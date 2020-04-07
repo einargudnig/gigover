@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class AvailableFonts {
-
   static TextStyle getTextStyle(
     BuildContext context, {
     double fontSize = 14,
@@ -10,11 +9,10 @@ class AvailableFonts {
     FontWeight weight = FontWeight.normal,
   }) {
     return TextStyle(
-      fontFamily: DefaultTextStyle.of(context).style.fontFamily,
-      fontSize: fontSize,
-      color: color,
-      fontWeight: weight,
-    );
+        fontFamily: DefaultTextStyle.of(context).style.fontFamily,
+        fontSize: fontSize,
+        color: color,
+        fontWeight: weight,
+        decoration: TextDecoration.none);
   }
-
 }
