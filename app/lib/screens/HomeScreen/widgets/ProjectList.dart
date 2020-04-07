@@ -98,7 +98,6 @@ class ProjectCard extends StatelessWidget {
                   isVertical: true,
                 ),
                 ProjectCardDaysLeft(context),
-
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
@@ -122,7 +121,30 @@ class ProjectCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
+                ),
+                Spacing(
+                  amount: 1,
+                  isVertical: true,
+                ),
+                Row(
+                  children: <Widget>[
+                    CircleAvatar(
+                        child: Text('AB',
+                            style: AvailableFonts.getTextStyle(context,
+                                color: Colors.white, fontSize: 10)),
+                        maxRadius: 12),
+                    CircleAvatar(
+                        child: Text('AB',
+                            style: AvailableFonts.getTextStyle(context,
+                                color: Colors.white, fontSize: 10)),
+                        maxRadius: 12),
+                    CircleAvatar(
+                        child: Text('AB',
+                            style: AvailableFonts.getTextStyle(context,
+                                color: Colors.white, fontSize: 10)),
+                        maxRadius: 12),
+                  ],
+                ),
               ]),
         ),
       ),
