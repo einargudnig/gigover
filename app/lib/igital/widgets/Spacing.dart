@@ -5,7 +5,7 @@ class Spacing extends StatelessWidget {
   final bool isVertical;
   static const double modifier = 8;
 
-  Spacing({ this.amount = 1, this.isVertical = false });
+  Spacing({ this.amount = 1, this.isVertical = true });
 
   @override
   Widget build(BuildContext context) {

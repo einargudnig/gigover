@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,8 +7,6 @@ import 'package:mittverk/screens/LoginScreen/widgets/LoginFooter.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginForm.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginHeader.dart';
 
-import '../../igital/services/AuthenticationService.dart';
-import '../../igital/services/AuthenticationService.dart';
 import '../../igital/services/AuthenticationService.dart';
 import '../../igital/utils/ScaleFactor.dart';
 
@@ -47,8 +47,30 @@ class LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void submit() {
+  void setErrorMessage(String errorMessage) {
+    setState(() {
+      _errorMessage = errorMessage;
+    });
+  }
 
+  // TODO Implement real logic
+  void submit(BuildContext context) {
+    log('Submitting');
+
+    if (!_verificationCodeSent) {
+      setState(() {
+        _verificationCodeSent = true;
+      });
+    } else {
+
+      if (_errorMessage == null) {
+        // Temporary
+        setErrorMessage('Invalid verification code');
+      } else {
+        Navigator.pushNamed(context, '/home');
+      }
+
+    }
   }
 
   @override
@@ -76,10 +98,12 @@ class LoginScreenState extends State<LoginScreen> {
                   verificationCodeSent: _verificationCodeSent
                 ),
                 LoginForm(
+                  verificationCodeSent: _verificationCodeSent,
                   phoneNumberInput: _phoneNumberInput,
                   verificationCodeInput: _verificationCodeInput,
+                  errorMessage: _errorMessage,
                   onSubmit: () {
-                    submit();
+                    submit(context);
                   }
                 ),
                 LoginFooter(),

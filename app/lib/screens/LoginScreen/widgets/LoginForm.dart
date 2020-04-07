@@ -1,15 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mittverk/igital/utils/AvailableFonts.dart';
-import 'package:mittverk/igital/widgets/DebugBorder.dart';
+import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/widgets/Input.dart';
+
+import '../../../igital/utils/AvailableFonts.dart';
 
 class LoginForm extends StatelessWidget {
   final TextEditingController phoneNumberInput;
   final TextEditingController verificationCodeInput;
   final Function onSubmit;
+  final bool verificationCodeSent;
+  final String errorMessage;
 
-  LoginForm({ this.phoneNumberInput, this.verificationCodeInput, this.onSubmit });
+  LoginForm({
+    this.phoneNumberInput,
+    this.verificationCodeInput,
+    this.onSubmit,
+    this.verificationCodeSent,
+    this.errorMessage,
+  });
+
+  Input getInput() {
+    if (verificationCodeSent) {
+      return Input(
+        hintText: 'Verification code',
+        controller: this.verificationCodeInput,
+      );
+    }
+
+    return Input(
+      hintText: 'Your mobile number',
+      controller: this.phoneNumberInput,
+    );
+  }
+
+  Widget showErrorMessage(BuildContext context) {
+    if (errorMessage != null) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: Spacing.modifier * 2),
+        child: Text(errorMessage, style: AvailableFonts.getTextStyle(context, color: Colors.red)),
+      );
+    }
+
+    return Container();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,26 +52,14 @@ class LoginForm extends StatelessWidget {
       padding: const EdgeInsets.all(Spacing.modifier * 3),
       child: Column(
         children: <Widget>[
-          Container(
-            child: TextField(
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                focusColor: Colors.black.withAlpha(150),
-                hintStyle: TextStyle(color: Colors.black.withAlpha(150)),
-                hintText: 'Your mobile number',
-                border: OutlineInputBorder(),
-                filled: true,
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color.fromRGBO(31, 223, 131, 1))),
-              ),
-              controller: this.phoneNumberInput,
-              keyboardType: TextInputType.number,
-            )
-          ),
-          Container(
-            child: Text(
-              'LoginForm x29',
-              style: AvailableFonts.getTextStyle(context, color: Colors.white),
-            ),
+          showErrorMessage(context),
+          getInput(),
+          Spacing(amount: 2),
+          RoundedButton(
+            fillBackground: Color.fromRGBO(31, 223, 131, 1),
+            textColor: Color.fromRGBO(7, 16, 41, 1),
+            onTap: onSubmit,
+            text: verificationCodeSent ? 'Verify code' : 'Sign in',
           ),
         ],
       ),
