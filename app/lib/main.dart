@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mittverk/routes/Routes.dart';
 import 'package:mittverk/states/Application.dart';
 
+import 'igital/utils/ScaleFactor.dart';
+
 void main() => runApp(MittVerkApp());
 
 class MittVerkApp extends StatefulWidget {

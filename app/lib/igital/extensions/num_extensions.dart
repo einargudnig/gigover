@@ -1,6 +1,5 @@
-import 'package:mittverk/igital/utils/ScaleFactor.dart';
+import '../utils/ScaleFactor.dart';
 
-/* Time */
 extension Time on int {
   Duration get asHours => Duration(hours: this);
   Duration get asMinutes => Duration(minutes: this);

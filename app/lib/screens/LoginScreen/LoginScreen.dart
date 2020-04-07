@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginFooter.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginForm.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginHeader.dart';
+
+import '../../igital/utils/ScaleFactor.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -24,6 +25,8 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ScaleFactor(context);
+
     return Scaffold(
       body: SizedBox.expand(
         child: Container(
@@ -33,14 +36,18 @@ class LoginScreenState extends State<LoginScreen> {
               fit: BoxFit.cover,
             )
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              LoginHeader(),
-              LoginForm(),
-              LoginFooter(),
-            ],
+          child: SafeArea(
+            top: true,
+            bottom: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                LoginHeader(),
+                LoginForm(),
+                LoginFooter(),
+              ],
+            ),
           ),
         ),
       ),

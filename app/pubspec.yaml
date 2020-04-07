@@ -15,11 +15,11 @@ dependencies:
   cupertino_icons: ^0.1.2
   fluro: ^1.6.2
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
 flutter:
   uses-material-design: true
   assets:
+    # Images
     - assets/images/background.jpg
+    # Logos
+    - assets/logo/mittverk.svg
+    # Vectors

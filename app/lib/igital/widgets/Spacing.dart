@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 
-class Divider extends StatelessWidget {
+class Spacing extends StatelessWidget {
   final double amount;
   final bool isVertical;
+  static const double modifier = 8;
 
-  static double modifier = 8;
-
-  Divider({ this.amount = 1, this.isVertical = false });
+  Spacing({ this.amount = 1, this.isVertical = false });
 
   @override
   Widget build(BuildContext context) {
-    var spacing = amount * Divider.modifier;
+    var spacing = amount * Spacing.modifier;
 
     if (isVertical) {
       return SizedBox(height: spacing);
