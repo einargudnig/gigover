@@ -5,6 +5,9 @@ import 'package:mittverk/screens/LoginScreen/widgets/LoginFooter.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginForm.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginHeader.dart';
 
+import '../../igital/services/AuthenticationService.dart';
+import '../../igital/services/AuthenticationService.dart';
+import '../../igital/services/AuthenticationService.dart';
 import '../../igital/utils/ScaleFactor.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,14 +16,39 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  AuthenticationService authenticationService;
+
+  TextEditingController _phoneNumberInput = TextEditingController();
+  TextEditingController _verificationCodeInput = TextEditingController();
+
+  String _phoneNumber;
+  String _errorMessage;
+  bool _verificationCodeSent = false;
+  int _resendCount = 0;
+
   @override
   void initState() {
+
     super.initState();
+    authenticationService = AuthenticationService();
+
+    _phoneNumberInput.addListener(phoneInputChange);
+
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void phoneInputChange() {
+    setState(() {
+      _phoneNumber = _phoneNumberInput.value.text;
+    });
+  }
+
+  void submit() {
+
   }
 
   @override
@@ -43,8 +71,17 @@ class LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                LoginHeader(),
-                LoginForm(),
+                LoginHeader(
+                  phoneNumber: _phoneNumber,
+                  verificationCodeSent: _verificationCodeSent
+                ),
+                LoginForm(
+                  phoneNumberInput: _phoneNumberInput,
+                  verificationCodeInput: _verificationCodeInput,
+                  onSubmit: () {
+                    submit();
+                  }
+                ),
                 LoginFooter(),
               ],
             ),
