@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
+import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 

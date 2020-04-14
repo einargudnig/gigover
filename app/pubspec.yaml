@@ -22,4 +22,5 @@ flutter:
     - assets/images/background.jpg
     # Logos
     - assets/logo/mittverk.svg
-    # Vectors
+    # Vectors & Icons
+    - assets/icons/gear.svg
