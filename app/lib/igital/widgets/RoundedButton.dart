@@ -114,7 +114,7 @@ class RoundedButtonState extends State<RoundedButton>
             style: AvailableFonts.getTextStyle(
               context,
               color: widget.textColor,
-              fontSize: widget.small ? 16.scale : 20.scale,
+              fontSize: widget.small ? 16 : 20,
             ),
           );
 

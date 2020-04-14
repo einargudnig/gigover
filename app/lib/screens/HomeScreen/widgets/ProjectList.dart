@@ -182,11 +182,11 @@ class ProjectList extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: ListView.builder(
-            itemCount: homeProvider.test.length,
+            itemCount: homeProvider.projects.length,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return ProjectCard(item: homeProvider.test[index]);
+              return ProjectCard(item: homeProvider.projects[index]);
             }),
       ),
     );
