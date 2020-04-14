@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 class Spacing extends StatelessWidget {
   final double amount;
   final bool isVertical;
+  final double overridePadding;
   static const double modifier = 8;
 
-  Spacing({ this.amount = 1, this.isVertical = true });
+  Spacing({ this.amount = 1, this.isVertical = true, this.overridePadding = 0 });
 
-  @override
   Widget build(BuildContext context) {
-    var spacing = amount * Spacing.modifier;
+    var spacing = this.overridePadding != 0 ? this.overridePadding : amount * Spacing.modifier;
 
     if (isVertical) {
       return SizedBox(height: spacing);
