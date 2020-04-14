@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mittverk/igital/utils/AvailableFonts.dart';
-import 'package:mittverk/igital/widgets/Dialog.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
