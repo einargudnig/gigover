@@ -34,9 +34,7 @@ Widget ProjectCardDaysLeft(BuildContext context) {
             color: OurColors.darkOrange,
             size: 12,
           ),
-          Spacing(
-            amount: 0.5,
-          ),
+          Spacing(overridePadding: 6, isVertical: false),
           Text(
             '3 Days left',
             style: AvailableFonts.getTextStyle(
@@ -47,6 +45,46 @@ Widget ProjectCardDaysLeft(BuildContext context) {
           ),
         ],
       ),
+    ),
+  );
+}
+
+Widget Avatars(BuildContext context, List<String> people) {
+  Widget Avatar(String text, int index, {bool special = false}) {
+    return Positioned(
+      top: 0,
+      left: (index * 20).toDouble(),
+      child: CircleAvatar(
+        maxRadius: 17,
+        backgroundColor: Colors.white,
+        child: CircleAvatar(
+            backgroundColor: special ? Colors.greenAccent : Colors.deepOrange,
+            child: Text(text,
+                style: AvailableFonts.getTextStyle(context,
+                    color: Colors.white, fontSize: 10)),
+            maxRadius: 16),
+      ),
+    );
+  }
+
+  int i = 0;
+  List<Widget> avatars = [];
+  for (final String f in people) {
+    avatars.add(Avatar(f, i));
+    i++;
+
+    if (i == 4) {
+      break;
+    }
+  }
+  if (people.length > 4) {
+    avatars.add(Avatar("+" + (people.length - avatars.length).toString(), 4,
+        special: true));
+  }
+  return Container(
+    height: 33,
+    child: Stack(
+      children: <Widget>[...avatars],
     ),
   );
 }
@@ -75,7 +113,7 @@ class ProjectCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      "Laugarsvegur 24",
+                      item.title,
                       style: AvailableFonts.getTextStyle(context,
                           color: OurColors.mainFont, weight: FontWeight.bold),
                     ),
@@ -90,7 +128,7 @@ class ProjectCard extends StatelessWidget {
                   isVertical: true,
                 ),
                 Text(
-                  "Framkv;mdir a einbilyshusi",
+                  item.subTitle,
                   style: AvailableFonts.getTextStyle(context,
                       color: OurColors.grayFont),
                 ),
@@ -101,7 +139,7 @@ class ProjectCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Text('24%',
+                    Text(item.amountDonePercentage,
                         style: AvailableFonts.getTextStyle(context,
                             color: OurColors.grayFont, fontSize: 10)),
                     Spacing(
@@ -113,7 +151,7 @@ class ProjectCard extends StatelessWidget {
                       child: Container(
                         height: 8,
                         child: LinearProgressIndicator(
-                          value: 0.35, // percent filled
+                          value: item.amountDoneValue, // percent filled
                           valueColor: AlwaysStoppedAnimation<Color>(
                               OurColors.mainGreen),
                           backgroundColor: OurColors.backgroundLightGrap,
@@ -126,25 +164,7 @@ class ProjectCard extends StatelessWidget {
                   amount: 1,
                   isVertical: true,
                 ),
-                Row(
-                  children: <Widget>[
-                    CircleAvatar(
-                        child: Text('AB',
-                            style: AvailableFonts.getTextStyle(context,
-                                color: Colors.white, fontSize: 10)),
-                        maxRadius: 12),
-                    CircleAvatar(
-                        child: Text('AB',
-                            style: AvailableFonts.getTextStyle(context,
-                                color: Colors.white, fontSize: 10)),
-                        maxRadius: 12),
-                    CircleAvatar(
-                        child: Text('AB',
-                            style: AvailableFonts.getTextStyle(context,
-                                color: Colors.white, fontSize: 10)),
-                        maxRadius: 12),
-                  ],
-                ),
+                Avatars(context, item.people)
               ]),
         ),
       ),
