@@ -1,0 +1,190 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mittverk/igital/utils/AvailableFonts.dart';
+import 'package:mittverk/igital/widgets/RoundedButton.dart';
+import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/providers/StopwatchProvider.dart';
+import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
+import 'package:provider/provider.dart';
+
+import 'TimeTrackerDialog.dart';
+
+class TimeTracker extends StatelessWidget {
+  TimeTracker();
+
+  String formatTime(ElapsedTime time) {
+    if (time == null) {
+      return '00:00';
+    }
+    if (time.minutes == null && time.seconds == null) {
+      return '00:00';
+    }
+    String minutesStr = (time.minutes % 60).toString().padLeft(2, '0');
+    String secondsStr = (time.seconds % 60).toString().padLeft(2, '0');
+    return '$minutesStr:$secondsStr';
+  }
+
+  Widget TimeActions(StopwatchProvider stopwatch) {
+    if (stopwatch.currentStopwatch.isRunning) {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: RoundedButton(
+                padding: EdgeInsets.all(20.0),
+                fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                textColor: Color.fromRGBO(7, 16, 41, 1),
+                onTap: () {
+                  stopwatch.stopStopWatch();
+                },
+                child: SvgPicture.asset(
+                  'assets/icons/pause.svg',
+                  width: 28,
+                  height: 28,
+                )),
+          ),
+          Spacing(
+            isVertical: false,
+            amount: 2,
+          ),
+          Expanded(
+            child: RoundedButton(
+                padding: EdgeInsets.all(20.0),
+                fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                textColor: Color.fromRGBO(7, 16, 41, 1),
+                onTap: () {
+                  print('open modal with dialgo thingy');
+                },
+                child: SvgPicture.asset(
+                  'assets/icons/comment.svg',
+                  width: 28,
+                  height: 28,
+                )),
+          ),
+        ],
+      );
+    } else {
+      return Row(children: <Widget>[
+        Expanded(
+          child: RoundedButton(
+              padding: EdgeInsets.all(20.0),
+              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              textColor: Color.fromRGBO(7, 16, 41, 1),
+              onTap: () {
+                stopwatch.startStopWatch();
+              },
+              child: SvgPicture.asset(
+                'assets/icons/resume.svg',
+                width: 24,
+                height: 24,
+              )),
+        ),
+        Spacing(
+          isVertical: false,
+          amount: 2,
+        ),
+        Expanded(
+            child: RoundedButton(
+                padding: EdgeInsets.all(20.0),
+                fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                textColor: Color.fromRGBO(7, 16, 41, 1),
+                onTap: () {
+                  stopwatch.resetStopWatch();
+                },
+                child: SvgPicture.asset(
+                  'assets/icons/stop.svg',
+                  width: 28,
+                  height: 28,
+                )))
+      ]);
+    }
+  }
+
+  Widget TimeItem(String currentTime) {
+    return Expanded(
+      child: RoundedButton(
+          padding: EdgeInsets.all(20.0),
+          textColor: Color.fromRGBO(7, 16, 41, 1),
+          borderColorFromTextColor: true,
+          onTap: () {},
+          text: currentTime),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+    final stopWatchProvider = Provider.of<StopwatchProvider>(context);
+
+    if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero) {
+      return Container(
+        padding: EdgeInsets.only( left:24, right:24, top:16, bottom:16),
+        decoration: new BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(16),
+            topLeft: Radius.circular(16),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  homeProvider.currentProject.title,
+                  style: AvailableFonts.getTextStyle(context,
+                      color: OurColors.grayFont, weight: FontWeight.bold),
+                ),
+                Spacing(
+                  amount: 0.5,
+                ),
+                Text(homeProvider.currentTask.title,
+                    style: AvailableFonts.getTextStyle(context,
+                        color: OurColors.mainFont,
+                        weight: FontWeight.bold,
+                        fontSize: 20))
+              ],
+            ),
+            Spacing(
+              amount: 2,
+            ),
+            Row(
+              children: <Widget>[
+                TimeItem(formatTime(homeProvider.stopwatch.currentElapsedTime)),
+                Spacing(
+                  isVertical: false,
+                  amount: 2,
+                ),
+                Expanded(
+                  child: TimeActions(homeProvider.stopwatch),
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Row(children: <Widget>[
+      Expanded(
+        child: RoundedButton(
+            padding: EdgeInsets.all(20.0),
+            fillBackground: Color.fromRGBO(31, 223, 131, 1),
+            textColor: Color.fromRGBO(7, 16, 41, 1),
+            onTap: () {
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (_) {
+                    return ChangeNotifierProvider.value(
+                        value: homeProvider, child: TimeTrackerDialog());
+                  });
+            },
+            text: 'Tímaskráning'),
+      ),
+    ]);
+  }
+}

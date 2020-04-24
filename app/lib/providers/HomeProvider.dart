@@ -2,6 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/providers/StopwatchProvider.dart';
+
+class ElapsedTime {
+  final int hundreds;
+  final int seconds;
+  final int minutes;
+
+  ElapsedTime({
+    this.hundreds,
+    this.seconds,
+    this.minutes,
+  });
+}
 
 class HomeProvider with ChangeNotifier {
   int _count = 0;
@@ -20,54 +33,31 @@ class HomeProvider with ChangeNotifier {
         daysLeft: 2)
   ];
   Project currentProject;
+  Task currentTask;
 
-  Stopwatch stopWatch = Stopwatch();
-  Duration currentStopWatchDuration = Duration.zero;
-  Timer _timer;
+  StopwatchProvider stopwatch;
 
   int get count => _count;
 
   HomeProvider() {
     this.currentProject = this.projects[0];
-  }
-
-  void _onTick(Timer timer) {
-    currentStopWatchDuration = stopWatch.elapsed;
-
-    // notify all listening widgets
-    notifyListeners();
-  }
-
-  void startStopWatch() {
-    if (_timer != null) return;
-    stopWatch.start();
-
-    _timer = Timer.periodic(Duration(seconds: 1), _onTick);
-    currentStopWatchDuration = stopWatch.elapsed;
-    notifyListeners();
-  }
-
-  void stopStopWatch() {
-    _timer?.cancel();
-    _timer = null;
-    stopWatch.stop();
-    currentStopWatchDuration = stopWatch.elapsed;
-    notifyListeners();
-  }
-
-  void resetStopWatch() {
-    stopStopWatch();
-    stopWatch.reset();
-    currentStopWatchDuration = Duration.zero;
-
-    notifyListeners();
+    this.currentTask = this.currentProject.tasks[0];
   }
 
   void setCurrentProject(String projectTitle) {
     Project p = projects.firstWhere((p) {
       return p.title == projectTitle;
     });
+    this.currentTask = p.tasks[0];
     this.currentProject = p;
+    notifyListeners();
+  }
+
+  void setCurrentTask(String taskTitle) {
+    Task t = this.currentProject.tasks.firstWhere((p) {
+      return p.title == taskTitle;
+    });
+    this.currentTask = t;
     notifyListeners();
   }
 
@@ -79,5 +69,9 @@ class HomeProvider with ChangeNotifier {
         people: ["SEB", "TEB", "FAF", "TS", "TS", "TS", "TS", "TS"],
         daysLeft: 7));
     notifyListeners();
+  }
+
+  void setStopwatchState(StopwatchProvider stopwatchState) {
+    this.stopwatch = stopwatchState;
   }
 }

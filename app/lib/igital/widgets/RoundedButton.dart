@@ -14,7 +14,7 @@ class RoundedButton extends StatefulWidget {
   Color textColor;
   bool loading;
   bool disabled;
-  Widget textWidget;
+  Widget child;
   bool small;
   bool borderColorFromTextColor;
   List<String> subtitle;
@@ -32,13 +32,13 @@ class RoundedButton extends StatefulWidget {
       disabled,
       small,
       borderColorFromTextColor,
-      textWidget,
+      child,
       subtitle,
       borderRadius,
       padding}) {
     this.onTap = onTap;
     this.text = text;
-    this.textWidget = textWidget;
+    this.child = child;
     this.icon = icon;
     this.fillBackground = fillBackground;
     this.disabledFillBackground = disabledFillBackground != null
@@ -107,8 +107,8 @@ class RoundedButtonState extends State<RoundedButton>
       );
     }
 
-    Widget text = widget.textWidget != null
-        ? widget.textWidget
+    Widget text = widget.child != null
+        ? widget.child
         : Text(
             widget.text,
             style: AvailableFonts.getTextStyle(

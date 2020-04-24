@@ -24,3 +24,7 @@ flutter:
     - assets/logo/mittverk.svg
     # Vectors & Icons
     - assets/icons/gear.svg
+    - assets/icons/comment.svg
+    - assets/icons/pause.svg
+    - assets/icons/resume.svg
+    - assets/icons/stop.svg

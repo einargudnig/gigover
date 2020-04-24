@@ -51,8 +51,25 @@ class TimeTrackerDialog extends StatelessWidget {
                   homeProvider.setCurrentProject(s);
                 }),
                 Spacing(),
-                /*dropdownButton(context, 'Veldu verkþátt'),
-                Spacing(),*/
+              ],
+            ),
+          ),
+          Spacing(
+            amount: 4,
+          ),
+          Container(
+            child: Column(
+              children: <Widget>[
+                dropdownButton(
+                    context,
+                    'Veldu verkþátt',
+                    homeProvider.currentTask.title,
+                    homeProvider.currentProject.tasks.map((t) {
+                      return t.title;
+                    }).toList(), onTap: (String s) {
+                  homeProvider.setCurrentTask(s);
+                }),
+                Spacing(),
               ],
             ),
           ),
@@ -68,7 +85,7 @@ class TimeTrackerDialog extends StatelessWidget {
                   textColor: Color.fromRGBO(176, 189, 220, 1),
                   borderColorFromTextColor: true,
                   onTap: () {
-                    print('Hætt');
+                    Navigator.of(context, rootNavigator: true).pop("Discard");
                   },
                   text: 'Hætta'),
               Spacing(amount: 2, isVertical: false),
@@ -79,10 +96,8 @@ class TimeTrackerDialog extends StatelessWidget {
                     fillBackground: Color.fromRGBO(31, 223, 131, 1),
                     textColor: Color.fromRGBO(7, 16, 41, 1),
                     onTap: () {
-                      print('Hefja tímatöku');
-                      homeProvider.startStopWatch();
+                      homeProvider.stopwatch.startStopWatch();
                       Navigator.of(context, rootNavigator: true).pop("Discard");
-
                     },
                     text: 'Hefja tímatöku'),
               ),

@@ -180,7 +180,7 @@ class ProjectList extends StatelessWidget {
 
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(16),
         child: ListView.builder(
             itemCount: homeProvider.projects.length,
             scrollDirection: Axis.vertical,
