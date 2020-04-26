@@ -1,13 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mittverk/igital/widgets/RoundedButton.dart';
-import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
-import 'package:mittverk/screens/HomeScreen/widgets/TimeTrackerDialog.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +13,8 @@ class HomeScreen extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<StopwatchProvider>(
-              create: (_) => StopwatchProvider()),
+            create: (_) => StopwatchProvider(),
+          ),
         ],
         child: MultiProvider(
           providers: [
@@ -36,7 +34,6 @@ class HomeScreenView extends StatefulWidget {
   @override
   State createState() => HomeScreenViewState();
 }
-//3160
 
 class HomeScreenViewState extends State<HomeScreenView> {
   @override

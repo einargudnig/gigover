@@ -7,7 +7,7 @@ import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
-import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
+import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
 import 'TimeTrackerDialog.dart';
@@ -137,14 +137,14 @@ class TimeTracker extends StatelessWidget {
                 Text(
                   homeProvider.currentProject.title,
                   style: AvailableFonts.getTextStyle(context,
-                      color: OurColors.grayFont, weight: FontWeight.bold),
+                      color: MVTheme.grayFont, weight: FontWeight.bold),
                 ),
                 Spacing(
                   amount: 0.5,
                 ),
                 Text(homeProvider.currentTask.title,
                     style: AvailableFonts.getTextStyle(context,
-                        color: OurColors.mainFont,
+                        color: MVTheme.mainFont,
                         weight: FontWeight.bold,
                         fontSize: 20))
               ],

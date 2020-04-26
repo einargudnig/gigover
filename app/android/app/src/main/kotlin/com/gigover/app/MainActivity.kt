@@ -1,4 +1,4 @@
-package com.example.mittverk
+package com.gigover.app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

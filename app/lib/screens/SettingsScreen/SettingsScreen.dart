@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/igital/widgets/RoundedButton.dart';
+import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 
@@ -28,7 +30,16 @@ class SettingsScreenState extends State<SettingsScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Settings screen')
+                Text('Settings screen'),
+                RoundedButton(
+                  fillBackground: MVTheme.secondaryColor,
+                  textColor: MVTheme.primaryColor,
+                  text: 'DEV Logout',
+                  onTap: () {
+                    // TODO Logout and clear auth
+                    Navigator.of(context).pushReplacementNamed('/');
+                  },
+                )
               ],
             ),
           ),

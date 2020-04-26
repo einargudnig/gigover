@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>761785841920-mdbt53t06h1uk6a72ed39kql77vv3hnj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.761785841920-mdbt53t06h1uk6a72ed39kql77vv3hnj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAi5uGGL9CEbOfCIlC8HRZeOTihTztcWDA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>761785841920</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.gigover.app</string>
+	<key>PROJECT_ID</key>
+	<string>gigover2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>gigover2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:761785841920:ios:81af1727d5e9bf33</string>
+	<key>DATABASE_URL</key>
+	<string>https://gigover2.firebaseio.com</string>
+</dict>
+</plist>

@@ -5,9 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/routes/Handlers.dart';
 
 class Routes {
-  static String root = '/login';
+  static String root = '/';
   static String settings = '/settings';
-  static String home = '/';
+  static String home = '/home';
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(

@@ -67,7 +67,7 @@ class LoginScreenState extends State<LoginScreen> {
         // Temporary
         setErrorMessage('Invalid verification code');
       } else {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/home');
       }
 
     }

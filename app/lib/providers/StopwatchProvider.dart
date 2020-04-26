@@ -10,8 +10,6 @@ class StopwatchProvider with ChangeNotifier {
   ElapsedTime currentElapsedTime;
   Timer _timer;
 
-  Function callback;
-
   void _onTick(Timer timer) {
     if (milliseconds != currentStopwatch.elapsedMilliseconds) {
       milliseconds = currentStopwatch.elapsedMilliseconds;

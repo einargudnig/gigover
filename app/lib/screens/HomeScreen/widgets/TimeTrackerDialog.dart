@@ -7,6 +7,7 @@ import 'package:mittverk/igital/widgets/Dialog.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
 class TimeTrackerDialog extends StatelessWidget {
@@ -126,7 +127,7 @@ Widget dropdownButton(
       DropdownButton<String>(
         value: item,
         icon:
-            Icon(Icons.arrow_drop_down, color: Color.fromRGBO(31, 223, 131, 1)),
+            Icon(Icons.arrow_drop_down, color: MVTheme.secondaryColor),
         iconSize: 24,
         elevation: 16,
         style: AvailableFonts.getTextStyle(
@@ -137,7 +138,7 @@ Widget dropdownButton(
         isExpanded: true,
         underline: Container(
           height: 2,
-          color: Color.fromRGBO(31, 223, 131, 1),
+          color: MVTheme.secondaryColor,
         ),
         onChanged: (String newValue) {
           onTap(newValue);

@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "761785841920",
+    "firebase_url": "https://gigover2.firebaseio.com",
+    "project_id": "gigover2",
+    "storage_bucket": "gigover2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761785841920:android:81af1727d5e9bf33",
+        "android_client_info": {
+          "package_name": "com.gigover.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761785841920-0bfhii1ur2f065veknfft146b6dr51d4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmKEq4EFeuRQwdm9OlRpyysu63yh7AMrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761785841920-0bfhii1ur2f065veknfft146b6dr51d4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "761785841920-mdbt53t06h1uk6a72ed39kql77vv3hnj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gigover.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761785841920:android:35a80b4f8efe99e7",
+        "android_client_info": {
+          "package_name": "io.gigover"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761785841920-0bfhii1ur2f065veknfft146b6dr51d4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmKEq4EFeuRQwdm9OlRpyysu63yh7AMrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761785841920-0bfhii1ur2f065veknfft146b6dr51d4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "761785841920-mdbt53t06h1uk6a72ed39kql77vv3hnj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gigover.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

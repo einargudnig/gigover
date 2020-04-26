@@ -6,20 +6,12 @@ import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:provider/provider.dart';
-
-class OurColors {
-  static Color lightOrange = Color.fromRGBO(255, 244, 236, 1);
-  static Color darkOrange = Color.fromRGBO(235, 126, 48, 1);
-  static Color mainFont = Color.fromRGBO(7, 16, 41, 1);
-  static Color grayFont = Color.fromRGBO(131, 136, 148, 1);
-  static Color mainGreen = Color.fromRGBO(31, 223, 131, 1);
-  static Color backgroundLightGrap = Color.fromRGBO(233, 233, 239, 1);
-}
+import 'package:mittverk/utils/Theme.dart';
 
 Widget ProjectCardDaysLeft(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
-      color: OurColors.lightOrange,
+      color: MVTheme.lightOrange,
       borderRadius: BorderRadius.circular(4.0),
     ),
     child: Padding(
@@ -31,7 +23,7 @@ Widget ProjectCardDaysLeft(BuildContext context) {
         children: <Widget>[
           Icon(
             Icons.access_alarm,
-            color: OurColors.darkOrange,
+            color: MVTheme.darkOrange,
             size: 12,
           ),
           Spacing(overridePadding: 6, isVertical: false),
@@ -40,7 +32,7 @@ Widget ProjectCardDaysLeft(BuildContext context) {
             style: AvailableFonts.getTextStyle(
               context,
               fontSize: 10,
-              color: OurColors.darkOrange,
+              color: MVTheme.darkOrange,
             ),
           ),
         ],
@@ -115,11 +107,11 @@ class ProjectCard extends StatelessWidget {
                     Text(
                       item.title,
                       style: AvailableFonts.getTextStyle(context,
-                          color: OurColors.mainFont, weight: FontWeight.bold),
+                          color: MVTheme.mainFont, weight: FontWeight.bold),
                     ),
                     Icon(
                       Icons.more_horiz,
-                      color: OurColors.grayFont,
+                      color: MVTheme.grayFont,
                       size: 20,
                     )
                   ],
@@ -130,7 +122,7 @@ class ProjectCard extends StatelessWidget {
                 Text(
                   item.subTitle,
                   style: AvailableFonts.getTextStyle(context,
-                      color: OurColors.grayFont),
+                      color: MVTheme.grayFont),
                 ),
                 Spacing(
                   isVertical: true,
@@ -141,7 +133,7 @@ class ProjectCard extends StatelessWidget {
                   children: <Widget>[
                     Text(item.amountDonePercentage,
                         style: AvailableFonts.getTextStyle(context,
-                            color: OurColors.grayFont, fontSize: 10)),
+                            color: MVTheme.grayFont, fontSize: 10)),
                     Spacing(
                       amount: 0.5,
                       isVertical: true,
@@ -153,8 +145,8 @@ class ProjectCard extends StatelessWidget {
                         child: LinearProgressIndicator(
                           value: item.amountDoneValue, // percent filled
                           valueColor: AlwaysStoppedAnimation<Color>(
-                              OurColors.mainGreen),
-                          backgroundColor: OurColors.backgroundLightGrap,
+                              MVTheme.mainGreen),
+                          backgroundColor: MVTheme.backgroundLightGrap,
                         ),
                       ),
                     ),
