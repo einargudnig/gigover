@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mittverk/models/VerifyUser.dart';
 import 'package:mittverk/services/AnalyticsService.dart';
+import 'package:mittverk/services/ApiService.dart';
 
 class AuthProvider extends ChangeNotifier {
 
@@ -95,7 +98,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setUser(FirebaseUser user, {bool isInit}) {
+  void setUser(FirebaseUser user, {bool isInit}) async {
     if (isInit == null || isInit == false) {
       AnalyticsService.sendEvent('loginSuccess', {
         'userId': user.uid,
@@ -103,6 +106,8 @@ class AuthProvider extends ChangeNotifier {
     }
 
     _user = user;
+
+    await verifyUser();
     linkAnalyticsUser();
     notifyListeners();
   }
@@ -111,23 +116,33 @@ class AuthProvider extends ChangeNotifier {
     return _user;
   }
 
-  /**
-   * Used to check if the user is logged in before showing the login screen.
-   */
-  Future<bool> initialIsLoggedIn() async {
-    FirebaseUser user = await _auth.currentUser();
-
-    if (user != null) {
-      setUser(user, isInit: true);
-      return true;
-    }
-
-    return false;
-  }
-
   void linkAnalyticsUser() {
     if (_user != null) {
       AnalyticsService.linkAnalyticsUser(_user.uid);
     }
   }
+
+  Future<void> verifyUser() async {
+    if (_user != null) {
+      IdTokenResult token = await _user.getIdToken();
+
+      if (token != null) {
+        Response response = await ApiService.verifyUser(token.token);
+        print('GOT RESPONSE FROM GIGOVER2');
+
+        VerifyUser user = VerifyUser.fromJson(response.data);
+        print(user);
+
+        print(token);
+        print(token.token);
+
+        return;
+      }
+
+      throw new Exception("Token was not retrievable");
+    }
+
+    throw new Exception("User not logged in");
+  }
+
 }
