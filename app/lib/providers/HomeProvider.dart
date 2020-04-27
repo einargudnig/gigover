@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';

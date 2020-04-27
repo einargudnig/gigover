@@ -2,10 +2,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:mittverk/providers/AnalyticsProvider.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
-import 'package:mittverk/routes/Routes.dart';
 import 'package:mittverk/routes/RouteObserver.dart';
+import 'package:mittverk/routes/Routes.dart';
+import 'package:mittverk/services/AnalyticsService.dart';
 import 'package:mittverk/states/Application.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +24,10 @@ class MittVerkAppState extends State<MittVerkApp> {
 
   MittVerkAppState() {
     Routes.configureRoutes(router);
+
     Application.router = router;
+    AnalyticsService.analytics = FirebaseAnalytics();
+    AnalyticsService.observer = FirebaseAnalyticsObserver(analytics: AnalyticsService.analytics);
   }
 
   @override
@@ -41,29 +44,17 @@ class MittVerkAppState extends State<MittVerkApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AnalyticsProvider>(create: (_) => AnalyticsProvider()),
+        ChangeNotifierProvider<AuthProvider>(create: (context) => AuthProvider()),
       ],
-      child: Consumer<AnalyticsProvider>(
-        builder: (context, analyticsProvider, child) {
-          return Container(
-            child: MultiProvider(
-              providers: [
-                ChangeNotifierProvider<AuthProvider>(
-                    create: (context) => AuthProvider(analyticsProvider)),
-              ],
-              child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                navigatorObservers: [routeObserver],
-                theme: ThemeData(
-                  primaryColor: Color.fromRGBO(7, 16, 41, 1),
-                  backgroundColor: Color.fromRGBO(251, 251, 251, 1),
-                  accentColor: Color.fromRGBO(131, 136, 148, 1),
-                ),
-                onGenerateRoute: Application.router.generator,
-              ),
-            ),
-          );
-        },
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [routeObserver],
+        theme: ThemeData(
+          primaryColor: Color.fromRGBO(7, 16, 41, 1),
+          backgroundColor: Color.fromRGBO(251, 251, 251, 1),
+          accentColor: Color.fromRGBO(131, 136, 148, 1),
+        ),
+        onGenerateRoute: Application.router.generator,
       ),
     );
   }

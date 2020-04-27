@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../utils/AvailableFonts.dart';
 import '../extensions/num_extensions.dart';
 import '../utils/AvailableFonts.dart';
 

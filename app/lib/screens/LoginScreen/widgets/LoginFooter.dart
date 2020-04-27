@@ -4,6 +4,7 @@ import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 
 class LoginFooter extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,4 +15,5 @@ class LoginFooter extends StatelessWidget {
       ),
     );
   }
+
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
-import 'package:mittverk/igital/widgets/DebugBorder.dart';
+import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 
 class LoginHeader extends StatelessWidget {

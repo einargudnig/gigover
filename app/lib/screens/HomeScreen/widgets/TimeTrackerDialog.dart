@@ -11,7 +11,7 @@ import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
 class TimeTrackerDialog extends StatelessWidget {
-  TimeTrackerDialog() {}
+  TimeTrackerDialog();
 
   @override
   Widget build(BuildContext context) {
