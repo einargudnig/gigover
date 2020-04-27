@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
@@ -51,7 +52,17 @@ class HomeScreenViewState extends State<HomeScreenView> {
     return ScreenLayout(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[ProjectList(), TimeTracker()],
+        children: <Widget>[
+          Consumer<AuthProvider>(
+            builder: (context, authProvider, child) {
+              return Container(
+                  child: Text(authProvider.getUser().uid)
+              );
+            },
+          ),
+          ProjectList(),
+          TimeTracker(),
+        ],
       ),
     );
   }

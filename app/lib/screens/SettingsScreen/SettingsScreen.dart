@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
+import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
     @override
@@ -23,25 +25,29 @@ class SettingsScreenState extends State<SettingsScreen> {
 
     @override
     Widget build(BuildContext context) {
-        return ScreenLayout(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Settings screen'),
-                RoundedButton(
-                  fillBackground: MVTheme.secondaryColor,
-                  textColor: MVTheme.primaryColor,
-                  text: 'DEV Logout',
-                  onTap: () {
-                    // TODO Logout and clear auth
-                    Navigator.of(context).pushReplacementNamed('/');
-                  },
-                )
-              ],
-            ),
-          ),
+        return Consumer<AuthProvider>(
+          builder: (context, authProvider, child) {
+            return ScreenLayout(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Settings screen'),
+                    RoundedButton(
+                      fillBackground: MVTheme.secondaryColor,
+                      textColor: MVTheme.primaryColor,
+                      text: 'DEV Logout',
+                      onTap: () async {
+                        await authProvider.logout();
+                        Navigator.of(context).pushReplacementNamed('/');
+                      },
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
         );
     }
 }

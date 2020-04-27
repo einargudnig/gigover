@@ -3,11 +3,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:mittverk/services/AnalyticsService.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  FirebaseAuth _auth;
   FirebaseUser _user;
+
   String _currentPhoneNumber;
   String _currentVerificationId;
+
+  AuthProvider(FirebaseAuth authInstance, FirebaseUser user) {
+    _auth = authInstance;
+
+    if (user != null) {
+      setUser(user, isInit: true);
+    }
+  }
 
   /// Send a code to the phone number
   Future<bool> verifyPhoneNumber({
@@ -37,7 +46,7 @@ class AuthProvider extends ChangeNotifier {
           this._currentVerificationId = verificationId;
           codeSent();
 
-          AnalyticsService.sendEvent('login_verificationSent', {
+          AnalyticsService.sendEvent('loginVerificationSent', {
             "phoneNumber": phoneNumber,
           });
         },
@@ -62,14 +71,19 @@ class AuthProvider extends ChangeNotifier {
     AuthCredential credential = PhoneAuthProvider.getCredential(
         verificationId: _currentVerificationId, smsCode: smsCode);
 
-    AnalyticsService.sendEvent('login_attemptVerificationCode',
+    AnalyticsService.sendEvent('loginAttemptVerificationCode',
         {'phoneNumber': _currentPhoneNumber, 'code': smsCode});
 
-    AuthResult authResult = await _auth.signInWithCredential(credential);
+    try {
+      AuthResult authResult = await _auth.signInWithCredential(credential);
 
-    if (authResult.user != null) {
-      setUser(authResult.user);
-      return true;
+      if (authResult.user != null) {
+        setUser(authResult.user);
+        return true;
+      }
+    } catch (e) {
+      print('AttemptLogin failure');
+      print(e);
     }
 
     return false;
@@ -77,18 +91,38 @@ class AuthProvider extends ChangeNotifier {
 
   Future logout() async {
     await _auth.signOut();
+    AnalyticsService.sendEvent('userLoggedOut', null);
     notifyListeners();
   }
 
-  void setUser(FirebaseUser user) {
+  void setUser(FirebaseUser user, {bool isInit}) {
+    if (isInit == null || isInit == false) {
+      AnalyticsService.sendEvent('loginSuccess', {
+        'userId': user.uid,
+      });
+    }
+
     _user = user;
     linkAnalyticsUser();
-
     notifyListeners();
   }
 
   FirebaseUser getUser() {
     return _user;
+  }
+
+  /**
+   * Used to check if the user is logged in before showing the login screen.
+   */
+  Future<bool> initialIsLoggedIn() async {
+    FirebaseUser user = await _auth.currentUser();
+
+    if (user != null) {
+      setUser(user, isInit: true);
+      return true;
+    }
+
+    return false;
   }
 
   void linkAnalyticsUser() {

@@ -1,19 +1,18 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mittverk/igital/utils/ScaleFactor.dart';
+import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
 import 'package:mittverk/screens/LoginScreen/LoginScreen.dart';
 import 'package:mittverk/screens/ScreenAppBarWrapper.dart';
 import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
+import 'package:provider/provider.dart';
 
 void setScaleFactor(BuildContext context) {
   ScaleFactor(context);
 }
 
 var rootHandler = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-  // if loggin
-  // if not ...
-
   return LoginScreen();
 });
 
