@@ -1,8 +1,17 @@
 class Task {
   String title;
   String id;
+  List<Comment> comments = [];
 
-  Task(this.id, this.title);
+  Task(this.id, this.title, this.comments);
+}
+
+class Comment {
+  String content;
+  String userIdFrom; // userId
+  String dateSent;
+
+  Comment({this.content, this.userIdFrom, this.dateSent});
 }
 
 class Project {
@@ -24,7 +33,20 @@ class Project {
     this.daysLeft = daysLeft;
     this.amountDone = amountDone;
     this.people = people;
-    this.tasks = [Task('Test', 'test'), Task('Baba', 'afqaf')];
+    this.tasks = [
+      Task('Test', 'test', [
+        new Comment(
+            content: 'You need to clean up the brush',
+            userIdFrom: '1',
+            dateSent: new DateTime(2020).toString())
+      ]),
+      Task('Baba', 'afqaf', [
+        new Comment(
+            content: 'You need to clean uafafa',
+            userIdFrom: '1',
+            dateSent: new DateTime(2019).toString())
+      ])
+    ];
   }
 
   String get amountDonePercentage {

@@ -170,17 +170,15 @@ class ProjectList extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView.builder(
-            itemCount: homeProvider.projects.length,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemBuilder: (BuildContext context, int index) {
-              return ProjectCard(item: homeProvider.projects[index]);
-            }),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: ListView.builder(
+          itemCount: homeProvider.projects.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return ProjectCard(item: homeProvider.projects[index]);
+          }),
     );
   }
 }

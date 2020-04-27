@@ -97,7 +97,7 @@ class TimeTrackerDialog extends StatelessWidget {
                     fillBackground: Color.fromRGBO(31, 223, 131, 1),
                     textColor: Color.fromRGBO(7, 16, 41, 1),
                     onTap: () {
-                      homeProvider.stopwatch.startStopWatch();
+                      homeProvider.startTimer();
                       Navigator.of(context, rootNavigator: true).pop("Discard");
                     },
                     text: 'Hefja tímatöku'),

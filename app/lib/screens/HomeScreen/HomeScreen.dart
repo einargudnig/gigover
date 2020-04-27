@@ -3,31 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
-import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<StopwatchProvider>(
-            create: (_) => StopwatchProvider(),
-          ),
-        ],
-        child: MultiProvider(
-          providers: [
-            ChangeNotifierProxyProvider<StopwatchProvider, HomeProvider>(
-                create: (context) => HomeProvider(),
-                update: (context, stopwatchState, homeState) {
-                  homeState.setStopwatchState(stopwatchState);
-                  return homeState;
-                }),
-          ],
-          child: HomeScreenView(),
-        ));
+      providers: [
+        ChangeNotifierProvider<HomeProvider>(
+            create: (context) => HomeProvider())
+      ],
+      child: HomeScreenView(),
+    );
   }
 }
 
@@ -49,20 +39,27 @@ class HomeScreenViewState extends State<HomeScreenView> {
 
   @override
   Widget build(BuildContext context) {
+    HomeProvider homeProvider =
+        Provider.of<HomeProvider>(context, listen: true);
+
+    /*Consumer<AuthProvider>(
+      builder: (context, authProvider, child) {
+        return Container(
+            child: Text(authProvider.getUser().uid)
+        );
+      },
+    ),*/
+    SlidePanelConfig config = homeProvider.slidePanelConfig;
     return ScreenLayout(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Consumer<AuthProvider>(
-            builder: (context, authProvider, child) {
-              return Container(
-                  child: Text(authProvider.getUser().uid)
-              );
-            },
-          ),
-          ProjectList(),
-          TimeTracker(),
-        ],
+      child: SlidingUpPanel(
+        controller: homeProvider.panelController,
+        renderPanelSheet: config.renderPanelSheet,
+        minHeight: config.minHeight,
+        maxHeight: config.maxHeight,
+        isDraggable: config.isDraggable,
+        backdropEnabled: config.backdropEnabled,
+        panel: TimeTracker(),
+        body: ProjectList(),
       ),
     );
   }
