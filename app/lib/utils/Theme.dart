@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 class MVTheme {
-
   static Color primaryColor = Color.fromRGBO(7, 16, 41, 1);
   static Color secondaryColor = Color.fromRGBO(31, 223, 131, 1);
 
@@ -12,4 +11,5 @@ class MVTheme {
   static Color mainGreen = MVTheme.secondaryColor;
   static Color backgroundLightGrap = Color.fromRGBO(233, 233, 239, 1);
 
+  static Color borderColor = Color.fromRGBO(251, 251, 251, 1);
 }

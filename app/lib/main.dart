@@ -74,7 +74,8 @@ class MittVerkAppState extends State<MittVerkApp> {
           return splashScreen(Text('ERROR'));
         }
 
-        if (snapshot.hasData) {
+
+        if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
           return MultiProvider(
             providers: [
               ChangeNotifierProvider<AuthProvider>(
