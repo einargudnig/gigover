@@ -57,27 +57,40 @@ class LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  bool validatePhoneNumber(String number) {
+    if (number == null || number.length < 7) {
+      setErrorMessage("Phone number must be at least 7 digits");
+
+      return false;
+    }
+
+    return true;
+  }
+
   void submit(BuildContext context, AuthProvider authProvider) async {
     if (!_verificationCodeSent) {
-      authProvider.verifyPhoneNumber(
-        phoneNumber: '+354$_phoneNumber',
-        codeSent: () {
-          setState(() {
-            _verificationCodeSent = true;
-            _errorMessage = null;
-          });
-        },
-        timeout: () {
-          setErrorMessage('Login timed out, please try again.');
-        },
-        success: (AuthCredential authCredential) {
-          print('Login: Successfully created authCredential');
-          print(authCredential);
-        },
-        err: (String message) {
-          setErrorMessage(message);
-        },
-      );
+      if (validatePhoneNumber(_phoneNumber)) {
+        authProvider.verifyPhoneNumber(
+          phoneNumber: '+354$_phoneNumber',
+          codeSent: () {
+            setState(() {
+              _verificationCodeSent = true;
+              _errorMessage = null;
+            });
+          },
+          timeout: () {
+            setErrorMessage('Login timed out, please try again.');
+          },
+          success: (AuthCredential authCredential) {
+            print('Login: Successfully created authCredential');
+            print(authCredential);
+          },
+          err: (String message) {
+            setErrorMessage(message);
+          },
+        );
+
+      }
     } else {
       bool loginStatus = await authProvider.attemptLogin(_verificationCode);
 
