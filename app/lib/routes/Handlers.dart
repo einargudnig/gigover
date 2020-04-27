@@ -6,6 +6,7 @@ import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
 import 'package:mittverk/screens/LoginScreen/LoginScreen.dart';
 import 'package:mittverk/screens/ScreenAppBarWrapper.dart';
 import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
+import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:provider/provider.dart';
 
 void setScaleFactor(BuildContext context) {
@@ -28,4 +29,9 @@ var settingsScreenHandler = Handler(handlerFunc: (BuildContext context, Map<Stri
   setScaleFactor(context);
 
   return ScreenAppBarWrapper(child: SettingsScreen());
+});
+
+
+var taskDetailsHandler = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+  return ScreenAppBarWrapper(child: TaskDetailsScreen(userId: params["id"][0]));
 });

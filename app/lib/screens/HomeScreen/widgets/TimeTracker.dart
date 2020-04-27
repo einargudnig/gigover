@@ -1,3 +1,4 @@
+import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,6 +8,8 @@ import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
+import 'package:mittverk/routes/Routes.dart';
+import 'package:mittverk/states/Application.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
@@ -58,6 +61,8 @@ class TimeTracker extends StatelessWidget {
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
                   print('open modal with dialgo thingy');
+                  Application.router.navigateTo(context, "/taskDetails/1234",
+                      transition: TransitionType.fadeIn);
                 },
                 child: SvgPicture.asset(
                   'assets/icons/comment.svg',
