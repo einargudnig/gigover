@@ -1,3 +1,5 @@
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,7 @@ import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/routes/RouteObserver.dart';
 import 'package:mittverk/routes/Routes.dart';
 import 'package:mittverk/services/AnalyticsService.dart';
+import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/states/Application.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
@@ -28,10 +31,15 @@ class MittVerkAppState extends State<MittVerkApp> {
   MittVerkAppState() {
     Routes.configureRoutes(router);
 
+    // Initialize static instances
     Application.router = router;
     AnalyticsService.analytics = FirebaseAnalytics();
     AnalyticsService.observer =
         FirebaseAnalyticsObserver(analytics: AnalyticsService.analytics);
+    ApiService.dio = Dio();
+    ApiService.cookieJar = CookieJar();
+    ApiService.setCookieJar();
+
   }
 
   @override
