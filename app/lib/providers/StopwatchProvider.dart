@@ -1,14 +1,17 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 
-class StopwatchProvider with ChangeNotifier {
+class StopwatchProvider {
   Stopwatch currentStopwatch = Stopwatch();
   Duration currentStopWatchDuration = Duration.zero;
   int milliseconds;
   ElapsedTime currentElapsedTime;
   Timer _timer;
+
+  Function callback;
+
+  get isRunning => this.currentStopWatchDuration != Duration.zero;
 
   void _onTick(Timer timer) {
     if (milliseconds != currentStopwatch.elapsedMilliseconds) {
@@ -24,23 +27,20 @@ class StopwatchProvider with ChangeNotifier {
       currentStopWatchDuration = currentStopwatch.elapsed;
       currentElapsedTime = elapsedTime;
 
-      // notify all listening widgets
-      notifyListeners();
     }
   }
 
-  void startStopWatch() {
+  void startStopWatch(callback) {
     if (_timer != null) return;
     currentStopwatch.start();
 
-
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer){
       _onTick(timer);
-      notifyListeners();
+      callback();
     });
     _onTick(_timer);
     currentStopWatchDuration = currentStopwatch.elapsed;
-    notifyListeners();
+    callback();
   }
 
   void stopStopWatch() {
@@ -48,14 +48,11 @@ class StopwatchProvider with ChangeNotifier {
     _timer = null;
     currentStopwatch.stop();
     currentStopWatchDuration = currentStopwatch.elapsed;
-    notifyListeners();
   }
 
   void resetStopWatch() {
     stopStopWatch();
     currentStopwatch.reset();
     currentStopWatchDuration = Duration.zero;
-
-    notifyListeners();
   }
 }

@@ -27,8 +27,10 @@ class TimeTracker extends StatelessWidget {
     return '$minutesStr:$secondsStr';
   }
 
-  Widget TimeActions(StopwatchProvider stopwatch) {
-    if (stopwatch.currentStopwatch.isRunning) {
+  Widget TimeActions(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+
+    if (homeProvider.stopwatch.currentStopwatch.isRunning) {
       return Row(
         children: <Widget>[
           Expanded(
@@ -37,7 +39,7 @@ class TimeTracker extends StatelessWidget {
                 fillBackground: Color.fromRGBO(31, 223, 131, 1),
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
-                  stopwatch.stopStopWatch();
+                  homeProvider.pauseTimer();
                 },
                 child: SvgPicture.asset(
                   'assets/icons/pause.svg',
@@ -73,7 +75,7 @@ class TimeTracker extends StatelessWidget {
               fillBackground: Color.fromRGBO(31, 223, 131, 1),
               textColor: Color.fromRGBO(7, 16, 41, 1),
               onTap: () {
-                stopwatch.startStopWatch();
+                homeProvider.startTimer();
               },
               child: SvgPicture.asset(
                 'assets/icons/resume.svg',
@@ -91,7 +93,7 @@ class TimeTracker extends StatelessWidget {
                 fillBackground: Color.fromRGBO(31, 223, 131, 1),
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
-                  stopwatch.resetStopWatch();
+                  homeProvider.resetTimer();
                 },
                 child: SvgPicture.asset(
                   'assets/icons/stop.svg',
@@ -116,11 +118,10 @@ class TimeTracker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-    final stopWatchProvider = Provider.of<StopwatchProvider>(context);
 
     if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero) {
       return Container(
-        padding: EdgeInsets.only( left:24, right:24, top:16, bottom:16),
+        padding: EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
         decoration: new BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -128,62 +129,80 @@ class TimeTracker extends StatelessWidget {
             topLeft: Radius.circular(16),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  homeProvider.currentProject.title,
-                  style: AvailableFonts.getTextStyle(context,
-                      color: MVTheme.grayFont, weight: FontWeight.bold),
-                ),
-                Spacing(
-                  amount: 0.5,
-                ),
-                Text(homeProvider.currentTask.title,
+        child: Stack(children: [
+          Positioned(
+            top: 0,
+            right: 0,
+            child: Icon(
+                !homeProvider.panelController.isPanelOpen
+                    ? Icons.arrow_drop_up
+                    : Icons.arrow_drop_down,
+                size: 36,
+                color: Color.fromRGBO(31, 223, 131, 1)),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    homeProvider.currentProject.title,
                     style: AvailableFonts.getTextStyle(context,
-                        color: MVTheme.mainFont,
-                        weight: FontWeight.bold,
-                        fontSize: 20))
-              ],
-            ),
-            Spacing(
-              amount: 2,
-            ),
-            Row(
-              children: <Widget>[
-                TimeItem(formatTime(homeProvider.stopwatch.currentElapsedTime)),
-                Spacing(
-                  isVertical: false,
-                  amount: 2,
-                ),
-                Expanded(
-                  child: TimeActions(homeProvider.stopwatch),
-                )
-              ],
-            ),
-          ],
-        ),
+                        color: MVTheme.grayFont, weight: FontWeight.bold),
+                  ),
+                  Spacing(
+                    amount: 0.5,
+                  ),
+                  Text(homeProvider.currentTask.title,
+                      style: AvailableFonts.getTextStyle(context,
+                          color: MVTheme.mainFont,
+                          weight: FontWeight.bold,
+                          fontSize: 20))
+                ],
+              ),
+              Spacing(
+                amount: 2,
+              ),
+              Row(
+                children: <Widget>[
+                  TimeItem(
+                      formatTime(homeProvider.stopwatch.currentElapsedTime)),
+                  Spacing(
+                    isVertical: false,
+                    amount: 2,
+                  ),
+                  Expanded(
+                    child: TimeActions(context),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ]),
       );
     }
 
-    return Row(children: <Widget>[
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
       Expanded(
-        child: RoundedButton(
-            padding: EdgeInsets.all(20.0),
-            fillBackground: Color.fromRGBO(31, 223, 131, 1),
-            textColor: Color.fromRGBO(7, 16, 41, 1),
-            onTap: () {
-              showCupertinoModalPopup(
-                  context: context,
-                  builder: (_) {
-                    return ChangeNotifierProvider.value(
-                        value: homeProvider, child: TimeTrackerDialog());
-                  });
-            },
-            text: 'Tímaskráning'),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 54,
+            child: RoundedButton(
+                fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                textColor: Color.fromRGBO(7, 16, 41, 1),
+                onTap: () {
+                  showCupertinoModalPopup(
+                      context: context,
+                      builder: (_) {
+                        return ChangeNotifierProvider.value(
+                            value: homeProvider, child: TimeTrackerDialog());
+                      });
+                },
+                text: 'Tímaskráning'),
+          ),
+        ),
       ),
     ]);
   }
