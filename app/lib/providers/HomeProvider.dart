@@ -53,42 +53,28 @@ class HomeProvider with ChangeNotifier {
   int _count = 0;
   List<Project> projects = [
     new Project(
+        id: 1,
         title: 'Laugarásvegur 20',
         subTitle: 'Viðgerðir á klósetti',
         amountDone: 35.00,
         people: ["SEB", "TEB", "SAS"],
         daysLeft: 5),
     new Project(
+        id: 2,
         title: 'Sólvellir 8',
         subTitle: 'Parketlagning',
         amountDone: 59.00,
         people: ["SEB", "TEB"],
         daysLeft: 2),
     new Project(
+        id: 3,
         title: 'Sólvellir 8',
         subTitle: 'Parketlagning',
         amountDone: 59.00,
         people: ["SEB", "TEB"],
         daysLeft: 2),
     new Project(
-        title: 'Sólvellir 8',
-        subTitle: 'Parketlagning',
-        amountDone: 59.00,
-        people: ["SEB", "TEB"],
-        daysLeft: 2),
-    new Project(
-        title: 'Sólvellir 8',
-        subTitle: 'Parketlagning',
-        amountDone: 59.00,
-        people: ["SEB", "TEB"],
-        daysLeft: 2),
-    new Project(
-        title: 'Sólvellir 8',
-        subTitle: 'Parketlagning',
-        amountDone: 59.00,
-        people: ["SEB", "TEB"],
-        daysLeft: 2),
-    new Project(
+        id: 4,
         title: 'Sólvellir 8',
         subTitle: 'Parketlagning',
         amountDone: 59.00,

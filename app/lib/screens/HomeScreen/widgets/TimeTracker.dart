@@ -19,10 +19,7 @@ class TimeTracker extends StatelessWidget {
   TimeTracker();
 
   String formatTime(ElapsedTime time) {
-    if (time == null) {
-      return '00:00';
-    }
-    if (time.minutes == null && time.seconds == null) {
+    if (time == null || (time.minutes == null && time.seconds == null)) {
       return '00:00';
     }
     String minutesStr = (time.minutes % 60).toString().padLeft(2, '0');

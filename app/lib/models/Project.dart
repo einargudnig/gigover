@@ -15,6 +15,7 @@ class Comment {
 }
 
 class Project {
+  int id;
   String title;
   String subTitle;
   int daysLeft;
@@ -23,11 +24,13 @@ class Project {
   List<Task> tasks;
 
   Project(
-      {String title,
+      {int id,
+      String title,
       String subTitle,
       int daysLeft,
       double amountDone,
       List<String> people}) {
+    this.id = id;
     this.title = title;
     this.subTitle = subTitle;
     this.daysLeft = daysLeft;

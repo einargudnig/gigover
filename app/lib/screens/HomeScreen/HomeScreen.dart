@@ -1,12 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/igital/widgets/NestedNavigator.dart';
+import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+import 'ProjectScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
@@ -26,6 +30,8 @@ class HomeScreenView extends StatefulWidget {
 }
 
 class HomeScreenViewState extends State<HomeScreenView> {
+  final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +64,15 @@ class HomeScreenViewState extends State<HomeScreenView> {
         isDraggable: config.isDraggable,
         backdropEnabled: config.backdropEnabled,
         panel: TimeTracker(),
-        body: ProjectList(),
+        body: NestedNavigator(
+          navigationKey: navigationKey,
+          initialRoute: '/',
+          routes: {
+            // default route as '/' is necessary!
+            '/': (context) => ProjectList(),
+            '/project': (context) => ProjectScreen(),
+          },
+        ),
       ),
     );
   }
