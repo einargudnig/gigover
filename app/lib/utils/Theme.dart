@@ -10,6 +10,6 @@ class MVTheme {
   static Color grayFont = Color.fromRGBO(131, 136, 148, 1);
   static Color mainGreen = MVTheme.secondaryColor;
   static Color backgroundLightGrap = Color.fromRGBO(233, 233, 239, 1);
-
+  static Color backgroundGray = Color.fromRGBO(245, 245, 245, 1);
   static Color borderColor = Color.fromRGBO(251, 251, 251, 1);
 }
