@@ -20,6 +20,8 @@ class NestedNavigator extends StatelessWidget {
         initialRoute: initialRoute,
         onGenerateRoute: (RouteSettings routeSettings) {
           WidgetBuilder builder = routes[routeSettings.name];
+          print(routeSettings.name);
+          print(routes);
           if (routeSettings.isInitialRoute) {
             return PageRouteBuilder(
               pageBuilder: (context, __, ___) => builder(context),

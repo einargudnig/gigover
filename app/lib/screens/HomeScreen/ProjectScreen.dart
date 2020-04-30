@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/DebugBorder.dart';
+import 'package:mittverk/igital/widgets/NestedNavigator.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectCard.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class ProjectScreenArguments {
   Project project;
+
 
   ProjectScreenArguments(this.project);
 }
@@ -20,6 +22,8 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class ProjectScreenState extends State<ProjectScreen> {
+  final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();

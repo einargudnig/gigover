@@ -7,6 +7,7 @@ import 'package:mittverk/main.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
+import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
 import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
@@ -85,6 +86,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
               '/': (context) => ProjectList(),
               '/project': (context) => ProjectScreen(),
               '/settings': (context) => SettingsScreen(),
+              '/task': (context) => TaskDetailsScreen(),
             },
           ),
         ),
