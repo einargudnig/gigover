@@ -1,19 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:mittverk/main.dart';
 
-void pressGearIcon(BuildContext context) {
-  log('Pressed gear icon');
-
-  Navigator.pushNamed(context, '/settings');
-}
-
 class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
-  MittVerkAppBar({Key key}) : preferredSize = Size.fromHeight(kToolbarHeight), super(key: key);
+  final Function onBack;
+  final Function onSettings;
+
+  MittVerkAppBar({this.onBack, this.onSettings, Key key})
+      : preferredSize = Size.fromHeight(kToolbarHeight),
+        super(key: key);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -23,7 +20,6 @@ class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class MittVerkAppBarState extends State<MittVerkAppBar> with RouteAware {
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -41,15 +37,22 @@ class MittVerkAppBarState extends State<MittVerkAppBar> with RouteAware {
     bool showGearIcon = routeObserver.screenName != '/settings';
 
     return AppBar(
-      title: SvgPicture.asset('assets/logo/mittverk.svg', height: 26.scale,),
+      title: SvgPicture.asset(
+        'assets/logo/mittverk.svg',
+        height: 26.scale,
+      ),
       centerTitle: true,
+
       actions: <Widget>[
-        showGearIcon ? IconButton(
-          icon: SvgPicture.asset('assets/icons/gear.svg', height: 24.scale),
-          onPressed: () {
-            pressGearIcon(context);
-          },
-        ) : Container(),
+        showGearIcon
+            ? IconButton(
+                icon:
+                    SvgPicture.asset('assets/icons/gear.svg', height: 24.scale),
+                onPressed: () {
+                  widget.onSettings();
+                },
+              )
+            : Container(),
       ],
     );
   }

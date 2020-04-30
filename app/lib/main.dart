@@ -3,14 +3,14 @@ import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:mittverk/igital/utils/ScaleFactor.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/routes/RouteObserver.dart';
-import 'package:mittverk/routes/Routes.dart';
+import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
+import 'package:mittverk/screens/LoginScreen/LoginScreen.dart';
 import 'package:mittverk/services/AnalyticsService.dart';
 import 'package:mittverk/services/ApiService.dart';
-import 'package:mittverk/states/Application.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +18,7 @@ void main() => runApp(MittVerkApp());
 
 // global RouteObserver
 final RouteObserverHelper routeObserver = new RouteObserverHelper();
+final GlobalKey<NavigatorState> mainNavigatorKey = GlobalKey<NavigatorState>();
 
 class MittVerkApp extends StatefulWidget {
   @override
@@ -26,20 +27,14 @@ class MittVerkApp extends StatefulWidget {
 
 class MittVerkAppState extends State<MittVerkApp> {
   final FirebaseAuth authInstance = FirebaseAuth.instance;
-  final router = Router();
 
   MittVerkAppState() {
-    Routes.configureRoutes(router);
-
-    // Initialize static instances
-    Application.router = router;
     AnalyticsService.analytics = FirebaseAnalytics();
     AnalyticsService.observer =
         FirebaseAnalyticsObserver(analytics: AnalyticsService.analytics);
     ApiService.dio = Dio();
     ApiService.cookieJar = CookieJar();
     ApiService.setCookieJar();
-
   }
 
   @override
@@ -74,7 +69,6 @@ class MittVerkAppState extends State<MittVerkApp> {
           return splashScreen(Text('ERROR'));
         }
 
-
         if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
           return MultiProvider(
             providers: [
@@ -90,8 +84,12 @@ class MittVerkAppState extends State<MittVerkApp> {
                 backgroundColor: Color.fromRGBO(251, 251, 251, 1),
                 accentColor: Color.fromRGBO(131, 136, 148, 1),
               ),
-              initialRoute: snapshot.data != null ? '/home' : '/',
-              onGenerateRoute: Application.router.generator,
+              navigatorKey: mainNavigatorKey,
+              initialRoute: snapshot.data != null ? '/home' : '/login',
+              routes: {
+                '/login': (context) => LoginScreen(),
+                '/home': (context) => HomeScreen(),
+              },
             ),
           );
         }

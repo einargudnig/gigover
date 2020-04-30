@@ -19,7 +19,7 @@ class ProjectList extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamed('/project', arguments: ProjectScreenArguments(homeProvider.projects[index].id));
+              Navigator.of(context).pushNamed('/project', arguments: ProjectScreenArguments(homeProvider.projects[index]));
             },
               child: ProjectCard(item: homeProvider.projects[index]),
           );

@@ -2,8 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
+import 'package:mittverk/main.dart';
 import 'package:mittverk/models/NEW_Project.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
+import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
@@ -44,7 +46,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                       text: 'DEV Logout',
                       onTap: () async {
                         await authProvider.logout();
-                        Navigator.of(context).pushReplacementNamed('/');
+                        mainNavigatorKey.currentState.pushReplacementNamed('/login');
                       },
                     ),
                     RoundedButton(

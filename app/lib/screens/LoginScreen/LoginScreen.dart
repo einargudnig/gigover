@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/main.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginFooter.dart';
 import 'package:mittverk/screens/LoginScreen/widgets/LoginForm.dart';
@@ -109,7 +110,7 @@ class LoginScreenState extends State<LoginScreen> {
           _sendCount = _sendCount + 1;
         });
       } else {
-        Navigator.pushReplacementNamed(context, '/home');
+        mainNavigatorKey.currentState.pushReplacementNamed('/home');
       }
     }
   }

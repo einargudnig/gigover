@@ -6,6 +6,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
 
   void _sendScreenView(
       PageRoute<dynamic> route, PageRoute<dynamic> previousRoute) {
+    print('SEND SCREEN VIEW');
     this.screenName = route.settings.name;
     if (previousRoute != null) {
       this.previousScreenName = previousRoute.settings.name;

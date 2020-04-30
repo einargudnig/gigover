@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/igital/utils/ScaleFactor.dart';
 import 'package:mittverk/igital/widgets/NestedNavigator.dart';
-import 'package:mittverk/igital/widgets/RoundedButton.dart';
+import 'package:mittverk/main.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
+import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
+import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -29,8 +32,7 @@ class HomeScreenView extends StatefulWidget {
   State createState() => HomeScreenViewState();
 }
 
-class HomeScreenViewState extends State<HomeScreenView> {
-  final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
 
   @override
   void initState() {
@@ -38,22 +40,24 @@ class HomeScreenViewState extends State<HomeScreenView> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    ScaleFactor(context);
+
     HomeProvider homeProvider =
         Provider.of<HomeProvider>(context, listen: true);
 
-    /*Consumer<AuthProvider>(
-      builder: (context, authProvider, child) {
-        return Container(
-            child: Text(authProvider.getUser().uid)
-        );
-      },
-    ),*/
     SlidePanelConfig config = homeProvider.slidePanelConfig;
     return ScreenLayout(
       child: SlidingUpPanel(
@@ -64,14 +68,25 @@ class HomeScreenViewState extends State<HomeScreenView> {
         isDraggable: config.isDraggable,
         backdropEnabled: config.backdropEnabled,
         panel: TimeTracker(),
-        body: NestedNavigator(
-          navigationKey: navigationKey,
-          initialRoute: '/',
-          routes: {
-            // default route as '/' is necessary!
-            '/': (context) => ProjectList(),
-            '/project': (context) => ProjectScreen(),
-          },
+        body: Scaffold(
+          appBar: MittVerkAppBar(
+            onBack: () {
+              homeProvider.homeNavigationKey.currentState.pop();
+            },
+            onSettings: () {
+              homeProvider.homeNavigationKey.currentState.pushNamed('/settings');
+            }
+          ),
+          body: NestedNavigator(
+            navigationKey: homeProvider.homeNavigationKey,
+            initialRoute: '/',
+            routes: {
+              // default route as '/' is necessary!
+              '/': (context) => ProjectList(),
+              '/project': (context) => ProjectScreen(),
+              '/settings': (context) => SettingsScreen(),
+            },
+          ),
         ),
       ),
     );

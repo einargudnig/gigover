@@ -41,8 +41,9 @@ Widget ProjectCardDaysLeft(BuildContext context) {
 
 class ProjectCard extends StatelessWidget {
   final Project item;
+  final double borderRadius;
 
-  ProjectCard({ this.item });
+  ProjectCard({ this.item, this.borderRadius = 8.0 });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,7 @@ class ProjectCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -103,7 +104,7 @@ class ProjectCard extends StatelessWidget {
                         value: item.amountDoneValue, // percent filled
                         valueColor:
                             AlwaysStoppedAnimation<Color>(MVTheme.mainGreen),
-                        backgroundColor: MVTheme.backgroundLightGrap,
+                        backgroundColor: MVTheme.backgroundLightGray,
                       ),
                     ),
                   ),
