@@ -113,18 +113,18 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     return Row(
       children: <Widget>[
         Expanded(
-            child: Center(
-          child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text('Comments on this task',
-                    style: AvailableFonts.getTextStyle(context,
-                        color: MVTheme.mainFont,
-                        fontSize: 14,
-                        weight: FontWeight.bold)),
-              )),
-        )),
+            child: Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: Text('Comments on this task',
+                        style: AvailableFonts.getTextStyle(context,
+                            color: MVTheme.mainFont,
+                            fontSize: 14,
+                            weight: FontWeight.bold)),
+                  ),
+                ))),
       ],
     );
   }
@@ -206,19 +206,17 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             Comments(),
             Row(
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                      color: MVTheme.backgroundGray,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text('Write a comment on this task..',
-                            style: AvailableFonts.getTextStyle(context,
-                                color: MVTheme.grayFont,
-                                fontStyle: FontStyle.italic,
-                                weight: FontWeight.bold,
-                                fontSize: 12)),
-                      )),
-                ),
+                Container(
+                    color: MVTheme.backgroundGray,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text('Write a comment on this task..',
+                          style: AvailableFonts.getTextStyle(context,
+                              color: MVTheme.grayFont,
+                              fontStyle: FontStyle.italic,
+                              weight: FontWeight.bold,
+                              fontSize: 12)),
+                    )),
               ],
             )
           ],
