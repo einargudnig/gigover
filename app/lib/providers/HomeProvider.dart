@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -50,6 +51,8 @@ class ElapsedTime {
 }
 
 class HomeProvider with ChangeNotifier {
+  final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
+
   int _count = 0;
   List<Project> projects = [
     new Project(

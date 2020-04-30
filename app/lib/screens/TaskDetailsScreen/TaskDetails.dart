@@ -5,10 +5,14 @@ import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 
-class TaskDetailsScreen extends StatelessWidget {
-  final String userId;
+class TaskDetailsArguments {
+  String taskId;
 
-  TaskDetailsScreen({this.userId});
+  TaskDetailsArguments(this.taskId);
+}
+
+class TaskDetailsScreen extends StatelessWidget {
+  TaskDetailsScreen();
 
   Widget build(BuildContext context) {
     return TaskDetailsView();
@@ -184,6 +188,8 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final TaskDetailsArguments args =
+        ModalRoute.of(context).settings.arguments;
     return ScreenLayout(
       child: Container(
         child: Column(

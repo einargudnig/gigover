@@ -33,5 +33,5 @@ var settingsScreenHandler = Handler(handlerFunc: (BuildContext context, Map<Stri
 
 
 var taskDetailsHandler = Handler(handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-  return ScreenAppBarWrapper(child: TaskDetailsScreen(userId: params["id"][0]));
+  return ScreenAppBarWrapper(child: TaskDetailsScreen());
 });

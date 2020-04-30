@@ -6,6 +6,7 @@ import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
+import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -30,8 +31,6 @@ class HomeScreenView extends StatefulWidget {
 }
 
 class HomeScreenViewState extends State<HomeScreenView> {
-  final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
-
   @override
   void initState() {
     super.initState();
@@ -65,12 +64,13 @@ class HomeScreenViewState extends State<HomeScreenView> {
         backdropEnabled: config.backdropEnabled,
         panel: TimeTracker(),
         body: NestedNavigator(
-          navigationKey: navigationKey,
+          navigationKey: homeProvider.navigationKey,
           initialRoute: '/',
           routes: {
             // default route as '/' is necessary!
             '/': (context) => ProjectList(),
             '/project': (context) => ProjectScreen(),
+            '/task': (context) => TaskDetailsScreen()
           },
         ),
       ),
