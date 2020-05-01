@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/ScaleFactor.dart';
+import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/igital/widgets/NestedNavigator.dart';
 import 'package:mittverk/main.dart';
 import 'package:mittverk/providers/HomeProvider.dart';

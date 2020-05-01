@@ -5,6 +5,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/igital/utils/ScaleFactor.dart';
+import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/routes/RouteObserver.dart';
 import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
@@ -49,6 +50,12 @@ class MittVerkAppState extends State<MittVerkApp> {
 
   Widget splashScreen(Widget child) {
     return MaterialApp(
+      builder: (context, child) {
+        return ScrollConfiguration(
+          behavior: IgitalScrollBehaviour(),
+          child: child,
+        );
+      },
       home: Container(
         decoration: BoxDecoration(
           color: MVTheme.primaryColor,
@@ -84,6 +91,12 @@ class MittVerkAppState extends State<MittVerkApp> {
                 backgroundColor: Color.fromRGBO(251, 251, 251, 1),
                 accentColor: Color.fromRGBO(131, 136, 148, 1),
               ),
+              builder: (context, child) {
+                return ScrollConfiguration(
+                  behavior: IgitalScrollBehaviour(),
+                  child: child,
+                );
+              },
               navigatorKey: mainNavigatorKey,
               initialRoute: snapshot.data != null ? '/home' : '/login',
               routes: {

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
-import 'package:mittverk/igital/widgets/DebugBorder.dart';
-import 'package:mittverk/igital/widgets/NestedNavigator.dart';
 import 'package:mittverk/models/Project.dart';
-import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectCard.dart';
 import 'package:mittverk/utils/Theme.dart';
-import 'package:provider/provider.dart';
+import 'package:mittverk/widgets/TaskCard.dart';
 
 class ProjectScreenArguments {
   Project project;
-
 
   ProjectScreenArguments(this.project);
 }
@@ -34,50 +30,102 @@ class ProjectScreenState extends State<ProjectScreen> {
     super.dispose();
   }
 
+  Widget paddedTask(Widget child) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+      child: child,
+    );
+  }
+  
+  // TODO get tasks from server
+  List<Widget> getTaskItems() {
+    return [
+      paddedTask(TaskCard()),
+      paddedTask(TaskCard()),
+      paddedTask(TaskCard()),
+      paddedTask(TaskCard()),
+    ];
+  }
+
+  List<Widget> getTabBarViews() {
+    return [
+      ListView(
+        children: getTaskItems(),
+      ),
+      ListView(
+        children: getTaskItems(),
+      ),
+      ListView(
+        children: getTaskItems(),
+      ),
+      ListView(
+        children: getTaskItems(),
+      ),
+    ];
+  }
+
+  List<Tab> getTabs() {
+    return [
+      Tab(
+        child: Text(
+          'Backlog',
+          style: AvailableFonts.getTextStyle(context,
+              color: MVTheme.mainFont, weight: FontWeight.bold),
+        ),
+      ),
+      Tab(
+        child: Text(
+          'To do',
+          style: AvailableFonts.getTextStyle(context,
+              color: MVTheme.mainFont, weight: FontWeight.bold),
+        ),
+      ),
+      Tab(
+        child: Text(
+          'Doing',
+          style: AvailableFonts.getTextStyle(context,
+              color: MVTheme.mainFont, weight: FontWeight.bold),
+        ),
+      ),
+      Tab(
+        child: Text(
+          'Done',
+          style: AvailableFonts.getTextStyle(context,
+              color: MVTheme.mainFont, weight: FontWeight.bold),
+        ),
+      ),
+    ];
+  }
+
   Widget tabs() {
+    List<Tab> tabs = getTabs();
+    List<Widget> tabBarViews = getTabBarViews();
+
+    if (tabs.length != tabBarViews.length) {
+      throw new Exception("Mismatch between tabs and tab views length");
+    }
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(top: 2.0),
         child: DefaultTabController(
-          length: 3,
+          length: tabs.length,
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: TabBar(
-              isScrollable: true,
+              isScrollable: tabs.length > 4,
               indicatorColor: MVTheme.secondaryColor,
-              tabs: [
-                Tab(
-                    child: Text(
-                  'Hello world',
-                  style: AvailableFonts.getTextStyle(context,
-                      color: MVTheme.mainFont, weight: FontWeight.bold),
-                )),
-                Tab(
-                    child: Text(
-                  'Hello world',
-                  style: AvailableFonts.getTextStyle(context,
-                      color: MVTheme.mainFont, weight: FontWeight.bold),
-                )),
-                Tab(
-                    child: Text(
-                      'Hello world',
-                      style: AvailableFonts.getTextStyle(context,
-                          color: MVTheme.mainFont, weight: FontWeight.bold),
-                    )),
-              ],
+              tabs: tabs,
             ),
             body: Column(
               children: <Widget>[
                 Expanded(
                   child: Container(
                     height: 40,
-                    decoration: BoxDecoration(color: MVTheme.backgroundLightGray),
+                    decoration:
+                        BoxDecoration(color: MVTheme.backgroundLightGray),
                     child: TabBarView(
-                      children: [
-                        Center(child: Text('Hello')),
-                        Icon(Icons.directions_transit),
-                        Icon(Icons.directions_bike),
-                      ],
+                      children: getTabBarViews(),
                     ),
                   ),
                 ),
