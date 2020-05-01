@@ -55,9 +55,7 @@ class TimeTracker extends StatelessWidget {
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
                   print('open modal with dialgo thingy');
-                  homeProvider.homeNavigationKey.currentState.pushNamed('/task',
-                      arguments:
-                          TaskDetailsArguments(homeProvider.currentTask.id));
+                  homeProvider.goToTaskDetail();
                 },
                 child: SvgPicture.asset(
                   'assets/icons/comment.svg',

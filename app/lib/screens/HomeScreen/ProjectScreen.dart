@@ -22,6 +22,8 @@ class ProjectScreenState extends State<ProjectScreen> {
 
   @override
   void initState() {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.showTimePanel();
     super.initState();
   }
 
