@@ -33,7 +33,10 @@ class _ProjectListState extends State<ProjectList> {
           },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-            child: ProjectCard(item: homeProvider.projects[index]),
+            child: Padding(
+              padding: const EdgeInsets.only(top:4.0, bottom: 4.0),
+              child: ProjectCard(item: homeProvider.projects[index]),
+            ),
             ),
         );
       },
