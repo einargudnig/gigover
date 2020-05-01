@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectCard.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/TaskCard.dart';
 import 'package:provider/provider.dart';
 
-class ProjectScreenArguments {
+class ProjectListScreenArgs {
   Project project;
 
-  ProjectScreenArguments(this.project);
+  ProjectListScreenArgs(this.project);
 }
 
 class ProjectScreen extends StatefulWidget {
@@ -41,11 +43,13 @@ class ProjectScreenState extends State<ProjectScreen> {
 
   // TODO get tasks from server
   List<Widget> getTaskItems() {
+    Task tempTask = new Task('1', 'some task',
+        [new TaskComment(content: 'test', userIdFrom: 'fe', dateSent: 'afa')]);
     return [
-      paddedTask(TaskCard()),
-      paddedTask(TaskCard()),
-      paddedTask(TaskCard()),
-      paddedTask(TaskCard()),
+      paddedTask(TaskCard(tempTask)),
+      paddedTask(TaskCard(tempTask)),
+      paddedTask(TaskCard(tempTask)),
+      paddedTask(TaskCard(tempTask)),
     ];
   }
 
@@ -121,7 +125,7 @@ class ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ProjectScreenArguments args =
+    final ProjectListScreenArgs args =
         ModalRoute.of(context).settings.arguments;
 
     print('Project with id:');
@@ -133,7 +137,7 @@ class ProjectScreenState extends State<ProjectScreen> {
       child: Column(
         children: <Widget>[
           ProjectCard(
-            item: args.project,
+            item: project,
             borderRadius: 0,
             hasBoxShadow: false,
           ),

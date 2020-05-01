@@ -1,18 +1,6 @@
-class Task {
-  String title;
-  String id;
-  List<Comment> comments = [];
+import 'Task.dart';
+import 'TaskComment.dart';
 
-  Task(this.id, this.title, this.comments);
-}
-
-class Comment {
-  String content;
-  String userIdFrom; // userId
-  String dateSent;
-
-  Comment({this.content, this.userIdFrom, this.dateSent});
-}
 
 class Project {
   int id;
@@ -38,13 +26,13 @@ class Project {
     this.people = people;
     this.tasks = [
       Task('Test', 'test', [
-        new Comment(
+        new TaskComment(
             content: 'You need to clean up the brush',
             userIdFrom: '1',
             dateSent: new DateTime(2020).toString())
       ]),
       Task('Baba', 'afqaf', [
-        new Comment(
+        new TaskComment(
             content: 'You need to clean uafafa',
             userIdFrom: '1',
             dateSent: new DateTime(2019).toString())

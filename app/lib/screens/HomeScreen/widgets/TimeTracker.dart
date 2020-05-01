@@ -6,7 +6,6 @@ import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
-import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +54,7 @@ class TimeTracker extends StatelessWidget {
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
                   print('open modal with dialgo thingy');
-                  homeProvider.goToTaskDetail();
+                  homeProvider.goToTaskDetail(homeProvider.currentTrackedTask.id);
                 },
                 child: SvgPicture.asset(
                   'assets/icons/comment.svg',
@@ -145,14 +144,14 @@ class TimeTracker extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    homeProvider.currentProject.title,
+                    homeProvider.currentTrackedProject.title,
                     style: AvailableFonts.getTextStyle(context,
                         color: MVTheme.grayFont, weight: FontWeight.bold),
                   ),
                   Spacing(
                     amount: 0.5,
                   ),
-                  Text(homeProvider.currentTask.title,
+                  Text(homeProvider.currentTrackedTask.title,
                       style: AvailableFonts.getTextStyle(context,
                           color: MVTheme.mainFont,
                           weight: FontWeight.bold,

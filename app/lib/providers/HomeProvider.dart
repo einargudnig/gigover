@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
-import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
+import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
@@ -86,8 +87,8 @@ class HomeProvider with ChangeNotifier {
         people: ["SEB", "TEB"],
         daysLeft: 2)
   ];
-  Project currentProject;
-  Task currentTask;
+  Project currentTrackedProject;
+  Task currentTrackedTask;
   StopwatchProvider stopwatch;
   SlidePanelConfig slidePanelConfig = defaultSlidePanelConfig;
   PanelController panelController = new PanelController();
@@ -97,10 +98,9 @@ class HomeProvider with ChangeNotifier {
   bool mama = true;
 
   HomeProvider() {
-    this.currentProject = this.projects[0];
-    this.currentTask = this.currentProject.tasks[0];
+    this.currentTrackedProject = this.projects[0];
+    this.currentTrackedTask = this.currentTrackedProject.tasks[0];
     this.stopwatch = new StopwatchProvider();
-
     //TODI if slidepanelConfig/timer starttimer and set the slidepanelConfig
   }
 
@@ -108,16 +108,16 @@ class HomeProvider with ChangeNotifier {
     Project p = projects.firstWhere((p) {
       return p.title == projectTitle;
     });
-    this.currentTask = p.tasks[0];
-    this.currentProject = p;
+    this.currentTrackedTask = p.tasks[0];
+    this.currentTrackedProject = p;
     notifyListeners();
   }
 
   void setCurrentTask(String taskTitle) {
-    Task t = this.currentProject.tasks.firstWhere((p) {
+    Task t = this.currentTrackedProject.tasks.firstWhere((p) {
       return p.title == taskTitle;
     });
-    this.currentTask = t;
+    this.currentTrackedTask = t;
     notifyListeners();
   }
 
@@ -153,12 +153,11 @@ class HomeProvider with ChangeNotifier {
 
   ///TIMMMMER STUFF
 
-  void goToTaskDetail(){
+  void goToTaskDetail(String id){
     this.hideTimePanel();
     this.homeNavigationKey.currentState.pushNamed('/task',
         arguments:
-        TaskDetailsArguments(this.currentTask.id));
-
+        TaskDetailsArguments(id));
   }
 
   void showTimePanel() {
