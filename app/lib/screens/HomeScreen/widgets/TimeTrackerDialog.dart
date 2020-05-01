@@ -45,7 +45,7 @@ class TimeTrackerDialog extends StatelessWidget {
                 dropdownButton(
                     context,
                     'Veldu verkefni',
-                    homeProvider.currentProject.title,
+                    homeProvider.currentTrackedProject.title,
                     homeProvider.projects.map((t) {
                       return t.title;
                     }).toList(), onTap: (String s) {
@@ -64,8 +64,8 @@ class TimeTrackerDialog extends StatelessWidget {
                 dropdownButton(
                     context,
                     'Veldu verkþátt',
-                    homeProvider.currentTask.title,
-                    homeProvider.currentProject.tasks.map((t) {
+                    homeProvider.currentTrackedTask.title,
+                    homeProvider.currentTrackedProject.tasks.map((t) {
                       return t.title;
                     }).toList(), onTap: (String s) {
                   homeProvider.setCurrentTask(s);

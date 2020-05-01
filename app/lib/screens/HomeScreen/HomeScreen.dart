@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/ScaleFactor.dart';
-import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/igital/widgets/NestedNavigator.dart';
 import 'package:mittverk/main.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
-import 'package:mittverk/screens/HomeScreen/widgets/ProjectList.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
 import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
@@ -14,7 +12,7 @@ import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
+import 'ProjectListScreen.dart';
 import 'ProjectScreen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -84,7 +82,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
             initialRoute: '/',
             routes: {
               // default route as '/' is necessary!
-              '/': (context) => ProjectList(),
+              '/': (context) => ProjectListScreen(),
               '/project': (context) => ProjectScreen(),
               '/settings': (context) => SettingsScreen(),
               '/task': (context) => TaskDetailsScreen(),

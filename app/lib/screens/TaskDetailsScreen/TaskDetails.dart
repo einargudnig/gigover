@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
@@ -10,7 +13,6 @@ import 'package:provider/provider.dart';
 
 class TaskDetailsArguments {
   String taskId;
-
   TaskDetailsArguments(this.taskId);
 }
 
@@ -28,9 +30,13 @@ class TaskDetailsView extends StatefulWidget {
 }
 
 class TaskDetailsViewState extends State<TaskDetailsView> {
+  Task task;
+
   @override
   void initState() {
     super.initState();
+    //TODO: Call server to get all taskDetails
+    this.task = new Task('Jolasveinn', 'Some content', [new TaskComment(content: 'fafa', userIdFrom: 'fafa', dateSent: 'fafa')]);
   }
 
   Widget TaskDetailItemWrapper(Widget child) {

@@ -55,7 +55,7 @@ class TimeTracker extends StatelessWidget {
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
                   print('open modal with dialgo thingy');
-                  homeProvider.goToTaskDetail();
+                  homeProvider.goToTaskDetail(homeProvider.currentTrackedTask.id);
                 },
                 child: SvgPicture.asset(
                   'assets/icons/comment.svg',
@@ -145,14 +145,14 @@ class TimeTracker extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    homeProvider.currentProject.title,
+                    homeProvider.currentTrackedProject.title,
                     style: AvailableFonts.getTextStyle(context,
                         color: MVTheme.grayFont, weight: FontWeight.bold),
                   ),
                   Spacing(
                     amount: 0.5,
                   ),
-                  Text(homeProvider.currentTask.title,
+                  Text(homeProvider.currentTrackedTask.title,
                       style: AvailableFonts.getTextStyle(context,
                           color: MVTheme.mainFont,
                           weight: FontWeight.bold,
