@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:mittverk/main.dart';
+import 'package:mittverk/utils/Theme.dart';
 
 class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function onBack;
@@ -37,6 +38,7 @@ class MittVerkAppBarState extends State<MittVerkAppBar> with RouteAware {
     bool showGearIcon = routeObserver.screenName != '/settings';
 
     return AppBar(
+      backgroundColor: MVTheme.appBarBackgroundColor,
       title: SvgPicture.asset(
         'assets/logo/mittverk.svg',
         height: 26.scale,

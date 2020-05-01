@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'TimeTrackerDialog.dart';
 
 class TimeTracker extends StatelessWidget {
-
   TimeTracker();
 
   String formatTime(ElapsedTime time) {
@@ -56,8 +55,9 @@ class TimeTracker extends StatelessWidget {
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
                   print('open modal with dialgo thingy');
-                  homeProvider.homeNavigationKey.currentState
-                      .pushNamed('/task', arguments: TaskDetailsArguments(homeProvider.currentTask.id));
+                  homeProvider.homeNavigationKey.currentState.pushNamed('/task',
+                      arguments:
+                          TaskDetailsArguments(homeProvider.currentTask.id));
                 },
                 child: SvgPicture.asset(
                   'assets/icons/comment.svg',
@@ -190,17 +190,22 @@ class TimeTracker extends StatelessWidget {
           child: Container(
             height: 54,
             child: RoundedButton(
-                fillBackground: Color.fromRGBO(31, 223, 131, 1),
-                textColor: Color.fromRGBO(7, 16, 41, 1),
-                onTap: () {
-                  showCupertinoModalPopup(
-                      context: context,
-                      builder: (_) {
-                        return ChangeNotifierProvider.value(
-                            value: homeProvider, child: TimeTrackerDialog());
-                      });
-                },
-                text: 'Tímaskráning'),
+              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              textColor: Color.fromRGBO(7, 16, 41, 1),
+              onTap: () {
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (_) {
+                      return ChangeNotifierProvider.value(
+                          value: homeProvider, child: TimeTrackerDialog());
+                    });
+              },
+              child: Text('Tímaskráning',
+                  style: AvailableFonts.getTextStyle(context,
+                      color: MVTheme.primaryColor,
+                      fontSize: 18,
+                      weight: FontWeight.bold)),
+            ),
           ),
         ),
       ),
