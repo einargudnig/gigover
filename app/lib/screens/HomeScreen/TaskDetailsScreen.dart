@@ -10,6 +10,7 @@ import 'package:mittverk/widgets/ScreenLayout.dart';
 
 class TaskDetailsArguments {
   String taskId;
+
   TaskDetailsArguments(this.taskId);
 }
 
@@ -27,13 +28,30 @@ class TaskDetailsView extends StatefulWidget {
 }
 
 class TaskDetailsViewState extends State<TaskDetailsView> {
+  TextEditingController commentInputController = TextEditingController();
+  String _commentText = '';
   Task task;
 
   @override
   void initState() {
     super.initState();
+    commentInputController.addListener(commentInputChange);
     //TODO: Call server to get all taskDetails
-    this.task = new Task('Jolasveinn', 'Some content', [new TaskComment(content: 'fafa', userIdFrom: 'fafa', dateSent: 'fafa')]);
+    this.task = new Task('Jolasveinn', 'Some content', [
+      new TaskComment(content: 'fafa', userIdFrom: 'fafa', dateSent: 'fafa')
+    ]);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    commentInputController.dispose();
+  }
+
+  void commentInputChange() {
+    setState(() {
+      _commentText = commentInputController.value.text;
+    });
   }
 
   Widget TaskDetailItemWrapper(Widget child) {
@@ -176,11 +194,6 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
     return ScreenLayout(
@@ -192,24 +205,26 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               'Currently tracking',
               'Elhusinnretting',
             )),
-            TaskDetailItemWrapper(TaskDetailInfo(
-                'Type', 'Elhusinnretting',
+            TaskDetailItemWrapper(TaskDetailInfo('Type', 'Elhusinnretting',
                 widget: Icon(Icons.arrow_drop_down))),
             CommentHeader(),
             Comments(),
             Row(
               children: <Widget>[
-                Container(
-                    color: MVTheme.backgroundGray,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text('Write a comment on this task..',
-                          style: AvailableFonts.getTextStyle(context,
-                              color: MVTheme.grayFont,
-                              fontStyle: FontStyle.italic,
-                              weight: FontWeight.bold,
-                              fontSize: 12)),
-                    )),
+                Expanded(
+                  child: Container(
+                      color: MVTheme.mainGreen,
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Add comment to task..',
+                          fillColor: Colors.white,
+                          focusColor: Colors.black.withAlpha(150),
+                          filled: true,
+                        ),
+                        controller: commentInputController,
+                        keyboardType: TextInputType.text,
+                      )),
+                ),
               ],
             )
           ],
