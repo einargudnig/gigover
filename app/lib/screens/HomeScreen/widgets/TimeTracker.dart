@@ -6,7 +6,6 @@ import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
-import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 

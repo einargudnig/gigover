@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
-import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
+import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {

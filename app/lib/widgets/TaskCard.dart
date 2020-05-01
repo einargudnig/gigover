@@ -33,6 +33,7 @@ class TaskCardState extends State<TaskCard> {
     return ScaleTap(
       onTap: () {
         print('Tapping task!');
+        //TODO take a callback in instead
         final homeProvider = Provider.of<HomeProvider>(context, listen:false);
         homeProvider.goToTaskDetail(widget.task.id);
       },
