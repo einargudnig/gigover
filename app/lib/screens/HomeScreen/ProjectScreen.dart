@@ -123,7 +123,7 @@ class ProjectScreenState extends State<ProjectScreen> {
                   child: Container(
                     height: 40,
                     decoration:
-                        BoxDecoration(color: MVTheme.backgroundLightGray),
+                        BoxDecoration(color: MVTheme.backgroundGray),
                     child: TabBarView(
                       children: getTabBarViews(),
                     ),
@@ -147,7 +147,7 @@ class ProjectScreenState extends State<ProjectScreen> {
     print(project.id);
 
     return Container(
-      decoration: BoxDecoration(color: MVTheme.backgroundLightGray),
+      decoration: BoxDecoration(color: MVTheme.backgroundGray),
       child: Column(
         children: <Widget>[
           ProjectCard(

@@ -108,7 +108,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                         value: item.amountDoneValue, // percent filled
                         valueColor:
                             AlwaysStoppedAnimation<Color>(MVTheme.mainGreen),
-                        backgroundColor: MVTheme.backgroundLightGray,
+                        backgroundColor: MVTheme.backgroundGray,
                       ),
                     ),
                   ),
