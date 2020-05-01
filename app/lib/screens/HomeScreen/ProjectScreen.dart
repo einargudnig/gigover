@@ -38,7 +38,7 @@ class ProjectScreenState extends State<ProjectScreen> {
       child: child,
     );
   }
-  
+
   // TODO get tasks from server
   List<Widget> getTaskItems() {
     return [
@@ -68,34 +68,10 @@ class ProjectScreenState extends State<ProjectScreen> {
 
   List<Tab> getTabs() {
     return [
-      Tab(
-        child: Text(
-          'Backlog',
-          style: AvailableFonts.getTextStyle(context,
-              color: MVTheme.mainFont, weight: FontWeight.bold),
-        ),
-      ),
-      Tab(
-        child: Text(
-          'To do',
-          style: AvailableFonts.getTextStyle(context,
-              color: MVTheme.mainFont, weight: FontWeight.bold),
-        ),
-      ),
-      Tab(
-        child: Text(
-          'Doing',
-          style: AvailableFonts.getTextStyle(context,
-              color: MVTheme.mainFont, weight: FontWeight.bold),
-        ),
-      ),
-      Tab(
-        child: Text(
-          'Done',
-          style: AvailableFonts.getTextStyle(context,
-              color: MVTheme.mainFont, weight: FontWeight.bold),
-        ),
-      ),
+      Tab(text: 'Backlog'),
+      Tab(text: 'To do'),
+      Tab(text: 'Doing'),
+      Tab(text: 'Done'),
     ];
   }
 
@@ -115,6 +91,12 @@ class ProjectScreenState extends State<ProjectScreen> {
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: TabBar(
+              labelColor: MVTheme.mainFont,
+              unselectedLabelColor: MVTheme.mainFont,
+              labelStyle: AvailableFonts.getTextStyle(context,
+                  fontSize: 14, weight: FontWeight.bold),
+              unselectedLabelStyle: AvailableFonts.getTextStyle(context,
+                  fontSize: 14, weight: FontWeight.normal),
               isScrollable: tabs.length > 4,
               indicatorColor: MVTheme.secondaryColor,
               tabs: tabs,
@@ -123,9 +105,7 @@ class ProjectScreenState extends State<ProjectScreen> {
               children: <Widget>[
                 Expanded(
                   child: Container(
-                    height: 40,
-                    decoration:
-                        BoxDecoration(color: MVTheme.backgroundGray),
+                    decoration: BoxDecoration(color: MVTheme.backgroundGray),
                     child: TabBarView(
                       children: getTabBarViews(),
                     ),
