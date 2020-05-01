@@ -10,21 +10,21 @@ class ProjectList extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: ListView.builder(
-        itemCount: homeProvider.projects.length,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed('/project', arguments: ProjectScreenArguments(homeProvider.projects[index]));
-            },
+    return ListView.builder(
+      itemCount: homeProvider.projects.length,
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed('/project', arguments: ProjectScreenArguments(homeProvider.projects[index]));
+          },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
               child: ProjectCard(item: homeProvider.projects[index]),
-          );
-        },
-      ),
+            ),
+        );
+      },
     );
   }
 }

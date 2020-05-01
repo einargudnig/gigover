@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/utils/Theme.dart';
+import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 
 class TaskDetailsArguments {
@@ -78,26 +79,9 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                subHeader,
-                style: AvailableFonts.getTextStyle(
-                  context,
-                  color: MVTheme.grayFont,
-                  fontSize: 10,
-                ),
-              ),
-              Spacing(
-                isVertical: true,
-              ),
-              Text(header,
-                  style: AvailableFonts.getTextStyle(context,
-                      color: MVTheme.mainFont,
-                      fontSize: 14,
-                      weight: FontWeight.bold))
-            ],
+          child: CardTitle(
+            subtitle: subHeader,
+            title: header,
           ),
         ),
         Column(
@@ -113,18 +97,23 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     return Row(
       children: <Widget>[
         Expanded(
-            child: Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Center(
-                    child: Text('Comments on this task',
-                        style: AvailableFonts.getTextStyle(context,
-                            color: MVTheme.mainFont,
-                            fontSize: 14,
-                            weight: FontWeight.bold)),
-                  ),
-                ))),
+          child: Container(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Text(
+                'Comments on this task',
+                style: AvailableFonts.getTextStyle(
+                  context,
+                  color: MVTheme.mainFont,
+                  fontSize: 14,
+                  weight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -188,8 +177,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final TaskDetailsArguments args =
-        ModalRoute.of(context).settings.arguments;
+    final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
     return ScreenLayout(
       child: Container(
         child: Column(

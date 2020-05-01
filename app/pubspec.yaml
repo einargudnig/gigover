@@ -33,3 +33,4 @@ flutter:
     - assets/icons/pause.svg
     - assets/icons/resume.svg
     - assets/icons/stop.svg
+    - assets/icons/timer.svg

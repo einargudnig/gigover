@@ -66,18 +66,22 @@ class ProjectScreenState extends State<ProjectScreen> {
                     )),
               ],
             ),
-            body: DebugBorder(
-              child: Container(
-                height: 40,
-                decoration: BoxDecoration(color: MVTheme.backgroundLightGray),
-                child: TabBarView(
-                  children: [
-                    Center(child: Text('Hello')),
-                    Icon(Icons.directions_transit),
-                    Icon(Icons.directions_bike),
-                  ],
+            body: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    height: 40,
+                    decoration: BoxDecoration(color: MVTheme.backgroundLightGray),
+                    child: TabBarView(
+                      children: [
+                        Center(child: Text('Hello')),
+                        Icon(Icons.directions_transit),
+                        Icon(Icons.directions_bike),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -98,7 +102,11 @@ class ProjectScreenState extends State<ProjectScreen> {
       decoration: BoxDecoration(color: MVTheme.backgroundLightGray),
       child: Column(
         children: <Widget>[
-          ProjectCard(item: args.project, borderRadius: 0),
+          ProjectCard(
+            item: args.project,
+            borderRadius: 0,
+            hasBoxShadow: false,
+          ),
           tabs(),
         ],
       ),
