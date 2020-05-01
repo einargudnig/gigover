@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
+import 'package:provider/provider.dart';
 
 class TaskDetailsArguments {
   String taskId;
@@ -188,7 +190,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               'Elhusinnretting',
             )),
             TaskDetailItemWrapper(TaskDetailInfo(
-                'Currently tracking', 'Elhusinnretting',
+                'Type', 'Elhusinnretting',
                 widget: Icon(Icons.arrow_drop_down))),
             CommentHeader(),
             Comments(),

@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
+import 'package:mittverk/screens/TaskDetailsScreen/TaskDetails.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
@@ -52,6 +53,7 @@ class ElapsedTime {
 
 class HomeProvider with ChangeNotifier {
   final GlobalKey<NavigatorState> homeNavigationKey = GlobalKey<NavigatorState>();
+
 
   int _count = 0;
   List<Project> projects = [
@@ -119,6 +121,7 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ///TIMMMMER STUFF
   void pauseTimer() {
     this.stopwatch.stopStopWatch();
     notifyListeners();
@@ -148,37 +151,27 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void increment() {
-    projects.add(new Project(
-        title: 'Laugarvegur 3',
-        subTitle: 'Setja upp Apple TV',
-        amountDone: 10,
-        people: ["SEB", "TEB", "FAF", "TS", "TS", "TS", "TS", "TS"],
-        daysLeft: 7));
-    notifyListeners();
+  ///TIMMMMER STUFF
+
+  void goToTaskDetail(){
+    this.hideTimePanel();
+    this.homeNavigationKey.currentState.pushNamed('/task',
+        arguments:
+        TaskDetailsArguments(this.currentTask.id));
+
   }
 
-  void setStopwatchState(StopwatchProvider stopwatchState) {
-    this.stopwatch = stopwatchState;
-  }
-
-  SlidePanelConfig getSlidePanelConfig() {
-    if (stopwatch.currentStopWatchDuration == Duration.zero) {
-      //Default time tracking bottom
-      return new SlidePanelConfig(
-          minHeight: 72,
-          maxHeight: 72,
-          isDraggable: false,
-          backdropEnabled: false,
-          renderPanelSheet: false);
-    } else {
-      print('returning here');
-      return new SlidePanelConfig(
-          minHeight: 70,
-          maxHeight: 170,
-          isDraggable: true,
-          backdropEnabled: false,
-          renderPanelSheet: true);
+  void showTimePanel() {
+    if(!this.panelController.isPanelShown){
+      this.panelController.show();
+      notifyListeners();
     }
   }
+  void hideTimePanel(){
+    if(this.panelController.isPanelShown){
+      this.panelController.hide();
+      notifyListeners();
+    }
+  }
+
 }

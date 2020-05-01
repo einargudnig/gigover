@@ -5,7 +5,19 @@ import 'package:provider/provider.dart';
 
 import 'ProjectCard.dart';
 
-class ProjectList extends StatelessWidget {
+class ProjectList extends StatefulWidget {
+  @override
+  _ProjectListState createState() => _ProjectListState();
+}
+
+class _ProjectListState extends State<ProjectList> {
+  @override
+  void initState() {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.showTimePanel();
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
@@ -21,10 +33,14 @@ class ProjectList extends StatelessWidget {
           },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+            child: Padding(
+              padding: const EdgeInsets.only(top:4.0, bottom: 4.0),
               child: ProjectCard(item: homeProvider.projects[index]),
+            ),
             ),
         );
       },
     );
   }
 }
+

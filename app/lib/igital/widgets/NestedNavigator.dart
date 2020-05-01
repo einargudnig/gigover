@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:provider/provider.dart';
 
 class NestedNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState> navigationKey;
@@ -36,6 +38,12 @@ class NestedNavigator extends StatelessWidget {
         },
       ),
       onWillPop: () {
+        String currentRoute = ModalRoute.of(context).settings.name;
+        if(currentRoute == '/home' || currentRoute == '/project'){
+          HomeProvider homeProvider =
+          Provider.of<HomeProvider>(context, listen: false);
+          homeProvider.showTimePanel();
+        }
         if(navigationKey.currentState.canPop()) {
           navigationKey.currentState.pop();
           return Future<bool>.value(false);
