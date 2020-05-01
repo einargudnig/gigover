@@ -9,8 +9,8 @@ class CardTitle extends StatelessWidget {
   final Widget icon;
 
   CardTitle({
-    @required this.subtitle,
     @required this.title,
+    this.subtitle,
     this.icon,
   });
 
@@ -19,17 +19,17 @@ class CardTitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
+        subtitle != null ? Text(
           subtitle,
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.grayFont,
             fontSize: 10,
           ),
-        ),
-        Spacing(
+        ) : Container(),
+        subtitle != null ? Spacing(
           isVertical: true,
-        ),
+        ) : Container(),
         Text(
           title,
           style: AvailableFonts.getTextStyle(

@@ -5,7 +5,7 @@ import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 
-import 'Avatars.dart';
+import '../../../widgets/Avatars.dart';
 
 Widget ProjectCardDaysLeft(BuildContext context) {
   return Container(

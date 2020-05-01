@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/igital/widgets/ScaleTap.dart';
+import 'package:mittverk/widgets/Avatars.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 
@@ -7,35 +9,10 @@ class TaskCard extends StatefulWidget {
   State createState() => TaskCardState();
 }
 
-class TaskCardState extends State<TaskCard>
-    with SingleTickerProviderStateMixin {
-  double _scale = 1.0;
-  AnimationController _animationController;
-
+class TaskCardState extends State<TaskCard> {
   @override
   void initState() {
     super.initState();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 50),
-      lowerBound: 0.0,
-      upperBound: 0.08,
-    )..addListener(() {
-        setState(() {});
-      });
-  }
-
-  void tapDownRoundedButton(TapDownDetails details) {
-    _animationController.forward();
-  }
-
-  void tapUpRoundedButton(TapUpDetails details) {
-    resetAnimation();
-  }
-
-  void resetAnimation() {
-    _animationController.reverse();
   }
 
   @override
@@ -45,26 +22,20 @@ class TaskCardState extends State<TaskCard>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ScaleTap(
       onTap: () {
-        //widget.onTap();
+        print('Tapping task!');
       },
-      onTapDown: tapDownRoundedButton,
-      onTapUp: tapUpRoundedButton,
-      onTapCancel: resetAnimation,
-      child: Transform.scale(
-        scale: _scale,
-        child: CardBox(
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: <Widget>[
-                CardTitle(
-                  subtitle: 'Assigned to you',
-                  title: 'Task number 1'
-                ),
-              ],
-            ),
+      child: CardBox(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              CardTitle(title: 'Task number 1'),
+              onlyAvatar(context, text: 'AV', circleSize: 14),
+            ],
           ),
         ),
       ),
