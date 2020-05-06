@@ -23,7 +23,7 @@ class TimeTracker extends StatelessWidget {
     return '$minutesStr:$secondsStr';
   }
 
-  Widget TimeActions(BuildContext context) {
+  Widget timerActions(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
     if (homeProvider.stopwatch.currentStopwatch.isRunning) {
@@ -54,7 +54,7 @@ class TimeTracker extends StatelessWidget {
                 textColor: Color.fromRGBO(7, 16, 41, 1),
                 onTap: () {
                   print('open modal with dialgo thingy');
-                  homeProvider.goToTaskDetail(homeProvider.currentTrackedTask.id);
+                  homeProvider.goToTaskDetail(homeProvider.currentTrackedTask);
                 },
                 child: SvgPicture.asset(
                   'assets/icons/comment.svg',
@@ -101,7 +101,7 @@ class TimeTracker extends StatelessWidget {
     }
   }
 
-  Widget TimeItem(String currentTime) {
+  Widget timeItem(String currentTime) {
     return Expanded(
       child: RoundedButton(
           padding: EdgeInsets.all(20.0),
@@ -144,14 +144,14 @@ class TimeTracker extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    homeProvider.currentTrackedProject.title,
+                    homeProvider.currentTrackedProject.toString(),
                     style: AvailableFonts.getTextStyle(context,
                         color: MVTheme.grayFont, weight: FontWeight.bold),
                   ),
                   Spacing(
                     amount: 0.5,
                   ),
-                  Text(homeProvider.currentTrackedTask.title,
+                  Text(homeProvider.currentTrackedTask.toString(),
                       style: AvailableFonts.getTextStyle(context,
                           color: MVTheme.mainFont,
                           weight: FontWeight.bold,
@@ -163,14 +163,14 @@ class TimeTracker extends StatelessWidget {
               ),
               Row(
                 children: <Widget>[
-                  TimeItem(
+                  timeItem(
                       formatTime(homeProvider.stopwatch.currentElapsedTime)),
                   Spacing(
                     isVertical: false,
                     amount: 2,
                   ),
                   Expanded(
-                    child: TimeActions(context),
+                    child: timerActions(context),
                   )
                 ],
               ),
@@ -191,17 +191,22 @@ class TimeTracker extends StatelessWidget {
               textColor: Color.fromRGBO(7, 16, 41, 1),
               onTap: () {
                 showCupertinoModalPopup(
-                    context: context,
-                    builder: (_) {
-                      return ChangeNotifierProvider.value(
-                          value: homeProvider, child: TimeTrackerDialog());
-                    });
+                  context: context,
+                  builder: (_) {
+                    return ChangeNotifierProvider.value(
+                        value: homeProvider, child: TimeTrackerDialog());
+                  },
+                );
               },
-              child: Text('Tímaskráning',
-                  style: AvailableFonts.getTextStyle(context,
-                      color: MVTheme.primaryColor,
-                      fontSize: 18,
-                      weight: FontWeight.bold)),
+              child: Text(
+                'Tímaskráning',
+                style: AvailableFonts.getTextStyle(
+                  context,
+                  color: MVTheme.primaryColor,
+                  fontSize: 18,
+                  weight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ),

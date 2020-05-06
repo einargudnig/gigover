@@ -3,26 +3,24 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
-import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 
 class TaskDetailsArguments {
-  String taskId;
+  Task task;
 
-  TaskDetailsArguments(this.taskId);
-}
-
-class TaskDetailsScreen extends StatelessWidget {
-  TaskDetailsScreen();
-
-  Widget build(BuildContext context) {
-    return TaskDetailsView();
-  }
+  TaskDetailsArguments(this.task);
 }
 
 class TaskDetailsView extends StatefulWidget {
+  Task task;
+
+  TaskDetailsView(BuildContext context) {
+    final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
+    this.task = args.task;
+  }
+
   @override
   State createState() => TaskDetailsViewState();
 }
@@ -30,16 +28,11 @@ class TaskDetailsView extends StatefulWidget {
 class TaskDetailsViewState extends State<TaskDetailsView> {
   TextEditingController commentInputController = TextEditingController();
   String _commentText = '';
-  Task task;
 
   @override
   void initState() {
     super.initState();
     commentInputController.addListener(commentInputChange);
-    //TODO: Call server to get all taskDetails
-    this.task = new Task('Jolasveinn', 'Some content', [
-      new TaskComment(content: 'fafa', userIdFrom: 'fafa', dateSent: 'fafa')
-    ]);
   }
 
   @override
@@ -54,7 +47,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     });
   }
 
-  Widget TaskDetailItemWrapper(Widget child) {
+  Widget taskDetailItemWrapper(Widget child) {
     return Container(
         child: Container(
             decoration: BoxDecoration(
@@ -76,7 +69,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Test',
+              widget.task.toString(),
               style: AvailableFonts.getTextStyle(
                 context,
                 color: MVTheme.mainFont,
@@ -87,7 +80,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             Icon(Icons.more_horiz)
           ],
         ),
-        Text('baba',
+        Text('DUDUD',
             style: AvailableFonts.getTextStyle(
               context,
               color: MVTheme.grayFont,
@@ -116,7 +109,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     );
   }
 
-  Widget CommentHeader() {
+  Widget commentHeader() {
     return Row(
       children: <Widget>[
         Expanded(
@@ -141,7 +134,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     );
   }
 
-  Widget Comment() {
+  Widget comment() {
     return Container(
         child: Padding(
       padding: const EdgeInsets.all(12.0),
@@ -179,7 +172,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     ));
   }
 
-  Widget Comments() {
+  Widget comments() {
     return Expanded(
       child: Container(
         child: ListView.builder(
@@ -187,7 +180,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return Comment();
+              return comment();
             }),
       ),
     );
@@ -195,20 +188,20 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
+
     return ScreenLayout(
       child: Container(
         child: Column(
           children: [
-            TaskDetailItemWrapper(TaskDetailHeader()),
-            TaskDetailItemWrapper(TaskDetailInfo(
+            taskDetailItemWrapper(TaskDetailHeader()),
+            taskDetailItemWrapper(TaskDetailInfo(
               'Currently tracking',
               'Elhusinnretting',
             )),
-            TaskDetailItemWrapper(TaskDetailInfo('Type', 'Elhusinnretting',
+            taskDetailItemWrapper(TaskDetailInfo('Type', 'Elhusinnretting',
                 widget: Icon(Icons.arrow_drop_down))),
-            CommentHeader(),
-            Comments(),
+            commentHeader(),
+            comments(),
             Row(
               children: <Widget>[
                 Expanded(

@@ -6,6 +6,8 @@ import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Dialog.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
@@ -42,15 +44,15 @@ class TimeTrackerDialog extends StatelessWidget {
           Container(
             child: Column(
               children: <Widget>[
-                dropdownButton(
-                    context,
-                    'Veldu verkefni',
-                    homeProvider.currentTrackedProject.title,
-                    homeProvider.projects.map((t) {
-                      return t.title;
-                    }).toList(), onTap: (String s) {
-                  homeProvider.setCurrentProject(s);
-                }),
+                dropdownButton<Project>(
+                  context,
+                  'Veldu verkefni',
+                  homeProvider.currentTrackedProject,
+                  homeProvider.projects,
+                  onTap: (Project p) {
+                    homeProvider.setCurrentProject(p);
+                  },
+                ),
                 Spacing(),
               ],
             ),
@@ -61,15 +63,15 @@ class TimeTrackerDialog extends StatelessWidget {
           Container(
             child: Column(
               children: <Widget>[
-                dropdownButton(
-                    context,
-                    'Veldu verkþátt',
-                    homeProvider.currentTrackedTask.title,
-                    homeProvider.currentTrackedProject.tasks.map((t) {
-                      return t.title;
-                    }).toList(), onTap: (String s) {
-                  homeProvider.setCurrentTask(s);
-                }),
+                dropdownButton<Task>(
+                  context,
+                  'Veldu verkþátt',
+                  homeProvider.currentTrackedTask,
+                  homeProvider.currentTrackedProject.tasks,
+                  onTap: (Task task) {
+                    homeProvider.setCurrentTask(task);
+                  },
+                ),
                 Spacing(),
               ],
             ),
@@ -110,8 +112,7 @@ class TimeTrackerDialog extends StatelessWidget {
   }
 }
 
-Widget dropdownButton(
-    context, String prefixTitle, String item, List<String> items,
+Widget dropdownButton<T>(context, String prefixTitle, T item, List<T> items,
     {Function onTap}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,10 +125,9 @@ Widget dropdownButton(
           color: Colors.grey,
         ),
       ),
-      DropdownButton<String>(
+      DropdownButton<T>(
         value: item,
-        icon:
-            Icon(Icons.arrow_drop_down, color: MVTheme.secondaryColor),
+        icon: Icon(Icons.arrow_drop_down, color: MVTheme.secondaryColor),
         iconSize: 24,
         elevation: 16,
         style: AvailableFonts.getTextStyle(
@@ -140,13 +140,13 @@ Widget dropdownButton(
           height: 2,
           color: MVTheme.secondaryColor,
         ),
-        onChanged: (String newValue) {
-          onTap(newValue);
+        onChanged: (T newItem) {
+          onTap(newItem);
         },
-        items: items.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
+        items: items.map<DropdownMenuItem<T>>((T value) {
+          return DropdownMenuItem<T>(
             value: value,
-            child: Text(value),
+            child: Text(value.toString()),
           );
         }).toList(),
       ),

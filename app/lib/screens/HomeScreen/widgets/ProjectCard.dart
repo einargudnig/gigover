@@ -54,7 +54,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'ProjectCard_${item.id}',
+      tag: 'ProjectCard_${item.projectId}',
       child: CardBox(
         hasBoxShadow: true,
         borderRadius: borderRadius,
@@ -67,7 +67,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    item.title,
+                    item.name,
                     style: AvailableFonts.getTextStyle(context,
                         color: MVTheme.mainFont, weight: FontWeight.bold),
                   ),
@@ -82,7 +82,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 isVertical: true,
               ),
               Text(
-                item.subTitle,
+                item.description,
                 style: AvailableFonts.getTextStyle(context,
                     color: MVTheme.grayFont),
               ),
@@ -118,7 +118,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 amount: 1,
                 isVertical: true,
               ),
-              Avatars(context, item.people),
+              /// TODO ADD PEOPLE AGAIN ? Avatars(context, item.people),
             ],
           ),
         ),

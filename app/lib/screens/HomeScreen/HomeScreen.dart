@@ -83,9 +83,9 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
             routes: {
               // default route as '/' is necessary!
               '/': (context) => ProjectListScreen(),
-              '/project': (context) => ProjectScreen(),
+              '/project': (context) => ProjectScreen(context),
               '/settings': (context) => SettingsScreen(),
-              '/task': (context) => TaskDetailsScreen(),
+              '/task': (context) => TaskDetailsView(context),
             },
           ),
         ),

@@ -1,50 +1,57 @@
-import 'Task.dart';
-import 'TaskComment.dart';
+import 'package:mittverk/models/ProjectStatus.dart';
 
+import 'Task.dart';
+import 'TaskStatus.dart';
 
 class Project {
-  int id;
-  String title;
-  String subTitle;
-  int daysLeft;
-  double amountDone;
-  List<String> people;
+
+  int projectId;
+  String name;
+  String description;
+  String zipCode;
+  ProjectStatus status;
+  int workId;
   List<Task> tasks;
 
-  Project(
-      {int id,
-      String title,
-      String subTitle,
-      int daysLeft,
-      double amountDone,
-      List<String> people}) {
-    this.id = id;
-    this.title = title;
-    this.subTitle = subTitle;
-    this.daysLeft = daysLeft;
-    this.amountDone = amountDone;
-    this.people = people;
-    this.tasks = [
-      Task('Test', 'test', [
-        new TaskComment(
-            content: 'You need to clean up the brush',
-            userIdFrom: '1',
-            dateSent: new DateTime(2020).toString())
-      ]),
-      Task('Baba', 'afqaf', [
-        new TaskComment(
-            content: 'You need to clean uafafa',
-            userIdFrom: '1',
-            dateSent: new DateTime(2019).toString())
-      ])
-    ];
+  Project({ this.projectId, this.name, this.description, this.zipCode, this.status, this.workId, this.tasks}) {
+    if (tasks == null) {
+      this.tasks = [];
+    }
+  }
+
+  static Project fromJson(Map<String, dynamic> json) {
+    try {
+      return Project(
+        projectId: json["projectId"],
+        name: json["name"],
+        description: json["description"],
+        zipCode: json["zipCode"],
+        status: getProjectStatusFromString(json["status"]),
+        workId: json["workId"],
+      );
+    } catch(e) {
+      return null;
+    }
   }
 
   String get amountDonePercentage {
-    return this.amountDone.toString().substring(0, 2) + '%';
+    return this.amountDoneValue.toString().substring(0, 2) + '%';
   }
 
   double get amountDoneValue {
-    return this.amountDone / 100;
+    if (tasks.length > 0) {
+      int tasksDone = 0;
+      tasks.forEach((t) => tasksDone += (t.status != TaskStatus.Done ? 1 : 0));
+      return (tasksDone / tasks.length) * 100;
+    }
+
+    return 0;
   }
+
+  // USED FOR GENERIC FUNCTIONS DO NOT REMOVE
+  @override
+  String toString() {
+    return this.name;
+  }
+
 }

@@ -1,9 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
+import 'package:mittverk/services/ApiService.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
@@ -53,40 +55,15 @@ class ElapsedTime {
 }
 
 class HomeProvider with ChangeNotifier {
-  final GlobalKey<NavigatorState> homeNavigationKey = GlobalKey<NavigatorState>();
-
+  final GlobalKey<NavigatorState> homeNavigationKey =
+      GlobalKey<NavigatorState>();
 
   int _count = 0;
-  List<Project> projects = [
-    new Project(
-        id: 1,
-        title: 'Laugarásvegur 20',
-        subTitle: 'Viðgerðir á klósetti',
-        amountDone: 35.00,
-        people: ["SEB", "TEB", "SAS"],
-        daysLeft: 5),
-    new Project(
-        id: 2,
-        title: 'Sólvellir 8',
-        subTitle: 'Parketlagning',
-        amountDone: 59.00,
-        people: ["SEB", "TEB"],
-        daysLeft: 2),
-    new Project(
-        id: 3,
-        title: 'Sólvellir 8',
-        subTitle: 'Parketlagning',
-        amountDone: 59.00,
-        people: ["SEB", "TEB"],
-        daysLeft: 2),
-    new Project(
-        id: 4,
-        title: 'Sólvellir 8',
-        subTitle: 'Parketlagning',
-        amountDone: 59.00,
-        people: ["SEB", "TEB"],
-        daysLeft: 2)
-  ];
+
+  String projectsError;
+  bool loadingProjects = true;
+  List<Project> projects = [];
+
   Project currentTrackedProject;
   Task currentTrackedTask;
   StopwatchProvider stopwatch;
@@ -98,26 +75,51 @@ class HomeProvider with ChangeNotifier {
   bool mama = true;
 
   HomeProvider() {
-    this.currentTrackedProject = this.projects[0];
-    this.currentTrackedTask = this.currentTrackedProject.tasks[0];
     this.stopwatch = new StopwatchProvider();
     //TODI if slidepanelConfig/timer starttimer and set the slidepanelConfig
+
+    // Load projects
+    this.getProjects();
   }
 
-  void setCurrentProject(String projectTitle) {
-    Project p = projects.firstWhere((p) {
-      return p.title == projectTitle;
-    });
-    this.currentTrackedTask = p.tasks[0];
-    this.currentTrackedProject = p;
+  void getProjects() async {
+    Response response = await ApiService.projectList();
+
+    print('Getting projects..');
+
+    if (response.statusCode != 200) {
+      projectsError = 'Error came up while fetching projects';
+    } else {
+      try {
+        if (response.data != null && response.data["projects"] != null) {
+          dynamic projects = response.data["projects"];
+
+          print('Got projects!');
+
+          projects.forEach((project) {
+            this.projects.add(Project.fromJson(project));
+          });
+        } else {
+          projectsError = 'No projects available';
+        }
+      } catch (e) {
+        print("ERROR WHILE PARSING PROJECTS");
+        projectsError = 'Could not load projects';
+      }
+    }
+
+    loadingProjects = false;
     notifyListeners();
   }
 
-  void setCurrentTask(String taskTitle) {
-    Task t = this.currentTrackedProject.tasks.firstWhere((p) {
-      return p.title == taskTitle;
-    });
-    this.currentTrackedTask = t;
+  void setCurrentProject(Project project) {
+    this.currentTrackedProject = project;
+    this.currentTrackedTask = project.tasks.length > 0 ? project.tasks[0] : null;
+    notifyListeners();
+  }
+
+  void setCurrentTask(Task task) {
+    this.currentTrackedTask = task;
     notifyListeners();
   }
 
@@ -153,24 +155,25 @@ class HomeProvider with ChangeNotifier {
 
   ///TIMMMMER STUFF
 
-  void goToTaskDetail(String id){
+  void goToTaskDetail(Task task) {
     this.hideTimePanel();
-    this.homeNavigationKey.currentState.pushNamed('/task',
-        arguments:
-        TaskDetailsArguments(id));
+    this.homeNavigationKey.currentState.pushNamed(
+          '/task',
+          arguments: TaskDetailsArguments(task),
+        );
   }
 
   void showTimePanel() {
-    if(!this.panelController.isPanelShown){
+    if (!this.panelController.isPanelShown) {
       this.panelController.show();
       notifyListeners();
     }
   }
-  void hideTimePanel(){
-    if(this.panelController.isPanelShown){
+
+  void hideTimePanel() {
+    if (this.panelController.isPanelShown) {
       this.panelController.hide();
       notifyListeners();
     }
   }
-
 }

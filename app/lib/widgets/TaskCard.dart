@@ -1,16 +1,15 @@
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/ScaleTap.dart';
-import 'package:mittverk/widgets/Avatars.dart';
-import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/widgets/Avatars.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:provider/provider.dart';
 
 class TaskCard extends StatefulWidget {
+  final Task task;
 
-  Task task;
   TaskCard(this.task);
 
   @override
@@ -35,7 +34,7 @@ class TaskCardState extends State<TaskCard> {
         print('Tapping task!');
         //TODO take a callback in instead
         final homeProvider = Provider.of<HomeProvider>(context, listen:false);
-        homeProvider.goToTaskDetail(widget.task.id);
+        homeProvider.goToTaskDetail(widget.task);
       },
       child: CardBox(
         child: Padding(
@@ -44,7 +43,7 @@ class TaskCardState extends State<TaskCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              CardTitle(title: widget.task.title),
+              CardTitle(title: widget.task.text),
               onlyAvatar(context, text: 'AV', circleSize: 14),
             ],
           ),

@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/TaskComment.dart';
+import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectCard.dart';
+import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/TaskCard.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +20,13 @@ class ProjectListScreenArgs {
 }
 
 class ProjectScreen extends StatefulWidget {
+  Project project;
+
+  ProjectScreen(BuildContext context) {
+    final ProjectListScreenArgs args = ModalRoute.of(context).settings.arguments;
+    this.project = args.project;
+  }
+
   @override
   State createState() => ProjectScreenState();
 }
@@ -24,9 +34,15 @@ class ProjectScreen extends StatefulWidget {
 class ProjectScreenState extends State<ProjectScreen> {
   final GlobalKey<NavigatorState> navigationKey = GlobalKey<NavigatorState>();
 
+  bool _loadingTasks = true;
+  String _taskError;
+  List<Task> _tasks = [];
+
   @override
   void initState() {
     super.initState();
+
+    getTasks();
   }
 
   @override
@@ -41,41 +57,78 @@ class ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
-  // TODO get tasks from server
-  List<Widget> getTaskItems() {
-    Task tempTask = new Task('1', 'some task',
-        [new TaskComment(content: 'test', userIdFrom: 'fe', dateSent: 'afa')]);
-    return [
-      paddedTask(TaskCard(tempTask)),
-      paddedTask(TaskCard(tempTask)),
-      paddedTask(TaskCard(tempTask)),
-      paddedTask(TaskCard(tempTask)),
-    ];
+  void setError(String error) {
+    setState(() {
+      _taskError = error;
+    });
+  }
+
+  void getTasks() async {
+    Response response = await ApiService.getProjectTaskList(widget.project.projectId);
+
+    print('Getting tasks..');
+
+    if (response.statusCode != 200) {
+      setError('Error came up while fetching task list for project ${widget.project.toString()}');
+    } else {
+      try {
+        if (response.data != null && response.data["projectTasks"] != null) {
+          dynamic projectTasks = response.data["projectTasks"];
+
+          print('Got tasks!');
+
+          List<Task> tempTasks = [];
+
+          projectTasks.forEach((task) {
+            tempTasks.add(Task.fromJson(task));
+          });
+
+          setState(() {
+            _tasks = tempTasks;
+          });
+        } else {
+          setError('No tasks available');
+        }
+      } catch (e) {
+        print("ERROR WHILE PARSING PROJECTS");
+        setError('Could not load projects');
+      }
+    }
+
+    setState(() {
+      _loadingTasks = false;
+    });
+  }
+
+
+
+  List<Widget> getTaskWidgets(TaskStatus status) {
+    List<Task> tasksForStatus = _tasks != null && _tasks.length > 0 ? _tasks.where((t) => t.status == status).toList() : [];
+
+    if (tasksForStatus.length == 0) {
+      return [];
+    }
+
+    return tasksForStatus.map((t) {
+      return paddedTask(TaskCard(t));
+    }).toList();
   }
 
   List<Widget> getTabBarViews() {
     return [
-      ListView(
-        children: getTaskItems(),
-      ),
-      ListView(
-        children: getTaskItems(),
-      ),
-      ListView(
-        children: getTaskItems(),
-      ),
-      ListView(
-        children: getTaskItems(),
-      ),
+      ListView(children: getTaskWidgets(TaskStatus.Backlog)),
+      ListView(children: getTaskWidgets(TaskStatus.Todo)),
+      ListView(children: getTaskWidgets(TaskStatus.Doing)),
+      ListView(children: getTaskWidgets(TaskStatus.Done)),
     ];
   }
 
   List<Tab> getTabs() {
     return [
-      Tab(text: 'Backlog'),
-      Tab(text: 'To do'),
-      Tab(text: 'Doing'),
-      Tab(text: 'Done'),
+      Tab(text: getTaskStatusString(TaskStatus.Backlog)),
+      Tab(text: getTaskStatusString(TaskStatus.Todo)),
+      Tab(text: getTaskStatusString(TaskStatus.Doing)),
+      Tab(text: getTaskStatusString(TaskStatus.Done)),
     ];
   }
 
@@ -97,10 +150,16 @@ class ProjectScreenState extends State<ProjectScreen> {
             appBar: TabBar(
               labelColor: MVTheme.mainFont,
               unselectedLabelColor: MVTheme.mainFont,
-              labelStyle: AvailableFonts.getTextStyle(context,
-                  fontSize: 14, weight: FontWeight.bold),
-              unselectedLabelStyle: AvailableFonts.getTextStyle(context,
-                  fontSize: 14, weight: FontWeight.normal),
+              labelStyle: AvailableFonts.getTextStyle(
+                context,
+                fontSize: 14,
+                weight: FontWeight.bold,
+              ),
+              unselectedLabelStyle: AvailableFonts.getTextStyle(
+                context,
+                fontSize: 14,
+                weight: FontWeight.normal,
+              ),
               isScrollable: tabs.length > 4,
               indicatorColor: MVTheme.secondaryColor,
               tabs: tabs,
@@ -125,19 +184,12 @@ class ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ProjectListScreenArgs args =
-        ModalRoute.of(context).settings.arguments;
-
-    print('Project with id:');
-    Project project = args.project;
-    print(project.id);
-
     return Container(
       decoration: BoxDecoration(color: MVTheme.backgroundGray),
       child: Column(
         children: <Widget>[
           ProjectCard(
-            item: project,
+            item: widget.project,
             borderRadius: 0,
             hasBoxShadow: false,
           ),

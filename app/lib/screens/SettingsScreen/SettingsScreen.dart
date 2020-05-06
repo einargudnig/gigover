@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/main.dart';
-import 'package:mittverk/models/NEW_Project.dart';
+import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
@@ -79,7 +79,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                           dynamic projects = response.data["projects"];
 
                           projects.forEach((project) {
-                              NEW_Project p = NEW_Project.fromJson(project);
+                              Project p = Project.fromJson(project);
                               print(p.name);
                           });
                         }
