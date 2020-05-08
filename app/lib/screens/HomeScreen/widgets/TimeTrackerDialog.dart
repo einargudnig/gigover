@@ -10,6 +10,7 @@ import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/utils/Theme.dart';
+import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:provider/provider.dart';
 
 class TimeTrackerDialog extends StatelessWidget {
@@ -19,7 +20,8 @@ class TimeTrackerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
-    print(homeProvider.currentTrackedTask == null || homeProvider.currentTrackedProject == null);
+    print(homeProvider.currentTrackedTask == null ||
+        homeProvider.currentTrackedProject == null);
     print('isDisabled');
     return Material(
       child: LSDialog(
@@ -46,7 +48,7 @@ class TimeTrackerDialog extends StatelessWidget {
           Container(
             child: Column(
               children: <Widget>[
-                dropdownButton<Project>(
+                IgitalDropdownButton<Project>(
                   context,
                   'Veldu verkefni',
                   homeProvider.currentTrackedProject,
@@ -65,7 +67,7 @@ class TimeTrackerDialog extends StatelessWidget {
           Container(
             child: Column(
               children: <Widget>[
-                dropdownButton<Task>(
+                IgitalDropdownButton<Task>(
                   context,
                   'Veldu verkþátt',
                   homeProvider.currentTrackedTask,
@@ -97,7 +99,8 @@ class TimeTrackerDialog extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: RoundedButton(
-                  disabled: homeProvider.currentTrackedTask == null || homeProvider.currentTrackedProject == null,
+                    disabled: homeProvider.currentTrackedTask == null ||
+                        homeProvider.currentTrackedProject == null,
                     padding: EdgeInsets.all(20.0),
                     fillBackground: Color.fromRGBO(31, 223, 131, 1),
                     textColor: Color.fromRGBO(7, 16, 41, 1),
@@ -113,46 +116,4 @@ class TimeTrackerDialog extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget dropdownButton<T>(context, String prefixTitle, T item, List<T> items,
-    {Function onTap}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        prefixTitle,
-        style: AvailableFonts.getTextStyle(
-          context,
-          fontSize: 14,
-          color: Colors.grey,
-        ),
-      ),
-      DropdownButton<T>(
-        value: item,
-        icon: Icon(Icons.arrow_drop_down, color: MVTheme.secondaryColor),
-        iconSize: 24,
-        elevation: 16,
-        style: AvailableFonts.getTextStyle(
-          context,
-          fontSize: 22,
-          color: Colors.black,
-        ),
-        isExpanded: true,
-        underline: Container(
-          height: 2,
-          color: MVTheme.secondaryColor,
-        ),
-        onChanged: (T newItem) {
-          onTap(newItem);
-        },
-        items: items.map<DropdownMenuItem<T>>((T value) {
-          return DropdownMenuItem<T>(
-            value: value,
-            child: Text(value.toString()),
-          );
-        }).toList(),
-      ),
-    ],
-  );
 }

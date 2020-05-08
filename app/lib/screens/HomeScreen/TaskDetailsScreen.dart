@@ -3,8 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/screens/HomeScreen/widgets/TimeTrackerDialog.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
+import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 
 class TaskDetailsArguments {
@@ -189,7 +191,6 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-
     return ScreenLayout(
       child: Container(
         child: Column(
@@ -199,8 +200,15 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               'Currently tracking',
               'Elhusinnretting',
             )),
-            taskDetailItemWrapper(TaskDetailInfo('Type', 'Elhusinnretting',
-                widget: Icon(Icons.arrow_drop_down))),
+            taskDetailItemWrapper(IgitalDropdownButton<dynamic>(
+              context,
+              'Current status',
+              'In progress',
+              ['In progress', 'tatafafa'],
+              onTap: (dynamic p) {
+                print(p);
+              },
+            )),
             commentHeader(),
             comments(),
             Row(
