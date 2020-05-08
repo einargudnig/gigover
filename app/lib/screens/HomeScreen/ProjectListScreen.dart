@@ -40,24 +40,29 @@ class ProjectListScreen extends StatelessWidget {
             homeProvider.getProjects();
           },
         ),
-        ListView.builder(
-          itemCount: homeProvider.projects.length,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed('/project', arguments: ProjectListScreenArgs(homeProvider.projects[index]));
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 64),
+            child: ListView.builder(
+              itemCount: homeProvider.projects.length,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/project', arguments: ProjectListScreenArgs(homeProvider.projects[index]));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top:4.0, bottom: 4.0),
+                      child: ProjectCard(item: homeProvider.projects[index]),
+                    ),
+                  ),
+                );
               },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                child: Padding(
-                  padding: const EdgeInsets.only(top:4.0, bottom: 4.0),
-                  child: ProjectCard(item: homeProvider.projects[index]),
-                ),
-              ),
-            );
-          },
+            ),
+          ),
         ),
       ],
     );
