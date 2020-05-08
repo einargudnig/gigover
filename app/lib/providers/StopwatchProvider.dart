@@ -4,18 +4,38 @@ import 'package:mittverk/providers/HomeProvider.dart';
 
 class StopwatchProvider {
   Stopwatch currentStopwatch = Stopwatch();
-  Duration currentStopWatchDuration = Duration.zero;
   int milliseconds;
-  ElapsedTime currentElapsedTime;
-  Timer _timer;
 
+  Duration currentStopWatchDuration = Duration.zero;
+  ElapsedTime currentElapsedTime;
+
+  //This is if the timer is old then we have some additionalTime
+  Duration addedTime = Duration.zero;
+  ElapsedTime addedElapsedTime;
+
+  Timer _timer;
   Function callback;
 
   get isRunning => this.currentStopWatchDuration != Duration.zero;
 
+  void setAddedTime(ElapsedTime elapsedTime, Duration duration) {
+    this.addedElapsedTime = elapsedTime;
+    this.addedTime = duration;
+    this.setTime(elapsedTime, duration);
+  }
+
+  void setTime(ElapsedTime elapsedTime, Duration duration) {
+    this.currentElapsedTime = elapsedTime;
+    this.currentStopWatchDuration = duration;
+  }
+
   void _onTick(Timer timer) {
     if (milliseconds != currentStopwatch.elapsedMilliseconds) {
-      milliseconds = currentStopwatch.elapsedMilliseconds;
+      milliseconds = this.addedTime.inMilliseconds == null
+          ? currentStopwatch.elapsedMilliseconds
+          : currentStopwatch.elapsedMilliseconds +
+              this.addedTime.inMilliseconds;
+
       int hundreds = (milliseconds / 10).truncate();
       int seconds = (hundreds / 100).truncate();
       int minutes = (seconds / 60).truncate();
@@ -24,9 +44,7 @@ class StopwatchProvider {
         seconds: seconds,
         minutes: minutes,
       );
-      currentStopWatchDuration = currentStopwatch.elapsed;
-      currentElapsedTime = elapsedTime;
-
+      this.setTime(elapsedTime, currentStopwatch.elapsed);
     }
   }
 
@@ -34,7 +52,7 @@ class StopwatchProvider {
     if (_timer != null) return;
     currentStopwatch.start();
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer){
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       _onTick(timer);
       callback();
     });
@@ -51,6 +69,8 @@ class StopwatchProvider {
   }
 
   void resetStopWatch() {
+    this.addedTime = null;
+    this.addedElapsedTime = null;
     stopStopWatch();
     currentStopwatch.reset();
     currentStopWatchDuration = Duration.zero;

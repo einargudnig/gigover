@@ -54,6 +54,24 @@ class ElapsedTime {
   });
 }
 
+class TimerItem {
+  String dateStarted;
+  String id;
+  String dateFinished;
+}
+
+enum StopWatchStatus { OnGoing, Paused, Stopped, Idle }
+
+class StopWatchData {
+  Project currentProject;
+  Task currentTask;
+  StopWatchStatus stopWatchStatus;
+  List<TimerItem> timerItems;
+
+  StopWatchData(this.currentProject, this.currentTask, this.stopWatchStatus,
+      this.timerItems);
+}
+
 class HomeProvider with ChangeNotifier {
   final GlobalKey<NavigatorState> homeNavigationKey =
       GlobalKey<NavigatorState>();
@@ -70,6 +88,8 @@ class HomeProvider with ChangeNotifier {
   SlidePanelConfig slidePanelConfig = defaultSlidePanelConfig;
   PanelController panelController = new PanelController();
 
+  StopWatchData stopWatchData;
+
   int get count => _count;
 
   bool mama = true;
@@ -79,42 +99,110 @@ class HomeProvider with ChangeNotifier {
     //TODI if slidepanelConfig/timer starttimer and set the slidepanelConfig
 
     // Load projects
-    this.getProjects();
+    this.getProjects().then((v) {
+      this.getStopWatchData();
+    });
   }
 
-  void getProjects() async {
+  //TIMER STUFF
+  void getStopWatchData() {
+    //TODO do API call to fetch the stopWatchDetails
+
+    this.stopWatchData =
+        new StopWatchData(null, null, StopWatchStatus.OnGoing, null);
+
+    //TODO calculate the stopwatch data here to change the stopWatch
+    if (this.stopWatchData.stopWatchStatus == StopWatchStatus.Idle) {
+      //TODO do nothing
+    } else {
+      //Calculate current time from the stopwatch data
+      //TODO this from API
+      int minutes = 30;
+      int seconds = 30;
+      int hundreds = 30;
+
+      ElapsedTime elapsedTime = new ElapsedTime(
+        hundreds: hundreds,
+        seconds: seconds,
+        minutes: minutes,
+      );
+      Duration duration = new Duration(
+          minutes: minutes, seconds: seconds, milliseconds: hundreds);
+
+      //Set the time from the time instance from the server
+      this.stopwatch.setAddedTime(elapsedTime, duration);
+
+      //Start the timer if needed
+      if (this.stopWatchData.stopWatchStatus == StopWatchStatus.OnGoing) {
+        this.resumeTimer();
+      }
+
+      //Make sure the showSlidePanel is open, since there is a timer active
+      this.showSlidePanel();
+    }
+    notifyListeners();
+  }
+
+  //
+
+  void clearErrors() {
+    this.projectsError = '';
+  }
+
+  Future<String> getProjects() async {
     Response response = await ApiService.projectList();
 
+    Response res2 = await ApiService.getUserDetails();
+    print(res2);
     print('Getting projects..');
 
     if (response.statusCode != 200) {
       projectsError = 'Error came up while fetching projects';
+      print('error');
+      return 'error';
     } else {
+      print('herna');
       try {
+        print(response.data);
         if (response.data != null && response.data["projects"] != null) {
-          dynamic projects = response.data["projects"];
+          List<Project> projectsMapped =
+              response.data["projects"].map<Project>((p) {
+            return Project.fromJson(p);
+          }).toList();
 
           print('Got projects!');
+          this.projects = projectsMapped;
+          print(this.projects[0]);
+          print(response.data["projects"]);
+          this.setCurrentProject(this.projects[0]);
+
+          this.clearErrors();
+          /*
 
           projects.forEach((project) {
             this.projects.add(Project.fromJson(project));
-          });
+          });*/
+
         } else {
           projectsError = 'No projects available';
         }
       } catch (e) {
         print("ERROR WHILE PARSING PROJECTS");
+        print(e);
         projectsError = 'Could not load projects';
       }
     }
 
     loadingProjects = false;
     notifyListeners();
+    //TODO this better
+    return 'done';
   }
 
   void setCurrentProject(Project project) {
     this.currentTrackedProject = project;
-    this.currentTrackedTask = project.tasks.length > 0 ? project.tasks[0] : null;
+    this.currentTrackedTask =
+        project.tasks.length > 0 ? project.tasks[0] : null;
     notifyListeners();
   }
 
@@ -124,12 +212,17 @@ class HomeProvider with ChangeNotifier {
   }
 
   ///TIMMMMER STUFF
+  void showSlidePanel() {
+    this.slidePanelConfig = activeSlidePanelConfig;
+  }
+
   void pauseTimer() {
     this.stopwatch.stopStopWatch();
     notifyListeners();
   }
 
   void resumeTimer() {
+    this.showSlidePanel();
     this.stopwatch.startStopWatch(() {
       notifyListeners();
     });
@@ -137,7 +230,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   void startTimer() {
-    this.slidePanelConfig = activeSlidePanelConfig;
+    this.showSlidePanel();
     if (this.panelController.isPanelClosed) {
       this.panelController.open();
     }

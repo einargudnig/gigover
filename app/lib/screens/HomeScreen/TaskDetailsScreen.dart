@@ -19,6 +19,7 @@ class TaskDetailsView extends StatefulWidget {
   TaskDetailsView(BuildContext context) {
     final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
     this.task = args.task;
+    print(this.task);
   }
 
   @override

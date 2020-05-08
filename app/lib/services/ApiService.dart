@@ -40,6 +40,12 @@ class ApiService {
     return await dio.get(apiPrefix + '/workers/tasks/' + projectId.toString());
   }
 
+  /// Get user specific info
+  ///
+  static Future<Response> getUserDetails() async {
+    return await dio.get(apiPrefix+ '/user/info');
+  }
+
   /// Update a project task status with an optional comment
   static Future<Response> setProjectTaskStatus(
     int taskId,

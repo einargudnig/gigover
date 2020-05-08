@@ -76,6 +76,7 @@ class ProjectScreenState extends State<ProjectScreen> {
           dynamic projectTasks = response.data["projectTasks"];
 
           print('Got tasks!');
+          print(projectTasks[0]);
 
           List<Task> tempTasks = [];
 

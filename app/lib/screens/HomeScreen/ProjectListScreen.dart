@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'ProjectScreen.dart';
 
 class ProjectListScreen extends StatelessWidget {
-
   Widget showLoader(HomeProvider homeProvider) {
     if (homeProvider.loadingProjects) {
       return Text('Loading projects...');
@@ -37,7 +36,9 @@ class ProjectListScreen extends StatelessWidget {
         RoundedButton(
           text: 'Fetch projects',
           onTap: () {
-            homeProvider.getProjects();
+            homeProvider.getProjects().then((v) {
+              homeProvider.getStopWatchData();
+            });
           },
         ),
         Expanded(
@@ -50,12 +51,14 @@ class ProjectListScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushNamed('/project', arguments: ProjectListScreenArgs(homeProvider.projects[index]));
+                    Navigator.of(context).pushNamed('/project',
+                        arguments: ProjectListScreenArgs(
+                            homeProvider.projects[index]));
                   },
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
                     child: Padding(
-                      padding: const EdgeInsets.only(top:4.0, bottom: 4.0),
+                      padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
                       child: ProjectCard(item: homeProvider.projects[index]),
                     ),
                   ),
