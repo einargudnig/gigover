@@ -18,4 +18,19 @@ class TaskComment {
     this.fullName,
     this.sent,
   });
+
+  static TaskComment fromJson(Map<String, dynamic> json) {
+    try {
+      return TaskComment(
+          taskId: json["taskId"],
+          projectId: json["projectId"],
+          comment: json["comment"],
+          fullName: json["fullName"],
+          sent: json["sent"]);
+    } catch (e) {
+      print('taskCommentErr');
+      print(e);
+      return null;
+    }
+  }
 }

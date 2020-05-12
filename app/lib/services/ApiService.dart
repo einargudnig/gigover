@@ -30,6 +30,11 @@ class ApiService {
     return await dio.get(apiPrefix + '/workers/' + projectId.toString());
   }
 
+  /// Task details
+  static Future<Response> getTaskDetails(int taskId) async {
+    return await dio.get(apiPrefix + '/workers/task/' + taskId.toString());
+  }
+
   /// Get project types, these are used on tasks
   static Future<Response> projectTypes() async {
     return await dio.get(apiPrefix + '/workers/types');
@@ -43,7 +48,7 @@ class ApiService {
   /// Get user specific info
   ///
   static Future<Response> getUserDetails() async {
-    return await dio.get(apiPrefix+ '/user/info');
+    return await dio.get(apiPrefix + '/user/info');
   }
 
   /// Update a project task status with an optional comment
@@ -52,6 +57,7 @@ class ApiService {
     TaskStatus status, {
     String comment,
   }) async {
+
     return await dio.post(apiPrefix + '/workers/updateTask', data: {
       'taskId': taskId,
       'status': status.index,

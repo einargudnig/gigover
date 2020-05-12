@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/TaskComment.dart';
+import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTrackerDialog.dart';
+import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
@@ -31,11 +35,71 @@ class TaskDetailsView extends StatefulWidget {
 class TaskDetailsViewState extends State<TaskDetailsView> {
   TextEditingController commentInputController = TextEditingController();
   String _commentText = '';
+  Task _task;
 
   @override
   void initState() {
     super.initState();
+
+    getTaskDetail();
     commentInputController.addListener(commentInputChange);
+  }
+
+  ///
+  ///
+  /// {
+  //    "projectTask": {
+  //        "taskId": 1,
+  //        "text": "Henda rusli",
+  //        "status": 0,
+  //        "typeId": 5,
+  //        "comments": [
+  //            {
+  //                "taskId": 1,
+  //                "comment": "my owner comment",
+  //                "type": 0,
+  //                "fullName": "Og svo framvegis",
+  //                "sent": 1588625338000
+  //            },
+  //            {
+  //                "taskId": 1,
+  //                "comment": "my owner comment",
+  //                "type": 0,
+  //                "fullName": "Og svo framvegis",
+  //                "sent": 1588670556000
+  //            }
+  //        ],
+  //        "project": {
+  //            "projectId": 909,
+  //            "ownerName": "Tómas Erlingsson",
+  //            "ownerAvatar": "https://lh6.googleusercontent.com/-M2GCfHlDcuk/AAAAAAAAAAI/AAAAAAAAARg/LDxlbUiczCQ/photo.jpg",
+  //            "status": "CLOSED"
+  //        }
+  //    }
+  //}
+
+  void getTaskDetail() async {
+    print('taskDetails');
+    Response response = await ApiService.getTaskDetails(widget.task.taskId);
+    if (response.statusCode != 200) {
+      print('errorFetchin');
+    } else {
+      try {
+        print(response.data);
+        if (response.data != null && response.data["projectTask"] != null) {
+          dynamic projectTask = response.data["projectTask"];
+          Task tempTasks = Task.fromJson(projectTask);
+          setState(() {
+            _task = tempTasks;
+          });
+        } else {
+          print('nopthing available');
+        }
+      } catch (e) {
+        print("ERROR WHILE PARSING PROJECTS");
+      }
+    }
+    print(response);
   }
 
   @override
@@ -63,7 +127,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             )));
   }
 
-  Widget TaskDetailHeader() {
+  Widget TaskDetailHeader(String headerText) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -72,7 +136,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              widget.task.toString(),
+              headerText,
               style: AvailableFonts.getTextStyle(
                 context,
                 color: MVTheme.mainFont,
@@ -137,7 +201,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     );
   }
 
-  Widget comment() {
+  Widget comment(TaskComment comment) {
     return Container(
         child: Padding(
       padding: const EdgeInsets.all(12.0),
@@ -146,12 +210,12 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Heimir',
+              Text(comment.fullName,
                   style: AvailableFonts.getTextStyle(context,
                       color: MVTheme.mainFont,
                       fontSize: 12,
                       weight: FontWeight.bold)),
-              Text('10/20/2020',
+              Text(comment.dateSent.toString(),
                   style: AvailableFonts.getTextStyle(
                     context,
                     color: MVTheme.grayFont,
@@ -167,8 +231,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                   borderRadius: BorderRadius.all(Radius.circular(16))),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                    'ahfwpuehfpauhwef pawheufhapuw ehfpuahweifhapiuwehfpaiuwh'),
+                child: Text(comment.comment),
               ))
         ],
       ),
@@ -179,11 +242,11 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     return Expanded(
       child: Container(
         child: ListView.builder(
-            itemCount: 10,
+            itemCount: this._task.comments.length,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return comment();
+              return comment(this._task.comments[index]);
             }),
       ),
     );
@@ -191,11 +254,18 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    //todo
+    print(this._task);
+    print('task---------------');
+    if (this._task == null) {
+      return Text('fafafaloading');
+    }
+
     return ScreenLayout(
       child: Container(
         child: Column(
           children: [
-            taskDetailItemWrapper(TaskDetailHeader()),
+            taskDetailItemWrapper(TaskDetailHeader(this._task.text)),
             taskDetailItemWrapper(TaskDetailInfo(
               'Currently tracking',
               'Elhusinnretting',
@@ -203,10 +273,22 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             taskDetailItemWrapper(IgitalDropdownButton<dynamic>(
               context,
               'Current status',
-              'In progress',
-              ['In progress', 'tatafafa'],
-              onTap: (dynamic p) {
+              getTaskStatusString(this._task.status),
+              TaskStatus.values.map((s) {
+                return getTaskStatusString(s);
+              }).toList(),
+              onTap: (String p) async {
                 print(p);
+                TaskStatus newStatus = statusFromString(p);
+                this._task.setStatus(newStatus);
+                this.setState(() {
+                  _task = _task;
+                });
+                Response res =
+                    await ApiService.setProjectTaskStatus(this._task.taskId, newStatus);
+
+                print(res);
+                //TODO if res is wrong changeback
               },
             )),
             commentHeader(),
