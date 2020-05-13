@@ -19,6 +19,11 @@ class TaskComment {
     this.sent,
   });
 
+   String get formatedDate {
+     DateTime currentDate = DateTime(this.sent);
+    return currentDate.year.toString() + '/' + currentDate.month.toString() + '/' + currentDate.day.toString();
+  }
+
   static TaskComment fromJson(Map<String, dynamic> json) {
     try {
       return TaskComment(

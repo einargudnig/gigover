@@ -73,7 +73,7 @@ class ApiService {
     bool isContractor = false,
   }) async {
     return await dio.post(
-        apiPrefix + '/${isContractor ? 'workers' : 'contractor'}/comment',
+        apiPrefix + '/${!isContractor ? 'workers' : 'contractor'}/comment',
         data: {
           'projectId': projectId,
           'taskId': taskId,

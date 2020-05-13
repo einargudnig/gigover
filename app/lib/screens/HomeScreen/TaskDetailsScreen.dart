@@ -1,17 +1,20 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
+import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/models/TaskStatus.dart';
-import 'package:mittverk/screens/HomeScreen/widgets/TimeTrackerDialog.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
+
+import '../../main.dart';
 
 class TaskDetailsArguments {
   Task task;
@@ -37,12 +40,17 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   String _commentText = '';
   Task _task;
 
+  final FocusNode commnetFocus = FocusNode();
+
   @override
   void initState() {
     super.initState();
-
     getTaskDetail();
     commentInputController.addListener(commentInputChange);
+  }
+
+  void _onCommentFocusChange() {
+    this.setState(() {});
   }
 
   ///
@@ -215,7 +223,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                       color: MVTheme.mainFont,
                       fontSize: 12,
                       weight: FontWeight.bold)),
-              Text(comment.dateSent.toString(),
+              Text(comment.formatedDate,
                   style: AvailableFonts.getTextStyle(
                     context,
                     color: MVTheme.grayFont,
@@ -224,15 +232,20 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             ],
           ),
           Spacing(isVertical: true),
-          Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.white),
-                  borderRadius: BorderRadius.all(Radius.circular(16))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(comment.comment),
-              ))
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(comment.comment),
+                  )),
+            ],
+          )
         ],
       ),
     ));
@@ -252,6 +265,27 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     );
   }
 
+  void addComment() async {
+    FocusScope.of(context).unfocus();
+    String currentText = commentInputController.value.text;
+    //TODO set loading
+    Response res =
+        await ApiService.addComment(currentText, _task.projectId, _task.taskId);
+
+    if (true) {
+      //Priint
+      //TODO  loader !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // add comment to list
+      //Refetch all the stuff
+      //TODO this better
+      await this.getTaskDetail();
+      commentInputController.clear();
+      print('addeedComment');
+    } else {
+      print('showError');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //todo
@@ -266,10 +300,6 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
         child: Column(
           children: [
             taskDetailItemWrapper(TaskDetailHeader(this._task.text)),
-            taskDetailItemWrapper(TaskDetailInfo(
-              'Currently tracking',
-              'Elhusinnretting',
-            )),
             taskDetailItemWrapper(IgitalDropdownButton<dynamic>(
               context,
               'Current status',
@@ -284,8 +314,8 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                 this.setState(() {
                   _task = _task;
                 });
-                Response res =
-                    await ApiService.setProjectTaskStatus(this._task.taskId, newStatus);
+                Response res = await ApiService.setProjectTaskStatus(
+                    this._task.taskId, newStatus);
 
                 print(res);
                 //TODO if res is wrong changeback
@@ -293,23 +323,71 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             )),
             commentHeader(),
             comments(),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                      color: MVTheme.mainGreen,
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Add comment to task..',
-                          fillColor: Colors.white,
-                          focusColor: Colors.black.withAlpha(150),
-                          filled: true,
-                        ),
-                        controller: commentInputController,
-                        keyboardType: TextInputType.text,
-                      )),
-                ),
-              ],
+            Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                            child: TextField(
+                          textInputAction: TextInputAction.send,
+                          onSubmitted: (value) {
+                            print("search");
+                            addComment();
+                          },
+                          focusNode: commnetFocus,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 3,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            focusColor: Colors.black.withAlpha(150),
+                            hintStyle:
+                                TextStyle(color: Colors.black.withAlpha(150)),
+                            hintText: 'add comment',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          controller: commentInputController,
+                        )),
+                      ),
+                    ],
+                  ),
+                  commnetFocus.hasFocus
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 8.0, bottom: 8.0),
+                              child: RoundedButton(
+                                  fillBackground: MVTheme.mainGreen,
+                                  padding: EdgeInsets.only(
+                                      right: 12.0, left: 12, top: 8, bottom: 8),
+                                  textColor: Colors.white,
+                                  onTap: () {
+                                    addComment();
+                                  },
+                                  text: 'Add comment'),
+                            ),
+                          ],
+                        )
+                      : null,
+                ].where(notNull).toList(),
+              ),
             )
           ],
         ),

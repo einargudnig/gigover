@@ -15,7 +15,8 @@ import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/SignupScreen/SignupScreen.dart';
+bool notNull(Object o) => o != null;
+
 
 void main() => runApp(MittVerkApp());
 

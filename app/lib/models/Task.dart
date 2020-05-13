@@ -36,18 +36,26 @@ class Task {
   int typeId;
   List<TaskComment> comments = [];
   TaskStatus status;
+  int projectId;
 
-  Task({this.taskId, this.text, this.status, this.typeId, this.comments});
+  Task(
+      {this.taskId,
+      this.text,
+      this.status,
+      this.typeId,
+      this.comments,
+      this.projectId});
 
   static Task fromJson(Map<String, dynamic> json) {
     try {
       print(json["comments"]);
       return Task(
           taskId: json["taskId"],
+          projectId: json["project"] != null ? json["project"]["projectId"] : null,
           text: json["text"],
           status: TaskStatus.values[json["status"]],
           typeId: json["typeId"],
-          comments: json["comments"] != null && json["comments"].lenght > 0
+          comments: json["comments"] != null && json["comments"].length > 0
               ? json["comments"].map<TaskComment>((t) {
                   return TaskComment.fromJson(t);
                 }).toList()
