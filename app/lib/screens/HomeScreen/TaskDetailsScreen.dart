@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
+import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
@@ -11,7 +12,6 @@ import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
-import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 
 import '../../main.dart';

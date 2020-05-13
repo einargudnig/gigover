@@ -195,7 +195,9 @@ class TimeTracker extends StatelessWidget {
                   context: context,
                   builder: (_) {
                     return ChangeNotifierProvider.value(
-                        value: homeProvider, child: TimeTrackerDialog());
+                      value: homeProvider,
+                      child: TimeTrackerDialog(),
+                    );
                   },
                 );
               },

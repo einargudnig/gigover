@@ -114,6 +114,11 @@ class HomeProvider with ChangeNotifier {
     //      this.getStopWatchData();
     //    });
 
+    initVerifyUser();
+
+  }
+
+  void initVerifyUser() {
     this.verifyUser().then((user) {
       verifiedUser = user;
 
@@ -126,7 +131,6 @@ class HomeProvider with ChangeNotifier {
       errorVerifiedUser = err.toString();
       notifyListeners();
     });
-
   }
 
   Future<VerifyUser> verifyUser() async {
@@ -146,6 +150,12 @@ class HomeProvider with ChangeNotifier {
     }
 
     throw new Exception("User token not available");
+  }
+
+  void signupCompleted() {
+    // Reverify to make sure the user was registered
+    initVerifyUser();
+    homeNavigationKey.currentState.pushReplacementNamed('/');
   }
 
   //TIMER STUFF

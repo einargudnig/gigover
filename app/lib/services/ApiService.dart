@@ -20,6 +20,13 @@ class ApiService {
     return response;
   }
 
+  /// Register user
+  static Future<Response> registerUser(Map<String, dynamic> data) async {
+    String url = apiPrefix + '/user/store';
+    Response response = await dio.post(url, data: data);
+    return response;
+  }
+
   /// Get a list of projects
   static Future<Response> projectList() async {
     return await dio.get(apiPrefix + '/workers/list');

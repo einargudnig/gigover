@@ -26,12 +26,14 @@ class LoginForm extends StatelessWidget {
       return Input(
         hintText: 'Verification code',
         controller: this.verificationCodeInput,
+        textInputType: TextInputType.number,
       );
     }
 
     return Input(
       hintText: 'Your mobile number',
       controller: this.phoneNumberInput,
+      textInputType: TextInputType.number,
     );
   }
 
