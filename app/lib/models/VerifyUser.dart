@@ -1,12 +1,11 @@
 enum UserType {
-  Worker,       // 0
-  Contractor,   // 1
-  Store,        // 2
-  Admin,        // 3
+  Worker, // 0
+  Contractor, // 1
+  Store, // 2
+  Admin, // 3
 }
 
 class VerifyUser {
-
   String name;
   String zipCode;
   String userName;
@@ -15,7 +14,13 @@ class VerifyUser {
   UserType type;
   bool authenticated;
 
-  VerifyUser({ this.name, this.zipCode, this.userName, this.registered, this.type, this.authenticated });
+  VerifyUser(
+      {this.name,
+      this.zipCode,
+      this.userName,
+      this.registered,
+      this.type,
+      this.authenticated});
 
   static VerifyUser fromJson(Map<String, dynamic> json) {
     try {
@@ -24,12 +29,11 @@ class VerifyUser {
         zipCode: json["zipCode"],
         userName: json["userName"],
         registered: json["registered"],
-        type: json["type"],
+        type: UserType.values[json["type"]],
         authenticated: json["authenticated"],
       );
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
-
 }

@@ -9,6 +9,7 @@ class AuthProvider extends ChangeNotifier {
 
   FirebaseAuth _auth;
   FirebaseUser _user;
+  IdTokenResult userToken;
 
   String _currentPhoneNumber;
   String _currentVerificationId;
@@ -107,7 +108,7 @@ class AuthProvider extends ChangeNotifier {
 
     _user = user;
 
-    await verifyUser();
+    userToken = await _user.getIdToken();
     linkAnalyticsUser();
     notifyListeners();
   }
@@ -120,29 +121,6 @@ class AuthProvider extends ChangeNotifier {
     if (_user != null) {
       AnalyticsService.linkAnalyticsUser(_user.uid);
     }
-  }
-
-  Future<void> verifyUser() async {
-    if (_user != null) {
-      IdTokenResult token = await _user.getIdToken();
-
-      if (token != null) {
-        Response response = await ApiService.verifyUser(token.token);
-        print('GOT RESPONSE FROM GIGOVER2');
-
-        VerifyUser user = VerifyUser.fromJson(response.data);
-        print(user);
-
-        print(token);
-        print(token.token);
-
-        return;
-      }
-
-      throw new Exception("Token was not retrievable");
-    }
-
-    throw new Exception("User not logged in");
   }
 
 }

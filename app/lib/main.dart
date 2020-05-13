@@ -15,6 +15,8 @@ import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/SignupScreen/SignupScreen.dart';
+
 void main() => runApp(MittVerkApp());
 
 // global RouteObserver
@@ -73,6 +75,7 @@ class MittVerkAppState extends State<MittVerkApp> {
       future: authInstance.currentUser(),
       builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
         if (snapshot.hasError) {
+          // TODO
           return splashScreen(Text('ERROR'));
         }
 
@@ -107,6 +110,7 @@ class MittVerkAppState extends State<MittVerkApp> {
           );
         }
 
+        // TODO
         return splashScreen(Text('TODO LOADING'));
       },
     );

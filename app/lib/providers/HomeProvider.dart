@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/VerifyUser.dart';
+import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
+import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
@@ -78,6 +82,8 @@ class HomeProvider with ChangeNotifier {
 
   int _count = 0;
 
+  bool loadingUserVerification = true;
+
   String projectsError;
   bool loadingProjects = true;
   List<Project> projects = [];
@@ -87,21 +93,59 @@ class HomeProvider with ChangeNotifier {
   StopwatchProvider stopwatch;
   SlidePanelConfig slidePanelConfig = defaultSlidePanelConfig;
   PanelController panelController = new PanelController();
-
   StopWatchData stopWatchData;
+
+  IdTokenResult userToken;
+  VerifyUser verifiedUser;
+  bool loadingVerifiedUser = true;
+  String errorVerifiedUser;
 
   int get count => _count;
 
   bool mama = true;
 
-  HomeProvider() {
+  HomeProvider(IdTokenResult userToken) {
+    this.userToken = userToken;
     this.stopwatch = new StopwatchProvider();
     //TODI if slidepanelConfig/timer starttimer and set the slidepanelConfig
 
     // Load projects
-    this.getProjects().then((v) {
-      this.getStopWatchData();
+    //    this.getProjects().then((v) {
+    //      this.getStopWatchData();
+    //    });
+
+    this.verifyUser().then((user) {
+      verifiedUser = user;
+
+      if (user.registered) {
+        this.getProjects().then((v) {
+          this.getStopWatchData();
+        });
+      }
+    }).catchError((err) {
+      errorVerifiedUser = err.toString();
+      notifyListeners();
     });
+
+  }
+
+  Future<VerifyUser> verifyUser() async {
+    if (userToken != null) {
+      Response response = await ApiService.verifyUser(userToken.token);
+
+      try {
+        verifiedUser = VerifyUser.fromJson(response.data);
+        return verifiedUser;
+      } catch(e) {
+        print(e);
+        throw new Exception("Could not verify user");
+      } finally {
+        loadingVerifiedUser = false;
+        notifyListeners();
+      }
+    }
+
+    throw new Exception("User token not available");
   }
 
   //TIMER STUFF
