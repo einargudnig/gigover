@@ -115,7 +115,6 @@ class HomeProvider with ChangeNotifier {
     //    });
 
     initVerifyUser();
-
   }
 
   void initVerifyUser() {
@@ -140,7 +139,7 @@ class HomeProvider with ChangeNotifier {
       try {
         verifiedUser = VerifyUser.fromJson(response.data);
         return verifiedUser;
-      } catch(e) {
+      } catch (e) {
         print(e);
         throw new Exception("Could not verify user");
       } finally {
@@ -159,18 +158,23 @@ class HomeProvider with ChangeNotifier {
   }
 
   //TIMER STUFF
-  void getStopWatchData() {
+  void getStopWatchData() async {
     //TODO do API call to fetch the stopWatchDetails
 
-    this.stopWatchData =
-        new StopWatchData(null, null, StopWatchStatus.OnGoing, null);
+    Response response = await ApiService.getTimer();
+    print(response);
+    print('res');
 
-    //TODO calculate the stopwatch data here to change the stopWatch
-    if (this.stopWatchData.stopWatchStatus == StopWatchStatus.Idle) {
-      //TODO do nothing
-    } else {
+    //If error just do nothing
+    if (response.statusCode != 200) {
+      return;
+    }
+
+    if (response.data["timeSheet"] != null &&
+        !response.data["timeSheet"].isEmpty) {
+      //Set the data
       //Calculate current time from the stopwatch data
-      //TODO this from API
+      //TODO ADAM CALCULATE
       int minutes = 30;
       int seconds = 30;
       int hundreds = 30;
@@ -180,17 +184,18 @@ class HomeProvider with ChangeNotifier {
         seconds: seconds,
         minutes: minutes,
       );
+
+      //TODO ADAM SET THE CORRECT CURRENTPROJECTID AND TASKID TO SHOW THE RIGHT STUFF
       Duration duration = new Duration(
           minutes: minutes, seconds: seconds, milliseconds: hundreds);
-
       //Set the time from the time instance from the server
       this.stopwatch.setAddedTime(elapsedTime, duration);
+      this.resumeTimer();
 
-      //Start the timer if needed
+/*      //Start the timer if needed
       if (this.stopWatchData.stopWatchStatus == StopWatchStatus.OnGoing) {
         this.resumeTimer();
-      }
-
+      }*/
       //Make sure the showSlidePanel is open, since there is a timer active
       this.showSlidePanel();
     }
@@ -205,6 +210,8 @@ class HomeProvider with ChangeNotifier {
 
   Future<String> getProjects() async {
     Response response = await ApiService.projectList();
+    print(response);
+    print('resss--');
 
     Response res2 = await ApiService.getUserDetails();
     print(res2);
@@ -283,11 +290,18 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void startTimer() {
+  Future<void> startTimer() async {
     this.showSlidePanel();
     if (this.panelController.isPanelClosed) {
       this.panelController.open();
     }
+
+    //TODO  not posibly wait for callback
+    Response res = await ApiService.workStart(
+        this.currentTrackedProject.projectId,
+        this.currentTrackedTask.taskId,
+        1);
+
     this.stopwatch.startStopWatch(() {
       notifyListeners();
     });
@@ -295,6 +309,10 @@ class HomeProvider with ChangeNotifier {
   }
 
   void resetTimer() {
+    
+    //TODO perhaps show some dialog to tell the user about the time he just logged
+    //TODO and do not
+    ApiService.workEnd(this.currentTrackedProject.projectId);
     this.stopwatch.resetStopWatch();
     this.slidePanelConfig = defaultSlidePanelConfig;
     notifyListeners();

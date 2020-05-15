@@ -31,10 +31,10 @@ class StopwatchProvider {
 
   void _onTick(Timer timer) {
     if (milliseconds != currentStopwatch.elapsedMilliseconds) {
-      milliseconds = this.addedTime.inMilliseconds == null
-          ? currentStopwatch.elapsedMilliseconds
-          : currentStopwatch.elapsedMilliseconds +
-              this.addedTime.inMilliseconds;
+      milliseconds = this.addedTime != null &&
+              this.addedTime.inMilliseconds != null
+          ? currentStopwatch.elapsedMilliseconds + this.addedTime.inMilliseconds
+          : currentStopwatch.elapsedMilliseconds;
 
       int hundreds = (milliseconds / 10).truncate();
       int seconds = (hundreds / 100).truncate();

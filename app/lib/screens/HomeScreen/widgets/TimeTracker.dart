@@ -30,6 +30,19 @@ class TimeTracker extends StatelessWidget {
       return Row(
         children: <Widget>[
           Expanded(
+              child: RoundedButton(
+                  padding: EdgeInsets.all(20.0),
+                  fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                  textColor: Color.fromRGBO(7, 16, 41, 1),
+                  onTap: () {
+                    homeProvider.resetTimer();
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icons/stop.svg',
+                    width: 28,
+                    height: 28,
+                  ))),
+/*          Expanded(
             child: RoundedButton(
                 padding: EdgeInsets.all(20.0),
                 fillBackground: Color.fromRGBO(31, 223, 131, 1),
@@ -42,7 +55,7 @@ class TimeTracker extends StatelessWidget {
                   width: 28,
                   height: 28,
                 )),
-          ),
+          ),*/
           Spacing(
             isVertical: false,
             amount: 2,

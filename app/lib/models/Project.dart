@@ -4,7 +4,6 @@ import 'Task.dart';
 import 'TaskStatus.dart';
 
 class Project {
-
   int projectId;
   String name;
   String description;
@@ -13,7 +12,14 @@ class Project {
   int workId;
   List<Task> tasks;
 
-  Project({ this.projectId, this.name, this.description, this.zipCode, this.status, this.workId, this.tasks}) {
+  Project(
+      {this.projectId,
+      this.name,
+      this.description,
+      this.zipCode,
+      this.status,
+      this.workId,
+      this.tasks}) {
     if (tasks == null) {
       this.tasks = [];
     }
@@ -22,14 +28,18 @@ class Project {
   static Project fromJson(Map<String, dynamic> json) {
     try {
       return Project(
-        projectId: json["projectId"],
-        name: json["name"],
-        description: json["description"],
-        zipCode: json["zipCode"],
-        status: getProjectStatusFromString(json["status"]),
-        workId: json["workId"],
-      );
-    } catch(e) {
+          projectId: json["projectId"],
+          name: json["name"],
+          description: json["description"],
+          zipCode: json["zipCode"],
+          status: getProjectStatusFromString(json["status"]),
+          workId: json["workId"],
+          tasks: json["tasks"] != null
+              ? json["tasks"].map<Task>((t) {
+                  return Task.fromJson(t);
+                }).toList()
+              : []);
+    } catch (e) {
       return null;
     }
   }
@@ -53,5 +63,4 @@ class Project {
   String toString() {
     return this.name;
   }
-
 }

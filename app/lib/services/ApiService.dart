@@ -12,6 +12,32 @@ class ApiService {
     dio.interceptors.add(CookieManager(cookieJar));
   }
 
+  //Get currentTimer
+  static Future<Response> getTimer() async {
+    return await dio.get(apiPrefix + '/work/current');
+  }
+
+  /// Start a timer
+  static Future<Response> workStart(int projectId, int taskId, int workType) async {
+    return await dio.post(apiPrefix + '/work/start', data: {
+      'projectId': projectId,
+      'workType': 1,
+      //'taskId' : taskId
+    });
+  }
+
+  /// Stop a timer
+  static Future<Response> workEnd(
+      int projectId, {
+        String comment,
+      }) async {
+    return await dio.post(apiPrefix + '/work/stop', data: {
+      'projectId': projectId,
+      'comment': comment,
+    });
+  }
+
+
   /// Verify the user you are logged in as
   static Future<Response> verifyUser(String token) async {
     String url = apiPrefix + '/user/verify';
@@ -86,25 +112,6 @@ class ApiService {
           'taskId': taskId,
           'comment': comment,
         });
-  }
-
-  /// Start a timer
-  static Future<Response> workStart(int projectId, int workType) async {
-    return await dio.post(apiPrefix + '/work/start', data: {
-      'projectId': projectId,
-      'workType': workType,
-    });
-  }
-
-  /// Stop a timer
-  static Future<Response> workEnd(
-    int projectId, {
-    String comment,
-  }) async {
-    return await dio.post(apiPrefix + '/work/stop', data: {
-      'projectId': projectId,
-      'comment': comment,
-    });
   }
 
   // TODO Remove
