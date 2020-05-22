@@ -186,7 +186,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                       color: MVTheme.mainFont,
                       fontSize: 12,
                       weight: FontWeight.bold)),
-              Text(comment.formatedDate,
+              Text(comment.formattedDate,
                   style: AvailableFonts.getTextStyle(
                     context,
                     color: MVTheme.grayFont,

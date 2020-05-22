@@ -21,7 +21,7 @@ class TaskComment {
     this.sent,
   });
 
-  String get formatedDate {
+  String get formattedDate {
     var dateFormat = new DateFormat('yyyy/MM/dd HH:mm');
     DateTime currentDate = new DateTime.fromMillisecondsSinceEpoch(this.sent);
     Duration diff = DateTime.now().difference(currentDate);
