@@ -16,6 +16,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPush(route, previousRoute);
+    print('Did Push');
     if (route is PageRoute && previousRoute is PageRoute) {
       _sendScreenView(route, previousRoute);
     }
@@ -24,6 +25,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   @override
   void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    print('Did Replace');
     if (newRoute is PageRoute && oldRoute is PageRoute) {
       _sendScreenView(newRoute, oldRoute);
     }
@@ -32,6 +34,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   @override
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
+    print('Did Pop');
     if (previousRoute is PageRoute && route is PageRoute) {
       _sendScreenView(previousRoute, route);
     }

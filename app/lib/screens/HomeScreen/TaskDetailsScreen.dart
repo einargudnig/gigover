@@ -287,7 +287,16 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             commentHeader(),
             comments(),
             Container(
-              color: Colors.white,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset.fromDirection(0, 5),
+                    color: Colors.black.withAlpha(15),
+                    blurRadius: 15,
+                  )
+                ],
+              ),
               child: Column(
                 children: <Widget>[
                   Row(
@@ -337,14 +346,15 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                               padding: const EdgeInsets.only(
                                   right: 8.0, bottom: 8.0),
                               child: RoundedButton(
-                                  fillBackground: MVTheme.mainGreen,
-                                  padding: EdgeInsets.only(
-                                      right: 12.0, left: 12, top: 8, bottom: 8),
-                                  textColor: Colors.white,
-                                  onTap: () {
-                                    addComment();
-                                  },
-                                  text: 'Add comment'),
+                                fillBackground: MVTheme.mainGreen,
+                                padding: EdgeInsets.only(
+                                    right: 12.0, left: 12, top: 8, bottom: 8),
+                                textColor: Colors.white,
+                                onTap: () {
+                                  addComment();
+                                },
+                                text: 'Add comment',
+                              ),
                             ),
                           ],
                         )

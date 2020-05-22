@@ -13,6 +13,8 @@ import 'package:mittverk/screens/LoginScreen/LoginScreen.dart';
 import 'package:mittverk/services/AnalyticsService.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
+import 'package:mittverk/widgets/FullscreenLoader.dart';
+import 'package:mittverk/widgets/LoadingSpinner.dart';
 import 'package:provider/provider.dart';
 
 bool notNull(Object o) => o != null;
@@ -111,8 +113,7 @@ class MittVerkAppState extends State<MittVerkApp> {
           );
         }
 
-        // TODO
-        return splashScreen(Text('TODO LOADING'));
+        return FullscreenLoader();
       },
     );
   }

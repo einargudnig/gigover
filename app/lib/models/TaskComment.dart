@@ -29,8 +29,6 @@ class TaskComment {
     if (diff.inDays > 6) {
       return dateFormat.format(currentDate);
     } else {
-      print (diff.inDays);
-
       if (diff.inDays < 1) {
         if (diff.inHours < 1) {
           return 'Just now';
@@ -46,7 +44,6 @@ class TaskComment {
 
       return '${diff.inDays} days ago';
     }
-
   }
 
   static TaskComment fromJson(Map<String, dynamic> json) {

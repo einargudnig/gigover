@@ -14,6 +14,7 @@ import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
 import 'package:mittverk/screens/SignupScreen/SignupScreen.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
+import 'package:mittverk/widgets/FullscreenLoader.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -92,12 +93,11 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
         Provider.of<HomeProvider>(context, listen: true);
 
     if (homeProvider.loadingVerifiedUser) {
-      return Container(
-        child: Text('Loading')
-      );
+      return FullscreenLoader();
     }
 
     if (!homeProvider.loadingVerifiedUser && homeProvider.errorVerifiedUser != null) {
+      // TODO Full screen error
       return Container(
         child: Text(homeProvider.errorVerifiedUser),
       );
