@@ -34,7 +34,7 @@ flutter:
     # Images
     - assets/images/background.jpg
     # Logos
-    - assets/logo/mittverk.svg
+    - assets/logo/gigover.svg
     # Vectors & Icons
     - assets/icons/gear.svg
     - assets/icons/comment.svg

@@ -37,7 +37,7 @@ class MittVerkAppBarState extends State<MittVerkAppBar> {
     return AppBar(
       backgroundColor: MVTheme.appBarBackgroundColor,
       title: SvgPicture.asset(
-        'assets/logo/mittverk.svg',
+        'assets/logo/gigover.svg',
         height: 26.scale,
       ),
       centerTitle: true,

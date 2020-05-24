@@ -3,7 +3,7 @@ import 'dart:ui';
 class MVTheme {
   static Color primaryColor = Color.fromRGBO(7, 16, 41, 1);
   static Color secondaryColor = Color.fromRGBO(31, 223, 131, 1);
-  static Color appBarBackgroundColor = Color.fromRGBO(15, 49, 137, 1);
+  static Color appBarBackgroundColor = Color.fromRGBO(0, 0, 0, 1);
 
   static Color lightOrange = Color.fromRGBO(255, 244, 236, 1);
   static Color darkOrange = Color.fromRGBO(235, 126, 48, 1);
@@ -17,5 +17,6 @@ class MVTheme {
 
   static Color blueLabelBackground = Color.fromRGBO(201, 239, 255, 1);
   static Color blueLabelText = Color.fromRGBO(57, 142, 178, 1);
+
 
 }
