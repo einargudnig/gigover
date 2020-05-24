@@ -52,7 +52,7 @@ class Project {
       return "0%";
     }
 
-    return this.amountDoneValue.toString().substring(0, 2) + '%';
+    return this.amountDoneValue.toString().substring(0, 3) + '%';
   }
 
   double get amountDoneValue {
