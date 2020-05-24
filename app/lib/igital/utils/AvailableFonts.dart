@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,7 +12,9 @@ class AvailableFonts {
     FontStyle fontStyle = FontStyle.normal,
   }) {
     return TextStyle(
-      fontFamily: DefaultTextStyle.of(context).style.fontFamily,
+      fontFamily: Platform.isIOS
+          ? DefaultTextStyle.of(context).style.fontFamily
+          : 'Roboto',
       fontSize: fontSize,
       color: color,
       fontWeight: weight,
