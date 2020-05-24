@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/screens/HomeScreen/ProjectScreen.dart';
 import 'package:provider/provider.dart';
@@ -27,15 +28,17 @@ class _ProjectListState extends State<ProjectList> {
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
+        Project project = homeProvider.projects[index];
+
         return GestureDetector(
           onTap: () {
-            Navigator.of(context).pushNamed('/project', arguments: ProjectListScreenArgs(homeProvider.projects[index]));
+            homeProvider.homeNavigationKey.currentState.pushNamed('/project', arguments: ProjectListScreenArgs(project));
           },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
             child: Padding(
               padding: const EdgeInsets.only(top:4.0, bottom: 4.0),
-              child: ProjectCard(item: homeProvider.projects[index]),
+              child: ProjectCard(item: project),
             ),
             ),
         );

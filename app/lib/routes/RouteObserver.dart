@@ -20,8 +20,10 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
       homeProvider.hideTimePanel();
     }
 
-    print('==== New screen view: $screenName ====');
+    homeProvider.navigationSettings.showBackButton = (routeStack.length > 0 && homeProvider.homeNavigationKey.currentState.canPop()) || screenName == '/project';
+    homeProvider.navigationSettings.showSettingsIcon = !(screenName == '/settings');
 
+    print('==== New screen view: $screenName ====');
     if (previousRoute != null) {
       this.previousScreenName = previousRoute.settings.name;
       print('==== From screen: $previousScreenName ====');
@@ -67,7 +69,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
 
   @override
   void didRemove(Route route, Route previousRoute) {
-    removeLast();
+    //removeLast();
 
     if (previousRoute is PageRoute && route is PageRoute) {
       _sendScreenView(previousRoute, route);

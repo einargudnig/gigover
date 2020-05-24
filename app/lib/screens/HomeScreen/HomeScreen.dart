@@ -116,8 +116,11 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
         panel: TimeTracker(),
         body: Scaffold(
           appBar: MittVerkAppBar(
+            navigationSettings: homeProvider.navigationSettings,
             onBack: () {
-              homeProvider.homeNavigationKey.currentState.pop();
+              if (homeProvider.homeNavigationKey.currentState.canPop()) {
+                homeProvider.homeNavigationKey.currentState.pop();
+              }
             },
             onSettings: () {
               homeProvider.homeNavigationKey.currentState.pushNamed('/settings');
@@ -131,8 +134,8 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
               // default route as '/' is necessary!
               '/': (context) => ProjectListScreen(),
               '/signup': (context) => SignupScreen(),
-              '/project': (context) => ProjectScreen(context),
               '/settings': (context) => SettingsScreen(),
+              '/project': (context) => ProjectScreen(context),
               '/task': (context) => TaskDetailsView(context),
             },
           ),

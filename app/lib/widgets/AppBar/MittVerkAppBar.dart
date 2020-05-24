@@ -3,14 +3,20 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:mittverk/main.dart';
+import 'package:mittverk/utils/NavigationSettings.dart';
 import 'package:mittverk/utils/Theme.dart';
 
 class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function onBack;
   final Function onSettings;
+  final NavigationSettings navigationSettings;
 
-  MittVerkAppBar({this.onBack, this.onSettings, Key key})
-      : preferredSize = Size.fromHeight(kToolbarHeight),
+  MittVerkAppBar({
+    @required this.navigationSettings,
+    @required this.onBack,
+    @required this.onSettings,
+    Key key,
+  })  : preferredSize = Size.fromHeight(kToolbarHeight),
         super(key: key);
 
   @override
@@ -21,7 +27,6 @@ class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class MittVerkAppBarState extends State<MittVerkAppBar> {
-
   @override
   void dispose() {
     super.dispose();
@@ -29,11 +34,7 @@ class MittVerkAppBarState extends State<MittVerkAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    bool showGearIcon = true;
-    bool showBack = true;
-
     return AppBar(
-
       backgroundColor: MVTheme.appBarBackgroundColor,
       title: SvgPicture.asset(
         'assets/logo/mittverk.svg',
@@ -41,12 +42,14 @@ class MittVerkAppBarState extends State<MittVerkAppBar> {
       ),
       centerTitle: true,
       automaticallyImplyLeading: false,
-      leading: showBack ? new IconButton(
-        icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
-        onPressed: () => widget.onBack(),
-      ) : Container(),
+      leading: widget.navigationSettings.showBackButton
+          ? new IconButton(
+              icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+              onPressed: () => widget.onBack(),
+            )
+          : Container(),
       actions: <Widget>[
-        showGearIcon
+        widget.navigationSettings.showSettingsIcon
             ? IconButton(
                 icon:
                     SvgPicture.asset('assets/icons/gear.svg', height: 24.scale),

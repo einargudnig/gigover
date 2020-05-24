@@ -8,6 +8,7 @@ import 'package:mittverk/models/VerifyUser.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
+import 'package:mittverk/utils/NavigationSettings.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
@@ -103,18 +104,11 @@ class HomeProvider with ChangeNotifier {
 
   int get count => _count;
 
-  bool mama = true;
+  NavigationSettings navigationSettings = NavigationSettings();
 
   HomeProvider(IdTokenResult userToken) {
     this.userToken = userToken;
     this.stopwatch = new StopwatchProvider();
-    //TODI if slidepanelConfig/timer starttimer and set the slidepanelConfig
-
-    // Load projects
-    //    this.getProjects().then((v) {
-    //      this.getStopWatchData();
-    //    });
-
     initVerifyUser();
   }
 
