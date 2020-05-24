@@ -184,6 +184,7 @@ class HomeProvider with ChangeNotifier {
 
     //If error just do nothing
     if (response.statusCode != 200) {
+      this.stopwatch.resetStopWatch();
       return;
     }
 
@@ -191,30 +192,40 @@ class HomeProvider with ChangeNotifier {
         !response.data["timeSheet"].isEmpty) {
       // Set the data
       // Calculate current time from the stopwatch data
-      //TODO ADAM CALCULATE
-      int minutes = 30;
-      int seconds = 30;
-      int hundreds = 30;
+      Project tempP = this.projects.firstWhere((Project t) {
+        return t.projectId == response.data["timeSheet"]["projectId"];
+      });
+      Task tempT = tempP.tasks.firstWhere((Task t) {
+        return t.taskId == response.data["timeSheet"]["taskId"];
+      });
+
+      if (tempP != null) {
+        this.setCurrentProject(tempP);
+      }
+      if (tempT != null) {
+        this.setCurrentTask(tempT);
+      }
+
+      DateTime startTime = new DateTime.fromMillisecondsSinceEpoch(
+          response.data["timeSheet"]["start"]);
+      DateTime now = DateTime.now();
+
+      var inMilliseconds = now.difference(startTime).inMilliseconds;
 
       ElapsedTime elapsedTime = new ElapsedTime(
-        hundreds: hundreds,
-        seconds: seconds,
-        minutes: minutes,
+        hundreds: inMilliseconds,
       );
 
-      //TODO ADAM SET THE CORRECT CURRENTPROJECTID AND TASKID TO SHOW THE RIGHT STUFF
-      Duration duration = new Duration(
-          minutes: minutes, seconds: seconds, milliseconds: hundreds);
-      //Set the time from the time instance from the server
+      Duration duration = new Duration(milliseconds: inMilliseconds);
+      // Set the time from the time instance from the server
+      this.stopwatch.resetStopWatch();
       this.stopwatch.setAddedTime(elapsedTime, duration);
+
       this.resumeTimer();
 
-/*      //Start the timer if needed
-      if (this.stopWatchData.stopWatchStatus == StopWatchStatus.OnGoing) {
-        this.resumeTimer();
-      }*/
-      //Make sure the showSlidePanel is open, since there is a timer active
       this.showSlidePanel();
+    } else {
+      this.resetTimer();
     }
     notifyListeners();
   }
@@ -245,15 +256,7 @@ class HomeProvider with ChangeNotifier {
 
           print('Got projects!');
           this.projects = projectsMapped;
-          this.setCurrentProject(this.projects[0]);
-
           this.clearErrors();
-          /*
-
-          projects.forEach((project) {
-            this.projects.add(Project.fromJson(project));
-          });*/
-
         } else {
           projectsError = 'No projects available';
         }
