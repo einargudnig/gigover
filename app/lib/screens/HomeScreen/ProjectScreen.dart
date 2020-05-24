@@ -9,6 +9,7 @@ import 'package:mittverk/screens/HomeScreen/widgets/ProjectCard.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/TaskCard.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class ProjectListScreenArgs {
   Project project;
@@ -148,12 +149,12 @@ class ProjectScreenState extends State<ProjectScreen> {
               unselectedLabelColor: MVTheme.mainFont,
               labelStyle: AvailableFonts.getTextStyle(
                 context,
-                fontSize: 14,
+                fontSize: 15.scale,
                 weight: FontWeight.bold,
               ),
               unselectedLabelStyle: AvailableFonts.getTextStyle(
                 context,
-                fontSize: 14,
+                fontSize: 15.scale,
                 weight: FontWeight.normal,
               ),
               isScrollable: tabs.length > 4,

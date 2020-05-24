@@ -4,10 +4,9 @@ import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardBox.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
-import '../../../widgets/Avatars.dart';
-
-Widget ProjectCardDaysLeft(BuildContext context) {
+Widget projectCardDaysLeft(BuildContext context) {
   return Container(
     decoration: BoxDecoration(
       color: MVTheme.lightOrange,
@@ -27,10 +26,10 @@ Widget ProjectCardDaysLeft(BuildContext context) {
           ),
           Spacing(overridePadding: 6, isVertical: false),
           Text(
-            '3 Days left',
+            'IMPLEMENT THIS',
             style: AvailableFonts.getTextStyle(
               context,
-              fontSize: 10,
+              fontSize: 12.scale,
               color: MVTheme.darkOrange,
             ),
           ),
@@ -49,7 +48,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
   @override
   final bool hasBoxShadow;
 
-  ProjectCard({ this.item, this.borderRadius = 8.0, this.hasBoxShadow = true });
+  ProjectCard({this.item, this.borderRadius = 8.0, this.hasBoxShadow = true});
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +67,12 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 children: <Widget>[
                   Text(
                     item.name,
-                    style: AvailableFonts.getTextStyle(context,
-                        color: MVTheme.mainFont, weight: FontWeight.bold),
+                    style: AvailableFonts.getTextStyle(
+                      context,
+                      fontSize: 16.scale,
+                      color: MVTheme.mainFont,
+                      weight: FontWeight.bold,
+                    ),
                   ),
                   Icon(
                     Icons.more_horiz,
@@ -83,19 +86,27 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
               ),
               Text(
                 item.description,
-                style: AvailableFonts.getTextStyle(context,
-                    color: MVTheme.grayFont),
+                style: AvailableFonts.getTextStyle(
+                  context,
+                  color: MVTheme.grayFont,
+                  fontSize: 14.scale,
+                ),
               ),
               Spacing(
                 isVertical: true,
               ),
-              ProjectCardDaysLeft(context),
+              projectCardDaysLeft(context),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  Text(item.amountDonePercentage,
-                      style: AvailableFonts.getTextStyle(context,
-                          color: MVTheme.grayFont, fontSize: 10)),
+                  Text(
+                    item.amountDonePercentage,
+                    style: AvailableFonts.getTextStyle(
+                      context,
+                      color: MVTheme.grayFont,
+                      fontSize: 12.scale,
+                    ),
+                  ),
                   Spacing(
                     amount: 0.5,
                     isVertical: true,
@@ -118,6 +129,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 amount: 1,
                 isVertical: true,
               ),
+
               /// TODO ADD PEOPLE AGAIN ? Avatars(context, item.people),
             ],
           ),

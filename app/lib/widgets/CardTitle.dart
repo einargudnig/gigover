@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:mittverk/utils/Theme.dart';
 
 class CardTitle extends StatelessWidget {
@@ -24,7 +25,7 @@ class CardTitle extends StatelessWidget {
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.grayFont,
-            fontSize: 10,
+            fontSize: 12.scale,
           ),
         ) : Container(),
         subtitle != null ? Spacing(
@@ -35,7 +36,7 @@ class CardTitle extends StatelessWidget {
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.mainFont,
-            fontSize: 14,
+            fontSize: 15.scale,
             weight: FontWeight.bold,
           ),
         )

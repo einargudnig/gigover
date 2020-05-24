@@ -6,6 +6,7 @@ import 'package:mittverk/widgets/Avatars.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:provider/provider.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
@@ -31,9 +32,7 @@ class TaskCardState extends State<TaskCard> {
   Widget build(BuildContext context) {
     return ScaleTap(
       onTap: () {
-        print('Tapping task!');
-        //TODO take a callback in instead
-        final homeProvider = Provider.of<HomeProvider>(context, listen:false);
+        final homeProvider = Provider.of<HomeProvider>(context, listen: false);
         homeProvider.goToTaskDetail(widget.task);
       },
       child: CardBox(
@@ -44,7 +43,6 @@ class TaskCardState extends State<TaskCard> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               CardTitle(title: widget.task.text),
-              onlyAvatar(context, text: 'AV', circleSize: 14),
             ],
           ),
         ),

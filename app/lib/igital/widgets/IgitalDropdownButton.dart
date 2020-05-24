@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/utils/Theme.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 Widget IgitalDropdownButton<T>(
     context, String prefixTitle, T item, List<T> items,
@@ -15,7 +16,7 @@ Widget IgitalDropdownButton<T>(
         style: AvailableFonts.getTextStyle(
           context,
           color: MVTheme.grayFont,
-          fontSize: 10,
+          fontSize: 14.scale,
         ),
       ),
       Spacing(
@@ -30,7 +31,7 @@ Widget IgitalDropdownButton<T>(
         style: AvailableFonts.getTextStyle(
           context,
           color: MVTheme.mainFont,
-          fontSize: 14,
+          fontSize: 16.scale,
           weight: FontWeight.bold,
         ),
         isDense: true,

@@ -12,7 +12,9 @@ import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
+import 'package:mittverk/widgets/LoadingSpinner.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 import '../../main.dart';
 
@@ -28,7 +30,6 @@ class TaskDetailsView extends StatefulWidget {
   TaskDetailsView(BuildContext context) {
     final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
     this.task = args.task;
-    print(this.task);
   }
 
   @override
@@ -36,11 +37,12 @@ class TaskDetailsView extends StatefulWidget {
 }
 
 class TaskDetailsViewState extends State<TaskDetailsView> {
+  bool addCommentLoading = false;
   TextEditingController commentInputController = TextEditingController();
   String _commentText = '';
   Task _task;
 
-  final FocusNode commnetFocus = FocusNode();
+  final FocusNode commentFocus = FocusNode();
 
   @override
   void initState() {
@@ -53,8 +55,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     this.setState(() {});
   }
 
-  void getTaskDetail() async {
-    print('taskDetails');
+  Future<void> getTaskDetail() async {
     Response response = await ApiService.getTaskDetails(widget.task.taskId);
     if (response.statusCode != 200) {
       print('errorFetchin');
@@ -93,15 +94,17 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   Widget taskDetailItemWrapper(Widget child) {
     return Container(
-        child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                    bottom: BorderSide(color: MVTheme.borderColor, width: 2))),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: child,
-            )));
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+                bottom: BorderSide(color: MVTheme.borderColor, width: 2))),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: child,
+        ),
+      ),
+    );
   }
 
   Widget TaskDetailHeader(String headerText) {
@@ -117,11 +120,10 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               style: AvailableFonts.getTextStyle(
                 context,
                 color: MVTheme.mainFont,
-                fontSize: 16,
+                fontSize: 16.scale,
                 weight: FontWeight.bold,
               ),
-            ),
-            Icon(Icons.more_horiz)
+            )
           ],
         ),
       ],
@@ -160,7 +162,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                 style: AvailableFonts.getTextStyle(
                   context,
                   color: MVTheme.mainFont,
-                  fontSize: 14,
+                  fontSize: 16.scale,
                   weight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -184,13 +186,13 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               Text(comment.fullName,
                   style: AvailableFonts.getTextStyle(context,
                       color: MVTheme.mainFont,
-                      fontSize: 12,
+                      fontSize: 14.scale,
                       weight: FontWeight.bold)),
               Text(comment.formattedDate,
                   style: AvailableFonts.getTextStyle(
                     context,
                     color: MVTheme.grayFont,
-                    fontSize: 12,
+                    fontSize: 14.scale,
                   ))
             ],
           ),
@@ -204,8 +206,12 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(comment.comment),
+                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                    child: Text(comment.comment, style: AvailableFonts.getTextStyle(
+                      context,
+                      color: MVTheme.mainFont,
+                      fontSize: 14.scale,
+                    ),),
                   )),
             ],
           )
@@ -231,31 +237,34 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   void addComment() async {
     FocusScope.of(context).unfocus();
     String currentText = commentInputController.value.text;
-    //TODO set loading
-    Response res =
-        await ApiService.addComment(currentText, _task.projectId, _task.taskId);
 
-    if (true) {
-      //Priint
-      //TODO  loader !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // add comment to list
-      //Refetch all the stuff
-      //TODO this better
+    if (currentText != null && currentText.length > 0) {
+      setState(() {
+        addCommentLoading = true;
+      });
+
+      // TODO Error component
+      await ApiService.addComment(currentText, _task.projectId, _task.taskId);
       await this.getTaskDetail();
       commentInputController.clear();
-      print('addeedComment');
-    } else {
-      print('showError');
+
+      setState(() {
+        addCommentLoading = false;
+      });
     }
+
   }
 
   @override
   Widget build(BuildContext context) {
-    //todo
-    print(this._task);
-    print('task---------------');
     if (this._task == null) {
-      return Text('fafafaloading');
+      return ScreenLayout(
+        child: Container(
+          child: Center(
+            child: LoadingSpinner(),
+          )
+        )
+      );
     }
 
     return ScreenLayout(
@@ -277,11 +286,9 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                 this.setState(() {
                   _task = _task;
                 });
-                Response res = await ApiService.setProjectTaskStatus(
-                    this._task.taskId, newStatus);
 
-                print(res);
-                //TODO if res is wrong changeback
+                await ApiService.setProjectTaskStatus(
+                    this._task.taskId, newStatus);
               },
             )),
             commentHeader(),
@@ -309,14 +316,16 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                             print("search");
                             addComment();
                           },
-                          focusNode: commnetFocus,
+                          focusNode: commentFocus,
                           keyboardType: TextInputType.multiline,
                           maxLines: 3,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
                             focusColor: Colors.black.withAlpha(150),
-                            hintStyle:
-                                TextStyle(color: Colors.black.withAlpha(150)),
+                            hintStyle: TextStyle(
+                              color: Colors.black.withAlpha(150),
+                              fontSize: 18.scale,
+                            ),
                             hintText: 'Write a comment..',
                             border: OutlineInputBorder(),
                             filled: true,
@@ -338,7 +347,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                       ),
                     ],
                   ),
-                  commnetFocus.hasFocus
+                  commentFocus.hasFocus
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
@@ -346,6 +355,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                               padding: const EdgeInsets.only(
                                   right: 8.0, bottom: 8.0),
                               child: RoundedButton(
+                                loading: addCommentLoading,
                                 fillBackground: MVTheme.mainGreen,
                                 padding: EdgeInsets.only(
                                     right: 12.0, left: 12, top: 8, bottom: 8),

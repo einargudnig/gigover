@@ -9,7 +9,9 @@ import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
+import 'package:mittverk/utils/Theme.dart';
 import 'package:provider/provider.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class TimeTrackerDialog extends StatelessWidget {
   TimeTrackerDialog();
@@ -18,9 +20,6 @@ class TimeTrackerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
-    print(homeProvider.currentTrackedTask == null ||
-        homeProvider.currentTrackedProject == null);
-    print('isDisabled');
     return Material(
       child: LSDialog(
         children: [
@@ -31,13 +30,15 @@ class TimeTrackerDialog extends StatelessWidget {
                 isVertical: false,
                 amount: 1,
               ),
-              Text('Tímaskráning',
-                  style: AvailableFonts.getTextStyle(
-                    context,
-                    fontSize: 28,
-                    weight: FontWeight.bold,
-                    color: Colors.black,
-                  ))
+              Text(
+                'Tímaskráning',
+                style: AvailableFonts.getTextStyle(
+                  context,
+                  fontSize: 28,
+                  weight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              )
             ],
           ),
           Spacing(
@@ -86,27 +87,46 @@ class TimeTrackerDialog extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               RoundedButton(
-                  padding: EdgeInsets.all(20.0),
-                  textColor: Color.fromRGBO(176, 189, 220, 1),
-                  borderColorFromTextColor: true,
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).pop("Discard");
-                  },
-                  text: 'Hætta'),
+                padding: EdgeInsets.all(20.0),
+                textColor: Color.fromRGBO(176, 189, 220, 1),
+                borderColorFromTextColor: true,
+                onTap: () {
+                  Navigator.of(context, rootNavigator: true).pop("Discard");
+                },
+                small: true,
+                child: Text(
+                  'Hætta',
+                  style: AvailableFonts.getTextStyle(
+                    context,
+                    weight: FontWeight.bold,
+                    fontSize: 16.scale,
+                    color: Color.fromRGBO(176, 189, 220, 1),
+                  ),
+                ),
+              ),
               Spacing(amount: 2, isVertical: false),
               Expanded(
                 flex: 1,
                 child: RoundedButton(
-                    disabled: homeProvider.currentTrackedTask == null ||
-                        homeProvider.currentTrackedProject == null,
-                    padding: EdgeInsets.all(20.0),
-                    fillBackground: Color.fromRGBO(31, 223, 131, 1),
-                    textColor: Color.fromRGBO(7, 16, 41, 1),
-                    onTap: () {
-                      homeProvider.startTimer();
-                      Navigator.of(context, rootNavigator: true).pop("Discard");
-                    },
-                    text: 'Hefja tímatöku'),
+                  disabled: homeProvider.currentTrackedTask == null ||
+                      homeProvider.currentTrackedProject == null,
+                  padding: EdgeInsets.all(20.0),
+                  fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                  onTap: () {
+                    homeProvider.startTimer();
+                    Navigator.of(context, rootNavigator: true).pop("Discard");
+                  },
+                  small: true,
+                  child: Text(
+                    'Hefja tímatöku',
+                    style: AvailableFonts.getTextStyle(
+                      context,
+                      weight: FontWeight.bold,
+                      fontSize: 16.scale,
+                      color: MVTheme.mainFont,
+                    ),
+                  ),
+                ),
               ),
             ],
           )
