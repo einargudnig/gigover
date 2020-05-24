@@ -4,17 +4,14 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mittverk/igital/utils/ScaleFactor.dart';
 import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
-import 'package:mittverk/routes/RouteObserver.dart';
 import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
 import 'package:mittverk/screens/LoginScreen/LoginScreen.dart';
 import 'package:mittverk/services/AnalyticsService.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/FullscreenLoader.dart';
-import 'package:mittverk/widgets/LoadingSpinner.dart';
 import 'package:provider/provider.dart';
 
 bool notNull(Object o) => o != null;
@@ -22,8 +19,6 @@ bool notNull(Object o) => o != null;
 
 void main() => runApp(MittVerkApp());
 
-// global RouteObserver
-final RouteObserverHelper routeObserver = new RouteObserverHelper();
 final GlobalKey<NavigatorState> mainNavigatorKey = GlobalKey<NavigatorState>();
 
 class MittVerkApp extends StatefulWidget {
@@ -91,7 +86,6 @@ class MittVerkAppState extends State<MittVerkApp> {
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
-              navigatorObservers: [routeObserver],
               theme: ThemeData(
                 primaryColor: Color.fromRGBO(7, 16, 41, 1),
                 backgroundColor: Color.fromRGBO(251, 251, 251, 1),

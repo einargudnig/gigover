@@ -20,31 +20,31 @@ class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
   State createState() => MittVerkAppBarState();
 }
 
-class MittVerkAppBarState extends State<MittVerkAppBar> with RouteAware {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
-  }
+class MittVerkAppBarState extends State<MittVerkAppBar> {
 
   @override
   void dispose() {
-    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool showGearIcon = routeObserver.screenName != '/settings';
+    bool showGearIcon = true;
+    bool showBack = true;
 
     return AppBar(
+
       backgroundColor: MVTheme.appBarBackgroundColor,
       title: SvgPicture.asset(
         'assets/logo/mittverk.svg',
         height: 26.scale,
       ),
       centerTitle: true,
-
+      automaticallyImplyLeading: false,
+      leading: showBack ? new IconButton(
+        icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+        onPressed: () => widget.onBack(),
+      ) : Container(),
       actions: <Widget>[
         showGearIcon
             ? IconButton(

@@ -8,6 +8,7 @@ import 'package:mittverk/main.dart';
 import 'package:mittverk/models/VerifyUser.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/routes/RouteObserver.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/screens/SettingsScreen/SettingsScreen.dart';
@@ -56,12 +57,10 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
   }
 
   @override
   void dispose() {
-    routeObserver.unsubscribe(this);
     super.dispose();
   }
 
