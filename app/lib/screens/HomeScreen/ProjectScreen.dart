@@ -54,8 +54,7 @@ class ProjectScreenState extends State<ProjectScreen> {
   }
 
   List<Widget> getTaskWidgets(TaskStatus status) {
-    final projectProvider =
-        Provider.of<ProjectProvider>(context, listen: false);
+    final projectProvider = Provider.of<ProjectProvider>(context, listen: true);
 
     final tasks = projectProvider.tasks;
 
