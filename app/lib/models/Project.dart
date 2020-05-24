@@ -11,6 +11,7 @@ class Project {
   ProjectStatus status;
   int workId;
   List<Task> tasks;
+  int minutes;
 
   Project(
       {this.projectId,
@@ -19,7 +20,8 @@ class Project {
       this.zipCode,
       this.status,
       this.workId,
-      this.tasks}) {
+      this.tasks,
+      this.minutes}) {
     if (tasks == null) {
       this.tasks = [];
     }
@@ -34,6 +36,7 @@ class Project {
           zipCode: json["zipCode"],
           status: getProjectStatusFromString(json["status"]),
           workId: json["workId"],
+          minutes: json["minutes"],
           tasks: json["tasks"] != null
               ? json["tasks"].map<Task>((t) {
                   return Task.fromJson(t);

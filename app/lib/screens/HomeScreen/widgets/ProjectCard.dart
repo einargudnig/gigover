@@ -6,7 +6,17 @@ import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 
-Widget projectCardDaysLeft(BuildContext context) {
+String getTimeTracked(int min) {
+  //TODO perhaps render thisi better
+  String minutesStr = (min % 60).toString().padLeft(2, '0');
+  String hourStr = (min / 60).truncate().toString();
+  return '$hourStr:$minutesStr:00 tracked';
+}
+
+Widget projectCardDaysLeft(BuildContext context, Project item) {
+  if (item.minutes == null) {
+    return Container();
+  }
   return Container(
     decoration: BoxDecoration(
       color: MVTheme.lightOrange,
@@ -26,7 +36,7 @@ Widget projectCardDaysLeft(BuildContext context) {
           ),
           Spacing(overridePadding: 6, isVertical: false),
           Text(
-            'IMPLEMENT THIS',
+            getTimeTracked(item.minutes),
             style: AvailableFonts.getTextStyle(
               context,
               fontSize: 12.scale,
@@ -95,7 +105,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
               Spacing(
                 isVertical: true,
               ),
-              projectCardDaysLeft(context),
+              projectCardDaysLeft(context, item),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
