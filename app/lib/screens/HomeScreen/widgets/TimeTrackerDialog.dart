@@ -31,7 +31,7 @@ class TimeTrackerDialog extends StatelessWidget {
                 amount: 1,
               ),
               Text(
-                'Tímaskráning',
+                'Log time',
                 style: AvailableFonts.getTextStyle(
                   context,
                   fontSize: 28,
@@ -49,7 +49,7 @@ class TimeTrackerDialog extends StatelessWidget {
               children: <Widget>[
                 IgitalDropdownButton<Project>(
                   context,
-                  'Veldu verkefni',
+                  'Select project',
                   homeProvider.currentTrackedProject,
                   homeProvider.projects,
                   onTap: (Project p) {
@@ -68,7 +68,7 @@ class TimeTrackerDialog extends StatelessWidget {
               children: <Widget>[
                 IgitalDropdownButton<Task>(
                   context,
-                  'Veldu verkþátt',
+                  'Select task',
                   homeProvider.currentTrackedTask,
                   homeProvider.currentTrackedProject.tasks ?? [],
                   onTap: (Task task) {
@@ -95,7 +95,7 @@ class TimeTrackerDialog extends StatelessWidget {
                 },
                 small: true,
                 child: Text(
-                  'Hætta',
+                  'Exit',
                   style: AvailableFonts.getTextStyle(
                     context,
                     weight: FontWeight.bold,
@@ -118,7 +118,7 @@ class TimeTrackerDialog extends StatelessWidget {
                   },
                   small: true,
                   child: Text(
-                    'Hefja tímatöku',
+                    'Start time log',
                     style: AvailableFonts.getTextStyle(
                       context,
                       weight: FontWeight.bold,
