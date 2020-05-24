@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
+import 'package:mittverk/igital/widgets/DebugBorder.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
@@ -30,18 +31,20 @@ class TimeTracker extends StatelessWidget {
       return Row(
         children: <Widget>[
           Expanded(
-              child: RoundedButton(
-                  padding: EdgeInsets.all(20.0),
-                  fillBackground: Color.fromRGBO(31, 223, 131, 1),
-                  textColor: Color.fromRGBO(7, 16, 41, 1),
-                  onTap: () {
-                    homeProvider.resetTimer();
-                  },
-                  child: SvgPicture.asset(
-                    'assets/icons/stop.svg',
-                    width: 28,
-                    height: 28,
-                  ))),
+            child: RoundedButton(
+              padding: EdgeInsets.all(20.0),
+              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              textColor: Color.fromRGBO(7, 16, 41, 1),
+              onTap: () {
+                homeProvider.resetTimer();
+              },
+              child: SvgPicture.asset(
+                'assets/icons/stop.svg',
+                width: 28,
+                height: 28,
+              ),
+            ),
+          ),
 /*          Expanded(
             child: RoundedButton(
                 padding: EdgeInsets.all(20.0),
@@ -62,25 +65,26 @@ class TimeTracker extends StatelessWidget {
           ),
           Expanded(
             child: RoundedButton(
-                padding: EdgeInsets.all(20.0),
-                fillBackground: Color.fromRGBO(31, 223, 131, 1),
-                textColor: Color.fromRGBO(7, 16, 41, 1),
-                onTap: () {
-                  print('open modal with dialgo thingy');
-                  homeProvider.goToTaskDetail(homeProvider.currentTrackedTask);
-                },
-                child: SvgPicture.asset(
-                  'assets/icons/comment.svg',
-                  width: 28,
-                  height: 28,
-                )),
+              padding: EdgeInsets.all(20.0),
+              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              textColor: Color.fromRGBO(7, 16, 41, 1),
+              onTap: () {
+                homeProvider.goToTaskDetail(homeProvider.currentTrackedTask);
+              },
+              child: SvgPicture.asset(
+                'assets/icons/comment.svg',
+                width: 28,
+                height: 28,
+              ),
+            ),
           ),
         ],
       );
     } else {
-      return Row(children: <Widget>[
-        Expanded(
-          child: RoundedButton(
+      return Row(
+        children: <Widget>[
+          Expanded(
+            child: RoundedButton(
               padding: EdgeInsets.all(20.0),
               fillBackground: Color.fromRGBO(31, 223, 131, 1),
               textColor: Color.fromRGBO(7, 16, 41, 1),
@@ -91,45 +95,50 @@ class TimeTracker extends StatelessWidget {
                 'assets/icons/resume.svg',
                 width: 24,
                 height: 24,
-              )),
-        ),
-        Spacing(
-          isVertical: false,
-          amount: 2,
-        ),
-        Expanded(
+              ),
+            ),
+          ),
+          Spacing(
+            isVertical: false,
+            amount: 2,
+          ),
+          Expanded(
             child: RoundedButton(
-                padding: EdgeInsets.all(20.0),
-                fillBackground: Color.fromRGBO(31, 223, 131, 1),
-                textColor: Color.fromRGBO(7, 16, 41, 1),
-                onTap: () {
-                  homeProvider.resetTimer();
-                },
-                child: SvgPicture.asset(
-                  'assets/icons/stop.svg',
-                  width: 28,
-                  height: 28,
-                )))
-      ]);
+              padding: EdgeInsets.all(20.0),
+              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              textColor: Color.fromRGBO(7, 16, 41, 1),
+              onTap: () {
+                homeProvider.resetTimer();
+              },
+              child: SvgPicture.asset(
+                'assets/icons/stop.svg',
+                width: 28,
+                height: 28,
+              ),
+            ),
+          )
+        ],
+      );
     }
   }
 
   Widget timeItem(String currentTime) {
     return Expanded(
       child: RoundedButton(
-          padding: EdgeInsets.all(20.0),
-          textColor: Color.fromRGBO(7, 16, 41, 1),
-          borderColorFromTextColor: true,
-          onTap: () {},
-          text: currentTime),
+        padding: EdgeInsets.all(20.0),
+        textColor: Color.fromRGBO(7, 16, 41, 1),
+        borderColorFromTextColor: true,
+        onTap: () {},
+        text: currentTime,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-    print(homeProvider.stopwatch.currentStopWatchDuration);
-    print('------------------currentStopWatch');
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero) {
       return Container(
         padding: EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
@@ -194,39 +203,35 @@ class TimeTracker extends StatelessWidget {
       );
     }
 
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-      Expanded(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 54,
-            child: RoundedButton(
-              fillBackground: Color.fromRGBO(31, 223, 131, 1),
-              textColor: Color.fromRGBO(7, 16, 41, 1),
-              onTap: () {
-                showCupertinoModalPopup(
-                  context: context,
-                  builder: (_) {
-                    return ChangeNotifierProvider.value(
-                      value: homeProvider,
-                      child: TimeTrackerDialog(),
-                    );
-                  },
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: RoundedButton(
+          fillBackground: Color.fromRGBO(31, 223, 131, 1),
+          textColor: Color.fromRGBO(7, 16, 41, 1),
+          onTap: () {
+            showCupertinoModalPopup(
+              context: context,
+              builder: (_) {
+                return ChangeNotifierProvider.value(
+                  value: homeProvider,
+                  child: TimeTrackerDialog(),
                 );
               },
-              child: Text(
-                'Tímaskráning',
-                style: AvailableFonts.getTextStyle(
-                  context,
-                  color: MVTheme.primaryColor,
-                  fontSize: 18,
-                  weight: FontWeight.bold,
-                ),
-              ),
+            );
+          },
+          child: Text(
+            'Tímaskráning',
+            style: AvailableFonts.getTextStyle(
+              context,
+              color: MVTheme.primaryColor,
+              fontSize: 18,
+              weight: FontWeight.bold,
             ),
           ),
         ),
       ),
-    ]);
+    );
   }
 }

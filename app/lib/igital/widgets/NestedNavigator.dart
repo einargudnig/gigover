@@ -4,14 +4,15 @@ import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/routes/RouteObserver.dart';
 import 'package:provider/provider.dart';
 
-final RouteObserverHelper routeObserver = new RouteObserverHelper();
 
 class NestedNavigator extends StatefulWidget {
+  final RouteObserverHelper routeObserver;
   final GlobalKey<NavigatorState> navigationKey;
   final String initialRoute;
   final Map<String, WidgetBuilder> routes;
 
   NestedNavigator({
+    @required this.routeObserver,
     @required this.navigationKey,
     @required this.initialRoute,
     @required this.routes,
@@ -31,52 +32,52 @@ class NestedNavigatorState extends State<NestedNavigator> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
+    widget.routeObserver.subscribe(this, ModalRoute.of(context));
   }
 
   @override
   void dispose() {
-    routeObserver.unsubscribe(this);
+    widget.routeObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Navigator(
-        observers: [routeObserver],
-        key: widget.navigationKey,
-        initialRoute: widget.initialRoute,
-        onGenerateRoute: (RouteSettings routeSettings) {
-          WidgetBuilder builder = widget.routes[routeSettings.name];
-          print(routeSettings.name);
-          print(widget.routes);
-          if (routeSettings.isInitialRoute) {
-            return PageRouteBuilder(
-              pageBuilder: (context, __, ___) => builder(context),
-              settings: routeSettings,
-            );
-          } else {
-            return MaterialPageRoute(
-              builder: builder,
-              settings: routeSettings,
-            );
-          }
-        },
-      ),
-      onWillPop: () {
-        String currentRoute = ModalRoute.of(context).settings.name;
-        if(currentRoute == '/' || currentRoute == '/project') {
-          HomeProvider homeProvider =
-          Provider.of<HomeProvider>(context, listen: false);
-          homeProvider.showTimePanel();
-        }
-        if(widget.navigationKey.currentState.canPop()) {
-          widget.navigationKey.currentState.pop();
-          return Future<bool>.value(false);
-        }
-        return Future<bool>.value(true);
-      },
+    return Consumer<HomeProvider>(
+      builder: (context, homeProvider, child) {
+
+
+        return WillPopScope(
+          child: Navigator(
+            observers: [widget.routeObserver],
+            key: widget.navigationKey,
+            initialRoute: widget.initialRoute,
+            onGenerateRoute: (RouteSettings routeSettings) {
+              WidgetBuilder builder = widget.routes[routeSettings.name];
+              print(routeSettings.name);
+              print(widget.routes);
+              if (routeSettings.isInitialRoute) {
+                return PageRouteBuilder(
+                  pageBuilder: (context, __, ___) => builder(context),
+                  settings: routeSettings,
+                );
+              } else {
+                return MaterialPageRoute(
+                  builder: builder,
+                  settings: routeSettings,
+                );
+              }
+            },
+          ),
+          onWillPop: () {
+            if(widget.navigationKey.currentState.canPop()) {
+              widget.navigationKey.currentState.pop();
+              return Future<bool>.value(false);
+            }
+            return Future<bool>.value(true);
+          },
+        );
+      }
     );
   }
 

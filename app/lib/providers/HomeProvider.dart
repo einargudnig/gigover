@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/VerifyUser.dart';
-import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
@@ -21,30 +19,33 @@ class SlidePanelConfig {
 
   bool isCollapsed;
 
-  SlidePanelConfig(
-      {this.minHeight,
-      this.maxHeight,
-      this.renderPanelSheet,
-      this.backdropEnabled,
-      this.isDraggable,
-      this.isCollapsed});
+  SlidePanelConfig({
+    this.minHeight,
+    this.maxHeight,
+    this.renderPanelSheet,
+    this.backdropEnabled,
+    this.isDraggable,
+    this.isCollapsed,
+  });
 }
 
 SlidePanelConfig defaultSlidePanelConfig = new SlidePanelConfig(
-    minHeight: 72,
-    maxHeight: 72,
-    isDraggable: false,
-    backdropEnabled: false,
-    renderPanelSheet: false,
-    isCollapsed: true);
+  minHeight: 72,
+  maxHeight: 72,
+  isDraggable: false,
+  backdropEnabled: false,
+  renderPanelSheet: false,
+  isCollapsed: true,
+);
 
 SlidePanelConfig activeSlidePanelConfig = new SlidePanelConfig(
-    minHeight: 70,
-    maxHeight: 170,
-    isDraggable: true,
-    backdropEnabled: false,
-    renderPanelSheet: false,
-    isCollapsed: false);
+  minHeight: 70,
+  maxHeight: 170,
+  isDraggable: true,
+  backdropEnabled: false,
+  renderPanelSheet: false,
+  isCollapsed: false,
+);
 
 class ElapsedTime {
   final int hundreds;
@@ -309,7 +310,6 @@ class HomeProvider with ChangeNotifier {
   }
 
   void resetTimer() {
-    
     //TODO perhaps show some dialog to tell the user about the time he just logged
     //TODO and do not
     ApiService.workEnd(this.currentTrackedProject.projectId);

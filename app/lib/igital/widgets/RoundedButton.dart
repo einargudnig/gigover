@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/utils/Theme.dart';
+import 'package:mittverk/widgets/LoadingSpinner.dart';
 import '../extensions/num_extensions.dart';
 import '../utils/AvailableFonts.dart';
 
@@ -20,21 +22,22 @@ class RoundedButton extends StatefulWidget {
   double borderRadius;
   EdgeInsets padding;
 
-  RoundedButton(
-      {onTap,
-      text,
-      icon,
-      disabledFillBackground,
-      fillBackground,
-      textColor,
-      loading,
-      disabled,
-      small,
-      borderColorFromTextColor,
-      child,
-      subtitle,
-      borderRadius,
-      padding}) {
+  RoundedButton({
+    onTap,
+    text,
+    icon,
+    disabledFillBackground,
+    fillBackground,
+    textColor,
+    loading,
+    disabled,
+    small,
+    borderColorFromTextColor,
+    child,
+    subtitle,
+    borderRadius,
+    padding,
+  }) {
     this.onTap = onTap;
     this.text = text;
     this.child = child;
@@ -95,13 +98,15 @@ class RoundedButtonState extends State<RoundedButton>
   }
 
   Widget buttonChild(BuildContext context) {
-    // TODO Add loader to this widget
     if (widget.loading) {
       return Center(
         child: Container(
           width: 24,
           height: 24,
-          //child: LoadingIndicator(darkMode: false),
+          child: LoadingSpinner(
+            radius: 14,
+            dotRadius: 5,
+          ),
         ),
       );
     }
@@ -113,7 +118,7 @@ class RoundedButtonState extends State<RoundedButton>
             style: AvailableFonts.getTextStyle(
               context,
               color: widget.textColor,
-              fontSize: widget.small ? 16 : 20,
+              fontSize: widget.small ? 16.scale : 20.scale,
             ),
           );
 
@@ -129,7 +134,7 @@ class RoundedButtonState extends State<RoundedButton>
               style: AvailableFonts.getTextStyle(
                 context,
                 color: widget.textColor,
-                fontSize: widget.small ? 12.scale : 14.scale,
+                fontSize: widget.small ? 14.scale : 16.scale,
               ),
             ),
           ),
@@ -156,9 +161,8 @@ class RoundedButtonState extends State<RoundedButton>
       return widget.textColor;
     }
 
-    // TODO IMPLEMENT COLOR LIGHTGREEN to Theme
     return widget.fillBackground == null
-        ? Colors.lightGreen
+        ? MVTheme.secondaryColor
         : widget.fillBackground;
   }
 
@@ -183,8 +187,10 @@ class RoundedButtonState extends State<RoundedButton>
     return GestureDetector(
       onTap: () {
         if (!widget.disabled) {
-          print('Tapping RoundedButton');
           widget.onTap();
+        } else {
+          // Dev
+          print('Button is disabled');
         }
       },
       onTapDown: tapDownRoundedButton,
@@ -195,11 +201,12 @@ class RoundedButtonState extends State<RoundedButton>
         child: Container(
           padding: getButtonPadding(),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              border: Border.all(color: getBorderColor(), width: 2),
-              color: widget.disabled
-                  ? widget.disabledFillBackground
-                  : widget.fillBackground),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            border: Border.all(color: getBorderColor(), width: 2),
+            color: widget.disabled
+                ? widget.disabledFillBackground
+                : widget.fillBackground,
+          ),
           child: Center(
             child: buttonChild(context),
           ),

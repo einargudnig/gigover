@@ -102,13 +102,15 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
       );
     }
 
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     SlidePanelConfig config = homeProvider.slidePanelConfig;
     return ScreenLayout(
       child: SlidingUpPanel(
         controller: homeProvider.panelController,
         renderPanelSheet: config.renderPanelSheet,
-        minHeight: config.minHeight,
-        maxHeight: config.maxHeight,
+        minHeight: config.minHeight + bottomPadding,
+        maxHeight: config.maxHeight + bottomPadding,
         isDraggable: config.isDraggable,
         backdropEnabled: config.backdropEnabled,
         panel: TimeTracker(),
@@ -122,6 +124,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
             }
           ),
           body: NestedNavigator(
+            routeObserver: RouteObserverHelper(homeProvider: homeProvider),
             navigationKey: homeProvider.homeNavigationKey,
             initialRoute: homeProvider.verifiedUser.registered ? '/' : '/signup',
             routes: {

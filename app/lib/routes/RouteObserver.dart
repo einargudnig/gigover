@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mittverk/providers/HomeProvider.dart';
 
 class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
+  HomeProvider homeProvider;
   List<Route<dynamic>> routeStack = List();
+
+  RouteObserverHelper({ this.homeProvider });
 
   var screenName = "";
   var previousScreenName = "";
@@ -9,11 +13,24 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   void _sendScreenView(
       PageRoute<dynamic> route, PageRoute<dynamic> previousRoute) {
     this.screenName = route.settings.name;
-    print('==== New screen view: ${screenName} ====');
+
+    if(screenName == '/' || screenName == '/project') {
+      homeProvider.showTimePanel();
+    } else {
+      homeProvider.hideTimePanel();
+    }
+
+    print('==== New screen view: $screenName ====');
 
     if (previousRoute != null) {
       this.previousScreenName = previousRoute.settings.name;
-      print('==== From screen: ${previousScreenName} ====');
+      print('==== From screen: $previousScreenName ====');
+    }
+  }
+
+  void removeLast() {
+    if (routeStack.length > 0) {
+      routeStack.removeLast();
     }
   }
 
@@ -30,7 +47,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   @override
   void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    routeStack.removeLast();
+    removeLast();
     routeStack.add(newRoute);
 
     if (newRoute is PageRoute && oldRoute is PageRoute) {
@@ -41,9 +58,8 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   @override
   void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
     super.didPop(route, previousRoute);
-    routeStack.removeLast();
+    removeLast();
 
-    print('Did Pop');
     if (previousRoute is PageRoute && route is PageRoute) {
       _sendScreenView(previousRoute, route);
     }
@@ -51,9 +67,8 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
 
   @override
   void didRemove(Route route, Route previousRoute) {
-    routeStack.removeLast();
+    removeLast();
 
-    print('Did remove');
     if (previousRoute is PageRoute && route is PageRoute) {
       _sendScreenView(previousRoute, route);
     }
