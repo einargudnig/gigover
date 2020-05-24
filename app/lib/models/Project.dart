@@ -52,7 +52,10 @@ class Project {
       return "0%";
     }
 
-    return this.amountDoneValue.toString().substring(0, 3) + '%';
+    if (this.amountDoneValue == 100) {
+      return this.amountDoneValue.toString().substring(0, 3) + '%';
+    }
+    return this.amountDoneValue.toString().substring(0, 2) + '%';
   }
 
   double get amountDoneValue {
