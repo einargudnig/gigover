@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/widgets/Input.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 import '../../../igital/utils/AvailableFonts.dart';
 
@@ -41,7 +42,14 @@ class LoginForm extends StatelessWidget {
     if (errorMessage != null) {
       return Padding(
         padding: const EdgeInsets.only(bottom: Spacing.modifier * 2),
-        child: Text(errorMessage, style: AvailableFonts.getTextStyle(context, color: Colors.red)),
+        child: Text(
+          errorMessage,
+          style: AvailableFonts.getTextStyle(
+            context,
+            color: Colors.red,
+            fontSize: 16.scale,
+          ),
+        ),
       );
     }
 

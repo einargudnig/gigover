@@ -54,19 +54,10 @@ class NestedNavigatorState extends State<NestedNavigator> with RouteAware {
             initialRoute: widget.initialRoute,
             onGenerateRoute: (RouteSettings routeSettings) {
               WidgetBuilder builder = widget.routes[routeSettings.name];
-              print(routeSettings.name);
-              print(widget.routes);
-              if (routeSettings.isInitialRoute) {
-                return PageRouteBuilder(
-                  pageBuilder: (context, __, ___) => builder(context),
-                  settings: routeSettings,
-                );
-              } else {
-                return MaterialPageRoute(
-                  builder: builder,
-                  settings: routeSettings,
-                );
-              }
+              return MaterialPageRoute(
+                builder: builder,
+                settings: routeSettings,
+              );
             },
           ),
           onWillPop: () {

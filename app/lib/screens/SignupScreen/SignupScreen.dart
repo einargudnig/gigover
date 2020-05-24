@@ -10,6 +10,7 @@ import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/Input.dart';
 import 'package:provider/provider.dart';
+import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -160,6 +161,7 @@ class SignupScreenState extends State<SignupScreen> {
                 context,
                 weight: FontWeight.bold,
                 color: MVTheme.primaryColor,
+                fontSize: 16.scale,
               ),
               textAlign: TextAlign.center,
             ),
@@ -169,6 +171,7 @@ class SignupScreenState extends State<SignupScreen> {
                 style: AvailableFonts.getTextStyle(
                   context,
                   color: MVTheme.primaryColor,
+                  fontSize: 15.scale,
                 )),
             Spacing(amount: 2, isVertical: true),
             Input(
