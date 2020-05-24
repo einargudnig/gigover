@@ -45,13 +45,17 @@ class Project {
   }
 
   String get amountDonePercentage {
+    if (this.amountDoneValue == 0) {
+      return "0%";
+    }
+
     return this.amountDoneValue.toString().substring(0, 2) + '%';
   }
 
   double get amountDoneValue {
     if (tasks.length > 0) {
       int tasksDone = 0;
-      tasks.forEach((t) => tasksDone += (t.status != TaskStatus.Done ? 1 : 0));
+      tasks.forEach((t) => tasksDone += (t.status == TaskStatus.Done ? 1 : 0));
       return (tasksDone / tasks.length) * 100;
     }
 
