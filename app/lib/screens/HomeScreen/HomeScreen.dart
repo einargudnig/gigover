@@ -4,10 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/ScaleFactor.dart';
 import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/igital/widgets/NestedNavigator.dart';
-import 'package:mittverk/main.dart';
-import 'package:mittverk/models/VerifyUser.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/providers/ProjectProvider.dart';
 import 'package:mittverk/routes/RouteObserver.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/TimeTracker.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
@@ -36,6 +35,9 @@ class HomeScreen extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<HomeProvider>(
           create: (context) => HomeProvider(authProvider.userToken),
+        ),
+        ChangeNotifierProvider<ProjectProvider>(
+          create: (context) => ProjectProvider(),
         )
       ],
       child: HomeScreenView(),
@@ -95,7 +97,8 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
       return FullscreenLoader();
     }
 
-    if (!homeProvider.loadingVerifiedUser && homeProvider.errorVerifiedUser != null) {
+    if (!homeProvider.loadingVerifiedUser &&
+        homeProvider.errorVerifiedUser != null) {
       // TODO Full screen error
       return Container(
         child: Text(homeProvider.errorVerifiedUser),
@@ -116,20 +119,21 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
         panel: TimeTracker(),
         body: Scaffold(
           appBar: MittVerkAppBar(
-            navigationSettings: homeProvider.navigationSettings,
-            onBack: () {
-              if (homeProvider.homeNavigationKey.currentState.canPop()) {
-                homeProvider.homeNavigationKey.currentState.pop();
-              }
-            },
-            onSettings: () {
-              homeProvider.homeNavigationKey.currentState.pushNamed('/settings');
-            }
-          ),
+              navigationSettings: homeProvider.navigationSettings,
+              onBack: () {
+                if (homeProvider.homeNavigationKey.currentState.canPop()) {
+                  homeProvider.homeNavigationKey.currentState.pop();
+                }
+              },
+              onSettings: () {
+                homeProvider.homeNavigationKey.currentState
+                    .pushNamed('/settings');
+              }),
           body: NestedNavigator(
             routeObserver: RouteObserverHelper(homeProvider: homeProvider),
             navigationKey: homeProvider.homeNavigationKey,
-            initialRoute: homeProvider.verifiedUser.registered ? '/' : '/signup',
+            initialRoute:
+                homeProvider.verifiedUser.registered ? '/' : '/signup',
             routes: {
               // default route as '/' is necessary!
               '/': (context) => ProjectListScreen(),

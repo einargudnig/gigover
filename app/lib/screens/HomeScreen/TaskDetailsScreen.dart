@@ -9,12 +9,14 @@ import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/models/TaskStatus.dart';
+import 'package:mittverk/providers/ProjectProvider.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/widgets/LoadingSpinner.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
+import 'package:provider/provider.dart';
 
 import '../../main.dart';
 
@@ -207,11 +209,14 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                    child: Text(comment.comment, style: AvailableFonts.getTextStyle(
-                      context,
-                      color: MVTheme.mainFont,
-                      fontSize: 14.scale,
-                    ),),
+                    child: Text(
+                      comment.comment,
+                      style: AvailableFonts.getTextStyle(
+                        context,
+                        color: MVTheme.mainFont,
+                        fontSize: 14.scale,
+                      ),
+                    ),
                   )),
             ],
           )
@@ -252,19 +257,16 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
         addCommentLoading = false;
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     if (this._task == null) {
       return ScreenLayout(
-        child: Container(
-          child: Center(
-            child: LoadingSpinner(),
-          )
-        )
-      );
+          child: Container(
+              child: Center(
+        child: LoadingSpinner(),
+      )));
     }
 
     return ScreenLayout(
@@ -287,6 +289,9 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                   _task = _task;
                 });
 
+                ProjectProvider projectProvider =
+                    Provider.of<ProjectProvider>(context, listen: true);
+                projectProvider.updateTask(_task);
                 await ApiService.setProjectTaskStatus(
                     this._task.taskId, newStatus);
               },

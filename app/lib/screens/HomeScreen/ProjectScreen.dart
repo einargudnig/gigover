@@ -5,11 +5,12 @@ import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/TaskStatus.dart';
+import 'package:mittverk/providers/ProjectProvider.dart';
 import 'package:mittverk/screens/HomeScreen/widgets/ProjectCard.dart';
-import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/TaskCard.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
+import 'package:provider/provider.dart';
 
 class ProjectListScreenArgs {
   Project project;
@@ -21,7 +22,8 @@ class ProjectScreen extends StatefulWidget {
   Project project;
 
   ProjectScreen(BuildContext context) {
-    final ProjectListScreenArgs args = ModalRoute.of(context).settings.arguments;
+    final ProjectListScreenArgs args =
+        ModalRoute.of(context).settings.arguments;
     this.project = args.project;
   }
 
@@ -30,15 +32,13 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class ProjectScreenState extends State<ProjectScreen> {
-  bool _loadingTasks = true;
-  String _taskError;
-  List<Task> _tasks = [];
-
   @override
   void initState() {
     super.initState();
 
-    getTasks();
+    final projectProvider =
+        Provider.of<ProjectProvider>(context, listen: false);
+    projectProvider.getTasks(widget.project.projectId);
   }
 
   @override
@@ -53,54 +53,15 @@ class ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
-  void setError(String error) {
-    setState(() {
-      _taskError = error;
-    });
-  }
-
-  void getTasks() async {
-    Response response = await ApiService.getProjectTaskList(widget.project.projectId);
-
-    print('Getting tasks..');
-
-    if (response.statusCode != 200) {
-      setError('Error came up while fetching task list for project ${widget.project.toString()}');
-    } else {
-      try {
-        if (response.data != null && response.data["projectTasks"] != null) {
-          dynamic projectTasks = response.data["projectTasks"];
-
-          print('Got tasks!');
-          print(projectTasks[0]);
-
-          List<Task> tempTasks = [];
-
-          projectTasks.forEach((task) {
-            tempTasks.add(Task.fromJson(task));
-          });
-
-          setState(() {
-            _tasks = tempTasks;
-          });
-        } else {
-          setError('No tasks available');
-        }
-      } catch (e) {
-        print("ERROR WHILE PARSING PROJECTS");
-        setError('Could not load projects');
-      }
-    }
-
-    setState(() {
-      _loadingTasks = false;
-    });
-  }
-
-
-
   List<Widget> getTaskWidgets(TaskStatus status) {
-    List<Task> tasksForStatus = _tasks != null && _tasks.length > 0 ? _tasks.where((t) => t.status == status).toList() : [];
+    final projectProvider =
+        Provider.of<ProjectProvider>(context, listen: false);
+
+    final tasks = projectProvider.tasks;
+
+    List<Task> tasksForStatus = tasks != null && tasks.length > 0
+        ? tasks.where((t) => t.status == status).toList()
+        : [];
 
     if (tasksForStatus.length == 0) {
       return [];
