@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/ScaleTap.dart';
+import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
-import 'package:mittverk/widgets/Avatars.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
+import 'package:mittverk/widgets/ProjectTypeLabel.dart';
 import 'package:provider/provider.dart';
-import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class TaskCard extends StatefulWidget {
   final Task task;
@@ -38,11 +38,12 @@ class TaskCardState extends State<TaskCard> {
       child: CardBox(
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CardTitle(title: widget.task.text),
+              Spacing(isVertical: true, amount: 1,),
+              ProjectTypeLabel(typeId: widget.task.typeId),
             ],
           ),
         ),

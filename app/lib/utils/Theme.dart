@@ -14,4 +14,8 @@ class MVTheme {
   static Color redColor = Color.fromRGBO(222, 39, 39, 1);
 
   static Color borderColor = Color.fromRGBO(251, 251, 251, 1);
+
+  static Color blueLabelBackground = Color.fromRGBO(201, 239, 255, 1);
+  static Color blueLabelText = Color.fromRGBO(57, 142, 178, 1);
+
 }

@@ -22,6 +22,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
 
     homeProvider.navigationSettings.showBackButton = (routeStack.length > 0 && homeProvider.homeNavigationKey.currentState.canPop()) || screenName == '/project';
     homeProvider.navigationSettings.showSettingsIcon = !(screenName == '/settings');
+    homeProvider.notifyListenersAfterNavigationSettings();
 
     print('==== New screen view: $screenName ====');
     if (previousRoute != null) {

@@ -25,7 +25,7 @@ class CardTitle extends StatelessWidget {
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.grayFont,
-            fontSize: 12.scale,
+            fontSize: 14.scale,
           ),
         ) : Container(),
         subtitle != null ? Spacing(
@@ -36,7 +36,7 @@ class CardTitle extends StatelessWidget {
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.mainFont,
-            fontSize: 15.scale,
+            fontSize: 16.scale,
             weight: FontWeight.bold,
           ),
         )

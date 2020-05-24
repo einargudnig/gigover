@@ -10,11 +10,12 @@ class AvailableFonts {
     FontStyle fontStyle = FontStyle.normal,
   }) {
     return TextStyle(
-        fontFamily: DefaultTextStyle.of(context).style.fontFamily,
-        fontSize: fontSize,
-        color: color,
-        fontWeight: weight,
-        decoration: TextDecoration.none,
-        fontStyle: fontStyle);
+      fontFamily: DefaultTextStyle.of(context).style.fontFamily,
+      fontSize: fontSize,
+      color: color,
+      fontWeight: weight,
+      decoration: TextDecoration.none,
+      fontStyle: fontStyle,
+    );
   }
 }

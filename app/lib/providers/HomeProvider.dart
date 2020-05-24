@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/ProjectType.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/VerifyUser.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
@@ -88,7 +89,8 @@ class HomeProvider with ChangeNotifier {
 
   String projectsError;
   bool loadingProjects = true;
-  List<Project> projects = [];
+  List<Project> projects = List();
+  List<ProjectType> projectTypes = List();
 
   Project currentTrackedProject;
   Task currentTrackedTask;
@@ -112,9 +114,15 @@ class HomeProvider with ChangeNotifier {
     initVerifyUser();
   }
 
+  void notifyListenersAfterNavigationSettings() {
+    notifyListeners();
+  }
+
   void initVerifyUser() {
     this.verifyUser().then((user) {
       verifiedUser = user;
+
+      getProjectTypes();
 
       if (user.registered) {
         this.getProjects().then((v) {
@@ -125,6 +133,20 @@ class HomeProvider with ChangeNotifier {
       errorVerifiedUser = err.toString();
       notifyListeners();
     });
+  }
+
+  void getProjectTypes() async {
+    try {
+      Response response = await ApiService.getProjectTypes();
+      List<ProjectType> projectsMapped =
+          response.data["projectTypes"].map<ProjectType>((p) {
+        return ProjectType.fromJson(p);
+      }).toList();
+      projectTypes = projectsMapped;
+    } catch (e) {
+      print(e);
+      // Do nothing here, nothing major happens without ProjectTypes
+    }
   }
 
   Future<VerifyUser> verifyUser() async {
@@ -167,8 +189,8 @@ class HomeProvider with ChangeNotifier {
 
     if (response.data["timeSheet"] != null &&
         !response.data["timeSheet"].isEmpty) {
-      //Set the data
-      //Calculate current time from the stopwatch data
+      // Set the data
+      // Calculate current time from the stopwatch data
       //TODO ADAM CALCULATE
       int minutes = 30;
       int seconds = 30;
@@ -197,8 +219,6 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  //
-
   void clearErrors() {
     this.projectsError = '';
   }
@@ -214,12 +234,9 @@ class HomeProvider with ChangeNotifier {
 
     if (response.statusCode != 200) {
       projectsError = 'Error came up while fetching projects';
-      print('error');
       return 'error';
     } else {
-      print('herna');
       try {
-        print(response.data);
         if (response.data != null && response.data["projects"] != null) {
           List<Project> projectsMapped =
               response.data["projects"].map<Project>((p) {
@@ -228,8 +245,6 @@ class HomeProvider with ChangeNotifier {
 
           print('Got projects!');
           this.projects = projectsMapped;
-          print(this.projects[0]);
-          print(response.data["projects"]);
           this.setCurrentProject(this.projects[0]);
 
           this.clearErrors();

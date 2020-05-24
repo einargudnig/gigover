@@ -69,7 +69,7 @@ class ApiService {
   }
 
   /// Get project types, these are used on tasks
-  static Future<Response> projectTypes() async {
+  static Future<Response> getProjectTypes() async {
     return await dio.get(apiPrefix + '/workers/types');
   }
 
