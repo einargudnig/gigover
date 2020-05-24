@@ -18,25 +18,22 @@ class ApiService {
   }
 
   /// Start a timer
-  static Future<Response> workStart(int projectId, int taskId, int workType) async {
-    return await dio.post(apiPrefix + '/work/start', data: {
-      'projectId': projectId,
-      'workType': 1,
-      //'taskId' : taskId
-    });
+  static Future<Response> workStart(
+      int projectId, int taskId, int workType) async {
+    return await dio.post(apiPrefix + '/work/start',
+        data: {'projectId': projectId, 'workType': taskId, 'taskId': taskId});
   }
 
   /// Stop a timer
   static Future<Response> workEnd(
-      int projectId, {
-        String comment,
-      }) async {
+    int projectId, {
+    String comment,
+  }) async {
     return await dio.post(apiPrefix + '/work/stop', data: {
       'projectId': projectId,
       'comment': comment,
     });
   }
-
 
   /// Verify the user you are logged in as
   static Future<Response> verifyUser(String token) async {
@@ -90,7 +87,6 @@ class ApiService {
     TaskStatus status, {
     String comment,
   }) async {
-
     return await dio.post(apiPrefix + '/workers/updateTask', data: {
       'taskId': taskId,
       'status': status.index,
