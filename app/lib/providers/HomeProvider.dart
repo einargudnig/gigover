@@ -126,7 +126,11 @@ class HomeProvider with ChangeNotifier {
 
       if (user.registered) {
         this.getProjects().then((v) {
-          this.getStopWatchData();
+          this.getStopWatchData().then((s) {
+            if (this.currentTrackedProject == null) {
+              this.setCurrentProject(this.projects[0]);
+            }
+          });
         });
       }
     }).catchError((err) {
@@ -175,7 +179,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   //TIMER STUFF
-  void getStopWatchData() async {
+  Future<String> getStopWatchData() async {
     //TODO do API call to fetch the stopWatchDetails
 
     Response response = await ApiService.getTimer();
@@ -185,7 +189,7 @@ class HomeProvider with ChangeNotifier {
     //If error just do nothing
     if (response.statusCode != 200) {
       this.stopwatch.resetStopWatch();
-      return;
+      return "Error";
     }
 
     if (response.data["timeSheet"] != null &&
@@ -225,9 +229,10 @@ class HomeProvider with ChangeNotifier {
 
       this.showSlidePanel();
     } else {
-      this.resetTimer();
+      this.stopwatch.resetStopWatch();
     }
     notifyListeners();
+    return "done";
   }
 
   void clearErrors() {
