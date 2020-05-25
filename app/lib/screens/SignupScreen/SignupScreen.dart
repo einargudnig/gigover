@@ -198,6 +198,7 @@ class SignupScreenState extends State<SignupScreen> {
                     child: Input(
                       controller: postalCode,
                       hintText: 'Zip',
+                      textInputType: TextInputType.number,
                     ),
                   ),
                   SizedBox(width: 16,),
@@ -206,7 +207,6 @@ class SignupScreenState extends State<SignupScreen> {
                     child: Input(
                       controller: postalTown,
                       hintText: 'City or Town',
-                      textInputType: TextInputType.number,
                     ),
                   ),
                 ],
