@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>761785841920-m1k7lvclofb9d0akb00d0g4htd02sin8.apps.googleusercontent.com</string>
+	<string>761785841920-mdbt53t06h1uk6a72ed39kql77vv3hnj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.761785841920-m1k7lvclofb9d0akb00d0g4htd02sin8</string>
+	<string>com.googleusercontent.apps.761785841920-mdbt53t06h1uk6a72ed39kql77vv3hnj</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAi5uGGL9CEbOfCIlC8HRZeOTihTztcWDA</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.gigover.app.igital</string>
+	<string>com.gigover.app</string>
 	<key>PROJECT_ID</key>
 	<string>gigover2</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:761785841920:ios:f299ef437e96dd2b621be5</string>
+	<string>1:761785841920:ios:81af1727d5e9bf33</string>
 	<key>DATABASE_URL</key>
 	<string>https://gigover2.firebaseio.com</string>
 </dict>
