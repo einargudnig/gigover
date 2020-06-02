@@ -127,7 +127,7 @@ class HomeProvider with ChangeNotifier {
       if (user.registered) {
         this.getProjects().then((v) {
           this.getStopWatchData().then((s) {
-            if (this.currentTrackedProject == null) {
+            if (this.currentTrackedProject == null && this.projects.length > 0) {
               this.setCurrentProject(this.projects[0]);
             }
           });
@@ -173,7 +173,7 @@ class HomeProvider with ChangeNotifier {
   }
 
   void signupCompleted() {
-    // Reverify to make sure the user was registered
+    // Re-verify to make sure the user was registered
     initVerifyUser();
     homeNavigationKey.currentState.pushReplacementNamed('/');
   }

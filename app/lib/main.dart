@@ -19,6 +19,7 @@ bool notNull(Object o) => o != null;
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MittVerkApp());

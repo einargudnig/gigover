@@ -16,7 +16,7 @@ class FullscreenLoader extends StatelessWidget {
       },
       home: Container(
         decoration: BoxDecoration(
-          color: MVTheme.primaryColor,
+          color: Colors.black,
         ),
         child: Center(
           child: child,
@@ -28,7 +28,7 @@ class FullscreenLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return splashScreen(Container(
-      color: MVTheme.primaryColor,
+      color: Colors.black,
       child: Center(
           child: LoadingSpinner(
         radius: 15,

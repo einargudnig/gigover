@@ -11,7 +11,7 @@ class LoginFooter extends StatelessWidget {
       padding: const EdgeInsets.all(Spacing.modifier * 3),
       child: Text(
         'Need help with signing in?',
-        style: AvailableFonts.getTextStyle(context, color: Color.fromRGBO(175, 195, 248, 1)),
+        style: AvailableFonts.getTextStyle(context, color: Colors.white),
       ),
     );
   }
