@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
@@ -17,7 +18,12 @@ import 'package:provider/provider.dart';
 bool notNull(Object o) => o != null;
 
 
-void main() => runApp(MittVerkApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MittVerkApp());
+  });
+}
 
 final GlobalKey<NavigatorState> mainNavigatorKey = GlobalKey<NavigatorState>();
 
