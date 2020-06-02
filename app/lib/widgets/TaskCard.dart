@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/ScaleTap.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/utils/TimeTrackingString.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
 import 'package:mittverk/widgets/ProjectTypeLabel.dart';
@@ -41,9 +43,16 @@ class TaskCardState extends State<TaskCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              CardTitle(title: widget.task.text),
+                  CardTitle(title: widget.task.text),
               Spacing(isVertical: true, amount: 1,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(timeTrackedFromMinutes(widget.task.minutes), style: AvailableFonts.getTextStyle(context, fontSize: 11)),
               ProjectTypeLabel(typeId: widget.task.typeId),
+                ],
+              ),
             ],
           ),
         ),

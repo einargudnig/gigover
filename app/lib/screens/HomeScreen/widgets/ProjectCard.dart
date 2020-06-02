@@ -3,15 +3,9 @@ import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/utils/Theme.dart';
+import 'package:mittverk/utils/TimeTrackingString.dart';
 import 'package:mittverk/widgets/CardBox.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
-
-String getTimeTracked(int min) {
-  //TODO perhaps render thisi better
-  String minutesStr = (min % 60).toString().padLeft(2, '0');
-  String hourStr = (min / 60).truncate().toString();
-  return '$hourStr:$minutesStr:00 tracked';
-}
 
 Widget projectCardDaysLeft(BuildContext context, Project item) {
   if (item.minutes == null) {
@@ -36,7 +30,7 @@ Widget projectCardDaysLeft(BuildContext context, Project item) {
           ),
           Spacing(overridePadding: 6, isVertical: false),
           Text(
-            getTimeTracked(item.minutes),
+            timeTrackedFromMinutes(item.minutes),
             style: AvailableFonts.getTextStyle(
               context,
               fontSize: 12.scale,

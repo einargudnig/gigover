@@ -13,15 +13,16 @@ class Project {
   List<Task> tasks;
   int minutes;
 
-  Project(
-      {this.projectId,
-      this.name,
-      this.description,
-      this.zipCode,
-      this.status,
-      this.workId,
-      this.tasks,
-      this.minutes}) {
+  Project({
+    this.projectId,
+    this.name,
+    this.description,
+    this.zipCode,
+    this.status,
+    this.workId,
+    this.tasks,
+    this.minutes,
+  }) {
     if (tasks == null) {
       this.tasks = [];
     }
@@ -30,18 +31,19 @@ class Project {
   static Project fromJson(Map<String, dynamic> json) {
     try {
       return Project(
-          projectId: json["projectId"],
-          name: json["name"],
-          description: json["description"],
-          zipCode: json["zipCode"],
-          status: getProjectStatusFromString(json["status"]),
-          workId: json["workId"],
-          minutes: json["minutes"],
-          tasks: json["tasks"] != null
-              ? json["tasks"].map<Task>((t) {
-                  return Task.fromJson(t);
-                }).toList()
-              : []);
+        projectId: json["projectId"],
+        name: json["name"],
+        description: json["description"],
+        zipCode: json["zipCode"],
+        status: getProjectStatusFromString(json["status"]),
+        workId: json["workId"],
+        minutes: json["minutes"],
+        tasks: json["tasks"] != null
+            ? json["tasks"].map<Task>((t) {
+                return Task.fromJson(t);
+              }).toList()
+            : [],
+      );
     } catch (e) {
       return null;
     }
