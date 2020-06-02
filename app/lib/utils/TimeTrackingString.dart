@@ -1,4 +1,8 @@
 String timeTrackedFromMinutes(int minutes) {
+  if (minutes < 1) {
+    return '';
+  }
+
   String minutesStr = (minutes % 60).toString().padLeft(2, '0');
   int hours = (minutes / 60).truncate();
 
