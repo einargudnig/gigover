@@ -51,6 +51,7 @@ SlidePanelConfig activeSlidePanelConfig = new SlidePanelConfig(
 
 class ElapsedTime {
   final int hundreds;
+  final int hours;
   final int seconds;
   final int minutes;
 
@@ -58,6 +59,7 @@ class ElapsedTime {
     this.hundreds,
     this.seconds,
     this.minutes,
+    this.hours,
   });
 }
 

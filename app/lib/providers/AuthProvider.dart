@@ -44,6 +44,7 @@ class AuthProvider extends ChangeNotifier {
           err(authException.message);
         },
         verificationCompleted: (auth) {
+          print('CALLING SUCCESS');
           success(auth);
         },
         codeSent: (verificationId, [forceResendingToken]) {

@@ -69,6 +69,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
   // TODO FIXXX
   Widget splashScreen(Widget child) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: IgitalScrollBehaviour(),

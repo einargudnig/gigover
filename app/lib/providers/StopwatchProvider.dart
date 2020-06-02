@@ -9,7 +9,7 @@ class StopwatchProvider {
   Duration currentStopWatchDuration = Duration.zero;
   ElapsedTime currentElapsedTime;
 
-  //This is if the timer is old then we have some additionalTime
+  // This is if the timer is old then we have some additionalTime
   Duration addedTime = Duration.zero;
   ElapsedTime addedElapsedTime;
 
@@ -39,11 +39,15 @@ class StopwatchProvider {
       int hundreds = (milliseconds / 10).truncate();
       int seconds = (hundreds / 100).truncate();
       int minutes = (seconds / 60).truncate();
+      int hours = (minutes / 60).truncate();
+
       ElapsedTime elapsedTime = new ElapsedTime(
         hundreds: hundreds,
         seconds: seconds,
         minutes: minutes,
+        hours: hours,
       );
+
       this.setTime(elapsedTime, currentStopwatch.elapsed);
     }
   }
