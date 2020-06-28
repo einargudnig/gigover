@@ -94,6 +94,22 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> loginWithCredentials(AuthCredential credential) async {
+    try {
+      AuthResult authResult = await _auth.signInWithCredential(credential);
+
+      if (authResult.user != null) {
+        setUser(authResult.user);
+        return true;
+      }
+    } catch (e) {
+      print('loginWithCredentials failure');
+      print(e);
+    }
+
+    return false;
+  }
+
   Future logout() async {
     await _auth.signOut();
     AnalyticsService.sendEvent('userLoggedOut', null);
