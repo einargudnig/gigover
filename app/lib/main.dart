@@ -17,7 +17,6 @@ import 'package:provider/provider.dart';
 
 bool notNull(Object o) => o != null;
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -76,45 +75,45 @@ class MittVerkAppState extends State<MittVerkApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: authInstance.currentUser(),
+    return StreamBuilder(
+      stream: authInstance.onAuthStateChanged,
       builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
         if (snapshot.hasError) {
           // TODO
           return splashScreen(Text('ERROR'));
         }
 
-        if (snapshot.connectionState == ConnectionState.done || snapshot.hasData) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider<AuthProvider>(
-                create: (context) => AuthProvider(authInstance, snapshot.data),
-              ),
-            ],
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primaryColor: Color.fromRGBO(7, 16, 41, 1),
-                backgroundColor: Color.fromRGBO(251, 251, 251, 1),
-                accentColor: Color.fromRGBO(131, 136, 148, 1),
-              ),
-              builder: (context, child) {
-                return ScrollConfiguration(
-                  behavior: IgitalScrollBehaviour(),
-                  child: child,
-                );
-              },
-              navigatorKey: mainNavigatorKey,
-              initialRoute: snapshot.data != null ? '/home' : '/login',
-              routes: {
-                '/login': (context) => LoginScreen(),
-                '/home': (context) => HomeScreen(),
-              },
-            ),
-          );
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return FullscreenLoader();
         }
 
-        return FullscreenLoader();
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider<AuthProvider>(
+              create: (context) => AuthProvider(authInstance, snapshot.data),
+            ),
+          ],
+          child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: Color.fromRGBO(7, 16, 41, 1),
+              backgroundColor: Color.fromRGBO(251, 251, 251, 1),
+              accentColor: Color.fromRGBO(131, 136, 148, 1),
+            ),
+            builder: (context, child) {
+              return ScrollConfiguration(
+                behavior: IgitalScrollBehaviour(),
+                child: child,
+              );
+            },
+            navigatorKey: mainNavigatorKey,
+            initialRoute: snapshot.data != null ? '/home' : '/login',
+            routes: {
+              '/login': (context) => LoginScreen(),
+              '/home': (context) => HomeScreen(),
+            },
+          ),
+        );
       },
     );
   }
