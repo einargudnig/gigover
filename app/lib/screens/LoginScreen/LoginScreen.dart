@@ -85,7 +85,7 @@ class LoginScreenState extends State<LoginScreen> {
           success: (AuthCredential authCredential) {
             print('Login: Successfully created authCredential');
             print(authCredential);
-            authProvider.loginWithCredentials(authCredential);
+            //authProvider.loginWithCredentials(authCredential);
           },
           err: (String message) {
             setErrorMessage(message);
