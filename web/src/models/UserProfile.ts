@@ -1,12 +1,10 @@
+export type ContractorType = 0;
+export type WorkerType = 1;
+
 export interface IUserProfile {
+	registered: boolean;
+	type: ContractorType | WorkerType;
 	email: string;
-	family_name: string;
-	given_name: string;
-	granted_scopes: string;
-	hd: string; // Organization (domain)
-	id: string;
-	locale: string;
-	name: string;
-	picture: string;
-	verified_email: boolean;
+	authenticated: boolean;
+	avatar: string;
 }
