@@ -5,6 +5,9 @@ import { GoIcon } from './GoIcon';
 import { Link } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { OrganizeIcon } from './icons/OrganizeIcon';
+import { TimeIcon } from './icons/TimeIcon';
+import { UsersIcon } from './icons/UsersIcon';
+import { SettingsIcon } from './icons/SettingsIcon';
 
 interface PageProps {
 	title?: string;
@@ -97,8 +100,17 @@ export const Page = ({ title, headerActions, children }: PageProps): JSX.Element
 					<IconLink to={'/'}>
 						<ProjectIcon />
 					</IconLink>
-					<IconLink to={'/'}>
+					<IconLink to={'/organize'}>
 						<OrganizeIcon />
+					</IconLink>
+					<IconLink to={'/time-tracker'}>
+						<TimeIcon />
+					</IconLink>
+					<IconLink to={'/users'}>
+						<UsersIcon />
+					</IconLink>
+					<IconLink to={'/settings'}>
+						<SettingsIcon />
 					</IconLink>
 				</SidebarNav>
 				<small>v1.0</small>

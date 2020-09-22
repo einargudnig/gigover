@@ -12,6 +12,10 @@ import { IUserProfile } from './models/UserProfile';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import { UserContext } from './context/UserContext';
 import { FullscreenLoader } from './components/FullscreenLoader';
+import { Organize } from './pages/Organize';
+import { TimeTracker } from './pages/TimeTracker';
+import { Users } from './pages/Users';
+import { Settings } from './pages/Settings';
 
 const queryCache = new QueryCache();
 
@@ -82,8 +86,17 @@ const App = ({
 					{authenticated ? (
 						<>
 							<Route path={'/'} element={<Dashboard />} />
+							<Route path={'organize'} element={<Organize />}>
+								<Route path={':projectId'} element={<Organize />} />
+							</Route>
+							<Route path={'time-tracker'} element={<TimeTracker />}>
+								<Route path={':projectId'} element={<TimeTracker />} />
+							</Route>
+							<Route path={'users'} element={<Users />}>
+								<Route path={':userId'} element={<Users />} />
+							</Route>
+							<Route path={'settings'} element={<Settings />} />
 							<Route path={'project'} element={<Dashboard />}>
-								<Route path={'list'} element={<Dashboard />} />
 								<Route path={':id'} element={<Dashboard />} />
 							</Route>
 						</>
