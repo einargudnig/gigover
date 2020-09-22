@@ -10,6 +10,8 @@ import { QueryCache, ReactQueryCacheProvider } from 'react-query';
 import { ApiService } from './services/ApiService';
 import { IUserProfile } from './models/UserProfile';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+import { UserContext } from './context/UserContext';
+import { FullscreenLoader } from './components/FullscreenLoader';
 
 const queryCache = new QueryCache();
 
@@ -52,7 +54,7 @@ export const AppPreloader = (): JSX.Element => {
 	}, [authUser]);
 
 	if (loading || isLoadingFirebase) {
-		return <p>Loading</p>;
+		return <FullscreenLoader />;
 	}
 
 	if (error) {
@@ -61,28 +63,36 @@ export const AppPreloader = (): JSX.Element => {
 
 	return (
 		<ReactQueryCacheProvider queryCache={queryCache}>
-			<App authenticated={Boolean(authUser)} />
+			<App authenticated={Boolean(authUser)} userProfile={userProfile} />
 		</ReactQueryCacheProvider>
 	);
 };
 
-const App = ({ authenticated }: { authenticated: boolean }): JSX.Element => {
+const App = ({
+	authenticated,
+	userProfile
+}: {
+	authenticated: boolean;
+	userProfile: IUserProfile | null;
+}): JSX.Element => {
 	return (
-		<Router>
-			<Routes>
-				{authenticated ? (
-					<>
-						<Route path={'/'} element={<Dashboard />} />
-						<Route path={'project'} element={<Dashboard />}>
-							<Route path={'list'} element={<Dashboard />} />
-							<Route path={':id'} element={<Dashboard />} />
-						</Route>
-					</>
-				) : (
-					<Route path={'*'} element={<Login />} />
-				)}
-			</Routes>
-		</Router>
+		<UserContext.Provider value={userProfile}>
+			<Router>
+				<Routes>
+					{authenticated ? (
+						<>
+							<Route path={'/'} element={<Dashboard />} />
+							<Route path={'project'} element={<Dashboard />}>
+								<Route path={'list'} element={<Dashboard />} />
+								<Route path={':id'} element={<Dashboard />} />
+							</Route>
+						</>
+					) : (
+						<Route path={'*'} element={<Login />} />
+					)}
+				</Routes>
+			</Router>
+		</UserContext.Provider>
 	);
 };
 
