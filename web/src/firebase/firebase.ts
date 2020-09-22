@@ -22,14 +22,7 @@ export class Firebase {
 		this.auth = app.auth();
 		this.analytics = app.analytics();
 		this.authProvider = new app.auth.GoogleAuthProvider();
-
-		this.auth.onAuthStateChanged(this.authStateChanged);
 	}
-
-	authStateChanged = async (user: app.User | null): Promise<void> => {
-		console.log('Auth state changed', user);
-		await this.auth.updateCurrentUser(user);
-	};
 
 	user = async (): Promise<app.User | null> => {
 		await this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);

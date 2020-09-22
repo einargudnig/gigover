@@ -11,5 +11,5 @@ ReactDOM.render(
 			<AppPreloader />
 		</FirebaseContext.Provider>
 	</React.StrictMode>,
-	document.getElementById('root')
+	document.getElementById('gigover-root')
 );

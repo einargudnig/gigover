@@ -25,6 +25,7 @@ export const AppPreloader = (): JSX.Element => {
 	useEffect(() => {
 		setLoading(true);
 
+		// Check if the Firebase credentials are legit
 		const checkAuthToken = async (user: FirebaseUser) => {
 			try {
 				const token = await user.getIdToken();
@@ -43,7 +44,6 @@ export const AppPreloader = (): JSX.Element => {
 		};
 
 		if (authUser !== null) {
-			console.log('Going in here');
 			checkAuthToken(authUser);
 		} else {
 			setUserProfile(null);
@@ -71,9 +71,13 @@ const App = ({ authenticated }: { authenticated: boolean }): JSX.Element => {
 		<Router>
 			<Routes>
 				{authenticated ? (
-					<Route path={'g'} element={<Dashboard />}>
+					<>
 						<Route path={'/'} element={<Dashboard />} />
-					</Route>
+						<Route path={'project'} element={<Dashboard />}>
+							<Route path={'list'} element={<Dashboard />} />
+							<Route path={':id'} element={<Dashboard />} />
+						</Route>
+					</>
 				) : (
 					<Route path={'*'} element={<Login />} />
 				)}
