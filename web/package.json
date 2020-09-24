@@ -9,6 +9,7 @@
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hook-form": "^6.8.4",
     "react-query": "^2.23.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "3.4.3",

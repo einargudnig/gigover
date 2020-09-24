@@ -11,7 +11,7 @@ import { SettingsIcon } from './icons/SettingsIcon';
 
 interface PageProps {
 	title?: string;
-	headerActions?: React.ReactNode;
+	tabs?: React.ReactNode;
 	children: React.ReactNode;
 }
 
@@ -52,23 +52,32 @@ const PageWrapper = styled.div`
 		h3 {
 			margin: 0;
 		}
-
-		.avatar {
-			width: 40px;
-			height: 40px;
-			border-radius: 50%;
-			overflow: hidden;
-
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-		}
 	}
 
 	.page-content {
 		padding: 20px 40px;
+	}
+`;
+
+const HeaderActions = styled.div`
+	display: flex;
+	justify-content: flex-start;
+
+	> *:not(:last-child) {
+		margin-right: 8px;
+	}
+
+	.avatar {
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
 	}
 `;
 
@@ -83,7 +92,7 @@ const IconLink = styled(Link)`
 	margin: 8px;
 `;
 
-export const Page = ({ title, headerActions, children }: PageProps): JSX.Element | null => {
+export const Page = ({ title, tabs, children }: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
 
 	if (user === null) {
@@ -118,10 +127,14 @@ export const Page = ({ title, headerActions, children }: PageProps): JSX.Element
 			<PageWrapper>
 				<header>
 					<h3>{title ? title : ''}</h3>
-					{headerActions && <div>{headerActions}</div>}
-					<div className={'avatar'}>
-						<img src={user.avatar} alt={'Avatar'} />
-					</div>
+					{tabs && <div>{tabs}</div>}
+					<HeaderActions>
+						<button>Time</button>
+						<button>New</button>
+						<div className={'avatar'}>
+							<img src={user.avatar} alt={'Avatar'} />
+						</div>
+					</HeaderActions>
 				</header>
 				<div className={'page-content'}>{children}</div>
 			</PageWrapper>
