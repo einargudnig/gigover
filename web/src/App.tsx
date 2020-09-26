@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import 'normalize.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/Login';
@@ -12,6 +12,7 @@ import { IModalContext, ModalContext } from './context/ModalContext';
 import { GlobalModals } from './components/GlobalModals';
 import { useVerifyDevWorker } from './queries/useVerify';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
+import { FirebaseUser } from './firebase/firebaseTypes';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -20,12 +21,12 @@ export const AppPreloader = (): JSX.Element => {
 
 	useEffect(() => {
 		if (authUser) {
-			authUser.getIdToken().then((token) => {
+			authUser.getIdToken().then(async (token) => {
 				// TODO Replace with Non-debug call
 				// verify({
 				// 	token
 				// });
-				verify();
+				await verify();
 			});
 		}
 	}, [authUser, verify]);
@@ -38,34 +39,41 @@ export const AppPreloader = (): JSX.Element => {
 		return <p>Error in auth check</p>;
 	}
 
-	return <App authenticated={Boolean(authUser)} userProfile={userProfile} />;
+	return <App userProfile={userProfile} authUser={authUser} />;
 };
 
 const App = ({
-	authenticated,
-	userProfile
+	userProfile,
+	authUser
 }: {
-	authenticated: boolean;
 	userProfile?: IUserProfile;
+	authUser: FirebaseUser | null;
 }): JSX.Element => {
 	const [modalContext, setModalContext] = useState<IModalContext>({ registered: true });
 
 	useEffect(() => {
-		console.log('in here');
 		if (userProfile) {
 			setModalContext({
 				registered: userProfile.registered
 			});
 		}
-
-		console.log(modalContext);
 	}, [userProfile]);
+
+	const user = useMemo(() => {
+		if (authUser && userProfile) {
+			return {
+				...userProfile,
+				avatar: authUser.photoURL || ''
+			};
+		}
+		return null;
+	}, [authUser, userProfile]);
 
 	return (
 		<Router>
-			{authenticated && userProfile ? (
+			{user !== null ? (
 				<ModalContext.Provider value={[modalContext, setModalContext]}>
-					<UserContext.Provider value={userProfile}>
+					<UserContext.Provider value={user}>
 						<GlobalModals>
 							<AuthenticatedRoutes />
 						</GlobalModals>

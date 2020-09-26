@@ -37,6 +37,23 @@ const ProjectCardTitle = styled.div`
 	justify-content: space-between;
 `;
 
+const ProjectCardEdit = styled.div`
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: transparent;
+	transition: all 0.2s linear;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: -16px;
+	margin-right: -16px;
+
+	&:hover {
+		background: #e5e5e5;
+	}
+`;
+
 export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
@@ -48,13 +65,14 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 						<h3>{project.name}</h3>
 						<p>{project.description}</p>
 					</div>
-					<div
+					<ProjectCardEdit
 						onClick={(event) => {
+							event.preventDefault();
 							setModalContext({ modifyProject: { project } });
 						}}
 					>
-						<Edit size={24} />
-					</div>
+						<Edit size={20} />
+					</ProjectCardEdit>
 				</ProjectCardTitle>
 				<div>
 					<ProgressBar percent={Math.floor(Math.random() * 101)} />
