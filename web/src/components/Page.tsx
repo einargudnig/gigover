@@ -156,7 +156,7 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 					<GoIcon size={40} />
 				</Link>
 				<SidebarNav>
-					<IconLink to={'/'}>
+					<IconLink to={'/'} end={true}>
 						<div>
 							<ProjectIcon />
 						</div>
