@@ -14,23 +14,25 @@ import { PlusIcon } from './icons/PlusIcon';
 import { ClockIcon } from './icons/ClockIcon';
 
 interface PageProps {
+	children: React.ReactNode;
 	title?: string;
 	breadcrumbs?: string[];
 	tabs?: React.ReactNode;
-	children: React.ReactNode;
+	noContentPadding?: boolean;
 }
 
 const PageStyled = styled.div`
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	display: flex;
 	flex-direction: row;
 	overflow-y: hidden;
+	overflow-x: hidden;
 `;
 
 const Sidebar = styled.div`
 	background: #000;
-	flex: 0 0 80px;
+	flex: 0 1 80px;
 	padding: 24px 0;
 	display: flex;
 	flex-direction: column;
@@ -46,9 +48,9 @@ const Sidebar = styled.div`
 const PageWrapper = styled.div`
 	flex: 1;
 	background: ${(props) => props.theme.colors.blueBackground};
+	max-width: calc(100vw - 80px);
 
 	header {
-		width: 100%;
 		box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.03);
 		display: flex;
 		justify-content: space-between;
@@ -76,7 +78,9 @@ const PageWrapper = styled.div`
 	.page-content {
 		padding: 20px 40px 80px 40px;
 		max-height: 100%;
-		overflow-y: scroll;
+		max-width: 100%;
+		overflow-x: hidden;
+		overflow-y: auto;
 	}
 `;
 
@@ -114,7 +118,13 @@ const IconLink = styled(Link)`
 	margin: 8px;
 `;
 
-export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Element | null => {
+export const Page = ({
+	title,
+	breadcrumbs,
+	tabs,
+	children,
+	noContentPadding
+}: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
 	const [, setModalContext] = useContext(ModalContext);
 
@@ -178,7 +188,9 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 						</div>
 					</HeaderActions>
 				</header>
-				<div className={'page-content'}>{children}</div>
+				<div className={'page-content'} style={noContentPadding ? { padding: 0 } : {}}>
+					{children}
+				</div>
 			</PageWrapper>
 		</PageStyled>
 	);

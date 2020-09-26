@@ -8,6 +8,7 @@
     "history": "^5.0.0",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.8.4",
     "react-query": "^2.23.0",

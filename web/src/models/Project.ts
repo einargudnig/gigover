@@ -1,12 +1,11 @@
 import { Task } from './Task';
+import { TaskComment } from './TaskComment';
 
 export const ProjectStatus = {
-	CLOSED: 'CLOSED'
+	CLOSED: 'CLOSED',
+	OPEN: 'OPEN',
+	ARCHIVED: 'ARCHIVED'
 } as const;
-
-type ProjectComment = {
-	comment: string;
-};
 
 export interface Project {
 	description: string;
@@ -17,5 +16,5 @@ export interface Project {
 	length: number;
 	zipCode: string;
 	uId: string;
-	comments?: ProjectComment[];
+	comments?: TaskComment[];
 }
