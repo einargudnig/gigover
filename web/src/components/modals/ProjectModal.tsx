@@ -5,6 +5,7 @@ import { ProjectFormData, useModifyProject } from '../../queries/useModifyProjec
 import { Label } from '../forms/Label';
 import { Input, InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
+import { Button } from '../forms/Button';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -12,7 +13,9 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const [modify, { isLoading, isError, error }] = useModifyProject(project?.projectId);
+	const [modify, { isLoading, isError, error }] = useModifyProject({
+		projectId: project?.projectId
+	});
 	const { register, handleSubmit, errors } = useForm<ProjectFormData>({
 		defaultValues: project
 	});
@@ -59,13 +62,9 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					<Label>Lýsing á verkefni</Label>
 					<Input name="description" required={true} ref={register} />
 				</InputWrapper>
-				{isLoading ? (
-					<button type="submit" disabled={true}>
-						Loading
-					</button>
-				) : (
-					<button type="submit">Submit</button>
-				)}
+				<Button type={'submit'} disabled={isLoading} loading={isLoading}>
+					Submit
+				</Button>
 			</form>
 		</div>
 	);

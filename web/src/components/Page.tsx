@@ -9,11 +9,13 @@ import { TimeIcon } from './icons/TimeIcon';
 import { UsersIcon } from './icons/UsersIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ModalContext } from '../context/ModalContext';
-import { useQueryCache } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { Button } from './forms/Button';
+import { PlusIcon } from './icons/PlusIcon';
+import { ClockIcon } from './icons/ClockIcon';
 
 interface PageProps {
 	title?: string;
+	breadcrumbs?: string[];
 	tabs?: React.ReactNode;
 	children: React.ReactNode;
 }
@@ -43,7 +45,7 @@ const Sidebar = styled.div`
 
 const PageWrapper = styled.div`
 	flex: 1;
-	background: #f4f7fc;
+	background: ${(props) => props.theme.colors.blueBackground};
 
 	header {
 		width: 100%;
@@ -53,9 +55,21 @@ const PageWrapper = styled.div`
 		align-items: center;
 		padding: 12px 16px;
 		background: #fff;
+		border-bottom: 1px solid ${(props) => props.theme.colors.border};
 
 		h3 {
+			user-select: none;
 			margin: 0;
+			display: flex;
+			align-items: center;
+
+			span {
+				&:not(:last-child):after {
+					content: '»';
+					color: ${(props) => props.theme.colors.green};
+					margin: 0 8px;
+				}
+			}
 		}
 	}
 
@@ -69,9 +83,10 @@ const PageWrapper = styled.div`
 const HeaderActions = styled.div`
 	display: flex;
 	justify-content: flex-start;
+	align-items: center;
 
 	> *:not(:last-child) {
-		margin-right: 8px;
+		margin-right: 24px;
 	}
 
 	.avatar {
@@ -99,7 +114,7 @@ const IconLink = styled(Link)`
 	margin: 8px;
 `;
 
-export const Page = ({ title, tabs, children }: PageProps): JSX.Element | null => {
+export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
 	const [, setModalContext] = useContext(ModalContext);
 
@@ -134,19 +149,30 @@ export const Page = ({ title, tabs, children }: PageProps): JSX.Element | null =
 			</Sidebar>
 			<PageWrapper>
 				<header>
-					<h3>{title ? title : ''}</h3>
+					<h3>
+						{breadcrumbs ? (
+							<>
+								{breadcrumbs.map((breadcrumb, bIndex) => (
+									<span key={bIndex}>{breadcrumb}</span>
+								))}
+							</>
+						) : (
+							title || ''
+						)}
+					</h3>
 					{tabs && <div>{tabs}</div>}
 					<HeaderActions>
-						<button>
-							Time
-						</button>
-						<button
+						<Button height={'38px'}>
+							<ClockIcon />
+						</Button>
+						<Button
+							height={'38px'}
 							onClick={() =>
 								setModalContext({ modifyProject: { project: undefined } })
 							}
 						>
-							New
-						</button>
+							<PlusIcon />
+						</Button>
 						<div className={'avatar'}>
 							<img src={user.avatar} alt={'Avatar'} />
 						</div>

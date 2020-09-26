@@ -9,6 +9,5 @@ export interface ProjectResponse {
 
 export const useProjectList = () =>
 	useQuery<ProjectResponse, ErrorResponse>(ApiService.projectList, {
-		refetchOnMount: true,
 		refetchOnWindowFocus: true
 	});

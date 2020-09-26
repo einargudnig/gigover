@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { ProgressBar } from './ProgressBar';
 import { Edit } from './icons/Edit';
 import { ModalContext } from '../context/ModalContext';
+import { Theme } from '../Theme';
 
 interface ProjectCardProps {
 	project: Project;
@@ -50,7 +51,7 @@ const ProjectCardEdit = styled.div`
 	margin-right: -16px;
 
 	&:hover {
-		background: #e5e5e5;
+		background: ${(props) => props.theme.colors.blueBackground};
 	}
 `;
 
@@ -71,7 +72,7 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 							setModalContext({ modifyProject: { project } });
 						}}
 					>
-						<Edit size={20} />
+						<Edit size={20} color={Theme.colors.darkLightBlue} />
 					</ProjectCardEdit>
 				</ProjectCardTitle>
 				<div>

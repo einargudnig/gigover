@@ -4,21 +4,17 @@ import './styles/index.css';
 import { AppPreloader } from './App';
 import { Firebase } from './firebase/firebase';
 import { FirebaseContext } from './firebase/FirebaseContext';
-import { QueryCache, ReactQueryCacheProvider, ReactQueryConfigProvider } from 'react-query';
+import { ReactQueryConfigProvider } from 'react-query';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import { ThemeProvider } from 'styled-components';
+import { Theme } from './Theme';
 
-// TODO Fix ThemeProvider
+const firebaseApp = new Firebase();
 
 ReactDOM.render(
 	<React.StrictMode>
-		<ThemeProvider
-			theme={{
-				black: '#000',
-				white: '#fff'
-			}}
-		>
-			<FirebaseContext.Provider value={new Firebase()}>
+		<ThemeProvider theme={Theme}>
+			<FirebaseContext.Provider value={firebaseApp}>
 				<ReactQueryConfigProvider
 					config={{
 						queries: {
