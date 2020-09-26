@@ -1,8 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
+import { Project } from '../models/Project';
+import { Task } from '../models/Task';
 
 export interface IModalContext {
-	project?: { id: number };
-	timeTracker?: { projectId: number; taskId?: number };
+	modifyProject?: {
+		project?: Project;
+	};
+	timeTracker?: { Project: Project; task?: Task };
 	registered?: boolean;
 }
 

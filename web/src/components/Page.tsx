@@ -8,6 +8,7 @@ import { OrganizeIcon } from './icons/OrganizeIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { UsersIcon } from './icons/UsersIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
+import { ModalContext } from '../context/ModalContext';
 
 interface PageProps {
 	title?: string;
@@ -94,6 +95,7 @@ const IconLink = styled(Link)`
 
 export const Page = ({ title, tabs, children }: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
+	const [, setModalContext] = useContext(ModalContext);
 
 	if (user === null) {
 		return null;
@@ -130,7 +132,13 @@ export const Page = ({ title, tabs, children }: PageProps): JSX.Element | null =
 					{tabs && <div>{tabs}</div>}
 					<HeaderActions>
 						<button>Time</button>
-						<button>New</button>
+						<button
+							onClick={() =>
+								setModalContext({ modifyProject: { project: undefined } })
+							}
+						>
+							New
+						</button>
 						<div className={'avatar'}>
 							<img src={user.avatar} alt={'Avatar'} />
 						</div>

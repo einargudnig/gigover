@@ -2,5 +2,6 @@ export interface IconProps {
 	size?: number;
 	scale?: number;
 	color?: string;
-	onClick?(): void;
+
+	onClick?(event: unknown): void;
 }
