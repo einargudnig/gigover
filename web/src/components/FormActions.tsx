@@ -15,7 +15,7 @@ interface FormActionsProps {
 	submitLoading?: boolean;
 	cancelText?: string | React.ReactNode;
 	cancelDisabled?: boolean;
-
+	style?: React.CSSProperties;
 	onCancel?(): void;
 
 	onSubmit?(): void;
@@ -28,9 +28,10 @@ export const FormActions = ({
 	onCancel,
 	onSubmit,
 	cancelText,
-	cancelDisabled = false
+	cancelDisabled = false,
+	...props
 }: FormActionsProps): JSX.Element => (
-	<FormActionsContainer>
+	<FormActionsContainer {...props}>
 		{onCancel ? (
 			<Button
 				appearance={'outline'}

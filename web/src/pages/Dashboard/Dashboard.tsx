@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { Page } from '../components/Page';
-import { useProjectList } from '../queries/useProjectList';
-import { ProjectCard } from '../components/ProjectCard';
-import { EmptyState } from '../components/empty/EmptyState';
-import { EmptyProjects } from '../components/empty/EmptyProjects';
-import { Button } from '../components/forms/Button';
-import { ModalContext } from '../context/ModalContext';
+import { Page } from '../../components/Page';
+import { useProjectList } from '../../queries/useProjectList';
+import { ProjectCard } from '../../components/ProjectCard';
+import { EmptyState } from '../../components/empty/EmptyState';
+import { EmptyProjects } from '../../components/empty/EmptyProjects';
+import { Button } from '../../components/forms/Button';
+import { ModalContext } from '../../context/ModalContext';
+import { DashboardTabs } from './DashboardTabs';
 
 const ProjectDashboard = styled.div`
 	display: flex;
@@ -20,6 +21,7 @@ const ProjectDashboard = styled.div`
 `;
 
 export const Dashboard = (): JSX.Element => {
+	const [activeTab, setActiveTab] = useState('OPEN');
 	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading, isError, error } = useProjectList();
 
@@ -37,7 +39,16 @@ export const Dashboard = (): JSX.Element => {
 	}
 
 	return (
-		<Page title={'Dashboard'}>
+		<Page
+			title={'Dashboard'}
+			tabs={
+				<DashboardTabs
+					tabs={['OPEN', 'CLOSED']}
+					activeTab={activeTab}
+					onChange={(tab) => setActiveTab(tab)}
+				/>
+			}
+		>
 			<ProjectDashboard>
 				{(!data || !data.projects || data.projects.length <= 0) && (
 					<EmptyState
@@ -54,9 +65,11 @@ export const Dashboard = (): JSX.Element => {
 						}
 					/>
 				)}
-				{data?.projects?.map((project) => (
-					<ProjectCard key={project.projectId} project={project} />
-				))}
+				{data?.projects
+					?.filter((project) => project.status === activeTab)
+					.map((project) => (
+						<ProjectCard key={project.projectId} project={project} />
+					))}
 			</ProjectDashboard>
 		</Page>
 	);

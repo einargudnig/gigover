@@ -161,11 +161,11 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 							<ProjectIcon />
 						</div>
 					</IconLink>
-					<IconLink to={'/organize'}>
-						<div>
-							<OrganizeIcon />
-						</div>
-					</IconLink>
+					{/*<IconLink to={'/organize'}>*/}
+					{/*	<div>*/}
+					{/*		<OrganizeIcon />*/}
+					{/*	</div>*/}
+					{/*</IconLink>*/}
 					<IconLink to={'/time-tracker'}>
 						<div>
 							<TimeIcon />
@@ -199,7 +199,19 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 					</h3>
 					{tabs && <div>{tabs}</div>}
 					<HeaderActions>
-						<Button size={'small'} appearance={'outline'} height={'38px'}>
+						<Button
+							size={'small'}
+							appearance={'outline'}
+							height={'38px'}
+							onClick={() =>
+								setModalContext({
+									timeTracker: {
+										project: undefined,
+										task: undefined
+									}
+								})
+							}
+						>
 							<ClockIcon />
 						</Button>
 						<Button

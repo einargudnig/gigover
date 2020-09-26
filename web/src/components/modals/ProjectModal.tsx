@@ -28,7 +28,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				projectId: project?.projectId,
 				name,
 				description,
-				status: project?.status || 1
+				status: project?.status || 'OPEN'
 			});
 			closeModal();
 		} catch (e) {

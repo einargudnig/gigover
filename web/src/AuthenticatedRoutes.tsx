@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Dashboard } from './pages/Dashboard';
+import { Dashboard } from './pages/Dashboard/Dashboard';
 import { Organize } from './pages/Organize';
 import { TimeTracker } from './pages/TimeTracker';
 import { Users } from './pages/Users';

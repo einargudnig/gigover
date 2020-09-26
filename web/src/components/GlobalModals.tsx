@@ -3,16 +3,20 @@ import { ModalContext } from '../context/ModalContext';
 import { Modal } from './Modal';
 import { RegistrationModal } from './modals/RegistrationModal';
 import { ProjectModal } from './modals/ProjectModal';
+import { TimeTrackerModal } from './modals/TimeTrackerModal';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
 
-	console.log(modalContext);
+	// Todo do same thing for Project that was done for Timetracker.. much cleanr
 
 	return (
 		<>
 			{children}
+			{modalContext.timeTracker && (
+				<TimeTrackerModal open={true} context={modalContext.timeTracker} />
+			)}
 			{modalContext.modifyProject && (
 				<Modal
 					open={true}

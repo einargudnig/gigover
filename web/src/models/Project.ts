@@ -11,7 +11,7 @@ export interface Project {
 	description: string;
 	name: string;
 	projectId: number;
-	status: typeof ProjectStatus | number;
+	status: 'CLOSED' | 'OPEN' | 'ARCHIVED';
 	tasks?: Task[];
 	length: number;
 	zipCode: string;

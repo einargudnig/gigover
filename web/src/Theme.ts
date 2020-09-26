@@ -7,7 +7,8 @@ export const Theme = {
 		darkBlue: '#071029',
 		darkLightBlue: '#A0ADCD',
 		blueBackground: '#f4f7fc',
-		border: '#e0e5f2'
+		border: '#e0e5f2',
+		grayBackground: '#F8F8F8',
 	},
 	padding: (modifier: number): string => `${modifier * 8}px`
 };

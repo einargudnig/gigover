@@ -17,7 +17,7 @@ import { FirebaseUser } from './firebase/firebaseTypes';
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
-	const [verify, { data, isLoading: loading, error }] = useVerify();
+	const [verify, { data, isLoading: loading, error }] = useVerifyDevWorker();
 
 	useEffect(() => {
 		if (authUser) {
@@ -26,7 +26,7 @@ export const AppPreloader = (): JSX.Element => {
 				// verify({
 				// 	token
 				// });
-				await verify(token);
+				await verify();
 			});
 		}
 	}, [authUser, verify]);
