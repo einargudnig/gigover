@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { UserContext } from '../context/UserContext';
 import { GoIcon } from './GoIcon';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { OrganizeIcon } from './icons/OrganizeIcon';
 import { TimeIcon } from './icons/TimeIcon';
@@ -18,7 +18,6 @@ interface PageProps {
 	title?: string;
 	breadcrumbs?: string[];
 	tabs?: React.ReactNode;
-	noContentPadding?: boolean;
 }
 
 const PageStyled = styled.div`
@@ -47,6 +46,8 @@ const Sidebar = styled.div`
 
 const PageWrapper = styled.div`
 	flex: 1;
+	display: flex;
+	flex-direction: column;
 	background: ${(props) => props.theme.colors.blueBackground};
 	max-width: calc(100vw - 80px);
 
@@ -74,13 +75,18 @@ const PageWrapper = styled.div`
 			}
 		}
 	}
+`;
 
-	.page-content {
-		padding: 20px 40px 80px 40px;
-		max-height: 100%;
-		max-width: 100%;
-		overflow-x: hidden;
-		overflow-y: auto;
+const PageContent = styled.div`
+	flex: 1;
+	padding: ${(props) => props.theme.padding(3)};
+	max-height: 100%;
+	max-width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	@media screen and (max-width: 768px) {
+		padding: ${(props) => props.theme.padding(2)};
 	}
 `;
 
@@ -112,19 +118,30 @@ const SidebarNav = styled.nav`
 	flex-direction: column;
 `;
 
-const IconLink = styled(Link)`
-	display: block;
-	padding: 24px;
+const IconLink = styled(NavLink)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin: 8px;
+
+	> div {
+		margin: 4px;
+		height: 60px;
+		width: 60px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+	}
+
+	&.active {
+		> div {
+			background: ${(props) => props.theme.colors.green};
+		}
+	}
 `;
 
-export const Page = ({
-	title,
-	breadcrumbs,
-	tabs,
-	children,
-	noContentPadding
-}: PageProps): JSX.Element | null => {
+export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
 	const [, setModalContext] = useContext(ModalContext);
 
@@ -140,19 +157,29 @@ export const Page = ({
 				</Link>
 				<SidebarNav>
 					<IconLink to={'/'}>
-						<ProjectIcon />
+						<div>
+							<ProjectIcon />
+						</div>
 					</IconLink>
 					<IconLink to={'/organize'}>
-						<OrganizeIcon />
+						<div>
+							<OrganizeIcon />
+						</div>
 					</IconLink>
 					<IconLink to={'/time-tracker'}>
-						<TimeIcon />
+						<div>
+							<TimeIcon />
+						</div>
 					</IconLink>
 					<IconLink to={'/users'}>
-						<UsersIcon />
+						<div>
+							<UsersIcon />
+						</div>
 					</IconLink>
 					<IconLink to={'/settings'}>
-						<SettingsIcon />
+						<div>
+							<SettingsIcon />
+						</div>
 					</IconLink>
 				</SidebarNav>
 				<small>v1.0</small>
@@ -172,10 +199,12 @@ export const Page = ({
 					</h3>
 					{tabs && <div>{tabs}</div>}
 					<HeaderActions>
-						<Button height={'38px'}>
+						<Button size={'small'} appearance={'outline'} height={'38px'}>
 							<ClockIcon />
 						</Button>
 						<Button
+							size={'small'}
+							appearance={'outline'}
 							height={'38px'}
 							onClick={() =>
 								setModalContext({ modifyProject: { project: undefined } })
@@ -188,9 +217,7 @@ export const Page = ({
 						</div>
 					</HeaderActions>
 				</header>
-				<div className={'page-content'} style={noContentPadding ? { padding: 0 } : {}}>
-					{children}
-				</div>
+				<PageContent>{children}</PageContent>
 			</PageWrapper>
 		</PageStyled>
 	);

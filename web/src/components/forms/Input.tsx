@@ -6,7 +6,12 @@ export const Input = styled.input`
 	border-radius: 6px;
 	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.06);
 	padding: 12px 16px;
-	width: 80%;
+	width: 100%;
+	transition: all 0.2s linear;
+
+	&:focus {
+		outline-color: ${(props) => props.theme.colors.green};
+	}
 `;
 
 export const InputWrapper = styled.div`

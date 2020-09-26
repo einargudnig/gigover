@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Page } from '../components/Page';
 import { useParams } from 'react-router-dom';
 import { useProjectDetails } from '../queries/useProjectDetails';
+import { TaskStatusArray } from '../models/Task';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -10,10 +11,7 @@ const FeedBoard = styled.div`
 `;
 
 const KanbanBoard = styled.div`
-	max-width: 100%;
-	overflow-x: auto;
 	flex: 1;
-	padding: 0 ${(props): string => props.theme.padding(4)};
 	user-select: none;
 `;
 
@@ -21,11 +19,12 @@ const FeedColumn = styled.div`
 	background: #fff;
 	border-radius: 12px;
 	padding: ${(props): string => props.theme.padding(3)};
-	margin: ${(props): string => props.theme.padding(2)};
-	width: 33%;
-	min-height: 500px;
+	margin: ${(props): string => props.theme.padding(3)};
+	height: 100%;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
+
 	h3 {
 		margin: 0 0 ${(props): string => props.theme.padding(2)};
 		padding-bottom: ${(props): string => props.theme.padding(2)};
@@ -41,7 +40,10 @@ const FeedColumn = styled.div`
 `;
 
 const ProjectDetailsPage = styled.div`
-	padding: 40px 0;
+	max-width: 100%;
+	height: 100%;
+	flex: 1;
+	overflow-x: auto;
 `;
 
 export const ProjectDetails = (): JSX.Element => {
@@ -50,7 +52,7 @@ export const ProjectDetails = (): JSX.Element => {
 	const project = (data && data.project) ?? { name: 'Invalid' };
 
 	return (
-		<Page breadcrumbs={[project.name, 'Tasks']} noContentPadding={true}>
+		<Page breadcrumbs={[project.name, 'Tasks']}>
 			<ProjectDetailsPage>
 				{isLoading ? (
 					<p>Loading</p>
@@ -62,9 +64,12 @@ export const ProjectDetails = (): JSX.Element => {
 				) : (
 					<KanbanBoard>
 						<FeedBoard>
-							<FeedColumn>Test</FeedColumn>
-							<FeedColumn>Test</FeedColumn>
-							<FeedColumn>Test</FeedColumn>
+							{TaskStatusArray.map((taskStatus, tIndex) => (
+								<FeedColumn key={tIndex}>
+									<h3>{taskStatus}</h3>
+									<div>tasks...</div>
+								</FeedColumn>
+							))}
 						</FeedBoard>
 					</KanbanBoard>
 				)}

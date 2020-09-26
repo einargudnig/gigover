@@ -10,14 +10,14 @@ import { UserContext } from './context/UserContext';
 import { FullscreenLoader } from './components/FullscreenLoader';
 import { IModalContext, ModalContext } from './context/ModalContext';
 import { GlobalModals } from './components/GlobalModals';
-import { useVerifyDevWorker } from './queries/useVerify';
+import { useVerify, useVerifyDevWorker } from './queries/useVerify';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import { FirebaseUser } from './firebase/firebaseTypes';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
-	const [verify, { data: userProfile, isLoading: loading, error }] = useVerifyDevWorker();
+	const [verify, { data, isLoading: loading, error }] = useVerify();
 
 	useEffect(() => {
 		if (authUser) {
@@ -26,7 +26,7 @@ export const AppPreloader = (): JSX.Element => {
 				// verify({
 				// 	token
 				// });
-				await verify();
+				await verify(token);
 			});
 		}
 	}, [authUser, verify]);
@@ -39,7 +39,7 @@ export const AppPreloader = (): JSX.Element => {
 		return <p>Error in auth check</p>;
 	}
 
-	return <App userProfile={userProfile} authUser={authUser} />;
+	return <App userProfile={data?.data} authUser={authUser} />;
 };
 
 const App = ({
@@ -49,15 +49,9 @@ const App = ({
 	userProfile?: IUserProfile;
 	authUser: FirebaseUser | null;
 }): JSX.Element => {
-	const [modalContext, setModalContext] = useState<IModalContext>({ registered: true });
-
-	useEffect(() => {
-		if (userProfile) {
-			setModalContext({
-				registered: userProfile.registered
-			});
-		}
-	}, [userProfile]);
+	const [modalContext, setModalContext] = useState<IModalContext>(
+		userProfile ? { registered: userProfile.registered } : {}
+	);
 
 	const user = useMemo(() => {
 		if (authUser && userProfile) {

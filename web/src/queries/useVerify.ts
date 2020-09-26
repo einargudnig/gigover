@@ -4,15 +4,23 @@ import axios from 'axios';
 import { IUserProfile } from '../models/UserProfile';
 import { ErrorResponse } from '../models/ErrorResponse';
 
+interface MutationResponse {
+	data: IUserProfile;
+}
+
 export const useVerifyDevWorker = () =>
-	useMutation<IUserProfile, ErrorResponse>(
+	useMutation<MutationResponse, ErrorResponse>(
 		async () => await axios.get(ApiService.debugVerifyContractor, { withCredentials: true })
 	);
 
 export const useVerify = () =>
-	useMutation<IUserProfile, ErrorResponse, { token: string }>(
-		async (variables) =>
-			await axios.post(ApiService.verify, variables, {
-				withCredentials: true
-			})
+	useMutation<MutationResponse, ErrorResponse, string>(
+		async (token) =>
+			await axios.post(
+				ApiService.verify,
+				{ token },
+				{
+					withCredentials: true
+				}
+			)
 	);

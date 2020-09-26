@@ -8,6 +8,8 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
 
+	console.log(modalContext);
+
 	return (
 		<>
 			{children}

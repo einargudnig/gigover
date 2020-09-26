@@ -6,6 +6,7 @@ import { Label } from '../forms/Label';
 import { Input, InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { Button } from '../forms/Button';
+import { FormActions } from '../FormActions';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -62,9 +63,13 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					<Label>Lýsing á verkefni</Label>
 					<Input name="description" required={true} ref={register} />
 				</InputWrapper>
-				<Button type={'submit'} disabled={isLoading} loading={isLoading}>
-					Submit
-				</Button>
+				<FormActions
+					submitText={project ? 'Update project' : 'Create a project'}
+					submitLoading={isLoading}
+					submitDisabled={isLoading}
+					cancelText={'Discard changes'}
+					onCancel={() => closeModal()}
+				/>
 			</form>
 		</div>
 	);

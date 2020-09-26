@@ -11,8 +11,9 @@ interface ProjectCardProps {
 	project: Project;
 }
 
-const ProjectCardStyled = styled.div`
+const ProjectCardStyled = styled(Link)`
 	width: 440px;
+	max-width: 100%;
 	height: 220px;
 	border-radius: 12px;
 	background: #fff;
@@ -30,6 +31,10 @@ const ProjectCardStyled = styled.div`
 	h3 {
 		margin-bottom: 16px;
 		color: #000;
+	}
+
+	@media screen and (max-width: 768px) {
+		width: 100%;
 	}
 `;
 
@@ -59,26 +64,24 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
 	return (
-		<Link to={`/project/${project.projectId}`}>
-			<ProjectCardStyled>
-				<ProjectCardTitle>
-					<div>
-						<h3>{project.name}</h3>
-						<p>{project.description}</p>
-					</div>
-					<ProjectCardEdit
-						onClick={(event) => {
-							event.preventDefault();
-							setModalContext({ modifyProject: { project } });
-						}}
-					>
-						<Edit size={20} color={Theme.colors.darkLightBlue} />
-					</ProjectCardEdit>
-				</ProjectCardTitle>
+		<ProjectCardStyled to={`/project/${project.projectId}`}>
+			<ProjectCardTitle>
 				<div>
-					<ProgressBar percent={Math.floor(Math.random() * 101)} />
+					<h3>{project.name}</h3>
+					<p>{project.description}</p>
 				</div>
-			</ProjectCardStyled>
-		</Link>
+				<ProjectCardEdit
+					onClick={(event) => {
+						event.preventDefault();
+						setModalContext({ modifyProject: { project } });
+					}}
+				>
+					<Edit size={20} color={Theme.colors.darkLightBlue} />
+				</ProjectCardEdit>
+			</ProjectCardTitle>
+			<div>
+				<ProgressBar percent={Math.floor(Math.random() * 101)} />
+			</div>
+		</ProjectCardStyled>
 	);
 };
