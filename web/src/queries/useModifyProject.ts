@@ -5,11 +5,15 @@ import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import axios from 'axios';
 
-export interface ProjectFormData extends Pick<Project, 'name' | 'description' | 'status'> {
+interface OptionalProjectId {
 	projectId?: number;
 }
 
-export const useModifyProject = () => {
+export interface ProjectFormData
+	extends OptionalProjectId,
+		Pick<Project, 'name' | 'description' | 'status'> {}
+
+export const useModifyProject = ({ projectId }: OptionalProjectId) => {
 	const queryCache = useQueryCache();
 
 	return useMutation<ProjectResponse, ErrorResponse, ProjectFormData>(
@@ -18,6 +22,10 @@ export const useModifyProject = () => {
 		{
 			onSuccess: async () => {
 				await queryCache.invalidateQueries(ApiService.projectList);
+
+				if (projectId) {
+					await queryCache.invalidateQueries(ApiService.projectDetails(projectId));
+				}
 			}
 		}
 	);

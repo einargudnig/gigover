@@ -12,7 +12,7 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const [modify, { isLoading, isError, error }] = useModifyProject();
+	const [modify, { isLoading, isError, error }] = useModifyProject(project?.projectId);
 	const { register, handleSubmit, errors } = useForm<ProjectFormData>({
 		defaultValues: project
 	});
