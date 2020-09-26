@@ -21,6 +21,7 @@ const PageStyled = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: row;
+	overflow-y: hidden;
 `;
 
 const Sidebar = styled.div`
@@ -49,6 +50,7 @@ const PageWrapper = styled.div`
 		justify-content: space-between;
 		align-items: center;
 		padding: 12px 16px;
+		background: #fff;
 
 		h3 {
 			margin: 0;
@@ -56,7 +58,9 @@ const PageWrapper = styled.div`
 	}
 
 	.page-content {
-		padding: 20px 40px;
+		padding: 20px 40px 80px 40px;
+		max-height: 100%;
+		overflow-y: scroll;
 	}
 `;
 

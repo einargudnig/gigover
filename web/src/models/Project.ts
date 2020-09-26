@@ -8,7 +8,7 @@ export interface Project {
 	description: string;
 	name: string;
 	projectId: number;
-	status: typeof ProjectStatus;
+	status: typeof ProjectStatus | number;
 	tasks: Task[];
 	length: number;
 	zipCode: string;

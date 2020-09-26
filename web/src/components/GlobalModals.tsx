@@ -8,8 +8,6 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
 
-	console.log(modalContext);
-
 	return (
 		<>
 			{children}
@@ -22,9 +20,11 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 					<ProjectModal project={project} />
 				</Modal>
 			)}
-			<Modal open={!!modalContext.registered} title={'Setup your account'}>
-				<RegistrationModal />
-			</Modal>
+			{modalContext.registered === false && (
+				<Modal open={true} title={'Setup your account'}>
+					<RegistrationModal />
+				</Modal>
+			)}
 		</>
 	);
 };

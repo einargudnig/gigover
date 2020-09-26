@@ -14,8 +14,9 @@ export interface RegistrationData {
 }
 
 export const useRegister = () =>
-	useMutation<unknown, ErrorResponse, RegistrationData>((variables) =>
-		axios.post(ApiService.registerUser, variables, {
-			withCredentials: true
-		})
+	useMutation<unknown, ErrorResponse, RegistrationData>(
+		async (variables) =>
+			await axios.post(ApiService.registerUser, variables, {
+				withCredentials: true
+			})
 	);

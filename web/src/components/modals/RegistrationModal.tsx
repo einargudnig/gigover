@@ -3,6 +3,8 @@ import { ModalContext } from '../../context/ModalContext';
 import { useForm } from 'react-hook-form';
 import { RegistrationData, useRegister } from '../../queries/useRegister';
 import { UserContext } from '../../context/UserContext';
+import { Input, InputWrapper } from '../forms/Input';
+import { Label } from '../forms/Label';
 
 interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'> {
 	name: string;
@@ -21,22 +23,25 @@ export const RegistrationModal = (): JSX.Element => {
 	};
 
 	const { register, handleSubmit, errors } = useForm<FormData>();
-	const onSubmit = handleSubmit(({ name, address, zipCode, phoneNumber }) => {
+	const onSubmit = handleSubmit(async ({ name, address, zipCode, phoneNumber }) => {
 		// TODO Validate form..
 		console.log(name, address, zipCode, phoneNumber);
+		try {
+			await registerFn({
+				name,
+				address,
+				zipCode,
+				phoneNumber,
+				email: user.email,
+				userName: user.email,
+				type: 1
+			});
 
-		registerFn({
-			name,
-			address,
-			zipCode,
-			phoneNumber,
-			email: user.email,
-			userName: user.email,
-			type: 1
-		}).then(() => {
 			finished();
-		});
-	}); // firstName and lastName will have correct type
+		} catch (e) {
+			console.log('Error', e);
+		}
+	});
 
 	return (
 		<div>
@@ -58,22 +63,22 @@ export const RegistrationModal = (): JSX.Element => {
 				</>
 			)}
 			<form onSubmit={onSubmit}>
-				<label>Name</label>
-				<br />
-				<input name="name" required={true} ref={register} />
-				<br />
-				<label>Phone number</label>
-				<br />
-				<input name="phoneNumber" maxLength={7} required={true} ref={register} />
-				<br />
-				<label>Address</label>
-				<br />
-				<input name="address" required={true} ref={register} />
-				<br />
-				<label>ZipCode</label>
-				<br />
-				<input name="zipCode" maxLength={3} required={true} ref={register} />
-				<br />
+				<InputWrapper>
+					<Label>Name</Label>
+					<Input name="name" required={true} ref={register} />
+				</InputWrapper>
+				<InputWrapper>
+					<Label>Phone number</Label>
+					<Input name="phoneNumber" maxLength={7} required={true} ref={register} />
+				</InputWrapper>
+				<InputWrapper>
+					<Label>Address</Label>
+					<Input name="address" required={true} ref={register} />
+				</InputWrapper>
+				<InputWrapper>
+					<Label>Zip code</Label>
+					<Input name="zipCode" maxLength={3} required={true} ref={register} />
+				</InputWrapper>
 				{isLoading ? (
 					<button type="submit" disabled={true}>
 						Loading
