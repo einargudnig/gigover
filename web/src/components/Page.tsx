@@ -9,6 +9,8 @@ import { TimeIcon } from './icons/TimeIcon';
 import { UsersIcon } from './icons/UsersIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ModalContext } from '../context/ModalContext';
+import { useQueryCache } from 'react-query';
+import { ApiService } from '../services/ApiService';
 
 interface PageProps {
 	title?: string;
@@ -135,7 +137,9 @@ export const Page = ({ title, tabs, children }: PageProps): JSX.Element | null =
 					<h3>{title ? title : ''}</h3>
 					{tabs && <div>{tabs}</div>}
 					<HeaderActions>
-						<button>Time</button>
+						<button>
+							Time
+						</button>
 						<button
 							onClick={() =>
 								setModalContext({ modifyProject: { project: undefined } })

@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Project } from '../../models/Project';
 import { useForm } from 'react-hook-form';
 import { ProjectFormData, useModifyProject } from '../../queries/useModifyProject';
 import { Label } from '../forms/Label';
 import { Input, InputWrapper } from '../forms/Input';
-import { ModalContext } from '../../context/ModalContext';
 import { useCloseModal } from '../../hooks/useCloseModal';
 
 interface ProjectModalProps {
