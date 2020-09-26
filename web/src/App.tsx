@@ -2,32 +2,30 @@ import React, { useContext, useEffect, useState } from 'react';
 import 'normalize.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
 import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { IUserProfile } from './models/UserProfile';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import { UserContext } from './context/UserContext';
 import { FullscreenLoader } from './components/FullscreenLoader';
-import { Organize } from './pages/Organize';
-import { TimeTracker } from './pages/TimeTracker';
-import { Users } from './pages/Users';
-import { Settings } from './pages/Settings';
 import { IModalContext, ModalContext } from './context/ModalContext';
 import { GlobalModals } from './components/GlobalModals';
-import { useVerify } from './queries/useVerify';
+import { useVerifyDevWorker } from './queries/useVerify';
+import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
-	const [verify, { data: userProfile, isLoading: loading, error }] = useVerify();
+	const [verify, { data: userProfile, isLoading: loading, error }] = useVerifyDevWorker();
 
 	useEffect(() => {
 		if (authUser) {
 			authUser.getIdToken().then((token) => {
-				verify({
-					token
-				});
+				// TODO Replace with Non-debug call
+				// verify({
+				// 	token
+				// });
+				verify();
 			});
 		}
 	}, [authUser, verify]);
@@ -65,32 +63,19 @@ const App = ({
 
 	return (
 		<Router>
-			<Routes>
-				{authenticated && userProfile ? (
-					<ModalContext.Provider value={[modalContext, setModalContext]}>
-						<UserContext.Provider value={userProfile}>
-							<GlobalModals>
-								<Route path={'/'} element={<Dashboard />} />
-								<Route path={'organize'} element={<Organize />}>
-									<Route path={':projectId'} element={<Organize />} />
-								</Route>
-								<Route path={'time-tracker'} element={<TimeTracker />}>
-									<Route path={':projectId'} element={<TimeTracker />} />
-								</Route>
-								<Route path={'users'} element={<Users />}>
-									<Route path={':userId'} element={<Users />} />
-								</Route>
-								<Route path={'settings'} element={<Settings />} />
-								<Route path={'project'} element={<Dashboard />}>
-									<Route path={':id'} element={<Dashboard />} />
-								</Route>
-							</GlobalModals>
-						</UserContext.Provider>
-					</ModalContext.Provider>
-				) : (
+			{authenticated && userProfile ? (
+				<ModalContext.Provider value={[modalContext, setModalContext]}>
+					<UserContext.Provider value={userProfile}>
+						<GlobalModals>
+							<AuthenticatedRoutes />
+						</GlobalModals>
+					</UserContext.Provider>
+				</ModalContext.Provider>
+			) : (
+				<Routes>
 					<Route path={'*'} element={<Login />} />
-				)}
-			</Routes>
+				</Routes>
+			)}
 		</Router>
 	);
 };

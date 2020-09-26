@@ -1,29 +1,42 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { FirebaseContext } from '../firebase/FirebaseContext';
 import { Page } from '../components/Page';
-import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { useProjectList } from '../queries/useProjectList';
+import { ProjectCard } from '../components/ProjectCard';
 
-const DashboardStyled = styled.div``;
+const ProjectDashboard = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	padding: 16px 0;
+
+	> * {
+		margin: 16px;
+	}
+`;
 
 export const Dashboard = (): JSX.Element => {
-	const firebase = useContext(FirebaseContext);
+	const { data, isLoading, isError, error } = useProjectList();
 
-	useEffect(() =>{
-		const getList = async () => {
-			await ApiService.getProjectList();
-		};
+	// TODO
+	if (isLoading) {
+		return <p>Loading projects..</p>;
+	}
 
-		getList();
-	}, []);
+	if (isError) {
+		return (
+			<p>
+				Error: {error?.errorText} - Code: {error?.errorCode}
+			</p>
+		);
+	}
 
 	return (
 		<Page title={'Dashboard'}>
-			<DashboardStyled>
-				<h1>Dashboard</h1>
-				<button onClick={() => firebase.signOut()}>Sign out</button>
-			</DashboardStyled>
+			<ProjectDashboard>
+				{data?.projects.map((project) => (
+					<ProjectCard key={project.projectId} project={project} />
+				))}
+			</ProjectDashboard>
 		</Page>
 	);
 };
