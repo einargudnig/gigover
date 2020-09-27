@@ -79,21 +79,6 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					<Label>Lýsing á verkefni</Label>
 					<Input name="description" required={true} ref={register} />
 				</InputWrapper>
-				{project?.projectId && (
-					<InputWrapper>
-						<Button
-							type={'button'}
-							size={'none'}
-							appearance={'delete'}
-							onClick={async (event) => {
-								event.preventDefault();
-								await archiveProject();
-							}}
-						>
-							Archive this project
-						</Button>
-					</InputWrapper>
-				)}
 				<FormActions
 					submitText={project ? 'Update project' : 'Create a project'}
 					submitLoading={isLoading}
@@ -102,6 +87,21 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					onCancel={() => closeModal()}
 				/>
 			</form>
+			{project?.projectId && (
+				<InputWrapper>
+					<Button
+						type={'button'}
+						size={'none'}
+						appearance={'delete'}
+						onClick={async (event) => {
+							event.preventDefault();
+							await archiveProject();
+						}}
+					>
+						Archive this project
+					</Button>
+				</InputWrapper>
+			)}
 		</div>
 	);
 };

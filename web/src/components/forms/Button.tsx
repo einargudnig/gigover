@@ -12,6 +12,7 @@ const getButtonStyle = (appearance: ButtonAppearance) => {
 				background: transparent;
 				border: none;
 				box-shadow: none;
+				border-radius: 0;
 
 				&:hover {
 					color: ${(props) => props.theme.colors.red};
@@ -19,6 +20,12 @@ const getButtonStyle = (appearance: ButtonAppearance) => {
 					border: none;
 					box-shadow: none;
 					text-decoration: underline;
+				}
+
+				&:focus {
+					text-decoration: underline;
+					border: none;
+					outline: none;
 				}
 			`;
 		case 'outline':
@@ -84,6 +91,10 @@ const StyledButton = styled.button<{
 		color: ${(props) => props.theme.colors.darkGreen};
 	}
 
+	&:focus {
+		border: 2px solid ${(props) => props.theme.colors.green};
+	}
+
 	${(props) => props.appearance !== 'primary' && getButtonStyle(props.appearance)}
 	${(props) => props.size !== 'normal' && getButtonSized(props.size)}
 
@@ -113,7 +124,8 @@ export const Button = ({
 	onClick,
 	disabled = false,
 	loading = false,
-	height = 'auto'
+	height = 'auto',
+	...props
 }: ButtonProps): JSX.Element => {
 	return (
 		<StyledButton
@@ -123,6 +135,7 @@ export const Button = ({
 			onClick={onClick}
 			disabled={disabled || loading}
 			height={height}
+			{...props}
 		>
 			{loading ? <p>Loading</p> : children}
 		</StyledButton>
