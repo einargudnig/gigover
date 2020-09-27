@@ -202,22 +202,24 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                    child: Text(
-                      comment.comment,
-                      style: AvailableFonts.getTextStyle(
-                        context,
-                        color: MVTheme.mainFont,
-                        fontSize: 14.scale,
+              Flexible(
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(16))),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                      child: Text(
+                        comment.comment,
+                        style: AvailableFonts.getTextStyle(
+                          context,
+                          color: MVTheme.mainFont,
+                          fontSize: 14.scale,
+                        ),
                       ),
-                    ),
-                  )),
+                    )),
+              ),
             ],
           )
         ],
