@@ -8,11 +8,6 @@ interface MutationResponse {
 	data: IUserProfile;
 }
 
-export const useVerifyDevWorker = () =>
-	useMutation<MutationResponse, ErrorResponse>(
-		async () => await axios.get(ApiService.debugVerifyContractor, { withCredentials: true })
-	);
-
 export const useVerify = () =>
 	useMutation<MutationResponse, ErrorResponse, string>(
 		async (token) =>

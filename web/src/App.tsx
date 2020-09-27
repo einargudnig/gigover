@@ -22,10 +22,6 @@ export const AppPreloader = (): JSX.Element => {
 	useEffect(() => {
 		if (authUser) {
 			authUser.getIdToken().then(async (token) => {
-				// TODO Replace with Non-debug call
-				// verify({
-				// 	token
-				// });
 				await verify(token);
 			});
 		}
