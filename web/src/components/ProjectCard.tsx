@@ -6,6 +6,7 @@ import { ProgressBar } from './ProgressBar';
 import { Edit } from './icons/Edit';
 import { ModalContext } from '../context/ModalContext';
 import { Theme } from '../Theme';
+import { TaskStatus } from '../models/Task';
 
 interface ProjectCardProps {
 	project: Project;
@@ -63,6 +64,9 @@ const ProjectCardEdit = styled.div`
 export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
+	const tasks = project.tasks || [];
+	const completed = tasks.filter((task) => task.status === TaskStatus.Done);
+	
 	return (
 		<ProjectCardStyled to={`/project/${project.projectId}`}>
 			<ProjectCardTitle>
@@ -80,7 +84,7 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 				</ProjectCardEdit>
 			</ProjectCardTitle>
 			<div>
-				<ProgressBar percent={Math.floor(Math.random() * 101)} />
+				<ProgressBar percent={(completed.length / tasks.length) * 100} />
 			</div>
 		</ProjectCardStyled>
 	);

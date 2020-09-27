@@ -4,6 +4,7 @@ import { Modal } from './Modal';
 import { RegistrationModal } from './modals/RegistrationModal';
 import { ProjectModal } from './modals/ProjectModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
+import { TaskModal } from './modals/TaskModal';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -14,6 +15,7 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 	return (
 		<>
 			{children}
+			{modalContext.task && <TaskModal task={modalContext.task} />}
 			{modalContext.timeTracker && (
 				<TimeTrackerModal open={true} context={modalContext.timeTracker} />
 			)}

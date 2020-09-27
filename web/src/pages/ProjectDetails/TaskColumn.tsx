@@ -5,6 +5,8 @@ import { useModifyTask } from '../../queries/useModifyTask';
 import { Button } from '../../components/forms/Button';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { TaskCard } from '../../components/TaskCard';
+import { InputWrapper } from '../../components/forms/Input';
+import { useEventListener } from '../../hooks/useEventListener';
 
 interface TaskColumnProps {
 	project: Project;
@@ -13,7 +15,7 @@ interface TaskColumnProps {
 
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
-	const [addTask, { data, isLoading, isError, error }] = useModifyTask();
+	const [addTask, { isLoading, isError, error }] = useModifyTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
 	const tasks = project.tasks?.filter((task) => task.status === status) ?? [];
@@ -28,6 +30,12 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 		setIsCreatingTask(false);
 	};
 
+	useEventListener('keydown', (event) => {
+		if (event.keyCode === 27) {
+			setIsCreatingTask(false);
+		}
+	});
+
 	return (
 		<>
 			<h3>{taskStatus}</h3>
@@ -39,9 +47,9 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 				</div>
 			)}
 			{isCreatingTask && (
-				<div>
+				<InputWrapper>
 					<TaskCard onSubmit={(taskValues) => createTask(taskValues)} />
-				</div>
+				</InputWrapper>
 			)}
 			<Button size={'fill'} appearance={'lightblue'} onClick={() => setIsCreatingTask(true)}>
 				<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />
