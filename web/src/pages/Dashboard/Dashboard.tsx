@@ -8,6 +8,7 @@ import { EmptyProjects } from '../../components/empty/EmptyProjects';
 import { Button } from '../../components/forms/Button';
 import { ModalContext } from '../../context/ModalContext';
 import { DashboardTabs } from './DashboardTabs';
+import { ProjectStatus } from '../../models/Project';
 
 const ProjectDashboard = styled.div`
 	display: flex;
@@ -43,7 +44,7 @@ export const Dashboard = (): JSX.Element => {
 			title={'Dashboard'}
 			tabs={
 				<DashboardTabs
-					tabs={['OPEN', 'CLOSED']}
+					tabs={[ProjectStatus.ALL, ProjectStatus.OPEN, ProjectStatus.CLOSED]}
 					activeTab={activeTab}
 					onChange={(tab) => setActiveTab(tab)}
 				/>
@@ -66,7 +67,11 @@ export const Dashboard = (): JSX.Element => {
 					/>
 				)}
 				{data?.projects
-					?.filter((project) => project.status === activeTab)
+					?.filter(
+						(project) =>
+							project.status !== ProjectStatus.DONE &&
+							(activeTab === ProjectStatus.ALL || project.status === activeTab)
+					)
 					.map((project) => (
 						<ProjectCard key={project.projectId} project={project} />
 					))}

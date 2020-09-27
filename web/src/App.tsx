@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
 import 'normalize.css';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { FirebaseContext } from './firebase/FirebaseContext';
@@ -10,14 +10,14 @@ import { UserContext } from './context/UserContext';
 import { FullscreenLoader } from './components/FullscreenLoader';
 import { IModalContext, ModalContext } from './context/ModalContext';
 import { GlobalModals } from './components/GlobalModals';
-import { useVerify, useVerifyDevWorker } from './queries/useVerify';
+import { useVerify } from './queries/useVerify';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import { FirebaseUser } from './firebase/firebaseTypes';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
-	const [verify, { data, isLoading: loading, error }] = useVerifyDevWorker();
+	const [verify, { data, isLoading: loading, error }] = useVerify();
 
 	useEffect(() => {
 		if (authUser) {
@@ -26,7 +26,7 @@ export const AppPreloader = (): JSX.Element => {
 				// verify({
 				// 	token
 				// });
-				await verify();
+				await verify(token);
 			});
 		}
 	}, [authUser, verify]);

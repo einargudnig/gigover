@@ -1,12 +1,12 @@
 import React from 'react';
-import { Project } from '../../models/Project';
+import { Project, ProjectStatus } from '../../models/Project';
 import { useForm } from 'react-hook-form';
 import { ProjectFormData, useModifyProject } from '../../queries/useModifyProject';
 import { Label } from '../forms/Label';
 import { Input, InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
-import { Button } from '../forms/Button';
 import { FormActions } from '../FormActions';
+import { Button } from '../forms/Button';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -36,6 +36,22 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 		}
 	});
 
+	const archiveProject = async () => {
+		try {
+			const projectId = project?.projectId;
+
+			if (projectId) {
+				await modify({
+					projectId,
+					status: ProjectStatus.DONE
+				});
+				closeModal();
+			}
+		} catch (e) {
+			console.log('Error', e);
+		}
+	};
+
 	return (
 		<div>
 			{isError && (
@@ -63,6 +79,21 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					<Label>Lýsing á verkefni</Label>
 					<Input name="description" required={true} ref={register} />
 				</InputWrapper>
+				{project?.projectId && (
+					<InputWrapper>
+						<Button
+							type={'button'}
+							size={'none'}
+							appearance={'delete'}
+							onClick={async (event) => {
+								event.preventDefault();
+								await archiveProject();
+							}}
+						>
+							Archive this project
+						</Button>
+					</InputWrapper>
+				)}
 				<FormActions
 					submitText={project ? 'Update project' : 'Create a project'}
 					submitLoading={isLoading}

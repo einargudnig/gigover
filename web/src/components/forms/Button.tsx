@@ -1,13 +1,26 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-type ButtonSize = 'large' | 'normal' | 'small';
-type ButtonAppearance = 'primary' | 'green' | 'outline';
+type ButtonSize = 'large' | 'normal' | 'small' | 'none';
+type ButtonAppearance = 'primary' | 'green' | 'outline' | 'delete';
 
 const getButtonStyle = (appearance: ButtonAppearance) => {
 	switch (appearance) {
-		case 'primary':
-			return null;
+		case 'delete':
+			return css`
+				color: ${(props) => props.theme.colors.red};
+				background: transparent;
+				border: none;
+				box-shadow: none;
+
+				&:hover {
+					color: ${(props) => props.theme.colors.red};
+					background: transparent;
+					border: none;
+					box-shadow: none;
+					text-decoration: underline;
+				}
+			`;
 		case 'outline':
 			return css`
 				color: ${(props) => props.theme.colors.darkLightBlue};
@@ -28,6 +41,10 @@ const getButtonSized = (size: ButtonSize) => {
 		case 'small':
 			return css`
 				padding: 12px 12px;
+			`;
+		case 'none':
+			return css`
+				padding: 0;
 			`;
 	}
 
@@ -81,7 +98,7 @@ interface ButtonProps {
 	children: React.ReactNode;
 	appearance?: ButtonAppearance;
 	type?: 'submit' | 'button';
-	onClick?: () => void;
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	disabled?: boolean;
 	loading?: boolean;
 	height?: string;
