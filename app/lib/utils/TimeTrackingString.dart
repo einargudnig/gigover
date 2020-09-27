@@ -10,5 +10,5 @@ String timeTrackedFromMinutes(int minutes) {
     return '${hours.toString()}h ${minutesStr}m tracked';
   }
 
-  return '${minutesStr}mins tracked';
+  return '${minutesStr}m tracked';
 }

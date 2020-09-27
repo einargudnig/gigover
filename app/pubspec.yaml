@@ -13,7 +13,7 @@ dependencies:
   cookie_jar: ^1.0.0
   dio: ^3.0.7
   dio_cookie_manager: 1.0.0
-  flutter_svg: ^0.17.1
+  flutter_svg: ^0.18.0
   cupertino_icons: ^0.1.2
   sliding_up_panel: ^1.0.2
   firebase_core: ^0.4.0+9
