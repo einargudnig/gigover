@@ -18,18 +18,20 @@ export interface CloseProjectData {
 	status: typeof ProjectStatus.DONE;
 }
 
-export const useModifyProject = ({ projectId }: OptionalProjectId) => {
+export const useModifyProject = () => {
 	const queryCache = useQueryCache();
 
 	return useMutation<ProjectResponse, ErrorResponse, ProjectFormData | CloseProjectData>(
 		async (project) =>
 			await axios.post(ApiService.modifyProject, project, { withCredentials: true }),
 		{
-			onSuccess: async () => {
+			onSuccess: async (data, variables) => {
 				await queryCache.invalidateQueries(ApiService.projectList);
 
-				if (projectId) {
-					await queryCache.invalidateQueries(ApiService.projectDetails(projectId));
+				if (variables.projectId) {
+					await queryCache.invalidateQueries(
+						ApiService.projectDetails(variables.projectId)
+					);
 				}
 			}
 		}

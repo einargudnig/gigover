@@ -8,7 +8,7 @@ export class ApiService {
 	static modifyProject = API_BASE + 'contractor/store'; // CRUD
 
 	static modifyTask = API_BASE + 'contractor/addTask';
-	static addComment = API_BASE + 'contractor/addComment';
+	static addComment = API_BASE + 'contractor/comment';
 
 	static registerUser = API_BASE + 'user/store';
 

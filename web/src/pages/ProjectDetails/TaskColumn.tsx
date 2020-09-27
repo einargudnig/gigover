@@ -13,8 +13,10 @@ interface TaskColumnProps {
 
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
-	const [addTask, { data, isLoading, isError, error }] = useModifyTask(project.projectId);
+	const [addTask, { data, isLoading, isError, error }] = useModifyTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
+
+	const tasks = project.tasks?.filter((task) => task.status === status) ?? [];
 
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'text'>) => {
 		await addTask({
@@ -22,24 +24,20 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 			projectId: project.projectId,
 			status
 		});
+
+		setIsCreatingTask(false);
 	};
 
 	return (
 		<>
 			<h3>{taskStatus}</h3>
-			<div>
-				<TaskCard
-					task={{
-						text: 'Test',
-						taskId: 1,
-						projectId: project.projectId,
-						comments: [],
-						minutes: 524,
-						status,
-						typeId: 1
-					}}
-				/>
-			</div>
+			{tasks.length > 0 && (
+				<div>
+					{tasks.map((task) => (
+						<TaskCard key={task.taskId} task={task} />
+					))}
+				</div>
+			)}
 			{isCreatingTask && (
 				<div>
 					<TaskCard onSubmit={(taskValues) => createTask(taskValues)} />

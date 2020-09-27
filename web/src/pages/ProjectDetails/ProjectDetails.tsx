@@ -18,9 +18,10 @@ const KanbanBoard = styled.div`
 
 const FeedColumn = styled.div`
 	background: #fff;
-	border-radius: 12px;
+	border-radius: 6px;
 	padding: ${(props): string => props.theme.padding(3)};
-	margin: ${(props): string => props.theme.padding(3)} ${(props): string => props.theme.padding(1.5)};
+	margin: ${(props): string => props.theme.padding(3)}
+		${(props): string => props.theme.padding(1.5)};
 	height: 100%;
 	flex: 1;
 	display: flex;
