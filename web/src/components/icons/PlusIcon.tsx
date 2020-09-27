@@ -2,8 +2,15 @@ import React from 'react';
 import { IconProps } from '../IconProps';
 import { Theme } from '../../Theme';
 
-export const PlusIcon = ({ color = Theme.colors.darkBlue }: IconProps): JSX.Element => (
-	<svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const PlusIcon = ({ color = Theme.colors.darkBlue, ...props }: IconProps): JSX.Element => (
+	<svg
+		width="12"
+		height="13"
+		viewBox="0 0 12 13"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+		{...props}
+	>
 		<path
 			d="M1.07143 5.42857H4.71429C4.83262 5.42857 4.92857 5.33262 4.92857 5.21429V1.57143C4.92857 0.979736 5.40831 0.5 6 0.5C6.59169 0.5 7.07143 0.979736 7.07143 1.57143V5.21429C7.07143 5.33262 7.16738 5.42857 7.28571 5.42857H10.9286C11.5203 5.42857 12 5.90831 12 6.5C12 7.09169 11.5203 7.57143 10.9286 7.57143H7.28571C7.16738 7.57143 7.07143 7.66738 7.07143 7.78571V11.4286C7.07143 12.0203 6.59169 12.5 6 12.5C5.40831 12.5 4.92857 12.0203 4.92857 11.4286V7.78571C4.92857 7.66738 4.83262 7.57143 4.71429 7.57143H1.07143C0.479736 7.57143 0 7.09169 0 6.5C0 5.90831 0.479736 5.42857 1.07143 5.42857Z"
 			fill={color}

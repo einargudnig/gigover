@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Page } from '../components/Page';
+import { Page } from '../../components/Page';
 import { useParams } from 'react-router-dom';
-import { useProjectDetails } from '../queries/useProjectDetails';
-import { TaskStatusArray } from '../models/Task';
+import { useProjectDetails } from '../../queries/useProjectDetails';
+import { TaskStatus } from '../../models/Task';
+import { TaskColumn } from './TaskColumn';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -19,7 +20,7 @@ const FeedColumn = styled.div`
 	background: #fff;
 	border-radius: 12px;
 	padding: ${(props): string => props.theme.padding(3)};
-	margin: ${(props): string => props.theme.padding(3)};
+	margin: ${(props): string => props.theme.padding(3)} ${(props): string => props.theme.padding(1.5)};
 	height: 100%;
 	flex: 1;
 	display: flex;
@@ -46,10 +47,14 @@ const ProjectDetailsPage = styled.div`
 	overflow-x: auto;
 `;
 
-export const ProjectDetails = (): JSX.Element => {
+export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
 	const { data, isLoading, isError, error } = useProjectDetails(parseInt(projectId));
-	const project = (data && data.project) ?? { name: 'Invalid' };
+	const project = data && data.project;
+
+	if (!project) {
+		return null;
+	}
 
 	return (
 		<Page breadcrumbs={[project.name, 'Tasks']}>
@@ -64,10 +69,9 @@ export const ProjectDetails = (): JSX.Element => {
 				) : (
 					<KanbanBoard>
 						<FeedBoard>
-							{TaskStatusArray.map((taskStatus, tIndex) => (
+							{Object.values(TaskStatus).map((taskStatus, tIndex) => (
 								<FeedColumn key={tIndex}>
-									<h3>{taskStatus}</h3>
-									<div>tasks...</div>
+									<TaskColumn project={project} status={taskStatus} />
 								</FeedColumn>
 							))}
 						</FeedBoard>

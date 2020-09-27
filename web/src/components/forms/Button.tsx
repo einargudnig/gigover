@@ -1,8 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { darken } from 'polished';
 
-type ButtonSize = 'large' | 'normal' | 'small' | 'none';
-type ButtonAppearance = 'primary' | 'green' | 'outline' | 'delete';
+type ButtonSize = 'fill' | 'large' | 'normal' | 'small' | 'tiny' | 'none';
+type ButtonAppearance = 'primary' | 'green' | 'lightblue' | 'outline' | 'delete';
 
 const getButtonStyle = (appearance: ButtonAppearance) => {
 	switch (appearance) {
@@ -34,6 +35,35 @@ const getButtonStyle = (appearance: ButtonAppearance) => {
 				background: transparent;
 				border-color: ${(props) => props.theme.colors.border};
 			`;
+		case 'lightblue':
+			return css`
+				background-color: #f4f7fc;
+				color: #b0bddc;
+				justify-content: flex-start;
+				outline: none;
+				border: none;
+
+				svg {
+					path {
+						fill: #b0bddc;
+					}
+				}
+
+				&:active,
+				&:focus {
+					border: none;
+				}
+
+				&:hover {
+					color: ${darken(0.1, '#b0bddc')};
+					background-color: ${darken(0.1, '#f4f7fc')};
+					svg {
+						path {
+							fill: ${darken(0.1, '#b0bddc')};
+						}
+					}
+				}
+			`;
 	}
 
 	return null;
@@ -41,6 +71,12 @@ const getButtonStyle = (appearance: ButtonAppearance) => {
 
 const getButtonSized = (size: ButtonSize) => {
 	switch (size) {
+		case 'fill':
+			return css`
+				width: 100%;
+				border-radius: 6px;
+				padding: 12px 12px;
+			`;
 		case 'large':
 			return css`
 				padding: 12px 40px;
@@ -49,6 +85,11 @@ const getButtonSized = (size: ButtonSize) => {
 			return css`
 				padding: 12px 12px;
 			`;
+		case 'tiny':
+			return css`
+				padding: 6px 10px;
+				font-size: 11px;
+`;
 		case 'none':
 			return css`
 				padding: 0;

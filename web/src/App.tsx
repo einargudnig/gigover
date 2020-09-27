@@ -13,11 +13,13 @@ import { GlobalModals } from './components/GlobalModals';
 import { useVerify } from './queries/useVerify';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import { FirebaseUser } from './firebase/firebaseTypes';
+import { useProjectTypes } from './queries/useProjectTypes';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
 	const [verify, { data, isLoading: loading, error }] = useVerify();
+	const { data: typesData } = useProjectTypes();
 
 	useEffect(() => {
 		if (authUser) {

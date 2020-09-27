@@ -5,7 +5,7 @@ import { Organize } from './pages/Organize';
 import { TimeTracker } from './pages/TimeTracker';
 import { Users } from './pages/Users';
 import { Settings } from './pages/Settings';
-import { ProjectDetails } from './pages/ProjectDetails';
+import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>

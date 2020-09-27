@@ -1,4 +1,3 @@
-import { Project } from './Project';
 import { TaskComment } from './TaskComment';
 
 export const TaskStatus = {
@@ -8,14 +7,14 @@ export const TaskStatus = {
 	Done: 3
 } as const;
 
-export const TaskStatusArray: string[] = Object.keys(TaskStatus);
+export type TaskStatusType = 0 | 1 | 2 | 3;
 
 export interface Task {
 	taskId: number;
-	project: Project;
-	text: string;
-	status: typeof TaskStatus;
+	projectId: number;
 	typeId: number;
+	text: string;
+	status: TaskStatusType;
 	minutes: number; // Minutes tracked
 	comments: TaskComment[];
 }

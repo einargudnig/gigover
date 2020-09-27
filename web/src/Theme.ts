@@ -9,7 +9,9 @@ export const Theme = {
 		blueBackground: '#f4f7fc',
 		border: '#e0e5f2',
 		grayBackground: '#F8F8F8',
-		red: '#DE2727'
+		red: '#DE2727',
+		taskBorder: '#E9E9EF',
+		taskBackground: '#FBFBFC'
 	},
 	padding: (modifier: number): string => `${modifier * 8}px`
 };
