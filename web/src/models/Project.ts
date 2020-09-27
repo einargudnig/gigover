@@ -6,13 +6,15 @@ export const ProjectStatus = {
 	CLOSED: 'CLOSED',
 	OPEN: 'OPEN',
 	DONE: 'DONE'
-} as const;
+};
+
+export type ProjectStatusType = 'CLOSED' | 'OPEN' | 'DONE';
 
 export interface Project {
 	description: string;
 	name: string;
 	projectId: number;
-	status: 'CLOSED' | 'OPEN' | 'DONE';
+	status: ProjectStatusType;
 	tasks?: Task[];
 	length: number;
 	zipCode: string;
