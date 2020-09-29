@@ -134,6 +134,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
             routeObserver: RouteObserverHelper(homeProvider: homeProvider),
             navigationKey: homeProvider.homeNavigationKey,
             initialRoute:
+                // TODO REMOVE Settings as initial
                 homeProvider.verifiedUser.registered ? '/' : '/signup',
             routes: {
               // default route as '/' is necessary!
