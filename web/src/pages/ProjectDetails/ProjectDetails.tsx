@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { useParams } from 'react-router-dom';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { TaskStatus } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
+import { CardBase } from '../../components/CardBase';
+import { AddWorkerForm } from './AddWorkerForm';
+import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -16,10 +19,7 @@ const KanbanBoard = styled.div`
 	user-select: none;
 `;
 
-const FeedColumn = styled.div`
-	background: #fff;
-	border-radius: 6px;
-	padding: ${(props): string => props.theme.padding(3)};
+const FeedColumn = styled(CardBase)`
 	margin: ${(props): string => props.theme.padding(3)}
 		${(props): string => props.theme.padding(1.5)};
 	height: 100%;
@@ -41,6 +41,33 @@ const FeedColumn = styled.div`
 	}
 `;
 
+const ProjectDashboard = styled(CardBase)`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	> div:first-child {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		> div {
+			margin: 0 ${(props) => props.theme.padding(6)};
+			text-align: center;
+		}
+
+		.separator {
+			height: 100px;
+			width: 1px;
+			background-color: ${(props) => props.theme.colors.border};
+		}
+	}
+
+	h3 {
+		font-weight: 300;
+	}
+`;
+
 const ProjectDetailsPage = styled.div`
 	max-width: 100%;
 	height: 100%;
@@ -53,12 +80,38 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const { data, isLoading, isError, error } = useProjectDetails(parseInt(projectId));
 	const project = data && data.project;
 
+	const all = project?.tasks.length || 0;
+	const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;
+
+	const onDragEnd = (result: DropResult, responder: ResponderProvided) => {
+		console.log('Dropped', result, responder);
+	};
+
 	if (!project) {
 		return null;
 	}
 
 	return (
 		<Page breadcrumbs={[project.name, 'Tasks']}>
+			<ProjectDashboard>
+				<div>
+					<div>
+						<h3>Task count</h3>
+						<h1>{all}</h1>
+					</div>
+					<div className={'separator'} />
+					<div>
+						<h3>Completed tasks</h3>
+						<h1>{completed}</h1>
+					</div>
+					<div className={'separator'} />
+					<div>
+						<h3>Finished</h3>
+						<h1>{(completed / all) * 100}%</h1>
+					</div>
+				</div>
+				<AddWorkerForm projectId={project.projectId} />
+			</ProjectDashboard>
 			<ProjectDetailsPage>
 				{isLoading ? (
 					<p>Loading</p>
@@ -69,13 +122,15 @@ export const ProjectDetails = (): JSX.Element | null => {
 					</p>
 				) : (
 					<KanbanBoard>
-						<FeedBoard>
-							{Object.values(TaskStatus).map((taskStatus, tIndex) => (
-								<FeedColumn key={tIndex}>
-									<TaskColumn project={project} status={taskStatus} />
-								</FeedColumn>
-							))}
-						</FeedBoard>
+						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
+							<FeedBoard>
+								{Object.values(TaskStatus).map((taskStatus, tIndex) => (
+									<FeedColumn key={tIndex}>
+										<TaskColumn project={project} status={taskStatus} />
+									</FeedColumn>
+								))}
+							</FeedBoard>
+						</DragDropContext>
 					</KanbanBoard>
 				)}
 			</ProjectDetailsPage>

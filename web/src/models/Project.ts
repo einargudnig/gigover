@@ -15,9 +15,10 @@ export interface Project {
 	name: string;
 	projectId: number;
 	status: ProjectStatusType;
-	tasks?: Task[];
+	tasks: Task[];
 	length: number;
 	zipCode: string;
 	uId: string;
 	comments?: TaskComment[];
+	workers: string[];
 }

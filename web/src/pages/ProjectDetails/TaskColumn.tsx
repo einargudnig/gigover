@@ -7,11 +7,16 @@ import { PlusIcon } from '../../components/icons/PlusIcon';
 import { TaskCard } from '../../components/TaskCard';
 import { InputWrapper } from '../../components/forms/Input';
 import { useEventListener } from '../../hooks/useEventListener';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 interface TaskColumnProps {
 	project: Project;
 	status: TaskStatusType;
 }
+
+const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
+	background: !isDraggingOver ? 'transparent' : '#e7fff3'
+});
 
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
@@ -39,18 +44,43 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	return (
 		<>
 			<h3>{taskStatus}</h3>
-			{tasks.length > 0 && (
-				<div>
-					{tasks.map((task) => (
-						<TaskCard key={task.taskId} task={task} />
-					))}
-				</div>
-			)}
 			{isCreatingTask && (
 				<InputWrapper>
 					<TaskCard onSubmit={(taskValues) => createTask(taskValues)} />
 				</InputWrapper>
 			)}
+
+			{tasks.length > 0 && (
+				<Droppable droppableId={status.toString()}>
+					{(droppable, snapshot) => (
+						<div
+							{...droppable.droppableProps}
+							style={getListStyle(snapshot.isDraggingOver)}
+							ref={droppable.innerRef}
+						>
+							{tasks.map((task, taskIndex) => (
+								<Draggable
+									key={taskIndex}
+									draggableId={task.taskId.toString()}
+									index={taskIndex}
+								>
+									{(provided): JSX.Element => (
+										<div
+											{...provided.draggableProps}
+											{...provided.dragHandleProps}
+											ref={provided.innerRef}
+										>
+											<TaskCard task={task} />
+										</div>
+									)}
+								</Draggable>
+							))}
+							{droppable.placeholder}
+						</div>
+					)}
+				</Droppable>
+			)}
+
 			<Button size={'fill'} appearance={'lightblue'} onClick={() => setIsCreatingTask(true)}>
 				<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />
 				<span>Add task</span>

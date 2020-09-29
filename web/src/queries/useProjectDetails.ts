@@ -9,5 +9,5 @@ interface ProjectDetailsResponse {
 
 export const useProjectDetails = (projectId: number) =>
 	useQuery<ProjectDetailsResponse, ErrorResponse>(ApiService.projectDetails(projectId), {
-		refetchOnWindowFocus: true
+		refetchOnWindowFocus: true,
 	});

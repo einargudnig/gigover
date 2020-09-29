@@ -1,26 +1,21 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Project } from '../models/Project';
-import { Link } from 'react-router-dom';
 import { ProgressBar } from './ProgressBar';
 import { Edit } from './icons/Edit';
 import { ModalContext } from '../context/ModalContext';
 import { Theme } from '../Theme';
 import { TaskStatus } from '../models/Task';
+import { CardBaseLink } from './CardBase';
 
 interface ProjectCardProps {
 	project: Project;
 }
 
-const ProjectCardStyled = styled(Link)`
+const ProjectCardStyled = styled(CardBaseLink)`
 	width: 440px;
 	max-width: 100%;
 	height: 220px;
-	border-radius: 12px;
-	background: #fff;
-	box-shadow: 5px 5px 25px rgba(0, 0, 0, 0.03);
-	padding: 24px;
-	transition: all 0.2s linear;
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;

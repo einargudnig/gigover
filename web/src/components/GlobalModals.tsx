@@ -4,7 +4,7 @@ import { Modal } from './Modal';
 import { RegistrationModal } from './modals/RegistrationModal';
 import { ProjectModal } from './modals/ProjectModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
-import { TaskModal } from './modals/TaskModal';
+import { TaskModal } from './modals/TaskModal/TaskModal';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);

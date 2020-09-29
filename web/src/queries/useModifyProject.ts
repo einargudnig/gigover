@@ -13,8 +13,7 @@ export interface ProjectFormData
 	extends OptionalProjectId,
 		Pick<Project, 'name' | 'description' | 'status'> {}
 
-export interface CloseProjectData {
-	projectId: number;
+export interface CloseProjectData extends Pick<Project, 'projectId'> {
 	status: typeof ProjectStatus.DONE;
 }
 
