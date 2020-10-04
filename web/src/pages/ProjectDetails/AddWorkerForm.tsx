@@ -4,6 +4,7 @@ import { useAddWorker } from '../../queries/useAddWorker';
 import { useForm } from 'react-hook-form';
 import { Input, InputWrapper } from '../../components/forms/Input';
 import { Button } from '../../components/forms/Button';
+import { useGetUserByPhoneNumber } from '../../queries/useGetUserByPhoneNumber';
 
 const AddWorkerFormStyled = styled.div`
 	flex: 0 0 360px;
@@ -15,13 +16,24 @@ interface FormData {
 
 export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element => {
 	const { register, handleSubmit, errors } = useForm<FormData>();
+	const [
+		getUserIdByPhoneNumber,
+		{ isLoading: pLoading, isError: pIsError, error: pError }
+	] = useGetUserByPhoneNumber();
 	const [addWorker, { isLoading, isError, error }] = useAddWorker();
 
 	const onSubmit = handleSubmit(async (data) => {
-		await addWorker({
-			projectId,
-			phoneNr: data.phoneNumber
-		});
+		const response = await getUserIdByPhoneNumber({ phoneNumber: data.phoneNumber });
+
+		if (response) {
+			console.log(response);
+			await addWorker({
+				projectId,
+				phoneNumber: data.phoneNumber
+			});
+		} else {
+			console.error('Error getting user id by phone.');
+		}
 	});
 
 	return (

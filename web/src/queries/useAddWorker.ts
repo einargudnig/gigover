@@ -5,7 +5,7 @@ import axios from 'axios';
 
 interface AddWorkerInput {
 	projectId: number;
-	phoneNr: string;
+	phoneNumber: string;
 }
 
 export const useAddWorker = () => {

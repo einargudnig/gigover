@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { useParams } from 'react-router-dom';
 import { useProjectDetails } from '../../queries/useProjectDetails';
-import { TaskStatus } from '../../models/Task';
+import { TaskStatus, TaskStatusType } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
 import { CardBase } from '../../components/CardBase';
 import { AddWorkerForm } from './AddWorkerForm';
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd';
+import { useUpdateTask } from '../../queries/useUpdateTask';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -77,14 +78,29 @@ const ProjectDetailsPage = styled.div`
 
 export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
-	const { data, isLoading, isError, error } = useProjectDetails(parseInt(projectId));
+	const projectIdNumber = parseInt(projectId);
+	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
+	const [updateTask] = useUpdateTask(projectIdNumber);
 	const project = data && data.project;
 
 	const all = project?.tasks.length || 0;
 	const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;
 
-	const onDragEnd = (result: DropResult, responder: ResponderProvided) => {
-		console.log('Dropped', result, responder);
+	const onDragEnd = async (result: DropResult) => {
+		const status: TaskStatusType = parseInt(
+			result.destination?.droppableId || '0'
+		) as TaskStatusType;
+		const taskId = parseInt(result.draggableId || '0');
+
+		if (taskId === 0) {
+			return;
+		}
+
+		await updateTask({
+			comment: '',
+			status,
+			taskId
+		});
 	};
 
 	if (!project) {

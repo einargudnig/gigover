@@ -15,6 +15,7 @@ interface TaskColumnProps {
 }
 
 const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
+	minHeight: 140,
 	background: !isDraggingOver ? 'transparent' : '#e7fff3'
 });
 
@@ -50,36 +51,34 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 				</InputWrapper>
 			)}
 
-			{tasks.length > 0 && (
-				<Droppable droppableId={status.toString()}>
-					{(droppable, snapshot) => (
-						<div
-							{...droppable.droppableProps}
-							style={getListStyle(snapshot.isDraggingOver)}
-							ref={droppable.innerRef}
-						>
-							{tasks.map((task, taskIndex) => (
-								<Draggable
-									key={taskIndex}
-									draggableId={task.taskId.toString()}
-									index={taskIndex}
-								>
-									{(provided): JSX.Element => (
-										<div
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
-											ref={provided.innerRef}
-										>
-											<TaskCard task={task} />
-										</div>
-									)}
-								</Draggable>
-							))}
-							{droppable.placeholder}
-						</div>
-					)}
-				</Droppable>
-			)}
+			<Droppable droppableId={status.toString()}>
+				{(droppable, snapshot) => (
+					<div
+						{...droppable.droppableProps}
+						style={getListStyle(snapshot.isDraggingOver)}
+						ref={droppable.innerRef}
+					>
+						{tasks.map((task, taskIndex) => (
+							<Draggable
+								key={taskIndex}
+								draggableId={task.taskId.toString()}
+								index={taskIndex}
+							>
+								{(provided): JSX.Element => (
+									<div
+										{...provided.draggableProps}
+										{...provided.dragHandleProps}
+										ref={provided.innerRef}
+									>
+										<TaskCard task={task} />
+									</div>
+								)}
+							</Draggable>
+						))}
+						{droppable.placeholder}
+					</div>
+				)}
+			</Droppable>
 
 			<Button size={'fill'} appearance={'lightblue'} onClick={() => setIsCreatingTask(true)}>
 				<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />
