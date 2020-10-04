@@ -32,7 +32,7 @@ const ProgressBarStyled = styled.div<ProgressBarProps>`
 export const ProgressBar = ({ percent }: ProgressBarProps): JSX.Element => {
 	return (
 		<ProgressBarStyled percent={percent}>
-			<p>{percent}%</p>
+			<p>{percent.toFixed(0)}%</p>
 			<div className={'bar'}>
 				<div className={'progress'} />
 			</div>
