@@ -33,10 +33,11 @@ const TaskModalStyled = styled.div`
 `;
 
 interface TaskModalProps {
+	projectId: number;
 	task: Task;
 }
 
-export const TaskModal = ({ task }: TaskModalProps): JSX.Element => {
+export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
@@ -44,7 +45,9 @@ export const TaskModal = ({ task }: TaskModalProps): JSX.Element => {
 	return (
 		<Modal open={true} title={task.text} onClose={closeModal}>
 			{isLoading ? (
-				<p>// TODO Loading</p>
+				<div>
+					<LoadingSpinner />
+				</div>
 			) : isError ? (
 				<p>
 					Error fetching task with id: {task.taskId} - Reason: {error?.errorText}. Code:{' '}
@@ -60,7 +63,7 @@ export const TaskModal = ({ task }: TaskModalProps): JSX.Element => {
 						/>
 					</div>
 					<Divider />
-					<StatusUpdate task={task} />
+					<StatusUpdate task={task} projectId={projectId} />
 					<Divider />
 					<div>
 						<h3>Comments {isLoading && <LoadingSpinner />}</h3>

@@ -31,7 +31,7 @@ export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.
 			onClose={() => closeModal()}
 		>
 			<>
-				<TrackerSelect
+				{/*<TrackerSelect
 					title={'Select a project'}
 					value={'Project #1'}
 					valueChanged={(newValue) => null}
@@ -45,7 +45,7 @@ export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.
 					title={'Select a task'}
 					value={'Select a task'}
 					valueChanged={(newValue) => null}
-				/>
+				/>*/}
 				<FormActions
 					onSubmit={() => console.log('cool')}
 					submitText={'Start tracking'}

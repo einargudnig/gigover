@@ -9,7 +9,7 @@ export interface TaskFormData extends Pick<Task, 'projectId' | 'typeId' | 'text'
 	taskId?: number;
 }
 
-export const useModifyTask = () => {
+export const useAddTask = () => {
 	const queryCache = useQueryCache();
 
 	return useMutation<ProjectResponse, ErrorResponse, TaskFormData>(

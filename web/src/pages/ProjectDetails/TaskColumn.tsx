@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
-import { useModifyTask } from '../../queries/useModifyTask';
+import { useAddTask } from '../../queries/useAddTask';
 import { Button } from '../../components/forms/Button';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { TaskCard } from '../../components/TaskCard';
@@ -21,7 +21,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
-	const [addTask, { isLoading, isError, error }] = useModifyTask();
+	const [addTask, { isLoading, isError, error }] = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
 	const tasks = project.tasks?.filter((task) => task.status === status) ?? [];
@@ -45,11 +45,6 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	return (
 		<>
 			<h3>{taskStatus}</h3>
-			{isCreatingTask && (
-				<InputWrapper>
-					<TaskCard onSubmit={(taskValues) => createTask(taskValues)} />
-				</InputWrapper>
-			)}
 
 			<Droppable droppableId={status.toString()}>
 				{(droppable, snapshot) => (
@@ -70,7 +65,7 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 										{...provided.dragHandleProps}
 										ref={provided.innerRef}
 									>
-										<TaskCard task={task} />
+										<TaskCard projectId={project.projectId} task={task} />
 									</div>
 								)}
 							</Draggable>
@@ -80,6 +75,15 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 				)}
 			</Droppable>
 
+			{isCreatingTask && (
+				<InputWrapper>
+					<TaskCard
+						projectId={project.projectId}
+						onSubmit={(taskValues) => createTask(taskValues)}
+					/>
+				</InputWrapper>
+			)}
+			
 			<Button size={'fill'} appearance={'lightblue'} onClick={() => setIsCreatingTask(true)}>
 				<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />
 				<span>Add task</span>

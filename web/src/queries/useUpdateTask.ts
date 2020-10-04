@@ -23,23 +23,25 @@ export const useUpdateTask = (projectId: number) => {
 				const cacheKey = ApiService.projectDetails(projectId);
 				const projectDetails = queryCache.getQueryData(cacheKey) as { project: Project };
 
-				const tasks = [...projectDetails.project.tasks];
-				const taskIndex = tasks.findIndex((task) => task.taskId === variables.taskId);
+				if (projectDetails) {
+					const tasks = [...projectDetails.project.tasks];
+					const taskIndex = tasks.findIndex((task) => task.taskId === variables.taskId);
 
-				if (taskIndex !== -1) {
-					tasks[taskIndex] = {
-						...tasks[taskIndex],
-						status: variables.status
-					};
+					if (taskIndex !== -1) {
+						tasks[taskIndex] = {
+							...tasks[taskIndex],
+							status: variables.status
+						};
 
-					const newProjectDetails = {
-						project: {
-							...projectDetails.project,
-							tasks: tasks
-						}
-					};
+						const newProjectDetails = {
+							project: {
+								...projectDetails.project,
+								tasks: tasks
+							}
+						};
 
-					await queryCache.setQueryData(cacheKey, newProjectDetails);
+						await queryCache.setQueryData(cacheKey, newProjectDetails);
+					}
 				}
 			},
 			onSuccess: async (data, variables) => {

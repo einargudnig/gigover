@@ -14,7 +14,10 @@ export interface IModalContext {
 	};
 	timeTracker?: ITimeTrackerModalContext;
 	registered?: boolean;
-	task?: Task;
+	taskDetails?: {
+		task: Task;
+		projectId: number;
+	};
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

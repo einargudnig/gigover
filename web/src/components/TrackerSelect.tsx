@@ -14,23 +14,65 @@ const TrackerSelectStyled = styled.div`
 	user-select: none;
 	transition: all 0.2s linear;
 	border-radius: 6px;
+	position: relative;
 
 	&:hover {
 		background-color: ${(props) => darken(0.05, props.theme.colors.grayBackground)};
 	}
+
+	select {
+		outline: none;
+		border: none;
+		background: transparent;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		padding: 34px 16px 16px 16px;
+		color: #838894;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		&::-ms-expand {
+			display: none;
+		}
+	}
 `;
+
+interface Option {
+	value: number;
+	label: string;
+}
 
 interface TrackerSelectProps {
 	title: string;
-	value: string;
-	valueChanged: (newValue: string) => void;
+	value: number;
+	options: Option[];
+	valueChanged: (newValue: number) => void;
 }
 
-export const TrackerSelect = ({ title, value, valueChanged }: TrackerSelectProps): JSX.Element => (
+export const TrackerSelect = ({
+	title,
+	value,
+	options,
+	valueChanged
+}: TrackerSelectProps): JSX.Element => (
 	<TrackerSelectStyled>
+		<select
+			defaultValue={value}
+			onChange={(event) => valueChanged(parseInt(event.target.value))}
+		>
+			{options.map((option, optionIndex) => (
+				<option key={optionIndex} value={option.value}>
+					{option.label}
+				</option>
+			))}
+		</select>
 		<div>
 			<small>{title}</small>
-			<p>{value}</p>
+			<p>&nbsp;</p>
 		</div>
 		<CaretIcon />
 	</TrackerSelectStyled>

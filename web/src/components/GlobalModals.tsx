@@ -15,7 +15,12 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 	return (
 		<>
 			{children}
-			{modalContext.task && <TaskModal task={modalContext.task} />}
+			{modalContext.taskDetails && (
+				<TaskModal
+					task={modalContext.taskDetails.task}
+					projectId={modalContext.taskDetails.projectId}
+				/>
+			)}
 			{modalContext.timeTracker && (
 				<TimeTrackerModal open={true} context={modalContext.timeTracker} />
 			)}

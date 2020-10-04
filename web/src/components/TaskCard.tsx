@@ -46,11 +46,12 @@ const TaskItem = styled.div`
 `;
 
 interface TaskProps {
+	projectId: number;
 	task?: Task;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
 }
 
-export const TaskCard = ({ task, onSubmit }: TaskProps): JSX.Element => {
+export const TaskCard = ({ task, projectId, onSubmit }: TaskProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data } = useProjectTypes();
 	const textInputRef = useRef<HTMLInputElement>();
@@ -85,7 +86,11 @@ export const TaskCard = ({ task, onSubmit }: TaskProps): JSX.Element => {
 	return (
 		<TaskCardStyled
 			isEditing={isEditing}
-			onClick={() => (isEditing ? null : setModalContext({ task }))}
+			onClick={() =>
+				isEditing
+					? null
+					: setModalContext({ taskDetails: { task: task!, projectId: projectId } })
+			}
 		>
 			{task ? (
 				<TaskItem>

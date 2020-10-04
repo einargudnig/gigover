@@ -2,21 +2,21 @@ import React from 'react';
 import styled from 'styled-components';
 import { Task, TaskStatus, TaskStatusType } from '../../../models/Task';
 import { TrackerSelect } from '../../TrackerSelect';
-import { Button } from '../../forms/Button';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
 
 interface StatusUpdateProps {
+	projectId: number;
 	task: Task;
 }
 
 const StatusUpdateStyled = styled.div``;
 
-export const StatusUpdate = ({ task }: StatusUpdateProps): JSX.Element => {
-	const [modifyTask, { isLoading, isError, error }] = useUpdateTask(task.projectId);
+export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Element => {
+	const [updateTask, { isLoading, isError, error }] = useUpdateTask(projectId);
 
 	const updateTaskStatus = async (status: TaskStatusType) => {
-		await modifyTask({
+		await updateTask({
 			taskId: task.taskId,
 			status: status,
 			comment: ''
@@ -28,10 +28,15 @@ export const StatusUpdate = ({ task }: StatusUpdateProps): JSX.Element => {
 			<h3>Task status {isLoading && <LoadingSpinner />}</h3>
 			<TrackerSelect
 				title={'Status'}
-				value={Object.keys(TaskStatus)[task.status] || 'Unknown'}
-				valueChanged={(newValue: string) => null}
+				value={task.status}
+				options={[
+					{ value: TaskStatus.Backlog, label: 'Backlog' },
+					{ value: TaskStatus.Todo, label: 'Todo' },
+					{ value: TaskStatus.Doing, label: 'Doing' },
+					{ value: TaskStatus.Done, label: 'Done' }
+				]}
+				valueChanged={(newValue: number) => updateTaskStatus(newValue as TaskStatusType)}
 			/>
-			<Button onClick={() => updateTaskStatus(TaskStatus.Done)}>Test</Button>
 		</StatusUpdateStyled>
 	);
 };
