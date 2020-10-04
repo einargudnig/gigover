@@ -61,7 +61,8 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 
 	const tasks = project.tasks || [];
 	const completed = tasks.filter((task) => task.status === TaskStatus.Done);
-	
+	const percent = (completed.length / tasks.length) * 100 || 0;
+
 	return (
 		<ProjectCardStyled to={`/project/${project.projectId}`}>
 			<ProjectCardTitle>
@@ -79,7 +80,7 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 				</ProjectCardEdit>
 			</ProjectCardTitle>
 			<div>
-				<ProgressBar percent={(completed.length / tasks.length) * 100} />
+				<ProgressBar percent={percent} />
 			</div>
 		</ProjectCardStyled>
 	);
