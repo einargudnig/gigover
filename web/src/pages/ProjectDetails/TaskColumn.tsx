@@ -83,7 +83,7 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 					/>
 				</InputWrapper>
 			)}
-			
+
 			<Button size={'fill'} appearance={'lightblue'} onClick={() => setIsCreatingTask(true)}>
 				<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />
 				<span>Add task</span>

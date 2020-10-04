@@ -123,7 +123,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 					<div className={'separator'} />
 					<div>
 						<h3>Finished</h3>
-						<h1>{(completed / all) * 100}%</h1>
+						<h1>{((completed / all) * 100).toFixed(0)}%</h1>
 					</div>
 				</div>
 				<AddWorkerForm projectId={project.projectId} />
