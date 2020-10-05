@@ -13,6 +13,9 @@ import { TrackerSelect } from '../../TrackerSelect';
 import { Comment } from '../../Comment';
 import { Button } from '../../forms/Button';
 import { StatusUpdate } from './StatusUpdate';
+import { useTrackerStart } from '../../../queries/useTrackerStart';
+import { useProjectDetails } from '../../../queries/useProjectDetails';
+import { useTrackerStop } from '../../../queries/useTrackerStop';
 
 const Divider = styled.div`
 	height: ${(props) => props.theme.padding(3)};
@@ -39,8 +42,28 @@ interface TaskModalProps {
 
 export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
+	const { data: project } = useProjectDetails(projectId);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
+	const [startTask] = useTrackerStart();
+	const [stopTask] = useTrackerStop();
 	const projectTask = data?.projectTask;
+
+	// TODO DEBUG REMOVE
+	const startTracker = async () => {
+		await startTask({
+			projectId: projectId,
+			taskId: task.taskId,
+			uId: project?.project.workers[0].uId || ''
+		});
+	};
+
+	const stopTracker = async () => {
+		await stopTask({
+			projectId: projectId,
+			taskId: task.taskId,
+			uId: project?.project.workers[0].uId || ''
+		});
+	};
 
 	return (
 		<Modal open={true} title={task.text} onClose={closeModal}>
@@ -61,6 +84,11 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							avatar={projectTask?.project.ownerAvatar || ''}
 							name={projectTask?.project.ownerName || 'unknown'}
 						/>
+					</div>
+					<div>
+						<h3>Test tracking</h3>
+						<Button onClick={() => startTracker()}>Start</Button>
+						<Button onClick={() => stopTracker()}>Stop</Button>
 					</div>
 					<Divider />
 					<StatusUpdate task={task} projectId={projectId} />

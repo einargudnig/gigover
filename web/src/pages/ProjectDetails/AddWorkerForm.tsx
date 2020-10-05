@@ -26,10 +26,9 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 		const response = await getUserIdByPhoneNumber({ phoneNumber: data.phoneNumber });
 
 		if (response) {
-			console.log(response);
 			await addWorker({
 				projectId,
-				phoneNumber: data.phoneNumber
+				uId: response.data.uId
 			});
 		} else {
 			console.error('Error getting user id by phone.');

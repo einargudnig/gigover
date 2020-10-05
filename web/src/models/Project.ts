@@ -10,6 +10,13 @@ export const ProjectStatus = {
 
 export type ProjectStatusType = 'CLOSED' | 'OPEN' | 'DONE';
 
+// TODO Refactor to file
+export type WorkerItem = {
+	name: string;
+	uId: string;
+	userName: string;
+};
+
 export interface Project {
 	description: string;
 	name: string;
@@ -20,5 +27,5 @@ export interface Project {
 	zipCode: string;
 	uId: string;
 	comments?: TaskComment[];
-	workers: string[];
+	workers: WorkerItem[];
 }

@@ -3,17 +3,17 @@ import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
 import axios from 'axios';
 
-interface AddWorkerInput {
+interface RemoveWorkerInput {
 	projectId: number;
 	uId: string;
 }
 
-export const useAddWorker = () => {
+export const useRemoveWorker = () => {
 	const queryCache = useQueryCache();
 
-	return useMutation<unknown, ErrorResponse, AddWorkerInput>(
+	return useMutation<unknown, ErrorResponse, RemoveWorkerInput>(
 		async (variables) =>
-			await axios.post(ApiService.addWorker, variables, {
+			await axios.post(ApiService.removeWorker, variables, {
 				withCredentials: true
 			}),
 		{

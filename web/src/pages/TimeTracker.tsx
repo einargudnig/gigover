@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Page } from '../components/Page';
 import { useActiveTimeTrackers } from '../queries/useActiveTimeTrackers';
+import { useTrackerReport } from '../queries/useTrackerReport';
 
 const TimeTrackerStyled = styled.div``;
 
 export const TimeTracker = (): JSX.Element => {
-	const { data, isLoading, isError, error } = useActiveTimeTrackers();
+	const [getTrackers, { data, isLoading, isError, error }] = useActiveTimeTrackers();
+	const [getReport] = useTrackerReport();
+
+	useEffect(() => {
+		getTrackers({});
+		getReport({});
+	}, []);
 
 	return (
 		<>

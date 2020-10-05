@@ -9,6 +9,10 @@ import { CardBase } from '../../components/CardBase';
 import { AddWorkerForm } from './AddWorkerForm';
 import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
+import { Button } from '../../components/forms/Button';
+import { useRemoveWorker } from '../../queries/useRemoveWorker';
+import { WorkerType } from '../../models/UserProfile';
+import { WorkerItem } from '../../models/Project';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -81,6 +85,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const projectIdNumber = parseInt(projectId);
 	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const [updateTask] = useUpdateTask(projectIdNumber);
+	const [removeWorker] = useRemoveWorker();
 	const project = data && data.project;
 
 	const all = project?.tasks.length || 0;
@@ -100,6 +105,13 @@ export const ProjectDetails = (): JSX.Element | null => {
 			comment: '',
 			status,
 			taskId
+		});
+	};
+
+	const remove = async (worker: WorkerItem) => {
+		await removeWorker({
+			projectId: projectIdNumber,
+			uId: worker.uId
 		});
 	};
 
@@ -126,6 +138,16 @@ export const ProjectDetails = (): JSX.Element | null => {
 						<h1>{((completed / all) * 100).toFixed(0)}%</h1>
 					</div>
 				</div>
+				<ul>
+					{project.workers.map((worker, workerIndex) => (
+						<li key={workerIndex}>
+							{worker.name}
+							<Button size={'none'} appearance={'outline'} onClick={() => remove(worker)}>
+								Delete
+							</Button>
+						</li>
+					))}
+				</ul>
 				<AddWorkerForm projectId={project.projectId} />
 			</ProjectDashboard>
 			<ProjectDetailsPage>

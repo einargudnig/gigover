@@ -3,7 +3,9 @@ import axios from 'axios';
 import { ApiService } from '../services/ApiService';
 
 interface UserIdByPhoneNumberResponse {
-	uId: string;
+	data: {
+		uId: string;
+	};
 }
 
 interface UserIdByPhoneNumberVariables {

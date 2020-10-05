@@ -171,11 +171,11 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 							<TimeIcon />
 						</div>
 					</IconLink>
-					<IconLink to={'/users'}>
+					{/*<IconLink to={'/users'}>
 						<div>
 							<UsersIcon />
 						</div>
-					</IconLink>
+					</IconLink>*/}
 					<IconLink to={'/settings'}>
 						<div>
 							<SettingsIcon />

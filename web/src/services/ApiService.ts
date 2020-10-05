@@ -18,7 +18,9 @@ export class ApiService {
 
 	// Time tracking
 	static activeWorkers = API_BASE + 'contractor/activeWorkers';
-
+	static startTimer = API_BASE + 'contractor/start';
+	static stopTimer = API_BASE + 'contractor/stop';
+	static timerReport = API_BASE + 'contractor/report';
 	static registerUser = API_BASE + 'user/store';
 
 	// Support
