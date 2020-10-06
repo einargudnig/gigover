@@ -8,8 +8,9 @@ import { useForm } from 'react-hook-form';
 import { useProjectTypes } from '../queries/useProjectTypes';
 import { ModalContext } from '../context/ModalContext';
 import { Label } from './Label';
+import { TaskCardInput } from './TaskCardInput';
 
-const TaskCardStyled = styled.div<{ isEditing: boolean }>`
+const TaskCardStyled = styled.div<{ isEditing: boolean; error?: boolean }>`
 	padding: 16px;
 	margin: 8px 0;
 	background: ${(props) => props.theme.colors.taskBackground};
@@ -37,6 +38,14 @@ const TaskCardStyled = styled.div<{ isEditing: boolean }>`
 			border-color: ${props.theme.colors.green};
 			box-shadow: 0 5px 25px rgba(0, 140, 0, 0.2);
 		`};
+
+	${(props) =>
+		props.isEditing &&
+		props.error &&
+		css`
+			border-color: ${props.theme.colors.red};
+			box-shadow: 0 5px 25px rgba(222, 39, 39, 0.2);
+		`};
 `;
 
 const TaskItem = styled.div`
@@ -48,8 +57,8 @@ const TaskItem = styled.div`
 
 interface TaskProps {
 	projectId: number;
-	loading?: boolean;
 	error?: string;
+	loading?: boolean;
 	task?: Task;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
 }
@@ -63,30 +72,7 @@ export const TaskCard = ({
 }: TaskProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data } = useProjectTypes();
-	const textInputRef = useRef<HTMLInputElement>();
-	const { register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'text'>>({
-		defaultValues: {
-			text: ''
-		}
-	});
-
-	const submit = handleSubmit(async (values) => {
-		if (onSubmit) {
-			onSubmit({
-				text: values.text,
-				// Sending string because of the select value..
-				typeId: parseInt(values.typeId.toString())
-			});
-		}
-	});
-
 	const isEditing = Boolean(onSubmit);
-
-	useEffect(() => {
-		if (textInputRef.current) {
-			textInputRef.current.focus();
-		}
-	}, []);
 
 	if (!task && !onSubmit) {
 		throw new Error('No task or onSubmit was supplied for Task Component');
@@ -94,6 +80,7 @@ export const TaskCard = ({
 
 	return (
 		<TaskCardStyled
+			error={Boolean(error)}
 			isEditing={isEditing}
 			onClick={() =>
 				isEditing
@@ -115,41 +102,7 @@ export const TaskCard = ({
 					</div>
 				</TaskItem>
 			) : (
-				<form onSubmit={submit}>
-					{error && <div style={{ color: 'red' }}>{error}</div>}
-					<div>
-						<Input
-							name={'text'}
-							required={true}
-							placeholder={'Write the task name'}
-							ref={(e) => {
-								register(e, { required: true });
-
-								if (e) {
-									textInputRef.current = e;
-								}
-							}}
-						/>
-					</div>
-					<div>
-						<select name="typeId" ref={register}>
-							{data?.projectTypes.map((projectType) => (
-								<option key={projectType.typeId} value={projectType.typeId}>
-									{projectType.name}
-								</option>
-							))}
-						</select>
-					</div>
-					<Button
-						size={'tiny'}
-						type={'submit'}
-						appearance={'outline'}
-						loading={loading}
-						disabled={loading}
-					>
-						Save
-					</Button>
-				</form>
+				<TaskCardInput loading={loading} error={error} onSubmit={onSubmit} />
 			)}
 		</TaskCardStyled>
 	);
