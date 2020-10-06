@@ -142,7 +142,11 @@ export const ProjectDetails = (): JSX.Element | null => {
 					{project.workers.map((worker, workerIndex) => (
 						<li key={workerIndex}>
 							{worker.name}
-							<Button size={'none'} appearance={'outline'} onClick={() => remove(worker)}>
+							<Button
+								size={'none'}
+								appearance={'outline'}
+								onClick={() => remove(worker)}
+							>
 								Delete
 							</Button>
 						</li>

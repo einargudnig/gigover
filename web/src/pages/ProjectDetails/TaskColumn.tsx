@@ -21,19 +21,24 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
+	const [taskError, setTaskError] = useState<string | null>();
 	const [addTask, { isLoading, isError, error }] = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
 	const tasks = project.tasks?.filter((task) => task.status === status) ?? [];
 
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'text'>) => {
-		await addTask({
-			...taskValues,
-			projectId: project.projectId,
-			status
-		});
+		try {
+			await addTask({
+				...taskValues,
+				projectId: project.projectId,
+				status
+			});
 
-		setIsCreatingTask(false);
+			setIsCreatingTask(false);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	useEventListener('keydown', (event) => {
@@ -45,7 +50,6 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	return (
 		<>
 			<h3>{taskStatus}</h3>
-
 			<Droppable droppableId={status.toString()}>
 				{(droppable, snapshot) => (
 					<div

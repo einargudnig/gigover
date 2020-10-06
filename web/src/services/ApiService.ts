@@ -6,7 +6,7 @@ export class ApiService {
 	// Projects
 	static projectList = API_BASE + 'contractor/list/';
 	static projectDetails = (id: number): string => API_BASE + 'contractor/project/' + id;
-	static modifyProject = API_BASE + 'contractor/store'; // CRUD
+	static modifyProject = API_BASE + 'contractor/store'; // Create & Update
 	static addWorker = API_BASE + 'contractor/addWorker';
 	static removeWorker = API_BASE + 'contractor/removeWorker';
 

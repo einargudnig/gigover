@@ -10,6 +10,9 @@ const TabContainer = styled.div`
 const Tab = styled.div<{ active: boolean }>`
 	text-align: center;
 	margin: 0 24px;
+	cursor: pointer;
+	text-transform: capitalize;
+	user-select: none;
 
 	${(props) =>
 		props.active &&
@@ -29,7 +32,7 @@ export const DashboardTabs = ({ tabs, activeTab, onChange }: DashboardTabsProps)
 	<TabContainer>
 		{tabs.map((tab, tabIndex) => (
 			<Tab key={tabIndex} onClick={() => onChange(tab)} active={tab === activeTab}>
-				{tab}
+				{tab.toLowerCase()}
 			</Tab>
 		))}
 	</TabContainer>

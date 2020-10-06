@@ -16,6 +16,7 @@ const TaskCardStyled = styled.div<{ isEditing: boolean }>`
 	border: 1px solid ${(props) => props.theme.colors.taskBorder};
 	cursor: pointer;
 	border-radius: 6px;
+	word-wrap: anywhere;
 
 	h4 {
 		font-weight: normal;
@@ -39,7 +40,7 @@ const TaskCardStyled = styled.div<{ isEditing: boolean }>`
 `;
 
 const TaskItem = styled.div`
-	height: 70px;
+	min-height: 70px;
 	display: inline-flex;
 	justify-content: space-between;
 	flex-direction: column;
@@ -97,6 +98,7 @@ export const TaskCard = ({ task, projectId, onSubmit }: TaskProps): JSX.Element 
 					<h4>{task.text}</h4>
 					<div>
 						<Label
+							style={{ display: 'inline-block', marginTop: 16 }}
 							text={
 								data?.projectTypes.find((pt) => pt.typeId === task?.typeId)?.name ||
 								'unknown'

@@ -13,8 +13,17 @@ export const useAddTask = () => {
 	const queryCache = useQueryCache();
 
 	return useMutation<ProjectResponse, ErrorResponse, TaskFormData>(
-		async (variables) =>
-			await axios.post(ApiService.addTask, variables, { withCredentials: true }),
+		async (variables) => {
+			const response = await axios.post(ApiService.addTask, variables, {
+				withCredentials: true
+			});
+
+			if (response.data.errorText !== undefined) {
+				throw new Error(response.data.errorText);
+			}
+
+			return response.data;
+		},
 		{
 			onSuccess: async (data, variables) => {
 				await queryCache.invalidateQueries(ApiService.projectDetails(variables.projectId));

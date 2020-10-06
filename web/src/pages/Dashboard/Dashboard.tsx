@@ -39,6 +39,12 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
+	const projects = data?.projects?.filter(
+		(project) =>
+			project.status !== ProjectStatus.DONE &&
+			(activeTab === ProjectStatus.ALL || project.status === activeTab)
+	);
+
 	return (
 		<Page
 			title={'Dashboard'}
@@ -51,7 +57,7 @@ export const Dashboard = (): JSX.Element => {
 			}
 		>
 			<ProjectDashboard>
-				{(!data || !data.projects || data.projects.length <= 0) && (
+				{!projects || projects.length <= 0 ? (
 					<EmptyState
 						icon={<EmptyProjects />}
 						title={'No projects found'}
@@ -65,16 +71,11 @@ export const Dashboard = (): JSX.Element => {
 							</Button>
 						}
 					/>
-				)}
-				{data?.projects
-					?.filter(
-						(project) =>
-							project.status !== ProjectStatus.DONE &&
-							(activeTab === ProjectStatus.ALL || project.status === activeTab)
-					)
-					.map((project) => (
+				) : (
+					projects.map((project) => (
 						<ProjectCard key={project.projectId} project={project} />
-					))}
+					))
+				)}
 			</ProjectDashboard>
 		</Page>
 	);
