@@ -8,7 +8,7 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { ITimeTrackerModalContext } from '../../context/ModalContext';
 import { useProjectList } from '../../queries/useProjectList';
 import { EmptyState } from '../empty/EmptyState';
-import { WorkerItem } from '../../models/Project';
+import { ProjectStatus, WorkerItem } from '../../models/Project';
 import { Task } from '../../models/Task';
 import { SubstringText } from '../../utils/StringUtils';
 import { useTrackerStart } from '../../queries/useTrackerStart';
@@ -25,7 +25,13 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 	const [selectedWorker, setSelectedWorker] = useState<string | undefined>();
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
 	const [startTask] = useTrackerStart();
-	const isEmpty = !data || data.projects.length <= 0;
+	const openProjects = useMemo(() => {
+		if (data && data.projects) {
+			return data.projects.filter(p => p.status === ProjectStatus.OPEN);
+		}
+		return [];
+	}, [data]);
+	const isEmpty = !data || openProjects.length <= 0;
 
 	const currentProject = useMemo(() => {
 		setSelectedWorker(undefined);
@@ -90,7 +96,7 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 			onClose={() => closeModal()}
 		>
 			<>
-				{isEmpty && !data?.projects ? (
+				{isEmpty && openProjects.length <= 0 ? (
 					<EmptyState
 						title={'No projects'}
 						text={
@@ -102,7 +108,7 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 						<TrackerSelect
 							title={'Select a project'}
 							value={selectedProject}
-							options={data!.projects.map((project) => ({
+							options={openProjects.map((project) => ({
 								label: project.name,
 								value: project.projectId
 							}))}

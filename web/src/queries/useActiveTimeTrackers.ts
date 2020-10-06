@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
 import axios from 'axios';
+import { TrackerReportItem } from './useTrackerReport';
 
 interface ActiveTimeTrackersInput {
 	from?: number;
@@ -10,7 +11,9 @@ interface ActiveTimeTrackersInput {
 }
 
 interface ActiveTimeTrackersResponse {
-	data: unknown;
+	data: {
+		workers: TrackerReportItem[];
+	};
 }
 
 export const useActiveTimeTrackers = () =>

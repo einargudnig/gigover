@@ -131,7 +131,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 						Close this project
 					</Button>
 				</InputWrapper>
-			) : (
+			) : project?.projectId ? (
 				<InputWrapper>
 					<Button
 						type={'button'}
@@ -145,7 +145,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 						Re-open this project
 					</Button>
 				</InputWrapper>
-			)}
+			) : null}
 			{project?.projectId && project.status === ProjectStatus.CLOSED && (
 				<InputWrapper>
 					<Button

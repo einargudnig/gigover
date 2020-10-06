@@ -1,48 +1,245 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Page } from '../components/Page';
 import { useActiveTimeTrackers } from '../queries/useActiveTimeTrackers';
 import { useTrackerReport } from '../queries/useTrackerReport';
-import { useTrackerStart } from '../queries/useTrackerStart';
 import { useTrackerStop } from '../queries/useTrackerStop';
+import { CardBase } from '../components/CardBase';
+import { intToString } from '../utils/NumberUtils';
+import { useProjectList } from '../queries/useProjectList';
+import { ModalContext } from '../context/ModalContext';
+import { Button } from '../components/forms/Button';
+import { ClockIcon } from '../components/icons/ClockIcon';
+import { Table } from '../components/Table';
+import Timer from 'react-compound-timer';
+import { SubstringText } from '../utils/StringUtils';
 
-const TimeTrackerStyled = styled.div``;
+const TitleContainer = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: ${(props) => props.theme.padding(3)};
+`;
+
+const TimerWrapper = styled.div`
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+
+	button {
+		border: none;
+		height: 100%;
+		border-radius: 6px;
+		padding: 12px 16px;
+		font-size: 24px;
+		margin-left: 12px;
+
+		&:active,
+		&:focus {
+			outline: none;
+			border: none;
+		}
+	}
+`;
+
+const TimerContainer = styled.div`
+	display: inline-block;
+	font-size: 24px;
+	font-weight: 300;
+	border: 1px solid #e5e5e5;
+	padding: 12px;
+	margin: 12px 0;
+	border-radius: 6px;
+	user-select: none;
+`;
+
+const TimeTrackerTotalReport = styled(CardBase)`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	> div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	h3 {
+		font-weight: normal;
+		padding-top: 24px;
+	}
+
+	.separator {
+		height: 100px;
+		width: 1px;
+		background-color: ${(props) => props.theme.colors.border};
+	}
+`;
+
+const ActiveTimeTrackers = styled(CardBase)`
+	margin: 24px 0;
+`;
 
 export const TimeTracker = (): JSX.Element => {
-	const [getTrackers, { data, isLoading, isError, error }] = useActiveTimeTrackers();
-	const [getReport] = useTrackerReport();
-
+	const [now] = useState(new Date());
+	const [, setModalContext] = useContext(ModalContext);
+	const { data: projectList } = useProjectList();
+	const [activeTrackers, { data, isLoading, isError, error }] = useActiveTimeTrackers();
+	const [getReport, { data: reportData }] = useTrackerReport();
 	const [stopTask] = useTrackerStop();
 
-	// TODO DEBUG REMOVE
-	const [startTask] = useTrackerStart();
-	const startTracker = async () => {
-		// await startTask({
-		// 	projectId: projectId,
-		// 	taskId: task.taskId,
-		// 	uId: project?.project.workers[0].uId || ''
-		// });
+	const totalTimesheets = useMemo(() => {
+		if (reportData?.data.report) {
+			return reportData.data.report.reduce((a, b) => a + b.timeSheets.length, 0);
+		}
+
+		return 0;
+	}, [reportData]);
+
+	const totalMinutes = useMemo(() => {
+		if (reportData?.data.report) {
+			return reportData.data.report.reduce(
+				(a, b) => a + b.timeSheets.reduce((c, d) => c + d.minutes, 0),
+				0
+			);
+		}
+
+		return 0;
+	}, [reportData]);
+
+	const stopTracker = async (projectId: number, taskId: number, uId: string) => {
+		await stopTask({
+			projectId: projectId,
+			taskId: taskId,
+			uId: uId
+		});
+
+		await activeTrackers({});
 	};
 
-	const stopTracker = async () => {
-		// await stopTask({
-		// 	projectId: projectId,
-		// 	taskId: task.taskId,
-		// 	uId: project?.project.workers[0].uId || ''
-		// });
+	const getActiveTrackerHeader = (projectId: number, taskId: number): React.ReactNode => {
+		let projectName = `Unknown project (${projectId})`;
+		let taskName = `Unknown task (${taskId})`;
+
+		if (projectList?.projects && projectList.projects.length > 0) {
+			const pj = projectList.projects.find((p) => p.projectId === projectId);
+
+			if (pj) {
+				projectName = pj.name;
+				const task = pj.tasks.find((t) => t.taskId === taskId);
+
+				if (task) {
+					taskName = SubstringText(task.text, 70);
+				}
+			}
+		}
+
+		return (
+			<>
+				<strong>{projectName}</strong>
+				<br />
+				<p>{taskName}</p>
+			</>
+		);
 	};
 
 	useEffect(() => {
-		getTrackers({});
+		activeTrackers({});
 		getReport({});
 	}, []);
 
 	return (
 		<>
 			<Page title={'Time tracker'}>
-				<TimeTrackerStyled>
-					<h1>Time Tracker</h1>
-				</TimeTrackerStyled>
+				<TimeTrackerTotalReport>
+					<div />
+					<div>
+						<h3>Timesheets</h3>
+						<h1>{totalTimesheets}</h1>
+					</div>
+					<div className={'separator'} />
+					<div>
+						<h3>Minutes tracked</h3>
+						<h1>{intToString(totalMinutes)}</h1>
+					</div>
+					<div className={'separator'} />
+					<div>
+						<h3>Workers</h3>
+						<h1>{reportData?.data.report.length || 0}</h1>
+					</div>
+					<div />
+				</TimeTrackerTotalReport>
+				<ActiveTimeTrackers>
+					<TitleContainer>
+						<h3>Active timers</h3>
+						<Button
+							appearance={'lightblue'}
+							onClick={() => setModalContext({ timeTracker: {} })}
+						>
+							<ClockIcon style={{ position: 'relative', left: -12 }} />
+							<span>Start timer</span>
+						</Button>
+					</TitleContainer>
+					<div>
+						<Table>
+							<thead>
+								<tr>
+									<th>Project</th>
+									<th>Worker</th>
+									<th align={'center'} style={{ width: 200 }}>
+										Timer
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{data?.data.workers.map((worker) =>
+									worker.timeSheets.map((timeSheet, timeSheetIndex) => (
+										<tr key={`${worker.uId}_${timeSheetIndex}`}>
+											<td>
+												{getActiveTrackerHeader(
+													timeSheet.projectId,
+													timeSheet.taskId
+												)}
+											</td>
+											<td>{worker.name}</td>
+											<td>
+												<TimerWrapper>
+													<TimerContainer>
+														<Timer
+															formatValue={(value) =>
+																value < 10 ? `0${value}` : value.toString()
+															}
+															initialTime={
+																now.getTime() - timeSheet.start
+															}
+															lastUnit={'d'}
+														>
+															<Timer.Hours />:
+															<Timer.Minutes />:
+															<Timer.Seconds />
+														</Timer>
+													</TimerContainer>
+													<Button
+														onClick={() =>
+															stopTracker(
+																timeSheet.projectId,
+																timeSheet.taskId,
+																worker.uId
+															)
+														}
+													>
+														|&nbsp;|
+													</Button>
+												</TimerWrapper>
+											</td>
+										</tr>
+									))
+								)}
+							</tbody>
+						</Table>
+					</div>
+				</ActiveTimeTrackers>
 			</Page>
 		</>
 	);

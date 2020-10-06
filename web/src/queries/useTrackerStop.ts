@@ -12,6 +12,7 @@ export const useTrackerStop = () => {
 		{
 			onSuccess: async () => {
 				await queryCache.invalidateQueries(ApiService.activeWorkers);
+				await queryCache.refetchQueries(ApiService.activeWorkers);
 			}
 		}
 	);
