@@ -52,6 +52,7 @@ interface TrackerSelectProps {
 	options: Option[];
 	valueChanged: (newValue: number | string) => void;
 	disabled?: boolean;
+	isNumber?: boolean;
 }
 
 export const TrackerSelect = ({
@@ -59,13 +60,16 @@ export const TrackerSelect = ({
 	value,
 	options,
 	valueChanged,
-	disabled = false
+	disabled = false,
+	isNumber = true
 }: TrackerSelectProps): JSX.Element => (
 	<TrackerSelectStyled>
 		<select
 			disabled={disabled}
-			defaultValue={value}
-			onChange={(event) => valueChanged(parseInt(event.target.value))}
+			defaultValue={value?.toString()}
+			onChange={(event) =>
+				valueChanged(isNumber ? parseInt(event.target.value) : event.target.value)
+			}
 		>
 			<option value="">Click to select</option>
 			{options.map((option, optionIndex) => (

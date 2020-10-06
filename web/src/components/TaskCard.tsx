@@ -1,10 +1,7 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { Task } from '../models/Task';
 import { darken } from 'polished';
-import { Button } from './forms/Button';
-import { Input } from './forms/Input';
-import { useForm } from 'react-hook-form';
 import { useProjectTypes } from '../queries/useProjectTypes';
 import { ModalContext } from '../context/ModalContext';
 import { Label } from './Label';

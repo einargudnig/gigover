@@ -34,6 +34,38 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 		}
 	});
 
+	const reOpenProject = async () => {
+		try {
+			const projectId = project?.projectId;
+
+			if (projectId) {
+				await modify({
+					projectId,
+					status: ProjectStatus.OPEN
+				});
+				closeModal();
+			}
+		} catch (e) {
+			console.log('Error', e);
+		}
+	};
+
+	const setClosed = async () => {
+		try {
+			const projectId = project?.projectId;
+
+			if (projectId) {
+				await modify({
+					projectId,
+					status: ProjectStatus.CLOSED
+				});
+				closeModal();
+			}
+		} catch (e) {
+			console.log('Error', e);
+		}
+	};
+
 	const archiveProject = async () => {
 		try {
 			const projectId = project?.projectId;
@@ -85,7 +117,36 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					onCancel={() => closeModal()}
 				/>
 			</form>
-			{project?.projectId && (
+			{project?.projectId && project.status === ProjectStatus.OPEN ? (
+				<InputWrapper>
+					<Button
+						type={'button'}
+						size={'none'}
+						appearance={'delete'}
+						onClick={async (event) => {
+							event.preventDefault();
+							await setClosed();
+						}}
+					>
+						Close this project
+					</Button>
+				</InputWrapper>
+			) : (
+				<InputWrapper>
+					<Button
+						type={'button'}
+						size={'none'}
+						appearance={'delete'}
+						onClick={async (event) => {
+							event.preventDefault();
+							await reOpenProject();
+						}}
+					>
+						Re-open this project
+					</Button>
+				</InputWrapper>
+			)}
+			{project?.projectId && project.status === ProjectStatus.CLOSED && (
 				<InputWrapper>
 					<Button
 						type={'button'}

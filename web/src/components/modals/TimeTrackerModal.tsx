@@ -54,7 +54,9 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 		}
 	}, [currentProject]);
 
-	const isSubmitDisabled = !(selectedProject && selectedTask && selectedWorker);
+	const isSubmitDisabled = useMemo(() => {
+		return !(selectedProject && selectedTask && selectedWorker);
+	}, [selectedProject, selectedTask, selectedWorker]);
 
 	const startTracker = useCallback(() => {
 		if (selectedProject && selectedTask && selectedWorker) {
@@ -68,10 +70,11 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 					closeModal();
 				})
 				.catch((e) => {
+					// eslint-disable-next-line no-console
 					console.error(e);
 				});
 		}
-	}, [selectedProject, selectedTask, selectedWorker, startTask]);
+	}, [closeModal, selectedProject, selectedTask, selectedWorker, startTask]);
 
 	return (
 		<Modal
@@ -104,7 +107,11 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 								value: project.projectId
 							}))}
 							valueChanged={(newValue) => {
-								setSelectedProject((newValue as number) ?? undefined);
+								if (newValue === '') {
+									setSelectedProject(undefined);
+								} else {
+									setSelectedProject((newValue as number) ?? undefined);
+								}
 							}}
 						/>
 						<TrackerSelect
@@ -114,8 +121,13 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 								label: worker.name,
 								value: worker.uId
 							}))}
+							isNumber={false}
 							valueChanged={(newValue) => {
-								setSelectedWorker((newValue as string) ?? undefined);
+								if (newValue === '') {
+									setSelectedWorker(undefined);
+								} else {
+									setSelectedWorker((newValue as string) ?? undefined);
+								}
 							}}
 						/>
 						<TrackerSelect
@@ -126,7 +138,11 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 								value: task.taskId
 							}))}
 							valueChanged={(newValue) => {
-								setSelectedWorker((newValue as string) ?? undefined);
+								if (newValue === '') {
+									setSelectedTask(undefined);
+								} else {
+									setSelectedTask((newValue as number) ?? undefined);
+								}
 							}}
 						/>
 					</>

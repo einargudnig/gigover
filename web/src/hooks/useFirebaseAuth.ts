@@ -19,6 +19,7 @@ export const useFirebaseAuth = (auth: firebase.auth.Auth) => {
 		return () => {
 			unlisten();
 		};
+		// eslint-disable-line
 	}, []);
 
 	return {
