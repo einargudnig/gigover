@@ -48,11 +48,19 @@ const TaskItem = styled.div`
 
 interface TaskProps {
 	projectId: number;
+	loading?: boolean;
+	error?: string;
 	task?: Task;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
 }
 
-export const TaskCard = ({ task, projectId, onSubmit }: TaskProps): JSX.Element => {
+export const TaskCard = ({
+	task,
+	projectId,
+	onSubmit,
+	loading = false,
+	error
+}: TaskProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data } = useProjectTypes();
 	const textInputRef = useRef<HTMLInputElement>();
@@ -108,6 +116,7 @@ export const TaskCard = ({ task, projectId, onSubmit }: TaskProps): JSX.Element 
 				</TaskItem>
 			) : (
 				<form onSubmit={submit}>
+					{error && <div style={{ color: 'red' }}>{error}</div>}
 					<div>
 						<Input
 							name={'text'}
@@ -131,7 +140,13 @@ export const TaskCard = ({ task, projectId, onSubmit }: TaskProps): JSX.Element 
 							))}
 						</select>
 					</div>
-					<Button size={'tiny'} type={'submit'} appearance={'outline'}>
+					<Button
+						size={'tiny'}
+						type={'submit'}
+						appearance={'outline'}
+						loading={loading}
+						disabled={loading}
+					>
 						Save
 					</Button>
 				</form>

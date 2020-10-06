@@ -1,19 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Page } from '../components/Page';
 
-interface UsersProps {
-}
-
-const UsersStyled = styled.div``;
-
-export const Users = ({}: UsersProps): JSX.Element => {
-    return (
+export const Users = (): JSX.Element => {
+	return (
 		<Page title={'Users'}>
-			<UsersStyled>
+			<div>
 				<h1>Users</h1>
-			</UsersStyled>
+			</div>
 		</Page>
-    );
+	);
 };
-

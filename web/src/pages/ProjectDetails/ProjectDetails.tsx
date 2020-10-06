@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { useParams } from 'react-router-dom';
@@ -7,11 +7,10 @@ import { TaskStatus, TaskStatusType } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
 import { CardBase } from '../../components/CardBase';
 import { AddWorkerForm } from './AddWorkerForm';
-import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { Button } from '../../components/forms/Button';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
-import { WorkerType } from '../../models/UserProfile';
 import { WorkerItem } from '../../models/Project';
 
 const FeedBoard = styled.div`

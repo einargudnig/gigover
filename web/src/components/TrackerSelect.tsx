@@ -42,28 +42,32 @@ const TrackerSelectStyled = styled.div`
 `;
 
 interface Option {
-	value: number;
+	value: number | string;
 	label: string;
 }
 
 interface TrackerSelectProps {
 	title: string;
-	value: number;
+	value?: number | string;
 	options: Option[];
-	valueChanged: (newValue: number) => void;
+	valueChanged: (newValue: number | string) => void;
+	disabled?: boolean;
 }
 
 export const TrackerSelect = ({
 	title,
 	value,
 	options,
-	valueChanged
+	valueChanged,
+	disabled = false
 }: TrackerSelectProps): JSX.Element => (
 	<TrackerSelectStyled>
 		<select
+			disabled={disabled}
 			defaultValue={value}
 			onChange={(event) => valueChanged(parseInt(event.target.value))}
 		>
+			<option value="">Click to select</option>
 			{options.map((option, optionIndex) => (
 				<option key={optionIndex} value={option.value}>
 					{option.label}

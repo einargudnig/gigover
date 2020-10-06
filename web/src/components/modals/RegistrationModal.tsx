@@ -16,7 +16,7 @@ interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'>
 export const RegistrationModal = (): JSX.Element => {
 	const user = useContext(UserContext);
 	const [, setModalContext] = useContext(ModalContext);
-	const [registerFn, { data, isLoading, isError, error }] = useRegister();
+	const [registerFn, { isLoading, isError, error }] = useRegister();
 
 	const finished = () => {
 		setModalContext({ registered: true });
@@ -25,7 +25,6 @@ export const RegistrationModal = (): JSX.Element => {
 	const { register, handleSubmit, errors } = useForm<FormData>();
 	const onSubmit = handleSubmit(async ({ name, address, zipCode, phoneNumber }) => {
 		// TODO Validate form..
-		console.log(name, address, zipCode, phoneNumber);
 		try {
 			await registerFn({
 				name,

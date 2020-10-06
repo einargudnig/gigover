@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Task, TaskStatus, TaskStatusType } from '../../../models/Task';
 import { TrackerSelect } from '../../TrackerSelect';
 import { LoadingSpinner } from '../../LoadingSpinner';
@@ -10,10 +9,8 @@ interface StatusUpdateProps {
 	task: Task;
 }
 
-const StatusUpdateStyled = styled.div``;
-
 export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Element => {
-	const [updateTask, { isLoading, isError, error }] = useUpdateTask(projectId);
+	const [updateTask, { isLoading }] = useUpdateTask(projectId);
 
 	const updateTaskStatus = async (status: TaskStatusType) => {
 		await updateTask({
@@ -24,7 +21,7 @@ export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Elemen
 	};
 
 	return (
-		<StatusUpdateStyled>
+		<div>
 			<h3>Task status {isLoading && <LoadingSpinner />}</h3>
 			<TrackerSelect
 				title={'Status'}
@@ -35,8 +32,8 @@ export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Elemen
 					{ value: TaskStatus.Doing, label: 'Doing' },
 					{ value: TaskStatus.Done, label: 'Done' }
 				]}
-				valueChanged={(newValue: number) => updateTaskStatus(newValue as TaskStatusType)}
+				valueChanged={(newValue) => updateTaskStatus(newValue as TaskStatusType)}
 			/>
-		</StatusUpdateStyled>
+		</div>
 	);
 };

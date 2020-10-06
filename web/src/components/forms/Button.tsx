@@ -142,6 +142,7 @@ const StyledButton = styled.button<{
 	${(props) =>
 		props.disabled &&
 		css`
+			opacity: 0.1;
 			pointer-events: none;
 		`}
 `;

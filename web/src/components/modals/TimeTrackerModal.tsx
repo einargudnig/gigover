@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { TimeIcon } from '../icons/TimeIcon';
 import { Theme } from '../../Theme';
 import { TrackerSelect } from '../TrackerSelect';
@@ -6,16 +6,72 @@ import { FormActions } from '../FormActions';
 import { Modal } from '../Modal';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { ITimeTrackerModalContext } from '../../context/ModalContext';
+import { useProjectList } from '../../queries/useProjectList';
+import { EmptyState } from '../empty/EmptyState';
+import { WorkerItem } from '../../models/Project';
+import { Task } from '../../models/Task';
+import { SubstringText } from '../../utils/StringUtils';
+import { useTrackerStart } from '../../queries/useTrackerStart';
 
 interface TimeTrackerModalProps {
 	open: boolean;
 	context: ITimeTrackerModalContext;
 }
 
-export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.Element => {
+export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element => {
+	const { data } = useProjectList();
 	const closeModal = useCloseModal();
+	const [selectedProject, setSelectedProject] = useState<number | undefined>();
+	const [selectedWorker, setSelectedWorker] = useState<string | undefined>();
+	const [selectedTask, setSelectedTask] = useState<number | undefined>();
+	const [startTask] = useTrackerStart();
+	const isEmpty = !data || data.projects.length <= 0;
 
-	console.log('TimeTrackerModalContext', context);
+	const currentProject = useMemo(() => {
+		setSelectedWorker(undefined);
+		setSelectedTask(undefined);
+
+		if (data && data.projects.length > 0) {
+			return data.projects.find((p) => p.projectId === selectedProject);
+		}
+
+		return null;
+	}, [data, selectedProject]);
+
+	const workers: WorkerItem[] = useMemo(() => {
+		if (currentProject) {
+			return currentProject ? currentProject.workers : [];
+		} else {
+			return [];
+		}
+	}, [currentProject]);
+
+	const tasks: Task[] = useMemo(() => {
+		if (currentProject) {
+			return currentProject ? currentProject.tasks : [];
+		} else {
+			return [];
+		}
+	}, [currentProject]);
+
+	const isSubmitDisabled = !(selectedProject && selectedTask && selectedWorker);
+
+	const startTracker = useCallback(() => {
+		if (selectedProject && selectedTask && selectedWorker) {
+			startTask({
+				projectId: selectedProject,
+				taskId: selectedTask,
+				uId: selectedWorker
+			})
+				.then(() => {
+					window.location.pathname = '/time-tracker';
+					closeModal();
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		}
+	}, [selectedProject, selectedTask, selectedWorker, startTask]);
 
 	return (
 		<Modal
@@ -31,23 +87,53 @@ export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.
 			onClose={() => closeModal()}
 		>
 			<>
-				{/*<TrackerSelect
-					title={'Select a project'}
-					value={'Project #1'}
-					valueChanged={(newValue) => null}
-				/>
-				<TrackerSelect
-					title={'Select a worker'}
-					value={'Adam Viðarsson'}
-					valueChanged={(newValue) => null}
-				/>
-				<TrackerSelect
-					title={'Select a task'}
-					value={'Select a task'}
-					valueChanged={(newValue) => null}
-				/>*/}
+				{isEmpty && !data?.projects ? (
+					<EmptyState
+						title={'No projects'}
+						text={
+							'You have to create some projects and add workers before you can track'
+						}
+					/>
+				) : (
+					<>
+						<TrackerSelect
+							title={'Select a project'}
+							value={selectedProject}
+							options={data!.projects.map((project) => ({
+								label: project.name,
+								value: project.projectId
+							}))}
+							valueChanged={(newValue) => {
+								setSelectedProject((newValue as number) ?? undefined);
+							}}
+						/>
+						<TrackerSelect
+							title={'Select a worker'}
+							value={selectedWorker}
+							options={workers.map((worker) => ({
+								label: worker.name,
+								value: worker.uId
+							}))}
+							valueChanged={(newValue) => {
+								setSelectedWorker((newValue as string) ?? undefined);
+							}}
+						/>
+						<TrackerSelect
+							title={'Select a task'}
+							value={selectedTask}
+							options={tasks.map((task) => ({
+								label: SubstringText(task.text, 70),
+								value: task.taskId
+							}))}
+							valueChanged={(newValue) => {
+								setSelectedWorker((newValue as string) ?? undefined);
+							}}
+						/>
+					</>
+				)}
 				<FormActions
-					onSubmit={() => console.log('cool')}
+					submitDisabled={isEmpty || isSubmitDisabled}
+					onSubmit={() => startTracker()}
 					submitText={'Start tracking'}
 					onCancel={() => closeModal()}
 					cancelText={'Close'}

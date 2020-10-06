@@ -1,21 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Modal } from '../../Modal';
-import { Task, TaskStatus } from '../../../models/Task';
+import { Task } from '../../../models/Task';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useTaskDetails } from '../../../queries/useTaskDetails';
-import { Input } from '../../forms/Input';
-import { useTaskComment } from '../../../queries/useTaskComment';
 import { User } from '../../User';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { CommentInput } from './CommentInput';
-import { TrackerSelect } from '../../TrackerSelect';
 import { Comment } from '../../Comment';
-import { Button } from '../../forms/Button';
 import { StatusUpdate } from './StatusUpdate';
-import { useTrackerStart } from '../../../queries/useTrackerStart';
-import { useProjectDetails } from '../../../queries/useProjectDetails';
-import { useTrackerStop } from '../../../queries/useTrackerStop';
 
 const Divider = styled.div`
 	height: ${(props) => props.theme.padding(3)};
@@ -42,7 +35,6 @@ interface TaskModalProps {
 
 export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const { data: project } = useProjectDetails(projectId);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
 

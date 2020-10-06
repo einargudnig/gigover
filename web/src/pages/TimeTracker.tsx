@@ -12,10 +12,10 @@ export const TimeTracker = (): JSX.Element => {
 	const [getTrackers, { data, isLoading, isError, error }] = useActiveTimeTrackers();
 	const [getReport] = useTrackerReport();
 
-	const [startTask] = useTrackerStart();
 	const [stopTask] = useTrackerStop();
 
 	// TODO DEBUG REMOVE
+	const [startTask] = useTrackerStart();
 	const startTracker = async () => {
 		// await startTask({
 		// 	projectId: projectId,

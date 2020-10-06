@@ -21,28 +21,37 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
-	const [taskError, setTaskError] = useState<string | null>();
-	const [addTask, { isLoading, isError, error }] = useAddTask();
+	const [taskError, setTaskError] = useState<string>();
+	const [addTask, { isLoading }] = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
 	const tasks = project.tasks?.filter((task) => task.status === status) ?? [];
 
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'text'>) => {
 		try {
-			await addTask({
+			const response = await addTask({
 				...taskValues,
 				projectId: project.projectId,
 				status
 			});
 
+			if (!response) {
+				setTaskError('Could not create task');
+				return;
+			} else {
+				setTaskError(undefined);
+			}
+
 			setIsCreatingTask(false);
 		} catch (e) {
 			console.log(e);
+			setTaskError(e);
 		}
 	};
 
 	useEventListener('keydown', (event) => {
 		if (event.keyCode === 27) {
+			setTaskError(undefined);
 			setIsCreatingTask(false);
 		}
 	});
@@ -82,6 +91,8 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 			{isCreatingTask && (
 				<InputWrapper>
 					<TaskCard
+						error={taskError}
+						loading={isLoading}
 						projectId={project.projectId}
 						onSubmit={(taskValues) => createTask(taskValues)}
 					/>
