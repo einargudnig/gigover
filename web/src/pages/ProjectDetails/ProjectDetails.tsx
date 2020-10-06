@@ -89,7 +89,10 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const project = data && data.project;
 
 	const all = project?.tasks.length || 0;
+	const doing = project?.tasks.filter((task) => task.status === TaskStatus.Doing).length || 0;
+	const doingPercent = (doing / all) * 100;
 	const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;
+	const completedPercent = (completed / all) * 100;
 
 	const onDragEnd = async (result: DropResult) => {
 		const status: TaskStatusType = parseInt(
@@ -134,8 +137,13 @@ export const ProjectDetails = (): JSX.Element | null => {
 					</div>
 					<div className={'separator'} />
 					<div>
+						<h3>In progress</h3>
+						<h1>{(isNaN(doingPercent) ? 0 : doingPercent).toFixed(0) ?? 0}%</h1>
+					</div>
+					<div className={'separator'} />
+					<div>
 						<h3>Finished</h3>
-						<h1>{((completed / all) * 100).toFixed(0)}%</h1>
+						<h1>{(isNaN(completedPercent) ? 0 : completedPercent).toFixed(0) ?? 0}%</h1>
 					</div>
 				</div>
 				<ul>
