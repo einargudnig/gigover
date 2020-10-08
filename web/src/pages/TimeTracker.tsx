@@ -5,7 +5,7 @@ import { useActiveTimeTrackers } from '../queries/useActiveTimeTrackers';
 import { useTrackerReport } from '../queries/useTrackerReport';
 import { useTrackerStop } from '../queries/useTrackerStop';
 import { CardBase } from '../components/CardBase';
-import { intToString } from '../utils/NumberUtils';
+import { secondsToString } from '../utils/NumberUtils';
 import { useProjectList } from '../queries/useProjectList';
 import { ModalContext } from '../context/ModalContext';
 import { Button } from '../components/forms/Button';
@@ -85,7 +85,7 @@ export const TimeTracker = (): JSX.Element => {
 	const [now] = useState(new Date());
 	const [, setModalContext] = useContext(ModalContext);
 	const { data: projectList } = useProjectList();
-	const [activeTrackers, { data, isLoading, isError, error }] = useActiveTimeTrackers();
+	const [activeTrackers, { data }] = useActiveTimeTrackers();
 	const [getReport, { data: reportData }] = useTrackerReport();
 	const [stopTask] = useTrackerStop();
 
@@ -147,6 +147,7 @@ export const TimeTracker = (): JSX.Element => {
 	useEffect(() => {
 		activeTrackers({});
 		getReport({});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -161,7 +162,7 @@ export const TimeTracker = (): JSX.Element => {
 					<div className={'separator'} />
 					<div>
 						<h3>Minutes tracked</h3>
-						<h1>{intToString(totalMinutes)}</h1>
+						<h1>{secondsToString(totalMinutes * 60)}</h1>
 					</div>
 					<div className={'separator'} />
 					<div>
@@ -208,7 +209,9 @@ export const TimeTracker = (): JSX.Element => {
 													<TimerContainer>
 														<Timer
 															formatValue={(value) =>
-																value < 10 ? `0${value}` : value.toString()
+																value < 10
+																	? `0${value}`
+																	: value.toString()
 															}
 															initialTime={
 																now.getTime() - timeSheet.start

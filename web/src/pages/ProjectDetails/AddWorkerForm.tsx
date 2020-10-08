@@ -15,7 +15,7 @@ interface FormData {
 }
 
 export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element => {
-	const { register, handleSubmit, errors } = useForm<FormData>();
+	const { register, handleSubmit, errors, reset } = useForm<FormData>();
 	const [getUserIdByPhoneNumber] = useGetUserByPhoneNumber();
 	const [addWorker, { isLoading, isError, error }] = useAddWorker();
 
@@ -27,6 +27,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 				projectId,
 				uId: response.data.uId
 			});
+			reset();
 		} else {
 			// eslint-disable-next-line no-console
 			console.error('Error getting user id by phone.');

@@ -9,3 +9,10 @@ export const intToString = (value: number) => {
 	}
 	return shortValue + suffixes[suffixNum];
 };
+
+export const secondsToString = (seconds: number): string => {
+	const hours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+	const minutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+
+	return hours + ' hours ' + minutes + ' minutes';
+};

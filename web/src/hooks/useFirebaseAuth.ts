@@ -19,7 +19,7 @@ export const useFirebaseAuth = (auth: firebase.auth.Auth) => {
 		return () => {
 			unlisten();
 		};
-		// eslint-disable-line
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return {

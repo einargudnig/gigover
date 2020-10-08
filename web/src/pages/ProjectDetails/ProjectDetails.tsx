@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { useParams } from 'react-router-dom';
@@ -6,12 +6,10 @@ import { useProjectDetails } from '../../queries/useProjectDetails';
 import { TaskStatus, TaskStatusType } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
 import { CardBase } from '../../components/CardBase';
-import { AddWorkerForm } from './AddWorkerForm';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
+import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Button } from '../../components/forms/Button';
-import { useRemoveWorker } from '../../queries/useRemoveWorker';
-import { WorkerItem } from '../../models/Project';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -83,8 +81,8 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
 	const projectIdNumber = parseInt(projectId);
 	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
+	const [manageWorkers, setManageWorkers] = useState(false);
 	const [updateTask] = useUpdateTask(projectIdNumber);
-	const [removeWorker] = useRemoveWorker();
 	const project = data && data.project;
 
 	const all = project?.tasks.length || 0;
@@ -110,79 +108,67 @@ export const ProjectDetails = (): JSX.Element | null => {
 		});
 	};
 
-	const remove = async (worker: WorkerItem) => {
-		await removeWorker({
-			projectId: projectIdNumber,
-			uId: worker.uId
-		});
-	};
-
 	if (!project) {
 		return null;
 	}
 
 	return (
-		<Page breadcrumbs={[project.name, 'Tasks']}>
-			<ProjectDashboard>
-				<div>
+		<>
+			{manageWorkers && (
+				<ManageProjectWorkers onClose={() => setManageWorkers(false)} project={project} />
+			)}
+			<Page breadcrumbs={[project.name, 'Tasks']}>
+				<ProjectDashboard>
 					<div>
-						<h3>Task count</h3>
-						<h1>{all}</h1>
+						<div>
+							<h3>Task count</h3>
+							<h1>{all}</h1>
+						</div>
+						<div className={'separator'} />
+						<div>
+							<h3>Completed tasks</h3>
+							<h1>{completed}</h1>
+						</div>
+						<div className={'separator'} />
+						<div>
+							<h3>In progress</h3>
+							<h1>{(isNaN(doingPercent) ? 0 : doingPercent).toFixed(0) ?? 0}%</h1>
+						</div>
+						<div className={'separator'} />
+						<div>
+							<h3>Finished</h3>
+							<h1>
+								{(isNaN(completedPercent) ? 0 : completedPercent).toFixed(0) ?? 0}%
+							</h1>
+						</div>
 					</div>
-					<div className={'separator'} />
 					<div>
-						<h3>Completed tasks</h3>
-						<h1>{completed}</h1>
+						<Button onClick={() => setManageWorkers(true)}>Manage workers</Button>
 					</div>
-					<div className={'separator'} />
-					<div>
-						<h3>In progress</h3>
-						<h1>{(isNaN(doingPercent) ? 0 : doingPercent).toFixed(0) ?? 0}%</h1>
-					</div>
-					<div className={'separator'} />
-					<div>
-						<h3>Finished</h3>
-						<h1>{(isNaN(completedPercent) ? 0 : completedPercent).toFixed(0) ?? 0}%</h1>
-					</div>
-				</div>
-				<ul>
-					{project.workers.map((worker, workerIndex) => (
-						<li key={workerIndex}>
-							{worker.name}
-							<Button
-								size={'none'}
-								appearance={'outline'}
-								onClick={() => remove(worker)}
-							>
-								Delete
-							</Button>
-						</li>
-					))}
-				</ul>
-				<AddWorkerForm projectId={project.projectId} />
-			</ProjectDashboard>
-			<ProjectDetailsPage>
-				{isLoading ? (
-					<p>Loading</p>
-				) : isError ? (
-					<p>
-						Error fetching project with id: {projectId} - Reason: {error?.errorText}.
-						Code: {error?.errorCode}
-					</p>
-				) : (
-					<KanbanBoard>
-						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
-							<FeedBoard>
-								{Object.values(TaskStatus).map((taskStatus, tIndex) => (
-									<FeedColumn key={tIndex}>
-										<TaskColumn project={project} status={taskStatus} />
-									</FeedColumn>
-								))}
-							</FeedBoard>
-						</DragDropContext>
-					</KanbanBoard>
-				)}
-			</ProjectDetailsPage>
-		</Page>
+				</ProjectDashboard>
+				<ProjectDetailsPage>
+					{isLoading ? (
+						<p>Loading</p>
+					) : isError ? (
+						<p>
+							Error fetching project with id: {projectId} - Reason: {error?.errorText}
+							. Code: {error?.errorCode}
+						</p>
+					) : (
+						<KanbanBoard>
+							<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
+								<FeedBoard>
+									{Object.values(TaskStatus).map((taskStatus, tIndex) => (
+										<FeedColumn key={tIndex}>
+											<TaskColumn project={project} status={taskStatus} />
+										</FeedColumn>
+									))}
+								</FeedBoard>
+							</DragDropContext>
+						</KanbanBoard>
+					)}
+				</ProjectDetailsPage>
+			</Page>
+		</>
 	);
 };
