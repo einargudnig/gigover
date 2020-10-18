@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export const SubstringText = (text: string, maxLength: number) => {
 	const addition = '..';
 
@@ -7,3 +9,5 @@ export const SubstringText = (text: string, maxLength: number) => {
 
 	return text;
 };
+
+export const formatDate = (date: Date): string => format(date, 'do LLL yyyy @ kk:mm');

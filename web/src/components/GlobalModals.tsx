@@ -5,12 +5,11 @@ import { RegistrationModal } from './modals/RegistrationModal';
 import { ProjectModal } from './modals/ProjectModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
 import { TaskModal } from './modals/TaskModal/TaskModal';
+import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
-
-	// Todo do same thing for Project that was done for Timetracker.. much cleanr
 
 	return (
 		<>
@@ -23,6 +22,9 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 			)}
 			{modalContext.timeTracker && (
 				<TimeTrackerModal open={true} context={modalContext.timeTracker} />
+			)}
+			{modalContext.editTimeTracker && (
+				<EditTimeTrackerModal open={true} context={modalContext.editTimeTracker} />
 			)}
 			{modalContext.modifyProject && (
 				<Modal

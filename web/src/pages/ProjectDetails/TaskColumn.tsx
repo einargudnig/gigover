@@ -76,7 +76,7 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 							<Draggable
 								key={taskIndex}
 								draggableId={task.taskId.toString()}
-								index={task.priority}
+								index={status + taskIndex + task.priority}
 							>
 								{(provided): JSX.Element => (
 									<div

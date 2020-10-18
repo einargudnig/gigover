@@ -15,6 +15,7 @@ import Timer from 'react-compound-timer';
 import { SubstringText } from '../../utils/StringUtils';
 import { TimeTrackerReport } from './TimeTrackerReport';
 import { EmptyState } from '../../components/empty/EmptyState';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -23,7 +24,7 @@ const TitleContainer = styled.div`
 	margin-bottom: ${(props) => props.theme.padding(3)};
 `;
 
-const TimerWrapper = styled.div`
+export const TimerWrapper = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
@@ -44,7 +45,7 @@ const TimerWrapper = styled.div`
 	}
 `;
 
-const TimerContainer = styled.div`
+export const TimerContainer = styled.div`
 	display: inline-block;
 	font-size: 24px;
 	font-weight: 300;
@@ -84,10 +85,11 @@ const ActiveTimeTrackers = styled(CardBase)`
 `;
 
 export const TimeTracker = (): JSX.Element => {
-	const [now] = useState(new Date());
+	const [now, setNow] = useState(new Date());
+	const [refetch, setRefetch] = useState(0);
 	const [, setModalContext] = useContext(ModalContext);
 	const { data: projectList } = useProjectList();
-	const [getReport, { data: reportData }] = useTrackerReport();
+	const [getReport, { data: reportData, isLoading: reportDataLoading }] = useTrackerReport();
 	const [activeTrackers, { data }] = useActiveTimeTrackers();
 	const [stopTask] = useTrackerStop();
 
@@ -147,17 +149,31 @@ export const TimeTracker = (): JSX.Element => {
 	};
 
 	const StartTrackingAction = () => (
-		<Button appearance={'lightblue'} onClick={() => setModalContext({ timeTracker: {} })}>
+		<Button
+			appearance={'lightblue'}
+			onClick={() =>
+				setModalContext({
+					timeTracker: {
+						callback: () => {
+							setNow(new Date());
+							setRefetch(refetch + 1);
+						}
+					}
+				})
+			}
+		>
 			<ClockIcon style={{ position: 'relative', left: -12 }} />
 			<span>Start timer</span>
 		</Button>
 	);
 
+	const hasWorkers = (data?.data.workers && data?.data.workers.length > 0) ?? false;
+
 	useEffect(() => {
 		activeTrackers({});
 		getReport({});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [refetch]);
 
 	return (
 		<>
@@ -166,17 +182,35 @@ export const TimeTracker = (): JSX.Element => {
 					<div />
 					<div>
 						<h3>Timesheets</h3>
-						<h1>{totalTimesheets}</h1>
+						{reportDataLoading ? (
+							<h1>
+								<LoadingSpinner />
+							</h1>
+						) : (
+							<h1>{totalTimesheets}</h1>
+						)}
 					</div>
 					<div className={'separator'} />
 					<div>
 						<h3>Minutes tracked</h3>
-						<h1>{secondsToString(totalMinutes * 60)}</h1>
+						{reportDataLoading ? (
+							<h1>
+								<LoadingSpinner />
+							</h1>
+						) : (
+							<h1>{secondsToString(totalMinutes * 60)}</h1>
+						)}
 					</div>
 					<div className={'separator'} />
 					<div>
 						<h3>Workers</h3>
-						<h1>{reportData?.data.report.length || 0}</h1>
+						{reportDataLoading ? (
+							<h1>
+								<LoadingSpinner />
+							</h1>
+						) : (
+							<h1>{reportData?.data.report?.length || 0}</h1>
+						)}
 					</div>
 					<div />
 				</TimeTrackerTotalReport>
@@ -186,7 +220,7 @@ export const TimeTracker = (): JSX.Element => {
 						<StartTrackingAction />
 					</TitleContainer>
 					<div>
-						{data?.data.workers.length === 0 ? (
+						{!hasWorkers ? (
 							<div style={{ marginTop: 24 }}>
 								<EmptyState
 									title={'No current active workers'}
@@ -206,7 +240,7 @@ export const TimeTracker = (): JSX.Element => {
 									</tr>
 								</thead>
 								<tbody>
-									{data?.data.workers.map((worker) =>
+									{data?.data?.workers?.map((worker) =>
 										worker.timeSheets.map((timeSheet, timeSheetIndex) => (
 											<tr key={`${worker.uId}_${timeSheetIndex}`}>
 												<td>
@@ -260,7 +294,7 @@ export const TimeTracker = (): JSX.Element => {
 					<TitleContainer>
 						<h3>Reports</h3>
 					</TitleContainer>
-					<TimeTrackerReport />
+					<TimeTrackerReport refetch={[refetch, setRefetch]} />
 				</ActiveTimeTrackers>
 			</Page>
 		</>

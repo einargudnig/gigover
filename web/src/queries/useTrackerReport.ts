@@ -3,7 +3,7 @@ import { useMutation } from 'react-query';
 import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
 
-interface Timesheet {
+export interface Timesheet {
 	minutes: number;
 	projectId: number;
 	start: number; // Timestamp

@@ -18,4 +18,12 @@ export const Table = styled.table`
 			border-bottom: 2px solid #e5e5e5;
 		}
 	}
+
+	tfoot {
+		td {
+			margin-top: 8px;
+			padding-top: 24px;
+			border-top: 2px solid #e5e5e5;
+		}
+	}
 `;

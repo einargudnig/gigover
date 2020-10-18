@@ -18,7 +18,7 @@ interface TimeTrackerModalProps {
 	context: ITimeTrackerModalContext;
 }
 
-export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element => {
+export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.Element => {
 	const { data } = useProjectList();
 	const closeModal = useCloseModal();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
@@ -27,7 +27,7 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 	const [startTask] = useTrackerStart();
 	const openProjects = useMemo(() => {
 		if (data && data.projects) {
-			return data.projects.filter(p => p.status === ProjectStatus.OPEN);
+			return data.projects.filter((p) => p.status === ProjectStatus.OPEN);
 		}
 		return [];
 	}, [data]);
@@ -72,7 +72,11 @@ export const TimeTrackerModal = ({ open }: TimeTrackerModalProps): JSX.Element =
 				uId: selectedWorker
 			})
 				.then(() => {
-					window.location.pathname = '/time-tracker';
+					if (!context.callback) {
+						window.location.pathname = '/time-tracker';
+					} else {
+						context.callback();
+					}
 					closeModal();
 				})
 				.catch((e) => {

@@ -1,11 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { useTrackerReport } from '../../queries/useTrackerReport';
-import { useProjectList } from '../../queries/useProjectList';
 import { TrackerSelect } from '../../components/TrackerSelect';
-import { Project } from '../../models/Project';
-import { DateRangePicker, DayPickerRangeController, isInclusivelyBeforeDay } from 'react-dates';
+import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
+import { useTimeTrackerReport } from './useTimeTrackerReport';
+import { EmptyState } from '../../components/empty/EmptyState';
+import { darken } from 'polished';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import Timer from 'react-compound-timer';
+import { Button } from '../../components/forms/Button';
+import { Table } from '../../components/Table';
+import { TimerContainer, TimerWrapper } from './TimeTracker';
+import { format } from 'date-fns';
+import { formatDate } from '../../utils/StringUtils';
+import { Edit } from '../../components/icons/Edit';
+import { ModalContext } from '../../context/ModalContext';
+import { secondsToHours, secondsToMinutes } from '../../utils/NumberUtils';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -22,52 +32,55 @@ const TimeTrackerReportFilter = styled.div`
 	}
 `;
 
-const TimeTrackerReportStyled = styled.div``;
+const DatePickerWrapper = styled.div`
+	.DateRangePickerInput__withBorder {
+		padding: 12px;
+		border-radius: 8px;
+	}
 
-export const TimeTrackerReport = (): JSX.Element => {
+	.DateInput_input__focused {
+		border-bottom-color: ${(props) => props.theme.colors.green};
+	}
+
+	.CalendarDay__selected {
+		background: ${(props) => props.theme.colors.darkGreen};
+	}
+	.CalendarDay__selected_span {
+		background: ${(props) => props.theme.colors.green};
+		border: 1px double ${(props) => darken(0.05, props.theme.colors.green)};
+		color: #fff;
+	}
+
+	.DayPickerKeyboardShortcuts_show__bottomRight::before {
+		border-right-color: ${(props) => props.theme.colors.darkGreen};
+	}
+`;
+
+export const TimeTrackerReport = ({
+	refetch: [refetchValue, setRefetch]
+}: {
+	refetch: [number, React.Dispatch<React.SetStateAction<number>>];
+}): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
 	const [selectedUser, setSelectedUser] = useState<string | undefined>();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
-	const [startDate, setStartDate] = useState(moment().subtract(30, 'days'));
+	const [startDate, setStartDate] = useState(moment().subtract(14, 'days'));
 	const [endDate, setEndDate] = useState(moment());
 	const [focusedInput, setFocusedInput] = useState<'startDate' | 'endDate' | null>(null);
-	const { data: projectList, isLoading: projectDataListLoading } = useProjectList();
-	const [getReport, { data, isLoading }] = useTrackerReport();
-	const users =
-		data?.data.report.map((reportSheet) => ({
-			userId: reportSheet.uId,
-			name: reportSheet.name
-		})) ?? [];
-
-	useEffect(() => {
-		getReport({});
-	}, []);
-
-	const projectMap: Map<number, Project> = useMemo(() => {
-		const pMap = new Map<number, Project>();
-		if (!isLoading && !projectDataListLoading && data?.data && projectList?.projects.length) {
-			data.data.report.forEach((reportSheet) => {
-				reportSheet.timeSheets.forEach((ts) => {
-					if (!pMap.get(ts.projectId)) {
-						const project = projectList.projects.find(
-							(p) => p.projectId === ts.projectId
-						);
-						if (project) {
-							pMap.set(ts.projectId, project);
-						}
-					}
-				});
-			});
-		}
-
-		return pMap;
-	}, [data, projectList, isLoading, projectDataListLoading]);
+	const { projectList, results, isLoading, totalTracked, users } = useTimeTrackerReport(
+		startDate,
+		endDate,
+		refetchValue,
+		selectedUser,
+		selectedProject
+	);
 
 	return (
-		<TimeTrackerReportStyled>
+		<div>
 			<TimeTrackerReportFilter>
-				<div>
+				<DatePickerWrapper>
 					<DateRangePicker
-						isOutsideRange={(day) => !isInclusivelyBeforeDay(day, moment())}
+						isOutsideRange={() => false}
 						startDate={startDate}
 						startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
 						endDate={endDate} // momentPropTypes.momentObj or null,
@@ -83,7 +96,7 @@ export const TimeTrackerReport = (): JSX.Element => {
 						focusedInput={focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
 						onFocusChange={(fInput) => setFocusedInput(fInput)} // PropTypes.func.isRequired,
 					/>
-				</div>
+				</DatePickerWrapper>
 				<div>
 					<TrackerSelect
 						minWidth={200}
@@ -107,9 +120,9 @@ export const TimeTrackerReport = (): JSX.Element => {
 						placeholder={'All projects'}
 						isNumber={true}
 						value={selectedProject}
-						options={Array.from(projectMap.keys()).map((id) => ({
-							value: id,
-							label: projectMap.get(id)!.name
+						options={projectList.map((p) => ({
+							label: p.name,
+							value: p.projectId
 						}))}
 						valueChanged={(newValue) => {
 							const v = newValue as number;
@@ -122,12 +135,100 @@ export const TimeTrackerReport = (): JSX.Element => {
 					/>
 				</div>
 			</TimeTrackerReportFilter>
-			<p>
-				Selected User: {selectedUser?.toString()}
-			</p>
-			<p>
-				Selected Project: {selectedProject}
-			</p>
-		</TimeTrackerReportStyled>
+			<div style={{ marginTop: 24 }}>
+				{isLoading ? (
+					<LoadingSpinner size={64} />
+				) : results.length > 0 ? (
+					<Table>
+						<thead>
+							<tr>
+								<th>Project</th>
+								<th>Worker</th>
+								<th>Start</th>
+								<th>End</th>
+								<th align={'center'} style={{ width: 200 }}>
+									Timer
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{results.map((result, resultIndex) => (
+								<tr key={`${resultIndex}`}>
+									<td>
+										<strong>{result.projectName}</strong>
+										<br />
+										<p>{result.taskName}</p>
+									</td>
+									<td>{result.worker.name}</td>
+									<td>{formatDate(new Date(result.timesheet.start))}</td>
+									<td>{formatDate(new Date(result.timesheet.stop))}</td>
+									<td>
+										<TimerWrapper>
+											<TimerContainer>
+												<Timer
+													startImmediately={false}
+													formatValue={(value) =>
+														value < 10 ? `0${value}` : value.toString()
+													}
+													initialTime={
+														result.timesheet.stop -
+														result.timesheet.start
+													}
+													lastUnit={'d'}
+												>
+													<Timer.Hours />:
+													<Timer.Minutes />:
+													<Timer.Seconds />
+												</Timer>
+											</TimerContainer>
+											<Button
+												onClick={() => {
+													setModalContext({
+														editTimeTracker: {
+															projectName: result.projectName,
+															taskName: result.taskName,
+															workerName: result.worker.name,
+															workId: result.timesheet.workId,
+															minutes: secondsToMinutes(
+																result.timesheet.stop -
+																	result.timesheet.start
+															),
+															hours: secondsToHours(
+																result.timesheet.stop -
+																	result.timesheet.start
+															),
+															callback: () => {
+																setRefetch(refetchValue + 1);
+															}
+														}
+													});
+												}}
+											>
+												<Edit size={26} color={'#fff'} />
+											</Button>
+										</TimerWrapper>
+									</td>
+								</tr>
+							))}
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colSpan={4} align={'right'}>
+									<strong>Total:</strong>
+								</td>
+								<td>{totalTracked}</td>
+							</tr>
+						</tfoot>
+					</Table>
+				) : (
+					<EmptyState
+						title={'No report available'}
+						text={`We could not find any timesheets between ${startDate.format(
+							'D MMM YYYY'
+						)} and ${endDate.format('D MMM YYYY')}`}
+					/>
+				)}
+			</div>
+		</div>
 	);
 };

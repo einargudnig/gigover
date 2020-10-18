@@ -16,3 +16,13 @@ export const secondsToString = (seconds: number): string => {
 
 	return hours + ' hours ' + minutes + ' minutes';
 };
+
+export const secondsToHours = (seconds: number): number => {
+	const secs = seconds / 1000;
+	return Math.floor(((secs % 31536000) % 86400) / 3600);
+};
+
+export const secondsToMinutes = (seconds: number): number => {
+	const secs = seconds / 1000;
+	return Math.floor((((secs % 31536000) % 86400) % 3600) / 60);
+};

@@ -41,6 +41,10 @@ const TrackerSelectStyled = styled.div<{ minWidth?: number }>`
 		-moz-appearance: none;
 		appearance: none;
 
+		&[disabled] {
+			cursor: not-allowed;
+		}
+
 		&::-ms-expand {
 			display: none;
 		}
