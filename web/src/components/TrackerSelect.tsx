@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { CaretIcon } from './icons/CaretIcon';
 import { darken } from 'polished';
 
-const TrackerSelectStyled = styled.div`
+const TrackerSelectStyled = styled.div<{ minWidth?: number }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -15,6 +15,12 @@ const TrackerSelectStyled = styled.div`
 	transition: all 0.2s linear;
 	border-radius: 6px;
 	position: relative;
+
+	${(props) =>
+		props.minWidth &&
+		css`
+			min-width: ${props.minWidth}px;
+		`}
 
 	&:hover {
 		background-color: ${(props) => darken(0.05, props.theme.colors.grayBackground)};
@@ -53,6 +59,7 @@ interface TrackerSelectProps {
 	valueChanged: (newValue: number | string) => void;
 	disabled?: boolean;
 	isNumber?: boolean;
+	minWidth?: number;
 }
 
 export const TrackerSelect = ({
@@ -60,10 +67,11 @@ export const TrackerSelect = ({
 	value,
 	options,
 	valueChanged,
+	minWidth,
 	disabled = false,
 	isNumber = true
 }: TrackerSelectProps): JSX.Element => (
-	<TrackerSelectStyled>
+	<TrackerSelectStyled minWidth={minWidth}>
 		<select
 			disabled={disabled}
 			defaultValue={value?.toString()}

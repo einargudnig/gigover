@@ -1,18 +1,20 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Page } from '../components/Page';
-import { useActiveTimeTrackers } from '../queries/useActiveTimeTrackers';
-import { useTrackerReport } from '../queries/useTrackerReport';
-import { useTrackerStop } from '../queries/useTrackerStop';
-import { CardBase } from '../components/CardBase';
-import { secondsToString } from '../utils/NumberUtils';
-import { useProjectList } from '../queries/useProjectList';
-import { ModalContext } from '../context/ModalContext';
-import { Button } from '../components/forms/Button';
-import { ClockIcon } from '../components/icons/ClockIcon';
-import { Table } from '../components/Table';
+import { Page } from '../../components/Page';
+import { useActiveTimeTrackers } from '../../queries/useActiveTimeTrackers';
+import { useTrackerReport } from '../../queries/useTrackerReport';
+import { useTrackerStop } from '../../queries/useTrackerStop';
+import { CardBase } from '../../components/CardBase';
+import { secondsToString } from '../../utils/NumberUtils';
+import { useProjectList } from '../../queries/useProjectList';
+import { ModalContext } from '../../context/ModalContext';
+import { Button } from '../../components/forms/Button';
+import { ClockIcon } from '../../components/icons/ClockIcon';
+import { Table } from '../../components/Table';
 import Timer from 'react-compound-timer';
-import { SubstringText } from '../utils/StringUtils';
+import { SubstringText } from '../../utils/StringUtils';
+import { TimeTrackerReport } from './TimeTrackerReport';
+import { EmptyState } from '../../components/empty/EmptyState';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -85,8 +87,8 @@ export const TimeTracker = (): JSX.Element => {
 	const [now] = useState(new Date());
 	const [, setModalContext] = useContext(ModalContext);
 	const { data: projectList } = useProjectList();
-	const [activeTrackers, { data }] = useActiveTimeTrackers();
 	const [getReport, { data: reportData }] = useTrackerReport();
+	const [activeTrackers, { data }] = useActiveTimeTrackers();
 	const [stopTask] = useTrackerStop();
 
 	const totalTimesheets = useMemo(() => {
@@ -144,6 +146,13 @@ export const TimeTracker = (): JSX.Element => {
 		);
 	};
 
+	const StartTrackingAction = () => (
+		<Button appearance={'lightblue'} onClick={() => setModalContext({ timeTracker: {} })}>
+			<ClockIcon style={{ position: 'relative', left: -12 }} />
+			<span>Start timer</span>
+		</Button>
+	);
+
 	useEffect(() => {
 		activeTrackers({});
 		getReport({});
@@ -174,74 +183,84 @@ export const TimeTracker = (): JSX.Element => {
 				<ActiveTimeTrackers>
 					<TitleContainer>
 						<h3>Active timers</h3>
-						<Button
-							appearance={'lightblue'}
-							onClick={() => setModalContext({ timeTracker: {} })}
-						>
-							<ClockIcon style={{ position: 'relative', left: -12 }} />
-							<span>Start timer</span>
-						</Button>
+						<StartTrackingAction />
 					</TitleContainer>
 					<div>
-						<Table>
-							<thead>
-								<tr>
-									<th>Project</th>
-									<th>Worker</th>
-									<th align={'center'} style={{ width: 200 }}>
-										Timer
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								{data?.data.workers.map((worker) =>
-									worker.timeSheets.map((timeSheet, timeSheetIndex) => (
-										<tr key={`${worker.uId}_${timeSheetIndex}`}>
-											<td>
-												{getActiveTrackerHeader(
-													timeSheet.projectId,
-													timeSheet.taskId
-												)}
-											</td>
-											<td>{worker.name}</td>
-											<td>
-												<TimerWrapper>
-													<TimerContainer>
-														<Timer
-															formatValue={(value) =>
-																value < 10
-																	? `0${value}`
-																	: value.toString()
+						{data?.data.workers.length === 0 ? (
+							<div style={{ marginTop: 24 }}>
+								<EmptyState
+									title={'No current active workers'}
+									text={'Start tracking to see active timers'}
+									action={<StartTrackingAction />}
+								/>
+							</div>
+						) : (
+							<Table>
+								<thead>
+									<tr>
+										<th>Project</th>
+										<th>Worker</th>
+										<th align={'center'} style={{ width: 200 }}>
+											Timer
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{data?.data.workers.map((worker) =>
+										worker.timeSheets.map((timeSheet, timeSheetIndex) => (
+											<tr key={`${worker.uId}_${timeSheetIndex}`}>
+												<td>
+													{getActiveTrackerHeader(
+														timeSheet.projectId,
+														timeSheet.taskId
+													)}
+												</td>
+												<td>{worker.name}</td>
+												<td>
+													<TimerWrapper>
+														<TimerContainer>
+															<Timer
+																formatValue={(value) =>
+																	value < 10
+																		? `0${value}`
+																		: value.toString()
+																}
+																initialTime={
+																	now.getTime() - timeSheet.start
+																}
+																lastUnit={'d'}
+															>
+																<Timer.Hours />:
+																<Timer.Minutes />:
+																<Timer.Seconds />
+															</Timer>
+														</TimerContainer>
+														<Button
+															onClick={() =>
+																stopTracker(
+																	timeSheet.projectId,
+																	timeSheet.taskId,
+																	worker.uId
+																)
 															}
-															initialTime={
-																now.getTime() - timeSheet.start
-															}
-															lastUnit={'d'}
 														>
-															<Timer.Hours />:
-															<Timer.Minutes />:
-															<Timer.Seconds />
-														</Timer>
-													</TimerContainer>
-													<Button
-														onClick={() =>
-															stopTracker(
-																timeSheet.projectId,
-																timeSheet.taskId,
-																worker.uId
-															)
-														}
-													>
-														|&nbsp;|
-													</Button>
-												</TimerWrapper>
-											</td>
-										</tr>
-									))
-								)}
-							</tbody>
-						</Table>
+															|&nbsp;|
+														</Button>
+													</TimerWrapper>
+												</td>
+											</tr>
+										))
+									)}
+								</tbody>
+							</Table>
+						)}
 					</div>
+				</ActiveTimeTrackers>
+				<ActiveTimeTrackers>
+					<TitleContainer>
+						<h3>Reports</h3>
+					</TitleContainer>
+					<TimeTrackerReport />
 				</ActiveTimeTrackers>
 			</Page>
 		</>

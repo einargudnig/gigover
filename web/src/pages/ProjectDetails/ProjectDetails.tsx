@@ -96,13 +96,19 @@ export const ProjectDetails = (): JSX.Element | null => {
 			result.destination?.droppableId || '0'
 		) as TaskStatusType;
 		const taskId = parseInt(result.draggableId || '0');
+		const task = project?.tasks.find((t) => t.taskId === taskId);
 
-		if (taskId === 0) {
+		if (taskId === 0 || !task) {
 			return;
 		}
 
+		const priority = result.destination ? result.destination.index : result.source.index;
+
 		await updateTask({
 			comment: '',
+			text: task.text,
+			typeId: task.typeId,
+			priority,
 			status,
 			taskId
 		});
@@ -158,11 +164,13 @@ export const ProjectDetails = (): JSX.Element | null => {
 						<KanbanBoard>
 							<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
 								<FeedBoard>
-									{Object.values(TaskStatus).map((taskStatus, tIndex) => (
-										<FeedColumn key={tIndex}>
-											<TaskColumn project={project} status={taskStatus} />
-										</FeedColumn>
-									))}
+									{Object.values(TaskStatus)
+										.filter((status) => status !== TaskStatus.Archived)
+										.map((taskStatus, tIndex) => (
+											<FeedColumn key={tIndex}>
+												<TaskColumn project={project} status={taskStatus} />
+											</FeedColumn>
+										))}
 								</FeedBoard>
 							</DragDropContext>
 						</KanbanBoard>

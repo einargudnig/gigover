@@ -9,7 +9,10 @@ import { Project } from '../models/Project';
 export interface UpdateTaskFormData {
 	taskId: number;
 	status: TaskStatusType;
-	comment: string;
+	typeId: number;
+	text: string;
+	comment?: string;
+	priority?: number;
 }
 
 export const useUpdateTask = (projectId: number) => {
@@ -30,6 +33,8 @@ export const useUpdateTask = (projectId: number) => {
 					if (taskIndex !== -1) {
 						tasks[taskIndex] = {
 							...tasks[taskIndex],
+							text: variables.text,
+							typeId: variables.typeId,
 							status: variables.status
 						};
 

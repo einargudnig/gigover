@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
 import { useAddTask } from '../../queries/useAddTask';
@@ -25,7 +25,13 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [addTask, { isLoading }] = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
-	const tasks = project.tasks?.filter((task) => task.status === status) ?? [];
+	const tasks = useMemo(() => {
+		return (
+			project.tasks
+				?.sort((a, b) => (a.priority < b.priority ? -1 : 1))
+				.filter((task) => task.status === status) ?? []
+		);
+	}, [project.tasks, status]);
 
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'text'>) => {
 		try {
@@ -70,7 +76,7 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 							<Draggable
 								key={taskIndex}
 								draggableId={task.taskId.toString()}
-								index={taskIndex}
+								index={task.priority}
 							>
 								{(provided): JSX.Element => (
 									<div

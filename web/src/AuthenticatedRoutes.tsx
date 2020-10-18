@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Dashboard } from './pages/Dashboard/Dashboard';
 import { Organize } from './pages/Organize';
-import { TimeTracker } from './pages/TimeTracker';
+import { TimeTracker } from './pages/TimeTracker/TimeTracker';
 import { Users } from './pages/Users';
 import { Settings } from './pages/Settings';
 import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
