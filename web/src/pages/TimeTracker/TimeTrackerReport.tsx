@@ -25,6 +25,8 @@ const TimeTrackerReportFilter = styled.div`
 const TimeTrackerReportStyled = styled.div``;
 
 export const TimeTrackerReport = (): JSX.Element => {
+	const [selectedUser, setSelectedUser] = useState<string | undefined>();
+	const [selectedProject, setSelectedProject] = useState<number | undefined>();
 	const [startDate, setStartDate] = useState(moment().subtract(30, 'days'));
 	const [endDate, setEndDate] = useState(moment());
 	const [focusedInput, setFocusedInput] = useState<'startDate' | 'endDate' | null>(null);
@@ -86,27 +88,46 @@ export const TimeTrackerReport = (): JSX.Element => {
 					<TrackerSelect
 						minWidth={200}
 						title={'Select user'}
+						placeholder={'All users'}
 						isNumber={false}
+						value={selectedUser}
 						options={users.map((u) => ({ value: u.userId, label: u.name }))}
 						valueChanged={(newValue) => {
-							console.log(newValue.toString());
+							const v = newValue.toString();
+							if (v.length > 0) {
+								setSelectedUser(newValue as string);
+							} else {
+								setSelectedUser(undefined);
+							}
 						}}
 					/>
 					<TrackerSelect
 						minWidth={200}
 						title={'Select project'}
+						placeholder={'All projects'}
 						isNumber={true}
+						value={selectedProject}
 						options={Array.from(projectMap.keys()).map((id) => ({
 							value: id,
 							label: projectMap.get(id)!.name
 						}))}
 						valueChanged={(newValue) => {
-							console.log(newValue);
+							const v = newValue as number;
+							if (v > 0) {
+								setSelectedProject(newValue as number);
+							} else {
+								setSelectedProject(undefined);
+							}
 						}}
 					/>
 				</div>
 			</TimeTrackerReportFilter>
-			<p>Test</p>
+			<p>
+				Selected User: {selectedUser?.toString()}
+			</p>
+			<p>
+				Selected Project: {selectedProject}
+			</p>
 		</TimeTrackerReportStyled>
 	);
 };

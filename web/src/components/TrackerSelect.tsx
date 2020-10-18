@@ -60,9 +60,11 @@ interface TrackerSelectProps {
 	disabled?: boolean;
 	isNumber?: boolean;
 	minWidth?: number;
+	placeholder?: string;
 }
 
 export const TrackerSelect = ({
+	placeholder = 'Click to select',
 	title,
 	value,
 	options,
@@ -79,7 +81,7 @@ export const TrackerSelect = ({
 				valueChanged(isNumber ? parseInt(event.target.value) : event.target.value)
 			}
 		>
-			<option value="">Click to select</option>
+			<option value="">{placeholder}</option>
 			{options.map((option, optionIndex) => (
 				<option key={optionIndex} value={option.value}>
 					{option.label}
