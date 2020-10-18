@@ -1,9 +1,9 @@
 import { useProjectList } from '../../queries/useProjectList';
 import { Project, WorkerItem } from '../../models/Project';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Timesheet, useTrackerReport } from '../../queries/useTrackerReport';
 import { Moment } from 'moment';
-import { secondsToString } from '../../utils/NumberUtils';
+import { secondsToHHMMSS, secondsToString } from '../../utils/NumberUtils';
 
 type TimeTrackerReportResultItem = {
 	projectName: string;
@@ -30,6 +30,7 @@ export const useTimeTrackerReport = (
 ): TimeTrackerReportResult => {
 	const startDateTimestamp = startDate.unix() * 1000;
 	const endDateTimestamp = endDate.unix() * 1000;
+	const [totalTracked, setTotalTracked] = useState<string>(secondsToHHMMSS(0));
 	const [getReport, { data, isLoading: isGetReportLoading }] = useTrackerReport();
 	const { data: projectList, isLoading: projectDataListLoading } = useProjectList();
 
@@ -90,18 +91,20 @@ export const useTimeTrackerReport = (
 		return [];
 	}, [data, projectMap, startDateTimestamp, endDateTimestamp, workerId, projectId]);
 
-	const totalTracked = (() => {
+	useEffect(() => {
 		if (results.length > 0) {
-			let totalUnix = 0;
+			let totalSeconds = 0;
 			results.forEach((res) => {
-				totalUnix = totalUnix + (res.timesheet.stop - res.timesheet.start);
+				totalSeconds =
+					totalSeconds + (res.timesheet.stop / 1000 - res.timesheet.start / 1000);
 			});
 
-			return secondsToString(totalUnix / 1000);
+			setTotalTracked(secondsToHHMMSS(totalSeconds));
+			return;
 		}
 
-		return secondsToString(0);
-	})();
+		setTotalTracked(secondsToHHMMSS(0));
+	}, [results]);
 
 	useEffect(() => {
 		getReport({

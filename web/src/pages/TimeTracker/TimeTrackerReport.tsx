@@ -174,7 +174,7 @@ export const TimeTrackerReport = ({
 														result.timesheet.stop -
 														result.timesheet.start
 													}
-													lastUnit={'d'}
+													lastUnit={'h'}
 												>
 													<Timer.Hours />:
 													<Timer.Minutes />:

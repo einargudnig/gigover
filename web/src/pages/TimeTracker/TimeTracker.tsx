@@ -262,7 +262,7 @@ export const TimeTracker = (): JSX.Element => {
 																initialTime={
 																	now.getTime() - timeSheet.start
 																}
-																lastUnit={'d'}
+																lastUnit={'h'}
 															>
 																<Timer.Hours />:
 																<Timer.Minutes />:
