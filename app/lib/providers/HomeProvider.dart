@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/ProjectStatus.dart';
 import 'package:mittverk/models/ProjectType.dart';
 import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/VerifyUser.dart';
@@ -262,7 +263,7 @@ class HomeProvider with ChangeNotifier {
           }).toList();
 
           print('Got projects!');
-          this.projects = projectsMapped;
+          this.projects = projectsMapped.where((element) => element.status != ProjectStatus.DONE).toList();
           this.clearErrors();
         } else {
           projectsError = 'No projects available';

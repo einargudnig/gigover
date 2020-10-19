@@ -6,7 +6,9 @@ import 'package:mittverk/igital/widgets/Dialog.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/models/Project.dart';
+import 'package:mittverk/models/ProjectStatus.dart';
 import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/utils/Theme.dart';
@@ -70,7 +72,12 @@ class TimeTrackerDialog extends StatelessWidget {
                   context,
                   'Select task',
                   homeProvider.currentTrackedTask,
-                  homeProvider.currentTrackedProject.tasks ?? [],
+                  homeProvider
+                      .currentTrackedProject
+                      .tasks
+                      .where((t) => t.status != TaskStatus.Archived)
+                      .toList()
+                      ?? [],
                   onTap: (Task task) {
                     homeProvider.setCurrentTask(task);
                   },

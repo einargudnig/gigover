@@ -22,5 +22,5 @@ String getTaskStatusString(TaskStatus status) {
       return "Done";
   }
 
-  return null;
+  return "";
 }

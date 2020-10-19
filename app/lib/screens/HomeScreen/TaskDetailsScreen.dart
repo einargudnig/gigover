@@ -280,7 +280,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               context,
               'Current status',
               getTaskStatusString(this._task.status),
-              TaskStatus.values.map((s) {
+              TaskStatus.values.where((v) => v != TaskStatus.Archived).map((s) {
                 return getTaskStatusString(s);
               }).toList(),
               onTap: (String p) async {
