@@ -25,6 +25,8 @@ class Project {
   }) {
     if (tasks == null) {
       this.tasks = [];
+    } else {
+      this.tasks = this.tasks.where((t) => t.status != TaskStatus.Archived).toList();
     }
   }
 
