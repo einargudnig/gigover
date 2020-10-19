@@ -3,6 +3,7 @@ enum TaskStatus {
   Todo,
   Doing,
   Done,
+  Archived,
 }
 
 TaskStatus statusFromString(String status) {

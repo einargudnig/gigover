@@ -22,12 +22,14 @@ class Task {
 
   static Task fromJson(Map<String, dynamic> json) {
     try {
+      int statusIndex = json["status"];
+
       return Task(
         taskId: json["taskId"],
         projectId:
             json["project"] != null ? json["project"]["projectId"] : null,
         text: json["text"],
-        status: TaskStatus.values[json["status"]],
+        status: statusIndex != -1 ? TaskStatus.values[statusIndex] : TaskStatus.Archived,
         typeId: json["typeId"],
         minutes: json["minutes"],
         comments: json["comments"] != null && json["comments"].length > 0
