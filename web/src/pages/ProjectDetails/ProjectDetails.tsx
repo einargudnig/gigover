@@ -84,8 +84,8 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const [manageWorkers, setManageWorkers] = useState(false);
 	const [updateTask] = useUpdateTask(projectIdNumber);
 	const project = data && data.project;
-	
-	const all = project?.tasks.length || 0;
+
+	const all = project?.tasks.filter((task) => task.status !== TaskStatus.Archived).length || 0;
 	const doing = project?.tasks.filter((task) => task.status === TaskStatus.Doing).length || 0;
 	const doingPercent = (doing / all) * 100;
 	const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;

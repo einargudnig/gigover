@@ -59,7 +59,7 @@ const ProjectCardEdit = styled.div`
 export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
-	const tasks = project.tasks || [];
+	const tasks = project.tasks.filter((task) => task.status !== TaskStatus.Archived) || [];
 	const completed = tasks.filter((task) => task.status === TaskStatus.Done);
 	const percent = (completed.length / tasks.length) * 100 || 0;
 
