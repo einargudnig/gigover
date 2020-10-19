@@ -8,6 +8,8 @@ import { ReactQueryConfigProvider } from 'react-query';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from './Theme';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
 const firebaseApp = new Firebase();
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Modal } from '../../Modal';
 import { Task } from '../../../models/Task';
@@ -9,10 +9,9 @@ import { LoadingSpinner } from '../../LoadingSpinner';
 import { CommentInput } from './CommentInput';
 import { Comment } from '../../Comment';
 import { StatusUpdate } from './StatusUpdate';
-
-const Divider = styled.div`
-	height: ${(props) => props.theme.padding(3)};
-`;
+import { Button } from '../../forms/Button';
+import { UpdateTaskComponent } from './UpdateTaskComponent';
+import { Divider } from '../../Divider';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -36,12 +35,17 @@ interface TaskModalProps {
 export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
+	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
 
 	return (
 		<Modal
 			open={true}
-			title={<p style={{ maxWidth: '400px' }}>{task.text}</p>}
+			title={
+				<p style={{ maxWidth: '400px' }}>
+					{editing ? `Edit task #${task.taskId}` : task.text}
+				</p>
+			}
 			onClose={closeModal}
 		>
 			{isLoading ? (
@@ -53,8 +57,27 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 					Error fetching task with id: {task.taskId} - Reason: {error?.errorText}. Code:{' '}
 					{error?.errorCode}
 				</p>
+			) : editing ? (
+				<TaskModalStyled>
+					<UpdateTaskComponent
+						task={task}
+						projectId={projectId}
+						onClose={(closeDetails) => {
+							setEditing(false);
+
+							if (closeDetails) {
+								closeModal();
+							}
+						}}
+					/>
+				</TaskModalStyled>
 			) : (
 				<TaskModalStyled>
+					<div>
+						<h3>Modify task</h3>
+						<Button onClick={() => setEditing(true)}>Edit task</Button>
+					</div>
+					<Divider />
 					<div>
 						<h3>Project owner</h3>
 						<User

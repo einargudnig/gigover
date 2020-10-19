@@ -21,6 +21,9 @@ export class ApiService {
 	static startTimer = API_BASE + 'contractor/start';
 	static stopTimer = API_BASE + 'contractor/stop';
 	static timerReport = API_BASE + 'contractor/report';
+	static changeTimeRecord = API_BASE + 'contractor/changeTimeRecord';
+
+	// User registration
 	static registerUser = API_BASE + 'user/store';
 
 	// Support

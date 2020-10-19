@@ -184,6 +184,11 @@ export const CenterModalWrapper = styled(ModalWrapper)`
 	border-radius: 12px;
 	animation-name: fadeInCenterModalWrapper;
 
+	@media screen and (max-width: 800px) {
+		min-width: auto;
+		max-width: 100%;
+	}
+
 	@keyframes fadeInCenterModalWrapper {
 		0% {
 			transform: translate3d(0, 100%, 0) scale(1);

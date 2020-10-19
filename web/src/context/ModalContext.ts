@@ -1,11 +1,22 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Project } from '../models/Project';
+import { Project, WorkerItem } from '../models/Project';
 import { Task } from '../models/Task';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
 	task?: Task;
-	worker?: null; // TODO
+	worker?: WorkerItem;
+	callback?: () => void;
+}
+
+export interface IEditTimeTrackerModalContext {
+	projectName: string;
+	taskName: string;
+	workerName: string;
+	workId: number;
+	hours: number;
+	minutes: number;
+	callback: () => void;
 }
 
 export interface IModalContext {
@@ -13,6 +24,7 @@ export interface IModalContext {
 		project?: Project;
 	};
 	timeTracker?: ITimeTrackerModalContext;
+	editTimeTracker?: IEditTimeTrackerModalContext;
 	registered?: boolean;
 	taskDetails?: {
 		task: Task;

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { formatDate } from '../utils/StringUtils';
 
 interface CommentProps {
 	author: string;
@@ -26,7 +27,7 @@ export const Comment = ({ author, date, comment }: CommentProps): JSX.Element =>
 	<CommentStyled>
 		<p>
 			<strong>{author}</strong>
-			<small>{date.toString()}</small>
+			<small>{formatDate(date)}</small>
 		</p>
 		<p>{comment}</p>
 	</CommentStyled>

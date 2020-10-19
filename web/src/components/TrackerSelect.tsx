@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { CaretIcon } from './icons/CaretIcon';
 import { darken } from 'polished';
 
-const TrackerSelectStyled = styled.div`
+const TrackerSelectStyled = styled.div<{ minWidth?: number }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -15,6 +15,12 @@ const TrackerSelectStyled = styled.div`
 	transition: all 0.2s linear;
 	border-radius: 6px;
 	position: relative;
+
+	${(props) =>
+		props.minWidth &&
+		css`
+			min-width: ${props.minWidth}px;
+		`}
 
 	&:hover {
 		background-color: ${(props) => darken(0.05, props.theme.colors.grayBackground)};
@@ -35,6 +41,10 @@ const TrackerSelectStyled = styled.div`
 		-moz-appearance: none;
 		appearance: none;
 
+		&[disabled] {
+			cursor: not-allowed;
+		}
+
 		&::-ms-expand {
 			display: none;
 		}
@@ -53,17 +63,21 @@ interface TrackerSelectProps {
 	valueChanged: (newValue: number | string) => void;
 	disabled?: boolean;
 	isNumber?: boolean;
+	minWidth?: number;
+	placeholder?: string;
 }
 
 export const TrackerSelect = ({
+	placeholder = 'Click to select',
 	title,
 	value,
 	options,
 	valueChanged,
+	minWidth,
 	disabled = false,
 	isNumber = true
 }: TrackerSelectProps): JSX.Element => (
-	<TrackerSelectStyled>
+	<TrackerSelectStyled minWidth={minWidth}>
 		<select
 			disabled={disabled}
 			defaultValue={value?.toString()}
@@ -71,7 +85,7 @@ export const TrackerSelect = ({
 				valueChanged(isNumber ? parseInt(event.target.value) : event.target.value)
 			}
 		>
-			<option value="">Click to select</option>
+			<option value="">{placeholder}</option>
 			{options.map((option, optionIndex) => (
 				<option key={optionIndex} value={option.value}>
 					{option.label}

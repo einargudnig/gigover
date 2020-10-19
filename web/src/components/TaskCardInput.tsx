@@ -20,24 +20,26 @@ const TaskInput = styled.textarea`
 `;
 
 interface TaskCardInputProps {
+	value?: string;
 	error?: string;
 	loading?: boolean;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
 }
 
 export const TaskCardInput = ({
+	value = '',
 	error,
 	loading = false,
 	onSubmit
 }: TaskCardInputProps): JSX.Element => {
 	const { data } = useProjectTypes();
 	const textInputRef = useRef<HTMLTextAreaElement>();
-	const [text, setText] = useState('');
+	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
 	const { register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'text'>>({
 		defaultValues: {
-			text: ''
+			text: value
 		}
 	});
 
