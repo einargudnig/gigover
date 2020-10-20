@@ -12,6 +12,7 @@ import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/NavigationSettings.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SlidePanelConfig {
   double minHeight;
@@ -72,6 +73,7 @@ class TimerItem {
 
 enum StopWatchStatus { OnGoing, Paused, Stopped, Idle }
 
+String currentProjectString = 'currentProject';
 class StopWatchData {
   Project currentProject;
   Task currentTask;
@@ -129,9 +131,21 @@ class HomeProvider with ChangeNotifier {
 
       if (user.registered) {
         this.getProjects().then((v) {
-          this.getStopWatchData().then((s) {
+          this.getStopWatchData().then((s) async {
             if (this.currentTrackedProject == null && this.projects.length > 0) {
-              this.setCurrentProject(this.projects[0]);
+              //TODO here set current project as last selected
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              var lastProjectId = prefs.getInt(currentProjectString);
+              if(lastProjectId != null) {
+                Project project = this.projects.firstWhere((Project element) => element.projectId == lastProjectId);
+                if (project != null) {
+                  this.setCurrentProject(project);
+                } else {
+                  this.setCurrentProject(this.projects[0]);
+                }
+              } else {
+                this.setCurrentProject(this.projects[0]);
+              }
             }
           });
         });
@@ -281,7 +295,13 @@ class HomeProvider with ChangeNotifier {
     return 'done';
   }
 
-  void setCurrentProject(Project project) {
+  Future<void> setCurrentProject(Project project) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print(prefs);
+    prefs.setInt(currentProjectString, project.projectId).then((bool success) {
+      return  project.projectId;
+    });
+    prefs.setInt(currentProjectString, project.projectId);
     this.currentTrackedProject = project;
     this.currentTrackedTask =
         project.tasks.length > 0 ? project.tasks[0] : null;
