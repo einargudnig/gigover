@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../../context/ModalContext';
 import { useForm } from 'react-hook-form';
 import { RegistrationData, useRegister } from '../../queries/useRegister';
 import { UserContext } from '../../context/UserContext';
 import { Input, InputWrapper } from '../forms/Input';
 import { Label } from '../forms/Label';
+import { ErrorTypes } from '../../models/ErrorResponse';
+import { Link } from 'react-router-dom';
+import { FirebaseContext } from '../../firebase/FirebaseContext';
 
 interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'> {
 	name: string;
@@ -15,16 +18,38 @@ interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'>
 
 export const RegistrationModal = (): JSX.Element => {
 	const user = useContext(UserContext);
+	const firebase = useContext(FirebaseContext);
 	const [, setModalContext] = useContext(ModalContext);
-	const [registerFn, { isLoading, isError, error }] = useRegister();
+	const [registrationError, setRegistrationError] = useState('');
+	const [registerFn, { data, isLoading, isError, error }] = useRegister();
 
 	const finished = () => {
 		setModalContext({ registered: true });
 	};
 
+	useEffect(() => {
+		if (data?.data) {
+			const resData = data.data;
+
+			if (resData.errorCode === ErrorTypes.OK) {
+				finished();
+			} else if (resData.errorCode === ErrorTypes.NOT_LOGGED_IN) {
+				alert('Invalid session, please log in again');
+				firebase.signOut();
+			} else {
+				setRegistrationError(
+					'Could not register user. Reason code: ' +
+						resData.errorCode +
+						' Message: ' +
+						resData.errorText
+				);
+			}
+		}
+	}, [data]);
+
 	const { register, handleSubmit, errors } = useForm<FormData>();
 	const onSubmit = handleSubmit(async ({ name, address, zipCode, phoneNumber }) => {
-		// TODO Validate form..
+		setRegistrationError('');
 		try {
 			await registerFn({
 				name,
@@ -35,10 +60,9 @@ export const RegistrationModal = (): JSX.Element => {
 				userName: user.email,
 				type: 1
 			});
-
-			finished();
 		} catch (e) {
 			console.log('Error', e);
+			setRegistrationError(e);
 		}
 	});
 
@@ -47,8 +71,13 @@ export const RegistrationModal = (): JSX.Element => {
 			{isError && (
 				<>
 					{/* Server errors */}
-					<p>{error?.errorText}</p>
+					<p style={{ color: 'red' }}>{error?.errorText}</p>
 					<small>{error?.errorCode}</small>
+				</>
+			)}
+			{registrationError.length > 0 && (
+				<>
+					<p style={{ color: 'red' }}>{registrationError}</p>
 				</>
 			)}
 			{errors && (

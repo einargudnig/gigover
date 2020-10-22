@@ -12,13 +12,14 @@ const config = {
 	appId: '1:761785841920:web:6fe3194e754695b3621be5'
 };
 
+app.initializeApp(config);
+
 export class Firebase {
 	public auth: app.auth.Auth;
 	public authProvider: app.auth.GoogleAuthProvider;
 	public analytics: app.analytics.Analytics;
 
 	constructor() {
-		app.initializeApp(config);
 		this.auth = app.auth();
 		this.analytics = app.analytics();
 		this.authProvider = new app.auth.GoogleAuthProvider();
@@ -30,7 +31,7 @@ export class Firebase {
 	};
 
 	signInWithGoogle = async (): Promise<app.auth.UserCredential> => {
-		await this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);
+		await this.auth.setPersistence(app.auth.Auth.Persistence.SESSION);
 		return this.auth.signInWithPopup(this.authProvider);
 	};
 

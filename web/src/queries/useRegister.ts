@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { ErrorResponse, ErrorTypes } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import axios from 'axios';
 import { Firebase } from '../firebase/firebase';
@@ -19,18 +19,27 @@ export interface RegistrationData {
 export const useRegister = () => {
 	const firebase: Firebase = useContext(FirebaseContext);
 
-	return useMutation<unknown, ErrorResponse, RegistrationData>(
+	return useMutation<{ data: ErrorResponse }, ErrorResponse, RegistrationData>(
 		async (variables) =>
 			await axios.post(ApiService.registerUser, variables, {
 				withCredentials: true
 			}),
 		{
-			onSuccess: async () => {
+			onSuccess: async (res) => {
 				// Refresh Firebase Credentials
-				const cloneCurrentUser = Object.assign(firebase.auth.currentUser, {});
+				if (res.data.errorCode === ErrorTypes.OK) {
+					const cloneCurrentUser = Object.assign(firebase.auth.currentUser, {});
 
-				await firebase.auth.signOut();
-				await firebase.auth.updateCurrentUser(cloneCurrentUser);
+					await firebase.auth.signOut();
+					await firebase.auth.updateCurrentUser(cloneCurrentUser);
+				} else {
+					throw new Error(
+						'Could not register user, Code: ' +
+							res.data.errorCode +
+							' Message: ' +
+							res.data.errorText
+					);
+				}
 			}
 		}
 	);

@@ -7,7 +7,7 @@ export const useFirebaseAuth = (auth: firebase.auth.Auth) => {
 	const [authUser, setAuthUser] = useState<FirebaseUser | null>(null);
 
 	useEffect(() => {
-		const unlisten = auth.onAuthStateChanged((user: FirebaseUser | null) => {
+		const unlisten = auth.onAuthStateChanged(async (user: FirebaseUser | null) => {
 			if (user) {
 				setAuthUser(user);
 			} else {
