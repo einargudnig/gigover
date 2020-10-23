@@ -1,4 +1,4 @@
-export const API_BASE = 'https://gigover2.appspot.com/rest/';
+export const API_BASE = 'https://rest.gigover.com/rest/';
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';

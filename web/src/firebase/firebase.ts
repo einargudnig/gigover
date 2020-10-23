@@ -31,7 +31,7 @@ export class Firebase {
 	};
 
 	signInWithGoogle = async (): Promise<app.auth.UserCredential> => {
-		await this.auth.setPersistence(app.auth.Auth.Persistence.SESSION);
+		await this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);
 		return this.auth.signInWithPopup(this.authProvider);
 	};
 

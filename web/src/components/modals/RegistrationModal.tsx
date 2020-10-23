@@ -34,8 +34,10 @@ export const RegistrationModal = (): JSX.Element => {
 			if (resData.errorCode === ErrorTypes.OK) {
 				finished();
 			} else if (resData.errorCode === ErrorTypes.NOT_LOGGED_IN) {
-				alert('Invalid session, please log in again');
-				firebase.signOut();
+				firebase.signOut().then(() => {
+					window.location.href = '/';
+					alert('Invalid session, please log in again');
+				});
 			} else {
 				setRegistrationError(
 					'Could not register user. Reason code: ' +
