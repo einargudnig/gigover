@@ -6,7 +6,7 @@ import 'package:mittverk/models/TaskStatus.dart';
 class ApiService {
   static Dio dio;
   static CookieJar cookieJar;
-  static String apiPrefix = 'http://gigover2.appspot.com/rest/';
+  static String apiPrefix = 'https://rest.gigover.com/rest/';
 
   static setCookieJar() {
     dio.interceptors.add(CookieManager(cookieJar));
@@ -108,28 +108,5 @@ class ApiService {
           'taskId': taskId,
           'comment': comment,
         });
-  }
-
-  // TODO Remove
-  // DEV - Only contractor accounts
-  static Future<Response> createProject() async {
-    String url = apiPrefix + '/contractor/store';
-    Response response = await dio.post(url, data: {
-      "name": "Gardastraeti 40",
-      "status": 0,
-      "description": "Laga gardinn"
-    });
-
-    return response;
-  }
-
-  // TODO Remove
-  // DEV - VerifyAdam to get Projects on the account
-  static Future<Response> verifyAdam() async {
-    String url = apiPrefix + '/user/verifyAdam';
-    Response response = await dio.get(url);
-    cookieJar.loadForRequest(Uri.parse(url));
-
-    return response;
   }
 }

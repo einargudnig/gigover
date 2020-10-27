@@ -102,11 +102,11 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			)}
 			<form onSubmit={onSubmit}>
 				<InputWrapper>
-					<Label>Heiti verkefnis</Label>
+					<Label>Project name</Label>
 					<Input name="name" required={true} ref={register} />
 				</InputWrapper>
 				<InputWrapper>
-					<Label>Lýsing á verkefni</Label>
+					<Label>Project description</Label>
 					<Input name="description" required={true} ref={register} />
 				</InputWrapper>
 				<FormActions
