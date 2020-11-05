@@ -4,7 +4,7 @@ import 'firebase/analytics';
 
 const config = {
 	apiKey: 'AIzaSyAS-XYBiGnAMdLORL1ctzYgN81pwargt80',
-	authDomain: 'gigover2.firebaseapp.com',
+	authDomain: 'web.gigover.com',
 	databaseURL: 'https://gigover2.firebaseio.com',
 	projectId: 'gigover2',
 	storageBucket: 'gigover2.appspot.com',
