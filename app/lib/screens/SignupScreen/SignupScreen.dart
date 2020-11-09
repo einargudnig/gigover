@@ -54,7 +54,7 @@ class SignupScreenState extends State<SignupScreen> {
     String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = new RegExp(p);
 
-    return regExp.hasMatch(em);
+    return regExp.hasMatch(em.replaceAll(' ', ''));
   }
 
   bool isValidSignup() {
@@ -82,6 +82,10 @@ class SignupScreenState extends State<SignupScreen> {
       return setError('Postal town is invalid');
     }
 
+    if (isTextInvalid(username)) {
+      return setError('Username missing');
+    }
+
     return true;
   }
 
@@ -106,7 +110,7 @@ class SignupScreenState extends State<SignupScreen> {
       try {
         Response response = await ApiService.registerUser({
           'address': address.text,
-          'email': email.text,
+          'email': email.text.replaceAll(' ', ''),
           'zipCode': postalCode.text,
           'type': UserType.Worker.index,
           'name': fullName.text,
@@ -156,7 +160,7 @@ class SignupScreenState extends State<SignupScreen> {
           shrinkWrap: true,
           children: <Widget>[
             Text(
-              'Welcome to the Mittverk app',
+              'Welcome to the Gigover app',
               style: AvailableFonts.getTextStyle(
                 context,
                 weight: FontWeight.bold,
@@ -215,7 +219,7 @@ class SignupScreenState extends State<SignupScreen> {
             Spacing(amount: 2, isVertical: true),
             Input(
               controller: username,
-              hintText: 'Username (optional)',
+              hintText: 'Username',
             ),
             showErrorMessage(),
             Spacing(amount: 2, isVertical: true),
