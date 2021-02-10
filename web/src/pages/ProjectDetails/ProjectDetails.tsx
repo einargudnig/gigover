@@ -14,6 +14,8 @@ import { Button } from '../../components/forms/Button';
 const FeedBoard = styled.div`
 	display: flex;
 	flex-direction: row;
+	margin-left: -8px;
+	margin-right: -8px;
 `;
 
 const KanbanBoard = styled.div`
@@ -28,11 +30,12 @@ const FeedColumn = styled(CardBase)`
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+	padding: 16px;
 
 	h3 {
-		margin: 0 0 ${(props): string => props.theme.padding(2)};
-		padding-bottom: ${(props): string => props.theme.padding(2)};
-		border-bottom: 1px solid #eee;
+		margin: 0 0 ${(props): string => props.theme.padding(1)};
+		padding-bottom: ${(props): string => props.theme.padding(1)};
+		font-size: 16px;
 	}
 	&:not(:last-child) {
 		margin-right: ${(props): string => props.theme.padding(2)};
@@ -41,32 +44,79 @@ const FeedColumn = styled(CardBase)`
 		flex: 1;
 		border-radius: 3px;
 	}
+	
+	@media screen and (max-width: 1024px) {
+		margin: ${(props): string => props.theme.padding(2)}
+		${(props): string => props.theme.padding(1)};
+		padding: 12px;
+		
+		&:not(:last-child) {
+			margin-right: ${(props): string => props.theme.padding(1)};
+		}
+	}
 `;
 
 const ProjectDashboard = styled(CardBase)`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-
+	flex-wrap: wrap;
+	
 	> div:first-child {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		flex-wrap: wrap;
 
 		> div {
-			margin: 0 ${(props) => props.theme.padding(6)};
 			text-align: center;
 		}
 
 		.separator {
+			margin: 0 24px;
 			height: 100px;
 			width: 1px;
 			background-color: ${(props) => props.theme.colors.border};
+			
+			@media screen and (max-width: 640px) {
+				margin: 0 12px;
+				height: 60px;
+			}
 		}
 	}
 
 	h3 {
 		font-weight: 300;
+		font-size: 1rem;
+		
+		@media screen and (max-width: 760px) {
+			font-size: 0.8rem;
+		}
+	}
+
+	h1 {
+		@media screen and (max-width: 760px) {
+			font-size: 1.2rem;
+		}
+	}
+	
+	@media screen and (max-width: 640px) {
+		
+		h3 {
+			font-size: 0.6rem;
+		}
+		
+		h1 {
+			font-size: 1.0rem;
+		}
+		
+		> div:nth-child(2) {
+			width: 100%;
+			
+			button {
+				width: 100%;
+			}
+		}
 	}
 `;
 
