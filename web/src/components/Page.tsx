@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { UserContext } from '../context/UserContext';
 import { GoIcon } from './GoIcon';
 import { Link, NavLink } from 'react-router-dom';
@@ -11,7 +11,9 @@ import { PlusIcon } from './icons/PlusIcon';
 import { ClockIcon } from './icons/ClockIcon';
 import {
 	Avatar,
+	Center,
 	Fade,
+	Heading,
 	IconButton,
 	Menu,
 	MenuButton,
@@ -21,12 +23,14 @@ import {
 	MenuList
 } from '@chakra-ui/react';
 import { FirebaseContext } from '../firebase/FirebaseContext';
+import { RoadmapIcon } from './icons/RoadmapIcon';
 
 interface PageProps {
 	children: React.ReactNode;
 	title?: string;
 	breadcrumbs?: string[];
 	tabs?: React.ReactNode;
+	backgroundColor?: string;
 }
 
 const PageStyled = styled.div`
@@ -59,34 +63,9 @@ const PageWrapper = styled.div`
 	flex-direction: column;
 	background: ${(props) => props.theme.colors.blueBackground};
 	max-width: calc(100vw - 80px);
-
-	header {
-		box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.03);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 12px 16px;
-		background: #fff;
-		border-bottom: 1px solid ${(props) => props.theme.colors.border};
-
-		h3 {
-			user-select: none;
-			margin: 0;
-			display: flex;
-			align-items: center;
-
-			span {
-				&:not(:last-child):after {
-					content: '»';
-					color: ${(props) => props.theme.colors.green};
-					margin: 0 8px;
-				}
-			}
-		}
-	}
 `;
 
-const PageContent = styled.div`
+const PageContent = styled.div<{ backgroundColor?: string }>`
 	flex: 1;
 	padding: ${(props) => props.theme.padding(3)};
 	max-height: 100%;
@@ -94,8 +73,51 @@ const PageContent = styled.div`
 	overflow-x: hidden;
 	overflow-y: auto;
 
+	${(props) =>
+		props.backgroundColor &&
+		css`
+			background-color: ${props.backgroundColor};
+		`};
+
 	@media screen and (max-width: 768px) {
 		padding: ${(props) => props.theme.padding(2)};
+	}
+`;
+
+const PageHeader = styled.header`
+	display: flex;
+	box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.03);
+	justify-content: space-between;
+	align-items: center;
+	padding: 12px 16px;
+	background: #fff;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border};
+
+	h3 {
+		user-select: none;
+		margin: 0;
+		display: flex;
+		align-items: center;
+
+		span {
+			&:not(:last-child):after {
+				content: '»';
+				color: ${(props) => props.theme.colors.green};
+				margin: 0 8px;
+			}
+		}
+	}
+
+	> * {
+		flex: 1 1 0;
+
+		&:first-child {
+			justify-content: flex-start;
+		}
+
+		&:last-child {
+			justify-content: flex-end;
+		}
 	}
 `;
 
@@ -137,7 +159,13 @@ const IconLink = styled(NavLink)`
 	}
 `;
 
-export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Element | null => {
+export const Page = ({
+	title,
+	breadcrumbs,
+	tabs,
+	children,
+	backgroundColor
+}: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
 	const [, setModalContext] = useContext(ModalContext);
@@ -163,6 +191,11 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 					{/*		<OrganizeIcon />*/}
 					{/*	</div>*/}
 					{/*</IconLink>*/}
+					<IconLink to={'/roadmap'}>
+						<div>
+							<RoadmapIcon />
+						</div>
+					</IconLink>
 					<IconLink to={'/time-tracker'}>
 						<div>
 							<TimeIcon />
@@ -182,7 +215,7 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 				<small>v1.0</small>
 			</Sidebar>
 			<PageWrapper>
-				<header>
+				<PageHeader>
 					<h3>
 						{breadcrumbs ? (
 							<>
@@ -191,10 +224,14 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 								))}
 							</>
 						) : (
-							title || ''
+							<Heading size={'md'}>{title}</Heading>
 						)}
 					</h3>
-					{tabs && <div>{tabs}</div>}
+					{tabs && (
+						<Center>
+							<div>{tabs}</div>
+						</Center>
+					)}
 					<HeaderActions>
 						<IconButton
 							variant={'outline'}
@@ -242,8 +279,8 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 							</Menu>
 						</div>
 					</HeaderActions>
-				</header>
-				<PageContent>
+				</PageHeader>
+				<PageContent backgroundColor={backgroundColor}>
 					<Fade in={true}>{children}</Fade>
 				</PageContent>
 			</PageWrapper>

@@ -9,7 +9,7 @@ import { CardBase } from '../../components/CardBase';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
-import { Button } from '../../components/forms/Button';
+import { Button } from '@chakra-ui/react';
 
 const FeedBoard = styled.div`
 	display: flex;

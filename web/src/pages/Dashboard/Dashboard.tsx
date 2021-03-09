@@ -1,16 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
 import { ProjectCard } from '../../components/ProjectCard';
-import { EmptyState } from '../../components/empty/EmptyState';
-import { EmptyProjects } from '../../components/empty/EmptyProjects';
-import { Button } from '../../components/forms/Button';
-import { ModalContext } from '../../context/ModalContext';
 import { DashboardTabs } from './DashboardTabs';
 import { ProjectStatus } from '../../models/Project';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Center } from '../../components/Center';
+import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 
 const ProjectDashboard = styled.div`
 	display: flex;
@@ -24,8 +21,7 @@ const ProjectDashboard = styled.div`
 `;
 
 export const Dashboard = (): JSX.Element => {
-	const [activeTab, setActiveTab] = useState('OPEN');
-	const [, setModalContext] = useContext(ModalContext);
+	const [activeTab, setActiveTab] = useState(ProjectStatus.OPEN);
 	const { data, isLoading, isError, error } = useProjectList();
 
 	if (isError) {
@@ -60,19 +56,7 @@ export const Dashboard = (): JSX.Element => {
 			) : (
 				<ProjectDashboard>
 					{!projects || projects.length <= 0 ? (
-						<EmptyState
-							icon={<EmptyProjects />}
-							title={'No projects found'}
-							text={
-								'Seems that you haven’t created any projects\n' +
-								'for you and your organisation yet. Why don’t you add a new project to your project manager.'
-							}
-							action={
-								<Button onClick={() => setModalContext({ modifyProject: {} })}>
-									Create a project
-								</Button>
-							}
-						/>
+						<NoProjectsFound />
 					) : (
 						projects.map((project) => (
 							<ProjectCard key={project.projectId} project={project} />

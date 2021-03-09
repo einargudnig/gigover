@@ -8,7 +8,11 @@ interface DashboardTabsProps {
 }
 
 export const DashboardTabs = ({ tabs, activeTab, onChange }: DashboardTabsProps): JSX.Element => (
-	<Tabs variant="soft-rounded" colorScheme="green">
+	<Tabs
+		defaultIndex={tabs.findIndex((t) => t === activeTab)}
+		variant="soft-rounded"
+		colorScheme="green"
+	>
 		<TabList>
 			{tabs.map((tab, tabIndex) => (
 				<Tab
