@@ -89,9 +89,13 @@ export const TimeTracker = (): JSX.Element => {
 	const [refetch, setRefetch] = useState(0);
 	const [, setModalContext] = useContext(ModalContext);
 	const { data: projectList } = useProjectList();
-	const [getReport, { data: reportData, isLoading: reportDataLoading }] = useTrackerReport();
-	const [activeTrackers, { data }] = useActiveTimeTrackers();
-	const [stopTask] = useTrackerStop();
+	const {
+		mutateAsync: getReport,
+		data: reportData,
+		isLoading: reportDataLoading
+	} = useTrackerReport();
+	const { mutateAsync: activeTrackers, data } = useActiveTimeTrackers();
+	const { mutateAsync: stopTask } = useTrackerStop();
 
 	const totalTimesheets = useMemo(() => {
 		if (reportData?.data.report) {

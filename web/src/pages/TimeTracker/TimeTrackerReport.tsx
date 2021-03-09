@@ -11,7 +11,6 @@ import Timer from 'react-compound-timer';
 import { Button } from '../../components/forms/Button';
 import { Table } from '../../components/Table';
 import { TimerContainer, TimerWrapper } from './TimeTracker';
-import { format } from 'date-fns';
 import { formatDate } from '../../utils/StringUtils';
 import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
@@ -45,6 +44,7 @@ const DatePickerWrapper = styled.div`
 	.CalendarDay__selected {
 		background: ${(props) => props.theme.colors.darkGreen};
 	}
+
 	.CalendarDay__selected_span {
 		background: ${(props) => props.theme.colors.green};
 		border: 1px double ${(props) => darken(0.05, props.theme.colors.green)};

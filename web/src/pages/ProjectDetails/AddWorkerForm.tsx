@@ -16,8 +16,8 @@ interface FormData {
 
 export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element => {
 	const { register, handleSubmit, errors, reset } = useForm<FormData>();
-	const [getUserIdByPhoneNumber] = useGetUserByPhoneNumber();
-	const [addWorker, { isLoading, isError, error }] = useAddWorker();
+	const { mutateAsync: getUserIdByPhoneNumber } = useGetUserByPhoneNumber();
+	const { mutateAsync: addWorker, isLoading, isError, error } = useAddWorker();
 
 	const onSubmit = handleSubmit(async (data) => {
 		const response = await getUserIdByPhoneNumber({ phoneNumber: data.phoneNumber });

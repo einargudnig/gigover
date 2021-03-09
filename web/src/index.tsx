@@ -4,7 +4,7 @@ import './styles/index.css';
 import { AppPreloader } from './App';
 import { Firebase } from './firebase/firebase';
 import { FirebaseContext } from './firebase/FirebaseContext';
-import { ReactQueryConfigProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from './Theme';
@@ -13,20 +13,22 @@ import 'react-dates/lib/css/_datepicker.css';
 
 const firebaseApp = new Firebase();
 
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			queryFn: axiosQueryFetcher,
+			refetchOnWindowFocus: false
+		}
+	}
+});
+
 ReactDOM.render(
 	<React.StrictMode>
 		<ThemeProvider theme={Theme}>
 			<FirebaseContext.Provider value={firebaseApp}>
-				<ReactQueryConfigProvider
-					config={{
-						queries: {
-							queryFn: axiosQueryFetcher,
-							refetchOnWindowFocus: false
-						}
-					}}
-				>
+				<QueryClientProvider client={queryClient}>
 					<AppPreloader />
-				</ReactQueryConfigProvider>
+				</QueryClientProvider>
 			</FirebaseContext.Provider>
 		</ThemeProvider>
 	</React.StrictMode>,

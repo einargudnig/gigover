@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import axios from 'axios';
@@ -10,14 +10,14 @@ interface TaskCommentData {
 }
 
 export const useTaskComment = () => {
-	const queryCache = useQueryCache();
+	const queryClient = useQueryClient();
 
 	return useMutation<{ data: ErrorResponse }, ErrorResponse, TaskCommentData>(
 		async (variables) =>
 			await axios.post(ApiService.addComment, variables, { withCredentials: true }),
 		{
 			onSuccess: async (data, variables) => {
-				await queryCache.invalidateQueries(ApiService.taskDetails(variables.taskId));
+				await queryClient.invalidateQueries(ApiService.taskDetails(variables.taskId));
 			}
 		}
 	);

@@ -3,7 +3,7 @@ import { Project, WorkerItem } from '../../models/Project';
 import { useEffect, useMemo, useState } from 'react';
 import { Timesheet, useTrackerReport } from '../../queries/useTrackerReport';
 import { Moment } from 'moment';
-import { secondsToHHMMSS, secondsToString } from '../../utils/NumberUtils';
+import { secondsToHHMMSS } from '../../utils/NumberUtils';
 
 type TimeTrackerReportResultItem = {
 	projectName: string;
@@ -31,7 +31,7 @@ export const useTimeTrackerReport = (
 	const startDateTimestamp = startDate.unix() * 1000;
 	const endDateTimestamp = endDate.unix() * 1000;
 	const [totalTracked, setTotalTracked] = useState<string>(secondsToHHMMSS(0));
-	const [getReport, { data, isLoading: isGetReportLoading }] = useTrackerReport();
+	const { mutate: getReport, data, isLoading: isGetReportLoading } = useTrackerReport();
 	const { data: projectList, isLoading: projectDataListLoading } = useProjectList();
 
 	const projectMap: Map<number, Project> = useMemo(() => {
@@ -89,6 +89,7 @@ export const useTimeTrackerReport = (
 		}
 
 		return [];
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, projectMap, startDateTimestamp, endDateTimestamp, workerId, projectId]);
 
 	useEffect(() => {
@@ -112,6 +113,7 @@ export const useTimeTrackerReport = (
 			to: endDateTimestamp,
 			projectId
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refetch, startDateTimestamp, endDateTimestamp, projectId]);
 
 	return {

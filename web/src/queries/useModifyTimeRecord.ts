@@ -1,7 +1,7 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 interface ModifyTimeRecordInput {
 	workId: number;
@@ -9,17 +9,17 @@ interface ModifyTimeRecordInput {
 }
 
 export const useModifyTimeRecord = () => {
-	const queryCache = useQueryCache();
+	const queryClient = useQueryClient();
 
-	return useMutation<unknown, ErrorResponse, ModifyTimeRecordInput>(
+	return useMutation<AxiosResponse, ErrorResponse, ModifyTimeRecordInput>(
 		async (variables) =>
 			await axios.post(ApiService.changeTimeRecord, variables, {
 				withCredentials: true
 			}),
 		{
 			onSuccess: async () => {
-				await queryCache.invalidateQueries(ApiService.timerReport);
-				await queryCache.invalidateQueries(ApiService.activeWorkers);
+				await queryClient.invalidateQueries(ApiService.timerReport);
+				await queryClient.invalidateQueries(ApiService.activeWorkers);
 			}
 		}
 	);

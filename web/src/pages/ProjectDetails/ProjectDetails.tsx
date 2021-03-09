@@ -37,19 +37,21 @@ const FeedColumn = styled(CardBase)`
 		padding-bottom: ${(props): string => props.theme.padding(1)};
 		font-size: 16px;
 	}
+
 	&:not(:last-child) {
 		margin-right: ${(props): string => props.theme.padding(2)};
 	}
+
 	> div {
 		flex: 1;
 		border-radius: 3px;
 	}
-	
+
 	@media screen and (max-width: 1024px) {
 		margin: ${(props): string => props.theme.padding(2)}
-		${(props): string => props.theme.padding(1)};
+			${(props): string => props.theme.padding(1)};
 		padding: 12px;
-		
+
 		&:not(:last-child) {
 			margin-right: ${(props): string => props.theme.padding(1)};
 		}
@@ -61,7 +63,7 @@ const ProjectDashboard = styled(CardBase)`
 	justify-content: space-between;
 	align-items: center;
 	flex-wrap: wrap;
-	
+
 	> div:first-child {
 		display: flex;
 		justify-content: space-between;
@@ -77,7 +79,7 @@ const ProjectDashboard = styled(CardBase)`
 			height: 100px;
 			width: 1px;
 			background-color: ${(props) => props.theme.colors.border};
-			
+
 			@media screen and (max-width: 640px) {
 				margin: 0 12px;
 				height: 60px;
@@ -88,7 +90,7 @@ const ProjectDashboard = styled(CardBase)`
 	h3 {
 		font-weight: 300;
 		font-size: 1rem;
-		
+
 		@media screen and (max-width: 760px) {
 			font-size: 0.8rem;
 		}
@@ -99,20 +101,19 @@ const ProjectDashboard = styled(CardBase)`
 			font-size: 1.2rem;
 		}
 	}
-	
+
 	@media screen and (max-width: 640px) {
-		
 		h3 {
 			font-size: 0.6rem;
 		}
-		
+
 		h1 {
-			font-size: 1.0rem;
+			font-size: 1rem;
 		}
-		
+
 		> div:nth-child(2) {
 			width: 100%;
-			
+
 			button {
 				width: 100%;
 			}
@@ -132,7 +133,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const projectIdNumber = parseInt(projectId);
 	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const [manageWorkers, setManageWorkers] = useState(false);
-	const [updateTask] = useUpdateTask(projectIdNumber);
+	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
 	const project = data && data.project;
 
 	const all = project?.tasks.filter((task) => task.status !== TaskStatus.Archived).length || 0;

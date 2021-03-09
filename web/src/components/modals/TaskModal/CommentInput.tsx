@@ -9,7 +9,7 @@ interface CommentInputProps {
 
 export const CommentInput = ({ projectId, taskId }: CommentInputProps): JSX.Element => {
 	const [commentValue, setCommentValue] = useState('');
-	const [addComment, { isLoading }] = useTaskComment();
+	const { mutateAsync: addComment, isLoading } = useTaskComment();
 
 	const onKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter' && !isLoading) {

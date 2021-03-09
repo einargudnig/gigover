@@ -50,7 +50,7 @@ export const ManageProjectWorkers = ({
 	onClose,
 	project
 }: ManageProjectWorkersProps): JSX.Element => {
-	const [removeWorker, { isLoading }] = useRemoveWorker();
+	const { mutate: removeWorker, isLoading } = useRemoveWorker();
 
 	const remove = async (worker: WorkerItem) => {
 		await removeWorker({

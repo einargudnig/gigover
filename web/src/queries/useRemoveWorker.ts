@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
 import axios from 'axios';
@@ -9,7 +9,7 @@ interface RemoveWorkerInput {
 }
 
 export const useRemoveWorker = () => {
-	const queryCache = useQueryCache();
+	const queryClient = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, RemoveWorkerInput>(
 		async (variables) =>
@@ -18,7 +18,7 @@ export const useRemoveWorker = () => {
 			}),
 		{
 			onSuccess: async (data, variables) => {
-				await queryCache.invalidateQueries(ApiService.projectDetails(variables.projectId));
+				await queryClient.invalidateQueries(ApiService.projectDetails(variables.projectId));
 			}
 		}
 	);

@@ -10,7 +10,7 @@ interface StatusUpdateProps {
 }
 
 export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Element => {
-	const [updateTask, { isLoading }] = useUpdateTask(projectId);
+	const { mutateAsync: updateTask, isLoading } = useUpdateTask(projectId);
 
 	const updateTaskStatus = async (status: TaskStatusType) => {
 		await updateTask({

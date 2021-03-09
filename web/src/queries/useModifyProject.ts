@@ -1,5 +1,5 @@
 import { Project, ProjectStatus } from '../models/Project';
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ProjectResponse } from './useProjectList';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
@@ -18,17 +18,17 @@ export interface CloseProjectData extends Pick<Project, 'projectId'> {
 }
 
 export const useModifyProject = () => {
-	const queryCache = useQueryCache();
+	const queryClient = useQueryClient();
 
 	return useMutation<ProjectResponse, ErrorResponse, ProjectFormData | CloseProjectData>(
 		async (project) =>
 			await axios.post(ApiService.modifyProject, project, { withCredentials: true }),
 		{
 			onSuccess: async (data, variables) => {
-				await queryCache.invalidateQueries(ApiService.projectList);
+				await queryClient.invalidateQueries(ApiService.projectList);
 
 				if (variables.projectId) {
-					await queryCache.invalidateQueries(
+					await queryClient.invalidateQueries(
 						ApiService.projectDetails(variables.projectId)
 					);
 				}

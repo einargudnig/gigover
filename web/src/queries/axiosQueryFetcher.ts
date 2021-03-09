@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-export const axiosQueryFetcher = async (url: string) => {
-	const { data } = await axios.get(url, {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const axiosQueryFetcher = async ({ queryKey }: { queryKey: string }) => {
+	const { data } = await axios.get(queryKey, {
 		withCredentials: true
 	});
+
 	return data;
 };

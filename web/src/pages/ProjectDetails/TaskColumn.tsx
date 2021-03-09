@@ -8,6 +8,7 @@ import { TaskCard } from '../../components/TaskCard';
 import { InputWrapper } from '../../components/forms/Input';
 import { useEventListener } from '../../hooks/useEventListener';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface TaskColumnProps {
 	project: Project;
@@ -22,7 +23,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [taskError, setTaskError] = useState<string>();
-	const [addTask, { isLoading }] = useAddTask();
+	const { mutateAsync: addTask, isLoading } = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
 	const tasks = useMemo(() => {
@@ -50,7 +51,7 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 
 			setIsCreatingTask(false);
 		} catch (e) {
-			console.log(e);
+			devError(e);
 			setTaskError(e);
 		}
 	};

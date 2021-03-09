@@ -6,8 +6,8 @@ import { UserContext } from '../../context/UserContext';
 import { Input, InputWrapper } from '../forms/Input';
 import { Label } from '../forms/Label';
 import { ErrorTypes } from '../../models/ErrorResponse';
-import { Link } from 'react-router-dom';
 import { FirebaseContext } from '../../firebase/FirebaseContext';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'> {
 	name: string;
@@ -21,7 +21,7 @@ export const RegistrationModal = (): JSX.Element => {
 	const firebase = useContext(FirebaseContext);
 	const [, setModalContext] = useContext(ModalContext);
 	const [registrationError, setRegistrationError] = useState('');
-	const [registerFn, { data, isLoading, isError, error }] = useRegister();
+	const { mutateAsync: registerFn, data, isLoading, isError, error } = useRegister();
 
 	const finished = () => {
 		setModalContext({ registered: true });
@@ -47,6 +47,7 @@ export const RegistrationModal = (): JSX.Element => {
 				);
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data]);
 
 	const { register, handleSubmit, errors } = useForm<FormData>();
@@ -63,7 +64,7 @@ export const RegistrationModal = (): JSX.Element => {
 				type: 1
 			});
 		} catch (e) {
-			console.log('Error', e);
+			devError('Error', e);
 			setRegistrationError(e);
 		}
 	});

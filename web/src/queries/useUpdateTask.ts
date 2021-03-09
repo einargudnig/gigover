@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ProjectResponse } from './useProjectList';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
@@ -16,7 +16,7 @@ export interface UpdateTaskFormData {
 }
 
 export const useUpdateTask = (projectId: number) => {
-	const queryCache = useQueryCache();
+	const queryClient = useQueryClient();
 
 	return useMutation<ProjectResponse, ErrorResponse, UpdateTaskFormData>(
 		async (variables) =>
@@ -24,7 +24,7 @@ export const useUpdateTask = (projectId: number) => {
 		{
 			onMutate: async (variables) => {
 				const cacheKey = ApiService.projectDetails(projectId);
-				const projectDetails = queryCache.getQueryData(cacheKey) as { project: Project };
+				const projectDetails = queryClient.getQueryData(cacheKey) as { project: Project };
 
 				if (projectDetails) {
 					const tasks = [...projectDetails.project.tasks];
@@ -45,16 +45,16 @@ export const useUpdateTask = (projectId: number) => {
 							}
 						};
 
-						await queryCache.setQueryData(cacheKey, newProjectDetails);
+						await queryClient.setQueryData(cacheKey, newProjectDetails);
 					}
 				}
 			},
 			onSuccess: async (data, variables) => {
-				await queryCache.invalidateQueries(ApiService.projectList);
-				await queryCache.invalidateQueries(ApiService.projectDetails(projectId));
+				await queryClient.invalidateQueries(ApiService.projectList);
+				await queryClient.invalidateQueries(ApiService.projectDetails(projectId));
 
 				if (variables.taskId) {
-					await queryCache.invalidateQueries(ApiService.taskDetails(variables.taskId));
+					await queryClient.invalidateQueries(ApiService.taskDetails(variables.taskId));
 				}
 			}
 		}

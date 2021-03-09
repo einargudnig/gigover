@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ProjectResponse } from './useProjectList';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
@@ -10,7 +10,7 @@ export interface TaskFormData extends Pick<Task, 'projectId' | 'typeId' | 'text'
 }
 
 export const useAddTask = () => {
-	const queryCache = useQueryCache();
+	const queryClient = useQueryClient();
 
 	return useMutation<ProjectResponse, ErrorResponse, TaskFormData>(
 		async (variables) => {
@@ -26,10 +26,10 @@ export const useAddTask = () => {
 		},
 		{
 			onSuccess: async (data, variables) => {
-				await queryCache.invalidateQueries(ApiService.projectDetails(variables.projectId));
+				await queryClient.invalidateQueries(ApiService.projectDetails(variables.projectId));
 
 				if (variables.taskId) {
-					await queryCache.invalidateQueries(ApiService.taskDetails(variables.taskId));
+					await queryClient.invalidateQueries(ApiService.taskDetails(variables.taskId));
 				}
 			}
 		}

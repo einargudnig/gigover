@@ -9,6 +9,8 @@ import { Button } from '../../components/forms/Button';
 import { ModalContext } from '../../context/ModalContext';
 import { DashboardTabs } from './DashboardTabs';
 import { ProjectStatus } from '../../models/Project';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Center } from '../../components/Center';
 
 const ProjectDashboard = styled.div`
 	display: flex;
@@ -25,11 +27,6 @@ export const Dashboard = (): JSX.Element => {
 	const [activeTab, setActiveTab] = useState('OPEN');
 	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading, isError, error } = useProjectList();
-
-	// TODO
-	if (isLoading) {
-		return <p>Loading projects..</p>;
-	}
 
 	if (isError) {
 		return (
@@ -56,27 +53,33 @@ export const Dashboard = (): JSX.Element => {
 				/>
 			}
 		>
-			<ProjectDashboard>
-				{!projects || projects.length <= 0 ? (
-					<EmptyState
-						icon={<EmptyProjects />}
-						title={'No projects found'}
-						text={
-							'Seems that you haven’t created any projects\n' +
-							'for you and your organisation yet. Why don’t you add a new project to your project manager.'
-						}
-						action={
-							<Button onClick={() => setModalContext({ modifyProject: {} })}>
-								Create a project
-							</Button>
-						}
-					/>
-				) : (
-					projects.map((project) => (
-						<ProjectCard key={project.projectId} project={project} />
-					))
-				)}
-			</ProjectDashboard>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<ProjectDashboard>
+					{!projects || projects.length <= 0 ? (
+						<EmptyState
+							icon={<EmptyProjects />}
+							title={'No projects found'}
+							text={
+								'Seems that you haven’t created any projects\n' +
+								'for you and your organisation yet. Why don’t you add a new project to your project manager.'
+							}
+							action={
+								<Button onClick={() => setModalContext({ modifyProject: {} })}>
+									Create a project
+								</Button>
+							}
+						/>
+					) : (
+						projects.map((project) => (
+							<ProjectCard key={project.projectId} project={project} />
+						))
+					)}
+				</ProjectDashboard>
+			)}
 		</Page>
 	);
 };

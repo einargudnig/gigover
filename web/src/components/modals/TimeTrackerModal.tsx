@@ -24,7 +24,7 @@ export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
 	const [selectedWorker, setSelectedWorker] = useState<string | undefined>();
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
-	const [startTask] = useTrackerStart();
+	const { mutateAsync: startTask } = useTrackerStart();
 	const openProjects = useMemo(() => {
 		if (data && data.projects) {
 			return data.projects.filter((p) => p.status === ProjectStatus.OPEN);
@@ -84,6 +84,7 @@ export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.
 					console.error(e);
 				});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [closeModal, selectedProject, selectedTask, selectedWorker, startTask]);
 
 	return (

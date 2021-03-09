@@ -17,7 +17,7 @@ export const UpdateTaskComponent = ({
 	projectId,
 	onClose
 }: UpdateTaskComponentProps): JSX.Element => {
-	const [updateTask, { isLoading, error }] = useUpdateTask(projectId);
+	const { mutateAsync: updateTask, isLoading, error } = useUpdateTask(projectId);
 
 	const archiveTask = async () => {
 		await updateTask({
@@ -41,6 +41,7 @@ export const UpdateTaskComponent = ({
 
 			onClose(true);
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[task, updateTask]
 	);
 

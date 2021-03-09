@@ -57,6 +57,7 @@ const getButtonStyle = (appearance: ButtonAppearance) => {
 				&:hover {
 					color: ${darken(0.1, '#b0bddc')};
 					background-color: ${darken(0.1, '#f4f7fc')};
+
 					svg {
 						path {
 							fill: ${darken(0.1, '#b0bddc')};
@@ -89,7 +90,7 @@ const getButtonSized = (size: ButtonSize) => {
 			return css`
 				padding: 6px 10px;
 				font-size: 11px;
-`;
+			`;
 		case 'none':
 			return css`
 				padding: 0;
@@ -139,7 +140,7 @@ const StyledButton = styled.button<{
 	${(props) => props.appearance !== 'primary' && getButtonStyle(props.appearance)}
 	${(props) => props.size !== 'normal' && getButtonSized(props.size)}
 
-	${(props) =>
+  ${(props) =>
 		props.disabled &&
 		css`
 			opacity: 0.1;

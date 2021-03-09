@@ -7,6 +7,7 @@ import { Input, InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { FormActions } from '../FormActions';
 import { Button } from '../forms/Button';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -14,7 +15,7 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const [modify, { isLoading, isError, error }] = useModifyProject();
+	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
 	const { register, handleSubmit, errors } = useForm<ProjectFormData>({
 		defaultValues: project
 	});
@@ -30,7 +31,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			});
 			closeModal();
 		} catch (e) {
-			console.log('Error', e);
+			devError('Error', e);
 		}
 	});
 
@@ -46,7 +47,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				closeModal();
 			}
 		} catch (e) {
-			console.log('Error', e);
+			devError('Error', e);
 		}
 	};
 
@@ -62,7 +63,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				closeModal();
 			}
 		} catch (e) {
-			console.log('Error', e);
+			devError('Error', e);
 		}
 	};
 
@@ -78,7 +79,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				closeModal();
 			}
 		} catch (e) {
-			console.log('Error', e);
+			devError('Error', e);
 		}
 	};
 

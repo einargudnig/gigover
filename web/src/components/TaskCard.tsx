@@ -20,6 +20,22 @@ const TaskCardStyled = styled.div<{ isEditing: boolean; error?: boolean }>`
 		font-weight: normal;
 	}
 
+	@media screen and (max-width: 1024px) {
+		padding: 12px;
+
+		h4 {
+			font-size: 15px;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		padding: 8px;
+
+		h4 {
+			font-size: 14px;
+		}
+	}
+
 	${(props) =>
 		!props.isEditing &&
 		css`
@@ -50,6 +66,10 @@ const TaskItem = styled.div`
 	display: inline-flex;
 	justify-content: space-between;
 	flex-direction: column;
+
+	@media screen and (max-width: 768px) {
+		min-width: 240px;
+	}
 `;
 
 interface TaskProps {

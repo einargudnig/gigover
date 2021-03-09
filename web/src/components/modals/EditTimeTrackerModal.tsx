@@ -33,7 +33,7 @@ export const EditTimeTrackerModal = ({ open, context }: TimeTrackerModalProps): 
 	const closeModal = useCloseModal(context.callback);
 	const [hours, setHours] = useState(context.hours);
 	const [minutes, setMinutes] = useState(context.minutes);
-	const [modifyTimeRecord, { isLoading }] = useModifyTimeRecord();
+	const { mutateAsync: modifyTimeRecord, isLoading } = useModifyTimeRecord();
 
 	const update = async () => {
 		const newMins = hours * 60 + minutes;
