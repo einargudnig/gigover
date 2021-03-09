@@ -3,11 +3,11 @@ import { Project, ProjectStatus } from '../../models/Project';
 import { useForm } from 'react-hook-form';
 import { ProjectFormData, useModifyProject } from '../../queries/useModifyProject';
 import { Label } from '../forms/Label';
-import { Input, InputWrapper } from '../forms/Input';
+import { InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { FormActions } from '../FormActions';
-import { Button } from '../forms/Button';
 import { devError } from '../../utils/ConsoleUtils';
+import { Button, Input } from '@chakra-ui/react';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -102,14 +102,10 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				</>
 			)}
 			<form onSubmit={onSubmit}>
-				<InputWrapper>
-					<Label>Project name</Label>
-					<Input name="name" required={true} ref={register} />
-				</InputWrapper>
-				<InputWrapper>
-					<Label>Project description</Label>
-					<Input name="description" required={true} ref={register} />
-				</InputWrapper>
+				<Label>Project name</Label>
+				<Input mb={6} name="name" required={true} ref={register} />
+				<Label>Project description</Label>
+				<Input mb={6} name="description" required={true} ref={register} />
 				<FormActions
 					submitText={project ? 'Update project' : 'Create a project'}
 					submitLoading={isLoading}
@@ -122,8 +118,9 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				<InputWrapper>
 					<Button
 						type={'button'}
-						size={'none'}
-						appearance={'delete'}
+						size={'0'}
+						variant={'link'}
+						colorScheme={'red'}
 						onClick={async (event) => {
 							event.preventDefault();
 							await setClosed();
@@ -136,8 +133,9 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				<InputWrapper>
 					<Button
 						type={'button'}
-						size={'none'}
-						appearance={'delete'}
+						size={'0'}
+						variant={'link'}
+						colorScheme={'red'}
 						onClick={async (event) => {
 							event.preventDefault();
 							await reOpenProject();
@@ -151,8 +149,9 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				<InputWrapper>
 					<Button
 						type={'button'}
-						size={'none'}
-						appearance={'delete'}
+						size={'0'}
+						colorScheme={'red'}
+						variant={'link'}
 						onClick={async (event) => {
 							event.preventDefault();
 							await archiveProject();

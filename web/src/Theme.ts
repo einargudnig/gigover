@@ -1,3 +1,22 @@
+export const ChakraThemeColors = {
+	brand: {
+		900: '#000',
+		800: '#999',
+		700: '#666'
+	},
+	green: {
+		900: '#094327',
+		800: '#107042',
+		700: '#169d5c',
+		600: '#1cc976',
+		500: '#36e390',
+		400: '#62e9a9',
+		300: '#8fefc1',
+		200: '#bcf6da',
+		100: '#e9fcf3'
+	}
+};
+
 export const Theme = {
 	colors: {
 		black: '#000',

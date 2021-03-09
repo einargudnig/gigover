@@ -7,9 +7,20 @@ import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ModalContext } from '../context/ModalContext';
-import { Button } from './forms/Button';
 import { PlusIcon } from './icons/PlusIcon';
 import { ClockIcon } from './icons/ClockIcon';
+import {
+	Avatar,
+	Fade,
+	IconButton,
+	Menu,
+	MenuButton,
+	MenuDivider,
+	MenuGroup,
+	MenuItem,
+	MenuList
+} from '@chakra-ui/react';
+import { FirebaseContext } from '../firebase/FirebaseContext';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -96,19 +107,6 @@ const HeaderActions = styled.div`
 	> *:not(:last-child) {
 		margin-right: 24px;
 	}
-
-	.avatar {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
-		overflow: hidden;
-
-		img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
-	}
 `;
 
 const SidebarNav = styled.nav`
@@ -141,6 +139,7 @@ const IconLink = styled(NavLink)`
 
 export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
+	const firebase = useContext(FirebaseContext);
 	const [, setModalContext] = useContext(ModalContext);
 
 	if (user === null) {
@@ -197,37 +196,56 @@ export const Page = ({ title, breadcrumbs, tabs, children }: PageProps): JSX.Ele
 					</h3>
 					{tabs && <div>{tabs}</div>}
 					<HeaderActions>
-						<Button
-							size={'small'}
-							appearance={'outline'}
-							height={'38px'}
-							onClick={() =>
+						<IconButton
+							variant={'outline'}
+							colorScheme={'gray'}
+							aria-label={'Track time'}
+							onClick={() => {
 								setModalContext({
 									timeTracker: {
 										project: undefined,
 										task: undefined
 									}
-								})
-							}
-						>
-							<ClockIcon />
-						</Button>
-						<Button
-							size={'small'}
-							appearance={'outline'}
-							height={'38px'}
-							onClick={() =>
-								setModalContext({ modifyProject: { project: undefined } })
-							}
-						>
-							<PlusIcon />
-						</Button>
-						<div className={'avatar'}>
-							<img src={user.avatar} alt={'Avatar'} />
+								});
+							}}
+							icon={<ClockIcon />}
+						/>
+						<IconButton
+							variant={'outline'}
+							colorScheme={'gray'}
+							aria-label={'New project'}
+							onClick={() => {
+								setModalContext({ modifyProject: { project: undefined } });
+							}}
+							icon={<PlusIcon />}
+						/>
+						<div>
+							<Menu>
+								<MenuButton>
+									<Avatar size={'md'} name={user.email} src={user.avatar} />
+								</MenuButton>
+								<MenuList>
+									<MenuGroup title="Profile">
+										<NavLink to={'/settings'}>
+											<MenuItem>Settings</MenuItem>
+										</NavLink>
+										<MenuItem onClick={() => firebase.signOut()}>
+											Sign out
+										</MenuItem>
+									</MenuGroup>
+									<MenuDivider />
+									<MenuGroup title="Help">
+										<MenuItem>Helpdesk</MenuItem>
+										<MenuItem>FAQ</MenuItem>
+									</MenuGroup>
+								</MenuList>
+							</Menu>
 						</div>
 					</HeaderActions>
 				</header>
-				<PageContent>{children}</PageContent>
+				<PageContent>
+					<Fade in={true}>{children}</Fade>
+				</PageContent>
 			</PageWrapper>
 		</PageStyled>
 	);

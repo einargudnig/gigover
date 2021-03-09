@@ -1,6 +1,6 @@
+import { Button } from '@chakra-ui/react';
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from './forms/Button';
 
 const FormActionsContainer = styled.div`
 	display: flex;
@@ -33,12 +33,7 @@ export const FormActions = ({
 }: FormActionsProps): JSX.Element => (
 	<FormActionsContainer {...props}>
 		{onCancel ? (
-			<Button
-				appearance={'outline'}
-				size={'normal'}
-				onClick={onCancel}
-				disabled={cancelDisabled}
-			>
+			<Button variant={'outline'} onClick={onCancel} disabled={cancelDisabled}>
 				{cancelText}
 			</Button>
 		) : (
@@ -46,9 +41,9 @@ export const FormActions = ({
 		)}
 		<Button
 			type={'submit'}
-			size={'normal'}
 			onClick={onSubmit}
-			loading={submitLoading}
+			isLoading={submitLoading}
+			loadingText={'Submitting'}
 			disabled={submitDisabled}
 		>
 			{submitText}
