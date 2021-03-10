@@ -133,7 +133,7 @@ const getTitle = (type: CalendarType, m: moment.Moment) => {
 const getSubtitle = (type: CalendarType, m: moment.Moment) => {
 	switch (type) {
 		case 'Days': {
-			return m.format('MMM');
+			return m.format('ddd');
 		}
 		case 'Weeks': {
 			return m.format('MMM');

@@ -12,6 +12,7 @@ import { RoadmapSidebar } from './components/RoadmapSidebar';
 import { GantChart } from './components/GantChart';
 import { GantChartContext } from './contexts/GantChartContext';
 import { GRID_SIDEBAR_WIDTH, useGantChart } from './hooks/useGantChart';
+import { Chevron } from '../../components/icons/Chevron';
 
 // https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
 // https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
@@ -58,8 +59,9 @@ export const Roadmap = (): JSX.Element => {
 							setProject(project);
 						}
 					}}
+					icon={<Chevron />}
 					colorScheme={'green'}
-					variant="unstyled"
+					variant="filled"
 					placeholder="Select a project"
 				>
 					{projects.length > 0 &&
