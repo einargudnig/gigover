@@ -5,7 +5,6 @@ import { GantChartContext } from '../contexts/GantChartContext';
 import { GRID_ROW_HEIGHT } from '../hooks/useGantChart';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Chevron } from '../../../components/icons/Chevron';
-import moment from 'moment';
 import { GantChartDates } from '../GantChartDates';
 
 interface GridProps {
