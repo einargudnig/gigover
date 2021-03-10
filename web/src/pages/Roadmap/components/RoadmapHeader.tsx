@@ -1,5 +1,4 @@
 import {
-	Box,
 	Button,
 	Center,
 	Heading,
@@ -17,7 +16,23 @@ import { GantChartContext } from '../contexts/GantChartContext';
 import { ClockIcon } from '../../../components/icons/ClockIcon';
 import { UsersIcon } from '../../../components/icons/UsersIcon';
 import moment from 'moment';
-import { ChevronDown } from '../../../components/icons/ChevronDown';
+import { Chevron } from '../../../components/icons/Chevron';
+import styled from 'styled-components';
+
+const EqualFlex = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	> * {
+		flex: 1 1 0;
+
+		&:last-child {
+			display: flex;
+			justify-content: flex-end;
+		}
+	}
+`;
 
 export const RoadmapHeader = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
@@ -41,7 +56,7 @@ export const RoadmapHeader = (): JSX.Element => {
 	};
 
 	return (
-		<Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+		<EqualFlex>
 			<HStack spacing={2}>
 				<Tag>
 					<TagLeftIcon>
@@ -60,28 +75,30 @@ export const RoadmapHeader = (): JSX.Element => {
 					{moment(state.date).format('MMMM yyyy')}
 				</Heading>
 			</Center>
-			<Menu>
-				<MenuButton as={Button} colorScheme={'gray'} rightIcon={<ChevronDown />}>
-					{state.type}
-				</MenuButton>
-				<MenuList>
-					<MenuItem
-						onClick={() => dispatch({ type: 'SetCalendarType', payload: 'Days' })}
-					>
-						Days
-					</MenuItem>
-					<MenuItem
-						onClick={() => dispatch({ type: 'SetCalendarType', payload: 'Weeks' })}
-					>
-						Weeks
-					</MenuItem>
-					<MenuItem
-						onClick={() => dispatch({ type: 'SetCalendarType', payload: 'Months' })}
-					>
-						Months
-					</MenuItem>
-				</MenuList>
-			</Menu>
-		</Box>
+			<div>
+				<Menu>
+					<MenuButton as={Button} colorScheme={'gray'} rightIcon={<Chevron />}>
+						{state.type}
+					</MenuButton>
+					<MenuList>
+						<MenuItem
+							onClick={() => dispatch({ type: 'SetCalendarType', payload: 'Days' })}
+						>
+							Days
+						</MenuItem>
+						<MenuItem
+							onClick={() => dispatch({ type: 'SetCalendarType', payload: 'Weeks' })}
+						>
+							Weeks
+						</MenuItem>
+						<MenuItem
+							onClick={() => dispatch({ type: 'SetCalendarType', payload: 'Months' })}
+						>
+							Months
+						</MenuItem>
+					</MenuList>
+				</Menu>
+			</div>
+		</EqualFlex>
 	);
 };

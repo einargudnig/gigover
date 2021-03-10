@@ -216,7 +216,7 @@ export const Page = ({
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>
-					<h3>
+					<div>
 						{breadcrumbs ? (
 							<>
 								{breadcrumbs.map((breadcrumb, bIndex) => (
@@ -226,7 +226,7 @@ export const Page = ({
 						) : (
 							<Heading size={'md'}>{title}</Heading>
 						)}
-					</h3>
+					</div>
 					{tabs && (
 						<Center>
 							<div>{tabs}</div>

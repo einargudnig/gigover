@@ -1,4 +1,4 @@
-import { Box, Portal, Select } from '@chakra-ui/react';
+import { Box, Grid, Portal, Select } from '@chakra-ui/react';
 import React, { useEffect, useMemo } from 'react';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
@@ -11,7 +11,7 @@ import { DateAmountSlider } from './components/DateAmountSlider';
 import { RoadmapSidebar } from './components/RoadmapSidebar';
 import { GantChart } from './components/GantChart';
 import { GantChartContext } from './contexts/GantChartContext';
-import { useGantChart } from './hooks/useGantChart';
+import { GRID_SIDEBAR_WIDTH, useGantChart } from './hooks/useGantChart';
 
 // https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
 // https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
@@ -78,18 +78,25 @@ export const Roadmap = (): JSX.Element => {
 			) : projects.length === 0 ? (
 				<NoProjectsFound />
 			) : (
-				<Box>
+				<>
 					<GantChartContext.Provider value={[state, dispatch]}>
 						<RoadmapHeader />
-						<Box display={'flex'} mt={8}>
-							<RoadmapSidebar />
-							<GantChart />
+						<Box mt={8}>
+							<Grid
+								templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
+								templateRows={'auto 1fr'}
+								rowGap={4}
+								columnGap={8}
+							>
+								<RoadmapSidebar />
+								<GantChart />
+							</Grid>
 						</Box>
 						<Portal>
 							<DateAmountSlider />
 						</Portal>
 					</GantChartContext.Provider>
-				</Box>
+				</>
 			)}
 		</Page>
 	);

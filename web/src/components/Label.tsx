@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 import styled from 'styled-components';
-import { GeneratedColor, useColorGenerator } from '../hooks/useColorGenerator';
+import { GeneratedColor, colorGenerator } from '../hooks/colorGenerator';
 
 const LabelStyled = styled.label<GeneratedColor>`
 	padding: 4px 6px;
@@ -17,7 +17,7 @@ interface LabelProps {
 }
 
 export const Label = ({ text, ...props }: LabelProps): JSX.Element => {
-	const { backgroundColor, textColor } = useColorGenerator(text);
+	const { backgroundColor, textColor } = colorGenerator(text);
 
 	return (
 		<LabelStyled backgroundColor={backgroundColor} textColor={textColor} {...props}>

@@ -1,7 +1,29 @@
 import React from 'react';
 import { IconProps } from '../IconProps';
 
-export const ChevronDown = ({ color = 'black', size = 24 }: IconProps): JSX.Element => {
+type Direction = 'up' | 'right' | 'down' | 'left';
+
+const applyDirection = (direction: Direction): string | null => {
+	switch (direction) {
+		case 'up':
+			return 'rotate(180deg)';
+		case 'left':
+			return 'rotate(90deg)';
+		case 'right':
+			return 'rotate(-90deg)';
+		case 'down':
+		default:
+			return null;
+	}
+};
+
+export const Chevron = ({
+	color = 'black',
+	size = 24,
+	direction = 'down'
+}: IconProps & { direction?: Direction }): JSX.Element => {
+	const directionStyle = applyDirection(direction);
+
 	return (
 		<svg
 			width={size}
@@ -9,6 +31,7 @@ export const ChevronDown = ({ color = 'black', size = 24 }: IconProps): JSX.Elem
 			viewBox="0 0 24 24"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
+			style={(directionStyle && { transform: directionStyle }) || undefined}
 		>
 			<path
 				fillRule="evenodd"
