@@ -1,11 +1,7 @@
 import { Box, Grid, Portal, Select } from '@chakra-ui/react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Page } from '../../components/Page';
-import { useProjectList } from '../../queries/useProjectList';
 import { Project } from '../../models/Project';
-import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { Center } from '../../components/Center';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { RoadmapHeader } from './components/RoadmapHeader';
 import { DateAmountSlider } from './components/DateAmountSlider';
 import { RoadmapSidebar } from './components/RoadmapSidebar';
@@ -14,35 +10,29 @@ import { GantChartContext } from './contexts/GantChartContext';
 import { GRID_SIDEBAR_WIDTH, useGantChart } from './hooks/useGantChart';
 import { Chevron } from '../../components/icons/Chevron';
 
-// https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
-// https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
-// https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
-// https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
-// https://dribbble.com/shots/6363405/attachments/6363405-Project-management-tool-Project-roadmap-Gantt-chart?mode=media
+interface RoadmapProps {
+	projects: Project[];
+}
 
-export const Roadmap = (): JSX.Element => {
-	const { data, isLoading } = useProjectList();
-	const projects = useMemo(() => data?.projects || [], [data]);
+export const Roadmap = ({ projects }: RoadmapProps): JSX.Element => {
 	const [state, dispatch] = useGantChart({
 		initialState: {
 			type: 'Days',
 			date: new Date(),
 			dateOffset: 0,
-			project: null
+			project: projects[0],
+			milestones: []
 		}
 	});
 
-	const setProject = (project: Project) =>
-		dispatch({
-			type: 'SetProject',
-			payload: project
-		});
-
-	useEffect(() => {
-		if (projects.length > 0 && state.project === null) {
-			setProject(projects[0]);
-		}
-	}, [setProject, projects, state.project]);
+	const setProject = useCallback(
+		(project: Project) =>
+			dispatch({
+				type: 'SetProject',
+				payload: project
+			}),
+		[dispatch]
+	);
 
 	return (
 		<Page
@@ -73,33 +63,25 @@ export const Roadmap = (): JSX.Element => {
 				</Select>
 			}
 		>
-			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
-			) : projects.length === 0 ? (
-				<NoProjectsFound />
-			) : (
-				<>
-					<GantChartContext.Provider value={[state, dispatch]}>
-						<RoadmapHeader />
-						<Box mt={8}>
-							<Grid
-								templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
-								templateRows={'auto 1fr'}
-								rowGap={4}
-								columnGap={8}
-							>
-								<RoadmapSidebar />
-								<GantChart />
-							</Grid>
-						</Box>
-						<Portal>
-							<DateAmountSlider />
-						</Portal>
-					</GantChartContext.Provider>
-				</>
-			)}
+			<>
+				<GantChartContext.Provider value={[state, dispatch]}>
+					<RoadmapHeader />
+					<Box mt={8}>
+						<Grid
+							templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
+							templateRows={'auto 1fr'}
+							rowGap={4}
+							columnGap={8}
+						>
+							<RoadmapSidebar />
+							<GantChart />
+						</Grid>
+					</Box>
+					<Portal>
+						<DateAmountSlider />
+					</Portal>
+				</GantChartContext.Provider>
+			</>
 		</Page>
 	);
 };

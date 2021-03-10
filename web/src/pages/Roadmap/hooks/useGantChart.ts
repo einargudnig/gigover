@@ -1,6 +1,7 @@
 import { Dispatch, useReducer } from 'react';
 import { Project } from '../../../models/Project';
 import moment, { DurationInputArg2 } from 'moment';
+import { Milestone } from '../../../models/Milestone';
 
 export const GRID_SIDEBAR_WIDTH = '300px';
 export const GRID_ROW_HEIGHT = '50px';
@@ -20,6 +21,7 @@ interface GantChart {
 	segments: number;
 	project: Project | null;
 	type: CalendarType;
+	milestones: Milestone[];
 }
 
 interface GantChartState extends GantChart {
@@ -61,9 +63,31 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 			};
 		}
 		case 'SetProject': {
+			if (state.project) {
+				const milestones = state.project.tasks.map((t) => {
+					const startDate = randomDate(new Date(2021, 0, 1), new Date(2021, 11, 31));
+					const endDate = randomDate(startDate, new Date(2021, 11, 31));
+
+					return new Milestone(
+						t.text,
+						'',
+						1,
+						startDate.getTime(),
+						endDate.getTime(),
+						t.projectId
+					);
+				});
+
+				return {
+					...state,
+					milestones,
+					project: action.payload
+				};
+			}
+
 			return {
 				...state,
-				project: action.payload
+				project: null
 			};
 		}
 	}
@@ -76,7 +100,8 @@ export const InitialGantChartState: GantChart = {
 	dateOffset: 0,
 	segments: 1,
 	type: 'Days',
-	project: null
+	project: null,
+	milestones: []
 };
 
 export const useGantChart = ({
@@ -84,13 +109,23 @@ export const useGantChart = ({
 }: {
 	initialState: Omit<GantChart, 'segments'>;
 }): GantChartReducer => {
+	// TODO REMOVE
+	// TODO REMOVE
+	const milestones = initialState.project?.tasks.map((t) => {
+		const startDate = randomDate(new Date(2021, 0, 1), new Date(2021, 11, 31));
+		const endDate = randomDate(startDate, new Date(2021, 11, 31));
+
+		return new Milestone(t.text, '', 1, startDate.getTime(), endDate.getTime(), t.projectId);
+	});
+
 	return useReducer(reducer, {
 		date: initialState.date,
 		initialDate: initialState.date,
 		dateOffset: initialState.dateOffset,
 		segments: getMinMaxForCalendarType(initialState.type).defaultValue,
 		type: initialState.type,
-		project: initialState.project
+		project: initialState.project,
+		milestones: milestones || []
 	});
 };
 
@@ -108,64 +143,37 @@ export const getMinMaxForCalendarType = (type: CalendarType) => {
 	throw new Error('Invalid CalendarType in getMinMaxForCalendarType');
 };
 
-interface DateSegment {
+export interface DateSegment {
 	moment: moment.Moment;
 	title: string;
 	subtitle: string;
+	column: number;
 }
 
-const getTitle = (type: CalendarType, m: moment.Moment) => {
-	switch (type) {
-		case 'Days': {
-			return m.format('D');
-		}
-		case 'Weeks': {
-			return m.format('W');
-		}
-		case 'Months': {
-			return m.format('MMM');
-		}
-		default:
-			throw new Error(`Invalid type '${type}' in useGantChart.getTitle`);
-	}
-};
+// export const getDateSegments = (
+// 	type: CalendarType,
+// 	segments: number,
+// 	date: Date
+// ): Map<string, DateSegment> => {
+// 	const mid = Math.ceil(segments / 2);
+// 	const durationAddition = type as DurationInputArg2;
+// 	const firstDate = moment(date).add(-(segments - mid), durationAddition);
+// 	const dates: Map<string, DateSegment> = new Map<string, DateSegment>();
+//
+// 	for (let i = 0; i < segments; i++) {
+// 		// Clone the firstDate by wrapping moment so it won't add to it.
+// 		const m = moment(firstDate).add(i, durationAddition);
+//
+// 		dates.set(m.format('YYYY-MM-DD'), {
+// 			moment: m,
+// 			title: getTitle(type, m),
+// 			subtitle: getSubtitle(type, m)
+// 		});
+// 	}
+//
+// 	return dates;
+// };
 
-const getSubtitle = (type: CalendarType, m: moment.Moment) => {
-	switch (type) {
-		case 'Days': {
-			return m.format('ddd');
-		}
-		case 'Weeks': {
-			return m.format('MMM');
-		}
-		case 'Months': {
-			return m.format('YYYY');
-		}
-		default:
-			throw new Error(`Invalid type '${type}' in useGantChart.getTitle`);
-	}
-};
-
-export const getDateSegments = (
-	type: CalendarType,
-	segments: number,
-	date: Date
-): DateSegment[] => {
-	const mid = Math.ceil(segments / 2);
-	const durationAddition = type as DurationInputArg2;
-	const firstDate = moment(date).add(-(segments - mid), durationAddition);
-	const dates = [];
-
-	for (let i = 0; i < segments; i++) {
-		// Clone the firstDate by wrapping moment so it won't add to it.
-		const m = moment(firstDate).add(i, durationAddition);
-
-		dates.push({
-			moment: m,
-			title: getTitle(type, m),
-			subtitle: getSubtitle(type, m)
-		});
-	}
-
-	return dates;
-};
+// TODO REMOVE
+const randomDate = (start: Date, end: Date) =>
+	new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));

@@ -6,7 +6,7 @@ import { TimeTracker } from './pages/TimeTracker/TimeTracker';
 import { Users } from './pages/Users';
 import { Settings } from './pages/Settings';
 import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
-import { Roadmap } from './pages/Roadmap/Roadmap';
+import { RoadmapPreloader } from './pages/Roadmap/RoadmapPreloader';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -14,7 +14,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'project/:projectId'} element={<ProjectDetails />}>
 			<Route path={':taskId'} element={<Organize />} />
 		</Route>
-		<Route path={'roadmap'} element={<Roadmap />} />
+		<Route path={'roadmap'} element={<RoadmapPreloader />} />
 		<Route path={'organize'} element={<Organize />}>
 			<Route path={':projectId'} element={<Organize />} />
 		</Route>

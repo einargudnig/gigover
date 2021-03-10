@@ -1,10 +1,12 @@
-import { GridItem, Text, IconButton } from '@chakra-ui/react';
+import { GridItem, IconButton, Text } from '@chakra-ui/react';
 import React, { useContext, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { GantChartContext } from '../contexts/GantChartContext';
-import { getDateSegments, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
+import { GRID_ROW_HEIGHT } from '../hooks/useGantChart';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Chevron } from '../../../components/icons/Chevron';
+import moment from 'moment';
+import { GantChartDates } from '../GantChartDates';
 
 interface GridProps {
 	segments: number;
@@ -78,8 +80,8 @@ const GantLine = styled.span<{ isFirst: boolean; isLast: boolean }>`
 export const GantChart = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
 	const columns = useMemo(() => new Array(state.segments).fill(0), [state.segments]);
-	const dates = useMemo(() => {
-		return getDateSegments(state.type, state.segments, state.date);
+	const dates = useMemo<GantChartDates>(() => {
+		return new GantChartDates(state.date, state.segments, state.type);
 	}, [state.date, state.type, state.segments]);
 
 	return (
@@ -104,7 +106,7 @@ export const GantChart = (): JSX.Element => {
 							onClick={() => dispatch({ type: 'IncreaseOffset' })}
 						/>
 					</div>
-					{dates.map((d, index) => (
+					{Array.from(dates.dates.values()).map((d, index) => (
 						<div key={index}>
 							<Text textAlign={'center'} fontSize={'sm'} color={'black'}>
 								{d.title}
@@ -125,22 +127,34 @@ export const GantChart = (): JSX.Element => {
 							style={{ gridColumn: index + 1 }}
 						/>
 					))}
-					{state.project?.tasks.map((task, index) => {
-						const colors = colorGenerator(task.text);
+					{state.milestones.map((milestone, index) => {
+						const colors = colorGenerator(milestone.title);
+						const result = milestone.getColPositions(dates);
+
+						if (!result) {
+							return null;
+						}
+
+						const [start, end] = result;
 
 						return (
 							<GantLine
 								key={index}
-								isFirst={true}
-								isLast={false}
+								isFirst={start === 1}
+								isLast={end >= dates.dates.size}
 								style={{
-									gridColumn: '1 / span 4',
+									gridColumn: `${start} / ${end + 1}`,
 									gridRow: `${index + 1}`,
 									backgroundColor: colors.backgroundColor
 								}}
+								onClick={() => {
+									// TODO Open Milestone Popup
+									// TODO Open Milestone Popup
+									// TODO Open Milestone Popup
+								}}
 							>
 								<Text isTruncated color={colors.textColor}>
-									{task.text}
+									{milestone.title}
 								</Text>
 							</GantLine>
 						);

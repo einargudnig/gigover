@@ -1,4 +1,4 @@
-import { Flex, GridItem, HStack, IconButton, Text, Button } from '@chakra-ui/react';
+import { Button, Flex, GridItem, HStack, IconButton, Text } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { TimeIcon } from '../../../components/icons/TimeIcon';
@@ -15,10 +15,10 @@ export const RoadmapSidebar = (): JSX.Element => {
 				</Button>
 			</GridItem>
 			<GridItem colStart={1} rowStart={2}>
-				{state.project?.tasks.map((t) => (
+				{state.milestones.map((m, mIndex) => (
 					<Flex
 						justifyContent={'space-between'}
-						key={t.taskId}
+						key={mIndex}
 						alignItems={'center'}
 						height={GRID_ROW_HEIGHT}
 					>
@@ -31,7 +31,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 								colorScheme={'gray'}
 							/>
 							<Text isTruncated color={'black'} fontSize={'sm'} fontWeight={'bold'}>
-								{t.text}
+								{m.title}
 							</Text>
 						</HStack>
 						<IconButton
