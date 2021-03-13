@@ -4,7 +4,7 @@ import moment, { DurationInputArg2 } from 'moment';
 import { Milestone } from '../../../models/Milestone';
 
 export const GRID_SIDEBAR_WIDTH = '300px';
-export const GRID_ROW_HEIGHT = '50px';
+export const GRID_ROW_HEIGHT = '55px';
 
 export type CalendarType = 'Days' | 'Weeks' | 'Months';
 

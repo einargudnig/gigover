@@ -65,9 +65,13 @@ const GantLine = styled.span<{ isFirst: boolean; isLast: boolean }>`
 	cursor: pointer;
 	box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 	transition: all 0.2s linear;
+	border: 1px solid transparent;
 
 	&:hover {
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+		background-color: #fff !important;
+		color: #000 !important;
+		border-color: var(--chakra-colors-gray-200);
 	}
 
 	${(props) =>
@@ -127,7 +131,7 @@ export const GantChart = (): JSX.Element => {
 				</ClearGrid>
 			</GridItem>
 			<GridItem colStart={2} rowStart={2}>
-				<GantGrid segments={state.segments} milestones={state.project?.tasks.length || 1}>
+				<GantGrid segments={state.segments} milestones={state.milestones?.length + 1 || 1}>
 					{columns.map((s, index) => (
 						<GridRow
 							key={index}

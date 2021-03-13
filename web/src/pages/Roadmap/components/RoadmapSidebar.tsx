@@ -4,6 +4,8 @@ import { GantChartContext } from '../contexts/GantChartContext';
 import { TimeIcon } from '../../../components/icons/TimeIcon';
 import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
 import { ModalContext } from '../../../context/ModalContext';
+import { EmptyState } from '../../../components/empty/EmptyState';
+import { EmptyProjects } from '../../../components/empty/EmptyProjects';
 
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
@@ -61,6 +63,15 @@ export const RoadmapSidebar = (): JSX.Element => {
 						/>
 					</Flex>
 				))}
+				{state.milestones.length === 0 && (
+					<EmptyState
+						icon={<EmptyProjects scale={0.5} />}
+						title={'No milestones'}
+						text={
+							'No milestones have been added, create one to see it on the gant chart.'
+						}
+					/>
+				)}
 			</GridItem>
 		</>
 	);
