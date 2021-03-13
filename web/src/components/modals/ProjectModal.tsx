@@ -1,13 +1,22 @@
 import React from 'react';
-import { Project, ProjectStatus } from '../../models/Project';
-import { useForm } from 'react-hook-form';
+import { Project, ProjectStatus, ProjectStatusType } from '../../models/Project';
+import { Controller, useForm } from 'react-hook-form';
 import { ProjectFormData, useModifyProject } from '../../queries/useModifyProject';
-import { Label } from '../forms/Label';
 import { InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { FormActions } from '../FormActions';
 import { devError } from '../../utils/ConsoleUtils';
-import { Button, Input } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	FormControl,
+	FormErrorMessage,
+	FormHelperText,
+	FormLabel,
+	HStack,
+	Input
+} from '@chakra-ui/react';
+import { DatePicker } from '../forms/DatePicker';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -16,17 +25,19 @@ interface ProjectModalProps {
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
-	const { register, handleSubmit, errors } = useForm<ProjectFormData>({
-		defaultValues: project
+	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>({
+		defaultValues: project,
+		mode: 'onBlur'
 	});
 
-	const onSubmit = handleSubmit(async ({ name, description }) => {
-		// TODO Validate form..
+	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
 		try {
 			await modify({
 				projectId: project?.projectId,
 				name,
 				description,
+				startDate,
+				endDate,
 				status: project?.status || 'OPEN'
 			});
 			closeModal();
@@ -35,46 +46,14 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 		}
 	});
 
-	const reOpenProject = async () => {
+	const updateStatus = async (status: string) => {
 		try {
 			const projectId = project?.projectId;
 
 			if (projectId) {
 				await modify({
 					projectId,
-					status: ProjectStatus.OPEN
-				});
-				closeModal();
-			}
-		} catch (e) {
-			devError('Error', e);
-		}
-	};
-
-	const setClosed = async () => {
-		try {
-			const projectId = project?.projectId;
-
-			if (projectId) {
-				await modify({
-					projectId,
-					status: ProjectStatus.CLOSED
-				});
-				closeModal();
-			}
-		} catch (e) {
-			devError('Error', e);
-		}
-	};
-
-	const archiveProject = async () => {
-		try {
-			const projectId = project?.projectId;
-
-			if (projectId) {
-				await modify({
-					projectId,
-					status: ProjectStatus.DONE
+					status: status as ProjectStatusType
 				});
 				closeModal();
 			}
@@ -92,20 +71,88 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					<small>{error?.errorCode}</small>
 				</>
 			)}
-			{errors && (
-				<>
-					<ul>
-						{errors.name && <li>{errors.name}</li>}
-						{errors.description && <li>{errors.description}</li>}
-						{errors.status && <li>{errors.status}</li>}
-					</ul>
-				</>
-			)}
 			<form onSubmit={onSubmit}>
-				<Label>Project name</Label>
-				<Input mb={6} name="name" required={true} ref={register} />
-				<Label>Project description</Label>
-				<Input mb={6} name="description" required={true} ref={register} />
+				<FormControl id={'name'} isRequired isInvalid={Boolean(errors.name)}>
+					<FormLabel>Project name</FormLabel>
+					<Input
+						name="name"
+						required={true}
+						ref={register({ required: 'The project name is missing' })}
+					/>
+					{errors.name ? (
+						<FormErrorMessage>{errors.name.message}</FormErrorMessage>
+					) : (
+						<FormHelperText>Give your project a name</FormHelperText>
+					)}
+				</FormControl>
+				<Box mb={6} />
+				<FormControl id={'description'} isRequired isInvalid={Boolean(errors.description)}>
+					<FormLabel>Project description</FormLabel>
+					<Input name="description" required={true} ref={register} />
+					{errors.description ? (
+						<FormErrorMessage>{errors.description.message}</FormErrorMessage>
+					) : (
+						<FormHelperText>Describe your project</FormHelperText>
+					)}
+				</FormControl>
+				<Box mb={6} />
+				<FormControl isRequired isInvalid={true}>
+					<FormLabel htmlFor="startDate">Start and end date</FormLabel>
+					<HStack>
+						<Controller
+							name="startDate"
+							control={control}
+							defaultValue={project?.startDate ? new Date(project.startDate) : null}
+							rules={{
+								required: 'You have to set a start date'
+							}}
+							render={({ onChange, value, onBlur }) => (
+								<DatePicker
+									selected={value}
+									onChange={(date) => {
+										if (date) {
+											onChange((date as Date).getTime());
+										} else {
+											onChange(null);
+										}
+									}}
+									onBlur={onBlur}
+								/>
+							)}
+						/>
+						<Controller
+							name="endDate"
+							control={control}
+							defaultValue={project?.endDate ? new Date(project.endDate) : null}
+							rules={{
+								required: 'You have to set an end date'
+							}}
+							render={({ onChange, value, onBlur }) => (
+								<DatePicker
+									selected={value}
+									onChange={(date) => {
+										if (date) {
+											onChange((date as Date).getTime());
+										} else {
+											onChange(null);
+										}
+									}}
+									onBlur={onBlur}
+								/>
+							)}
+						/>
+					</HStack>
+					{errors.startDate || errors.endDate ? (
+						<FormErrorMessage>
+							{errors.startDate?.message || errors.endDate?.message}
+						</FormErrorMessage>
+					) : (
+						<FormHelperText>
+							When should this project start and be finished?
+						</FormHelperText>
+					)}
+				</FormControl>
+
 				<FormActions
 					submitText={project ? 'Update project' : 'Create a project'}
 					submitLoading={isLoading}
@@ -123,7 +170,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 						colorScheme={'red'}
 						onClick={async (event) => {
 							event.preventDefault();
-							await setClosed();
+							await updateStatus(ProjectStatus.CLOSED);
 						}}
 					>
 						Close this project
@@ -138,7 +185,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 						colorScheme={'red'}
 						onClick={async (event) => {
 							event.preventDefault();
-							await reOpenProject();
+							await updateStatus(ProjectStatus.OPEN);
 						}}
 					>
 						Re-open this project
@@ -154,7 +201,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 						variant={'link'}
 						onClick={async (event) => {
 							event.preventDefault();
-							await archiveProject();
+							await updateStatus(ProjectStatus.DONE);
 						}}
 					>
 						Archive this project

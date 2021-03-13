@@ -97,7 +97,29 @@ export class GantChartDates {
 		return this._endDate;
 	}
 
-	/*get weekNumberKey(date): string {
+	weekColumn(date: moment.Moment): number {
+		let col = 0;
+		this.dates.forEach((value) => {
+			if (date.isSame(value.moment, 'week')) {
+				col = value.column;
+				return;
+			}
+		});
 
-	}*/
+		return col;
+	}
+
+	monthColumn(date: moment.Moment): number {
+		let col = 0;
+		this.dates.forEach((value) => {
+			if (date.isSame(value.moment, 'month')) {
+				// eslint-disable-next-line no-console
+				console.log('Date', date, 'is in same month as ', value.moment);
+				col = value.column;
+				return;
+			}
+		});
+
+		return col;
+	}
 }

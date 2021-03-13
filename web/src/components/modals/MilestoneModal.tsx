@@ -42,7 +42,8 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 		try {
 			const res = await addMilestone({
 				...values,
-				projectId: projectId
+				milestoneId: milestone?.milestoneId ?? undefined,
+				projectId: milestone?.projectId ?? projectId
 			});
 
 			// eslint-disable-next-line no-console
@@ -154,8 +155,11 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 				<Box mb={6} />
 				<FormControl id={'estimatedHours'}>
 					<FormLabel>Estimated hours</FormLabel>
-					<NumberInput name={'estimatedHours'} ref={register} min={1}>
-						<NumberInputField />
+					<NumberInput min={1}>
+						<NumberInputField
+							name={'estimatedHours'}
+							ref={register({ required: false })}
+						/>
 						<NumberInputStepper>
 							<NumberIncrementStepper />
 							<NumberDecrementStepper />

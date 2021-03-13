@@ -11,7 +11,7 @@ interface OptionalProjectId {
 
 export interface ProjectFormData
 	extends OptionalProjectId,
-		Pick<Project, 'name' | 'description' | 'status'> {}
+		Pick<Project, 'name' | 'description' | 'status' | 'startDate' | 'endDate'> {}
 
 export interface CloseProjectData extends Pick<Project, 'projectId'> {
 	status: typeof ProjectStatus.DONE;

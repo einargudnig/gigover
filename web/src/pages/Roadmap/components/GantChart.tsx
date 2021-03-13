@@ -6,6 +6,7 @@ import { GRID_ROW_HEIGHT } from '../hooks/useGantChart';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Chevron } from '../../../components/icons/Chevron';
 import { GantChartDates } from '../GantChartDates';
+import { ModalContext } from '../../../context/ModalContext';
 
 interface GridProps {
 	segments: number;
@@ -61,6 +62,13 @@ const GantLine = styled.span<{ isFirst: boolean; isLast: boolean }>`
 	align-self: center;
 	font-size: 14px;
 	font-weight: bold;
+	cursor: pointer;
+	box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+	transition: all 0.2s linear;
+
+	&:hover {
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+	}
 
 	${(props) =>
 		props.isFirst &&
@@ -78,6 +86,7 @@ const GantLine = styled.span<{ isFirst: boolean; isLast: boolean }>`
 
 export const GantChart = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
+	const [, setModalContext] = useContext(ModalContext);
 	const columns = useMemo(() => new Array(state.segments).fill(0), [state.segments]);
 	const dates = useMemo<GantChartDates>(() => {
 		return new GantChartDates(state.date, state.segments, state.type);
@@ -128,7 +137,7 @@ export const GantChart = (): JSX.Element => {
 					))}
 					{state.milestones.map((milestone, index) => {
 						const colors = colorGenerator(milestone.title);
-						const result = milestone.getColPositions(dates);
+						const result = milestone.getColPositions(dates, state.type);
 
 						if (!result) {
 							return null;
@@ -142,14 +151,18 @@ export const GantChart = (): JSX.Element => {
 								isFirst={start === 1}
 								isLast={end >= dates.dates.size}
 								style={{
-									gridColumn: `${start} / ${end + 1}`,
+									gridColumn: `${start} / ${start !== end ? end + 1 : end}`,
 									gridRow: `${index + 1}`,
 									backgroundColor: colors.backgroundColor
 								}}
 								onClick={() => {
-									// TODO Open Milestone Popup
-									// TODO Open Milestone Popup
-									// TODO Open Milestone Popup
+									setModalContext({
+										milestone: {
+											projectId: milestone.projectId,
+											milestone: milestone,
+											callback: () => null
+										}
+									});
 								}}
 							>
 								<Text isTruncated color={colors.textColor}>

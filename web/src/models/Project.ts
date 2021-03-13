@@ -26,6 +26,8 @@ export interface Project {
 	length: number;
 	zipCode: string;
 	uId: string;
+	startDate: number;
+	endDate: number;
 	comments?: TaskComment[];
 	workers: WorkerItem[];
 }
