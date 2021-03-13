@@ -13,7 +13,8 @@ type GantChartReducerAction =
 	| { type: 'IncreaseOffset' }
 	| { type: 'DecreaseOffset' }
 	| { type: 'SetSegments'; payload: number }
-	| { type: 'SetProject'; payload: Project };
+	| { type: 'SetProject'; payload: Project }
+	| { type: 'SetMilestones'; payload: Milestone[] };
 
 interface GantChart {
 	date: Date;
@@ -64,9 +65,6 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 		}
 		case 'SetProject': {
 			if (state.project) {
-				// TODO Find new milestones when project is switched
-				// Maybe project shouldn't be in here, only milestones
-
 				return {
 					...state,
 					milestones: [],
@@ -77,6 +75,12 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 			return {
 				...state,
 				project: null
+			};
+		}
+		case 'SetMilestones': {
+			return {
+				...state,
+				milestones: action.payload
 			};
 		}
 	}

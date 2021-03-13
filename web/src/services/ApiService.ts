@@ -17,7 +17,8 @@ export class ApiService {
 	static addComment = API_BASE + 'contractor/comment';
 
 	// Milestones
-	static getMilestones = API_BASE + 'contractor/getMilestones';
+	static getMilestones = (projectId: number): string =>
+		API_BASE + 'contractor/milestones/' + projectId;
 	static addMilestone = API_BASE + 'contractor/addMilestone';
 	static milestoneDetails = (id: number): string => API_BASE + 'contractor/task/' + id;
 

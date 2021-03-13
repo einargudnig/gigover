@@ -25,8 +25,7 @@ export const useAddMilestone = () => {
 		},
 		{
 			onSuccess: async (data, variables) => {
-				await queryClient.invalidateQueries(ApiService.getMilestones);
-				await queryClient.invalidateQueries(ApiService.projectDetails(variables.projectId));
+				await queryClient.invalidateQueries(ApiService.getMilestones(variables.projectId));
 
 				if (variables.milestoneId) {
 					await queryClient.invalidateQueries(
