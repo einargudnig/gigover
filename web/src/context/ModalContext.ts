@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Project, WorkerItem } from '../models/Project';
 import { Task } from '../models/Task';
+import { Milestone } from '../models/Milestone';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -19,12 +20,19 @@ export interface IEditTimeTrackerModalContext {
 	callback: () => void;
 }
 
+export interface MilestoneModalContext {
+	projectId: number;
+	milestone?: Milestone;
+	callback: () => void;
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
 	};
 	timeTracker?: ITimeTrackerModalContext;
 	editTimeTracker?: IEditTimeTrackerModalContext;
+	milestone?: MilestoneModalContext;
 	registered?: boolean;
 	taskDetails?: {
 		task: Task;

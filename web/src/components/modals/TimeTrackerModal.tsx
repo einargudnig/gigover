@@ -14,11 +14,10 @@ import { SubstringText } from '../../utils/StringUtils';
 import { useTrackerStart } from '../../queries/useTrackerStart';
 
 interface TimeTrackerModalProps {
-	open: boolean;
 	context: ITimeTrackerModalContext;
 }
 
-export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.Element => {
+export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Element => {
 	const { data } = useProjectList();
 	const closeModal = useCloseModal();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
@@ -95,7 +94,7 @@ export const TimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.
 					<div>Time tracker</div>
 				</>
 			}
-			open={open}
+			open={true}
 			centerModal={true}
 			closeIcon={false}
 			onClose={() => closeModal()}

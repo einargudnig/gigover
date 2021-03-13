@@ -1,4 +1,4 @@
-export const API_BASE = 'https://rest.gigover.com/rest/';
+export const API_BASE = 'http://localhost:8080/rest/';
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';
@@ -15,6 +15,11 @@ export class ApiService {
 	static updateTask = API_BASE + 'contractor/updateTask';
 	static taskDetails = (id: number): string => API_BASE + 'workers/task/' + id;
 	static addComment = API_BASE + 'contractor/comment';
+
+	// Milestones
+	static getMilestones = API_BASE + 'contractor/getMilestones';
+	static addMilestone = API_BASE + 'contractor/addMilestone';
+	static milestoneDetails = (id: number): string => API_BASE + 'contractor/task/' + id;
 
 	// Time tracking
 	static activeWorkers = API_BASE + 'contractor/activeWorkers';

@@ -6,6 +6,7 @@ import { ProjectModal } from './modals/ProjectModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
 import { TaskModal } from './modals/TaskModal/TaskModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
+import { MilestoneModal } from './modals/MilestoneModal';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -20,12 +21,11 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 					projectId={modalContext.taskDetails.projectId}
 				/>
 			)}
-			{modalContext.timeTracker && (
-				<TimeTrackerModal open={true} context={modalContext.timeTracker} />
-			)}
+			{modalContext.timeTracker && <TimeTrackerModal context={modalContext.timeTracker} />}
 			{modalContext.editTimeTracker && (
-				<EditTimeTrackerModal open={true} context={modalContext.editTimeTracker} />
+				<EditTimeTrackerModal context={modalContext.editTimeTracker} />
 			)}
+			{modalContext.milestone && <MilestoneModal context={modalContext.milestone} />}
 			{modalContext.modifyProject && (
 				<Modal
 					open={true}

@@ -1,11 +1,20 @@
-import { CalendarType, DateSegment } from './hooks/useGantChart';
+import { CalendarType } from './hooks/useGantChart';
 import moment, { DurationInputArg2 } from 'moment';
 
 export const GANT_CHART_FORMAT = 'YYYY-MM-DD';
 
+export interface DateSegment {
+	moment: moment.Moment;
+	title: string;
+	subtitle: string;
+	column: number;
+}
+
 export class GantChartDates {
-	private _startDate?: Date;
-	private _endDate?: Date;
+	private _startDate: Date = new Date();
+	private _endDate: Date = new Date();
+	private _startDateMoment?: moment.Moment;
+	private _endDateMoment?: moment.Moment;
 
 	segments: number;
 	type: CalendarType;
@@ -57,6 +66,8 @@ export class GantChartDates {
 		const durationAddition = this.type as DurationInputArg2;
 		const firstDate = moment(this.initDate).add(-(this.segments - mid), durationAddition);
 
+		// Set start date
+		this._startDateMoment = firstDate;
 		this._startDate = firstDate.toDate();
 
 		for (let i = 0; i < this.segments; i++) {
@@ -71,21 +82,22 @@ export class GantChartDates {
 			});
 
 			if (i + 1 === this.segments) {
+				// Set end date
+				this._endDateMoment = m;
 				this._endDate = m.toDate();
 			}
 		}
-
-		// eslint-disable-next-line no-console
-		console.log(this._startDate);
-		// eslint-disable-next-line no-console
-		console.log(this._endDate);
 	}
 
 	get startDate(): Date {
-		return this._startDate || new Date();
+		return this._startDate;
 	}
 
 	get endDate(): Date {
-		return this._endDate || new Date();
+		return this._endDate;
 	}
+
+	/*get weekNumberKey(date): string {
+
+	}*/
 }

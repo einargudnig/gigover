@@ -25,11 +25,10 @@ const MultiSelectWrapper = styled.div`
 `;
 
 interface TimeTrackerModalProps {
-	open: boolean;
 	context: IEditTimeTrackerModalContext;
 }
 
-export const EditTimeTrackerModal = ({ open, context }: TimeTrackerModalProps): JSX.Element => {
+export const EditTimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Element => {
 	const closeModal = useCloseModal(context.callback);
 	const [hours, setHours] = useState(context.hours);
 	const [minutes, setMinutes] = useState(context.minutes);
@@ -55,7 +54,7 @@ export const EditTimeTrackerModal = ({ open, context }: TimeTrackerModalProps): 
 					{isLoading && <LoadingSpinner />}
 				</>
 			}
-			open={open}
+			open={true}
 			centerModal={true}
 			closeIcon={false}
 			onClose={() => closeModal()}

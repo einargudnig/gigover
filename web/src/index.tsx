@@ -38,6 +38,30 @@ const ChakraTheme = extendTheme({
 				colorScheme: 'green'
 			}
 		},
+		Textarea: {
+			parts: ['field'],
+			baseStyle: {
+				field: {
+					color: 'black'
+				}
+			},
+			defaultProps: {
+				focusBorderColor: 'green.500',
+				colorScheme: 'green'
+			}
+		},
+		NumberInput: {
+			parts: ['field'],
+			baseStyle: {
+				field: {
+					color: 'black'
+				}
+			},
+			defaultProps: {
+				focusBorderColor: 'green.500',
+				colorScheme: 'green'
+			}
+		},
 		Button: {
 			defaultProps: {
 				colorScheme: 'green'

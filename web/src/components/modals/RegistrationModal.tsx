@@ -8,6 +8,7 @@ import { Label } from '../forms/Label';
 import { ErrorTypes } from '../../models/ErrorResponse';
 import { FirebaseContext } from '../../firebase/FirebaseContext';
 import { devError } from '../../utils/ConsoleUtils';
+import { Button } from '@chakra-ui/react';
 
 interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'> {
 	name: string;
@@ -110,13 +111,14 @@ export const RegistrationModal = (): JSX.Element => {
 					<Label>Zip code</Label>
 					<Input name="zipCode" maxLength={3} required={true} ref={register} />
 				</InputWrapper>
-				{isLoading ? (
-					<button type="submit" disabled={true}>
-						Loading
-					</button>
-				) : (
-					<button type="submit">Submit</button>
-				)}
+				<Button
+					disabled={isLoading}
+					loading={isLoading}
+					loadingText={'Submitting'}
+					type="submit"
+				>
+					Submit
+				</Button>
 			</form>
 		</div>
 	);

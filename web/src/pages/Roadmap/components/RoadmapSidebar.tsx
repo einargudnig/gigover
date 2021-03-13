@@ -3,17 +3,35 @@ import React, { useContext } from 'react';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { TimeIcon } from '../../../components/icons/TimeIcon';
 import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
+import { ModalContext } from '../../../context/ModalContext';
 
 export const RoadmapSidebar = (): JSX.Element => {
+	const [, setModalState] = useContext(ModalContext);
 	const [state] = useContext(GantChartContext);
 
 	return (
 		<>
-			<GridItem colStart={1} rowStart={1}>
-				<Button colorScheme={'gray'} variant={'outline'} width={'100%'}>
-					Add a milestone
-				</Button>
-			</GridItem>
+			{state.project && (
+				<GridItem colStart={1} rowStart={1}>
+					<Button
+						colorScheme={'gray'}
+						variant={'outline'}
+						width={'100%'}
+						onClick={() =>
+							setModalState({
+								milestone: {
+									projectId: state.project!.projectId!,
+									callback: () => {
+										return;
+									}
+								}
+							})
+						}
+					>
+						Add a milestone
+					</Button>
+				</GridItem>
+			)}
 			<GridItem colStart={1} rowStart={2}>
 				{state.milestones.map((m, mIndex) => (
 					<Flex

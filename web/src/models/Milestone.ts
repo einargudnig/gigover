@@ -1,28 +1,59 @@
 import { GANT_CHART_FORMAT, GantChartDates } from '../pages/Roadmap/GantChartDates';
 import moment from 'moment';
+import { Task } from './Task';
 
-export class Milestone {
+export interface MilestoneForm {
+	milestoneId: number;
+	projectId: number;
+	title: string;
+	description: string;
+	estimatedHours: number;
+	startDate: number;
+	endDate: number;
+	projectTasks: Task[];
+}
+
+export class Milestone implements MilestoneForm {
+	milestoneId: number;
 	title: string;
 	description: string;
 	estimatedHours: number;
 	startDate: number; // Timestamp
 	endDate: number; // Timestamp
 	projectId: number;
+	projectTasks: Task[];
 
 	constructor(
+		milestoneId: number,
 		title: string,
 		description: string,
 		estimatedHours: number,
 		startDate: number,
 		endDate: number,
-		projectId: number
+		projectId: number,
+		projectTasks: Task[]
 	) {
+		this.milestoneId = milestoneId;
 		this.title = title;
 		this.description = description;
 		this.estimatedHours = estimatedHours;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.projectId = projectId;
+		this.projectTasks = projectTasks;
+	}
+
+	get milestoneJson(): MilestoneForm {
+		return {
+			milestoneId: this.milestoneId,
+			title: this.title,
+			description: this.description,
+			estimatedHours: this.estimatedHours,
+			startDate: this.startDate,
+			endDate: this.endDate,
+			projectId: this.projectId,
+			projectTasks: this.projectTasks
+		};
 	}
 
 	/**
@@ -46,19 +77,10 @@ export class Milestone {
 	}
 
 	private isBeforeStart(start: Date) {
-		// eslint-disable-next-line no-console
-		console.log(moment(start).format('YYYY-MM-DD'), 'start');
-		// eslint-disable-next-line no-console
-		console.log(moment(this.startDate).format('YYYY-MM-DD'), 'start');
-
 		return this.startDate < start.getTime();
 	}
 
 	private isAfterEnd(end: Date) {
-		// eslint-disable-next-line no-console
-		console.log(end.getMonth(), end.getDay(), 'end');
-		// eslint-disable-next-line no-console
-		console.log(moment(this.endDate).format('MM-DD'), 'end');
 		return this.endDate > end.getTime();
 	}
 
