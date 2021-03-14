@@ -13,11 +13,11 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { GantChartContext } from '../contexts/GantChartContext';
-import { ClockIcon } from '../../../components/icons/ClockIcon';
 import { UsersIcon } from '../../../components/icons/UsersIcon';
 import moment from 'moment';
 import { Chevron } from '../../../components/icons/Chevron';
 import styled from 'styled-components';
+import { ProjectTimeStatus } from '../../../components/ProjectTimeStatus';
 
 const EqualFlex = styled.div`
 	display: flex;
@@ -37,38 +37,21 @@ const EqualFlex = styled.div`
 export const RoadmapHeader = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
 
-	// TODO
-	const hoursLeft = Math.floor(Math.random() * Math.floor(100));
-
-	// Returns a colorScheme for the Project Hours Left Tag
-	const getColorScheme = (left: number, hoursTotal: number): string => {
-		const percent = left / hoursTotal;
-
-		if (percent > 0.6) {
-			return 'green';
-		} else if (percent > 0.45) {
-			return 'yellow';
-		} else if (percent > 0.2) {
-			return 'orange';
-		} else {
-			return 'red';
-		}
-	};
-
 	return (
 		<EqualFlex>
 			<HStack spacing={2}>
-				<Tag>
-					<TagLeftIcon>
-						<UsersIcon color={'#000'} />
-					</TagLeftIcon>
-					{/* TODO Add contractors length as well */}
-					<TagLabel>{(state.project?.workers.length || 0) + 1} people</TagLabel>
-				</Tag>
-				<Tag colorScheme={getColorScheme(hoursLeft, 100)}>
-					<TagLeftIcon as={ClockIcon} />
-					<TagLabel>{hoursLeft} hours left</TagLabel>
-				</Tag>
+				{state.project && (
+					<>
+						<Tag>
+							<TagLeftIcon>
+								<UsersIcon color={'#000'} />
+							</TagLeftIcon>
+							{/* TODO Add contractors length as well */}
+							<TagLabel>{(state.project?.workers.length || 0) + 1} people</TagLabel>
+						</Tag>
+						<ProjectTimeStatus project={state.project} />
+					</>
+				)}
 			</HStack>
 			<Center>
 				<Heading as={'h4'} size={'md'}>

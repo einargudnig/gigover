@@ -1,11 +1,11 @@
 import { Button, Flex, GridItem, HStack, IconButton, Text } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { GantChartContext } from '../contexts/GantChartContext';
-import { TimeIcon } from '../../../components/icons/TimeIcon';
 import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
 import { ModalContext } from '../../../context/ModalContext';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { EmptyProjects } from '../../../components/empty/EmptyProjects';
+import { Edit } from '../../../components/icons/Edit';
 
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
@@ -57,9 +57,20 @@ export const RoadmapSidebar = (): JSX.Element => {
 						<IconButton
 							size={'xs'}
 							aria-label={'milestone-actions'}
-							icon={<TimeIcon color={'black'} scale={0.6} />}
+							icon={<Edit size={14} color={'black'} />}
 							variant={'ghost'}
 							colorScheme={'gray'}
+							onClick={() => {
+								setModalState({
+									milestone: {
+										projectId: state.project!.projectId!,
+										milestone: m,
+										callback: () => {
+											return;
+										}
+									}
+								});
+							}}
 						/>
 					</Flex>
 				))}

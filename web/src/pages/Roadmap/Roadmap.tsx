@@ -11,22 +11,27 @@ import { GRID_SIDEBAR_WIDTH, useGantChart } from './hooks/useGantChart';
 import { Chevron } from '../../components/icons/Chevron';
 import { useMilestones } from '../../queries/useMilestones';
 import { Milestone } from '../../models/Milestone';
+import { useQueryParam, NumberParam } from 'use-query-params';
 
 interface RoadmapProps {
 	projects: Project[];
+	selectedProject?: Project;
 }
 
-export const Roadmap = ({ projects }: RoadmapProps): JSX.Element => {
+export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Element => {
+	const [, setProjectQuery] = useQueryParam('project', NumberParam);
 	const [state, dispatch] = useGantChart({
 		initialState: {
 			type: 'Days',
 			date: new Date(),
 			dateOffset: 0,
-			project: projects[0],
+			project: selectedProject ?? projects[0],
 			milestones: []
 		}
 	});
-	const { data } = useMilestones(state.project?.projectId ?? projects[0].projectId);
+	const { data } = useMilestones(
+		state.project?.projectId ?? selectedProject?.projectId ?? projects[0].projectId
+	);
 
 	const setProject = useCallback(
 		(project: Project) =>
@@ -37,6 +42,7 @@ export const Roadmap = ({ projects }: RoadmapProps): JSX.Element => {
 		[dispatch]
 	);
 
+	// TODO Refactor
 	useEffect(() => {
 		// Map to Milestone class
 		dispatch({
@@ -70,6 +76,7 @@ export const Roadmap = ({ projects }: RoadmapProps): JSX.Element => {
 						);
 						if (project) {
 							setProject(project);
+							setProjectQuery(project.projectId);
 						}
 					}}
 					icon={<Chevron />}

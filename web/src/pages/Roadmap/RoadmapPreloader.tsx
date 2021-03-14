@@ -5,8 +5,10 @@ import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Roadmap } from './Roadmap';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
+import { useQueryParam, NumberParam } from 'use-query-params';
 
 export const RoadmapPreloader = (): JSX.Element => {
+	const [projectId] = useQueryParam('project', NumberParam);
 	const { data, isLoading, isError, error } = useProjectList();
 
 	if (!isLoading && isError) {
@@ -15,7 +17,12 @@ export const RoadmapPreloader = (): JSX.Element => {
 	}
 
 	return !isLoading && data && data?.projects?.length > 0 ? (
-		<Roadmap projects={data!.projects} />
+		<Roadmap
+			projects={data!.projects}
+			selectedProject={
+				projectId ? data!.projects.find((p) => p.projectId === projectId) : undefined
+			}
+		/>
 	) : (
 		<Page title={'Gant chart'} backgroundColor={'#fff'}>
 			{isLoading ? (

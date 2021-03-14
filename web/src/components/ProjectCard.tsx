@@ -7,6 +7,7 @@ import { ModalContext } from '../context/ModalContext';
 import { Theme } from '../Theme';
 import { TaskStatus } from '../models/Task';
 import { CardBaseLink } from './CardBase';
+import { ProjectTimeStatus } from './ProjectTimeStatus';
 
 interface ProjectCardProps {
 	project: Project;
@@ -61,7 +62,9 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 
 	const tasks = project.tasks.filter((task) => task.status !== TaskStatus.Archived) || [];
 	const completed = tasks.filter((task) => task.status === TaskStatus.Done);
-	const percent = (completed.length / tasks.length) * 100 || 0;
+	const inProgress = tasks.filter((task) => task.status === TaskStatus.Doing);
+	const percent = Math.round((completed.length / tasks.length) * 100) || 0;
+	const progress = Math.round((inProgress.length / tasks.length) * 100) || 0;
 
 	return (
 		<ProjectCardStyled to={`/project/${project.projectId}`}>
@@ -80,7 +83,8 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 				</ProjectCardEdit>
 			</ProjectCardTitle>
 			<div>
-				<ProgressBar percent={percent} />
+				{project.endDate && <ProjectTimeStatus project={project} />}
+				<ProgressBar percent={percent} secondaryProgress={progress} />
 			</div>
 		</ProjectCardStyled>
 	);

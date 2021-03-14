@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { TaskStatus, TaskStatusType } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
@@ -9,7 +9,7 @@ import { CardBase } from '../../components/CardBase';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
-import { Button } from '@chakra-ui/react';
+import { Button, HStack } from '@chakra-ui/react';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -136,11 +136,9 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
 	const project = data && data.project;
 
-	const all = project?.tasks.filter((task) => task.status !== TaskStatus.Archived).length || 0;
-	const doing = project?.tasks.filter((task) => task.status === TaskStatus.Doing).length || 0;
-	const doingPercent = (doing / all) * 100;
-	const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;
-	const completedPercent = (completed / all) * 100;
+	// const all = project?.tasks.filter((task) => task.status !== TaskStatus.Archived).length || 0;
+	// const doing = project?.tasks.filter((task) => task.status === TaskStatus.Doing).length || 0;
+	// const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;
 
 	const onDragEnd = async (result: DropResult) => {
 		const status: TaskStatusType = parseInt(
@@ -176,32 +174,17 @@ export const ProjectDetails = (): JSX.Element | null => {
 			)}
 			<Page breadcrumbs={[project.name, 'Tasks']}>
 				<ProjectDashboard>
-					<div>
-						<div>
-							<h3>Task count</h3>
-							<h1>{all}</h1>
-						</div>
-						<div className={'separator'} />
-						<div>
-							<h3>Completed tasks</h3>
-							<h1>{completed}</h1>
-						</div>
-						<div className={'separator'} />
-						<div>
-							<h3>In progress</h3>
-							<h1>{(isNaN(doingPercent) ? 0 : doingPercent).toFixed(0) ?? 0}%</h1>
-						</div>
-						<div className={'separator'} />
-						<div>
-							<h3>Finished</h3>
-							<h1>
-								{(isNaN(completedPercent) ? 0 : completedPercent).toFixed(0) ?? 0}%
-							</h1>
-						</div>
-					</div>
-					<div>
+					<div />
+					<HStack spacing={4}>
 						<Button onClick={() => setManageWorkers(true)}>Manage workers</Button>
-					</div>
+						<Button
+							colorScheme={'black'}
+							as={Link}
+							to={'/roadmap?project=' + project.projectId}
+						>
+							Open Gant Chart
+						</Button>
+					</HStack>
 				</ProjectDashboard>
 				<ProjectDetailsPage>
 					{isLoading ? (

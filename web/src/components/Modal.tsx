@@ -1,3 +1,4 @@
+import { IconButton } from '@chakra-ui/react';
 import React, { FC, useCallback, useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useEventListener } from '../hooks/useEventListener';
@@ -70,12 +71,15 @@ export const Modal: FC<IModalContainerProps> = ({
 							<span>{title}</span>
 						</ModalTitleContainer>
 						{onClose && closeIcon && (
-							<ModalCloseCross
-								onClick={() => {
-									closeModal();
-								}}
-							>
-								<CrossIcon />
+							<ModalCloseCross>
+								<IconButton
+									aria-label={'Close modal'}
+									colorScheme={'gray'}
+									icon={<CrossIcon />}
+									onClick={() => {
+										closeModal();
+									}}
+								/>
 							</ModalCloseCross>
 						)}
 					</ModalHeader>

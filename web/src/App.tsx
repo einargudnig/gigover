@@ -14,6 +14,7 @@ import { useVerify } from './queries/useVerify';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import { FirebaseUser } from './firebase/firebaseTypes';
 import { useProjectTypes } from './queries/useProjectTypes';
+import { QueryParamProvider } from 'use-query-params';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -69,7 +70,9 @@ const App = ({
 				<ModalContext.Provider value={[modalContext, setModalContext]}>
 					<UserContext.Provider value={user}>
 						<GlobalModals>
-							<AuthenticatedRoutes />
+							<QueryParamProvider>
+								<AuthenticatedRoutes />
+							</QueryParamProvider>
 						</GlobalModals>
 					</UserContext.Provider>
 				</ModalContext.Provider>
