@@ -11,6 +11,9 @@ import { PlusIcon } from './icons/PlusIcon';
 import { ClockIcon } from './icons/ClockIcon';
 import {
 	Avatar,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
 	Center,
 	Fade,
 	Heading,
@@ -24,6 +27,8 @@ import {
 } from '@chakra-ui/react';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { RoadmapIcon } from './icons/RoadmapIcon';
+import { Chevron } from './icons/Chevron';
+import { Theme } from '../Theme';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -212,17 +217,24 @@ export const Page = ({
 						</div>
 					</IconLink>
 				</SidebarNav>
-				<small>v1.0</small>
+				<small>v1.1</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>
 					<div>
 						{breadcrumbs ? (
-							<>
+							<Breadcrumb
+								spacing={'8px'}
+								separator={
+									<Chevron direction={'right'} color={Theme.colors.green} />
+								}
+							>
 								{breadcrumbs.map((breadcrumb, bIndex) => (
-									<span key={bIndex}>{breadcrumb}</span>
+									<BreadcrumbItem key={bIndex}>
+										<BreadcrumbLink href={'#'}>{breadcrumb}</BreadcrumbLink>
+									</BreadcrumbItem>
 								))}
-							</>
+							</Breadcrumb>
 						) : (
 							<Heading size={'md'}>{title}</Heading>
 						)}

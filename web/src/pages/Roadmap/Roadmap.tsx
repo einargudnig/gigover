@@ -65,7 +65,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 
 	return (
 		<Page
-			title={'Gant chart'}
+			title={'Gantt chart'}
 			backgroundColor={'#fff'}
 			tabs={
 				<Select

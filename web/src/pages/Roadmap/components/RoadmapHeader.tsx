@@ -49,7 +49,7 @@ export const RoadmapHeader = (): JSX.Element => {
 							{/* TODO Add contractors length as well */}
 							<TagLabel>{(state.project?.workers.length || 0) + 1} people</TagLabel>
 						</Tag>
-						<ProjectTimeStatus project={state.project} />
+						{state.project.endDate && <ProjectTimeStatus project={state.project} />}
 					</>
 				)}
 			</HStack>

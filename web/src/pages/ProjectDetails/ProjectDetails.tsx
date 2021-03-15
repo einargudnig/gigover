@@ -24,7 +24,7 @@ const KanbanBoard = styled.div`
 `;
 
 const FeedColumn = styled(CardBase)`
-	margin: ${(props): string => props.theme.padding(3)}
+	margin: ${(props): string => props.theme.padding(1)}
 		${(props): string => props.theme.padding(1.5)};
 	height: 100%;
 	flex: 1;
@@ -54,69 +54,6 @@ const FeedColumn = styled(CardBase)`
 
 		&:not(:last-child) {
 			margin-right: ${(props): string => props.theme.padding(1)};
-		}
-	}
-`;
-
-const ProjectDashboard = styled(CardBase)`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-
-	> div:first-child {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-
-		> div {
-			text-align: center;
-		}
-
-		.separator {
-			margin: 0 24px;
-			height: 100px;
-			width: 1px;
-			background-color: ${(props) => props.theme.colors.border};
-
-			@media screen and (max-width: 640px) {
-				margin: 0 12px;
-				height: 60px;
-			}
-		}
-	}
-
-	h3 {
-		font-weight: 300;
-		font-size: 1rem;
-
-		@media screen and (max-width: 760px) {
-			font-size: 0.8rem;
-		}
-	}
-
-	h1 {
-		@media screen and (max-width: 760px) {
-			font-size: 1.2rem;
-		}
-	}
-
-	@media screen and (max-width: 640px) {
-		h3 {
-			font-size: 0.6rem;
-		}
-
-		h1 {
-			font-size: 1rem;
-		}
-
-		> div:nth-child(2) {
-			width: 100%;
-
-			button {
-				width: 100%;
-			}
 		}
 	}
 `;
@@ -172,20 +109,23 @@ export const ProjectDetails = (): JSX.Element | null => {
 			{manageWorkers && (
 				<ManageProjectWorkers onClose={() => setManageWorkers(false)} project={project} />
 			)}
-			<Page breadcrumbs={[project.name, 'Tasks']}>
-				<ProjectDashboard>
-					<div />
+			<Page
+				breadcrumbs={[project.name, 'Tasks']}
+				tabs={
 					<HStack spacing={4}>
-						<Button onClick={() => setManageWorkers(true)}>Manage workers</Button>
+						<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
+							Manage workers
+						</Button>
 						<Button
-							colorScheme={'black'}
+							colorScheme={'gray'}
 							as={Link}
 							to={'/roadmap?project=' + project.projectId}
 						>
-							Open Gant Chart
+							Open Gantt Chart
 						</Button>
 					</HStack>
-				</ProjectDashboard>
+				}
+			>
 				<ProjectDetailsPage>
 					{isLoading ? (
 						<p>Loading</p>

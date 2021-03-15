@@ -155,7 +155,7 @@ export const GantChart = (): JSX.Element => {
 								isFirst={start === 1}
 								isLast={end >= dates.dates.size}
 								style={{
-									gridColumn: `${start} / ${start !== end ? end + 1 : end}`,
+									gridColumn: `${start} / ${start === end ? 'span 2' : end + 1}`,
 									gridRow: `${index + 1}`,
 									backgroundColor: colors.backgroundColor
 								}}
