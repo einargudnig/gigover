@@ -1,4 +1,7 @@
-export const API_BASE = 'http://localhost:8080/rest/';
+export const API_BASE =
+	process.env.NODE_ENV === 'production'
+		? 'https://rest.gigover.com/rest/'
+		: 'http://localhost:8080/rest/';
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';

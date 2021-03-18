@@ -54,7 +54,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 				reset();
 				closeModal();
 			} else {
-				throw new Error('Could not create a milestone, please try again.');
+				throw new Error('Could not create a deliverable, please try again.');
 			}
 		} catch (e) {
 			devError('addMilestone', e);
@@ -64,7 +64,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 
 	return (
 		<Modal
-			title={milestone ? 'Edit milestone' : 'Create milestone'}
+			title={milestone ? 'Edit deliverable' : 'Create deliverable'}
 			open={true}
 			onClose={() => closeModal()}
 		>
@@ -90,14 +90,14 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								type={'text'}
 								name={'title'}
 								ref={register({
-									required: 'You have to set a title for the milestone'
+									required: 'You have to set a title for the project deliverable'
 								})}
 							/>
 							{errors.title ? (
 								<FormErrorMessage>{errors.title.message}</FormErrorMessage>
 							) : (
 								<FormHelperText>
-									Give your milestone a descriptive name
+									Give your project deliverable a descriptive name
 								</FormHelperText>
 							)}
 						</FormControl>
@@ -163,7 +163,8 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								</FormErrorMessage>
 							) : (
 								<FormHelperText>
-									When should this milestone start and be finished?
+									When is the estimated start and end date of this project
+									deliverable?
 								</FormHelperText>
 							)}
 						</FormControl>

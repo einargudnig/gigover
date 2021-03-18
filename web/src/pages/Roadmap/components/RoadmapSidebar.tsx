@@ -30,7 +30,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 							})
 						}
 					>
-						Add a milestone
+						Add a deliverable
 					</Button>
 				</GridItem>
 			)}
