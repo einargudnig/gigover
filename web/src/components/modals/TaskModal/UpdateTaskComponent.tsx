@@ -2,12 +2,13 @@ import React, { useCallback } from 'react';
 import { TaskCardInput } from '../../TaskCardInput';
 import { Task, TaskStatus } from '../../../models/Task';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Divider } from '../../Divider';
-import { Button } from '../../forms/Button';
+import { Tag, VStack, HStack, Button } from '@chakra-ui/react';
 
 interface UpdateTaskComponentProps {
 	task: Task;
 	projectId: number;
+
+	onChange(newValue: string): void;
 
 	onClose(closeModal: boolean): void;
 }
@@ -15,6 +16,7 @@ interface UpdateTaskComponentProps {
 export const UpdateTaskComponent = ({
 	task,
 	projectId,
+	onChange,
 	onClose
 }: UpdateTaskComponentProps): JSX.Element => {
 	const { mutateAsync: updateTask, isLoading, error } = useUpdateTask(projectId);
@@ -46,30 +48,29 @@ export const UpdateTaskComponent = ({
 	);
 
 	return (
-		<>
-			<div>
-				<h3>Task details</h3>
+		<VStack spacing={8} alignItems={'flex-start'}>
+			<div style={{ width: '100%' }}>
+				<Tag>Task details</Tag>
 				<TaskCardInput
+					task={task}
 					value={task.text}
 					error={error?.errorText}
 					loading={isLoading}
+					onChange={(newValue: string) => onChange(newValue)}
 					onSubmit={(newValue: Pick<Task, 'text' | 'typeId'>) => submitChanges(newValue)}
 				/>
 			</div>
-			<Divider />
-			<div>
-				<h3>Archive Task</h3>
-				<Button onClick={() => archiveTask()} appearance={'delete'} size={'none'}>
-					Archive this task
-				</Button>
-			</div>
-			<Divider />
-			<div>
-				<h3>Discard changes</h3>
-				<Button onClick={() => onClose(false)} appearance={'lightblue'}>
-					Cancel & close
-				</Button>
-			</div>
-		</>
+			<VStack spacing={8} alignItems={'flex-start'}>
+				<Tag>Actions</Tag>
+				<HStack justifyContent={'space-between'}>
+					<Button onClick={() => onClose(false)} colorScheme={'gray'}>
+						Cancel & close
+					</Button>
+					<Button onClick={() => archiveTask()} colorScheme={'red'}>
+						Archive this task
+					</Button>
+				</HStack>
+			</VStack>
+		</VStack>
 	);
 };

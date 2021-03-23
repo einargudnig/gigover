@@ -34,6 +34,7 @@ interface TaskModalProps {
 
 export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
+	const [taskTitle, setTaskTitle] = useState(task.text);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
@@ -41,11 +42,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	return (
 		<Modal
 			open={true}
-			title={
-				<p style={{ maxWidth: '400px' }}>
-					{editing ? `Edit task #${task.taskId}` : task.text}
-				</p>
-			}
+			title={<p style={{ maxWidth: '400px' }}>{editing ? `Edit ${taskTitle}` : task.text}</p>}
 			onClose={closeModal}
 		>
 			{isLoading ? (
@@ -62,6 +59,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 					<UpdateTaskComponent
 						task={task}
 						projectId={projectId}
+						onChange={(value) => setTaskTitle(value)}
 						onClose={(closeDetails) => {
 							setEditing(false);
 

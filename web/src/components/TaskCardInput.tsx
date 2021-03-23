@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Task } from '../models/Task';
 import { useProjectTypes } from '../queries/useProjectTypes';
-import { Button } from './forms/Button';
+import { Options } from './forms/Options';
+import { FormControl, HStack, Button } from '@chakra-ui/react';
+import { ProjectType } from '../models/ProjectType';
 
 const TaskInput = styled.textarea`
 	background: transparent;
@@ -20,16 +22,20 @@ const TaskInput = styled.textarea`
 `;
 
 interface TaskCardInputProps {
+	task?: Task;
 	value?: string;
 	error?: string;
 	loading?: boolean;
+	onChange?: (newValue: string) => void;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
 }
 
 export const TaskCardInput = ({
+	task,
 	value = '',
 	error,
 	loading = false,
+	onChange,
 	onSubmit
 }: TaskCardInputProps): JSX.Element => {
 	const { data } = useProjectTypes();
@@ -37,9 +43,10 @@ export const TaskCardInput = ({
 	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
-	const { register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'text'>>({
+	const { control, register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'text'>>({
 		defaultValues: {
-			text: value
+			text: value,
+			typeId: task?.typeId
 		}
 	});
 
@@ -68,6 +75,10 @@ export const TaskCardInput = ({
 		setTextAreaHeight('auto');
 		setParentHeight(`${textInputRef.current!.scrollHeight}px`);
 		setText(event.target.value);
+
+		if (onChange) {
+			onChange(event.target.value);
+		}
 	};
 
 	return (
@@ -89,30 +100,36 @@ export const TaskCardInput = ({
 					}}
 				/>
 			</div>
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center'
-				}}
-			>
-				<select name="typeId" ref={register}>
-					{data?.projectTypes.map((projectType) => (
-						<option key={projectType.typeId} value={projectType.typeId}>
-							{projectType.name}
-						</option>
-					))}
-				</select>
+			<HStack>
+				<FormControl id={'typeId'}>
+					<Controller
+						name={'typeId'}
+						control={control}
+						render={({ onChange: ptChange, value: ptValue, onBlur }) => (
+							<Options
+								isMulti={false}
+								onBlur={onBlur}
+								onChange={(v: ProjectType) => {
+									ptChange(v.typeId);
+								}}
+								value={data?.projectTypes.find((pt) => pt.typeId === ptValue)}
+								getOptionLabel={(option: ProjectType) => option.name}
+								getOptionValue={(option: ProjectType) => option.typeId}
+								options={data?.projectTypes || []}
+							/>
+						)}
+					/>
+				</FormControl>
 				<Button
-					size={'tiny'}
 					type={'submit'}
-					appearance={'outline'}
+					colorScheme={'green'}
+					loadingText={'Saving'}
 					loading={loading}
 					disabled={loading}
 				>
 					Save
 				</Button>
-			</div>
+			</HStack>
 		</form>
 	);
 };

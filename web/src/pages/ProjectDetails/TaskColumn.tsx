@@ -2,13 +2,13 @@ import React, { useMemo, useState } from 'react';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
 import { useAddTask } from '../../queries/useAddTask';
-import { Button } from '../../components/forms/Button';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { TaskCard } from '../../components/TaskCard';
 import { InputWrapper } from '../../components/forms/Input';
 import { useEventListener } from '../../hooks/useEventListener';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { devError } from '../../utils/ConsoleUtils';
+import { Button, Heading } from '@chakra-ui/react';
 
 interface TaskColumnProps {
 	project: Project;
@@ -65,7 +65,7 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 
 	return (
 		<>
-			<h3>{taskStatus}</h3>
+			<Heading size={'md'}>{taskStatus}</Heading>
 			<Droppable droppableId={status.toString()}>
 				{(droppable, snapshot) => (
 					<div
@@ -106,9 +106,13 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 				</InputWrapper>
 			)}
 
-			<Button size={'fill'} appearance={'lightblue'} onClick={() => setIsCreatingTask(true)}>
-				<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />
-				<span>Add task</span>
+			<Button
+				colorScheme={'gray'}
+				leftIcon={<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />}
+				variant={'outline'}
+				onClick={() => setIsCreatingTask(true)}
+			>
+				Add task
 			</Button>
 		</>
 	);

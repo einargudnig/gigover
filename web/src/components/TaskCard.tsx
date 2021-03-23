@@ -6,14 +6,12 @@ import { useProjectTypes } from '../queries/useProjectTypes';
 import { ModalContext } from '../context/ModalContext';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
+import { CardBase } from './CardBase';
 
-const TaskCardStyled = styled.div<{ isEditing: boolean; error?: boolean }>`
+const TaskCardStyled = styled(CardBase)<{ isEditing: boolean; error?: boolean }>`
 	padding: 16px;
 	margin: 8px 0;
-	background: ${(props) => props.theme.colors.taskBackground};
-	border: 1px solid ${(props) => props.theme.colors.taskBorder};
 	cursor: pointer;
-	border-radius: 6px;
 	word-wrap: anywhere;
 
 	h4 {
@@ -41,14 +39,12 @@ const TaskCardStyled = styled.div<{ isEditing: boolean; error?: boolean }>`
 		css`
 			&:hover {
 				background: ${darken(0.05, props.theme.colors.taskBackground)};
-				border: 1px solid ${darken(0.05, props.theme.colors.taskBorder)};
 			}
 		`}
 
 	${(props) =>
 		props.isEditing &&
 		css`
-			border-color: ${props.theme.colors.green};
 			box-shadow: 0 5px 25px rgba(0, 140, 0, 0.2);
 		`};
 
@@ -56,7 +52,6 @@ const TaskCardStyled = styled.div<{ isEditing: boolean; error?: boolean }>`
 		props.isEditing &&
 		props.error &&
 		css`
-			border-color: ${props.theme.colors.red};
 			box-shadow: 0 5px 25px rgba(222, 39, 39, 0.2);
 		`};
 `;

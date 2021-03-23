@@ -5,7 +5,6 @@ import { Link, useParams } from 'react-router-dom';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { TaskStatus, TaskStatusType } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
-import { CardBase } from '../../components/CardBase';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
@@ -23,24 +22,13 @@ const KanbanBoard = styled.div`
 	user-select: none;
 `;
 
-const FeedColumn = styled(CardBase)`
-	margin: ${(props): string => props.theme.padding(1)}
-		${(props): string => props.theme.padding(1.5)};
+const FeedColumn = styled.div`
+	margin: 0 ${(props): string => props.theme.padding(1.5)};
 	height: 100%;
 	flex: 1;
 	display: flex;
 	flex-direction: column;
 	padding: 16px;
-
-	h3 {
-		margin: 0 0 ${(props): string => props.theme.padding(1)};
-		padding-bottom: ${(props): string => props.theme.padding(1)};
-		font-size: 16px;
-	}
-
-	&:not(:last-child) {
-		margin-right: ${(props): string => props.theme.padding(2)};
-	}
 
 	> div {
 		flex: 1;
@@ -48,8 +36,7 @@ const FeedColumn = styled(CardBase)`
 	}
 
 	@media screen and (max-width: 1024px) {
-		margin: ${(props): string => props.theme.padding(2)}
-			${(props): string => props.theme.padding(1)};
+		margin: 0 ${(props): string => props.theme.padding(1)};
 		padding: 12px;
 
 		&:not(:last-child) {

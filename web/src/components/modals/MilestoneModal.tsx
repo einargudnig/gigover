@@ -20,9 +20,9 @@ import { FormActions } from '../FormActions';
 import { useAddMilestone } from '../../mutations/useAddMilestone';
 import { devError } from '../../utils/ConsoleUtils';
 import { Task, TaskStatus } from '../../models/Task';
-import Select from 'react-select';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { Options } from '../forms/Options';
 
 interface MilestoneModalProps {
 	context: MilestoneModalContext;
@@ -175,29 +175,14 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								name={'projectTasks'}
 								control={control}
 								render={({ onChange, value, onBlur }) => (
-									<Select
+									<Options
 										isMulti={true}
 										onBlur={onBlur}
-										onChange={(v) => onChange(v)}
+										onChange={(v: number) => onChange(v)}
 										value={value}
 										getOptionLabel={(option: Task) => option.text}
-										// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-										// @ts-ignore
 										getOptionValue={(option: Task) => option.taskId}
 										options={tasks}
-										theme={(theme) => ({
-											...theme,
-											borderRadius: 8,
-											colors: {
-												...theme.colors,
-												neutral20: 'var(--chakra-colors-gray-200)',
-												neutral30: 'var(--chakra-colors-gray-400)',
-												primary25: 'var(--chakra-colors-green-100)',
-												primary50: 'var(--chakra-colors-green-200)',
-												primary75: 'var(--chakra-colors-green-300)',
-												primary: 'var(--chakra-colors-green-400)'
-											}
-										})}
 									/>
 								)}
 							/>
