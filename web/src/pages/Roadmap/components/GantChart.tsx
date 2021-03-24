@@ -205,7 +205,7 @@ export const GantChart = (): JSX.Element => {
 		}
 
 		return [];
-	}, [dates, state.milestones, state.expanded, state.rows, state.type]);
+	}, [state.rows, state.milestones, state.type, state.expanded, dates, setModalContext]);
 
 	return (
 		<>
