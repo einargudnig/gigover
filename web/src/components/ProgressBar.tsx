@@ -50,7 +50,7 @@ const ProgressBarStyled = styled.div<ProgressBarProps>`
 
 export const ProgressBar = ({ percent, secondaryProgress = 0 }: ProgressBarProps): JSX.Element => {
 	return (
-		<ProgressBarStyled percent={percent} secondaryProgress={secondaryProgress}>
+		<ProgressBarStyled percent={percent} secondaryProgress={percent + secondaryProgress}>
 			<p>
 				{secondaryProgress > 0 && (
 					<>
