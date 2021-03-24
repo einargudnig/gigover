@@ -9,9 +9,11 @@ import { LoadingSpinner } from '../../LoadingSpinner';
 import { CommentInput } from './CommentInput';
 import { Comment } from '../../Comment';
 import { StatusUpdate } from './StatusUpdate';
-import { Button } from '../../forms/Button';
 import { UpdateTaskComponent } from './UpdateTaskComponent';
-import { Divider } from '../../Divider';
+import { Button, Center, HStack, Tag, VStack } from '@chakra-ui/react';
+import { TaskDateChanger } from './TaskDateChanger';
+import { Theme } from '../../../Theme';
+import { Edit } from '../../icons/Edit';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -46,9 +48,9 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 			onClose={closeModal}
 		>
 			{isLoading ? (
-				<div>
+				<Center>
 					<LoadingSpinner />
-				</div>
+				</Center>
 			) : isError ? (
 				<p>
 					Error fetching task with id: {task.taskId} - Reason: {error?.errorText}. Code:{' '}
@@ -71,44 +73,58 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 				</TaskModalStyled>
 			) : (
 				<TaskModalStyled>
-					<div>
-						<h3>Modify task</h3>
-						<Button onClick={() => setEditing(true)}>Edit task</Button>
-					</div>
-					<Divider />
-					<div>
-						<h3>Project owner</h3>
-						<User
-							avatar={projectTask?.project.ownerAvatar || ''}
-							name={projectTask?.project.ownerName || 'unknown'}
-						/>
-					</div>
-					<Divider />
-					<StatusUpdate task={task} projectId={projectId} />
-					<Divider />
-					<div>
-						<h3>Comments {isLoading && <LoadingSpinner />}</h3>
+					<VStack
+						spacing={8}
+						justifyContent={'stretch'}
+						alignItems={'flex-start'}
+						style={{ width: '100%' }}
+					>
 						<div>
-							{projectTask?.comments && projectTask.comments.length > 0 ? (
-								projectTask?.comments.map((taskComment, taskCommentId) => (
-									<Comment
-										key={taskCommentId}
-										author={taskComment.fullName}
-										comment={taskComment.comment}
-										date={new Date(taskComment.sent)}
-									/>
-								))
-							) : (
-								<p>No comments yet</p>
-							)}
+							<Button
+								variant={'link'}
+								colorScheme={'gray'}
+								leftIcon={<Edit size={20} color={Theme.colors.darkLightBlue} />}
+								onClick={() => setEditing(true)}
+							>
+								Edit task
+							</Button>
 						</div>
 						<div>
-							<CommentInput
-								projectId={projectTask?.project.projectId || -1}
-								taskId={task.taskId}
+							<Tag mb={4}>Project owner</Tag>
+							<User
+								avatar={projectTask?.project.ownerAvatar || ''}
+								name={projectTask?.project.ownerName || 'unknown'}
 							/>
 						</div>
-					</div>
+						{data && data.projectTask && <TaskDateChanger task={data.projectTask} />}
+						<StatusUpdate task={task} projectId={projectId} />
+						<div style={{ width: '100%' }}>
+							<HStack spacing={4} justifyContent={'space-between'} mb={4}>
+								<Tag mb={4}>Comments</Tag>
+								{isLoading && <LoadingSpinner />}
+							</HStack>
+							<div>
+								{projectTask?.comments && projectTask.comments.length > 0 ? (
+									projectTask?.comments.map((taskComment, taskCommentId) => (
+										<Comment
+											key={taskCommentId}
+											author={taskComment.fullName}
+											comment={taskComment.comment}
+											date={new Date(taskComment.sent)}
+										/>
+									))
+								) : (
+									<p>No comments yet</p>
+								)}
+							</div>
+							<div>
+								<CommentInput
+									projectId={projectTask?.project.projectId || -1}
+									taskId={task.taskId}
+								/>
+							</div>
+						</div>
+					</VStack>
 				</TaskModalStyled>
 			)}
 		</Modal>

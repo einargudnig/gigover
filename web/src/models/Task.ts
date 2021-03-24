@@ -19,4 +19,6 @@ export interface Task {
 	minutes: number; // Minutes tracked
 	comments: TaskComment[];
 	priority: number;
+	startDate: number | null;
+	endDate: number | null;
 }

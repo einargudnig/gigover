@@ -3,14 +3,12 @@ import { ProjectResponse } from './useProjectList';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import axios from 'axios';
-import { TaskStatusType } from '../models/Task';
+import { Task } from '../models/Task';
 import { Project } from '../models/Project';
 
-export interface UpdateTaskFormData {
-	taskId: number;
-	status: TaskStatusType;
-	typeId: number;
-	text: string;
+export interface UpdateTaskFormData extends Pick<Task, 'taskId' | 'status' | 'typeId' | 'text'> {
+	startDate?: number | null;
+	endDate?: number | null;
 	comment?: string;
 	priority?: number;
 }

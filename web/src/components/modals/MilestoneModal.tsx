@@ -4,7 +4,6 @@ import { Modal } from '../Modal';
 import { MilestoneModalContext } from '../../context/ModalContext';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import {
-	Box,
 	Center,
 	FormControl,
 	FormErrorMessage,
@@ -84,7 +83,12 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						)}
 					</div>
 					<form onSubmit={onSubmit}>
-						<FormControl id={'title'} isRequired isInvalid={Boolean(errors.title)}>
+						<FormControl
+							id={'title'}
+							isRequired
+							isInvalid={Boolean(errors.title)}
+							mb={6}
+						>
 							<FormLabel>Title</FormLabel>
 							<Input
 								type={'text'}
@@ -101,13 +105,11 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								</FormHelperText>
 							)}
 						</FormControl>
-						<Box mb={6} />
-						<FormControl id={'description'}>
+						<FormControl id={'description'} mb={6}>
 							<FormLabel>Description</FormLabel>
 							<Textarea name={'description'} ref={register} />
 						</FormControl>
-						<Box mb={6} />
-						<FormControl isRequired isInvalid={true}>
+						<FormControl isRequired isInvalid={true} mb={6}>
 							<FormLabel htmlFor="startDate">Start and end date</FormLabel>
 							<HStack>
 								<Controller
@@ -168,7 +170,6 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								</FormHelperText>
 							)}
 						</FormControl>
-						<Box mb={6} />
 						<FormControl id={'milestoneTasks'}>
 							<FormLabel>Tasks</FormLabel>
 							<Controller

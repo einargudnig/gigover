@@ -293,7 +293,9 @@ export const Page = ({
 					</HeaderActions>
 				</PageHeader>
 				<PageContent backgroundColor={backgroundColor}>
-					<Fade in={true}>{children}</Fade>
+					<Fade in={true} style={{ flex: 1, height: '100%' }}>
+						{children}
+					</Fade>
 				</PageContent>
 			</PageWrapper>
 		</PageStyled>

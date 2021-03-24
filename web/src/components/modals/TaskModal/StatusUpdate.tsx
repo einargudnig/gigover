@@ -3,6 +3,7 @@ import { Task, TaskStatus, TaskStatusType } from '../../../models/Task';
 import { TrackerSelect } from '../../TrackerSelect';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
+import { HStack, Tag } from '@chakra-ui/react';
 
 interface StatusUpdateProps {
 	projectId: number;
@@ -23,8 +24,11 @@ export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Elemen
 	};
 
 	return (
-		<div>
-			<h3>Task status {isLoading && <LoadingSpinner />}</h3>
+		<div style={{ width: '100%' }}>
+			<HStack mb={4} spacing={4} justifyContent={'space-between'}>
+				<Tag>Task status</Tag>
+				{isLoading && <LoadingSpinner />}
+			</HStack>
 			<TrackerSelect
 				title={'Status'}
 				value={task.status}

@@ -91,21 +91,19 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 							</Draggable>
 						))}
 						{droppable.placeholder}
+						{isCreatingTask && (
+							<InputWrapper>
+								<TaskCard
+									error={taskError}
+									loading={isLoading}
+									projectId={project.projectId}
+									onSubmit={(taskValues) => createTask(taskValues)}
+								/>
+							</InputWrapper>
+						)}
 					</div>
 				)}
 			</Droppable>
-
-			{isCreatingTask && (
-				<InputWrapper>
-					<TaskCard
-						error={taskError}
-						loading={isLoading}
-						projectId={project.projectId}
-						onSubmit={(taskValues) => createTask(taskValues)}
-					/>
-				</InputWrapper>
-			)}
-
 			<Button
 				colorScheme={'gray'}
 				leftIcon={<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />}
