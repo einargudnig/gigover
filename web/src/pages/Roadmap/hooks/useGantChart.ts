@@ -14,7 +14,8 @@ type GantChartReducerAction =
 	| { type: 'DecreaseOffset' }
 	| { type: 'SetSegments'; payload: number }
 	| { type: 'SetProject'; payload: Project }
-	| { type: 'SetMilestones'; payload: Milestone[] };
+	| { type: 'SetMilestones'; payload: Milestone[] }
+	| { type: 'ToggleMilestone'; payload: Milestone };
 
 interface GantChart {
 	date: Date;
@@ -23,6 +24,8 @@ interface GantChart {
 	project: Project | null;
 	type: CalendarType;
 	milestones: Milestone[];
+	rows: number;
+	expanded: Map<number, boolean>;
 }
 
 interface GantChartState extends GantChart {
@@ -80,7 +83,28 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 		case 'SetMilestones': {
 			return {
 				...state,
+				rows: action.payload.length,
+				expanded: new Map<number, boolean>(),
 				milestones: action.payload
+			};
+		}
+		case 'ToggleMilestone': {
+			const map = state.expanded;
+			const id = action.payload.milestoneId;
+			let rows = state.rows;
+
+			if (map.has(id)) {
+				map.delete(id);
+				rows = rows - action.payload.projectTasks.length;
+			} else {
+				map.set(id, true);
+				rows = rows + action.payload.projectTasks.length;
+			}
+
+			return {
+				...state,
+				rows,
+				expanded: map
 			};
 		}
 	}
@@ -94,13 +118,15 @@ export const InitialGantChartState: GantChart = {
 	segments: 1,
 	type: 'Days',
 	project: null,
-	milestones: []
+	milestones: [],
+	rows: 0,
+	expanded: new Map<number, boolean>()
 };
 
 export const useGantChart = ({
 	initialState
 }: {
-	initialState: Omit<GantChart, 'segments'>;
+	initialState: Omit<GantChart, 'segments' | 'rows' | 'expanded'>;
 }): GantChartReducer => {
 	return useReducer(reducer, {
 		date: initialState.date,
@@ -109,7 +135,9 @@ export const useGantChart = ({
 		segments: getMinMaxForCalendarType(initialState.type).defaultValue,
 		type: initialState.type,
 		project: initialState.project,
-		milestones: initialState.milestones
+		milestones: initialState.milestones,
+		rows: initialState.milestones.length,
+		expanded: new Map<number, boolean>()
 	});
 };
 

@@ -1,4 +1,5 @@
 import { TaskComment } from './TaskComment';
+import { GantChartItem } from './GantChartItem';
 
 export const TaskStatus = {
 	Backlog: 0,
@@ -21,4 +22,42 @@ export interface Task {
 	priority: number;
 	startDate: number | null;
 	endDate: number | null;
+}
+
+export class TaskItem extends GantChartItem implements Task {
+	taskId: number;
+	projectId: number;
+	typeId: number;
+	text: string;
+	status: TaskStatusType;
+	minutes: number; // Minutes tracked
+	comments: TaskComment[];
+	priority: number;
+
+	constructor(task: Task) {
+		super(task.startDate, task.endDate);
+		this.taskId = task.taskId;
+		this.projectId = task.projectId;
+		this.typeId = task.typeId;
+		this.text = task.text;
+		this.status = task.status;
+		this.minutes = task.minutes;
+		this.comments = task.comments;
+		this.priority = task.priority;
+	}
+
+	get taskJson(): Task {
+		return {
+			taskId: this.taskId,
+			projectId: this.projectId,
+			typeId: this.typeId,
+			text: this.text,
+			status: this.status,
+			minutes: this.minutes,
+			comments: this.comments,
+			priority: this.priority,
+			startDate: this.startDate,
+			endDate: this.endDate
+		};
+	}
 }

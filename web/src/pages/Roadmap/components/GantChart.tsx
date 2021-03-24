@@ -1,12 +1,14 @@
 import { GridItem, IconButton, Text } from '@chakra-ui/react';
-import React, { useContext, useMemo } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { GantChartContext } from '../contexts/GantChartContext';
-import { GRID_ROW_HEIGHT } from '../hooks/useGantChart';
+import { CalendarType, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Chevron } from '../../../components/icons/Chevron';
 import { GantChartDates } from '../GantChartDates';
-import { ModalContext } from '../../../context/ModalContext';
+import { Milestone } from '../../../models/Milestone';
+import { TaskItem } from '../../../models/Task';
+import { IModalContext, ModalContext } from '../../../context/ModalContext';
 
 interface GridProps {
 	segments: number;
@@ -88,6 +90,92 @@ const GantLine = styled.span<{ isFirst: boolean; isLast: boolean }>`
 		`}
 `;
 
+interface GridItemRow {
+	start: number;
+	end: number;
+	color: {
+		backgroundColor: string;
+		textColor: string;
+	};
+	title: string;
+	onClick: () => void;
+	type: 'deliverable' | 'task' | 'empty';
+}
+
+const emptyRow = (): GridItemRow => ({
+	start: 0,
+	end: 0,
+	color: { backgroundColor: '', textColor: '' },
+	title: '',
+	onClick: () => null,
+	type: 'empty'
+});
+
+const convertMilestoneToRow = (
+	dates: GantChartDates,
+	type: CalendarType,
+	milestone: Milestone,
+	setModalContext: Dispatch<SetStateAction<IModalContext>>
+): GridItemRow | null => {
+	const colors = colorGenerator(milestone.title);
+	const result = milestone.getColPositions(dates, type);
+
+	if (!result) {
+		return null;
+	}
+
+	const [start, end] = result;
+
+	return {
+		start,
+		end,
+		color: colors,
+		title: milestone.title,
+		onClick: () => {
+			setModalContext({
+				milestone: {
+					projectId: milestone.projectId,
+					milestone: milestone,
+					callback: () => null
+				}
+			});
+		},
+		type: 'deliverable'
+	};
+};
+
+const convertTaskToRow = (
+	dates: GantChartDates,
+	type: CalendarType,
+	task: TaskItem,
+	setModalContext: Dispatch<SetStateAction<IModalContext>>
+): GridItemRow | null => {
+	const colors = colorGenerator(task.text);
+	const result = task.getColPositions(dates, type);
+
+	if (!result) {
+		return null;
+	}
+
+	const [start, end] = result;
+
+	return {
+		start,
+		end,
+		color: colors,
+		title: task.text,
+		onClick: () => {
+			setModalContext({
+				taskDetails: {
+					projectId: task.projectId,
+					task: task
+				}
+			});
+		},
+		type: 'task'
+	};
+};
+
 export const GantChart = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
 	const [, setModalContext] = useContext(ModalContext);
@@ -95,6 +183,29 @@ export const GantChart = (): JSX.Element => {
 	const dates = useMemo<GantChartDates>(() => {
 		return new GantChartDates(state.date, state.segments, state.type);
 	}, [state.date, state.type, state.segments]);
+
+	const GridItemRows: GridItemRow[] = useMemo(() => {
+		if (state.rows > 0) {
+			const rows: GridItemRow[] = [];
+
+			state.milestones.forEach((m) => {
+				const row = convertMilestoneToRow(dates, state.type, m, setModalContext);
+				rows.push(row !== null ? row : emptyRow());
+
+				// If it is expanded, convert the tasks to rows
+				if (state.expanded.has(m.milestoneId)) {
+					m.projectTasks.forEach((t) => {
+						const taskRow = convertTaskToRow(dates, state.type, t, setModalContext);
+						rows.push(taskRow !== null ? taskRow : emptyRow());
+					});
+				}
+			});
+
+			return rows;
+		}
+
+		return [];
+	}, [dates, state.milestones, state.expanded, state.rows, state.type]);
 
 	return (
 		<>
@@ -131,7 +242,7 @@ export const GantChart = (): JSX.Element => {
 				</ClearGrid>
 			</GridItem>
 			<GridItem colStart={2} rowStart={2}>
-				<GantGrid segments={state.segments} milestones={state.milestones?.length + 1 || 1}>
+				<GantGrid segments={state.segments} milestones={state.rows + 1 || 1}>
 					{columns.map((s, index) => (
 						<GridRow
 							key={index}
@@ -139,15 +250,8 @@ export const GantChart = (): JSX.Element => {
 							style={{ gridColumn: index + 1 }}
 						/>
 					))}
-					{state.milestones.map((milestone, index) => {
-						const colors = colorGenerator(milestone.title);
-						const result = milestone.getColPositions(dates, state.type);
-
-						if (!result) {
-							return null;
-						}
-
-						const [start, end] = result;
+					{GridItemRows.map((row, index) => {
+						const { start, end, color } = row;
 
 						return (
 							<GantLine
@@ -157,20 +261,12 @@ export const GantChart = (): JSX.Element => {
 								style={{
 									gridColumn: `${start} / ${start === end ? 'span 2' : end + 1}`,
 									gridRow: `${index + 1}`,
-									backgroundColor: colors.backgroundColor
+									backgroundColor: color.backgroundColor
 								}}
-								onClick={() => {
-									setModalContext({
-										milestone: {
-											projectId: milestone.projectId,
-											milestone: milestone,
-											callback: () => null
-										}
-									});
-								}}
+								onClick={row.onClick}
 							>
-								<Text isTruncated color={colors.textColor}>
-									{milestone.title}
+								<Text isTruncated color={color.textColor}>
+									{row.title}
 								</Text>
 							</GantLine>
 						);
