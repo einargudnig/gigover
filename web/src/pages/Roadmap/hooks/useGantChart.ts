@@ -2,6 +2,7 @@ import { Dispatch, useReducer } from 'react';
 import { Project } from '../../../models/Project';
 import moment, { DurationInputArg2 } from 'moment';
 import { Milestone } from '../../../models/Milestone';
+import { TaskItem } from '../../../models/Task';
 
 export const GRID_SIDEBAR_WIDTH = '300px';
 export const GRID_ROW_HEIGHT = '55px';
@@ -23,6 +24,7 @@ interface GantChart {
 	segments: number;
 	project: Project | null;
 	type: CalendarType;
+	tasks: TaskItem[];
 	milestones: Milestone[];
 	rows: number;
 	expanded: Map<number, boolean>;
@@ -71,7 +73,8 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 				return {
 					...state,
 					milestones: [],
-					project: action.payload
+					project: action.payload,
+					tasks: action.payload.tasks.map((t) => new TaskItem(t))
 				};
 			}
 
@@ -81,11 +84,16 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 			};
 		}
 		case 'SetMilestones': {
+			const milestones = action.payload;
+			const filterOutTaskIds = milestones.flatMap((m) => m.projectTasks.map((t) => t.taskId));
+			const tasks = state.tasks.filter((t) => !filterOutTaskIds.includes(t.taskId));
+
 			return {
 				...state,
-				rows: action.payload.length,
+				tasks: tasks,
+				rows: action.payload.length + tasks.length,
 				expanded: new Map<number, boolean>(),
-				milestones: action.payload
+				milestones
 			};
 		}
 		case 'ToggleMilestone': {
@@ -118,6 +126,7 @@ export const InitialGantChartState: GantChart = {
 	segments: 1,
 	type: 'Days',
 	project: null,
+	tasks: [],
 	milestones: [],
 	rows: 0,
 	expanded: new Map<number, boolean>()
@@ -135,6 +144,7 @@ export const useGantChart = ({
 		segments: getMinMaxForCalendarType(initialState.type).defaultValue,
 		type: initialState.type,
 		project: initialState.project,
+		tasks: initialState.project?.tasks.map((t) => new TaskItem(t)) || [],
 		milestones: initialState.milestones,
 		rows: initialState.milestones.length,
 		expanded: new Map<number, boolean>()

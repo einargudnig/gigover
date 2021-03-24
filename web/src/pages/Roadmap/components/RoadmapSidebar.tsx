@@ -123,12 +123,56 @@ export const RoadmapSidebar = (): JSX.Element => {
 							))}
 					</VStack>
 				))}
+				{state.tasks.length > 0 && (
+					<Flex
+						justifyContent={'space-between'}
+						alignItems={'center'}
+						width={'100%'}
+						height={GRID_ROW_HEIGHT}
+					>
+						<HStack maxWidth={`calc(${GRID_SIDEBAR_WIDTH} - 40px)`} spacing={4}>
+							<Text isTruncated color={'black'} fontSize={'sm'} fontWeight={'bold'}>
+								Other tasks
+							</Text>
+						</HStack>
+					</Flex>
+				)}
+				{state.tasks.map((t, tIndex) => (
+					<Flex
+						key={tIndex}
+						justifyContent={'space-between'}
+						alignItems={'center'}
+						width={'100%'}
+						height={GRID_ROW_HEIGHT}
+					>
+						<HStack maxWidth={`calc(${GRID_SIDEBAR_WIDTH} - 40px)`} spacing={4}>
+							<Text isTruncated color={'black'} fontSize={'sm'}>
+								{t.text}
+							</Text>
+						</HStack>
+						<IconButton
+							size={'xs'}
+							aria-label={'milestone-actions'}
+							icon={<Edit size={14} color={'black'} />}
+							variant={'ghost'}
+							colorScheme={'gray'}
+							onClick={() => {
+								setModalState({
+									taskDetails: {
+										projectId: t.projectId,
+										task: t
+									}
+								});
+							}}
+						/>
+					</Flex>
+				))}
 				{state.milestones.length === 0 && (
 					<EmptyState
 						icon={<EmptyProjects scale={0.5} />}
-						title={'No milestones'}
+						title={'No deliverables'}
 						text={
-							'No milestones have been added, create one to see it on the gant chart.'
+							'No deliverables have been added, create one to see it on the gant chart.'
 						}
 					/>
 				)}

@@ -26,6 +26,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 			date: new Date(),
 			dateOffset: 0,
 			project: selectedProject ?? projects[0],
+			tasks: [],
 			milestones: []
 		}
 	});
@@ -85,11 +86,13 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 					placeholder="Select a project"
 				>
 					{projects.length > 0 &&
-						projects.map((p) => (
-							<option key={p.projectId} value={p.projectId}>
-								{p.name}
-							</option>
-						))}
+						projects
+							.filter((p) => p.status === 'OPEN')
+							.map((p) => (
+								<option key={p.projectId} value={p.projectId}>
+									{p.name}
+								</option>
+							))}
 				</Select>
 			}
 		>

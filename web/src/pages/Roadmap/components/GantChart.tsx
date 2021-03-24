@@ -201,11 +201,32 @@ export const GantChart = (): JSX.Element => {
 				}
 			});
 
+			if (state.tasks.length > 0) {
+				rows.push(emptyRow()); // For the divider between Deliverables and Tasks in the sidebar
+			}
+
+			// eslint-disable-next-line no-console
+			console.log('tasks', state.tasks);
+
+			// Tasks without Milestones
+			state.tasks.forEach((t) => {
+				const taskRow = convertTaskToRow(dates, state.type, t, setModalContext);
+				rows.push(taskRow !== null ? taskRow : emptyRow());
+			});
+
 			return rows;
 		}
 
 		return [];
-	}, [state.rows, state.milestones, state.type, state.expanded, dates, setModalContext]);
+	}, [
+		state.rows,
+		state.milestones,
+		state.tasks,
+		state.type,
+		state.expanded,
+		dates,
+		setModalContext
+	]);
 
 	return (
 		<>
