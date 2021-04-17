@@ -8,7 +8,7 @@ import { EmptyState } from '../../components/empty/EmptyState';
 import { darken } from 'polished';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import Timer from 'react-compound-timer';
-import { Button } from '../../components/forms/Button';
+import { Button } from '@chakra-ui/react';
 import { Table } from '../../components/Table';
 import { TimerContainer, TimerWrapper } from './TimeTracker';
 import { formatDate } from '../../utils/StringUtils';

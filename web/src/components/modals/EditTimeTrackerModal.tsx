@@ -86,7 +86,7 @@ export const EditTimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.El
 					title={'Hours'}
 					value={hours}
 					isNumber={true}
-					options={range(-1, 22).map((i) => ({
+					options={range(-1, 59).map((i) => ({
 						value: i + 1,
 						label: (i + 1).toString()
 					}))}

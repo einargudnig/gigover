@@ -75,9 +75,6 @@ export const Files = (): JSX.Element => {
 										{projects.map((p) => (
 											<Folder key={p.projectId} project={p} />
 										))}
-										{projects.map((p) => (
-											<Folder key={p.projectId} project={p} />
-										))}
 									</SimpleGrid>
 								) : (
 									<NoProjectsFound />

@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAddWorker } from '../../queries/useAddWorker';
 import { useForm } from 'react-hook-form';
-import { Input, InputWrapper } from '../../components/forms/Input';
-import { Button } from '../../components/forms/Button';
+import { Box, Input, Button } from '@chakra-ui/react';
 import { useGetUserByPhoneNumber } from '../../queries/useGetUserByPhoneNumber';
 
 const AddWorkerFormStyled = styled.div`
@@ -16,7 +15,7 @@ interface FormData {
 
 export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element => {
 	const { register, handleSubmit, errors, reset } = useForm<FormData>();
-	const { mutateAsync: getUserIdByPhoneNumber } = useGetUserByPhoneNumber();
+	const { mutateAsync: getUserIdByPhoneNumber, isLoading: loading } = useGetUserByPhoneNumber();
 	const { mutateAsync: addWorker, isLoading, isError, error } = useAddWorker();
 
 	const onSubmit = handleSubmit(async (data) => {
@@ -49,7 +48,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 				</>
 			)}
 			<form onSubmit={onSubmit}>
-				<InputWrapper>
+				<Box mb={4}>
 					<Input
 						placeholder={'Enter phone number'}
 						name={'phoneNumber'}
@@ -57,8 +56,13 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 						ref={register}
 						required={true}
 					/>
-				</InputWrapper>
-				<Button loading={isLoading} disabled={isLoading}>
+				</Box>
+				<Button
+					type={'submit'}
+					isLoading={loading || isLoading}
+					loadingText={'Searching'}
+					disabled={loading || isLoading}
+				>
 					Add worker
 				</Button>
 			</form>

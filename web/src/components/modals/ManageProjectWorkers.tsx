@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from '../forms/Button';
+import { Button, Heading } from '@chakra-ui/react';
 import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { Project, WorkerItem } from '../../models/Project';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
@@ -65,14 +65,17 @@ export const ManageProjectWorkers = ({
 				<AddWorkerForm projectId={project.projectId} />
 				<Divider />
 				<div>
-					<h3>Workers {isLoading && <LoadingSpinner />}</h3>
+					<Heading as={'h3'} size={'md'}>
+						Workers {isLoading && <LoadingSpinner />}
+					</Heading>
 					<ul>
 						{project.workers.map((worker, workerIndex) => (
 							<li key={workerIndex}>
 								{worker.name}
 								<Button
-									size={'tiny'}
-									appearance={'outline'}
+									size={'sm'}
+									variant={'outline'}
+									colorScheme={'red'}
 									onClick={() => remove(worker)}
 								>
 									Remove from project
