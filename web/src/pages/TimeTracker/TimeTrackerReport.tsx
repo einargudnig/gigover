@@ -15,6 +15,7 @@ import { formatDate } from '../../utils/StringUtils';
 import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
 import { secondsToHours, secondsToMinutes } from '../../utils/NumberUtils';
+import { Center } from '../../components/Center';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -137,7 +138,9 @@ export const TimeTrackerReport = ({
 			</TimeTrackerReportFilter>
 			<div style={{ marginTop: 24 }}>
 				{isLoading ? (
-					<LoadingSpinner size={64} />
+					<Center>
+						<LoadingSpinner size={32} />
+					</Center>
 				) : results.length > 0 ? (
 					<Table>
 						<thead>

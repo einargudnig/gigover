@@ -25,8 +25,8 @@
 
 .react-datepicker__input-container:focus-within {
     z-index: 1;
-    border-color: #36e390;
-    box-shadow: 0 0 0 1px #36e390;
+    border-color: #fae44d;
+    box-shadow: 0 0 0 1px #fae44d;
 }
 
 .react-datepicker__input-container > input {
@@ -98,16 +98,17 @@
 .react-datepicker__month-text--in-selecting-range,
 .react-datepicker__month-text--in-range,
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
-    background: #36e390;
+    color: #000;
+    background: #fae44d;
     font-weight: normal;
 }
 
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected:hover {
-    background: #36e390;
+    background: #fae44d;
 }
 
 .react-datepicker__day--keyboard-selected, .react-datepicker__month-text--keyboard-selected, .react-datepicker__quarter-text--keyboard-selected, .react-datepicker__year-text--keyboard-selected {
-    background-color: #36e390;
+    background-color: #fae44d;
 }
 
 .react-datepicker__close-icon::after {

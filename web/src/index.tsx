@@ -11,6 +11,7 @@ import { ChakraThemeColors, Theme } from './Theme';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import ErrorBoundary from './ErrorBoundary';
 
 const firebaseApp = new Firebase();
 
@@ -34,8 +35,8 @@ const ChakraTheme = extendTheme({
 				}
 			},
 			defaultProps: {
-				focusBorderColor: 'green.500',
-				colorScheme: 'green'
+				focusBorderColor: 'yellow.600',
+				colorScheme: 'yellow'
 			}
 		},
 		Textarea: {
@@ -46,8 +47,8 @@ const ChakraTheme = extendTheme({
 				}
 			},
 			defaultProps: {
-				focusBorderColor: 'green.500',
-				colorScheme: 'green'
+				focusBorderColor: 'yellow.600',
+				colorScheme: 'yellow'
 			}
 		},
 		NumberInput: {
@@ -58,13 +59,13 @@ const ChakraTheme = extendTheme({
 				}
 			},
 			defaultProps: {
-				focusBorderColor: 'green.500',
-				colorScheme: 'green'
+				focusBorderColor: 'yellow.600',
+				colorScheme: 'yellow'
 			}
 		},
 		Button: {
 			defaultProps: {
-				colorScheme: 'green'
+				colorScheme: 'yellow'
 			}
 		}
 	}
@@ -72,15 +73,17 @@ const ChakraTheme = extendTheme({
 
 ReactDOM.render(
 	<React.StrictMode>
-		<ThemeProvider theme={Theme}>
-			<ChakraProvider theme={ChakraTheme}>
-				<FirebaseContext.Provider value={firebaseApp}>
-					<QueryClientProvider client={queryClient}>
-						<AppPreloader />
-					</QueryClientProvider>
-				</FirebaseContext.Provider>
-			</ChakraProvider>
-		</ThemeProvider>
+		<ErrorBoundary>
+			<ThemeProvider theme={Theme}>
+				<ChakraProvider theme={ChakraTheme}>
+					<FirebaseContext.Provider value={firebaseApp}>
+						<QueryClientProvider client={queryClient}>
+							<AppPreloader />
+						</QueryClientProvider>
+					</FirebaseContext.Provider>
+				</ChakraProvider>
+			</ThemeProvider>
+		</ErrorBoundary>
 	</React.StrictMode>,
 	document.getElementById('gigover-root')
 );

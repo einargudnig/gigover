@@ -6,9 +6,6 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
-import { ModalContext } from '../context/ModalContext';
-import { PlusIcon } from './icons/PlusIcon';
-import { ClockIcon } from './icons/ClockIcon';
 import {
 	Avatar,
 	Breadcrumb,
@@ -17,7 +14,6 @@ import {
 	Center,
 	Fade,
 	Heading,
-	IconButton,
 	Menu,
 	MenuButton,
 	MenuDivider,
@@ -29,13 +25,19 @@ import { FirebaseContext } from '../firebase/FirebaseContext';
 import { RoadmapIcon } from './icons/RoadmapIcon';
 import { Chevron } from './icons/Chevron';
 import { Theme } from '../Theme';
+import { FolderIcon } from './icons/FolderIcon';
 
 interface PageProps {
 	children: React.ReactNode;
 	title?: string;
-	breadcrumbs?: string[];
+	breadcrumbs?: {
+		title: string;
+		url?: string;
+	}[];
 	tabs?: React.ReactNode;
 	backgroundColor?: string;
+	actions?: React.ReactNode;
+	contentPadding?: boolean;
 }
 
 const PageStyled = styled.div`
@@ -70,9 +72,8 @@ const PageWrapper = styled.div`
 	max-width: calc(100vw - 80px);
 `;
 
-const PageContent = styled.div<{ backgroundColor?: string }>`
+const PageContent = styled.div<Pick<PageProps, 'contentPadding' | 'backgroundColor'>>`
 	flex: 1;
-	padding: ${(props) => props.theme.padding(3)};
 	max-height: 100%;
 	max-width: 100%;
 	overflow-x: hidden;
@@ -84,9 +85,15 @@ const PageContent = styled.div<{ backgroundColor?: string }>`
 			background-color: ${props.backgroundColor};
 		`};
 
-	@media screen and (max-width: 768px) {
-		padding: ${(props) => props.theme.padding(2)};
-	}
+	${(props) =>
+		props.contentPadding &&
+		css`
+			padding: ${props.theme.padding(3)};
+
+			@media screen and (max-width: 768px) {
+				padding: ${props.theme.padding(2)};
+			}
+		`};
 `;
 
 const PageHeader = styled.header`
@@ -155,11 +162,25 @@ const IconLink = styled(NavLink)`
 		justify-content: center;
 		align-items: center;
 		border-radius: 50%;
+		background: transparent;
+		transition: all 0.2s linear;
+
+		svg {
+			path {
+				transition: all 0.2s linear;
+			}
+		}
 	}
 
 	&.active {
 		> div {
-			background: ${(props) => props.theme.colors.green};
+			background: ${(props) => props.theme.colors.yellow};
+
+			svg {
+				path {
+					fill: #000;
+				}
+			}
 		}
 	}
 `;
@@ -169,11 +190,12 @@ export const Page = ({
 	breadcrumbs,
 	tabs,
 	children,
-	backgroundColor
+	backgroundColor,
+	contentPadding = true,
+	actions
 }: PageProps): JSX.Element | null => {
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
-	const [, setModalContext] = useContext(ModalContext);
 
 	if (user === null) {
 		return null;
@@ -201,23 +223,23 @@ export const Page = ({
 							<RoadmapIcon />
 						</div>
 					</IconLink>
+					<IconLink to={'/files'}>
+						<div>
+							<FolderIcon color={Theme.colors.white} type={'bold'} />
+						</div>
+					</IconLink>
 					<IconLink to={'/time-tracker'}>
 						<div>
 							<TimeIcon />
 						</div>
 					</IconLink>
-					{/*<IconLink to={'/users'}>
-						<div>
-							<UsersIcon />
-						</div>
-					</IconLink>*/}
 					<IconLink to={'/settings'}>
 						<div>
 							<SettingsIcon />
 						</div>
 					</IconLink>
 				</SidebarNav>
-				<small>v1.1</small>
+				<small>v1.2</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>
@@ -231,7 +253,9 @@ export const Page = ({
 							>
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
-										<BreadcrumbLink href={'#'}>{breadcrumb}</BreadcrumbLink>
+										<BreadcrumbLink as={Link} to={breadcrumb.url || ''}>
+											{breadcrumb.title}
+										</BreadcrumbLink>
 									</BreadcrumbItem>
 								))}
 							</Breadcrumb>
@@ -245,29 +269,7 @@ export const Page = ({
 						</Center>
 					)}
 					<HeaderActions>
-						<IconButton
-							variant={'outline'}
-							colorScheme={'gray'}
-							aria-label={'Track time'}
-							onClick={() => {
-								setModalContext({
-									timeTracker: {
-										project: undefined,
-										task: undefined
-									}
-								});
-							}}
-							icon={<ClockIcon />}
-						/>
-						<IconButton
-							variant={'outline'}
-							colorScheme={'gray'}
-							aria-label={'New project'}
-							onClick={() => {
-								setModalContext({ modifyProject: { project: undefined } });
-							}}
-							icon={<PlusIcon />}
-						/>
+						{actions}
 						<div>
 							<Menu>
 								<MenuButton>
@@ -292,7 +294,7 @@ export const Page = ({
 						</div>
 					</HeaderActions>
 				</PageHeader>
-				<PageContent backgroundColor={backgroundColor}>
+				<PageContent contentPadding={contentPadding} backgroundColor={backgroundColor}>
 					<Fade in={true} style={{ flex: 1, height: '100%' }}>
 						{children}
 					</Fade>

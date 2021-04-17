@@ -41,7 +41,7 @@ export const DateAmountSlider = (): JSX.Element => {
 					min={minMax.min}
 					max={minMax.max}
 					defaultValue={minMax.defaultValue}
-					colorScheme={'green'}
+					colorScheme={'yellow'}
 					onChange={(value) => setDisplayValue(value)}
 					onChangeEnd={(value) => {
 						if (value !== state.segments) {

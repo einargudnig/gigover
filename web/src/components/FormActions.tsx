@@ -33,7 +33,12 @@ export const FormActions = ({
 }: FormActionsProps): JSX.Element => (
 	<FormActionsContainer {...props}>
 		{onCancel ? (
-			<Button variant={'outline'} onClick={onCancel} disabled={cancelDisabled}>
+			<Button
+				variant={'outline'}
+				colorScheme={'black'}
+				onClick={onCancel}
+				disabled={cancelDisabled}
+			>
 				{cancelText}
 			</Button>
 		) : (

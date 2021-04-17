@@ -4,7 +4,7 @@ import { Theme } from '../Theme';
 
 export const LoadingSpinner = ({
 	size = 24,
-	color = Theme.colors.green
+	color = Theme.colors.black
 }: IconProps): JSX.Element => {
 	return (
 		<svg

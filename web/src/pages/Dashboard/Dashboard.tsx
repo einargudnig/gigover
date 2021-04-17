@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useContext, useState } from 'react';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
 import { ProjectCard } from '../../components/ProjectCard';
@@ -8,19 +7,14 @@ import { ProjectStatus } from '../../models/Project';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Center } from '../../components/Center';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-
-const ProjectDashboard = styled.div`
-	display: flex;
-	justify-content: flex-start;
-	flex-wrap: wrap;
-	padding: 16px 0;
-
-	> * {
-		margin: 16px;
-	}
-`;
+import { ClockIcon } from '../../components/icons/ClockIcon';
+import { PlusIcon } from '../../components/icons/PlusIcon';
+import { IconButton, SimpleGrid, VStack } from '@chakra-ui/react';
+import { ModalContext } from '../../context/ModalContext';
+import { Theme } from '../../Theme';
 
 export const Dashboard = (): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
 	const [activeTab, setActiveTab] = useState(ProjectStatus.OPEN);
 	const { data, isLoading, isError, error } = useProjectList();
 
@@ -48,21 +42,52 @@ export const Dashboard = (): JSX.Element => {
 					onChange={(tab) => setActiveTab(tab)}
 				/>
 			}
+			actions={
+				<>
+					<IconButton
+						variant={'outline'}
+						colorScheme={'gray'}
+						aria-label={'Track time'}
+						onClick={() => {
+							setModalContext({
+								timeTracker: {
+									project: undefined,
+									task: undefined
+								}
+							});
+						}}
+						icon={<ClockIcon />}
+					/>
+					<IconButton
+						variant={'outline'}
+						colorScheme={'gray'}
+						aria-label={'New project'}
+						onClick={() => {
+							setModalContext({ modifyProject: { project: undefined } });
+						}}
+						icon={<PlusIcon />}
+					/>
+				</>
+			}
 		>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<ProjectDashboard>
-					{!projects || projects.length <= 0 ? (
-						<NoProjectsFound />
-					) : (
-						projects.map((project) => (
-							<ProjectCard key={project.projectId} project={project} />
-						))
-					)}
-				</ProjectDashboard>
+				<VStack>
+					<Center>
+						<SimpleGrid columns={[1, null, 3]} spacing={Theme.padding(3)}>
+							{!projects || projects.length <= 0 ? (
+								<NoProjectsFound />
+							) : (
+								projects.map((project) => (
+									<ProjectCard key={project.projectId} project={project} />
+								))
+							)}
+						</SimpleGrid>
+					</Center>
+				</VStack>
 			)}
 		</Page>
 	);

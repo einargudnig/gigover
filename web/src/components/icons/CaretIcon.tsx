@@ -2,7 +2,7 @@ import React from 'react';
 import { IconProps } from '../IconProps';
 import { Theme } from '../../Theme';
 
-export const CaretIcon = ({ scale = 1, color = Theme.colors.green }: IconProps): JSX.Element => (
+export const CaretIcon = ({ scale = 1, color = Theme.colors.black }: IconProps): JSX.Element => (
 	<svg
 		width={15 * scale}
 		height={10 * scale}

@@ -23,10 +23,10 @@ export const Options = (props: SelectComponentsProps): JSX.Element => {
 					...theme.colors,
 					neutral20: 'var(--chakra-colors-gray-200)',
 					neutral30: 'var(--chakra-colors-gray-400)',
-					primary25: 'var(--chakra-colors-green-100)',
-					primary50: 'var(--chakra-colors-green-200)',
-					primary75: 'var(--chakra-colors-green-300)',
-					primary: 'var(--chakra-colors-green-400)'
+					primary25: 'var(--chakra-colors-yellow-100)',
+					primary50: 'var(--chakra-colors-yellow-200)',
+					primary75: 'var(--chakra-colors-yellow-300)',
+					primary: 'var(--chakra-colors-yellow-400)'
 				}
 			})}
 			{...props}

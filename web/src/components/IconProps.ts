@@ -3,5 +3,6 @@ export interface IconProps {
 	scale?: number;
 	color?: string;
 	style?: React.CSSProperties;
+	type?: 'solid' | 'bold' | 'medium' | 'light';
 	onClick?(event: unknown): void;
 }

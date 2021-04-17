@@ -122,7 +122,7 @@ export const TaskCardInput = ({
 				</FormControl>
 				<Button
 					type={'submit'}
-					colorScheme={'green'}
+					colorScheme={'yellow'}
 					loadingText={'Saving'}
 					loading={loading}
 					disabled={loading}

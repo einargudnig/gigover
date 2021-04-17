@@ -37,7 +37,7 @@ export const AppPreloader = (): JSX.Element => {
 	}
 
 	if (error) {
-		return <p>Error in auth check</p>;
+		throw new Error('The server is down for maintenance, please try again later.');
 	}
 
 	return <App userProfile={data?.data} authUser={authUser} />;

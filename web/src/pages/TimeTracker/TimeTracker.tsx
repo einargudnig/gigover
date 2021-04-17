@@ -8,14 +8,15 @@ import { CardBase } from '../../components/CardBase';
 import { secondsToString } from '../../utils/NumberUtils';
 import { useProjectList } from '../../queries/useProjectList';
 import { ModalContext } from '../../context/ModalContext';
-import { Button } from '../../components/forms/Button';
-import { ClockIcon } from '../../components/icons/ClockIcon';
+import { Button } from '@chakra-ui/react';
 import { Table } from '../../components/Table';
 import Timer from 'react-compound-timer';
 import { SubstringText } from '../../utils/StringUtils';
 import { TimeTrackerReport } from './TimeTrackerReport';
 import { EmptyState } from '../../components/empty/EmptyState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { TimeIcon } from '../../components/icons/TimeIcon';
+import { Theme } from '../../Theme';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -154,7 +155,7 @@ export const TimeTracker = (): JSX.Element => {
 
 	const StartTrackingAction = () => (
 		<Button
-			appearance={'lightblue'}
+			leftIcon={<TimeIcon color={Theme.colors.black} />}
 			onClick={() =>
 				setModalContext({
 					timeTracker: {
@@ -166,7 +167,6 @@ export const TimeTracker = (): JSX.Element => {
 				})
 			}
 		>
-			<ClockIcon style={{ position: 'relative', left: -12 }} />
 			<span>Start timer</span>
 		</Button>
 	);

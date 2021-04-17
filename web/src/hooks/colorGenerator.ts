@@ -19,9 +19,9 @@ export interface GeneratedColor {
 	textColor: string;
 }
 
-export const colorGenerator = (text: string): GeneratedColor => {
-	const backgroundColor = stringToHslColor(text, 45, 80);
-	const textColor = stringToHslColor(text, 45, 30);
+export const colorGenerator = (text: string, saturation = 45, light = 80): GeneratedColor => {
+	const backgroundColor = stringToHslColor(text, saturation, light);
+	const textColor = stringToHslColor(text, saturation, light / 2);
 
 	return {
 		backgroundColor,

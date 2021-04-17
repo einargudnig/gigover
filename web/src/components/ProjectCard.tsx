@@ -21,10 +21,6 @@ const ProjectCardStyled = styled(CardBaseLink)`
 	justify-content: space-between;
 	flex-direction: column;
 
-	&:hover {
-		box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.1);
-	}
-
 	h3 {
 		margin-bottom: 16px;
 		color: #000;

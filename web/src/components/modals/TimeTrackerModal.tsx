@@ -90,7 +90,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 		<Modal
 			title={
 				<>
-					<TimeIcon color={Theme.colors.green} />
+					<TimeIcon size={32} color={Theme.colors.yellow} type={'solid'} />
 					<div>Time tracker</div>
 				</>
 			}

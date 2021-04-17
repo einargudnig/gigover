@@ -9,6 +9,7 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Button, HStack } from '@chakra-ui/react';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -87,35 +88,40 @@ export const ProjectDetails = (): JSX.Element | null => {
 		});
 	};
 
-	if (!project) {
-		return null;
+	if (!isLoading && !project) {
+		throw new Error('Could not find project');
 	}
 
 	return (
 		<>
-			{manageWorkers && (
+			{manageWorkers && project && (
 				<ManageProjectWorkers onClose={() => setManageWorkers(false)} project={project} />
 			)}
 			<Page
-				breadcrumbs={[project.name, 'Tasks']}
+				breadcrumbs={[
+					{ title: 'Projects', url: '/' },
+					...(isLoading ? [] : [{ title: project?.name || '' }, { title: 'Tasks' }])
+				]}
 				tabs={
-					<HStack spacing={4}>
-						<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
-							Manage workers
-						</Button>
-						<Button
-							colorScheme={'gray'}
-							as={Link}
-							to={'/roadmap?project=' + project.projectId}
-						>
-							Open Gantt Chart
-						</Button>
-					</HStack>
+					project && (
+						<HStack spacing={4}>
+							<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
+								Manage workers
+							</Button>
+							<Button
+								colorScheme={'gray'}
+								as={Link}
+								to={'/roadmap?project=' + project.projectId}
+							>
+								Open Gantt Chart
+							</Button>
+						</HStack>
+					)
 				}
 			>
 				<ProjectDetailsPage>
 					{isLoading ? (
-						<p>Loading</p>
+						<LoadingSpinner />
 					) : isError ? (
 						<p>
 							Error fetching project with id: {projectId} - Reason: {error?.errorText}
@@ -129,7 +135,10 @@ export const ProjectDetails = (): JSX.Element | null => {
 										.filter((status) => status !== TaskStatus.Archived)
 										.map((taskStatus, tIndex) => (
 											<FeedColumn key={tIndex}>
-												<TaskColumn project={project} status={taskStatus} />
+												<TaskColumn
+													project={project!}
+													status={taskStatus}
+												/>
 											</FeedColumn>
 										))}
 								</FeedBoard>

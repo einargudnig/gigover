@@ -43,7 +43,6 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		[dispatch]
 	);
 
-	// TODO Refactor
 	useEffect(() => {
 		// Map to Milestone class
 		dispatch({
@@ -81,7 +80,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 						}
 					}}
 					icon={<Chevron />}
-					colorScheme={'green'}
+					colorScheme={'yellow'}
 					variant="filled"
 					placeholder="Select a project"
 				>
