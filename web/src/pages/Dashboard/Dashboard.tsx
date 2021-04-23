@@ -77,15 +77,15 @@ export const Dashboard = (): JSX.Element => {
 			) : (
 				<VStack>
 					<Center>
-						<SimpleGrid columns={[1, null, 3]} spacing={Theme.padding(3)}>
-							{!projects || projects.length <= 0 ? (
-								<NoProjectsFound />
-							) : (
-								projects.map((project) => (
+						{!projects || projects.length <= 0 ? (
+							<NoProjectsFound />
+						) : (
+							<SimpleGrid columns={[1, null, 3]} spacing={Theme.padding(3)}>
+								{projects.map((project) => (
 									<ProjectCard key={project.projectId} project={project} />
-								))
-							)}
-						</SimpleGrid>
+								))}
+							</SimpleGrid>
+						)}
 					</Center>
 				</VStack>
 			)}

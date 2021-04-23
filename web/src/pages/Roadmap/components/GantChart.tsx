@@ -205,9 +205,6 @@ export const GantChart = (): JSX.Element => {
 				rows.push(emptyRow()); // For the divider between Deliverables and Tasks in the sidebar
 			}
 
-			// eslint-disable-next-line no-console
-			console.log('tasks', state.tasks);
-
 			// Tasks without Milestones
 			state.tasks.forEach((t) => {
 				const taskRow = convertTaskToRow(dates, state.type, t, setModalContext);

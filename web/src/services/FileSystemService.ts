@@ -8,13 +8,32 @@ interface UploadResult {
 	downloadUrl: string;
 }
 
+export interface FileDocument {
+	created: number;
+	downloadUrl: string;
+	fileExtension: string;
+	path: string;
+	type: FileUploadType;
+}
+
+export interface FolderResult {
+	folders: string[];
+	files: FileDocument[];
+}
+
+export interface FolderResultDb {
+	files: string[];
+}
+
 export class FileSystemService {
+	private dbRef: firebase.database.Reference;
 	private fileSystem: firebase.storage.Storage;
 	private ref: firebase.storage.Reference;
 
 	constructor() {
 		this.fileSystem = firebase.app().storage('gs://gigover-fileystem');
 		this.ref = this.fileSystem.ref();
+		this.dbRef = firebase.database().ref();
 	}
 
 	assertProjectAccess(projects: Project[], projectId: number) {
@@ -29,8 +48,68 @@ export class FileSystemService {
 		return this.ref.child(`${projectId}`);
 	}
 
-	getProjectFiles(projectId: number): Promise<firebase.storage.ListResult> {
-		return this.getProjectChild(projectId).listAll();
+	listAllFiles(ref: firebase.storage.Reference) {
+		return ref.listAll();
+	}
+
+	getDbProjectChild(projectId: number) {
+		return this.dbRef.child(`${projectId}`);
+	}
+
+	getProjectFilesDb(
+		projectId: number,
+		callback: (snapshot: firebase.database.DataSnapshot) => void
+	) {
+		return this.getDbProjectChild(projectId).on('value', callback);
+	}
+
+	async getProjectFiles(projectId: number): Promise<FolderResult> {
+		try {
+			const folders: string[] = [];
+			const res = await this.listAllFiles(this.getProjectChild(projectId));
+
+			res.prefixes.forEach((folderRef) => {
+				// eslint-disable-next-line no-console
+				console.log('folderRef', folderRef);
+				folders.push(folderRef.name);
+			});
+
+			// res.items.forEach((itemRef) => {
+			// 	// eslint-disable-next-line no-console
+			// 	console.log('itemRef', itemRef);
+			// 	files.push(itemRef.name);
+			// });
+
+			return {
+				folders,
+				files: []
+			};
+		} catch (e) {
+			devError('GetProjectFiles', e);
+			return {
+				folders: [],
+				files: []
+			};
+		}
+	}
+
+	async updateDoc(
+		projectId: number,
+		fileName: string,
+		filePath: string,
+		fileExtension: string,
+		downloadUrl: string,
+		uploadType: FileUploadType,
+		externalId: number | null
+	) {
+		return this.getDbProjectChild(projectId).child(fileName).set({
+			type: uploadType,
+			path: filePath,
+			fileExtension: fileExtension,
+			externalId: externalId,
+			downloadUrl: downloadUrl,
+			created: new Date().getTime()
+		});
 	}
 
 	async uploadFile(
@@ -41,6 +120,9 @@ export class FileSystemService {
 		status: (progress: number, state: firebase.storage.TaskState) => void,
 		externalId?: number
 	): Promise<UploadResult> {
+		// eslint-disable-next-line no-console
+		console.log('Gigover File Upload initiated');
+
 		const fileName = uuid();
 		const filePath = `${uploadType}${
 			externalId ? `${externalId}/${fileName}` : fileName
@@ -63,6 +145,17 @@ export class FileSystemService {
 				},
 				async () => {
 					const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+
+					await this.updateDoc(
+						projectId,
+						fileName,
+						filePath,
+						fileExtension,
+						downloadURL,
+						uploadType,
+						externalId || null
+					);
+
 					resolve({ downloadUrl: downloadURL });
 				}
 			);

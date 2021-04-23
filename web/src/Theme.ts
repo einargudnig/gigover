@@ -66,6 +66,7 @@ export const Theme = {
 		taskBorder: '#E9E9EF',
 		taskBackground: '#FBFBFC'
 	},
+	borderRadius: '12px',
 	boxShadow: (opacity = '0.03'): string => `5px 5px 25px rgba(0, 0, 0, ${opacity})`,
 	padding: (modifier: number): string => `${modifier * 8}px`
 };

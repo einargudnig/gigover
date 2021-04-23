@@ -15,6 +15,8 @@ import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import { FirebaseUser } from './firebase/firebaseTypes';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { QueryParamProvider } from 'use-query-params';
+import { FileSystemContext } from './context/FileSystemContext';
+import { FileSystemService } from './services/FileSystemService';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -50,6 +52,7 @@ const App = ({
 	userProfile?: IUserProfile;
 	authUser: FirebaseUser | null;
 }): JSX.Element => {
+	const fileSystem = useMemo(() => new FileSystemService(), []);
 	const [modalContext, setModalContext] = useState<IModalContext>(
 		userProfile ? { registered: userProfile.registered } : {}
 	);
@@ -69,11 +72,13 @@ const App = ({
 			{user !== null ? (
 				<ModalContext.Provider value={[modalContext, setModalContext]}>
 					<UserContext.Provider value={user}>
-						<GlobalModals>
-							<QueryParamProvider>
-								<AuthenticatedRoutes />
-							</QueryParamProvider>
-						</GlobalModals>
+						<FileSystemContext.Provider value={fileSystem}>
+							<GlobalModals>
+								<QueryParamProvider>
+									<AuthenticatedRoutes />
+								</QueryParamProvider>
+							</GlobalModals>
+						</FileSystemContext.Provider>
 					</UserContext.Provider>
 				</ModalContext.Provider>
 			) : (

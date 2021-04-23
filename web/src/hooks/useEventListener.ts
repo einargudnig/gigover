@@ -7,10 +7,6 @@ export const useEventListener = <K extends keyof WindowEventMap, E extends Windo
 ) => {
 	const handlerRef = useRef(handler);
 
-	if (!element) {
-		throw new Error('Could not useEventListener on null element.');
-	}
-
 	/*
 	 *  Make sure that the handler function contains the correct call stack values
 	 */
@@ -20,10 +16,14 @@ export const useEventListener = <K extends keyof WindowEventMap, E extends Windo
 
 	useEffect(() => {
 		const listener = (event: E) => handlerRef.current(event);
-		element.addEventListener(eventName, listener as EventListener);
+		if (element !== null) {
+			element.addEventListener(eventName, listener as EventListener);
+		}
 		return () => {
-			element.removeEventListener(eventName, listener as EventListener);
+			if (element !== null) {
+				element.removeEventListener(eventName, listener as EventListener);
+			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [element]);
 };
