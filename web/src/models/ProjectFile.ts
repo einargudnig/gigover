@@ -1,3 +1,5 @@
+import { FileDocument } from '../services/FileSystemService';
+
 export type FileType = 'txt' | 'other' | 'video' | 'picture' | 'drawing' | 'pdf' | 'document';
 
 export interface IFile {
@@ -17,19 +19,12 @@ export class ProjectFile implements IFile {
 	projectId: number;
 	name: string;
 
-	constructor(
-		documentId: string,
-		bytes: number,
-		created: number,
-		fileType: FileType,
-		name: string,
-		projectId: number
-	) {
-		this.fileId = documentId;
-		this.bytes = bytes;
-		this.created = created;
-		this.fileType = fileType;
-		this.name = name;
+	constructor(projectId: number, fileDocument: FileDocument) {
+		this.fileId = fileDocument.filePath;
+		this.bytes = fileDocument.size;
+		this.created = fileDocument.created;
+		this.fileType = 'picture'; // TODO
+		this.name = fileDocument.fileName;
 		this.projectId = projectId;
 	}
 }

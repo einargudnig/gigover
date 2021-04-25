@@ -22,7 +22,7 @@ const DropZoneContainer = styled.div<{
 	${(props) =>
 		props.isDraggingOver &&
 		css`
-			background: greenyellow;
+			background: ${props.theme.colors.green};
 		`};
 `;
 

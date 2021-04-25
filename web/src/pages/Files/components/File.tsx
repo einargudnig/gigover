@@ -11,6 +11,7 @@ import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
 import { Text, Heading, VStack, HStack } from '@chakra-ui/react';
 import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../Roadmap/GantChartDates';
+import { humanFileSize } from '../../../utils/FileSizeUtils';
 
 interface FileProps {
 	file: ProjectFile;
@@ -51,7 +52,7 @@ export const File = ({ file }: FileProps): JSX.Element => {
 					</Heading>
 					<Text m={0}>Project file</Text>
 				</VStack>
-				<Text m={0}>{Math.round(file.bytes / 1024).toFixed(2)} MB</Text>
+				<Text m={0}>{humanFileSize(file.bytes / 1024)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
 		</FileStyled>

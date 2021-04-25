@@ -12,7 +12,7 @@ export const humanFileSize = (bytes: number, si = true, dp = 1): string => {
 	const thresh = si ? 1000 : 1024;
 
 	if (Math.abs(bytes) < thresh) {
-		return bytes + ' B';
+		return bytes.toFixed(dp) + ' B';
 	}
 
 	const units = si

@@ -15,6 +15,7 @@ export interface FileDocument {
 	filePath: string;
 	size: number;
 	type: FileUploadType;
+	externalId?: number;
 }
 
 export interface FolderResult {
@@ -53,11 +54,15 @@ export class FileSystemService {
 		return this.dbRef.child(`${projectId}`);
 	}
 
+	getProjectFilesQuery(projectId: number) {
+		return this.getDbProjectChild(projectId).orderByChild('created');
+	}
+
 	getProjectFilesDb(
 		projectId: number,
 		callback: (snapshot: firebase.database.DataSnapshot) => void
 	) {
-		return this.getDbProjectChild(projectId).orderByChild('created').on('value', callback);
+		return this.getProjectFilesQuery(projectId).on('value', callback);
 	}
 
 	async getProjectFiles(projectId: number): Promise<FolderResult> {
