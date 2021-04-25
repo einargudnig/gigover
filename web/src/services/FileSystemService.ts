@@ -11,18 +11,15 @@ interface UploadResult {
 export interface FileDocument {
 	created: number;
 	downloadUrl: string;
-	fileExtension: string;
-	path: string;
+	fileName: string;
+	filePath: string;
+	size: number;
 	type: FileUploadType;
 }
 
 export interface FolderResult {
 	folders: string[];
 	files: FileDocument[];
-}
-
-export interface FolderResultDb {
-	files: string[];
 }
 
 export class FileSystemService {
@@ -60,7 +57,7 @@ export class FileSystemService {
 		projectId: number,
 		callback: (snapshot: firebase.database.DataSnapshot) => void
 	) {
-		return this.getDbProjectChild(projectId).on('value', callback);
+		return this.getDbProjectChild(projectId).orderByChild('created').on('value', callback);
 	}
 
 	async getProjectFiles(projectId: number): Promise<FolderResult> {
@@ -95,19 +92,21 @@ export class FileSystemService {
 
 	async updateDoc(
 		projectId: number,
+		fileId: string,
 		fileName: string,
 		filePath: string,
-		fileExtension: string,
 		downloadUrl: string,
 		uploadType: FileUploadType,
+		bytes: number,
 		externalId: number | null
 	) {
-		return this.getDbProjectChild(projectId).child(fileName).set({
+		return this.getDbProjectChild(projectId).child(fileId).set({
 			type: uploadType,
-			path: filePath,
-			fileExtension: fileExtension,
-			externalId: externalId,
-			downloadUrl: downloadUrl,
+			fileName,
+			filePath,
+			externalId,
+			downloadUrl,
+			size: bytes,
 			created: new Date().getTime()
 		});
 	}
@@ -116,7 +115,6 @@ export class FileSystemService {
 		file: File,
 		projectId: number,
 		uploadType = FileUploadType.Project,
-		fileExtension: string,
 		status: (progress: number, state: firebase.storage.TaskState) => void,
 		externalId?: number
 	): Promise<UploadResult> {
@@ -124,9 +122,10 @@ export class FileSystemService {
 		console.log('Gigover File Upload initiated');
 
 		const fileName = uuid();
-		const filePath = `${uploadType}${
-			externalId ? `${externalId}/${fileName}` : fileName
-		}${fileExtension}`;
+		const originalFileName = file.name;
+		const extension = originalFileName.split('.').pop();
+		const filePath =
+			fileName + (extension && extension !== originalFileName ? '.' + extension : '');
 
 		return new Promise<UploadResult>((resolve, reject) => {
 			const uploadTask = this.getProjectChild(projectId).child(filePath).put(file);
@@ -149,10 +148,11 @@ export class FileSystemService {
 					await this.updateDoc(
 						projectId,
 						fileName,
+						originalFileName,
 						filePath,
-						fileExtension,
 						downloadURL,
 						uploadType,
+						file.size,
 						externalId || null
 					);
 

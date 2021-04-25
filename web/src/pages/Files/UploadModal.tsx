@@ -25,10 +25,7 @@ export const UploadModal = ({ onClose }: UploadModalProps): JSX.Element => {
 				<VStack mb={-6} align={'stretch'}>
 					<DropZone />
 					<FormActions
-						submitText={'Upload'}
-						submitDisabled={isUploading}
-						submitLoading={isUploading}
-						cancelText={'Cancel'}
+						cancelText={'Close'}
 						cancelDisabled={isUploading}
 						onCancel={() => {
 							onClose();

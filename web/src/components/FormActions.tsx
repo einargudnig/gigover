@@ -10,12 +10,13 @@ const FormActionsContainer = styled.div`
 `;
 
 interface FormActionsProps {
-	submitText: string | React.ReactNode;
+	submitText?: string | React.ReactNode;
 	submitDisabled?: boolean;
 	submitLoading?: boolean;
 	cancelText?: string | React.ReactNode;
 	cancelDisabled?: boolean;
 	style?: React.CSSProperties;
+
 	onCancel?(): void;
 
 	onSubmit?(): void;
@@ -44,14 +45,16 @@ export const FormActions = ({
 		) : (
 			<div />
 		)}
-		<Button
-			type={'submit'}
-			onClick={onSubmit}
-			isLoading={submitLoading}
-			loadingText={'Submitting'}
-			disabled={submitDisabled}
-		>
-			{submitText}
-		</Button>
+		{onSubmit && (
+			<Button
+				type={'submit'}
+				onClick={onSubmit}
+				isLoading={submitLoading}
+				loadingText={'Submitting'}
+				disabled={submitDisabled}
+			>
+				{submitText}
+			</Button>
+		)}
 	</FormActionsContainer>
 );

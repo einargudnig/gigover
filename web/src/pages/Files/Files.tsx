@@ -20,8 +20,8 @@ import { Folder } from './components/Folder';
 import { ProjectStatus } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
 import { useParams } from 'react-router-dom';
-import { ProjectFile } from '../../models/ProjectFile';
-import { File } from './components/File';
+//import { ProjectFile } from '../../models/ProjectFile';
+// import { File } from './components/File';
 import { UploadModal } from './UploadModal';
 
 const Container = styled.div`
@@ -36,13 +36,6 @@ const SidebarContainer = styled(Container)`
 	background: #fff;
 	box-shadow: ${(props) => props.theme.boxShadow()};
 `;
-
-const FakeFiles = [
-	new ProjectFile('asdf', 1024, 1924812967032, 'txt', 'Document', 1052),
-	new ProjectFile('asdf', 1024, 1924812967032, 'txt', 'Document', 1052),
-	new ProjectFile('asdf', 1024, 1924812967032, 'txt', 'Document', 1052),
-	new ProjectFile('asdf', 1024, 1924812967032, 'txt', 'Document', 1052)
-];
 
 export const Files = (): JSX.Element => {
 	const params = useParams();
@@ -193,19 +186,19 @@ export const Files = (): JSX.Element => {
 											</Heading>
 										</HStack>
 									</HStack>
-									{FakeFiles && FakeFiles.length > 0 ? (
-										<VStack
-											style={{ width: '100%' }}
-											align={'stretch'}
-											spacing={4}
-										>
-											{FakeFiles.map((p, pIndex) => (
-												<File key={pIndex} file={p} />
-											))}
-										</VStack>
-									) : (
-										<p>TODO: No files</p>
-									)}
+									{/*{FakeFiles && FakeFiles.length > 0 ? (*/}
+									{/*	<VStack*/}
+									{/*		style={{ width: '100%' }}*/}
+									{/*		align={'stretch'}*/}
+									{/*		spacing={4}*/}
+									{/*	>*/}
+									{/*		{FakeFiles.map((p, pIndex) => (*/}
+									{/*			<File key={pIndex} file={p} />*/}
+									{/*		))}*/}
+									{/*	</VStack>*/}
+									{/*) : (*/}
+									{/*	<p>TODO: No files</p>*/}
+									{/*)}*/}
 								</VStack>
 							</Container>
 							{selectedFile && (

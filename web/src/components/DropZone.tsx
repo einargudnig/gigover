@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FilterIcon } from './icons/FilterIcon';
 import { Progress, Text } from '@chakra-ui/react';
@@ -26,37 +26,48 @@ const DropZoneContainer = styled.div<{
 		`};
 `;
 
-export const DropZone = (): JSX.Element => {
+interface DropZoneProps {
+	uploadType?: FileUploadType;
+	projectId?: number;
+	externalId?: number;
+
+	children?(props: { isDragActive: boolean }): React.ReactNode;
+}
+
+export const DropZone = ({
+	uploadType = FileUploadType.Project,
+	projectId,
+	externalId,
+	children
+}: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
-	const onDrop = useCallback(async (acceptedFiles: File[]) => {
-		// Do something with the files
-		if (acceptedFiles.length > 0) {
-			const file = acceptedFiles[0];
-			const parts = file.name.split('.');
+	// TODO Implement setSelectedProject
+	const [selectedProject] = useState<number>(projectId || 0);
 
-			try {
-				setIsUploading(true);
-				const response = await fileService.uploadFile(
-					file,
-					1052,
-					FileUploadType.Comment,
-					'.' + parts[1],
-					(status: number) => {
-						// eslint-disable-next-line no-console
-						console.log('File upload :: Status update ', status);
-						setFileUploadProgress(status);
+	const onDrop = useCallback(
+		(acceptedFiles: File[]) => {
+			// Do something with the files
+			if (acceptedFiles.length > 0) {
+				acceptedFiles.forEach(async (file) => {
+					try {
+						setIsUploading(true);
+						await fileService.uploadFile(
+							file,
+							selectedProject,
+							uploadType,
+							(status: number) => {
+								setFileUploadProgress(status);
+							},
+							externalId
+						);
+					} finally {
+						setIsUploading(false);
 					}
-				);
-
-				if (response.downloadUrl) {
-					// eslint-disable-next-line no-console
-					console.log('DOWNLOADURL', response.downloadUrl);
-				}
-			} finally {
-				setIsUploading(false);
+				}, []);
 			}
-		}
-	}, []);
+		},
+		[fileService, uploadType, selectedProject]
+	);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
 		multiple: true,
@@ -66,11 +77,16 @@ export const DropZone = (): JSX.Element => {
 	const [fileUploadProgress, setFileUploadProgress] = useState(0);
 	const [isUploading, setIsUploading] = useState(false);
 
-	useEffect(() => {
-		console.log('isDragActive', isDragActive);
-	}, [isDragActive]);
-
-	return (
+	return children ? (
+		<div
+			{...getRootProps({
+				onClick: (event) => event.stopPropagation()
+			})}
+		>
+			<input {...getInputProps()} />
+			{children({ isDragActive })}
+		</div>
+	) : (
 		<DropZoneContainer isDraggingOver={isDragActive} {...getRootProps()}>
 			<input {...getInputProps()} />
 			<FilterIcon size={64} color={'#838894'} />

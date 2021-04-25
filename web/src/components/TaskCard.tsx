@@ -7,8 +7,14 @@ import { ModalContext } from '../context/ModalContext';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
 import { CardBase } from './CardBase';
+import { FileUploadType } from '../models/FileUploadType';
+import { DropZone } from './DropZone';
 
-const TaskCardStyled = styled(CardBase)<{ isEditing: boolean; error?: boolean }>`
+const TaskCardStyled = styled(CardBase)<{
+	isEditing: boolean;
+	error?: boolean;
+	isDragActive: boolean;
+}>`
 	padding: 16px;
 	margin: 8px 0;
 	cursor: pointer;
@@ -54,6 +60,12 @@ const TaskCardStyled = styled(CardBase)<{ isEditing: boolean; error?: boolean }>
 		css`
 			box-shadow: 0 5px 25px rgba(222, 39, 39, 0.2);
 		`};
+
+	${(props) =>
+		props.isDragActive &&
+		css`
+			outline: 3px solid ${props.theme.colors.green};
+		`}
 `;
 
 const TaskItem = styled.div`
@@ -91,31 +103,38 @@ export const TaskCard = ({
 	}
 
 	return (
-		<TaskCardStyled
-			error={Boolean(error)}
-			isEditing={isEditing}
-			onClick={() =>
-				isEditing
-					? null
-					: setModalContext({ taskDetails: { task: task!, projectId: projectId } })
-			}
-		>
-			{task ? (
-				<TaskItem>
-					<h4>{task.text}</h4>
-					<div>
-						<Label
-							style={{ display: 'inline-block', marginTop: 16 }}
-							text={
-								data?.projectTypes.find((pt) => pt.typeId === task?.typeId)?.name ||
-								'unknown'
-							}
-						/>
-					</div>
-				</TaskItem>
-			) : (
-				<TaskCardInput loading={loading} error={error} onSubmit={onSubmit} />
+		<DropZone projectId={projectId} uploadType={FileUploadType.Task} externalId={task?.taskId}>
+			{({ isDragActive }) => (
+				<TaskCardStyled
+					isDragActive={isDragActive}
+					error={Boolean(error)}
+					isEditing={isEditing}
+					onClick={() =>
+						isEditing
+							? null
+							: setModalContext({
+									taskDetails: { task: task!, projectId: projectId }
+							  })
+					}
+				>
+					{task ? (
+						<TaskItem>
+							<h4>{task.text}</h4>
+							<div>
+								<Label
+									style={{ display: 'inline-block', marginTop: 16 }}
+									text={
+										data?.projectTypes.find((pt) => pt.typeId === task?.typeId)
+											?.name || 'unknown'
+									}
+								/>
+							</div>
+						</TaskItem>
+					) : (
+						<TaskCardInput loading={loading} error={error} onSubmit={onSubmit} />
+					)}
+				</TaskCardStyled>
 			)}
-		</TaskCardStyled>
+		</DropZone>
 	);
 };
