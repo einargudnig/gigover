@@ -19,10 +19,15 @@ import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { Folder } from './components/Folder';
 import { ProjectStatus } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
-import { useParams } from 'react-router-dom';
-//import { ProjectFile } from '../../models/ProjectFile';
-// import { File } from './components/File';
+import { useParams, useNavigate } from 'react-router-dom';
+import { File } from './components/File';
 import { UploadModal } from './UploadModal';
+import { EmptyState } from '../../components/empty/EmptyState';
+import { Center } from '../../components/Center';
+import { ProjectFile } from '../../models/ProjectFile';
+import { useFileService } from '../../hooks/useFileService';
+import { FileSidebar } from './components/FileSidebar';
+import { useProjectFiles } from '../../queries/useProjectFiles';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -39,32 +44,32 @@ const SidebarContainer = styled(Container)`
 
 export const Files = (): JSX.Element => {
 	const params = useParams();
-	const [selectedFile, setSelectedFile] = useState(!!params.fileId);
-	const { data, isLoading } = useProjectList();
+	const navigate = useNavigate();
+	const { fileService } = useFileService();
+	const [selectedFile, setSelectedFile] = useState<ProjectFile | null>(null);
+	const { files, loadingFiles: loadingProjectFiles, setProject } = useProjectFiles();
+	const { data, isLoading, loadingFiles, files: recentFiles } = useProjectList(true);
 	const projects = data?.projects?.filter((p) => p.status !== ProjectStatus.CLOSED) || [];
 	const selectedProject = params.projectId
 		? projects.find((p) => p.projectId === parseInt(params.projectId))
 		: null;
 	const [upload, setUpload] = useState(false);
-
-	// const list = useMemo(async () => {
-	// 	if (selectedProject) {
-	// 		return await getFilesForProject(selectedProject.projectId);
-	// 	} else {
-	// 		return await getFilesForProjects(projects.map((p) => p.projectId));
-	// 	}
-	// }, [selectedProject]);
-	//
-	// // eslint-disable-next-line no-console
-	// console.log('list', list);
+	const sortedRecentFiles = recentFiles.sort((a, b) =>
+		a.created < b.created ? 1 : a.created === b.created ? 0 : -1
+	);
 
 	useEffect(() => {
-		if (params.fileId) {
-			setSelectedFile(!!params.fileId);
+		if (params.projectId && params.fileId) {
+			const file = fileService.getProjectFile(parseInt(params.projectId), params.fileId);
+			file.then((f) => setSelectedFile(new ProjectFile(f)));
 		} else {
-			setSelectedFile(false);
+			setSelectedFile(null);
 		}
-	}, [params.fileId]);
+	}, [params]);
+
+	useEffect(() => {
+		setProject(selectedProject || null);
+	}, [selectedProject]);
 
 	return (
 		<>
@@ -144,18 +149,18 @@ export const Files = (): JSX.Element => {
 										<HStack spacing={4}>
 											<FolderIcon />
 											<Heading as={'h4'} size={'md'}>
-												All files
+												All folders
 											</Heading>
 										</HStack>
-										<HStack spacing={4}>
+										{/*<HStack spacing={4}>
 											{selectedProject && (
 												<Button
-													onClick={() => setSelectedFile(!selectedFile)}
+													onClick={}
 												>
 													New folder
 												</Button>
 											)}
-										</HStack>
+										</HStack>*/}
 									</HStack>
 									{projects && projects.length > 0 ? (
 										<SimpleGrid itemWidth={320}>
@@ -182,28 +187,58 @@ export const Files = (): JSX.Element => {
 										<HStack spacing={4}>
 											<FolderIcon />
 											<Heading as={'h4'} size={'md'}>
-												Recent files
+												{selectedProject
+													? selectedProject.name
+													: 'Recent files'}
 											</Heading>
 										</HStack>
 									</HStack>
-									{/*{FakeFiles && FakeFiles.length > 0 ? (*/}
-									{/*	<VStack*/}
-									{/*		style={{ width: '100%' }}*/}
-									{/*		align={'stretch'}*/}
-									{/*		spacing={4}*/}
-									{/*	>*/}
-									{/*		{FakeFiles.map((p, pIndex) => (*/}
-									{/*			<File key={pIndex} file={p} />*/}
-									{/*		))}*/}
-									{/*	</VStack>*/}
-									{/*) : (*/}
-									{/*	<p>TODO: No files</p>*/}
-									{/*)}*/}
+
+									{loadingFiles || loadingProjectFiles ? (
+										<Center>
+											<LoadingSpinner />
+										</Center>
+									) : (selectedProject && files.length > 0) ||
+									  (!selectedProject && sortedRecentFiles.length > 0) ? (
+										selectedProject && files ? (
+											<VStack
+												style={{ width: '100%' }}
+												align={'stretch'}
+												spacing={4}
+											>
+												{files.map((p, pIndex) => (
+													<File key={pIndex} file={p} />
+												))}
+											</VStack>
+										) : (
+											<VStack
+												style={{ width: '100%' }}
+												align={'stretch'}
+												spacing={4}
+											>
+												{sortedRecentFiles.slice(0, 10).map((p, pIndex) => (
+													<File key={pIndex} file={p} />
+												))}
+											</VStack>
+										)
+									) : (
+										<EmptyState
+											title={'No files yet'}
+											text={
+												'No files have been uploaded yet, you can drop files on to projects to upload them.'
+											}
+										/>
+									)}
 								</VStack>
 							</Container>
 							{selectedFile && (
 								<SidebarContainer>
-									<p>A file has been selected.</p>
+									<FileSidebar
+										file={selectedFile}
+										onClose={() =>
+											navigate('/files/' + (params.projectId || ''))
+										}
+									/>
 								</SidebarContainer>
 							)}
 						</HStack>

@@ -9,22 +9,27 @@ export interface IFile {
 	created: number; // Timestamp
 	projectId: number;
 	fileType: FileType;
+	downloadUrl: string;
 }
 
 export class ProjectFile implements IFile {
 	fileId: string;
+	filePath: string;
 	bytes: number;
 	created: number;
 	fileType: FileType;
 	projectId: number;
 	name: string;
+	downloadUrl: string;
 
-	constructor(projectId: number, fileDocument: FileDocument) {
-		this.fileId = fileDocument.filePath;
+	constructor(fileDocument: FileDocument) {
+		this.fileId = fileDocument.fileId;
+		this.filePath = fileDocument.filePath;
 		this.bytes = fileDocument.size;
 		this.created = fileDocument.created;
-		this.fileType = 'picture'; // TODO
+		this.fileType = fileDocument.fileType;
 		this.name = fileDocument.fileName;
-		this.projectId = projectId;
+		this.projectId = fileDocument.projectId;
+		this.downloadUrl = fileDocument.downloadUrl;
 	}
 }

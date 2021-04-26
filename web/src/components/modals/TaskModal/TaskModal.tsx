@@ -66,10 +66,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 		fileService.getProjectFilesDb(projectId, (snapshot) => {
 			if (snapshot !== null && snapshot.exists()) {
 				const files: ProjectFile[] = [];
-
-				// TODO convert to File model
 				const map = Object.entries<FileDocument>(snapshot.val());
-				console.log(snapshot.val());
 
 				map.forEach(([, value]) => {
 					if (
@@ -77,7 +74,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 						value.externalId &&
 						value.externalId === task.taskId
 					) {
-						files.push(new ProjectFile(projectId, value));
+						files.push(new ProjectFile(value));
 					}
 				});
 

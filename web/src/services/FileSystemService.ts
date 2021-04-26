@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { FileUploadType } from '../models/FileUploadType';
 import { devError } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
+import { FileType } from '../models/ProjectFile';
 
 interface UploadResult {
 	downloadUrl: string;
@@ -13,8 +14,11 @@ export interface FileDocument {
 	downloadUrl: string;
 	fileName: string;
 	filePath: string;
+	fileType: FileType;
 	size: number;
 	type: FileUploadType;
+	fileId: string;
+	projectId: number;
 	externalId?: number;
 }
 
@@ -46,56 +50,40 @@ export class FileSystemService {
 		return this.ref.child(`${projectId}`);
 	}
 
-	listAllFiles(ref: firebase.storage.Reference) {
-		return ref.listAll();
-	}
-
 	getDbProjectChild(projectId: number) {
 		return this.dbRef.child(`${projectId}`);
 	}
 
-	getProjectFilesQuery(projectId: number) {
-		return this.getDbProjectChild(projectId).orderByChild('created');
+	getProjectFilesQuery(projectId: number, limit?: number) {
+		const query = this.getDbProjectChild(projectId).orderByChild('created');
+
+		if (limit) {
+			query.limitToFirst(limit);
+		}
+
+		return query;
 	}
 
 	getProjectFilesDb(
 		projectId: number,
-		callback: (snapshot: firebase.database.DataSnapshot) => void
+		callback: (snapshot: firebase.database.DataSnapshot) => void,
+		limit?: number
 	) {
-		return this.getProjectFilesQuery(projectId).on('value', callback);
+		return this.getProjectFilesQuery(projectId, limit).on('value', callback);
 	}
 
-	async getProjectFiles(projectId: number): Promise<FolderResult> {
+	async getProjectFile(projectId: number, fileId: string) {
 		try {
-			const folders: string[] = [];
-			const res = await this.listAllFiles(this.getProjectChild(projectId));
-
-			res.prefixes.forEach((folderRef) => {
-				// eslint-disable-next-line no-console
-				console.log('folderRef', folderRef);
-				folders.push(folderRef.name);
-			});
-
-			// res.items.forEach((itemRef) => {
-			// 	// eslint-disable-next-line no-console
-			// 	console.log('itemRef', itemRef);
-			// 	files.push(itemRef.name);
-			// });
-
-			return {
-				folders,
-				files: []
-			};
+			const res = await this.getDbProjectChild(projectId).child(fileId).once('value');
+			return res.val() as FileDocument;
 		} catch (e) {
-			devError('GetProjectFiles', e);
-			return {
-				folders: [],
-				files: []
-			};
+			devError(e);
+			throw new Error('Could not find file');
 		}
 	}
 
 	async updateDoc(
+		file: File,
 		projectId: number,
 		fileId: string,
 		fileName: string,
@@ -105,12 +93,17 @@ export class FileSystemService {
 		bytes: number,
 		externalId: number | null
 	) {
+		const fileType: FileType = this.getFileTypeForFile(file);
+
 		return this.getDbProjectChild(projectId).child(fileId).set({
 			type: uploadType,
+			fileId: fileId,
+			projectId: projectId,
 			fileName,
 			filePath,
 			externalId,
 			downloadUrl,
+			fileType: fileType,
 			size: bytes,
 			created: new Date().getTime()
 		});
@@ -151,6 +144,7 @@ export class FileSystemService {
 					const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
 
 					await this.updateDoc(
+						file,
 						projectId,
 						fileName,
 						originalFileName,
@@ -165,5 +159,28 @@ export class FileSystemService {
 				}
 			);
 		});
+	}
+
+	private getFileTypeForFile(file: File): FileType {
+		if (file.type.startsWith('text/')) {
+			return 'txt';
+		}
+
+		if (file.type.startsWith('video/')) {
+			return 'video';
+		}
+
+		if (file.type.startsWith('image/')) {
+			return 'picture';
+		}
+
+		switch (file.type) {
+			case 'application/msword':
+				return 'document';
+			case 'application/pdf':
+				return 'pdf';
+			default:
+				return 'other';
+		}
 	}
 }

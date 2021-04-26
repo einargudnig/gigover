@@ -19,7 +19,7 @@ interface FileProps {
 
 const FileStyled = styled(CardBaseLink)``;
 
-const FileIconForType = (fileType: FileType) => {
+export const FileIconForType = (fileType: FileType) => {
 	switch (fileType) {
 		case 'txt':
 			return FileTextIcon;
