@@ -16,6 +16,7 @@ interface FormActionsProps {
 	cancelText?: string | React.ReactNode;
 	cancelDisabled?: boolean;
 	style?: React.CSSProperties;
+	hideSubmitButton?: boolean;
 
 	onCancel?(): void;
 
@@ -30,6 +31,7 @@ export const FormActions = ({
 	onSubmit,
 	cancelText,
 	cancelDisabled = false,
+	hideSubmitButton = false,
 	...props
 }: FormActionsProps): JSX.Element => (
 	<FormActionsContainer {...props}>
@@ -45,7 +47,7 @@ export const FormActions = ({
 		) : (
 			<div />
 		)}
-		{onSubmit && (
+		{!hideSubmitButton && (
 			<Button
 				type={'submit'}
 				onClick={onSubmit}

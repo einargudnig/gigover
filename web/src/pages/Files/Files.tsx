@@ -75,6 +75,7 @@ export const Files = (): JSX.Element => {
 		<>
 			{upload && (
 				<UploadModal
+					projectId={selectedProject?.projectId || undefined}
 					onClose={() => {
 						setUpload(false);
 					}}
