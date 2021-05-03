@@ -1,16 +1,7 @@
-import {
-	Button,
-	Heading,
-	HStack,
-	Input,
-	InputGroup,
-	InputRightElement,
-	VStack
-} from '@chakra-ui/react';
+import { Button, Heading, HStack, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';
-import { SearchIcon } from '../../components/icons/SearchIcon';
 import styled from 'styled-components';
 import { FolderIcon } from '../../components/icons/FolderIcon';
 import { useProjectList } from '../../queries/useProjectList';
@@ -19,7 +10,7 @@ import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { Folder } from './components/Folder';
 import { ProjectStatus } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { File } from './components/File';
 import { UploadModal } from './UploadModal';
 import { EmptyState } from '../../components/empty/EmptyState';
@@ -28,6 +19,7 @@ import { ProjectFile } from '../../models/ProjectFile';
 import { useFileService } from '../../hooks/useFileService';
 import { FileSidebar } from './components/FileSidebar';
 import { useProjectFiles } from '../../queries/useProjectFiles';
+import { SearchBar } from './components/SearchBar';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -110,19 +102,7 @@ export const Files = (): JSX.Element => {
 						  ]
 						: [])
 				]}
-				tabs={
-					<InputGroup>
-						<Input
-							name="search"
-							placeholder="Search file system"
-							variant={'filled'}
-							style={{ minWidth: '400px' }}
-						/>
-						<InputRightElement pointerEvents={'none'}>
-							<SearchIcon />
-						</InputRightElement>
-					</InputGroup>
-				}
+				tabs={<SearchBar files={sortedRecentFiles} />}
 				contentPadding={false}
 				actions={
 					<Button onClick={() => setUpload(true)} leftIcon={<UploadIcon />}>

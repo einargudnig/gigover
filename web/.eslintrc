@@ -33,6 +33,7 @@
   },
   "rules": {
     "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-submodule-imports": "off",
     "@typescript-eslint/jsx-no-lambda": "off",
     "@typescript-eslint/no-empty-interface": [

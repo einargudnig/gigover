@@ -11,7 +11,7 @@ export interface ProjectResponse {
 	projects: Project[];
 }
 
-export const useProjectList = (fetchRecentFiles?: boolean) => {
+export const useProjectList = (fetchRecentFiles?: boolean, limit?: number) => {
 	const { fileService } = useFileService();
 	const [loadingFiles, setLoadingFiles] = useState(false);
 	const { data, isLoading, isError, error } = useQuery<ProjectResponse, ErrorResponse>(
@@ -28,7 +28,7 @@ export const useProjectList = (fetchRecentFiles?: boolean) => {
 			const promises: Promise<firebase.database.DataSnapshot>[] = [];
 
 			data.projects.forEach((p) => {
-				const promise = fileService.getProjectFilesQuery(p.projectId, 5).once('value');
+				const promise = fileService.getProjectFilesQuery(p.projectId, limit).once('value');
 
 				promise.then((snapshot) => {
 					if (snapshot.val() !== null) {
@@ -49,7 +49,7 @@ export const useProjectList = (fetchRecentFiles?: boolean) => {
 		}
 
 		return [];
-	}, [fetchRecentFiles, isLoading, data, fileService]);
+	}, [fetchRecentFiles, limit, isLoading, data, fileService]);
 
 	return {
 		data,
