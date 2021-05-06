@@ -12,16 +12,7 @@ import { Navigation } from '../components/Navigation';
 
 export const GraphQLEndpoint = process.env.GRAPHCMS_CONTENT_URL;
 
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			queryFn: async (context) => {
-				const { queryKey } = context;
-				return await request(GraphQLEndpoint, queryKey as string | DocumentNode);
-			}
-		}
-	}
-});
+const queryClient = new QueryClient();
 
 export interface GigoverAppProps extends AppProps {
 	pages: Page[];

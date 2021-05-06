@@ -12,6 +12,10 @@ interface NavigationProps {
 }
 
 const StyledNavigation = styled(Div)`
+	a {
+		background-size: 0 0;
+	}
+	
 	nav {
 		a {
 			font-weight: bold;
@@ -37,7 +41,11 @@ export const Navigation = ({ pages }: NavigationProps): JSX.Element => {
 		<PageBlock color={'black'}>
 			<Div flex justify={'space-between'} align={'center'}>
 				<StyledNavigation flex justify={'flex-start'} align={'center'}>
-					<Logo color={'white'} />
+					<Link href={'/'}>
+						<a>
+							<Logo color={'white'} />
+						</a>
+					</Link>
 					<nav>
 						{navigationPages.map((p) => (
 							<Link href={`/${p.slug}`} key={p.id}>
