@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;800&display=swap');
+
+:root {
+    --mainColor: #FAE44D;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background: #000;
+}
+
+body {
+    background: #fff;
+}
+
+html, body, #__next {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 400;
+}
+
+h1 {
+    font-weight: 800;
+}
+
+h2, h3, h4, h5 {
+    font-weight: 700;
+}
+
+.light {
+    font-weight: 100;
+}
+
+a {
+    background:
+            linear-gradient(
+                    to bottom, var(--mainColor) 0%,
+                    var(--mainColor) 100%
+            );
+    background-position: 0 100%;
+    background-repeat: repeat-x;
+    background-size: 4px 4px;
+    color: #000;
+    text-decoration: none;
+    transition: background-size .2s;
+}
+
+a:hover {
+    background-size: 4px 50px;
+}
