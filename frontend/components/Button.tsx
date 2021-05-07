@@ -8,7 +8,8 @@ interface ButtonProps extends Partial<Pick<HTMLButtonElement, 'onClick' | 'type'
 }
 
 const ButtonStyled = styled.button<{ backgroundColor: ColorKey }>`
-	padding: ${({ theme }) => theme.padding(1.5, 3.5)};
+	padding: ${({ theme }) => theme.padding(1.5, 2.5)};
+	user-select: none;
 	border-radius:  ${({ theme }) => theme.borderRadius};
 	cursor: pointer;
 	border: none;

@@ -1,7 +1,8 @@
 import { useQuery } from 'react-query';
 import request, { gql } from 'graphql-request';
-import { GraphQLEndpoint, Page } from '../pages/_app';
-import {ColorKey} from '../styles/theme';
+import { GraphQLEndpoint } from '../pages/_app';
+import { PageBlock } from '../models/PageBlock';
+import { Page } from '../models/Page';
 
 export const PageQuery = gql`
 	query Page($input: PageWhereUniqueInput!) {
@@ -9,6 +10,7 @@ export const PageQuery = gql`
 			id
 			name
 			slug
+			pageId
 			pageBlocks {
 				heading
 				content
@@ -29,28 +31,6 @@ export const PageQuery = gql`
 
 interface PageInput {
 	slug: string;
-}
-
-interface Asset {
-	id: string;
-	handle: string;
-	fileName: string;
-	width: number;
-	height: number;
-	url: string;
-}
-
-enum PageBlockType {
-	Hero = 'Hero'
-}
-
-interface PageBlock {
-	id: string;
-	heading: string | null;
-	content: string | null;
-	image: Asset | null;
-	pageBlockColor: ColorKey;
-	blockType: PageBlockType;
 }
 
 export type PageWithBlocks = Page & {

@@ -5,7 +5,8 @@ import { Div } from './Div';
 import styled from 'styled-components';
 import { PageBlock } from './PageContainer';
 import { Button } from './Button';
-import { Page } from '../pages/_app';
+import { useVerify } from '../queries/useVerify';
+import { Page } from '../models/Page';
 
 interface NavigationProps {
 	pages: Page[];
@@ -15,7 +16,7 @@ const StyledNavigation = styled(Div)`
 	a {
 		background-size: 0 0;
 	}
-	
+
 	nav {
 		a {
 			font-weight: bold;
@@ -35,6 +36,7 @@ const StyledNavigation = styled(Div)`
 `;
 
 export const Navigation = ({ pages }: NavigationProps): JSX.Element => {
+	const { authenticated, isLoading } = useVerify();
 	const navigationPages = pages.filter((p) => p.inNavigation);
 
 	return (
@@ -54,7 +56,20 @@ export const Navigation = ({ pages }: NavigationProps): JSX.Element => {
 						))}
 					</nav>
 				</StyledNavigation>
-				<Button color={'white'}>Sign in</Button>
+				{!isLoading && (
+					<Button
+						color={'white'}
+						onClick={() => {
+							if (authenticated) {
+								openProjects();
+							} else {
+								alert('Implement this..');
+							}
+						}}
+					>
+						{authenticated ? <span>Your projects</span> : <span>Sign in</span>}
+					</Button>
+				)}
 			</Div>
 		</PageBlock>
 	);

@@ -3,12 +3,12 @@ import 'normalize.css';
 import '../styles/gigover.css';
 import theme from '../styles/theme';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import request, { request as GraphQLRequest } from 'graphql-request';
-import { DocumentNode } from 'graphql';
+import { request as GraphQLRequest } from 'graphql-request';
 import { PagesQuery } from '../queries/usePages';
 import App from 'next/app';
 import { AppProps } from 'next/dist/pages/_app';
 import { Navigation } from '../components/Navigation';
+import { Page } from '../models/Page';
 
 export const GraphQLEndpoint = process.env.GRAPHCMS_CONTENT_URL;
 
@@ -27,23 +27,6 @@ const GigoverApp = ({ Component, pageProps, pages }: GigoverAppProps) => {
 			</ThemeProvider>
 		</QueryClientProvider>
 	);
-};
-
-export enum PageId {
-	Frontpage = 'Frontpage',
-	Pricing = 'Pricing',
-	Help = 'Help',
-	MobileApp = 'MobileApp',
-	Features = 'Features',
-	Learn = 'Learn'
-}
-
-export type Page = {
-	id: string;
-	name: string;
-	slug: string;
-	inNavigation: boolean;
-	pageId: PageId;
 };
 
 interface PageResponse {

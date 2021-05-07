@@ -4,6 +4,16 @@
     --mainColor: #FAE44D;
 }
 
+::-moz-selection {
+    background: #FAE44D;
+    color: #000;
+}
+
+::selection {
+    background: #FAE44D;
+    color: #000;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -29,7 +39,12 @@ body {
 }
 
 h1 {
+    font-size: 54px;
     font-weight: 800;
+}
+
+h2 {
+    font-size: 42px;
 }
 
 h2, h3, h4, h5 {
@@ -41,11 +56,10 @@ h2, h3, h4, h5 {
 }
 
 a {
-    background:
-            linear-gradient(
-                    to bottom, var(--mainColor) 0%,
-                    var(--mainColor) 100%
-            );
+    background: linear-gradient(
+            to bottom, var(--mainColor) 0%,
+            var(--mainColor) 100%
+    );
     background-position: 0 100%;
     background-repeat: repeat-x;
     background-size: 4px 4px;
