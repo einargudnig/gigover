@@ -68,6 +68,11 @@ a {
     transition: background-size .2s;
 }
 
+
 a:hover {
     background-size: 4px 50px;
+}
+
+a.normal, a.normal:hover {
+    background-size: 0 0;
 }

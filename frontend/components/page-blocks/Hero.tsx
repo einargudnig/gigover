@@ -74,7 +74,9 @@ export const Hero = ({ pageId, pageBlock }: HeroProps): JSX.Element => {
 						)}
 					</Button>
 					<Link href={'/features'}>
-						<Button>View features</Button>
+						<a className={'normal'}>
+							<Button>View features</Button>
+						</a>
 					</Link>
 				</CallToActionWrapper>
 			);

@@ -5,15 +5,8 @@ interface VerifyResponse {
 	authenticated?: boolean;
 }
 
-const url =
-	process.env.NODE_ENV === 'production'
-		? 'https://rest.gigover.com/rest/user/info'
-		: 'http://localhost:8080/rest/user/info';
-
-const gigoverWeb =
-	process.env.NODE_ENV === 'production'
-		? 'https://web.gigover.com'
-		: 'http://local.gigover.com:3000';
+const url = process.env.NEXT_PUBLIC_GIGOVER_REST_API;
+const gigoverWeb = process.env.NEXT_PUBLIC_GIGOVER_URL;
 
 export const useVerify = () => {
 	const { data, isLoading } = useQuery<any, any, AxiosResponse<VerifyResponse>>(
