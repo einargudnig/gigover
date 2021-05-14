@@ -1,3 +1,5 @@
+export const IS_LOCAL = process.env.NODE_ENV !== 'production';
+
 export const API_BASE =
 	process.env.NODE_ENV === 'production'
 		? 'https://rest.gigover.com/rest/'
@@ -5,6 +7,8 @@ export const API_BASE =
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';
+	static change = API_BASE + 'user/change';
+	static logout = API_BASE + 'user/logout';
 
 	// Projects
 	static projectList = API_BASE + 'contractor/list/';
