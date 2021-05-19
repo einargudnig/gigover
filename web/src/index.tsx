@@ -12,6 +12,7 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import ErrorBoundary from './ErrorBoundary';
+import 'core-js/stable';
 
 const firebaseApp = new Firebase();
 
