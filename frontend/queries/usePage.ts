@@ -29,6 +29,19 @@ export const PageQuery = gql`
 					icon
 					description
 				}
+				testimonials {
+					testimonial
+					name
+					company
+					image {
+						id
+						handle
+						fileName
+						width
+						height
+						url
+					}
+				}
 			}
 		}
 	}

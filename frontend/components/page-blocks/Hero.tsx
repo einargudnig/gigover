@@ -53,11 +53,7 @@ export const Hero = ({ pageId, pageBlock }: HeroProps): JSX.Element => {
 					<Button
 						color={'white'}
 						onClick={() => {
-							if (authenticated) {
-								openProjects();
-							} else {
-								alert('Implement this..');
-							}
+							openProjects();
 						}}
 					>
 						{authenticated ? (

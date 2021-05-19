@@ -6,12 +6,21 @@ export enum PageBlockType {
 	Video = 'Video',
 	Features = 'Features',
 	Reviews = 'Reviews',
+	Testimonial = 'Testimonial',
+	Image = 'Image',
 }
 
 export type Feature = {
 	title: string;
 	description: string;
 	icon: 'report' | 'timer' | 'message' | 'tasks';
+};
+
+export type Testimonial = {
+	testimonial: string;
+	name: string;
+	company: string;
+	image: Asset | null;
 };
 
 export interface PageBlock {
@@ -22,4 +31,5 @@ export interface PageBlock {
 	pageBlockColor: ColorKey;
 	blockType: PageBlockType;
 	features: Feature[];
+	testimonials: Testimonial[];
 }

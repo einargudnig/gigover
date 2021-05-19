@@ -12,7 +12,7 @@ interface NavigationProps {
 	pages: Page[];
 }
 
-const StyledNavigation = styled(Div)`
+export const StyledNavigation = styled(Div)`
 	a {
 		background-size: 0 0;
 	}
@@ -36,7 +36,7 @@ const StyledNavigation = styled(Div)`
 `;
 
 export const Navigation = ({ pages }: NavigationProps): JSX.Element => {
-	const { authenticated, isLoading } = useVerify();
+	const { authenticated, isLoading, openProjects } = useVerify();
 	const navigationPages = pages.filter((p) => p.inNavigation);
 
 	return (
@@ -60,11 +60,7 @@ export const Navigation = ({ pages }: NavigationProps): JSX.Element => {
 					<Button
 						color={'white'}
 						onClick={() => {
-							if (authenticated) {
-								openProjects();
-							} else {
-								alert('Implement this..');
-							}
+							openProjects();
 						}}
 					>
 						{authenticated ? <span>Your projects</span> : <span>Sign in</span>}
