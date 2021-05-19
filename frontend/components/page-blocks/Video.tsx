@@ -53,7 +53,7 @@ export const Video = ({ pageId, pageBlock }: VideoProps): JSX.Element | null => 
 			flex={'column'}
 			justify={'space-between'}
 			align={'center'}
-			style={{ padding: theme.padding(4) }}
+			style={{ padding: theme.padding(12, 0) }}
 		>
 			<h2>{pageBlock.heading}</h2>
 			<YoutubeVideo>

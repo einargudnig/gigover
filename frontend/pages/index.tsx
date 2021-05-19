@@ -8,7 +8,8 @@ import ReactMarkdown from 'react-markdown';
 import { PageBlockType } from '../models/PageBlock';
 import { Hero } from '../components/page-blocks/Hero';
 import { Video } from '../components/page-blocks/Video';
-import {Features} from '../components/page-blocks/Features';
+import { Features } from '../components/page-blocks/Features';
+import { Reviews } from '../components/page-blocks/Reviews';
 
 interface PageProps {
 	page: PageWithBlocks;
@@ -28,6 +29,8 @@ const Index = ({ page }: PageProps): JSX.Element => {
 								return <Video pageId={page.pageId} pageBlock={pageBlock} />;
 							case PageBlockType.Features:
 								return <Features pageId={page.pageId} pageBlock={pageBlock} />;
+							case PageBlockType.Reviews:
+								return <Reviews pageId={page.pageId} pageBlock={pageBlock} />;
 							default:
 								return (
 									<>

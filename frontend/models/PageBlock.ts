@@ -5,6 +5,7 @@ export enum PageBlockType {
 	Hero = 'Hero',
 	Video = 'Video',
 	Features = 'Features',
+	Reviews = 'Reviews',
 }
 
 export type Feature = {

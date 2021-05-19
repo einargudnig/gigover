@@ -14,6 +14,15 @@ const FeatureCardStyled = styled.div`
 	border-radius: ${(props) => props.theme.borderRadius};
 	background-color: ${(props) => props.theme.colors.gray['200']};
 	padding: ${(props) => props.theme.padding(4)};
+	
+	h4 {
+		margin-bottom: ${(props) => props.theme.padding(2)};
+	}
+	
+	p {
+		font-size: 16px;
+		line-height: 22px;
+	}
 `;
 
 const IconContainer = styled.div`
