@@ -7,6 +7,7 @@ import { FeatureCard } from '../FeatureCard';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
 import { Button } from '../Button';
+import Link from 'next/link';
 
 const FeatureIconsContainer = styled.div`
 	display: flex;
@@ -25,6 +26,10 @@ const FeatureIconsContainer = styled.div`
 			margin-top: 22px;
 			margin-bottom: -22px;
 		}
+	}
+	
+	@media screen and (max-width: 924px) {
+		display: none;
 	}
 `;
 
@@ -74,7 +79,11 @@ export const Features = ({ pageBlock }: FeaturesProps): JSX.Element => (
 			<h2>{pageBlock.heading}</h2>
 			<ReactMarkdown>{pageBlock.content}</ReactMarkdown>
 			<div style={{ height: theme.padding(3) }} />
-			<Button>Get started</Button>
+			<Link href={'/features'}>
+				<a className={'normal'}>
+					<Button>View more features</Button>
+				</a>
+			</Link>
 		</FeaturesContainer>
 	</Div>
 );

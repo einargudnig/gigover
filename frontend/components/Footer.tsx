@@ -46,7 +46,6 @@ export const Footer = ({ pages }: FooterProps): JSX.Element => {
 					flex
 					justify={'space-between'}
 					align={'center'}
-
 				>
 					<div>
 						<p style={{ fontSize: 18, fontWeight: '300', paddingBottom: theme.padding(1) }}>Copyright © {new Date().getFullYear()}</p>

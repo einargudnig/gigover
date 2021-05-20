@@ -23,6 +23,20 @@ const TestimonialStyled = styled(Div)`
 			line-height: 32px;
 		}
 		
+		@media screen and (max-width: 924px) {
+			p {
+				font-size: 20px;
+				line-height: 24px;
+			}
+		}
+
+		@media screen and (max-width: 768px) {
+			p {
+				font-size: 16px;
+				line-height: 22px;
+			}
+		}
+		
 		h3 {
 			margin-top: ${props => props.theme.padding(2)};
 			

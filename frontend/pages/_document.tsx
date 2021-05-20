@@ -47,6 +47,7 @@ class GigoverDocument extends Document {
 				</Head>
 				<body>
 					<Main />
+					<div id={'go-portal'} />
 					<NextScript />
 				</body>
 			</Html>

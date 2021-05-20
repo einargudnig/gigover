@@ -24,6 +24,18 @@ const ImageContainer = styled(Div)`
 	img {
 		max-width: 100%;
 	}
+
+	@media screen and (max-width: 924px) {
+		p {
+			font-size: 16px;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		p {
+			font-size: 14px;
+		}
+	}
 `;
 
 export const Image = ({ pageId, pageBlock }: ImageProps): JSX.Element => {

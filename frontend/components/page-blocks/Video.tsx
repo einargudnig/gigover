@@ -31,6 +31,12 @@ const YoutubeVideo = styled.div`
 	width: 800px;
 	border-radius: 50px;
 
+	@media screen and (max-width: 924px) {
+		width: 90%;
+		margin: 0 auto;
+		margin-top: ${props => props.theme.padding(4)};
+	}
+	
 	iframe {
 		left: 0;
 		top: 0;
