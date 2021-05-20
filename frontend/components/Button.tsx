@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ColorKey } from '../styles/theme';
 
+// @ts-ignore
 interface ButtonProps extends Partial<Pick<HTMLButtonElement, 'onClick' | 'type'>> {
 	children?: React.ReactNode;
 	color?: ColorKey;
