@@ -2,10 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import { ColorKey } from '../styles/theme';
 
-// @ts-ignore
-interface ButtonProps extends Partial<Pick<HTMLButtonElement, 'onClick' | 'type'>> {
+interface ButtonProps {
+	type?: string;
 	children?: React.ReactNode;
 	color?: ColorKey;
+	onClick?: (event: MouseEvent) => void;
 }
 
 const ButtonStyled = styled.button<{ backgroundColor: ColorKey }>`
