@@ -9,6 +9,7 @@ import App from 'next/app';
 import { AppProps } from 'next/dist/pages/_app';
 import { Navigation } from '../components/Navigation';
 import { Page } from '../models/Page';
+import {Footer} from '../components/Footer';
 
 export const GraphQLEndpoint = process.env.GRAPHCMS_CONTENT_URL;
 
@@ -24,6 +25,7 @@ const GigoverApp = ({ Component, pageProps, pages }: GigoverAppProps) => {
 			<ThemeProvider theme={theme}>
 				<Navigation pages={pages} />
 				<Component {...pageProps} />
+				<Footer pages={pages} />
 			</ThemeProvider>
 		</QueryClientProvider>
 	);

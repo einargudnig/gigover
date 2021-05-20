@@ -26,6 +26,8 @@ import { RoadmapIcon } from './icons/RoadmapIcon';
 import { Chevron } from './icons/Chevron';
 import { Theme } from '../Theme';
 import { FolderIcon } from './icons/FolderIcon';
+import { useLogout } from '../mutations/useLogout';
+import { DevMenu } from './DevMenu';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -194,6 +196,7 @@ export const Page = ({
 	contentPadding = true,
 	actions
 }: PageProps): JSX.Element | null => {
+	const { mutateAsync: logout } = useLogout();
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
 
@@ -280,7 +283,12 @@ export const Page = ({
 										<NavLink to={'/settings'}>
 											<MenuItem>Settings</MenuItem>
 										</NavLink>
-										<MenuItem onClick={() => firebase.signOut()}>
+										<MenuItem
+											onClick={async () => {
+												await firebase.signOut();
+												await logout(undefined, undefined);
+											}}
+										>
 											Sign out
 										</MenuItem>
 									</MenuGroup>
@@ -300,6 +308,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
+			<DevMenu />
 		</PageStyled>
 	);
 };

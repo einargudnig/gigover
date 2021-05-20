@@ -24,6 +24,24 @@ export const PageQuery = gql`
 					url
 				}
 				blockType
+				features {
+					title
+					icon
+					description
+				}
+				testimonials {
+					testimonial
+					name
+					company
+					image {
+						id
+						handle
+						fileName
+						width
+						height
+						url
+					}
+				}
 			}
 		}
 	}

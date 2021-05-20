@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 
 interface GoogleIconProps {
 	size?: number;
+	style?: CSSProperties;
 }
 
 export const GoogleIconProps = ({ size = 34, ...props }: GoogleIconProps): JSX.Element => {

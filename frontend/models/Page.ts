@@ -4,7 +4,8 @@ export enum PageId {
 	Help = 'Help',
 	MobileApp = 'MobileApp',
 	Features = 'Features',
-	Learn = 'Learn'
+	Learn = 'Learn',
+	About = 'About'
 }
 
 export type Page = {

@@ -16,10 +16,16 @@ interface HeroProps {
 }
 
 const HeroImage = styled.div`
+	flex: 0 0 35%;
 	margin-left: ${theme.padding(6)};
 
 	img {
+		max-width: 100%;
 		user-select: none;
+	}
+	
+	@media screen and (max-width: 768px) {
+		display: none;
 	}
 `;
 
@@ -32,6 +38,18 @@ const HeroContent = styled.div`
 		font-size: 18px;
 		line-height: 1.6;
 		font-weight: 300;
+	}
+	
+	@media screen and (max-width: 924px) {
+		p {
+			font-size: 16px;
+		}
+	}
+	
+	@media screen and (max-width: 768px) {		
+		p {
+			font-size: 14px;
+		}
 	}
 `;
 
@@ -53,11 +71,7 @@ export const Hero = ({ pageId, pageBlock }: HeroProps): JSX.Element => {
 					<Button
 						color={'white'}
 						onClick={() => {
-							if (authenticated) {
-								openProjects();
-							} else {
-								alert('Implement this..');
-							}
+							openProjects();
 						}}
 					>
 						{authenticated ? (
@@ -74,7 +88,9 @@ export const Hero = ({ pageId, pageBlock }: HeroProps): JSX.Element => {
 						)}
 					</Button>
 					<Link href={'/features'}>
-						<Button>View features</Button>
+						<a className={'normal'}>
+							<Button>View features</Button>
+						</a>
 					</Link>
 				</CallToActionWrapper>
 			);

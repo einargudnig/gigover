@@ -32,6 +32,7 @@ const StyledMenuList = styled(MenuList)`
 
 export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
+	const refInput = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 
@@ -43,10 +44,17 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 	useEffect(() => {
 		if (searchValue.length > 0) {
 			setIsOpen(true);
+
+			if (refInput.current) {
+				// Keep focus on the input element
+				setTimeout(() => {
+					refInput.current!.focus();
+				}, 0);
+			}
 		} else {
 			setIsOpen(false);
 		}
-	}, [searchValue]);
+	}, [searchValue, refInput]);
 
 	const searchResults = useMemo<ProjectFile[]>(() => {
 		if (searchValue.length > 0) {
@@ -69,6 +77,7 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 				variant={'filled'}
 				style={{ minWidth: '400px' }}
 				value={searchValue}
+				ref={refInput}
 				onChange={(e) => {
 					setSearchValue(e.target.value);
 					e.target.focus(); // Keep the focus on the input
