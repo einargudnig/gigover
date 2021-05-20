@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import { PageBlock } from '../../models/PageBlock';
 import { Div } from '../Div';
 import ReactMarkdown from 'react-markdown';
@@ -13,6 +13,7 @@ import Link from 'next/link';
 interface HeroProps {
 	pageId: PageId;
 	pageBlock: PageBlock;
+	centerText?: boolean;
 }
 
 const HeroImage = styled.div`
@@ -29,7 +30,7 @@ const HeroImage = styled.div`
 	}
 `;
 
-const HeroContent = styled.div`
+const HeroContent = styled.div<{ centerText: boolean }>`
 	h1 {
 		margin-bottom: ${theme.padding(3)};
 	}
@@ -39,6 +40,16 @@ const HeroContent = styled.div`
 		line-height: 1.6;
 		font-weight: 300;
 	}
+	
+	${props => props.centerText && css`
+		h1 {
+			text-align: center;
+		}
+		
+		p {
+			text-align: center;
+		}
+	`};
 	
 	@media screen and (max-width: 924px) {
 		p {
@@ -61,7 +72,7 @@ const CallToActionWrapper = styled(Div)`
 	}
 `;
 
-export const Hero = ({ pageId, pageBlock }: HeroProps): JSX.Element => {
+export const Hero = ({ pageId, pageBlock, centerText = false }: HeroProps): JSX.Element => {
 	const { authenticated, openProjects } = useVerify();
 
 	const CallToAction = () => {
@@ -102,11 +113,11 @@ export const Hero = ({ pageId, pageBlock }: HeroProps): JSX.Element => {
 	return (
 		<Div
 			flex
-			justify={'space-between'}
+			justify={centerText ? 'center' : 'space-between'}
 			align={'center'}
 			style={{ paddingBottom: theme.padding(4) }}
 		>
-			<HeroContent>
+			<HeroContent centerText={centerText}>
 				<h1>{pageBlock.heading}</h1>
 				<ReactMarkdown>{pageBlock.content}</ReactMarkdown>
 				<CallToAction />
