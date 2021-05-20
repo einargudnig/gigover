@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Modal } from '../Modal';
 import {
 	Box,
@@ -20,6 +20,7 @@ import { ProjectFile } from '../../models/ProjectFile';
 import { ImageDot } from '../ImageEditor/ImageDot';
 import { formatDate } from '../../utils/StringUtils';
 import { ImportantIcon } from '../icons/ImportantIcon';
+import { UserContext } from '../../context/UserContext';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -37,7 +38,7 @@ export interface ICommentChord {
 	width: number;
 }
 export interface ICommentComment {
-	user?: { name: string; id: number };
+	user?: { name: string; id: string | number };
 	date: string;
 	comment: string;
 	id: number;
@@ -46,7 +47,9 @@ export interface ICommentComment {
 export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
 	const Icon = FileIconForType(file.fileType);
 	const [activePoint, setActivePoint] = useState(-1);
+	const user = useContext(UserContext);
 
+	console.log(user, 'user');
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		console.log(event.target! as Element);
 	};
@@ -64,8 +67,8 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 					{
 						id: Math.round(Math.random() * 1000),
 						user: {
-							name: 'Pétur hallgrimsson',
-							id: 29
+							name: user.name,
+							id: user.phoneNumber
 						},
 						date: new Date().toISOString(),
 						comment: comment.comment
@@ -87,8 +90,8 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 				{
 					id: Math.round(Math.random() * 1000),
 					user: {
-						name: 'Pétur hallgrimsson',
-						id: 29
+						name: user.name,
+						id: user.phoneNumber
 					},
 					date: new Date().toISOString(),
 					comment: comment.comment
@@ -280,7 +283,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 							colorScheme={'black'}
 							icon={<TrashIcon color={'white'} />}
 							onClick={() => {
-								console.log('DELETE');
+								alert('TODO delete');
 							}}
 						/>
 						<Text color={'black'} fontSize={'xs'}>

@@ -162,7 +162,7 @@ export const ImageDot = ({
 				justifyContent: 'center'
 			}}
 		>
-			<div style={{ position: 'relative', height: '100%' }}>
+			<div style={{ position: 'relative' }}>
 				<ChakraImage
 					ref={ref}
 					onMouseUp={addDot}

@@ -189,9 +189,11 @@ export const Files = (): JSX.Element => {
 												align={'stretch'}
 												spacing={4}
 											>
-												{files.map((p, pIndex) => (
-													<File key={pIndex} file={p} />
-												))}
+												{files
+													.sort((a, b) => b.created - a.created)
+													.map((p, pIndex) => (
+														<File key={pIndex} file={p} />
+													))}
 											</VStack>
 										) : (
 											<VStack
