@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import styled from 'styled-components';
 import { ColorKey } from '../styles/theme';
 
@@ -6,7 +6,7 @@ interface ButtonProps {
 	type?: 'button' | 'submit' | 'reset';
 	children?: React.ReactNode;
 	color?: ColorKey;
-	onClick?: (event: MouseEvent) => void;
+	onClick?: (event: MouseEventHandler<HTMLButtonElement>) => void;
 }
 
 const ButtonStyled = styled.button<{ backgroundColor: ColorKey }>`
