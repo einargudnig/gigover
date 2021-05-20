@@ -17,9 +17,9 @@ import { EmptyState } from '../../components/empty/EmptyState';
 import { Center } from '../../components/Center';
 import { ProjectFile } from '../../models/ProjectFile';
 import { useFileService } from '../../hooks/useFileService';
-import { FileSidebar } from './components/FileSidebar';
 import { useProjectFiles } from '../../queries/useProjectFiles';
 import { SearchBar } from './components/SearchBar';
+import { EditPhotoModal } from '../../components/modals/EditPhotoModal';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -28,11 +28,13 @@ const Container = styled.div`
 	overflow-y: auto;
 `;
 
+/*
 const SidebarContainer = styled(Container)`
 	flex: 0 0 350px;
 	background: #fff;
 	box-shadow: ${(props) => props.theme.boxShadow()};
 `;
+*/
 
 export const Files = (): JSX.Element => {
 	const params = useParams();
@@ -212,19 +214,15 @@ export const Files = (): JSX.Element => {
 									)}
 								</VStack>
 							</Container>
-							{selectedFile && (
-								<SidebarContainer>
-									<FileSidebar
-										file={selectedFile}
-										onClose={() =>
-											navigate('/files/' + (params.projectId || ''))
-										}
-									/>
-								</SidebarContainer>
-							)}
 						</HStack>
 					)}
 				</VStack>
+				{selectedFile && (
+					<EditPhotoModal
+						file={selectedFile}
+						onClose={() => navigate('/files/' + (params.projectId || ''))}
+					/>
+				)}
 			</Page>
 		</>
 	);

@@ -24,12 +24,15 @@
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.3.2",
     "react-hook-form": "^6.15.4",
+    "react-image-annotation": "^0.9.10",
     "react-query": "^3.12.1",
     "react-router-dom": "^6.0.0-beta.0",
     "react-scripts": "^4.0.3",
     "react-select": "^4.2.1",
+    "react-tippy": "^1.4.0",
     "styled-components": "^5.2.3",
     "use-query-params": "^1.2.0",
+    "use-resize-observer": "^7.0.0",
     "uuid": "^8.3.2"
   },
   "scripts": {

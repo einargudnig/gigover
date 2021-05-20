@@ -26,6 +26,11 @@ export interface MilestoneModalContext {
 	callback: () => void;
 }
 
+export interface IEditPhotoContext {
+	photoId: number;
+	projectId: number;
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
@@ -38,6 +43,7 @@ export interface IModalContext {
 		task: Task;
 		projectId: number;
 	};
+	editPhoto?: IEditPhotoContext;
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

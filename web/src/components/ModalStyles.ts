@@ -179,7 +179,6 @@ export const ModalWrapper = styled.div<IWithFlexContainer>`
 export const CenterModalWrapper = styled(ModalWrapper)`
 	min-width: 600px;
 	max-width: 90vw;
-	height: auto;
 	margin: 0 auto;
 	border-radius: 12px;
 	animation-name: fadeInCenterModalWrapper;
