@@ -72,6 +72,7 @@ export type ColorKey = keyof typeof colors;
 interface ThemeInterface {
     colors: {
         [key in ColorKey]: {
+            // @ts-ignore
             [key: '900' | '800' | '700' | '600' | '500' | '400' | '200' | '100']: string;
         };
     };

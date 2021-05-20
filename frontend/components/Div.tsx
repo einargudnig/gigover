@@ -2,8 +2,8 @@ import styled, { css } from 'styled-components';
 
 interface DivProps {
 	flex?: boolean | 'column' | 'row';
-	justify?: 'space-between' | 'flex-start' | 'flex-end';
-	align?: 'center';
+	justify?: 'space-between' | 'flex-start' | 'flex-end' | 'center';
+	align?: 'flex-start' | 'flex-end' | 'center';
 }
 
 export const Div = styled.div<DivProps>`

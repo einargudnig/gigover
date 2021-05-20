@@ -48,7 +48,7 @@ export const Footer = ({ pages }: FooterProps): JSX.Element => {
 					align={'center'}
 				>
 					<div>
-						<p style={{ fontSize: 18, fontWeight: '300', paddingBottom: theme.padding(1) }}>Copyright © {new Date().getFullYear()}</p>
+						<p style={{ fontSize: 18, fontWeight: 300, paddingBottom: theme.padding(1) }}>Copyright © {new Date().getFullYear()}</p>
 						<p style={{ fontSize: 14, fontWeight: 'bold' }}>Project management made easy</p>
 					</div>
 					<Div flex justify={'flex-end'} align={'center'}>

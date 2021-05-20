@@ -6,7 +6,7 @@ interface ButtonProps {
 	type?: 'button' | 'submit' | 'reset';
 	children?: React.ReactNode;
 	color?: ColorKey;
-	onClick?: (event: MouseEventHandler<HTMLButtonElement>) => void;
+	onClick?: (event: any) => void;
 }
 
 const ButtonStyled = styled.button<{ backgroundColor: ColorKey }>`
