@@ -43,6 +43,15 @@ export const PageQuery = gql`
 					}
 				}
 			}
+			pricePlans {
+				name
+				description
+				monthlyPrice
+				pricePlanFields {
+					fieldKey
+					fieldValue
+				}
+			}
 		}
 	}
 `;

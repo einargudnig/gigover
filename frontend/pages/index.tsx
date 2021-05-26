@@ -11,7 +11,9 @@ import { Video } from '../components/page-blocks/Video';
 import { Features } from '../components/page-blocks/Features';
 import { Reviews } from '../components/page-blocks/Reviews';
 import { Testimonial } from '../components/page-blocks/Testimonial';
-import {Image} from '../components/page-blocks/Image';
+import { Image } from '../components/page-blocks/Image';
+import { PageId } from '../models/Page';
+import { PricePlans } from '../components/page-blocks/PricePlans';
 
 interface PageProps {
 	page: PageWithBlocks;
@@ -22,9 +24,11 @@ const Index = ({ page }: PageProps): JSX.Element => {
 		<>
 			<HeadTitle title={page.name} />
 			{page.pageBlocks.map((pageBlock) => {
-				
 				// Validation methods
-				if (pageBlock.blockType === PageBlockType.Testimonial && pageBlock.testimonials.length === 0) {
+				if (
+					pageBlock.blockType === PageBlockType.Testimonial &&
+					pageBlock.testimonials.length === 0
+				) {
 					return null;
 				}
 
@@ -34,7 +38,7 @@ const Index = ({ page }: PageProps): JSX.Element => {
 						{(() => {
 							switch (pageBlock.blockType) {
 								case PageBlockType.Hero:
-									return <Hero pageId={page.pageId} pageBlock={pageBlock} />;
+									return <Hero pageId={page.pageId} pageBlock={pageBlock} centerText={page.pageId === PageId.Pricing} />;
 								case PageBlockType.Video:
 									return <Video pageId={page.pageId} pageBlock={pageBlock} />;
 								case PageBlockType.Features:
@@ -42,7 +46,9 @@ const Index = ({ page }: PageProps): JSX.Element => {
 								case PageBlockType.Reviews:
 									return <Reviews pageId={page.pageId} pageBlock={pageBlock} />;
 								case PageBlockType.Testimonial:
-									return <Testimonial pageId={page.pageId} pageBlock={pageBlock} />;
+									return (
+										<Testimonial pageId={page.pageId} pageBlock={pageBlock} />
+									);
 								case PageBlockType.Image:
 									return <Image pageId={page.pageId} pageBlock={pageBlock} />;
 								default:
@@ -58,8 +64,11 @@ const Index = ({ page }: PageProps): JSX.Element => {
 							}
 						})()}
 					</PageBlock>
-				)
+				);
 			})}
+			{page.pageId === PageId.Pricing && page.pricePlans.length > 0 && (
+				<PricePlans pricePlans={page.pricePlans} />
+			)}
 		</>
 	);
 };

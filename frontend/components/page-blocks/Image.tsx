@@ -41,8 +41,8 @@ const ImageContainer = styled(Div)`
 export const Image = ({ pageId, pageBlock }: ImageProps): JSX.Element => {
 	return (
 		<ImageContainer flex={'column'} justify={'center'} align={'center'} style={{ padding: theme.padding(8, 0) }}>
-			<h2>{pageBlock.heading}</h2>
-			<p>{pageBlock.content}</p>
+			{pageBlock.heading && <h2>{pageBlock.heading}</h2>}
+			{pageBlock.content && <p>{pageBlock.content}</p>}
 			<img src={pageBlock.image.url} />
 		</ImageContainer>
 	);
