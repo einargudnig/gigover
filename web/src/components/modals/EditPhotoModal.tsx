@@ -30,12 +30,14 @@ export interface ICommentDot {
 	id: number;
 	chord: ICommentChord;
 	comments: ICommentComment[];
+	pageNumber?: number;
 }
 export interface ICommentChord {
 	x: number;
 	y: number;
 	height: number;
 	width: number;
+	pageNumber?: number;
 }
 export interface ICommentComment {
 	user?: { name: string; id: string | number };
@@ -49,13 +51,13 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 	const [activePoint, setActivePoint] = useState(-1);
 	const user = useContext(UserContext);
 
-	console.log(user, 'user');
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		console.log(event.target! as Element);
 	};
 
 	const [comments, setComments] = useState<ICommentDot[]>([]);
 
+	console.log(comments, 'comments');
 	const newComment = (comment: { chord: ICommentChord; comment: string }) => {
 		const newId = Math.round(Math.random() * 1000);
 		setComments([
@@ -63,6 +65,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 			{
 				id: newId,
 				chord: comment.chord,
+				pageNumber: comment.chord.pageNumber,
 				comments: [
 					{
 						id: Math.round(Math.random() * 1000),
@@ -124,7 +127,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 			setComments([...returnComments]);
 		}
 	};
-	console.log(file.name, 'name');
+	console.log(file, 'name');
 
 	return (
 		<Modal title={'Photo edit'} open={true} onClose={() => onClose()} centerModal={true}>
@@ -151,9 +154,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 					</Text>
 				</HStack>
 				<Divider />
-				{(file.name.includes('png') ||
-					file.name.includes('jpg') ||
-					file.name.includes('jpeg')) && (
+				{
 					<Flex
 						minHeight={'60vh'}
 						direction={{
@@ -233,20 +234,19 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 						</Flex>
 
 						<Flex p={2} flex={1}>
-							{file.downloadUrl && file.fileType === 'picture' && (
-								<ImageDot
-									newComment={newComment}
-									removeComment={removeComment}
-									editComment={editComment}
-									imageSrc={file.downloadUrl}
-									dots={comments}
-									setActivePoint={setActivePoint}
-									activePoint={activePoint}
-								/>
-							)}
+							<ImageDot
+								newComment={newComment}
+								documentType={file.fileType}
+								removeComment={removeComment}
+								editComment={editComment}
+								imageSrc={file.downloadUrl}
+								dots={comments}
+								setActivePoint={setActivePoint}
+								activePoint={activePoint}
+							/>
 						</Flex>
 					</Flex>
-				)}
+				}
 				<Divider />
 
 				<VStack align={'stretch'} spacing={4}>
