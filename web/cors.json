@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["http://gigover.com", "http://local.gigover.com"
+,"http://local.gigover.com:3000", "https://gigover.com", "https://web.gigover.com"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]
