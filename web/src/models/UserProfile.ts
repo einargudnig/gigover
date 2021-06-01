@@ -7,4 +7,6 @@ export interface IUserProfile {
 	email: string;
 	authenticated: boolean;
 	avatar: string;
+	name: string;
+	phoneNumber: string;
 }

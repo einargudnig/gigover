@@ -13,6 +13,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import ErrorBoundary from './ErrorBoundary';
 import 'core-js/stable';
+import 'react-tippy/dist/tippy.css';
 
 const firebaseApp = new Firebase();
 

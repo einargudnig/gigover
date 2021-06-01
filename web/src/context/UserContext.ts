@@ -6,5 +6,7 @@ export const UserContext = React.createContext<IUserProfile>({
 	type: 1,
 	email: 'na',
 	authenticated: false,
-	avatar: ''
+	avatar: '',
+	name: '',
+	phoneNumber: ''
 });
