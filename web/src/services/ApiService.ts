@@ -43,5 +43,6 @@ export class ApiService {
 	static projectTypes = API_BASE + 'workers/types';
 
 	// Cloud Functions
-	static getUserIdByPhoneNumber = 'https://us-central1-gigover2.cloudfunctions.net/getUserId';
+	static getUserIdByPhoneNumber =
+		'https://us-central1-gigover2.cloudfunctions.net/getUserIdForPhoneNumber';
 }

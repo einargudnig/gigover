@@ -17,6 +17,9 @@ import { useProjectTypes } from './queries/useProjectTypes';
 import { QueryParamProvider } from 'use-query-params';
 import { FileSystemContext } from './context/FileSystemContext';
 import { FileSystemService } from './services/FileSystemService';
+import { pdfjs } from 'react-pdf';
+// We need this for loading PDF viewer on production.
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
