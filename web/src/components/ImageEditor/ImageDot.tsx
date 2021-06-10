@@ -16,7 +16,7 @@ import {
 	MenuItem
 } from '@chakra-ui/react';
 import useResizeObserver from 'use-resize-observer';
-import { ICommentChord, ICommentComment, ICommentDot } from '../modals/EditPhotoModal';
+import { ICommentChord, ICommentComment, IImageDot } from '../modals/EditPhotoModal';
 import { Theme } from '../../Theme';
 import { formatDate } from '../../utils/StringUtils';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -81,7 +81,7 @@ export const ImageDot = ({
 	setActivePoint,
 	activePoint
 }: {
-	dots: ICommentDot[];
+	dots: IImageDot[];
 	imageSrc: string;
 	documentType: FileType;
 	newComment: (comment: any) => void;
@@ -184,14 +184,14 @@ export const ImageDot = ({
 */
 				//TODO Small ajustments needed
 				const blabla = {
-					x: point.x * ratioSmaller,
-					y: point.y * ratioSmaller
+					x: point.coordinateX * ratioSmaller,
+					y: point.coordinateY * ratioSmaller
 				};
 				return blabla;
 			}
 			return {
-				x: point.x + (boxDimmensions.width - point.width) / 2,
-				y: point.y + (boxDimmensions.height - point.height) / 2
+				x: point.coordinateX + (boxDimmensions.width - point.width) / 2,
+				y: point.coordinateY + (boxDimmensions.height - point.height) / 2
 			};
 		},
 		[imageDimmensions, boxDimmensions]

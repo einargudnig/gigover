@@ -21,20 +21,28 @@ import { ImageDot } from '../ImageEditor/ImageDot';
 import { formatDate } from '../../utils/StringUtils';
 import { ImportantIcon } from '../icons/ImportantIcon';
 import { UserContext } from '../../context/UserContext';
+import { useImageDots } from '../../queries/useImageDots';
+import {
+	useAddImageDot,
+	useAddImageDotComment,
+	useEditDotComment,
+	useRemoveDotComment,
+	useRemoveImageDot
+} from '../../mutations/useImageDot';
+import { useLogout } from '../../mutations/useLogout';
 
 interface FileSidebarProps {
 	onClose: () => void;
 	file: ProjectFile;
 }
-export interface ICommentDot {
+export interface IImageDot extends ICommentChord {
 	id: number;
-	chord: ICommentChord;
-	comments: ICommentComment[];
-	pageNumber?: number;
+	comments?: ICommentComment[];
+	imageId?: number;
 }
 export interface ICommentChord {
-	x: number;
-	y: number;
+	coordinateX: number;
+	coordinateY: number;
 	height: number;
 	width: number;
 	pageNumber?: number;
@@ -47,7 +55,7 @@ export interface ICommentComment {
 }
 
 export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
-	const Icon = FileIconForType(file.fileType);
+	const Icon = FileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
 	const user = useContext(UserContext);
 
@@ -55,10 +63,28 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 		console.log(event.target! as Element);
 	};
 
-	const [comments, setComments] = useState<ICommentDot[]>([]);
+	const [comments, setComments] = useState<IImageDot[]>([]);
+
+	const { data, refetch: refetchImageDots } = useImageDots(29);
+
+	console.log(data, 'Data------');
+
+	const { mutateAsync: addImgageDot } = useAddImageDot();
+	const { mutateAsync: removeImageDot } = useRemoveImageDot();
+
+	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
+	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
+	const { mutateAsync: editImageDotComment } = useEditDotComment();
 
 	console.log(comments, 'comments');
-	const newComment = (comment: { chord: ICommentChord; comment: string }) => {
+	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
+		//TODO new dot
+		const response = await addImgageDot(chord);
+
+		//TODO new comment on that dot
+		await editImageDotComment({ dotId: comment.id, comment: comment.comment });
+		refetchImageDots();
+
 		const newId = Math.round(Math.random() * 1000);
 		setComments([
 			...comments,
@@ -82,7 +108,13 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 		setActivePoint(newId);
 	};
 
-	const editComment = (comment: { comment: string; id: number }) => {
+	const editComment = async (comment: { comment: string; id: number }) => {
+		const response = await editImageDotComment({ dotId: comment.id, comment: comment.comment });
+
+		console.log(response, 'response');
+		refetchImageDots();
+
+		//fetch the comments again
 		const index = comments.findIndex((s) => s.id === comment.id);
 
 		const ec = { ...comments[index] };
@@ -236,10 +268,10 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 						<Flex p={2} flex={1}>
 							<ImageDot
 								newComment={newComment}
-								documentType={file.fileType}
+								documentType={file.type}
 								removeComment={removeComment}
 								editComment={editComment}
-								imageSrc={file.downloadUrl}
+								imageSrc={file.url}
 								dots={comments}
 								setActivePoint={setActivePoint}
 								activePoint={activePoint}
@@ -257,7 +289,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 					</HStack>
 					<HStack justify={'space-between'} align={'center'}>
 						<Heading size={'sm'}>Size</Heading>
-						<Text>{humanFileSize(file.bytes)}</Text>
+						<Text>{humanFileSize(file?.bytes)}</Text>
 					</HStack>
 					<div style={{ height: 2 }} />
 				</VStack>
@@ -266,7 +298,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 				<div style={{ height: 2 }} />
 				<HStack justify={'space-between'} align={'center'}>
 					<VStack justify={'center'} align={'center'}>
-						<a href={file.downloadUrl} target={'_blank'} rel={'noopener noreferrer'}>
+						<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 							<IconButton
 								aria-label={'Download'}
 								colorScheme={'black'}

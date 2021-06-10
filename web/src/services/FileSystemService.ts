@@ -3,7 +3,9 @@ import { v4 as uuid } from 'uuid';
 import { FileUploadType } from '../models/FileUploadType';
 import { devError } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
-import { FileType } from '../models/ProjectFile';
+import { FileType, ProjectFile } from '../models/ProjectFile';
+import axios from 'axios';
+import { ApiService } from './ApiService';
 
 interface UploadResult {
 	downloadUrl: string;
@@ -155,6 +157,17 @@ export class FileSystemService {
 						externalId || null
 					);
 
+					//TODO add image
+
+					const image = {
+						projectId,
+						name: fileName,
+						type: 0,
+						previewImage: 'fafa',
+						url: 'http://leit.is'
+					};
+					const response = await axios.post(ApiService.addImage, image);
+					console.log(response, 'respone');
 					resolve({ downloadUrl: downloadURL });
 				}
 			);

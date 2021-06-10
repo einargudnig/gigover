@@ -40,10 +40,10 @@ export const FileIconForType = (fileType: FileType) => {
 };
 
 export const File = ({ file }: FileProps): JSX.Element => {
-	const Icon = FileIconForType(file.fileType);
+	const Icon = FileIconForType(file.type);
 
 	return (
-		<FileStyled to={`/files/${file.projectId}/file/${file.fileId}`}>
+		<FileStyled to={`/files/${file.projectId}/file/${file.imageId}`}>
 			<HStack spacing={8}>
 				<Icon />
 				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>
@@ -52,7 +52,7 @@ export const File = ({ file }: FileProps): JSX.Element => {
 					</Heading>
 					<Text m={0}>Project file</Text>
 				</VStack>
-				<Text m={0}>{humanFileSize(file.bytes)}</Text>
+				<Text m={0}>{humanFileSize(file?.bytes)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
 		</FileStyled>

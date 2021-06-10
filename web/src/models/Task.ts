@@ -46,6 +46,7 @@ export class TaskItem extends GantChartItem implements Task {
 		this.priority = task.priority;
 	}
 
+
 	get taskJson(): Task {
 		return {
 			taskId: this.taskId,

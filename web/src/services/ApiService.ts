@@ -45,4 +45,13 @@ export class ApiService {
 	// Cloud Functions
 	static getUserIdByPhoneNumber =
 		'https://us-central1-gigover2.cloudfunctions.net/getUserIdForPhoneNumber';
+
+	// Image dots and comments
+	static addImage = API_BASE + 'contractor/image';
+	static addImageDot = API_BASE + 'contractor/addDot';
+	static removeImageDot = API_BASE + 'contractor/removeDot';
+	static getImageDots = (imageId: number) => API_BASE + 'contractor/dots/' + imageId;
+	static addDotComment = API_BASE + 'contractor/addDotComment';
+	static removeDotComment = API_BASE + 'contractor/removeDotComment';
+	static editDotComment = API_BASE + 'contractor/editDotComment';
 }

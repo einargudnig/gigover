@@ -48,9 +48,15 @@ export const Files = (): JSX.Element => {
 		? projects.find((p) => p.projectId === parseInt(params.projectId))
 		: null;
 	const [upload, setUpload] = useState(false);
-	const sortedRecentFiles = recentFiles.sort((a, b) =>
-		a.created < b.created ? 1 : a.created === b.created ? 0 : -1
-	);
+	const sortedRecentFiles = recentFiles.sort((a, b) => {
+		return a.created && b.created
+			? a.created < b.created
+				? 1
+				: a.created === b.created
+				? 0
+				: -1
+			: -1;
+	});
 
 	useEffect(() => {
 		if (params.projectId && params.fileId) {
@@ -190,7 +196,11 @@ export const Files = (): JSX.Element => {
 												spacing={4}
 											>
 												{files
-													.sort((a, b) => b.created - a.created)
+													.sort((a, b) =>
+														b.created && a.created
+															? b.created - a.created
+															: -1
+													)
 													.map((p, pIndex) => (
 														<File key={pIndex} file={p} />
 													))}

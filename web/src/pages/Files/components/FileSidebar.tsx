@@ -22,7 +22,7 @@ interface FileSidebarProps {
 }
 
 export const FileSidebar = ({ onClose, file }: FileSidebarProps): JSX.Element => {
-	const Icon = FileIconForType(file.fileType);
+	const Icon = FileIconForType(file.type);
 
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		console.log(event.target! as Element);
@@ -61,7 +61,7 @@ export const FileSidebar = ({ onClose, file }: FileSidebarProps): JSX.Element =>
 				</HStack>
 				<HStack justify={'space-between'} align={'center'}>
 					<Heading size={'sm'}>Size</Heading>
-					<Text>{humanFileSize(file.bytes)}</Text>
+					<Text>{humanFileSize(file?.bytes)}</Text>
 				</HStack>
 				<div style={{ height: 2 }} />
 			</VStack>
@@ -69,13 +69,8 @@ export const FileSidebar = ({ onClose, file }: FileSidebarProps): JSX.Element =>
 			<VStack align={'stretch'} spacing={4}>
 				<div style={{ height: 2 }} />
 				<Heading size={'sm'}>File description</Heading>
-				{file.downloadUrl && file.fileType === 'picture' && (
-					<Image
-						borderRadius={12}
-						objectFit="cover"
-						src={file.downloadUrl}
-						alt="Segun Adebayo"
-					/>
+				{file.url && file.type === 'picture' && (
+					<Image borderRadius={12} objectFit="cover" src={file.url} alt="Segun Adebayo" />
 				)}
 			</VStack>
 			<Spacer />
@@ -83,7 +78,7 @@ export const FileSidebar = ({ onClose, file }: FileSidebarProps): JSX.Element =>
 			<div style={{ height: 2 }} />
 			<HStack justify={'space-between'} align={'center'}>
 				<VStack justify={'center'} align={'center'}>
-					<a href={file.downloadUrl} target={'_blank'} rel={'noopener noreferrer'}>
+					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 						<IconButton
 							aria-label={'Download'}
 							colorScheme={'black'}
