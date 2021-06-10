@@ -35,10 +35,16 @@ export const useEditDotComment = () => {
 };
 
 export const useAddImageDot = () => {
-	return useMutation('addImageDot', async (dotChord: IImageDot) => {
-
-		return await axios.post(ApiService.addImageDot, { dotChord }, { withCredentials: true });
-	});
+	return useMutation(
+		'addImageDot',
+		async (dotChord: { chord: ICommentChord; comment: string }) => {
+			return await axios.post(
+				ApiService.addImageDot,
+				{ dotChord },
+				{ withCredentials: true }
+			);
+		}
+	);
 };
 export const useRemoveImageDot = () => {
 	return useMutation('useRemoveImageDot', async (dotChord: ICommentChord) => {
