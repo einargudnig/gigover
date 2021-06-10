@@ -16,7 +16,7 @@ import {
 	MenuItem
 } from '@chakra-ui/react';
 import useResizeObserver from 'use-resize-observer';
-import { ICommentChord, ICommentComment, IImageDot } from '../modals/EditPhotoModal';
+import { ICommentComment, IImageDot } from '../modals/EditPhotoModal';
 import { Theme } from '../../Theme';
 import { formatDate } from '../../utils/StringUtils';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -81,7 +81,7 @@ export const ImageDot = ({
 	setActivePoint,
 	activePoint
 }: {
-	dots: IImageDot[];
+	dots?: IImageDot[];
 	imageSrc: string;
 	documentType: FileType;
 	newComment: (comment: any) => void;
@@ -169,7 +169,7 @@ export const ImageDot = ({
 	}, [imageSrc]);
 
 	const getPosition = useCallback(
-		(point: ICommentChord) => {
+		(point: IImageDot) => {
 			if (
 				imageDimmensions &&
 				(imageDimmensions.width / imageDimmensions.height).toFixed(2) ===
@@ -262,36 +262,37 @@ export const ImageDot = ({
 						fit={'contain'}
 					/>
 				)}
-				{dots.map((s, i) => {
-					const chord = getPosition(s?.chord);
+				{dots &&
+					dots.map((s, i) => {
+						const chord = getPosition(s);
 
-					if (s.pageNumber !== pageNumber) {
-						return null;
-					}
-					return (
-						<ImagePoint
-							chord={chord}
-							key={i}
-							mode={'edit'}
-							active={activePoint === s.id}
-							comments={s.comments}
-							saveComment={(af) => {
-								saveNewComment({ comment: af, id: s.id });
-							}}
-							deleteComment={(commentId) => {
-								removeComment(s.id, commentId);
-							}}
-							clickPoint={() => {
-								if (activePoint === s.id) {
-									setActivePoint(-1);
-								} else {
-									setActivePoint(s.id);
-									setDot(undefined);
-								}
-							}}
-						/>
-					);
-				})}
+						if (s.pageNumber !== pageNumber) {
+							return null;
+						}
+						return (
+							<ImagePoint
+								chord={chord}
+								key={i}
+								mode={'edit'}
+								active={activePoint === s.dotId}
+								comments={s.comments}
+								saveComment={(af) => {
+									saveNewComment({ comment: af, id: s.dotId });
+								}}
+								deleteComment={(commentId) => {
+									removeComment(s.dotId, commentId);
+								}}
+								clickPoint={() => {
+									if (activePoint === s.dotId) {
+										setActivePoint(-1);
+									} else {
+										setActivePoint(s.dotId);
+										setDot(undefined);
+									}
+								}}
+							/>
+						);
+					})}
 				{dot && (
 					<ImagePoint
 						mode={'new'}
@@ -394,7 +395,7 @@ const ImagePoint = ({
 												<Avatar
 													size="xs"
 													bg={Theme.colors.green}
-													name={s.user?.name}
+													name={s.userName}
 												/>
 												<Text
 													pr={2}
@@ -405,7 +406,7 @@ const ImagePoint = ({
 													isTruncated
 													maxWidth={'200px'}
 												>
-													{s.user?.name}
+													{s.userName}
 												</Text>
 												<Text
 													pr={2}
@@ -413,7 +414,7 @@ const ImagePoint = ({
 													fontSize={'11px'}
 													isTruncated
 												>
-													{formatDate(new Date(s.date))}
+													{formatDate(new Date(s.created))}
 												</Text>
 												<Spacer />
 												<Menu>
@@ -431,7 +432,7 @@ const ImagePoint = ({
 															<MenuItem
 																onClick={() =>
 																	deleteComment &&
-																	deleteComment(s.id)
+																	deleteComment(s.dotId)
 																}
 															>
 																Delete comment

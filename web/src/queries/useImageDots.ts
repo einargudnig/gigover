@@ -5,7 +5,7 @@ import { ProjectType } from '../models/ProjectType';
 import { IImageDot } from '../components/modals/EditPhotoModal';
 
 interface ImageDotResponse {
-	projectTypes: IImageDot[];
+	imageDots: IImageDot[];
 }
 
 export const useImageDots = (id: number) =>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal } from '../Modal';
 import {
 	Box,
@@ -20,26 +20,33 @@ import { ProjectFile } from '../../models/ProjectFile';
 import { ImageDot } from '../ImageEditor/ImageDot';
 import { formatDate } from '../../utils/StringUtils';
 import { ImportantIcon } from '../icons/ImportantIcon';
+/*
 import { UserContext } from '../../context/UserContext';
+*/
 import { useImageDots } from '../../queries/useImageDots';
 import {
 	useAddImageDot,
+	/*
 	useAddImageDotComment,
-	useEditDotComment,
+*/
+	useEditDotComment /*
 	useRemoveDotComment,
-	useRemoveImageDot
+	useRemoveImageDot*/
 } from '../../mutations/useImageDot';
+/*
 import { useLogout } from '../../mutations/useLogout';
+*/
 
 interface FileSidebarProps {
 	onClose: () => void;
 	file: ProjectFile;
 }
 export interface IImageDot extends ICommentChord {
-	id: number;
-	comments?: ICommentComment[];
-	imageId?: number;
+	dotId: number;
+	imageId: string;
+	comments: ICommentComment[];
 }
+
 export interface ICommentChord {
 	coordinateX: number;
 	coordinateY: number;
@@ -48,45 +55,47 @@ export interface ICommentChord {
 	pageNumber?: number;
 }
 export interface ICommentComment {
-	user?: { name: string; id: string | number };
-	date: string;
+	dotId: number;
 	comment: string;
-	id: number;
+	commentId: number;
+	created: string;
+	uId: string;
+	userName: string;
 }
 
 export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
 	const Icon = FileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
+	/*
 	const user = useContext(UserContext);
+*/
 
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		console.log(event.target! as Element);
 	};
 
-	const [comments, setComments] = useState<IImageDot[]>([]);
-
 	const { data, refetch: refetchImageDots } = useImageDots(29);
 
+	const comments = data?.imageDots;
 	console.log(data, 'Data------');
 
 	const { mutateAsync: addImgageDot } = useAddImageDot();
-	const { mutateAsync: removeImageDot } = useRemoveImageDot();
-
+	/*	const { mutateAsync: removeImageDot } = useRemoveImageDot();
 	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
-	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
+	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();*/
 	const { mutateAsync: editImageDotComment } = useEditDotComment();
 
 	console.log(comments, 'comments');
 	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
 		//TODO new dot
-		const response = await addImgageDot(chord);
+
+		const response = await addImgageDot(comment);
 
 		//TODO new comment on that dot
-		await editImageDotComment({ dotId: comment.id, comment: comment.comment });
+		await editImageDotComment({ dotId: response.data, comment: comment.comment });
 		refetchImageDots();
 
-		const newId = Math.round(Math.random() * 1000);
-		setComments([
+		/*		setComments([
 			...comments,
 			{
 				id: newId,
@@ -104,8 +113,8 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 					}
 				]
 			}
-		]);
-		setActivePoint(newId);
+		]);*/
+		setActivePoint(response.data);
 	};
 
 	const editComment = async (comment: { comment: string; id: number }) => {
@@ -114,7 +123,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 		console.log(response, 'response');
 		refetchImageDots();
 
-		//fetch the comments again
+		/*		//fetch the comments again
 		const index = comments.findIndex((s) => s.id === comment.id);
 
 		const ec = { ...comments[index] };
@@ -135,11 +144,12 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 			const newComments = [...comments];
 			newComments[index] = ec;
 			setComments(newComments);
-		}
+		}*/
 	};
 
 	const removeComment = (dotId: number, commentId: number) => {
-		const index = comments.findIndex((s) => s.id === dotId);
+		console.log(dotId, commentId);
+		/*		const index = comments.findIndex((s) => s.id === dotId);
 
 		const co = comments[index];
 		if (co?.comments.length === 1) {
@@ -157,7 +167,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 			returnComments[index] = filteredComment;
 
 			setComments([...returnComments]);
-		}
+		}*/
 	};
 	console.log(file, 'name');
 
@@ -213,54 +223,60 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								</Box>
 
 								<Box overflow={'scroll'} maxHeight={'450px'}>
-									{comments.map((s) => {
-										const currentComment = s.comments[s.comments.length - 1];
+									{comments &&
+										comments.map((s) => {
+											const currentComment =
+												s.comments[s.comments.length - 1];
 
-										return (
-											<>
-												<Flex
-													p={2}
-													py={2}
-													direction={'column'}
-													key={s.id}
-													_hover={{ background: '#ececf1' }}
-													cursor={'pointer'}
-													onClick={() => setActivePoint(s.id)}
-												>
-													<Flex>
-														<Text pr={2} fontSize={'11px'} isTruncated>
-															{currentComment?.user?.name}
-														</Text>
-														<Text fontSize={'11px'} isTruncated>
-															{formatDate(
-																new Date(currentComment.date)
-															)}
-														</Text>
-													</Flex>
-													<Text
-														color={'black'}
-														fontWeight={'400'}
-														fontSize={'11px'}
-														isTruncated
+											return (
+												<>
+													<Flex
+														p={2}
+														py={2}
+														direction={'column'}
+														key={s.dotId}
+														_hover={{ background: '#ececf1' }}
+														cursor={'pointer'}
+														onClick={() => setActivePoint(s.dotId)}
 													>
-														{currentComment.comment}
-													</Text>
-													<Flex>
-														<Text fontSize={'11px'} isTruncated>
-															{s.comments.length} comments
+														<Flex>
+															<Text
+																pr={2}
+																fontSize={'11px'}
+																isTruncated
+															>
+																{currentComment?.userName}
+															</Text>
+															<Text fontSize={'11px'} isTruncated>
+																{formatDate(
+																	new Date(currentComment.created)
+																)}
+															</Text>
+														</Flex>
+														<Text
+															color={'black'}
+															fontWeight={'400'}
+															fontSize={'11px'}
+															isTruncated
+														>
+															{currentComment.comment}
 														</Text>
-														{s.id === activePoint && (
-															<>
-																<Spacer />
-																<Tag size={'sm'}>Active</Tag>
-															</>
-														)}
+														<Flex>
+															<Text fontSize={'11px'} isTruncated>
+																{s.comments.length} comments
+															</Text>
+															{s.dotId === activePoint && (
+																<>
+																	<Spacer />
+																	<Tag size={'sm'}>Active</Tag>
+																</>
+															)}
+														</Flex>
 													</Flex>
-												</Flex>
-												<Divider />
-											</>
-										);
-									})}
+													<Divider />
+												</>
+											);
+										})}
 								</Box>
 							</Flex>
 						</Flex>
