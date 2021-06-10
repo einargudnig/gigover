@@ -79,85 +79,85 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 	console.log(comments, 'comments');
 	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
 		//TODO new dot
-		const response = await addImgageDot(chord);
+		//const response = await addImgageDot(chord);
 
 		//TODO new comment on that dot
-		await editImageDotComment({ dotId: comment.id, comment: comment.comment });
-		refetchImageDots();
-
-		const newId = Math.round(Math.random() * 1000);
-		setComments([
-			...comments,
-			{
-				id: newId,
-				chord: comment.chord,
-				pageNumber: comment.chord.pageNumber,
-				comments: [
-					{
-						id: Math.round(Math.random() * 1000),
-						user: {
-							name: user.name,
-							id: user.phoneNumber
-						},
-						date: new Date().toISOString(),
-						comment: comment.comment
-					}
-				]
-			}
-		]);
-		setActivePoint(newId);
+		// await editImageDotComment({ dotId: comment.id, comment: comment.comment });
+		// refetchImageDots();
+		//
+		// const newId = Math.round(Math.random() * 1000);
+		// setComments([
+		// 	...comments,
+		// 	{
+		// 		id: newId,
+		// 		chord: comment.chord,
+		// 		pageNumber: comment.chord.pageNumber,
+		// 		comments: [
+		// 			{
+		// 				id: Math.round(Math.random() * 1000),
+		// 				user: {
+		// 					name: user.name,
+		// 					id: user.phoneNumber
+		// 				},
+		// 				date: new Date().toISOString(),
+		// 				comment: comment.comment
+		// 			}
+		// 		]
+		// 	}
+		// ]);
+		//setActivePoint(newId);
 	};
 
 	const editComment = async (comment: { comment: string; id: number }) => {
-		const response = await editImageDotComment({ dotId: comment.id, comment: comment.comment });
-
-		console.log(response, 'response');
-		refetchImageDots();
-
-		//fetch the comments again
-		const index = comments.findIndex((s) => s.id === comment.id);
-
-		const ec = { ...comments[index] };
-
-		if (ec) {
-			ec.comments = [
-				...ec.comments,
-				{
-					id: Math.round(Math.random() * 1000),
-					user: {
-						name: user.name,
-						id: user.phoneNumber
-					},
-					date: new Date().toISOString(),
-					comment: comment.comment
-				}
-			];
-			const newComments = [...comments];
-			newComments[index] = ec;
-			setComments(newComments);
-		}
+		// const response = await editImageDotComment({ dotId: comment.id, comment: comment.comment });
+		//
+		// console.log(response, 'response');
+		// refetchImageDots();
+		//
+		// //fetch the comments again
+		// const index = comments.findIndex((s) => s.id === comment.id);
+		//
+		// const ec = { ...comments[index] };
+		//
+		// if (ec) {
+		// 	ec.comments = [
+		// 		...ec.comments,
+		// 		{
+		// 			id: Math.round(Math.random() * 1000),
+		// 			user: {
+		// 				name: user.name,
+		// 				id: user.phoneNumber
+		// 			},
+		// 			date: new Date().toISOString(),
+		// 			comment: comment.comment
+		// 		}
+		// 	];
+		// 	const newComments = [...comments];
+		// 	newComments[index] = ec;
+		// 	setComments(newComments);
+		// }
 	};
 
 	const removeComment = (dotId: number, commentId: number) => {
-		const index = comments.findIndex((s) => s.id === dotId);
-
-		const co = comments[index];
-		if (co?.comments.length === 1) {
-			alert('do you want to remove this dot?');
-			setComments([...comments.filter((c) => c.id !== dotId)]);
-		} else {
-			const filteredComments = co?.comments.filter((b) => b.id !== commentId);
-
-			const filteredComment = {
-				...co,
-				comments: [...filteredComments]
-			};
-			const returnComments = [...comments];
-
-			returnComments[index] = filteredComment;
-
-			setComments([...returnComments]);
-		}
+		// const index = comments.findIndex((s) => s.id === dotId);
+		//
+		// const co = comments[index];
+		// if (co?.comments.length === 1) {
+		// 	alert('do you want to remove this dot?');
+		// 	setComments([...comments.filter((c) => c.id !== dotId)]);
+		// } else {
+		// 	const filteredComments = co?.comments.filter((b) => b.id !== commentId);
+		//
+		// 	const filteredComment = {
+		// 		...co,
+		// 		comments: [...filteredComments]
+		// 	};
+		// 	const returnComments = [...comments];
+		//
+		// 	returnComments[index] = filteredComment;
+		//
+		// 	setComments([...returnComments]);
+		// }
 	};
 	console.log(file, 'name');
 
@@ -213,54 +213,54 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								</Box>
 
 								<Box overflow={'scroll'} maxHeight={'450px'}>
-									{comments.map((s) => {
-										const currentComment = s.comments[s.comments.length - 1];
+									{/*{comments.map((s) => {*/}
+									{/*	const currentComment = s.comments[s.comments.length - 1];*/}
 
-										return (
-											<>
-												<Flex
-													p={2}
-													py={2}
-													direction={'column'}
-													key={s.id}
-													_hover={{ background: '#ececf1' }}
-													cursor={'pointer'}
-													onClick={() => setActivePoint(s.id)}
-												>
-													<Flex>
-														<Text pr={2} fontSize={'11px'} isTruncated>
-															{currentComment?.user?.name}
-														</Text>
-														<Text fontSize={'11px'} isTruncated>
-															{formatDate(
-																new Date(currentComment.date)
-															)}
-														</Text>
-													</Flex>
-													<Text
-														color={'black'}
-														fontWeight={'400'}
-														fontSize={'11px'}
-														isTruncated
-													>
-														{currentComment.comment}
-													</Text>
-													<Flex>
-														<Text fontSize={'11px'} isTruncated>
-															{s.comments.length} comments
-														</Text>
-														{s.id === activePoint && (
-															<>
-																<Spacer />
-																<Tag size={'sm'}>Active</Tag>
-															</>
-														)}
-													</Flex>
-												</Flex>
-												<Divider />
-											</>
-										);
-									})}
+									{/*	return (*/}
+									{/*		<>*/}
+									{/*			<Flex*/}
+									{/*				p={2}*/}
+									{/*				py={2}*/}
+									{/*				direction={'column'}*/}
+									{/*				key={s.id}*/}
+									{/*				_hover={{ background: '#ececf1' }}*/}
+									{/*				cursor={'pointer'}*/}
+									{/*				onClick={() => setActivePoint(s.id)}*/}
+									{/*			>*/}
+									{/*				<Flex>*/}
+									{/*					<Text pr={2} fontSize={'11px'} isTruncated>*/}
+									{/*						{currentComment?.user?.name}*/}
+									{/*					</Text>*/}
+									{/*					<Text fontSize={'11px'} isTruncated>*/}
+									{/*						{formatDate(*/}
+									{/*							new Date(currentComment.date)*/}
+									{/*						)}*/}
+									{/*					</Text>*/}
+									{/*				</Flex>*/}
+									{/*				<Text*/}
+									{/*					color={'black'}*/}
+									{/*					fontWeight={'400'}*/}
+									{/*					fontSize={'11px'}*/}
+									{/*					isTruncated*/}
+									{/*				>*/}
+									{/*					{currentComment.comment}*/}
+									{/*				</Text>*/}
+									{/*				<Flex>*/}
+									{/*					<Text fontSize={'11px'} isTruncated>*/}
+									{/*						{s.comments.length} comments*/}
+									{/*					</Text>*/}
+									{/*					{s.id === activePoint && (*/}
+									{/*						<>*/}
+									{/*							<Spacer />*/}
+									{/*							<Tag size={'sm'}>Active</Tag>*/}
+									{/*						</>*/}
+									{/*					)}*/}
+									{/*				</Flex>*/}
+									{/*			</Flex>*/}
+									{/*			<Divider />*/}
+									{/*		</>*/}
+									{/*	);*/}
+									{/*})}*/}
 								</Box>
 							</Flex>
 						</Flex>

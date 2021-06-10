@@ -29,6 +29,7 @@ const DropZoneContainer = styled.div<{
 interface DropZoneProps {
 	uploadType?: FileUploadType;
 	projectId?: number;
+	folderId?: number;
 	externalId?: number;
 
 	children?(props: { isDragActive: boolean }): React.ReactNode;
@@ -37,6 +38,7 @@ interface DropZoneProps {
 export const DropZone = ({
 	uploadType = FileUploadType.Project,
 	projectId,
+	folderId,
 	externalId,
 	children
 }: DropZoneProps): JSX.Element => {
@@ -54,7 +56,8 @@ export const DropZone = ({
 						await fileService.uploadFile(
 							file,
 							selectedProject,
-							uploadType,
+							folderId || 0,
+							uploadType!,
 							(status: number) => {
 								setFileUploadProgress(status);
 							},
@@ -66,7 +69,7 @@ export const DropZone = ({
 				}, []);
 			}
 		},
-		[fileService, uploadType, selectedProject]
+		[fileService, uploadType, selectedProject, folderId, externalId]
 	);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({

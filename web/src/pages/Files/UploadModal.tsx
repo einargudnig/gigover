@@ -1,5 +1,5 @@
 import { VStack, Heading, Text } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Modal } from '../../components/Modal';
 import { FormActions } from '../../components/FormActions';
@@ -7,6 +7,7 @@ import { DropZone } from '../../components/DropZone';
 import { useProjectList } from '../../queries/useProjectList';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { ProjectStatus } from '../../models/Project';
+import { useProjectFolders } from '../../mutations/useProjectFolders';
 
 interface UploadModalProps {
 	onClose: () => void;
@@ -22,7 +23,9 @@ const UploadModalStyled = styled.div`
 
 export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Element => {
 	const { data } = useProjectList(false);
+	const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
+	const [selectedFolder, setSelectedFolder] = useState<number | undefined>(undefined);
 	const [isUploading] = useState(false);
 
 	const openProjects = useMemo(() => {
@@ -31,6 +34,18 @@ export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Eleme
 		}
 		return [];
 	}, [data]);
+
+	useEffect(() => {
+		if (selectedProject) {
+			mutateAsync({ projectId: selectedProject });
+		}
+	}, [selectedProject]);
+
+	useEffect(() => {
+		if (projectFolders) {
+			console.log('ProjectFolders', projectFolders);
+		}
+	}, [projectFolders]);
 
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file'}>
@@ -61,7 +76,25 @@ export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Eleme
 							</Text>
 						</>
 					)}
-					{selectedProject && <DropZone projectId={selectedProject} />}
+					<TrackerSelect
+						title={'Folder'}
+						options={
+							projectFolders?.map((folder) => ({
+								label: folder.name,
+								value: folder.folderId
+							})) ?? []
+						}
+						valueChanged={(newValue) => {
+							if (newValue === '') {
+								setSelectedFolder(undefined);
+							} else {
+								setSelectedFolder((newValue as number) ?? undefined);
+							}
+						}}
+					/>
+					{selectedProject && (
+						<DropZone projectId={selectedProject} folderId={selectedFolder} />
+					)}
 					<FormActions
 						hideSubmitButton={true}
 						cancelText={'Close'}

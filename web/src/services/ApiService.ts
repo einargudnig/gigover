@@ -46,8 +46,12 @@ export class ApiService {
 	static getUserIdByPhoneNumber =
 		'https://us-central1-gigover2.cloudfunctions.net/getUserIdForPhoneNumber';
 
+	// File system
+	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId;
+	static addFolder = API_BASE + 'contractor/addFolder';
+
 	// Image dots and comments
-	static addImage = API_BASE + 'contractor/image';
+	static addImage = API_BASE + 'contractor/addDocument';
 	static addImageDot = API_BASE + 'contractor/addDot';
 	static removeImageDot = API_BASE + 'contractor/removeDot';
 	static getImageDots = (imageId: number) => API_BASE + 'contractor/dots/' + imageId;

@@ -1,5 +1,5 @@
 import { Button, Heading, HStack, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';
 import styled from 'styled-components';
@@ -20,6 +20,7 @@ import { useFileService } from '../../hooks/useFileService';
 import { useProjectFiles } from '../../queries/useProjectFiles';
 import { SearchBar } from './components/SearchBar';
 import { EditPhotoModal } from '../../components/modals/EditPhotoModal';
+import { useAddFolder } from '../../mutations/useAddFolder';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -43,6 +44,7 @@ export const Files = (): JSX.Element => {
 	const [selectedFile, setSelectedFile] = useState<ProjectFile | null>(null);
 	const { files, loadingFiles: loadingProjectFiles, setProject } = useProjectFiles();
 	const { data, isLoading, loadingFiles, files: recentFiles } = useProjectList(true);
+	const { mutateAsync } = useAddFolder();
 	const projects = data?.projects?.filter((p) => p.status !== ProjectStatus.CLOSED) || [];
 	const selectedProject = params.projectId
 		? projects.find((p) => p.projectId === parseInt(params.projectId))
@@ -57,6 +59,24 @@ export const Files = (): JSX.Element => {
 				: -1
 			: -1;
 	});
+
+	const addFolder = useCallback(
+		(folderName: string) => {
+			if (!selectedProject) {
+				return alert('Select a project first');
+			}
+
+			if (!folderName || folderName.length < 3) {
+				return alert('Enter a name of 3 characters at least');
+			}
+
+			return mutateAsync({
+				name: folderName,
+				projectId: selectedProject.projectId
+			});
+		},
+		[selectedProject]
+	);
 
 	useEffect(() => {
 		if (params.projectId && params.fileId) {
@@ -113,9 +133,23 @@ export const Files = (): JSX.Element => {
 				tabs={<SearchBar files={sortedRecentFiles} />}
 				contentPadding={false}
 				actions={
-					<Button onClick={() => setUpload(true)} leftIcon={<UploadIcon />}>
-						Upload
-					</Button>
+					<>
+						<Button
+							onClick={() => {
+								const folder = prompt('Folder name');
+
+								if (folder) {
+									addFolder(folder!);
+								}
+							}}
+							leftIcon={<FolderIcon />}
+						>
+							Create folder
+						</Button>
+						<Button onClick={() => setUpload(true)} leftIcon={<UploadIcon />}>
+							Upload
+						</Button>
+					</>
 				}
 			>
 				<VStack style={{ height: '100%' }}>

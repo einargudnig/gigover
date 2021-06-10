@@ -263,7 +263,7 @@ export const ImageDot = ({
 					/>
 				)}
 				{dots.map((s, i) => {
-					const chord = getPosition(s?.chord);
+					const chord = getPosition(s);
 
 					if (s.pageNumber !== pageNumber) {
 						return null;

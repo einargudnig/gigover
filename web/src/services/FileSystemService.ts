@@ -3,9 +3,11 @@ import { v4 as uuid } from 'uuid';
 import { FileUploadType } from '../models/FileUploadType';
 import { devError } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
-import { FileType, ProjectFile } from '../models/ProjectFile';
+import { FileType } from '../models/ProjectFile';
 import axios from 'axios';
 import { ApiService } from './ApiService';
+import { ProjectImage } from '../models/ProjectImage';
+import { DocumentInput } from '../mutations/useAddDocument';
 
 interface UploadResult {
 	downloadUrl: string;
@@ -114,6 +116,7 @@ export class FileSystemService {
 	async uploadFile(
 		file: File,
 		projectId: number,
+		folderId: number,
 		uploadType = FileUploadType.Project,
 		status: (progress: number, state: firebase.storage.TaskState) => void,
 		externalId?: number
@@ -159,14 +162,16 @@ export class FileSystemService {
 
 					//TODO add image
 
-					const image = {
+					const image: DocumentInput = {
 						projectId,
+						folderId,
 						name: fileName,
 						type: 0,
-						previewImage: 'fafa',
-						url: 'http://leit.is'
+						url: downloadURL
 					};
-					const response = await axios.post(ApiService.addImage, image);
+					const response = await axios.post<ProjectImage>(ApiService.addImage, image, {
+						withCredentials: true
+					});
 					console.log(response, 'respone');
 					resolve({ downloadUrl: downloadURL });
 				}
