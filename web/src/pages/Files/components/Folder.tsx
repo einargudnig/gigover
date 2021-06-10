@@ -64,18 +64,23 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 
 	return (
 		<DropZone projectId={project.projectId} uploadType={FileUploadType.Project}>
-			{({ isDragActive }) => (
+			{({ isDragActive, isUploading }) => (
 				<FolderCard
 					to={`/files/${project.projectId}/${url || ''}`}
 					isDragActive={isDragActive}
 				>
 					<VStack align={'stretch'} spacing={4}>
-						<FolderIcon
-							size={38}
-							color={
-								colorGenerator(`${project.name}/${url}`, 150, 50).backgroundColor
-							}
-						/>
+						<HStack justify={'space-between'} align={'center'}>
+							<FolderIcon
+								size={38}
+								color={
+									colorGenerator(`${project.name}/${url}`, 150, 50).backgroundColor
+								}
+							/>
+							{isUploading && (
+								<LoadingSpinner color={'black'} />
+							)}
+						</HStack>
 						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
 							{project.name}
 						</Heading>
