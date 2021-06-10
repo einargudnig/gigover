@@ -9,9 +9,10 @@ import { CreateNewFolder } from './CreateNewFolder';
 
 interface ProjectFoldersProps {
 	project: Project;
+	selectedFolderId?: number;
 }
 
-export const ProjectFolders = ({ project }: ProjectFoldersProps): JSX.Element => {
+export const ProjectFolders = ({ selectedFolderId, project }: ProjectFoldersProps): JSX.Element => {
 	const { data, isLoading, isError, error } = useProjectFoldersQuery(project.projectId);
 
 	if (isLoading) {
@@ -36,7 +37,12 @@ export const ProjectFolders = ({ project }: ProjectFoldersProps): JSX.Element =>
 	return (
 		<>
 			{data?.map((folder) => (
-				<ProjectFolderComponent key={folder.folderId} folder={folder} project={project} />
+				<ProjectFolderComponent
+					key={folder.folderId}
+					folder={folder}
+					project={project}
+					selectedFolderId={selectedFolderId}
+				/>
 			))}
 			<CreateNewFolder projectId={project.projectId} />
 		</>

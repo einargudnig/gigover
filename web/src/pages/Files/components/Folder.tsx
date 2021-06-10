@@ -19,11 +19,19 @@ interface FolderProps {
 	url?: string;
 }
 
-const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean }>`
+const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: boolean }>`
 	${(props) =>
 		props.isDragActive &&
 		css`
 			outline: 3px solid ${props.theme.colors.green};
+		`};
+
+	${(props) =>
+		props.selected &&
+		css`
+			background: #000;
+		  color: #fff !important;
+			box-shadow: none;
 		`};
 `;
 
@@ -85,9 +93,14 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 interface ProjectFolderProps {
 	project: Project;
 	folder: ProjectFolder;
+	selectedFolderId?: number;
 }
 
-export const ProjectFolderComponent = ({ project, folder }: ProjectFolderProps): JSX.Element => {
+export const ProjectFolderComponent = ({
+	project,
+	folder,
+	selectedFolderId
+}: ProjectFolderProps): JSX.Element => {
 	const { data, isLoading, isError, error } = useFolderDocuments(folder.folderId);
 
 	return (
@@ -99,15 +112,13 @@ export const ProjectFolderComponent = ({ project, folder }: ProjectFolderProps):
 			{({ isDragActive }) => (
 				<FolderCard
 					to={`/files/${project.projectId}/${folder.folderId}`}
+					selected={folder.folderId === selectedFolderId}
 					isDragActive={isDragActive}
 				>
 					<VStack align={'stretch'} spacing={4}>
 						<FolderIcon
 							size={38}
-							color={
-								colorGenerator(`${project.name}/${folder.folderId}`, 150, 50)
-									.backgroundColor
-							}
+							color={colorGenerator(`${folder.name}`, 150, 50).backgroundColor}
 						/>
 						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
 							{folder.name}

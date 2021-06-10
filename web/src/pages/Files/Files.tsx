@@ -152,7 +152,14 @@ export const Files = (): JSX.Element => {
 													<Folder key={p.projectId} project={p} />
 												))
 											) : (
-												<ProjectFolders project={selectedProject} />
+												<ProjectFolders
+													project={selectedProject}
+													selectedFolderId={
+														params.folderId
+															? parseInt(params.folderId)
+															: undefined
+													}
+												/>
 											)}
 										</SimpleGrid>
 									) : (
