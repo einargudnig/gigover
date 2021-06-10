@@ -4,16 +4,19 @@ import { AxiosError } from 'axios';
 import { ProjectImage } from '../models/ProjectImage';
 
 interface FolderFilesResponse {
-	files: ProjectImage[];
+	projectDocuments: ProjectImage[];
 }
 
 export const useFolderDocuments = (folderId: number) => {
 	const { data, isLoading, isError, error } = useQuery<FolderFilesResponse, AxiosError>(
-		ApiService.folderFiles(folderId)
+		ApiService.folderFiles(folderId),
+		{
+			queryKey: ApiService.folderFiles(folderId)
+		}
 	);
 
 	return {
-		data: (data && data.files) || [],
+		data: (data && data.projectDocuments) || [],
 		isLoading,
 		isError,
 		error

@@ -24,6 +24,7 @@ import { FilePdfIcon } from '../../components/icons/FileTypes/FilePdfIcon';
 import { ProjectFolders } from './components/ProjectFolders';
 import { devInfo } from '../../utils/ConsoleUtils';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
+import { FolderFiles } from './components/FolderFiles';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -164,60 +165,73 @@ export const Files = (): JSX.Element => {
 									style={{ width: '100%' }}
 									spacing={4}
 								>
-									<HStack
-										justifyContent={'space-between'}
-										align={'center'}
-										mb={4}
-										style={{ width: '100%' }}
-									>
-										<HStack spacing={4}>
-											<FilePdfIcon />
-											<Heading as={'h4'} size={'md'}>
-												Recent files
-											</Heading>
-										</HStack>
-									</HStack>
-
-									{loadingFiles || loadingProjectFiles ? (
-										<Center>
-											<LoadingSpinner />
-										</Center>
-									) : (selectedProject && files.length > 0) ||
-									  (!selectedProject && sortedRecentFiles.length > 0) ? (
-										selectedProject && files ? (
-											<VStack
-												style={{ width: '100%' }}
-												align={'stretch'}
-												spacing={4}
-											>
-												{files
-													.sort((a, b) =>
-														b.created && a.created
-															? b.created - a.created
-															: -1
-													)
-													.map((p, pIndex) => (
-														<File key={pIndex} file={p} />
-													))}
-											</VStack>
-										) : (
-											<VStack
-												style={{ width: '100%' }}
-												align={'stretch'}
-												spacing={4}
-											>
-												{sortedRecentFiles.slice(0, 10).map((p, pIndex) => (
-													<File key={pIndex} file={p} />
-												))}
-											</VStack>
-										)
+									{selectedProject && params.folderId ? (
+										<>
+											<FolderFiles
+												project={selectedProject}
+												folderId={parseInt(params.folderId)}
+											/>
+										</>
 									) : (
-										<EmptyState
-											title={'No files yet'}
-											text={
-												'No files have been uploaded yet, you can drop files on to projects or folders to upload them.'
-											}
-										/>
+										<>
+											<HStack
+												justifyContent={'space-between'}
+												align={'center'}
+												mb={4}
+												style={{ width: '100%' }}
+											>
+												<HStack spacing={4}>
+													<FilePdfIcon />
+													<Heading as={'h4'} size={'md'}>
+														Recent files
+													</Heading>
+												</HStack>
+											</HStack>
+
+											{loadingFiles || loadingProjectFiles ? (
+												<Center>
+													<LoadingSpinner />
+												</Center>
+											) : (selectedProject && files.length > 0) ||
+											  (!selectedProject && sortedRecentFiles.length > 0) ? (
+												selectedProject && files ? (
+													<VStack
+														style={{ width: '100%' }}
+														align={'stretch'}
+														spacing={4}
+													>
+														{files
+															.sort((a, b) =>
+																b.created && a.created
+																	? b.created - a.created
+																	: -1
+															)
+															.map((p, pIndex) => (
+																<File key={pIndex} file={p} />
+															))}
+													</VStack>
+												) : (
+													<VStack
+														style={{ width: '100%' }}
+														align={'stretch'}
+														spacing={4}
+													>
+														{sortedRecentFiles
+															.slice(0, 10)
+															.map((p, pIndex) => (
+																<File key={pIndex} file={p} />
+															))}
+													</VStack>
+												)
+											) : (
+												<EmptyState
+													title={'No files yet'}
+													text={
+														'No files have been uploaded yet, you can drop files on to projects or folders to upload them.'
+													}
+												/>
+											)}
+										</>
 									)}
 								</VStack>
 							</Container>
