@@ -49,9 +49,10 @@ export class ApiService {
 	// File system
 	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId;
 	static addFolder = API_BASE + 'contractor/addFolder';
+	static folderFiles = (folderId: number) => API_BASE + 'contractor/documents/' + folderId;
 
 	// Image dots and comments
-	static addImage = API_BASE + 'contractor/addDocument';
+	static addImage = API_BASE + 'contractor/addDocument'; // Used for all kinds of files
 	static addImageDot = API_BASE + 'contractor/addDot';
 	static removeImageDot = API_BASE + 'contractor/removeDot';
 	static getImageDots = (imageId: number) => API_BASE + 'contractor/dots/' + imageId;

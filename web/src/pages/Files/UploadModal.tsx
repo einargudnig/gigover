@@ -37,15 +37,9 @@ export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Eleme
 
 	useEffect(() => {
 		if (selectedProject) {
-			mutateAsync({ projectId: selectedProject });
+			mutateAsync({ projectId: selectedProject }).finally(() => null);
 		}
 	}, [selectedProject]);
-
-	useEffect(() => {
-		if (projectFolders) {
-			console.log('ProjectFolders', projectFolders);
-		}
-	}, [projectFolders]);
 
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file'}>

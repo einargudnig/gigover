@@ -4,17 +4,17 @@ import { IWithFlexContainer } from './Modal';
 export const MODAL_PADDING = '24px';
 
 export const ModalContainerStyles = createGlobalStyle`
-    .gigover-modal-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        height: 100%;
-        width: 100%;
-        z-index: 9999;
-        transform: translate3d(0,0,0);
-    }
+  .gigover-modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 9999;
+    transform: translate3d(0, 0, 0);
+  }
 `;
 
 export const ModalHeader = styled.div<IWithFlexContainer>`
@@ -31,10 +31,8 @@ export const ModalHeader = styled.div<IWithFlexContainer>`
 		props.flexContainer &&
 		css`
 			flex-shrink: 1;
-		`}
-
-	// Disgusting safari issue, needs extra padding.
-    ${navigator &&
+		`} // Disgusting safari issue, needs extra padding.
+  ${navigator &&
 	/^((?!chrome|android).)*safari/i.test(navigator.userAgent) &&
 	css`
 		padding: 32px ${MODAL_PADDING};
@@ -180,6 +178,9 @@ export const CenterModalWrapper = styled(ModalWrapper)`
 	min-width: 600px;
 	max-width: 90vw;
 	margin: 0 auto;
+	height: auto;
+	min-height: auto;
+	max-height: 100vh;
 	border-radius: 12px;
 	animation-name: fadeInCenterModalWrapper;
 

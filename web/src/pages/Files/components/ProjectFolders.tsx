@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button } from '@chakra-ui/react';
 import { Project } from '../../../models/Project';
 import { devError } from '../../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { CreateNewFolder, Folder } from './Folder';
+import { ProjectFolderComponent } from './Folder';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { useProjectFoldersQuery } from '../../../queries/useProjectFoldersQuery';
+import { CreateNewFolder } from './CreateNewFolder';
 
 interface ProjectFoldersProps {
 	project: Project;
@@ -28,11 +28,7 @@ export const ProjectFolders = ({ project }: ProjectFoldersProps): JSX.Element =>
 			<EmptyState
 				title={'No folders created'}
 				text={'Create a folder for this project'}
-				action={
-					<>
-						<CreateNewFolder projectId={project.projectId} />
-					</>
-				}
+				action={<CreateNewFolder projectId={project.projectId} />}
 			/>
 		);
 	}
@@ -40,7 +36,7 @@ export const ProjectFolders = ({ project }: ProjectFoldersProps): JSX.Element =>
 	return (
 		<>
 			{data?.map((folder) => (
-				<Folder key={folder.folderId} project={project} url={`/${folder.folderId}`} />
+				<ProjectFolderComponent key={folder.folderId} folder={folder} project={project} />
 			))}
 			<CreateNewFolder projectId={project.projectId} />
 		</>

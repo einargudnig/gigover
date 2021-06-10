@@ -1,16 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../hooks/colorGenerator';
-import { CardBase, CardBaseLink } from '../../../components/CardBase';
-import { Heading, HStack, Text, VStack, Button } from '@chakra-ui/react';
+import { CardBaseLink } from '../../../components/CardBase';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { Project } from '../../../models/Project';
+import { ProjectFolder } from '../../../models/ProjectFolder';
 import { useFileService } from '../../../hooks/useFileService';
 import { FileDocument, FolderResult } from '../../../services/FileSystemService';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
 import { DropZone } from '../../../components/DropZone';
 import { FileUploadType } from '../../../models/FileUploadType';
-import { useAddFolder } from '../../../mutations/useAddFolder';
+import { useFolderDocuments } from '../../../queries/useFolderDocuments';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 interface FolderProps {
 	project: Project;
@@ -24,63 +26,6 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean }>`
 			outline: 3px solid ${props.theme.colors.green};
 		`};
 `;
-
-const NewFolderCard = styled(CardBase)`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	button {
-		margin-top: ${(props) => props.theme.padding(2)};
-	}
-`;
-
-export const CreateNewFolderButton = ({ projectId }: { projectId: number }) => {
-	const { mutateAsync } = useAddFolder();
-
-	const addFolder = useCallback(
-		(folderName: string) => {
-			if (!projectId) {
-				return alert('Select a project first');
-			}
-
-			if (!folderName || folderName.length < 3) {
-				return alert('Enter a name of 3 characters at least');
-			}
-
-			return mutateAsync({
-				name: folderName,
-				projectId: projectId
-			});
-		},
-		[projectId]
-	);
-
-	return (
-		<Button
-			leftIcon={<FolderIcon />}
-			onClick={() => {
-				const folder = prompt('Folder name');
-
-				if (folder) {
-					addFolder(folder!);
-				}
-			}}
-		>
-			Create folder
-		</Button>
-	);
-};
-
-export const CreateNewFolder = ({ projectId }: { projectId: number }) => {
-	return (
-		<NewFolderCard>
-			<Text>Create a new folder</Text>
-			<CreateNewFolderButton projectId={projectId} />
-		</NewFolderCard>
-	);
-};
 
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 	const { fileService } = useFileService();
@@ -129,6 +74,46 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 						<HStack justify={'space-between'}>
 							<Text>{folderResult?.files.length || 0} files</Text>
 							<Text>{humanFileSize(totalSize)}</Text>
+						</HStack>
+					</VStack>
+				</FolderCard>
+			)}
+		</DropZone>
+	);
+};
+
+interface ProjectFolderProps {
+	project: Project;
+	folder: ProjectFolder;
+}
+
+export const ProjectFolderComponent = ({ project, folder }: ProjectFolderProps): JSX.Element => {
+	const { data, isLoading, isError, error } = useFolderDocuments(folder.folderId);
+
+	return (
+		<DropZone
+			projectId={project.projectId}
+			folderId={folder.folderId}
+			uploadType={FileUploadType.Project}
+		>
+			{({ isDragActive }) => (
+				<FolderCard
+					to={`/files/${project.projectId}/${folder.folderId}`}
+					isDragActive={isDragActive}
+				>
+					<VStack align={'stretch'} spacing={4}>
+						<FolderIcon
+							size={38}
+							color={
+								colorGenerator(`${project.name}/${folder.folderId}`, 150, 50)
+									.backgroundColor
+							}
+						/>
+						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+							{folder.name}
+						</Heading>
+						<HStack justify={'space-between'}>
+							{isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
 						</HStack>
 					</VStack>
 				</FolderCard>

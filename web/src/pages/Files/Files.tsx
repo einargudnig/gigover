@@ -1,5 +1,5 @@
 import { Button, Heading, HStack, VStack } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import { FolderIcon } from '../../components/icons/FolderIcon';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { CreateNewFolderButton, Folder } from './components/Folder';
+import { Folder } from './components/Folder';
 import { Project, ProjectStatus } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -22,6 +22,8 @@ import { SearchBar } from './components/SearchBar';
 import { EditPhotoModal } from '../../components/modals/EditPhotoModal';
 import { FilePdfIcon } from '../../components/icons/FileTypes/FilePdfIcon';
 import { ProjectFolders } from './components/ProjectFolders';
+import { devInfo } from '../../utils/ConsoleUtils';
+import { CreateNewFolderButton } from './components/CreateNewFolder';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -29,14 +31,6 @@ const Container = styled.div`
 	padding: ${(props) => props.theme.padding(3)};
 	overflow-y: auto;
 `;
-
-/*
-const SidebarContainer = styled(Container)`
-	flex: 0 0 350px;
-	background: #fff;
-	box-shadow: ${(props) => props.theme.boxShadow()};
-`;
-*/
 
 export const Files = (): JSX.Element => {
 	const params = useParams();
@@ -82,8 +76,7 @@ export const Files = (): JSX.Element => {
 						setUpload(false);
 					}}
 					onComplete={(status) => {
-						// eslint-disable-next-line no-console
-						console.log('status', status);
+						devInfo('status', status);
 					}}
 				/>
 			)}
@@ -150,15 +143,6 @@ export const Files = (): JSX.Element => {
 													: selectedProject.name}
 											</Heading>
 										</HStack>
-										{/*<HStack spacing={4}>
-											{selectedProject && (
-												<Button
-													onClick={}
-												>
-													New folder
-												</Button>
-											)}
-										</HStack>*/}
 									</HStack>
 									{projects && projects.length > 0 ? (
 										<SimpleGrid itemWidth={320}>

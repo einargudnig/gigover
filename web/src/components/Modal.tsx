@@ -1,5 +1,5 @@
 import { IconButton } from '@chakra-ui/react';
-import React, { FC, useCallback, useLayoutEffect } from 'react';
+import React, { FC, ReactElement, useCallback, useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useEventListener } from '../hooks/useEventListener';
 import { CrossIcon } from './icons/CrossIcon';
@@ -17,7 +17,7 @@ import {
 const modalRoot = document.createElement('div');
 
 const ModalRenderer = ({ children }: { children: React.ReactNode }) =>
-	ReactDOM.createPortal(children, modalRoot);
+	ReactDOM.createPortal(children as ReactElement, modalRoot);
 
 export interface IModalContainerProps extends IWithFlexContainer {
 	open: boolean;
