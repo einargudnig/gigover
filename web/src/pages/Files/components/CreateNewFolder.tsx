@@ -37,6 +37,11 @@ export const CreateNewFolderButton = ({ projectId }: { projectId: number }) => {
 		return mutateAsync({
 			name: folderName,
 			projectId: projectId
+		}).then(() => {
+			if (inputRef.current) {
+				inputRef.current = null;
+			}
+			setIsOpen(false);
 		});
 	}, [inputRef, projectId]);
 
