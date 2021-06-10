@@ -5,6 +5,8 @@ import { Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
+import { useQueryClient } from 'react-query';
+import { ApiService } from '../services/ApiService';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
@@ -32,7 +34,7 @@ interface DropZoneProps {
 	folderId?: number;
 	externalId?: number;
 
-	children?(props: { isDragActive: boolean }): React.ReactNode;
+	children?(props: { isDragActive: boolean; isUploading: boolean; }): React.ReactNode;
 }
 
 export const DropZone = ({
@@ -42,6 +44,7 @@ export const DropZone = ({
 	externalId,
 	children
 }: DropZoneProps): JSX.Element => {
+	const client = useQueryClient();
 	const { fileService } = useFileService();
 	// TODO Implement setSelectedProject
 	const [selectedProject] = useState<number>(projectId || 0);
@@ -63,6 +66,10 @@ export const DropZone = ({
 							},
 							externalId
 						);
+
+						if (folderId) {
+							await client.refetchQueries(ApiService.folderFiles(folderId));
+						}
 					} finally {
 						setIsUploading(false);
 					}
@@ -87,7 +94,7 @@ export const DropZone = ({
 			})}
 		>
 			<input {...getInputProps()} />
-			{children({ isDragActive })}
+			{children({ isDragActive, isUploading })}
 		</div>
 	) : (
 		<DropZoneContainer isDraggingOver={isDragActive} {...getRootProps()}>

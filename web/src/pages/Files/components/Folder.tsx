@@ -30,7 +30,7 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: bool
 		props.selected &&
 		css`
 			background: #000;
-		  color: #fff !important;
+			color: #fff !important;
 			box-shadow: none;
 		`};
 `;
@@ -102,6 +102,7 @@ export const ProjectFolderComponent = ({
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
 	const { data, isLoading, isError, error } = useFolderDocuments(folder.folderId);
+	const isSelected = folder.folderId === selectedFolderId;
 
 	return (
 		<DropZone
@@ -109,17 +110,22 @@ export const ProjectFolderComponent = ({
 			folderId={folder.folderId}
 			uploadType={FileUploadType.Project}
 		>
-			{({ isDragActive }) => (
+			{({ isDragActive, isUploading }) => (
 				<FolderCard
 					to={`/files/${project.projectId}/${folder.folderId}`}
-					selected={folder.folderId === selectedFolderId}
+					selected={isSelected}
 					isDragActive={isDragActive}
 				>
 					<VStack align={'stretch'} spacing={4}>
-						<FolderIcon
-							size={38}
-							color={colorGenerator(`${folder.name}`, 150, 50).backgroundColor}
-						/>
+						<HStack justify={'space-between'} align={'center'}>
+							<FolderIcon
+								size={38}
+								color={colorGenerator(`${folder.name}`, 150, 50).backgroundColor}
+							/>
+							{isUploading && (
+								<LoadingSpinner color={isSelected ? 'white' : 'black'} />
+							)}
+						</HStack>
 						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
 							{folder.name}
 						</Heading>
