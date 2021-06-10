@@ -7,8 +7,8 @@ import { FolderIcon } from '../../components/icons/FolderIcon';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { Folder } from './components/Folder';
-import { ProjectStatus } from '../../models/Project';
+import { CreateNewFolderButton, Folder } from './components/Folder';
+import { Project, ProjectStatus } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { File } from './components/File';
@@ -20,7 +20,8 @@ import { useFileService } from '../../hooks/useFileService';
 import { useProjectFiles } from '../../queries/useProjectFiles';
 import { SearchBar } from './components/SearchBar';
 import { EditPhotoModal } from '../../components/modals/EditPhotoModal';
-import { useAddFolder } from '../../mutations/useAddFolder';
+import { FilePdfIcon } from '../../components/icons/FileTypes/FilePdfIcon';
+import { ProjectFolders } from './components/ProjectFolders';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -44,9 +45,8 @@ export const Files = (): JSX.Element => {
 	const [selectedFile, setSelectedFile] = useState<ProjectFile | null>(null);
 	const { files, loadingFiles: loadingProjectFiles, setProject } = useProjectFiles();
 	const { data, isLoading, loadingFiles, files: recentFiles } = useProjectList(true);
-	const { mutateAsync } = useAddFolder();
 	const projects = data?.projects?.filter((p) => p.status !== ProjectStatus.CLOSED) || [];
-	const selectedProject = params.projectId
+	const selectedProject: Project | null | undefined = params.projectId
 		? projects.find((p) => p.projectId === parseInt(params.projectId))
 		: null;
 	const [upload, setUpload] = useState(false);
@@ -59,24 +59,6 @@ export const Files = (): JSX.Element => {
 				: -1
 			: -1;
 	});
-
-	const addFolder = useCallback(
-		(folderName: string) => {
-			if (!selectedProject) {
-				return alert('Select a project first');
-			}
-
-			if (!folderName || folderName.length < 3) {
-				return alert('Enter a name of 3 characters at least');
-			}
-
-			return mutateAsync({
-				name: folderName,
-				projectId: selectedProject.projectId
-			});
-		},
-		[selectedProject]
-	);
 
 	useEffect(() => {
 		if (params.projectId && params.fileId) {
@@ -134,18 +116,9 @@ export const Files = (): JSX.Element => {
 				contentPadding={false}
 				actions={
 					<>
-						<Button
-							onClick={() => {
-								const folder = prompt('Folder name');
-
-								if (folder) {
-									addFolder(folder!);
-								}
-							}}
-							leftIcon={<FolderIcon />}
-						>
-							Create folder
-						</Button>
+						{selectedProject && (
+							<CreateNewFolderButton projectId={selectedProject.projectId} />
+						)}
 						<Button onClick={() => setUpload(true)} leftIcon={<UploadIcon />}>
 							Upload
 						</Button>
@@ -172,7 +145,9 @@ export const Files = (): JSX.Element => {
 										<HStack spacing={4}>
 											<FolderIcon />
 											<Heading as={'h4'} size={'md'}>
-												All folders
+												{!selectedProject
+													? 'All folders'
+													: selectedProject.name}
 											</Heading>
 										</HStack>
 										{/*<HStack spacing={4}>
@@ -187,9 +162,13 @@ export const Files = (): JSX.Element => {
 									</HStack>
 									{projects && projects.length > 0 ? (
 										<SimpleGrid itemWidth={320}>
-											{projects.map((p) => (
-												<Folder key={p.projectId} project={p} />
-											))}
+											{!selectedProject ? (
+												projects.map((p) => (
+													<Folder key={p.projectId} project={p} />
+												))
+											) : (
+												<ProjectFolders project={selectedProject} />
+											)}
 										</SimpleGrid>
 									) : (
 										<NoProjectsFound />
@@ -208,11 +187,9 @@ export const Files = (): JSX.Element => {
 										style={{ width: '100%' }}
 									>
 										<HStack spacing={4}>
-											<FolderIcon />
+											<FilePdfIcon />
 											<Heading as={'h4'} size={'md'}>
-												{selectedProject
-													? selectedProject.name
-													: 'Recent files'}
+												Recent files
 											</Heading>
 										</HStack>
 									</HStack>
@@ -254,7 +231,7 @@ export const Files = (): JSX.Element => {
 										<EmptyState
 											title={'No files yet'}
 											text={
-												'No files have been uploaded yet, you can drop files on to projects to upload them.'
+												'No files have been uploaded yet, you can drop files on to projects or folders to upload them.'
 											}
 										/>
 									)}
@@ -264,10 +241,7 @@ export const Files = (): JSX.Element => {
 					)}
 				</VStack>
 				{selectedFile && (
-					<EditPhotoModal
-						file={selectedFile}
-						onClose={() => navigate('/files/' + (params.projectId || ''))}
-					/>
+					<EditPhotoModal file={selectedFile} onClose={() => navigate(-1)} />
 				)}
 			</Page>
 		</>

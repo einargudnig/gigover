@@ -19,6 +19,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'files'}>
 			<Route path={':projectId/file/:fileId'} element={<Files />} />
 			<Route path={':projectId'} element={<Files />} />
+			<Route path={':projectId/:folderId'} element={<Files />} />
 			<Route path={'/'} element={<Files />} />
 		</Route>
 		<Route path={'organize'} element={<Organize />}>

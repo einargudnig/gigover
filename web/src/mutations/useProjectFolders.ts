@@ -1,9 +1,9 @@
 import { useMutation } from 'react-query';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ApiService } from '../services/ApiService';
 import { devError } from '../utils/ConsoleUtils';
 
-interface ProjectFolder {
+export interface ProjectFolder {
 	folderId: number;
 	projectId: number;
 	name: string;
