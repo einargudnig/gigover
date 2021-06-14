@@ -136,7 +136,7 @@ const ImagePoint = ({
 															<MenuItem
 																onClick={() =>
 																	deleteComment &&
-																	deleteComment(s.dotId)
+																	deleteComment(s.commentId)
 																}
 															>
 																Delete comment
