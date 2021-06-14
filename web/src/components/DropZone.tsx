@@ -30,8 +30,8 @@ const DropZoneContainer = styled.div<{
 `;
 
 interface DropZoneProps {
+	projectId: number;
 	uploadType?: FileUploadType;
-	projectId?: number;
 	folderId?: number;
 	externalId?: number;
 
@@ -47,8 +47,6 @@ export const DropZone = ({
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
 	const mutate = useAddDocument();
-	// TODO Implement setSelectedProject
-	const [selectedProject] = useState<number>(projectId || 0);
 
 	const onDrop = useCallback(
 		(acceptedFiles: File[]) => {
@@ -59,7 +57,7 @@ export const DropZone = ({
 						setIsUploading(true);
 						const response = await fileService.uploadFile(
 							file,
-							selectedProject,
+							projectId,
 							folderId || 0,
 							uploadType!,
 							(status: number) => {
@@ -68,16 +66,14 @@ export const DropZone = ({
 							externalId
 						);
 
-						mutate.mutateAsync(response).then(() => {
-							console.log('Upload complet');
-						});
+						mutate.mutateAsync(response).finally(() => null);
 					} finally {
 						setIsUploading(false);
 					}
 				}, []);
 			}
 		},
-		[fileService, uploadType, selectedProject, folderId, externalId]
+		[fileService, uploadType, projectId, folderId, externalId]
 	);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
