@@ -120,7 +120,7 @@ export class FileSystemService {
 		uploadType = FileUploadType.Project,
 		status: (progress: number, state: firebase.storage.TaskState) => void,
 		externalId?: number
-	): Promise<UploadResult> {
+	): Promise<DocumentInput> {
 		// eslint-disable-next-line no-console
 		console.log('Gigover File Upload initiated');
 
@@ -130,7 +130,7 @@ export class FileSystemService {
 		const filePath =
 			fileName + (extension && extension !== originalFileName ? '.' + extension : '');
 
-		return new Promise<UploadResult>((resolve, reject) => {
+		return new Promise<DocumentInput>((resolve, reject) => {
 			const uploadTask = this.getProjectChild(projectId).child(filePath).put(file);
 
 			uploadTask.on(
@@ -160,20 +160,20 @@ export class FileSystemService {
 						externalId || null
 					);
 
-					//TODO add image
-
 					const image: DocumentInput = {
 						projectId,
 						folderId,
 						name: fileName,
 						type: 0,
-						url: downloadURL
+						url: downloadURL,
+						bytes: file.size
 					};
-					const response = await axios.post<ProjectImage>(ApiService.addImage, image, {
-						withCredentials: true
-					});
-					console.log(response, 'respone');
-					resolve({ downloadUrl: downloadURL });
+					// const response = await axios.post<ProjectImage>(ApiService.addImage, image, {
+					// 	withCredentials: true
+					// });
+					// console.log(response, 'respone');
+
+					resolve(image);
 				}
 			);
 		});

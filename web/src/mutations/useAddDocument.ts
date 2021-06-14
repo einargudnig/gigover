@@ -5,7 +5,7 @@ import { devError } from '../utils/ConsoleUtils';
 import { ProjectImage } from '../models/ProjectImage';
 
 export interface DocumentInput
-	extends Pick<ProjectImage, 'projectId' | 'folderId' | 'name' | 'type' | 'url'> {}
+	extends Pick<ProjectImage, 'projectId' | 'folderId' | 'name' | 'type' | 'url' | 'bytes'> {}
 
 export const useAddDocument = () => {
 	const client = useQueryClient();
@@ -16,8 +16,9 @@ export const useAddDocument = () => {
 				withCredentials: true
 			});
 
+			await client.refetchQueries(ApiService.projectList);
+
 			if (variables.folderId) {
-				console.log('variables.folderId', variables.folderId);
 				await client.refetchQueries(ApiService.folderFiles(variables.folderId));
 			}
 

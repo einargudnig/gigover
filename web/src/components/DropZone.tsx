@@ -7,6 +7,7 @@ import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
 import { useQueryClient } from 'react-query';
 import { ApiService } from '../services/ApiService';
+import { useAddDocument } from '../mutations/useAddDocument';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
@@ -34,7 +35,7 @@ interface DropZoneProps {
 	folderId?: number;
 	externalId?: number;
 
-	children?(props: { isDragActive: boolean; isUploading: boolean; }): React.ReactNode;
+	children?(props: { isDragActive: boolean; isUploading: boolean }): React.ReactNode;
 }
 
 export const DropZone = ({
@@ -44,8 +45,8 @@ export const DropZone = ({
 	externalId,
 	children
 }: DropZoneProps): JSX.Element => {
-	const client = useQueryClient();
 	const { fileService } = useFileService();
+	const mutate = useAddDocument();
 	// TODO Implement setSelectedProject
 	const [selectedProject] = useState<number>(projectId || 0);
 
@@ -56,7 +57,7 @@ export const DropZone = ({
 				acceptedFiles.forEach(async (file) => {
 					try {
 						setIsUploading(true);
-						await fileService.uploadFile(
+						const response = await fileService.uploadFile(
 							file,
 							selectedProject,
 							folderId || 0,
@@ -67,9 +68,9 @@ export const DropZone = ({
 							externalId
 						);
 
-						if (folderId) {
-							await client.refetchQueries(ApiService.folderFiles(folderId));
-						}
+						mutate.mutateAsync(response).then(() => {
+							console.log('Upload complet');
+						});
 					} finally {
 						setIsUploading(false);
 					}

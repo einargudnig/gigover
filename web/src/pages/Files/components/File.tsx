@@ -75,7 +75,7 @@ export const File = ({ file }: FileProps): JSX.Element => {
 					</Heading>
 					<Text m={0}>Project file</Text>
 				</VStack>
-				<Text m={0}>{humanFileSize(file?.bytes)}</Text>
+				<Text m={0}>{humanFileSize(file.bytes)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
 		</FileStyled>
@@ -95,7 +95,7 @@ export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 					</Heading>
 					<Text m={0}>Project file</Text>
 				</VStack>
-				<Text m={0}>BYTES TODO</Text>
+				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
 		</FileStyled>

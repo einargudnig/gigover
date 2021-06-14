@@ -13,4 +13,5 @@ export interface ProjectImage {
 	previewImage: string;
 	url: string;
 	created: number;
+	bytes: number;
 }
