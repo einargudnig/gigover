@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFolderDocuments } from '../../../queries/useFolderDocuments';
 import { Project } from '../../../models/Project';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
@@ -7,6 +7,9 @@ import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { GigoverFile } from './File';
 import { EmptyState } from '../../../components/empty/EmptyState';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ProjectImage } from '../../../models/ProjectImage';
+import { EditPhotoModal } from '../../../components/modals/EditPhotoModal';
 
 interface FolderFilesProps {
 	project: Project;
@@ -14,10 +17,33 @@ interface FolderFilesProps {
 }
 
 export const FolderFiles = ({ project, folderId }: FolderFilesProps): JSX.Element => {
+	const params = useParams();
+	const navigate = useNavigate();
+	const [selectedFile, setSelectedFile] = useState<ProjectImage | null>(null);
 	const { data, isLoading } = useFolderDocuments(folderId);
+
+	useEffect(() => {
+		if (data && data.length > 0 && params.fileId) {
+			const file = data.find((d) => d.imageId === parseInt(params.fileId));
+
+			if (file) {
+				setSelectedFile(file);
+				return;
+			}
+		}
+
+		setSelectedFile(null);
+	}, [data, params.fileId]);
 
 	return (
 		<>
+			{selectedFile && (
+				<EditPhotoModal
+					projectId={project.projectId}
+					file={selectedFile}
+					onClose={() => navigate(-1)}
+				/>
+			)}
 			<HStack spacing={4}>
 				<FilePdfIcon />
 				<Heading as={'h4'} size={'md'}>

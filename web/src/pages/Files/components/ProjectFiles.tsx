@@ -1,19 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Project } from '../../../models/Project';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
 import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
-import { Center } from '../../../components/Center';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { GigoverFile } from './File';
 import { EmptyState } from '../../../components/empty/EmptyState';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ProjectImage } from '../../../models/ProjectImage';
+import { EditPhotoModal } from '../../../components/modals/EditPhotoModal';
 
 interface ProjectFilesProps {
 	project: Project;
 }
 
 export const ProjectFiles = ({ project }: ProjectFilesProps): JSX.Element => {
+	const params = useParams();
+	const navigate = useNavigate();
+	const [selectedFile, setSelectedFile] = useState<ProjectImage | null>(null);
+
+	useEffect(() => {
+		if (project.images.length > 0 && params.fileId) {
+			const file = project.images.find((d) => d.imageId === parseInt(params.fileId));
+
+			if (file) {
+				setSelectedFile(file);
+				return;
+			}
+		}
+
+		setSelectedFile(null);
+	}, [project.images, params.fileId]);
+
 	return (
 		<>
+			{selectedFile && (
+				<EditPhotoModal
+					projectId={project.projectId}
+					file={selectedFile}
+					onClose={() => navigate(-1)}
+				/>
+			)}
 			<HStack spacing={4}>
 				<FilePdfIcon />
 				<Heading as={'h4'} size={'md'}>

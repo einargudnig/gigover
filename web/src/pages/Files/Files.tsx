@@ -31,9 +31,7 @@ const Container = styled.div`
 export const Files = (): JSX.Element => {
 	const { data, isLoading } = useProjectList();
 	const params = useParams();
-	const navigate = useNavigate();
 	const [project, setProject] = useState<Project | null>(null);
-	const [selectedFile, setSelectedFile] = useState<ProjectImage | null>(null);
 	const [upload, setUpload] = useState(false);
 
 	const projects = useMemo(() => {
@@ -195,13 +193,6 @@ export const Files = (): JSX.Element => {
 						</HStack>
 					)}
 				</VStack>
-				{selectedFile && (
-					<EditPhotoModal
-						projectId={project?.projectId}
-						file={selectedFile}
-						onClose={() => navigate(-1)}
-					/>
-				)}
 			</Page>
 		</>
 	);
