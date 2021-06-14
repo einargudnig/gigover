@@ -1,5 +1,6 @@
 import { Task } from './Task';
 import { TaskComment } from './TaskComment';
+import { ProjectImage } from './ProjectImage';
 
 export const ProjectStatus = {
 	ALL: 'ALL',
@@ -30,4 +31,7 @@ export interface Project {
 	endDate: number;
 	comments?: TaskComment[];
 	workers: WorkerItem[];
+	images: ProjectImage[];
+	totalBytes: number;
+	fileCount: number;
 }

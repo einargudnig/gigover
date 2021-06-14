@@ -5,6 +5,9 @@ import { Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
+import { useQueryClient } from 'react-query';
+import { ApiService } from '../services/ApiService';
+import { useAddDocument } from '../mutations/useAddDocument';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
@@ -27,22 +30,23 @@ const DropZoneContainer = styled.div<{
 `;
 
 interface DropZoneProps {
+	projectId: number;
 	uploadType?: FileUploadType;
-	projectId?: number;
+	folderId?: number;
 	externalId?: number;
 
-	children?(props: { isDragActive: boolean }): React.ReactNode;
+	children?(props: { isDragActive: boolean; isUploading: boolean }): React.ReactNode;
 }
 
 export const DropZone = ({
 	uploadType = FileUploadType.Project,
 	projectId,
+	folderId,
 	externalId,
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
-	// TODO Implement setSelectedProject
-	const [selectedProject] = useState<number>(projectId || 0);
+	const mutate = useAddDocument();
 
 	const onDrop = useCallback(
 		(acceptedFiles: File[]) => {
@@ -51,22 +55,25 @@ export const DropZone = ({
 				acceptedFiles.forEach(async (file) => {
 					try {
 						setIsUploading(true);
-						await fileService.uploadFile(
+						const response = await fileService.uploadFile(
 							file,
-							selectedProject,
-							uploadType,
+							projectId,
+							folderId || 0,
+							uploadType!,
 							(status: number) => {
 								setFileUploadProgress(status);
 							},
 							externalId
 						);
+
+						mutate.mutateAsync(response).finally(() => null);
 					} finally {
 						setIsUploading(false);
 					}
 				}, []);
 			}
 		},
-		[fileService, uploadType, selectedProject]
+		[fileService, uploadType, projectId, folderId, externalId]
 	);
 
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -84,7 +91,7 @@ export const DropZone = ({
 			})}
 		>
 			<input {...getInputProps()} />
-			{children({ isDragActive })}
+			{children({ isDragActive, isUploading })}
 		</div>
 	) : (
 		<DropZoneContainer isDraggingOver={isDragActive} {...getRootProps()}>

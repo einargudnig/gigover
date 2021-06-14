@@ -16,12 +16,10 @@ export const RoadmapPreloader = (): JSX.Element => {
 		return <p>{error}</p>;
 	}
 
-	return !isLoading && data && data?.projects?.length > 0 ? (
+	return !isLoading && data && data.length > 0 ? (
 		<Roadmap
-			projects={data!.projects}
-			selectedProject={
-				projectId ? data!.projects.find((p) => p.projectId === projectId) : undefined
-			}
+			projects={data}
+			selectedProject={projectId ? data.find((p) => p.projectId === projectId) : undefined}
 		/>
 	) : (
 		<Page title={'Gant chart'} backgroundColor={'#fff'}>

@@ -8,9 +8,16 @@
  *
  * @return Formatted string.
  */
-export const humanFileSize = (bytes: number, si = true, dp = 1): string => {
+export const humanFileSize = (bytes?: number, si = true, dp = 1): string => {
 	const thresh = si ? 1000 : 1024;
 
+	if (bytes === 0) {
+		return '0 kB';
+	}
+
+	if (!bytes) {
+		return 'NAN';
+	}
 	if (Math.abs(bytes) < thresh) {
 		return bytes.toFixed(dp) + ' B';
 	}

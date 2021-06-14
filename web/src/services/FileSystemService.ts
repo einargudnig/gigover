@@ -1,9 +1,13 @@
 import firebase from 'firebase';
 import { v4 as uuid } from 'uuid';
 import { FileUploadType } from '../models/FileUploadType';
-import { devError } from '../utils/ConsoleUtils';
+import { devError, devInfo } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
 import { FileType } from '../models/ProjectFile';
+import axios from 'axios';
+import { ApiService } from './ApiService';
+import { ProjectImage } from '../models/ProjectImage';
+import { DocumentInput } from '../mutations/useAddDocument';
 
 interface UploadResult {
 	downloadUrl: string;
@@ -112,12 +116,12 @@ export class FileSystemService {
 	async uploadFile(
 		file: File,
 		projectId: number,
+		folderId: number,
 		uploadType = FileUploadType.Project,
 		status: (progress: number, state: firebase.storage.TaskState) => void,
 		externalId?: number
-	): Promise<UploadResult> {
-		// eslint-disable-next-line no-console
-		console.log('Gigover File Upload initiated');
+	): Promise<DocumentInput> {
+		devInfo('Gigover File Upload initiated');
 
 		const fileName = uuid();
 		const originalFileName = file.name;
@@ -125,7 +129,7 @@ export class FileSystemService {
 		const filePath =
 			fileName + (extension && extension !== originalFileName ? '.' + extension : '');
 
-		return new Promise<UploadResult>((resolve, reject) => {
+		return new Promise<DocumentInput>((resolve, reject) => {
 			const uploadTask = this.getProjectChild(projectId).child(filePath).put(file);
 
 			uploadTask.on(
@@ -155,7 +159,17 @@ export class FileSystemService {
 						externalId || null
 					);
 
-					resolve({ downloadUrl: downloadURL });
+					const image: DocumentInput = {
+						projectId,
+						folderId,
+						name: fileName,
+						type: 0,
+						url: downloadURL,
+						bytes: file.size
+					};
+
+					devInfo('File uploaded');
+					resolve(image);
 				}
 			);
 		});

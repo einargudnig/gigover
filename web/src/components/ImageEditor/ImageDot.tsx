@@ -1,27 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-	Box,
-	Text,
-	Image as ChakraImage,
-	Avatar,
-	Flex,
-	Button,
-	Spacer,
-	Input,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuGroup,
-	MenuItem
-} from '@chakra-ui/react';
+import { Box, Image as ChakraImage, Button } from '@chakra-ui/react';
 import useResizeObserver from 'use-resize-observer';
-import { ICommentChord, ICommentComment, ICommentDot } from '../modals/EditPhotoModal';
-import { Theme } from '../../Theme';
-import { formatDate } from '../../utils/StringUtils';
+import { IImageDot } from '../modals/EditPhotoModal';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import styled from 'styled-components';
-import { FileType } from '../../models/ProjectFile';
+import ImagePoint from './ImagePoint';
+import { DocumentTypes } from '../../models/ProjectImage';
 
 const StyledDiv = styled(Box)`
 	canvas {
@@ -81,9 +66,9 @@ export const ImageDot = ({
 	setActivePoint,
 	activePoint
 }: {
-	dots: ICommentDot[];
+	dots?: IImageDot[];
 	imageSrc: string;
-	documentType: FileType;
+	documentType: DocumentTypes;
 	newComment: (comment: any) => void;
 	editComment: (comment: any) => void;
 	removeComment: (dotId: number, commentId: number) => void;
@@ -91,8 +76,8 @@ export const ImageDot = ({
 	activePoint: number;
 }): JSX.Element => {
 	const [dot, setDot] = useState<{
-		x: number;
-		y: number;
+		coordinateX: number;
+		coordinateY: number;
 		height: number;
 		width: number;
 		pageNumber?: number;
@@ -140,8 +125,8 @@ export const ImageDot = ({
 
 		setAddingDot(true);
 		setDot({
-			x: e.clientX - bounds.left,
-			y: e.clientY - bounds.top,
+			coordinateX: e.clientX - bounds.left,
+			coordinateY: e.clientY - bounds.top,
 			width: boxDimmensions.width,
 			height: boxDimmensions.height,
 			pageNumber: pageNumber
@@ -169,7 +154,7 @@ export const ImageDot = ({
 	}, [imageSrc]);
 
 	const getPosition = useCallback(
-		(point: ICommentChord) => {
+		(point: IImageDot) => {
 			if (
 				imageDimmensions &&
 				(imageDimmensions.width / imageDimmensions.height).toFixed(2) ===
@@ -183,15 +168,14 @@ export const ImageDot = ({
 				const fluffer = (boxDimmensions.width - originalWidth) / 2;
 */
 				//TODO Small ajustments needed
-				const blabla = {
-					x: point.x * ratioSmaller,
-					y: point.y * ratioSmaller
+				return {
+					coordinateX: point.coordinateX * ratioSmaller,
+					coordinateY: point.coordinateY * ratioSmaller
 				};
-				return blabla;
 			}
 			return {
-				x: point.x + (boxDimmensions.width - point.width) / 2,
-				y: point.y + (boxDimmensions.height - point.height) / 2
+				coordinateX: point.coordinateX + (boxDimmensions.width - point.width) / 2,
+				coordinateY: point.coordinateY + (boxDimmensions.height - point.height) / 2
 			};
 		},
 		[imageDimmensions, boxDimmensions]
@@ -218,7 +202,7 @@ export const ImageDot = ({
 					maxHeight: '100%'
 				}}
 			>
-				{documentType === 'pdf' ? (
+				{documentType === 2 ? (
 					<>
 						{num !== -1 && (
 							<Box position={'absolute'} zIndex={2} right={0} bottom={0}>
@@ -262,36 +246,37 @@ export const ImageDot = ({
 						fit={'contain'}
 					/>
 				)}
-				{dots.map((s, i) => {
-					const chord = getPosition(s?.chord);
+				{dots &&
+					dots.map((s, i) => {
+						const chord = getPosition(s);
 
-					if (s.pageNumber !== pageNumber) {
-						return null;
-					}
-					return (
-						<ImagePoint
-							chord={chord}
-							key={i}
-							mode={'edit'}
-							active={activePoint === s.id}
-							comments={s.comments}
-							saveComment={(af) => {
-								saveNewComment({ comment: af, id: s.id });
-							}}
-							deleteComment={(commentId) => {
-								removeComment(s.id, commentId);
-							}}
-							clickPoint={() => {
-								if (activePoint === s.id) {
-									setActivePoint(-1);
-								} else {
-									setActivePoint(s.id);
-									setDot(undefined);
-								}
-							}}
-						/>
-					);
-				})}
+						if (s.pageNumber !== pageNumber) {
+							return null;
+						}
+						return (
+							<ImagePoint
+								chord={chord}
+								key={i}
+								mode={'edit'}
+								active={activePoint === s.dotId}
+								comments={s.comments}
+								saveComment={(af) => {
+									saveNewComment({ comment: af, id: s.dotId });
+								}}
+								deleteComment={(commentId) => {
+									removeComment(s.dotId, commentId);
+								}}
+								clickPoint={() => {
+									if (activePoint === s.dotId) {
+										setActivePoint(-1);
+									} else {
+										setActivePoint(s.dotId);
+										setDot(undefined);
+									}
+								}}
+							/>
+						);
+					})}
 				{dot && (
 					<ImagePoint
 						mode={'new'}
@@ -309,185 +294,5 @@ export const ImageDot = ({
 				)}
 			</Box>
 		</StyledDiv>
-	);
-};
-
-const ImagePoint = ({
-	chord,
-	active,
-	comments,
-	clickPoint,
-	saveComment,
-	deleteComment,
-	mode
-}: {
-	chord: { x: number; y: number };
-	active: boolean;
-	comments?: ICommentComment[];
-	clickPoint: (value?: boolean) => void;
-	saveComment: (c: string, m?: string) => void;
-	deleteComment?: (id: number) => void;
-	mode: string;
-}): JSX.Element => {
-	const [focus, setFocus] = useState(false);
-	const [value, setValue] = React.useState('');
-	// @ts-ignore
-	const handleChange = (event) => setValue(event.target.value);
-
-	useEffect(() => {
-		setValue('');
-	}, [active]);
-
-	return (
-		<div
-			style={{
-				position: 'absolute',
-				top: chord.y - 10,
-				left: chord.x - 10,
-				display: 'flex'
-			}}
-		>
-			<Box style={{ position: 'relative' }}>
-				<Box
-					onClick={() => clickPoint()}
-					style={{
-						height: '20px',
-						width: '20px',
-						borderRadius: '50%',
-						background: active ? Theme.colors.yellow : 'lightgray'
-					}}
-					_after={{
-						content: "''",
-						top: '11px',
-						left: '0px',
-						position: 'absolute',
-						borderLeft: '10px solid transparent',
-						borderRight: '10px solid transparent',
-						borderTop: '18px solid ' + (active ? Theme.colors.yellow : 'lightgray'),
-						width: 0,
-						height: 0
-					}}
-				/>
-				{active && (
-					<Box
-						className={'dot'}
-						width={'300px'}
-						background={'white'}
-						borderRadius={'10px'}
-						shadow={'md'}
-						p={4}
-						ml={2}
-						zIndex={9999999}
-						style={{
-							textAlign: 'left',
-							position: 'absolute',
-							top: '30px',
-							left: '-150px'
-						}}
-					>
-						<Box>
-							{mode === 'edit' &&
-								comments?.map((s, i) => {
-									return (
-										<Box key={i} my={2}>
-											<Flex mb={1} overflowY={'scroll'} maxHeight={'60vh'}>
-												<Avatar
-													size="xs"
-													bg={Theme.colors.green}
-													name={s.user?.name}
-												/>
-												<Text
-													pr={2}
-													pl={2}
-													color={'black'}
-													fontWeight={'bold'}
-													fontSize={'11px'}
-													isTruncated
-													maxWidth={'200px'}
-												>
-													{s.user?.name}
-												</Text>
-												<Text
-													pr={2}
-													color={'#838894'}
-													fontSize={'11px'}
-													isTruncated
-												>
-													{formatDate(new Date(s.date))}
-												</Text>
-												<Spacer />
-												<Menu>
-													<MenuButton
-														as={Button}
-														aria-label="More actions"
-														size="xs"
-														variant="ghost"
-														color={'black'}
-													>
-														...
-													</MenuButton>
-													<MenuList>
-														<MenuGroup title="Actions">
-															<MenuItem
-																onClick={() =>
-																	deleteComment &&
-																	deleteComment(s.id)
-																}
-															>
-																Delete comment
-															</MenuItem>
-															{/*		<MenuItem>Turn into task</MenuItem>*/}
-														</MenuGroup>
-													</MenuList>
-												</Menu>
-											</Flex>
-											<Box ml={'32px'}>
-												<Text fontSize={'12px'} color={'black'}>
-													{s.comment}
-												</Text>
-											</Box>
-										</Box>
-									);
-								})}
-						</Box>
-						<Box>
-							<Input
-								value={value}
-								onChange={handleChange}
-								onFocus={() => setFocus(true)}
-								placeholder={mode === 'new' ? 'Add comment' : 'Reply'}
-								size={'sm'}
-							/>
-							{(focus || mode === 'new') && (
-								<Flex mt={4}>
-									<Spacer />
-									<Box>
-										<Button
-											onClick={() => {
-												clickPoint();
-											}}
-											size={'sm'}
-											mr="4"
-										>
-											Cancel
-										</Button>
-										<Button
-											onClick={() => {
-												saveComment(value, mode);
-												setValue('');
-											}}
-											disabled={value.length === 0}
-											size={'sm'}
-										>
-											{mode === 'new' ? 'Post' : 'Reply'}
-										</Button>
-									</Box>
-								</Flex>
-							)}
-						</Box>
-					</Box>
-				)}
-			</Box>
-		</div>
 	);
 };

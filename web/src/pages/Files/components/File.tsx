@@ -12,13 +12,35 @@ import { Text, Heading, VStack, HStack } from '@chakra-ui/react';
 import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../Roadmap/GantChartDates';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
+import { DocumentTypes, ProjectImage } from '../../../models/ProjectImage';
 
 interface FileProps {
 	file: ProjectFile;
 }
 
+interface GigoverFileProps {
+	file: ProjectImage;
+}
+
+export const GigoverFileIconForType = (fileType: DocumentTypes) => {
+	switch (fileType) {
+		case 'IMAGE':
+		case 0:
+			return FileImgIcon;
+		case 'VIDEO':
+		case 1:
+			return FileVideoIcon;
+		case 'DOCUMENT':
+		case 2:
+			return FilePdfIcon;
+		default:
+			return FileHouseIcon;
+	}
+};
+
 const FileStyled = styled(CardBaseLink)``;
 
+// @deprecated
 export const FileIconForType = (fileType: FileType) => {
 	switch (fileType) {
 		case 'txt':
@@ -39,11 +61,12 @@ export const FileIconForType = (fileType: FileType) => {
 	}
 };
 
+// @deprecated
 export const File = ({ file }: FileProps): JSX.Element => {
-	const Icon = FileIconForType(file.fileType);
+	const Icon = FileIconForType(file.type);
 
 	return (
-		<FileStyled to={`/files/${file.projectId}/file/${file.fileId}`}>
+		<FileStyled to={`/files/${file.projectId}/file/${file.imageId}`}>
 			<HStack spacing={8}>
 				<Icon />
 				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>
@@ -53,6 +76,31 @@ export const File = ({ file }: FileProps): JSX.Element => {
 					<Text m={0}>Project file</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes)}</Text>
+				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+			</HStack>
+		</FileStyled>
+	);
+};
+
+export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
+	const Icon = GigoverFileIconForType(file.type);
+	let href = `/files/${file.projectId}/file/${file.imageId}`;
+
+	if (file.folderId) {
+		href = `/files/${file.projectId}/file/${file.folderId}/${file.imageId}`;
+	}
+
+	return (
+		<FileStyled to={href}>
+			<HStack spacing={8}>
+				<Icon />
+				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>
+					<Heading m={0} mb={0} as={'h4'} size={'sm'}>
+						{file.name}
+					</Heading>
+					<Text m={0}>Project file</Text>
+				</VStack>
+				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
 		</FileStyled>

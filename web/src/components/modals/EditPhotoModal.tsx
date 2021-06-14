@@ -1,133 +1,103 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal } from '../Modal';
-import {
-	Box,
-	Divider,
-	Flex,
-	Heading,
-	HStack,
-	IconButton,
-	Spacer,
-	Tag,
-	Text,
-	VStack
-} from '@chakra-ui/react';
+import { Box, Divider, Flex, Heading, HStack, IconButton, Spacer, Tag, Text, VStack } from '@chakra-ui/react';
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { DownloadIcon } from '../icons/DownloadIcon';
 import { TrashIcon } from '../icons/TrashIcon';
-import { FileIconForType } from '../../pages/Files/components/File';
-import { ProjectFile } from '../../models/ProjectFile';
 import { ImageDot } from '../ImageEditor/ImageDot';
 import { formatDate } from '../../utils/StringUtils';
 import { ImportantIcon } from '../icons/ImportantIcon';
-import { UserContext } from '../../context/UserContext';
+import { useImageDots } from '../../queries/useImageDots';
+import {
+	useAddImageDot,
+	useAddImageDotComment,
+	useEditDotComment,
+	useRemoveDotComment,
+	useRemoveImageDot
+} from '../../mutations/useImageDot';
+import { ProjectImage } from '../../models/ProjectImage';
+import { GigoverFileIconForType } from '../../pages/Files/components/File';
+import { devInfo } from '../../utils/ConsoleUtils';
 
 interface FileSidebarProps {
 	onClose: () => void;
-	file: ProjectFile;
+	file: ProjectImage;
+	projectId?: number;
 }
-export interface ICommentDot {
-	id: number;
-	chord: ICommentChord;
+export interface IImageDot extends ICommentChord {
+	dotId: number;
+	imageId: string;
 	comments: ICommentComment[];
-	pageNumber?: number;
 }
+
 export interface ICommentChord {
-	x: number;
-	y: number;
+	coordinateX: number;
+	coordinateY: number;
 	height: number;
 	width: number;
 	pageNumber?: number;
 }
 export interface ICommentComment {
-	user?: { name: string; id: string | number };
-	date: string;
+	dotId: number;
 	comment: string;
-	id: number;
+	commentId: number;
+	created: string;
+	uId: string;
+	userName: string;
 }
 
-export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
-	const Icon = FileIconForType(file.fileType);
+export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): JSX.Element => {
+	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
+	/*
 	const user = useContext(UserContext);
+*/
 
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
-		console.log(event.target! as Element);
+		devInfo('onChangeFileName', event.target! as Element);
 	};
 
-	const [comments, setComments] = useState<ICommentDot[]>([]);
+	const { data, refetch: refetchImageDots } = useImageDots(file.imageId);
 
-	console.log(comments, 'comments');
-	const newComment = (comment: { chord: ICommentChord; comment: string }) => {
-		const newId = Math.round(Math.random() * 1000);
-		setComments([
-			...comments,
-			{
-				id: newId,
-				chord: comment.chord,
-				pageNumber: comment.chord.pageNumber,
-				comments: [
-					{
-						id: Math.round(Math.random() * 1000),
-						user: {
-							name: user.name,
-							id: user.phoneNumber
-						},
-						date: new Date().toISOString(),
-						comment: comment.comment
-					}
-				]
+	const dots = data?.dots;
+
+	const { mutateAsync: addImgageDot } = useAddImageDot();
+	const { mutateAsync: removeImageDot } = useRemoveImageDot();
+	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
+	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
+	const { mutateAsync: editImageDotComment } = useEditDotComment();
+
+	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
+		//TODO new dot
+		const response = await addImgageDot({ ...comment.chord, imageId: file.imageId });
+
+		//TODO new comment on that dot
+		await addImageDotComment({ dotId: response.data.id, comment: comment.comment });
+		refetchImageDots();
+
+		setActivePoint(response.data.id);
+	};
+
+	const editComment = async (comment: { comment: string; id: number }) => {
+		await addImageDotComment({ dotId: comment.id, comment: comment.comment });
+		refetchImageDots();
+	};
+
+	const removeComment = async (dotId: number, commentId: number) => {
+		const dot = dots?.find((s) => s.dotId === dotId);
+		if (dot) {
+			const comment = dot.comments.find((b) => b.commentId === commentId);
+			if (comment) {
+				await removeImageDotComment(comment);
 			}
-		]);
-		setActivePoint(newId);
-	};
 
-	const editComment = (comment: { comment: string; id: number }) => {
-		const index = comments.findIndex((s) => s.id === comment.id);
-
-		const ec = { ...comments[index] };
-
-		if (ec) {
-			ec.comments = [
-				...ec.comments,
-				{
-					id: Math.round(Math.random() * 1000),
-					user: {
-						name: user.name,
-						id: user.phoneNumber
-					},
-					date: new Date().toISOString(),
-					comment: comment.comment
-				}
-			];
-			const newComments = [...comments];
-			newComments[index] = ec;
-			setComments(newComments);
+			if (dot?.comments.length === 1) {
+				//Delete the point aswell
+				await removeImageDot(dot);
+			}
 		}
+		refetchImageDots();
 	};
-
-	const removeComment = (dotId: number, commentId: number) => {
-		const index = comments.findIndex((s) => s.id === dotId);
-
-		const co = comments[index];
-		if (co?.comments.length === 1) {
-			alert('do you want to remove this dot?');
-			setComments([...comments.filter((c) => c.id !== dotId)]);
-		} else {
-			const filteredComments = co?.comments.filter((b) => b.id !== commentId);
-
-			const filteredComment = {
-				...co,
-				comments: [...filteredComments]
-			};
-			const returnComments = [...comments];
-
-			returnComments[index] = filteredComment;
-
-			setComments([...returnComments]);
-		}
-	};
-	console.log(file, 'name');
 
 	return (
 		<Modal title={'Photo edit'} open={true} onClose={() => onClose()} centerModal={true}>
@@ -181,54 +151,66 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								</Box>
 
 								<Box overflow={'scroll'} maxHeight={'450px'}>
-									{comments.map((s) => {
-										const currentComment = s.comments[s.comments.length - 1];
+									{dots &&
+										dots.map((s) => {
+											if (s.comments.length === 0) {
+												return null;
+											}
+											const currentComment =
+												s.comments[s.comments.length - 1];
 
-										return (
-											<>
-												<Flex
-													p={2}
-													py={2}
-													direction={'column'}
-													key={s.id}
-													_hover={{ background: '#ececf1' }}
-													cursor={'pointer'}
-													onClick={() => setActivePoint(s.id)}
-												>
-													<Flex>
-														<Text pr={2} fontSize={'11px'} isTruncated>
-															{currentComment?.user?.name}
-														</Text>
-														<Text fontSize={'11px'} isTruncated>
-															{formatDate(
-																new Date(currentComment.date)
-															)}
-														</Text>
-													</Flex>
-													<Text
-														color={'black'}
-														fontWeight={'400'}
-														fontSize={'11px'}
-														isTruncated
+											return (
+												<>
+													<Flex
+														p={2}
+														py={2}
+														direction={'column'}
+														key={s.dotId}
+														_hover={{ background: '#ececf1' }}
+														cursor={'pointer'}
+														onClick={() => setActivePoint(s.dotId)}
 													>
-														{currentComment.comment}
-													</Text>
-													<Flex>
-														<Text fontSize={'11px'} isTruncated>
-															{s.comments.length} comments
+														<Flex>
+															<Text
+																pr={2}
+																fontSize={'11px'}
+																isTruncated
+															>
+																{currentComment?.userName}
+															</Text>
+															<Text fontSize={'11px'} isTruncated>
+																{formatDate(
+																	new Date(
+																		currentComment?.created ||
+																			new Date()
+																	)
+																)}
+															</Text>
+														</Flex>
+														<Text
+															color={'black'}
+															fontWeight={'400'}
+															fontSize={'11px'}
+															isTruncated
+														>
+															{currentComment.comment}
 														</Text>
-														{s.id === activePoint && (
-															<>
-																<Spacer />
-																<Tag size={'sm'}>Active</Tag>
-															</>
-														)}
+														<Flex>
+															<Text fontSize={'11px'} isTruncated>
+																{s.comments.length} comments
+															</Text>
+															{s.dotId === activePoint && (
+																<>
+																	<Spacer />
+																	<Tag size={'sm'}>Active</Tag>
+																</>
+															)}
+														</Flex>
 													</Flex>
-												</Flex>
-												<Divider />
-											</>
-										);
-									})}
+													<Divider />
+												</>
+											);
+										})}
 								</Box>
 							</Flex>
 						</Flex>
@@ -236,11 +218,11 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 						<Flex p={2} flex={1}>
 							<ImageDot
 								newComment={newComment}
-								documentType={file.fileType}
+								documentType={file.type}
 								removeComment={removeComment}
 								editComment={editComment}
-								imageSrc={file.downloadUrl}
-								dots={comments}
+								imageSrc={file.url}
+								dots={dots}
 								setActivePoint={setActivePoint}
 								activePoint={activePoint}
 							/>
@@ -257,7 +239,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 					</HStack>
 					<HStack justify={'space-between'} align={'center'}>
 						<Heading size={'sm'}>Size</Heading>
-						<Text>{humanFileSize(file.bytes)}</Text>
+						<Text>{humanFileSize(0)}</Text>
 					</HStack>
 					<div style={{ height: 2 }} />
 				</VStack>
@@ -266,7 +248,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 				<div style={{ height: 2 }} />
 				<HStack justify={'space-between'} align={'center'}>
 					<VStack justify={'center'} align={'center'}>
-						<a href={file.downloadUrl} target={'_blank'} rel={'noopener noreferrer'}>
+						<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 							<IconButton
 								aria-label={'Download'}
 								colorScheme={'black'}

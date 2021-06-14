@@ -3,33 +3,36 @@ import { FileDocument } from '../services/FileSystemService';
 export type FileType = 'txt' | 'other' | 'video' | 'picture' | 'drawing' | 'pdf' | 'document';
 
 export interface IFile {
-	fileId: string;
-	name: string;
-	bytes: number;
-	created: number; // Timestamp
+	imageId?: string;
 	projectId: number;
-	fileType: FileType;
-	downloadUrl: string;
+	name: string;
+	bytes?: number;
+	created?: number; // Timestamp
+	type: FileType;
+	previewImage: string;
+	url: string;
 }
 
 export class ProjectFile implements IFile {
-	fileId: string;
-	filePath: string;
-	bytes: number;
-	created: number;
-	fileType: FileType;
+	imageId?: string;
+	filePath?: string;
+	bytes?: number;
+	created?: number;
+	type: FileType;
 	projectId: number;
+	previewImage: string;
 	name: string;
-	downloadUrl: string;
+	url: string;
 
 	constructor(fileDocument: FileDocument) {
-		this.fileId = fileDocument.fileId;
+		this.imageId = fileDocument.fileId;
 		this.filePath = fileDocument.filePath;
 		this.bytes = fileDocument.size;
 		this.created = fileDocument.created;
-		this.fileType = fileDocument.fileType;
+		this.type = fileDocument.fileType;
 		this.name = fileDocument.fileName;
+		this.previewImage = fileDocument.fileName;
 		this.projectId = fileDocument.projectId;
-		this.downloadUrl = fileDocument.downloadUrl;
+		this.url = fileDocument.downloadUrl;
 	}
 }

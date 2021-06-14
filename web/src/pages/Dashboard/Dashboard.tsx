@@ -26,7 +26,7 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
-	const projects = data?.projects?.filter(
+	const projects = data.filter(
 		(project) =>
 			project.status !== ProjectStatus.DONE &&
 			(activeTab === ProjectStatus.ALL || project.status === activeTab)

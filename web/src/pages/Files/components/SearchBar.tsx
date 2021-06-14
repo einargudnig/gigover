@@ -91,7 +91,7 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 					<StyledMenuList>
 						{searchResults.length > 0 ? (
 							searchResults.map((r, key) => (
-								<NavLink key={key} to={`/files/${r.projectId}/file/${r.fileId}`}>
+								<NavLink key={key} to={`/files/${r.projectId}/file/${r.imageId}`}>
 									<MenuItem onClick={() => setSearchValue('')}>{r.name}</MenuItem>
 								</NavLink>
 							))

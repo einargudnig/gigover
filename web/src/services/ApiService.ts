@@ -11,7 +11,7 @@ export class ApiService {
 	static logout = API_BASE + 'user/logout';
 
 	// Projects
-	static projectList = API_BASE + 'contractor/list/';
+	static projectList = API_BASE + 'contractor/listEx';
 	static projectDetails = (id: number): string => API_BASE + 'contractor/project/' + id;
 	static modifyProject = API_BASE + 'contractor/store'; // Create & Update
 	static addWorker = API_BASE + 'contractor/addWorker';
@@ -45,4 +45,18 @@ export class ApiService {
 	// Cloud Functions
 	static getUserIdByPhoneNumber =
 		'https://us-central1-gigover2.cloudfunctions.net/getUserIdForPhoneNumber';
+
+	// File system
+	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId;
+	static addFolder = API_BASE + 'contractor/addFolder';
+	static folderFiles = (folderId: number) => API_BASE + 'contractor/documents/' + folderId;
+
+	// Image dots and comments
+	static addImage = API_BASE + 'contractor/addDocument'; // Used for all kinds of files
+	static addImageDot = API_BASE + 'contractor/addDot';
+	static removeImageDot = API_BASE + 'contractor/removeDot';
+	static getImageDots = (imageId: number) => API_BASE + 'contractor/dots/' + imageId;
+	static addDotComment = API_BASE + 'contractor/addDotComment';
+	static removeDotComment = API_BASE + 'contractor/removeDotComment';
+	static editDotComment = API_BASE + 'contractor/editDotComment';
 }
