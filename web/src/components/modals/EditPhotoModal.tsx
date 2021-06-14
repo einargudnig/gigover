@@ -21,7 +21,8 @@ import { ImportantIcon } from '../icons/ImportantIcon';
 
 import { useImageDots } from '../../queries/useImageDots';
 import {
-	useAddImageDot, useAddImageDotComment,
+	useAddImageDot,
+	useAddImageDotComment,
 	/*
 	useAddImageDotComment,
 */
@@ -110,7 +111,7 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 		const dot = dots?.find((s) => s.dotId === dotId);
 		if (dot) {
 			const comment = dot.comments.find((b) => b.commentId === commentId);
-
+			console.log(comment, 'comment');
 			if (comment) {
 				await removeImageDotComment(comment);
 			}
