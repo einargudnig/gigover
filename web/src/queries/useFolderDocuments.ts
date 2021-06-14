@@ -8,6 +8,7 @@ interface FolderFilesResponse {
 }
 
 export const useFolderDocuments = (folderId: number) => {
+
 	const { data, isLoading, isError, error } = useQuery<FolderFilesResponse, AxiosError>(
 		ApiService.folderFiles(folderId),
 		{
@@ -15,7 +16,6 @@ export const useFolderDocuments = (folderId: number) => {
 		}
 	);
 
-	console.log(data, 'data');
 	return {
 		data: (data && data.projectDocuments) || [],
 		isLoading,

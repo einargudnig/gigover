@@ -36,31 +36,7 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: bool
 `;
 
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
-	const { fileService } = useFileService();
-	const [folderResult, setFolderResult] = useState<FolderResult | null>(null);
-
-	useEffect(() => {
-		fileService.getProjectFilesDb(project.projectId, (snapshot) => {
-			if (snapshot !== null && snapshot.exists()) {
-				const files: FileDocument[] = [];
-
-				// TODO convert to File model
-				const map = Object.entries<FileDocument>(snapshot.val());
-				console.log(snapshot.val());
-
-				map.forEach(([, value]) => {
-					files.push(value);
-				});
-
-				setFolderResult({
-					folders: [],
-					files: files
-				});
-			}
-		});
-	}, []);
-
-	const totalSize = folderResult?.files?.map((f) => f.size).reduce((a, b) => a + b) || 0;
+	const totalSize = project.totalBytes;
 
 	return (
 		<DropZone projectId={project.projectId} uploadType={FileUploadType.Project}>
@@ -74,19 +50,18 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 							<FolderIcon
 								size={38}
 								color={
-									colorGenerator(`${project.name}/${url}`, 150, 50).backgroundColor
+									colorGenerator(`${project.name}/${url}`, 150, 50)
+										.backgroundColor
 								}
 							/>
-							{isUploading && (
-								<LoadingSpinner color={'black'} />
-							)}
+							{isUploading && <LoadingSpinner color={'black'} />}
 						</HStack>
 						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
 							{project.name}
 						</Heading>
 						<HStack justify={'space-between'}>
-							<Text>{folderResult?.files.length || 0} files</Text>
-							<Text>{humanFileSize(totalSize)}</Text>
+							<Text>{project.fileCount || 0} files</Text>
+							<Text>{humanFileSize(project.totalBytes || 0)}</Text>
 						</HStack>
 					</VStack>
 				</FolderCard>
@@ -106,7 +81,7 @@ export const ProjectFolderComponent = ({
 	folder,
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
-	const { data, isLoading, isError, error } = useFolderDocuments(folder.folderId);
+	const { data, isLoading } = useFolderDocuments(folder.folderId);
 	const isSelected = folder.folderId === selectedFolderId;
 
 	return (

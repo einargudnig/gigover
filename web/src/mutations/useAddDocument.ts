@@ -17,10 +17,7 @@ export const useAddDocument = () => {
 			});
 
 			if (variables.folderId) {
-				console.log(
-					'Refetching FolderFilesQueryKey',
-					ApiService.folderFiles(variables.folderId)
-				);
+				console.log('variables.folderId', variables.folderId);
 				await client.refetchQueries(ApiService.folderFiles(variables.folderId));
 			}
 

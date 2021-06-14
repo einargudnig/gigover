@@ -11,7 +11,7 @@ export class ApiService {
 	static logout = API_BASE + 'user/logout';
 
 	// Projects
-	static projectList = API_BASE + 'contractor/list/';
+	static projectList = API_BASE + 'contractor/listEx';
 	static projectDetails = (id: number): string => API_BASE + 'contractor/project/' + id;
 	static modifyProject = API_BASE + 'contractor/store'; // Create & Update
 	static addWorker = API_BASE + 'contractor/addWorker';

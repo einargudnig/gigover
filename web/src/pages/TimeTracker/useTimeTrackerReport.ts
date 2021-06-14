@@ -32,11 +32,10 @@ export const useTimeTrackerReport = (
 	const endDateTimestamp = endDate.unix() * 1000;
 	const [totalTracked, setTotalTracked] = useState<string>(secondsToHHMMSS(0));
 	const { mutate: getReport, data, isLoading: isGetReportLoading } = useTrackerReport();
-	const { data: projectList, isLoading: projectDataListLoading } = useProjectList();
+	const { data: projects, isLoading: projectDataListLoading } = useProjectList();
 
 	const projectMap: Map<number, Project> = useMemo(() => {
 		const pMap = new Map<number, Project>();
-		const projects = projectList?.projects || [];
 		const reportData = data?.data || undefined;
 
 		if (reportData && projects.length > 0) {
@@ -53,7 +52,7 @@ export const useTimeTrackerReport = (
 		}
 
 		return pMap;
-	}, [data, projectList]);
+	}, [data, projects]);
 
 	const users =
 		data?.data?.report?.map((reportSheet) => ({
@@ -118,7 +117,7 @@ export const useTimeTrackerReport = (
 
 	return {
 		projectMap,
-		projectList: projectList?.projects || [],
+		projectList: projects,
 		users,
 		results,
 		totalTracked,

@@ -22,17 +22,14 @@ const UploadModalStyled = styled.div`
 `;
 
 export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Element => {
-	const { data } = useProjectList(false);
+	const { data } = useProjectList();
 	const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
 	const [selectedFolder, setSelectedFolder] = useState<number | undefined>(undefined);
 	const [isUploading] = useState(false);
 
 	const openProjects = useMemo(() => {
-		if (data && data.projects) {
-			return data.projects.filter((p) => p.status !== ProjectStatus.CLOSED);
-		}
-		return [];
+		return data.filter((p) => p.status !== ProjectStatus.CLOSED);
 	}, [data]);
 
 	useEffect(() => {

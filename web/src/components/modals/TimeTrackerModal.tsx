@@ -25,8 +25,8 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
 	const { mutateAsync: startTask } = useTrackerStart();
 	const openProjects = useMemo(() => {
-		if (data && data.projects) {
-			return data.projects.filter((p) => p.status === ProjectStatus.OPEN);
+		if (data) {
+			return data.filter((p) => p.status === ProjectStatus.OPEN);
 		}
 		return [];
 	}, [data]);
@@ -36,8 +36,8 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 		setSelectedWorker(undefined);
 		setSelectedTask(undefined);
 
-		if (data && data.projects.length > 0) {
-			return data.projects.find((p) => p.projectId === selectedProject);
+		if (data && data.length > 0) {
+			return data.find((p) => p.projectId === selectedProject);
 		}
 
 		return null;

@@ -131,8 +131,8 @@ export const TimeTracker = (): JSX.Element => {
 		let projectName = `Unknown project (${projectId})`;
 		let taskName = `Unknown task (${taskId})`;
 
-		if (projectList?.projects && projectList.projects.length > 0) {
-			const pj = projectList.projects.find((p) => p.projectId === projectId);
+		if (projectList && projectList.length > 0) {
+			const pj = projectList.find((p) => p.projectId === projectId);
 
 			if (pj) {
 				projectName = pj.name;

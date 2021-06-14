@@ -1,5 +1,4 @@
 import React from 'react';
-import { useFolderDocuments } from '../../../queries/useFolderDocuments';
 import { Project } from '../../../models/Project';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
 import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
@@ -8,20 +7,17 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { GigoverFile } from './File';
 import { EmptyState } from '../../../components/empty/EmptyState';
 
-interface FolderFilesProps {
+interface ProjectFilesProps {
 	project: Project;
-	folderId: number;
 }
 
-export const FolderFiles = ({ project, folderId }: FolderFilesProps): JSX.Element => {
-	const { data, isLoading } = useFolderDocuments(folderId);
-
+export const ProjectFiles = ({ project }: ProjectFilesProps): JSX.Element => {
 	return (
 		<>
 			<HStack spacing={4}>
 				<FilePdfIcon />
 				<Heading as={'h4'} size={'md'}>
-					Folder files
+					{project.name} files
 				</Heading>
 			</HStack>
 			<HStack
@@ -30,13 +26,9 @@ export const FolderFiles = ({ project, folderId }: FolderFilesProps): JSX.Elemen
 				mb={4}
 				style={{ width: '100%' }}
 			>
-				{isLoading ? (
-					<Center>
-						<LoadingSpinner />
-					</Center>
-				) : data.length > 0 ? (
+				{project.images.length > 0 ? (
 					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4}>
-						{data
+						{project.images
 							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 							.map((p, pIndex) => (
 								<GigoverFile key={pIndex} file={p} />
