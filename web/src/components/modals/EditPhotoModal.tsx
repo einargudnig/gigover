@@ -1,43 +1,23 @@
 import React, { useState } from 'react';
 import { Modal } from '../Modal';
-import {
-	Box,
-	Divider,
-	Flex,
-	Heading,
-	HStack,
-	IconButton,
-	Spacer,
-	Tag,
-	Text,
-	VStack
-} from '@chakra-ui/react';
+import { Box, Divider, Flex, Heading, HStack, IconButton, Spacer, Tag, Text, VStack } from '@chakra-ui/react';
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { DownloadIcon } from '../icons/DownloadIcon';
 import { TrashIcon } from '../icons/TrashIcon';
 import { ImageDot } from '../ImageEditor/ImageDot';
 import { formatDate } from '../../utils/StringUtils';
 import { ImportantIcon } from '../icons/ImportantIcon';
-
 import { useImageDots } from '../../queries/useImageDots';
 import {
 	useAddImageDot,
 	useAddImageDotComment,
-	/*
-	useAddImageDotComment,
-*/
 	useEditDotComment,
 	useRemoveDotComment,
-	useRemoveImageDot /*
-	useRemoveDotComment,
-	useRemoveImageDot*/
+	useRemoveImageDot
 } from '../../mutations/useImageDot';
-import { useProjectFoldersQuery } from '../../queries/useProjectFoldersQuery';
 import { ProjectImage } from '../../models/ProjectImage';
 import { GigoverFileIconForType } from '../../pages/Files/components/File';
-/*
-import { useLogout } from '../../mutations/useLogout';
-*/
+import { devInfo } from '../../utils/ConsoleUtils';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -74,7 +54,7 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 */
 
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
-		console.log(event.target! as Element);
+		devInfo('onChangeFileName', event.target! as Element);
 	};
 
 	const { data, refetch: refetchImageDots } = useImageDots(file.imageId);
@@ -87,7 +67,6 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
 	const { mutateAsync: editImageDotComment } = useEditDotComment();
 
-	console.log(dots, 'comments');
 	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
 		//TODO new dot
 		const response = await addImgageDot({ ...comment.chord, imageId: file.imageId });
@@ -100,18 +79,14 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 	};
 
 	const editComment = async (comment: { comment: string; id: number }) => {
-		const response = await addImageDotComment({ dotId: comment.id, comment: comment.comment });
-
-		console.log(response, 'response');
+		await addImageDotComment({ dotId: comment.id, comment: comment.comment });
 		refetchImageDots();
 	};
 
 	const removeComment = async (dotId: number, commentId: number) => {
-		console.log(dotId, commentId);
 		const dot = dots?.find((s) => s.dotId === dotId);
 		if (dot) {
 			const comment = dot.comments.find((b) => b.commentId === commentId);
-			console.log(comment, 'comment');
 			if (comment) {
 				await removeImageDotComment(comment);
 			}
@@ -123,7 +98,6 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 		}
 		refetchImageDots();
 	};
-	console.log(file, 'name');
 
 	return (
 		<Modal title={'Photo edit'} open={true} onClose={() => onClose()} centerModal={true}>

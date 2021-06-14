@@ -1,7 +1,7 @@
 import firebase from 'firebase';
 import { v4 as uuid } from 'uuid';
 import { FileUploadType } from '../models/FileUploadType';
-import { devError } from '../utils/ConsoleUtils';
+import { devError, devInfo } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
 import { FileType } from '../models/ProjectFile';
 import axios from 'axios';
@@ -121,8 +121,7 @@ export class FileSystemService {
 		status: (progress: number, state: firebase.storage.TaskState) => void,
 		externalId?: number
 	): Promise<DocumentInput> {
-		// eslint-disable-next-line no-console
-		console.log('Gigover File Upload initiated');
+		devInfo('Gigover File Upload initiated');
 
 		const fileName = uuid();
 		const originalFileName = file.name;
@@ -168,11 +167,8 @@ export class FileSystemService {
 						url: downloadURL,
 						bytes: file.size
 					};
-					// const response = await axios.post<ProjectImage>(ApiService.addImage, image, {
-					// 	withCredentials: true
-					// });
-					// console.log(response, 'respone');
 
+					devInfo('File uploaded');
 					resolve(image);
 				}
 			);
