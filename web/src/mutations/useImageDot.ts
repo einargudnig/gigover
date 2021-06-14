@@ -8,7 +8,7 @@ export const useAddImageDotComment = () => {
 		console.log(dotComment, 'dot');
 		return await axios.post(
 			ApiService.addDotComment,
-			{ dotComment },
+			{ ...dotComment },
 			{ withCredentials: true }
 		);
 	});
@@ -18,7 +18,7 @@ export const useRemoveDotComment = () => {
 	return useMutation('useRemoveDotComment', async (dotComment: DotComment) => {
 		return await axios.post(
 			ApiService.removeDotComment,
-			{ dotComment },
+			{ ...dotComment },
 			{ withCredentials: true }
 		);
 	});
@@ -28,7 +28,7 @@ export const useEditDotComment = () => {
 	return useMutation('useEditDotComment', async (dotComment: DotComment) => {
 		return await axios.post(
 			ApiService.editDotComment,
-			{ dotComment },
+			{ ...dotComment },
 			{ withCredentials: true }
 		);
 	});
@@ -49,7 +49,11 @@ export const useAddImageDot = () => {
 };
 export const useRemoveImageDot = () => {
 	return useMutation('useRemoveImageDot', async (dotChord: ICommentChord) => {
-		return await axios.post(ApiService.removeImageDot, { dotChord }, { withCredentials: true });
+		return await axios.post(
+			ApiService.removeImageDot,
+			{ ...dotChord },
+			{ withCredentials: true }
+		);
 	});
 };
 

@@ -21,7 +21,7 @@ import { ImportantIcon } from '../icons/ImportantIcon';
 
 import { useImageDots } from '../../queries/useImageDots';
 import {
-	useAddImageDot,
+	useAddImageDot, useAddImageDotComment,
 	/*
 	useAddImageDotComment,
 */
@@ -82,7 +82,7 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 
 	const { mutateAsync: addImgageDot } = useAddImageDot();
 	const { mutateAsync: removeImageDot } = useRemoveImageDot();
-	/*const { mutateAsync: addImageDotComment } = useAddImageDotComment();*/
+	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
 	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
 	const { mutateAsync: editImageDotComment } = useEditDotComment();
 
@@ -92,14 +92,14 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 		const response = await addImgageDot({ ...comment.chord, imageId: file.imageId });
 
 		//TODO new comment on that dot
-		await editImageDotComment({ dotId: response.data.id, comment: comment.comment });
+		await addImageDotComment({ dotId: response.data.id, comment: comment.comment });
 		refetchImageDots();
 
 		setActivePoint(response.data.id);
 	};
 
 	const editComment = async (comment: { comment: string; id: number }) => {
-		const response = await editImageDotComment({ dotId: comment.id, comment: comment.comment });
+		const response = await addImageDotComment({ dotId: comment.id, comment: comment.comment });
 
 		console.log(response, 'response');
 		refetchImageDots();
