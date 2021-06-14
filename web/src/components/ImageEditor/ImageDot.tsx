@@ -5,8 +5,8 @@ import useResizeObserver from 'use-resize-observer';
 import { IImageDot } from '../modals/EditPhotoModal';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import styled from 'styled-components';
-import { FileType } from '../../models/ProjectFile';
 import ImagePoint from './ImagePoint';
+import { DocumentTypes } from '../../models/ProjectImage';
 
 const StyledDiv = styled(Box)`
 	canvas {
@@ -68,7 +68,7 @@ export const ImageDot = ({
 }: {
 	dots?: IImageDot[];
 	imageSrc: string;
-	documentType: FileType;
+	documentType: DocumentTypes;
 	newComment: (comment: any) => void;
 	editComment: (comment: any) => void;
 	removeComment: (dotId: number, commentId: number) => void;
@@ -76,8 +76,8 @@ export const ImageDot = ({
 	activePoint: number;
 }): JSX.Element => {
 	const [dot, setDot] = useState<{
-		x: number;
-		y: number;
+		coordinateX: number;
+		coordinateY: number;
 		height: number;
 		width: number;
 		pageNumber?: number;
@@ -125,8 +125,8 @@ export const ImageDot = ({
 
 		setAddingDot(true);
 		setDot({
-			x: e.clientX - bounds.left,
-			y: e.clientY - bounds.top,
+			coordinateX: e.clientX - bounds.left,
+			coordinateY: e.clientY - bounds.top,
 			width: boxDimmensions.width,
 			height: boxDimmensions.height,
 			pageNumber: pageNumber
@@ -169,13 +169,13 @@ export const ImageDot = ({
 */
 				//TODO Small ajustments needed
 				return {
-					x: point.coordinateX * ratioSmaller,
-					y: point.coordinateY * ratioSmaller
+					coordinateX: point.coordinateX * ratioSmaller,
+					coordinateY: point.coordinateY * ratioSmaller
 				};
 			}
 			return {
-				x: point.coordinateX + (boxDimmensions.width - point.width) / 2,
-				y: point.coordinateY + (boxDimmensions.height - point.height) / 2
+				coordinateX: point.coordinateX + (boxDimmensions.width - point.width) / 2,
+				coordinateY: point.coordinateY + (boxDimmensions.height - point.height) / 2
 			};
 		},
 		[imageDimmensions, boxDimmensions]
@@ -202,7 +202,7 @@ export const ImageDot = ({
 					maxHeight: '100%'
 				}}
 			>
-				{documentType === 'pdf' ? (
+				{documentType === 2 ? (
 					<>
 						{num !== -1 && (
 							<Box position={'absolute'} zIndex={2} right={0} bottom={0}>

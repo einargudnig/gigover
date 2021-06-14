@@ -15,6 +15,7 @@ export const useFolderDocuments = (folderId: number) => {
 		}
 	);
 
+	console.log(data, 'data');
 	return {
 		data: (data && data.projectDocuments) || [],
 		isLoading,

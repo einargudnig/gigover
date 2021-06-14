@@ -15,6 +15,8 @@ interface FolderFilesProps {
 
 export const FolderFiles = ({ project, folderId }: FolderFilesProps): JSX.Element => {
 	const { data, isLoading } = useFolderDocuments(folderId);
+	console.log(data, 'datatata------------');
+	console.log('what the fuck');
 
 	return (
 		<>

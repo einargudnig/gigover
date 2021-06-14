@@ -86,7 +86,7 @@ export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
 
 	return (
-		<FileStyled to={`/files/${file.projectId}/file/${file.imageId}`}>
+		<FileStyled to={`/files/${file.projectId}/${file.folderId}/${file.imageId}`}>
 			<HStack spacing={8}>
 				<Icon />
 				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>

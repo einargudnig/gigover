@@ -34,17 +34,18 @@ export const useEditDotComment = () => {
 	});
 };
 
+export interface AddDotInput {
+	coordinateX: number;
+	coordinateY: number;
+	height: number;
+	width: number;
+	pageNumber?: number;
+	imageId?: number | string;
+}
 export const useAddImageDot = () => {
-	return useMutation(
-		'addImageDot',
-		async (dotChord: { chord: ICommentChord; comment: string }) => {
-			return await axios.post(
-				ApiService.addImageDot,
-				{ dotChord },
-				{ withCredentials: true }
-			);
-		}
-	);
+	return useMutation('addImageDot', async (dotChord: AddDotInput) => {
+		return await axios.post(ApiService.addImageDot, { ...dotChord }, { withCredentials: true });
+	});
 };
 export const useRemoveImageDot = () => {
 	return useMutation('useRemoveImageDot', async (dotChord: ICommentChord) => {

@@ -26,7 +26,7 @@ const ImagePoint = ({
 	deleteComment,
 	mode
 }: {
-	chord: { x: number; y: number };
+	chord: { coordinateX: number; coordinateY: number };
 	active: boolean;
 	comments?: ICommentComment[];
 	clickPoint: (value?: boolean) => void;
@@ -47,8 +47,8 @@ const ImagePoint = ({
 		<div
 			style={{
 				position: 'absolute',
-				top: chord.y - 10,
-				left: chord.x - 10,
+				top: chord.coordinateY - 10,
+				left: chord.coordinateX - 10,
 				display: 'flex'
 			}}
 		>

@@ -15,7 +15,6 @@ import { File } from './components/File';
 import { UploadModal } from './UploadModal';
 import { EmptyState } from '../../components/empty/EmptyState';
 import { Center } from '../../components/Center';
-import { ProjectFile } from '../../models/ProjectFile';
 import { useFileService } from '../../hooks/useFileService';
 import { useProjectFiles } from '../../queries/useProjectFiles';
 import { SearchBar } from './components/SearchBar';
@@ -25,6 +24,9 @@ import { ProjectFolders } from './components/ProjectFolders';
 import { devInfo } from '../../utils/ConsoleUtils';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
 import { FolderFiles } from './components/FolderFiles';
+import { ProjectImage } from '../../models/ProjectImage';
+import { FileDocument } from '../../services/FileSystemService';
+import { useFolderDocuments } from '../../queries/useFolderDocuments';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -37,9 +39,14 @@ export const Files = (): JSX.Element => {
 	const params = useParams();
 	const navigate = useNavigate();
 	const { fileService } = useFileService();
-	const [selectedFile, setSelectedFile] = useState<ProjectFile | null>(null);
+	const [selectedFile, setSelectedFile] = useState<ProjectImage | null>(null);
 	const { files, loadingFiles: loadingProjectFiles, setProject } = useProjectFiles();
+	console.log(files, 'files-----------');
 	const { data, isLoading, loadingFiles, files: recentFiles } = useProjectList(true);
+
+	const { data: testData } = useFolderDocuments(parseInt(params.folderId));
+
+	console.log(testData, 'testData');
 	const projects = data?.projects?.filter((p) => p.status !== ProjectStatus.CLOSED) || [];
 	const selectedProject: Project | null | undefined = params.projectId
 		? projects.find((p) => p.projectId === parseInt(params.projectId))
@@ -57,8 +64,12 @@ export const Files = (): JSX.Element => {
 
 	useEffect(() => {
 		if (params.projectId && params.fileId) {
-			const file = fileService.getProjectFile(parseInt(params.projectId), params.fileId);
-			file.then((f) => setSelectedFile(new ProjectFile(f)));
+			const s: ProjectImage | undefined = testData.find(
+				(c) => c.imageId === parseInt(params.fileId)
+			);
+			if (s) {
+				setSelectedFile(s);
+			}
 		} else {
 			setSelectedFile(null);
 		}
@@ -172,81 +183,37 @@ export const Files = (): JSX.Element => {
 									style={{ width: '100%' }}
 									spacing={4}
 								>
-									{selectedProject && params.folderId ? (
+									{
+										selectedProject &&
+											params.folderId && (
+												<>
+													<FolderFiles
+														project={selectedProject}
+														folderId={parseInt(params.folderId)}
+													/>
+												</>
+											) /*: (
 										<>
-											<FolderFiles
-												project={selectedProject}
-												folderId={parseInt(params.folderId)}
+											<EmptyState
+												title={'No files yet'}
+												text={
+													'No files have been uploaded yet, you can drop files on to projects or folders to upload them.'
+												}
 											/>
 										</>
-									) : (
-										<>
-											<HStack
-												justifyContent={'space-between'}
-												align={'center'}
-												mb={4}
-												style={{ width: '100%' }}
-											>
-												<HStack spacing={4}>
-													<FilePdfIcon />
-													<Heading as={'h4'} size={'md'}>
-														Recent files
-													</Heading>
-												</HStack>
-											</HStack>
-
-											{loadingFiles || loadingProjectFiles ? (
-												<Center>
-													<LoadingSpinner />
-												</Center>
-											) : (selectedProject && files.length > 0) ||
-											  (!selectedProject && sortedRecentFiles.length > 0) ? (
-												selectedProject && files ? (
-													<VStack
-														style={{ width: '100%' }}
-														align={'stretch'}
-														spacing={4}
-													>
-														{files
-															.sort((a, b) =>
-																b.created && a.created
-																	? b.created - a.created
-																	: -1
-															)
-															.map((p, pIndex) => (
-																<File key={pIndex} file={p} />
-															))}
-													</VStack>
-												) : (
-													<VStack
-														style={{ width: '100%' }}
-														align={'stretch'}
-														spacing={4}
-													>
-														{sortedRecentFiles
-															.slice(0, 10)
-															.map((p, pIndex) => (
-																<File key={pIndex} file={p} />
-															))}
-													</VStack>
-												)
-											) : (
-												<EmptyState
-													title={'No files yet'}
-													text={
-														'No files have been uploaded yet, you can drop files on to projects or folders to upload them.'
-													}
-												/>
-											)}
-										</>
-									)}
+									)*/
+									}
 								</VStack>
 							</Container>
 						</HStack>
 					)}
 				</VStack>
 				{selectedFile && (
-					<EditPhotoModal file={selectedFile} onClose={() => navigate(-1)} />
+					<EditPhotoModal
+						projectId={selectedProject?.projectId}
+						file={selectedFile}
+						onClose={() => navigate(-1)}
+					/>
 				)}
 			</Page>
 		</>

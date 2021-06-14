@@ -15,31 +15,33 @@ import {
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { DownloadIcon } from '../icons/DownloadIcon';
 import { TrashIcon } from '../icons/TrashIcon';
-import { FileIconForType } from '../../pages/Files/components/File';
-import { ProjectFile } from '../../models/ProjectFile';
 import { ImageDot } from '../ImageEditor/ImageDot';
 import { formatDate } from '../../utils/StringUtils';
 import { ImportantIcon } from '../icons/ImportantIcon';
-/*
-import { UserContext } from '../../context/UserContext';
-*/
+
 import { useImageDots } from '../../queries/useImageDots';
 import {
 	useAddImageDot,
 	/*
 	useAddImageDotComment,
 */
-	useEditDotComment /*
+	useEditDotComment,
+	useRemoveDotComment,
+	useRemoveImageDot /*
 	useRemoveDotComment,
 	useRemoveImageDot*/
 } from '../../mutations/useImageDot';
+import { useProjectFoldersQuery } from '../../queries/useProjectFoldersQuery';
+import { ProjectImage } from '../../models/ProjectImage';
+import { GigoverFileIconForType } from '../../pages/Files/components/File';
 /*
 import { useLogout } from '../../mutations/useLogout';
 */
 
 interface FileSidebarProps {
 	onClose: () => void;
-	file: ProjectFile;
+	file: ProjectImage;
+	projectId?: number;
 }
 export interface IImageDot extends ICommentChord {
 	dotId: number;
@@ -63,8 +65,8 @@ export interface ICommentComment {
 	userName: string;
 }
 
-export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
-	const Icon = FileIconForType(file.type);
+export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): JSX.Element => {
+	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
 	/*
 	const user = useContext(UserContext);
@@ -74,47 +76,26 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 		console.log(event.target! as Element);
 	};
 
-	const { data, refetch: refetchImageDots } = useImageDots(29);
+	const { data, refetch: refetchImageDots } = useImageDots(file.imageId);
 
-	const comments = data?.imageDots;
-	console.log(data, 'Data------');
+	const dots = data?.dots;
 
 	const { mutateAsync: addImgageDot } = useAddImageDot();
-	/*	const { mutateAsync: removeImageDot } = useRemoveImageDot();
-	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
-	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();*/
+	const { mutateAsync: removeImageDot } = useRemoveImageDot();
+	/*const { mutateAsync: addImageDotComment } = useAddImageDotComment();*/
+	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
 	const { mutateAsync: editImageDotComment } = useEditDotComment();
 
-	console.log(comments, 'comments');
+	console.log(dots, 'comments');
 	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
 		//TODO new dot
-
-		const response = await addImgageDot(comment);
+		const response = await addImgageDot({ ...comment.chord, imageId: file.imageId });
 
 		//TODO new comment on that dot
-		await editImageDotComment({ dotId: response.data, comment: comment.comment });
+		await editImageDotComment({ dotId: response.data.id, comment: comment.comment });
 		refetchImageDots();
 
-		/*		setComments([
-			...comments,
-			{
-				id: newId,
-				chord: comment.chord,
-				pageNumber: comment.chord.pageNumber,
-				comments: [
-					{
-						id: Math.round(Math.random() * 1000),
-						user: {
-							name: user.name,
-							id: user.phoneNumber
-						},
-						date: new Date().toISOString(),
-						comment: comment.comment
-					}
-				]
-			}
-		]);*/
-		setActivePoint(response.data);
+		setActivePoint(response.data.id);
 	};
 
 	const editComment = async (comment: { comment: string; id: number }) => {
@@ -122,52 +103,24 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 
 		console.log(response, 'response');
 		refetchImageDots();
-
-		/*		//fetch the comments again
-		const index = comments.findIndex((s) => s.id === comment.id);
-
-		const ec = { ...comments[index] };
-
-		if (ec) {
-			ec.comments = [
-				...ec.comments,
-				{
-					id: Math.round(Math.random() * 1000),
-					user: {
-						name: user.name,
-						id: user.phoneNumber
-					},
-					date: new Date().toISOString(),
-					comment: comment.comment
-				}
-			];
-			const newComments = [...comments];
-			newComments[index] = ec;
-			setComments(newComments);
-		}*/
 	};
 
-	const removeComment = (dotId: number, commentId: number) => {
+	const removeComment = async (dotId: number, commentId: number) => {
 		console.log(dotId, commentId);
-		/*		const index = comments.findIndex((s) => s.id === dotId);
+		const dot = dots?.find((s) => s.dotId === dotId);
+		if (dot) {
+			const comment = dot.comments.find((b) => b.commentId === commentId);
 
-		const co = comments[index];
-		if (co?.comments.length === 1) {
-			alert('do you want to remove this dot?');
-			setComments([...comments.filter((c) => c.id !== dotId)]);
-		} else {
-			const filteredComments = co?.comments.filter((b) => b.id !== commentId);
+			if (comment) {
+				await removeImageDotComment(comment);
+			}
 
-			const filteredComment = {
-				...co,
-				comments: [...filteredComments]
-			};
-			const returnComments = [...comments];
-
-			returnComments[index] = filteredComment;
-
-			setComments([...returnComments]);
-		}*/
+			if (dot?.comments.length === 1) {
+				//Delete the point aswell
+				await removeImageDot(dot);
+			}
+		}
+		refetchImageDots();
 	};
 	console.log(file, 'name');
 
@@ -223,8 +176,11 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								</Box>
 
 								<Box overflow={'scroll'} maxHeight={'450px'}>
-									{comments &&
-										comments.map((s) => {
+									{dots &&
+										dots.map((s) => {
+											if (s.comments.length === 0) {
+												return null;
+											}
 											const currentComment =
 												s.comments[s.comments.length - 1];
 
@@ -249,7 +205,10 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 															</Text>
 															<Text fontSize={'11px'} isTruncated>
 																{formatDate(
-																	new Date(currentComment.created)
+																	new Date(
+																		currentComment?.created ||
+																			new Date()
+																	)
 																)}
 															</Text>
 														</Flex>
@@ -288,7 +247,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								removeComment={removeComment}
 								editComment={editComment}
 								imageSrc={file.url}
-								dots={comments}
+								dots={dots}
 								setActivePoint={setActivePoint}
 								activePoint={activePoint}
 							/>
@@ -305,7 +264,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 					</HStack>
 					<HStack justify={'space-between'} align={'center'}>
 						<Heading size={'sm'}>Size</Heading>
-						<Text>{humanFileSize(file?.bytes)}</Text>
+						<Text>{humanFileSize(0)}</Text>
 					</HStack>
 					<div style={{ height: 2 }} />
 				</VStack>
