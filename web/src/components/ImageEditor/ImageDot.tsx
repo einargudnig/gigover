@@ -62,6 +62,7 @@ export const ImageDot = ({
 	newComment,
 	editComment,
 	removeComment,
+	updateStatus,
 	dots,
 	setActivePoint,
 	activePoint
@@ -72,6 +73,7 @@ export const ImageDot = ({
 	newComment: (comment: any) => void;
 	editComment: (comment: any) => void;
 	removeComment: (dotId: number, commentId: number) => void;
+	updateStatus: (dotId: number, commentId: number) => void;
 	setActivePoint: (id: number) => void;
 	activePoint: number;
 }): JSX.Element => {
@@ -255,6 +257,7 @@ export const ImageDot = ({
 						}
 						return (
 							<ImagePoint
+								status={s.status}
 								chord={chord}
 								key={i}
 								mode={'edit'}
@@ -265,6 +268,9 @@ export const ImageDot = ({
 								}}
 								deleteComment={(commentId) => {
 									removeComment(s.dotId, commentId);
+								}}
+								updateStatus={(commentId) => {
+									updateStatus(s.dotId, commentId);
 								}}
 								clickPoint={() => {
 									if (activePoint === s.dotId) {
@@ -279,6 +285,7 @@ export const ImageDot = ({
 					})}
 				{dot && (
 					<ImagePoint
+						status={0}
 						mode={'new'}
 						saveComment={(af) => {
 							saveNewDot(af);

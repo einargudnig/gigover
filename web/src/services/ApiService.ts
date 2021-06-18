@@ -59,6 +59,7 @@ export class ApiService {
 	static removeImageDot = API_BASE + 'contractor/removeDot';
 	static getImageDots = (imageId: number) => API_BASE + 'contractor/dots/' + imageId;
 	static addDotComment = API_BASE + 'contractor/addDotComment';
+	static updateDotStatus = API_BASE + 'contractor/updateDotStatus';
 	static removeDotComment = API_BASE + 'contractor/removeDotComment';
 	static editDotComment = API_BASE + 'contractor/editDotComment';
 }

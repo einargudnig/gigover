@@ -15,6 +15,19 @@ export const useAddImageDotComment = () => {
 	});
 };
 
+export const useChangeImageDotStatus = () => {
+	return useMutation(
+		'updateDotStatus',
+		async ({ dotId, status }: { dotId: number; status: number }) => {
+			return await axios.post(
+				ApiService.updateDotStatus,
+				{ dotId: dotId, status: status },
+				{ withCredentials: true }
+			);
+		}
+	);
+};
+
 export const useRemoveDotComment = () => {
 	return useMutation('useRemoveDotComment', async (dotComment: DotComment) => {
 		return await axios.post(

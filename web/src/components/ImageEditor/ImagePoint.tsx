@@ -16,22 +16,27 @@ import {
 } from '@chakra-ui/react';
 import { Theme } from '../../Theme';
 import { formatDate } from '../../utils/StringUtils';
+import { darken } from 'polished';
 
 const ImagePoint = ({
 	chord,
+	status,
 	active,
 	comments,
 	clickPoint,
 	saveComment,
 	deleteComment,
+	updateStatus,
 	mode
 }: {
 	chord: { coordinateX: number; coordinateY: number };
+	status: number;
 	active: boolean;
 	comments?: ICommentComment[];
 	clickPoint: (value?: boolean) => void;
 	saveComment: (c: string, m?: string) => void;
 	deleteComment?: (id: number) => void;
+	updateStatus?: (id: number) => void;
 	mode: string;
 }): JSX.Element => {
 	const [focus, setFocus] = useState(false);
@@ -43,6 +48,7 @@ const ImagePoint = ({
 		setValue('');
 	}, [active]);
 
+	const color = status === 0 ? Theme.colors.red : Theme.colors.green;
 	return (
 		<div
 			style={{
@@ -59,7 +65,7 @@ const ImagePoint = ({
 						height: '20px',
 						width: '20px',
 						borderRadius: '50%',
-						background: active ? Theme.colors.yellow : 'lightgray'
+						background: active ? darken(0.2, color) : color
 					}}
 					_after={{
 						content: "''",
@@ -68,7 +74,7 @@ const ImagePoint = ({
 						position: 'absolute',
 						borderLeft: '10px solid transparent',
 						borderRight: '10px solid transparent',
-						borderTop: '18px solid ' + (active ? Theme.colors.yellow : 'lightgray'),
+						borderTop: '18px solid ' + (active ? darken(0.2, color) : color),
 						width: 0,
 						height: 0
 					}}
@@ -141,7 +147,14 @@ const ImagePoint = ({
 															>
 																Delete comment
 															</MenuItem>
-															{/*		<MenuItem>Turn into task</MenuItem>*/}
+															<MenuItem
+																onClick={() =>
+																	updateStatus &&
+																	updateStatus(s.commentId)
+																}
+															>
+																Update status
+															</MenuItem>
 														</MenuGroup>
 													</MenuList>
 												</Menu>

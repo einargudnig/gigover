@@ -22,6 +22,7 @@ import { useImageDots } from '../../queries/useImageDots';
 import {
 	useAddImageDot,
 	useAddImageDotComment,
+	useChangeImageDotStatus,
 	useRemoveDotComment,
 	useRemoveImageDot
 } from '../../mutations/useImageDot';
@@ -30,7 +31,6 @@ import { GigoverFileIconForType } from '../../pages/Files/components/File';
 import { devInfo } from '../../utils/ConsoleUtils';
 import { ConfirmDialog } from '../ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
-import { useDeleteFolder } from '../../mutations/useDeleteFolder';
 import { useDeleteDocument } from '../../mutations/useDeleteDocument';
 
 interface FileSidebarProps {
@@ -41,6 +41,7 @@ interface FileSidebarProps {
 export interface IImageDot extends ICommentChord {
 	dotId: number;
 	imageId: string;
+	status: number;
 	comments: ICommentComment[];
 }
 
@@ -79,12 +80,21 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 	const { mutateAsync: removeImageDot } = useRemoveImageDot();
 	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
 	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
+	const { mutateAsync: changeImageDotStatus } = useChangeImageDotStatus();
 	/*	const { mutateAsync: editImageDotComment } = useEditDotComment();*/
 
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const { mutate: deleteDocument } = useDeleteDocument();
 
+	const updateStatus = async (dotId: number) => {
+		const dot = dots?.find((s) => s.dotId === dotId);
+
+		if (dot) {
+			await changeImageDotStatus({ dotId, status: dot.status === 0 ? 1 : 0 });
+			refetchImageDots();
+		}
+	};
 	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
 		//TODO new dot
 		const response = await addImgageDot({ ...comment.chord, imageId: file.imageId });
@@ -239,6 +249,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								documentType={file.type}
 								removeComment={removeComment}
 								editComment={editComment}
+								updateStatus={updateStatus}
 								imageSrc={file.url}
 								dots={dots}
 								setActivePoint={setActivePoint}
