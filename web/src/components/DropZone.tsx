@@ -5,8 +5,6 @@ import { Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
-import { useQueryClient } from 'react-query';
-import { ApiService } from '../services/ApiService';
 import { useAddDocument } from '../mutations/useAddDocument';
 
 const DropZoneContainer = styled.div<{

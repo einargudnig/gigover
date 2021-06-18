@@ -1,18 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { CardBaseLink } from '../../../components/CardBase';
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+	Button,
+	Heading,
+	HStack,
+	Menu,
+	MenuButton,
+	MenuGroup,
+	MenuItem,
+	MenuList,
+	Text,
+	VStack
+} from '@chakra-ui/react';
 import { Project } from '../../../models/Project';
 import { ProjectFolder } from '../../../models/ProjectFolder';
-import { useFileService } from '../../../hooks/useFileService';
-import { FileDocument, FolderResult } from '../../../services/FileSystemService';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
 import { DropZone } from '../../../components/DropZone';
 import { FileUploadType } from '../../../models/FileUploadType';
 import { useFolderDocuments } from '../../../queries/useFolderDocuments';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { useDeleteFolder } from '../../../mutations/useDeleteFolder';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { useNavigate } from 'react-router-dom';
 
 interface FolderProps {
 	project: Project;
@@ -36,8 +48,6 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: bool
 `;
 
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
-	const totalSize = project.totalBytes;
-
 	return (
 		<DropZone projectId={project.projectId} uploadType={FileUploadType.Project}>
 			{({ isDragActive, isUploading }) => (
@@ -83,38 +93,76 @@ export const ProjectFolderComponent = ({
 }: ProjectFolderProps): JSX.Element => {
 	const { data, isLoading } = useFolderDocuments(folder.folderId);
 	const isSelected = folder.folderId === selectedFolderId;
-
+	const navigate = useNavigate();
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const { mutate } = useDeleteFolder();
 	return (
-		<DropZone
-			projectId={project.projectId}
-			folderId={folder.folderId}
-			uploadType={FileUploadType.Project}
-		>
-			{({ isDragActive, isUploading }) => (
-				<FolderCard
-					to={`/files/${project.projectId}/${folder.folderId}`}
-					selected={isSelected}
-					isDragActive={isDragActive}
-				>
-					<VStack align={'stretch'} spacing={4}>
-						<HStack justify={'space-between'} align={'center'}>
-							<FolderIcon
-								size={38}
-								color={colorGenerator(`${folder.name}`, 150, 50).backgroundColor}
-							/>
-							{isUploading && (
-								<LoadingSpinner color={isSelected ? 'white' : 'black'} />
-							)}
-						</HStack>
-						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
-							{folder.name}
-						</Heading>
-						<HStack justify={'space-between'}>
-							{isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
-						</HStack>
-					</VStack>
-				</FolderCard>
-			)}
-		</DropZone>
+		<div style={{ position: 'relative' }}>
+			<div style={{ position: 'absolute', right: '8px', top: '8px' }}>
+				<Menu>
+					<MenuButton as={Button} aria-label="More actions" size="xs" color={'black'}>
+						...
+					</MenuButton>
+					<MenuList>
+						<MenuGroup title="Actions">
+							<ConfirmDialog
+								header={'You will delete all files in folder!'}
+								setIsOpen={setDialogOpen}
+								callback={async (b) => {
+									if (b) {
+										await mutate({ ...folder, projectId: project.projectId });
+										navigate(`/files/${project.projectId}`);
+									}
+									setDialogOpen(false);
+								}}
+								isOpen={dialogOpen}
+							>
+								<MenuItem
+									onClick={() => {
+										setDialogOpen(true);
+									}}
+								>
+									Delete folder
+								</MenuItem>
+							</ConfirmDialog>
+						</MenuGroup>
+					</MenuList>
+				</Menu>
+			</div>
+
+			<DropZone
+				projectId={project.projectId}
+				folderId={folder.folderId}
+				uploadType={FileUploadType.Project}
+			>
+				{({ isDragActive, isUploading }) => (
+					<FolderCard
+						to={`/files/${project.projectId}/${folder.folderId}`}
+						selected={isSelected}
+						isDragActive={isDragActive}
+					>
+						<VStack align={'stretch'} spacing={4}>
+							<HStack justify={'space-between'} align={'center'}>
+								<FolderIcon
+									size={38}
+									color={
+										colorGenerator(`${folder.name}`, 150, 50).backgroundColor
+									}
+								/>
+								{isUploading && (
+									<LoadingSpinner color={isSelected ? 'white' : 'black'} />
+								)}
+							</HStack>
+							<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+								{folder.name}
+							</Heading>
+							<HStack justify={'space-between'}>
+								{isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
+							</HStack>
+						</VStack>
+					</FolderCard>
+				)}
+			</DropZone>
+		</div>
 	);
 };

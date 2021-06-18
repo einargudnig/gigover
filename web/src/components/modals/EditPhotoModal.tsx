@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Modal } from '../Modal';
-import { Box, Divider, Flex, Heading, HStack, IconButton, Spacer, Tag, Text, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Divider,
+	Flex,
+	Heading,
+	HStack,
+	IconButton,
+	Spacer,
+	Tag,
+	Text,
+	VStack
+} from '@chakra-ui/react';
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { DownloadIcon } from '../icons/DownloadIcon';
 import { TrashIcon } from '../icons/TrashIcon';
@@ -11,13 +22,16 @@ import { useImageDots } from '../../queries/useImageDots';
 import {
 	useAddImageDot,
 	useAddImageDotComment,
-	useEditDotComment,
 	useRemoveDotComment,
 	useRemoveImageDot
 } from '../../mutations/useImageDot';
 import { ProjectImage } from '../../models/ProjectImage';
 import { GigoverFileIconForType } from '../../pages/Files/components/File';
 import { devInfo } from '../../utils/ConsoleUtils';
+import { ConfirmDialog } from '../ConfirmDialog';
+import { useNavigate } from 'react-router-dom';
+import { useDeleteFolder } from '../../mutations/useDeleteFolder';
+import { useDeleteDocument } from '../../mutations/useDeleteDocument';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -46,7 +60,7 @@ export interface ICommentComment {
 	userName: string;
 }
 
-export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): JSX.Element => {
+export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
 	/*
@@ -65,7 +79,11 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 	const { mutateAsync: removeImageDot } = useRemoveImageDot();
 	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
 	const { mutateAsync: removeImageDotComment } = useRemoveDotComment();
-	const { mutateAsync: editImageDotComment } = useEditDotComment();
+	/*	const { mutateAsync: editImageDotComment } = useEditDotComment();*/
+
+	const navigate = useNavigate();
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const { mutate: deleteDocument } = useDeleteDocument();
 
 	const newComment = async (comment: { chord: ICommentChord; comment: string }) => {
 		//TODO new dot
@@ -260,17 +278,30 @@ export const EditPhotoModal = ({ onClose, file, projectId }: FileSidebarProps): 
 						</Text>
 					</VStack>
 					<VStack justify={'center'} align={'center'}>
-						<IconButton
-							aria-label={'Delete'}
-							colorScheme={'black'}
-							icon={<TrashIcon color={'white'} />}
-							onClick={() => {
-								alert('TODO delete');
+						<ConfirmDialog
+							header={'Delete image'}
+							setIsOpen={setDialogOpen}
+							callback={async (b) => {
+								if (b) {
+									await deleteDocument(file);
+									navigate(`/files/${file.projectId}/${file.folderId}`);
+								}
+								setDialogOpen(false);
 							}}
-						/>
-						<Text color={'black'} fontSize={'xs'}>
-							Delete
-						</Text>
+							isOpen={dialogOpen}
+						>
+							<IconButton
+								aria-label={'Delete'}
+								colorScheme={'black'}
+								icon={<TrashIcon color={'white'} />}
+								onClick={() => {
+									setDialogOpen(true);
+								}}
+							/>
+							<Text color={'black'} fontSize={'xs'}>
+								Delete
+							</Text>
+						</ConfirmDialog>
 					</VStack>
 				</HStack>
 			</VStack>

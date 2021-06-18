@@ -4,14 +4,7 @@ import { FileUploadType } from '../models/FileUploadType';
 import { devError, devInfo } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
 import { FileType } from '../models/ProjectFile';
-import axios from 'axios';
-import { ApiService } from './ApiService';
-import { ProjectImage } from '../models/ProjectImage';
 import { DocumentInput } from '../mutations/useAddDocument';
-
-interface UploadResult {
-	downloadUrl: string;
-}
 
 export interface FileDocument {
 	created: number;

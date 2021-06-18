@@ -10,15 +10,13 @@ import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { Folder } from './components/Folder';
 import { Project, ProjectStatus } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { UploadModal } from './UploadModal';
 import { SearchBar } from './components/SearchBar';
-import { EditPhotoModal } from '../../components/modals/EditPhotoModal';
 import { ProjectFolders } from './components/ProjectFolders';
 import { devInfo } from '../../utils/ConsoleUtils';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
 import { FolderFiles } from './components/FolderFiles';
-import { ProjectImage } from '../../models/ProjectImage';
 import { ProjectFiles } from './components/ProjectFiles';
 
 const Container = styled.div`
