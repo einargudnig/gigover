@@ -5,7 +5,6 @@ import { devError, devInfo } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
 import { FileType } from '../models/ProjectFile';
 import { DocumentInput } from '../mutations/useAddDocument';
-import { DocumentTypes } from '../models/ProjectImage';
 
 export interface FileDocument {
 	created: number;
@@ -153,28 +152,16 @@ export class FileSystemService {
 						externalId || null
 					);
 
-					const fileType = () => {
-						if (
-							originalFileName.includes('.mov') ||
-							originalFileName.includes('.mp4') ||
-							originalFileName.includes('.m4') ||
-							originalFileName.includes('.avi')
-						) {
-							return 1;
-						}
-
-						if (originalFileName.includes('.pdf')) {
-							return 2;
-						}
-
-						return 0;
-					};
+					const currentFileType = this.getFileTypeForFile(file);
+					console.log('CurrentfileType', currentFileType);
+					const fileType = this.getDocumentTypeForFileType(currentFileType);
+					console.log('fileType', fileType);
 
 					const image: DocumentInput = {
 						projectId,
 						folderId,
 						name: fileName,
-						type: fileType(),
+						type: fileType,
 						url: downloadURL,
 						bytes: file.size
 					};
@@ -184,6 +171,18 @@ export class FileSystemService {
 				}
 			);
 		});
+	}
+
+	private getDocumentTypeForFileType(fileType: FileType) {
+		if (['document', 'pdf', 'other'].includes(fileType)) {
+			return 2;
+		}
+
+		if (fileType === 'video') {
+			return 1;
+		}
+
+		return 0;
 	}
 
 	private getFileTypeForFile(file: File): FileType {
