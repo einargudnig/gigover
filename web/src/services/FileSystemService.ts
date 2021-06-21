@@ -5,6 +5,7 @@ import { devError, devInfo } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
 import { FileType } from '../models/ProjectFile';
 import { DocumentInput } from '../mutations/useAddDocument';
+import { DocumentTypes } from '../models/ProjectImage';
 
 export interface FileDocument {
 	created: number;
@@ -152,11 +153,28 @@ export class FileSystemService {
 						externalId || null
 					);
 
+					const fileType = () => {
+						if (
+							originalFileName.includes('.mov') ||
+							originalFileName.includes('.mp4') ||
+							originalFileName.includes('.m4') ||
+							originalFileName.includes('.avi')
+						) {
+							return 1;
+						}
+
+						if (originalFileName.includes('.pdf')) {
+							return 2;
+						}
+
+						return 0;
+					};
+
 					const image: DocumentInput = {
 						projectId,
 						folderId,
 						name: fileName,
-						type: 0,
+						type: fileType(),
 						url: downloadURL,
 						bytes: file.size
 					};
