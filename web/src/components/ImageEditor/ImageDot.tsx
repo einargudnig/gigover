@@ -204,7 +204,7 @@ export const ImageDot = ({
 					maxHeight: '100%'
 				}}
 			>
-				{documentType === 2 ? (
+				{documentType === 2 || documentType === 'DOCUMENT' ? (
 					<>
 						{num !== -1 && (
 							<Box position={'absolute'} zIndex={2} right={0} bottom={0}>
