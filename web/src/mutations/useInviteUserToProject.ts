@@ -10,11 +10,13 @@ interface InviteUserInput {
 }
 
 export const useInviteUserToProject = () => {
+	const mutationKey = ApiService.addUser;
+
 	return useMutation<ErrorResponse, AxiosError, InviteUserInput>(
-		ApiService.addWorker,
+		mutationKey,
 		async (variables) => {
 			try {
-				const response = await axios.post<ErrorResponse>(ApiService.addWorker, variables, {
+				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
 				});
 
