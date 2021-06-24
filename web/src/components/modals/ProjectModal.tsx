@@ -9,14 +9,17 @@ import { devError } from '../../utils/ConsoleUtils';
 import {
 	Box,
 	Button,
+	Divider,
 	FormControl,
 	FormErrorMessage,
 	FormHelperText,
 	FormLabel,
+	Heading,
 	HStack,
 	Input
 } from '@chakra-ui/react';
 import { DatePicker } from '../forms/DatePicker';
+import { InviteUser } from '../InviteUser/InviteUser';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -207,6 +210,15 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 						Archive this project
 					</Button>
 				</InputWrapper>
+			)}
+			{project && project.projectId && (
+				<div>
+					<Divider mb={4} />
+					<Heading size={'md'} mb={4}>
+						Invite users to {project.name}
+					</Heading>
+					<InviteUser projectId={project.projectId} />
+				</div>
 			)}
 		</div>
 	);

@@ -3,7 +3,8 @@ export const IS_LOCAL = process.env.NODE_ENV !== 'production';
 export const API_BASE =
 	process.env.NODE_ENV === 'production'
 		? 'https://rest.gigover.com/rest/'
-		: 'http://localhost:8080/rest/';
+		: 'http://localhost:3000/rest/'; // If using proxy.
+// If hosting backend locally use :8080 instead of :3000
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';
@@ -16,6 +17,8 @@ export class ApiService {
 	static modifyProject = API_BASE + 'contractor/store'; // Create & Update
 	static addWorker = API_BASE + 'contractor/addWorker';
 	static removeWorker = API_BASE + 'contractor/removeWorker';
+	static addUser = API_BASE + 'contractor/addUser';
+	static removeUser = API_BASE + 'contractor/removeUser';
 
 	// Tasks
 	static addTask = API_BASE + 'contractor/addTask';
@@ -45,6 +48,7 @@ export class ApiService {
 	// Cloud Functions
 	static getUserIdByPhoneNumber =
 		'https://us-central1-gigover2.cloudfunctions.net/getUserIdForPhoneNumber';
+	static getUserIdByEmail = 'https://us-central1-gigover2.cloudfunctions.net/getUserIdForEmail';
 
 	// File system
 	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId;
