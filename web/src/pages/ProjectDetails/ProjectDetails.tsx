@@ -10,6 +10,7 @@ import { useUpdateTask } from '../../queries/useUpdateTask';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Button, HStack } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Project } from '../../models/Project';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -59,11 +60,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const [manageWorkers, setManageWorkers] = useState(false);
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
-	const project = data && data.project;
-
-	// const all = project?.tasks.filter((task) => task.status !== TaskStatus.Archived).length || 0;
-	// const doing = project?.tasks.filter((task) => task.status === TaskStatus.Doing).length || 0;
-	// const completed = project?.tasks.filter((task) => task.status === TaskStatus.Done).length || 0;
+	const project: Project | undefined = data && data.project;
 
 	const onDragEnd = async (result: DropResult) => {
 		const status: TaskStatusType = parseInt(
