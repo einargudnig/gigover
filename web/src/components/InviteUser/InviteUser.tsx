@@ -4,7 +4,6 @@ import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../utils/ConsoleUtils';
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
 import { Theme } from '../../Theme';
-import { useProjectUsers } from '../../queries/useProjectUsers';
 
 export interface InviteUserProps {
 	projectId: number;
