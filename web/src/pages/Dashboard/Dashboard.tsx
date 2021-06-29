@@ -9,9 +9,10 @@ import { Center } from '../../components/Center';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { ClockIcon } from '../../components/icons/ClockIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
-import { IconButton, SimpleGrid, VStack } from '@chakra-ui/react';
+import { Button, IconButton, SimpleGrid, VStack } from '@chakra-ui/react';
 import { ModalContext } from '../../context/ModalContext';
 import { Theme } from '../../Theme';
+import { UploadIcon } from '../../components/icons/UploadIcon';
 
 export const Dashboard = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -58,15 +59,12 @@ export const Dashboard = (): JSX.Element => {
 						}}
 						icon={<ClockIcon />}
 					/>
-					<IconButton
-						variant={'outline'}
-						colorScheme={'gray'}
-						aria-label={'New project'}
-						onClick={() => {
-							setModalContext({ modifyProject: { project: undefined } });
-						}}
-						icon={<PlusIcon />}
-					/>
+					<Button
+						onClick={() => setModalContext({ modifyProject: { project: undefined } })}
+						leftIcon={<PlusIcon />}
+					>
+						New project
+					</Button>
 				</>
 			}
 		>

@@ -4,12 +4,14 @@ import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../utils/ConsoleUtils';
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
 import { Theme } from '../../Theme';
+import { useProjectUsers } from '../../queries/useProjectUsers';
 
 export interface InviteUserProps {
 	projectId: number;
 }
 
 export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
+	const { data } = useProjectUsers(projectId);
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const inviteMutation = useInviteUserToProject();
@@ -46,6 +48,10 @@ export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
 		}
 	}, [inviteSuccess]);
 
+	useEffect(() => {
+		console.log(data, 'projectUsers');
+	}, [data]);
+
 	return (
 		<>
 			<FormControl
@@ -55,7 +61,7 @@ export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
 			>
 				<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
 				<Input
-					placeholder={'Enter e-mail address of a registered Gigover user'}
+					placeholder={'Enter e-mail address of a Gigover user'}
 					name={'inviteEmail'}
 					value={searchMail}
 					onChange={(e) => setSearchMail(e.target.value)}

@@ -1,11 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Heading } from '@chakra-ui/react';
+import { Spacer, Box, Flex, Button, Heading } from '@chakra-ui/react';
 import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { Project, WorkerItem } from '../../models/Project';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
 import { Modal } from '../Modal';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { InviteUser } from '../InviteUser/InviteUser';
+import { TrashIcon } from '../icons/TrashIcon';
+import { validateEmail } from '../../utils/StringUtils';
 
 const Divider = styled.div`
 	height: ${(props) => props.theme.padding(3)};
@@ -60,25 +63,33 @@ export const ManageProjectWorkers = ({
 	};
 
 	return (
-		<Modal title={'Manage workers'} open={true} onClose={onClose}>
+		<Modal title={'Add team members'} open={true} onClose={onClose}>
 			<ManageWorkersModalStyled>
-				<AddWorkerForm projectId={project.projectId} />
+				<Flex justifyContent={'stretch'} alignItems={'start'}>
+					<Box flexGrow={1}>
+						<InviteUser projectId={project.projectId} />
+					</Box>
+					<Spacer />
+					<Box flexGrow={1}>
+						<AddWorkerForm projectId={project.projectId} />
+					</Box>
+				</Flex>
 				<Divider />
 				<div>
 					<Heading as={'h3'} size={'md'}>
-						Workers {isLoading && <LoadingSpinner />}
+						Team members {isLoading && <LoadingSpinner />}
 					</Heading>
 					<ul>
 						{project.workers.map((worker, workerIndex) => (
 							<li key={workerIndex}>
-								{worker.name}
+								{worker.name} {validateEmail(worker.userName) ? '(Web user)' : '(App user)'}
 								<Button
 									size={'sm'}
 									variant={'outline'}
 									colorScheme={'red'}
 									onClick={() => remove(worker)}
 								>
-									Remove from project
+									<TrashIcon color={'red'} />
 								</Button>
 							</li>
 						))}

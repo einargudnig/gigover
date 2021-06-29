@@ -106,7 +106,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 					project && (
 						<HStack spacing={4}>
 							<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
-								Manage workers
+								Add team members
 							</Button>
 							<Button
 								colorScheme={'gray'}

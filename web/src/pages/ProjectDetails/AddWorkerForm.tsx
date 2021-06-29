@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAddWorker } from '../../queries/useAddWorker';
 import { useForm } from 'react-hook-form';
-import { Box, Input, Button } from '@chakra-ui/react';
+import { Box, Input, Button, FormLabel } from '@chakra-ui/react';
 import { useGetUserByPhoneNumber } from '../../queries/useGetUserByPhoneNumber';
 
 const AddWorkerFormStyled = styled.div`
@@ -49,6 +49,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 			)}
 			<form onSubmit={onSubmit}>
 				<Box mb={4}>
+					<FormLabel htmlFor={'phoneNumber'}>Phone number</FormLabel>
 					<Input
 						placeholder={'Enter phone number'}
 						name={'phoneNumber'}
@@ -63,7 +64,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 					loadingText={'Searching'}
 					disabled={loading || isLoading}
 				>
-					Add worker
+					Add app user
 				</Button>
 			</form>
 		</AddWorkerFormStyled>

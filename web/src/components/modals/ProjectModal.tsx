@@ -99,16 +99,13 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					)}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl isRequired isInvalid={true}>
+				<FormControl>
 					<FormLabel htmlFor="startDate">Start and end date</FormLabel>
 					<HStack>
 						<Controller
 							name="startDate"
 							control={control}
 							defaultValue={project?.startDate ? new Date(project.startDate) : null}
-							rules={{
-								required: 'You have to set a start date'
-							}}
 							render={({ onChange, value, onBlur }) => (
 								<DatePicker
 									selected={value}
@@ -127,9 +124,6 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 							name="endDate"
 							control={control}
 							defaultValue={project?.endDate ? new Date(project.endDate) : null}
-							rules={{
-								required: 'You have to set an end date'
-							}}
 							render={({ onChange, value, onBlur }) => (
 								<DatePicker
 									selected={value}
