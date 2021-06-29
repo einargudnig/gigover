@@ -48,10 +48,6 @@ export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
 		}
 	}, [inviteSuccess]);
 
-	useEffect(() => {
-		console.log(data, 'projectUsers');
-	}, [data]);
-
 	return (
 		<>
 			<FormControl

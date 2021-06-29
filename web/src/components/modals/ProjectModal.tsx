@@ -205,7 +205,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					</Button>
 				</InputWrapper>
 			)}
-			{project && project.projectId && (
+			{project && project.projectId && project.owner && (
 				<div>
 					<Divider mb={4} />
 					<Heading size={'md'} mb={4}>

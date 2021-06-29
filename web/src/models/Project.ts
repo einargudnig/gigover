@@ -34,4 +34,5 @@ export interface Project {
 	images: ProjectImage[];
 	totalBytes: number;
 	fileCount: number;
+	owner: boolean;
 }

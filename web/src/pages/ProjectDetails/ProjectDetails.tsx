@@ -105,9 +105,11 @@ export const ProjectDetails = (): JSX.Element | null => {
 				tabs={
 					project && (
 						<HStack spacing={4}>
-							<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
-								Add team members
-							</Button>
+							{project.owner && (
+								<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
+									Add team members
+								</Button>
+							)}
 							<Button
 								colorScheme={'gray'}
 								as={Link}
