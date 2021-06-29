@@ -11,7 +11,6 @@ export interface InviteUserProps {
 }
 
 export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
-	const { data } = useProjectUsers(projectId);
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const inviteMutation = useInviteUserToProject();
