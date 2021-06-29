@@ -7,6 +7,10 @@ import moment from 'moment';
 const hoursToHumanReadable = (hours: number): string => {
 	const days = Math.floor(hours / 24);
 
+	if (days === 1) {
+		return '1 day left';
+	}
+
 	return days > 0 ? `${days} days left` : `${hours} hours left`;
 };
 

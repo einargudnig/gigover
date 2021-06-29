@@ -1,13 +1,13 @@
-import { VStack, Heading, Text } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { Heading, Text, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Modal } from '../../components/Modal';
 import { FormActions } from '../../components/FormActions';
 import { DropZone } from '../../components/DropZone';
 import { useProjectList } from '../../queries/useProjectList';
 import { TrackerSelect } from '../../components/TrackerSelect';
-import { ProjectStatus } from '../../models/Project';
 import { useProjectFolders } from '../../mutations/useProjectFolders';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
 
 interface UploadModalProps {
 	onClose: () => void;
@@ -27,10 +27,7 @@ export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Eleme
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
 	const [selectedFolder, setSelectedFolder] = useState<number | undefined>(undefined);
 	const [isUploading] = useState(false);
-
-	const openProjects = useMemo(() => {
-		return data.filter((p) => p.status !== ProjectStatus.CLOSED);
-	}, [data]);
+	const openProjects = useOpenProjects(data);
 
 	useEffect(() => {
 		if (selectedProject) {

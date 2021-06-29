@@ -80,7 +80,7 @@ export const TrackerSelect = ({
 	<TrackerSelectStyled minWidth={minWidth}>
 		<select
 			disabled={disabled}
-			defaultValue={value?.toString()}
+			defaultValue={`${value ? value : ''}`}
 			onChange={(event) =>
 				valueChanged(isNumber ? parseInt(event.target.value) : event.target.value)
 			}

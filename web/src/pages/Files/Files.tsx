@@ -1,5 +1,5 @@
 import { Button, Heading, HStack, VStack } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';
 import styled from 'styled-components';
@@ -8,7 +8,7 @@ import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { Folder } from './components/Folder';
-import { Project, ProjectStatus } from '../../models/Project';
+import { Project } from '../../models/Project';
 import { SimpleGrid } from '../../components/SimpleGrid';
 import { useParams } from 'react-router-dom';
 import { UploadModal } from './UploadModal';
@@ -18,6 +18,7 @@ import { devInfo } from '../../utils/ConsoleUtils';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
 import { FolderFiles } from './components/FolderFiles';
 import { ProjectFiles } from './components/ProjectFiles';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -31,12 +32,7 @@ export const Files = (): JSX.Element => {
 	const params = useParams();
 	const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
-
-	const projects = useMemo(() => {
-		return data.filter(
-			(p) => p.status !== ProjectStatus.CLOSED && p.status !== ProjectStatus.DONE
-		);
-	}, [data]);
+	const projects = useOpenProjects(data);
 
 	useEffect(() => {
 		if (projects.length > 0 && params.projectId) {

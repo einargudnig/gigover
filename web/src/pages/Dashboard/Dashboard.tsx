@@ -12,7 +12,6 @@ import { PlusIcon } from '../../components/icons/PlusIcon';
 import { Button, IconButton, SimpleGrid, VStack } from '@chakra-ui/react';
 import { ModalContext } from '../../context/ModalContext';
 import { Theme } from '../../Theme';
-import { UploadIcon } from '../../components/icons/UploadIcon';
 
 export const Dashboard = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
