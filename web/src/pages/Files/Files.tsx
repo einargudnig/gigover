@@ -33,7 +33,9 @@ export const Files = (): JSX.Element => {
 	const [upload, setUpload] = useState(false);
 
 	const projects = useMemo(() => {
-		return data.filter((p) => p.status !== ProjectStatus.CLOSED);
+		return data.filter(
+			(p) => p.status !== ProjectStatus.CLOSED && p.status !== ProjectStatus.DONE
+		);
 	}, [data]);
 
 	useEffect(() => {
@@ -48,29 +50,6 @@ export const Files = (): JSX.Element => {
 
 		setProject(null);
 	}, [projects, params.projectId]);
-
-	// const sortedRecentFiles = recentFiles.sort((a, b) => {
-	// 	return a.created && b.created
-	// 		? a.created < b.created
-	// 			? 1
-	// 			: a.created === b.created
-	// 			? 0
-	// 			: -1
-	// 		: -1;
-	// });
-
-	// useEffect(() => {
-	// 	if (params.projectId && params.fileId) {
-	// 		const s: ProjectImage | undefined = testData.find(
-	// 			(c) => c.imageId === parseInt(params.fileId)
-	// 		);
-	// 		if (s) {
-	// 			setSelectedFile(s);
-	// 		}
-	// 	} else {
-	// 		setSelectedFile(null);
-	// 	}
-	// }, [params]);
 
 	return (
 		<>

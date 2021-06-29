@@ -160,7 +160,7 @@ export class FileSystemService {
 					const image: DocumentInput = {
 						projectId,
 						folderId,
-						name: fileName,
+						name: originalFileName,
 						type: fileType,
 						url: downloadURL,
 						bytes: file.size

@@ -82,7 +82,8 @@ export const ManageProjectWorkers = ({
 					<ul>
 						{project.workers.map((worker, workerIndex) => (
 							<li key={workerIndex}>
-								{worker.name} {validateEmail(worker.userName) ? '(Web user)' : '(App user)'}
+								{worker.name}{' '}
+								{validateEmail(worker.userName) ? '(Web user)' : '(App user)'}
 								<Button
 									size={'sm'}
 									variant={'outline'}
