@@ -19,7 +19,11 @@ const SingleBlog = ({ blog }: BlogProps): JSX.Element => {
 
 	return (
 		<>
-			<HeadTitle title={blog.title} description={blog.content.text.substr(0, 150)} />
+			<HeadTitle
+				title={blog.title}
+				description={blog.content.text.substr(0, 150)}
+				imageUrl={blog.image.url}
+			/>
 			<PageBlockWithBackground imageUrl={blog.image.url}>
 				<h4 style={{ marginTop: 60, marginBottom: -24 }}>By the Gigover Team</h4>
 				<h1 style={{ maxWidth: '70%' }}>{blog.title}</h1>

@@ -19,7 +19,7 @@ const PageContainerStyled = styled(ColorContainer)`
 
 const PageBlockImage = styled.div<{ imageUrl: string }>`
 	position: absolute;
-	width: 80%;
+	width: 100%;
 	right: 0;
 	top: 0;
   	z-index: 1;
@@ -30,7 +30,7 @@ const PageBlockImage = styled.div<{ imageUrl: string }>`
 		top: 0;
 		right: 0;
 		height: 100%;
-		width: 50%;
+		width: 40%;
 		z-index: 1;
 		opacity: 0.5;
 		background-image: url(${(props) => props.imageUrl});
@@ -41,8 +41,8 @@ const PageBlockImage = styled.div<{ imageUrl: string }>`
 
 	&:before {
 		background: rgb(250, 228, 77);
-		background: linear-gradient(90deg, rgba(250, 228, 77, 0) 0%, rgba(250, 228, 77, 1) 100%);
-		width: 80%;
+		background: linear-gradient(90deg, rgba(250, 228, 77, 1) 0%, rgba(250, 228, 77, 0) 100%);
+		width: 40%;
 	  	opacity: 0.7;
 		z-index: 2;
 		position: absolute;
