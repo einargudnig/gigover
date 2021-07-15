@@ -8,14 +8,24 @@
       "**/node_modules/**"
     ],
     "rewrites": [
-       {
-          "source": "**",
-	  "function": "nextServer"
-       }
+      {
+        "source": "**",
+        "function": "nextServer"
+      }
     ]
   },
   "functions": {
     "source": ".",
-    "runtime": "nodejs10"
+    "runtime": "nodejs10",
+    "ignore": [
+      ".firebase/**",
+      ".firebaserc",
+      "firebase.json",
+      "**/src/**",
+      "**/.idea/**",
+      "**/node_modules/**",
+      "**/public/**",
+      "**/.next/cache/**"
+    ]
   }
 }

@@ -40,11 +40,14 @@ class GigoverDocument extends Document<{ pageUrl: string }> {
 					<link rel="icon" type="image/png" href="/favicon.png" />
 					<meta property="og:type" content="website" />
 					<meta property="og:url" content={`https://gigover.com${pageUrl}`} />
+					<script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js" />
+					<script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js" />
 				</Head>
 				<body>
 					<Main />
 					<div id={'go-portal'} />
 					<NextScript />
+					<script src="/FirebaseInit.js" />
 				</body>
 			</Html>
 		);
