@@ -11,6 +11,10 @@ export async function getServerSideProps(context) {
 		}
 	});
 
+	if (context.params.slug.toLowerCase() === 'blog') {
+
+	}
+
 	return {
 		props: {
 			page: response.page

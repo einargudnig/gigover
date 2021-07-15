@@ -24,7 +24,7 @@ export const StyledNavigation = styled(Div)`
 			color: inherit;
 			text-decoration: none;
 			background-size: 0 0;
-			margin-left: ${(props) => props.theme.padding(5)};
+			margin-left: ${(props) => props.theme.padding(3.5)};
 			transition: all 0.2s linear;
 			padding: 6px;
 

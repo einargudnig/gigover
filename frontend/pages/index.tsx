@@ -22,7 +22,12 @@ interface PageProps {
 const Index = ({ page }: PageProps): JSX.Element => {
 	return (
 		<>
-			<HeadTitle title={page.name} />
+			<HeadTitle
+				title={page.name}
+				description={
+					'Gigover allows you to create projects, assign tasks seamlessly, keep track of what needs to be done versus what’s completed.'
+				}
+			/>
 			{page.pageBlocks.map((pageBlock) => {
 				// Validation methods
 				if (
@@ -38,7 +43,13 @@ const Index = ({ page }: PageProps): JSX.Element => {
 						{(() => {
 							switch (pageBlock.blockType) {
 								case PageBlockType.Hero:
-									return <Hero pageId={page.pageId} pageBlock={pageBlock} centerText={page.pageId === PageId.Pricing} />;
+									return (
+										<Hero
+											pageId={page.pageId}
+											pageBlock={pageBlock}
+											centerText={page.pageId === PageId.Pricing}
+										/>
+									);
 								case PageBlockType.Video:
 									return <Video pageId={page.pageId} pageBlock={pageBlock} />;
 								case PageBlockType.Features:
@@ -66,6 +77,7 @@ const Index = ({ page }: PageProps): JSX.Element => {
 					</PageBlock>
 				);
 			})}
+			{page.pageId === PageId.Blog && <p>blog page</p>}
 			{page.pageId === PageId.Pricing && page.pricePlans.length > 0 && (
 				<PricePlans pricePlans={page.pricePlans} />
 			)}

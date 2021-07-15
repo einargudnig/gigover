@@ -39,11 +39,7 @@ class GigoverDocument extends Document<{ pageUrl: string }> {
 				<Head>
 					<link rel="icon" type="image/png" href="/favicon.png" />
 					<meta property="og:type" content="website" />
-					<meta
-						property="og:description"
-						content=" Gigover allows you to create projects, assign tasks seamlessly, keep track of what needs to be done versus what’s completed."
-					/>
-					<meta property="og:url" content={pageUrl} />
+					<meta property="og:url" content={`https://gigover.com${pageUrl}`} />
 				</Head>
 				<body>
 					<Main />

@@ -5,7 +5,8 @@ export enum PageId {
 	MobileApp = 'MobileApp',
 	Features = 'Features',
 	Learn = 'Learn',
-	About = 'About'
+	About = 'About',
+	Blog = 'Blog',
 }
 
 export type PricePlanField = {

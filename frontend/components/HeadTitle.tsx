@@ -9,16 +9,18 @@ export const PageTitle = (title: string, withPrefix = true) => {
 
 export interface HeadTitleProps {
 	title: string;
+	description?: string;
 	withPrefix?: boolean;
 }
 
-export const HeadTitle = ({ title, withPrefix = true }: HeadTitleProps): JSX.Element => {
+export const HeadTitle = ({ title, description, withPrefix = true }: HeadTitleProps): JSX.Element => {
 	const Title = PageTitle(title, withPrefix);
 
 	return (
 		<Head>
 			<title>{Title}</title>
 			<meta property="og:title" content={Title} />
+			{description && <meta property="og:description" content={description} />}
 		</Head>
 	);
 };
