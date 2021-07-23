@@ -4,7 +4,7 @@ import { GraphQLEndpoint } from '../pages/_app';
 
 export const BlogPosts = gql`
 	query Blogs {
-		blogs(orderBy: publishedAt_ASC) {
+		blogs(orderBy: publishedAt_DESC) {
 			id
 			createdAt
 			publishedAt

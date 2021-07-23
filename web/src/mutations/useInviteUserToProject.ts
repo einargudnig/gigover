@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../services/ApiService';
 import axios, { AxiosError } from 'axios';
 import { devError } from '../utils/ConsoleUtils';
@@ -10,6 +10,7 @@ interface InviteUserInput {
 }
 
 export const useInviteUserToProject = () => {
+	const queryClient = useQueryClient();
 	const mutationKey = ApiService.addUser;
 
 	return useMutation<ErrorResponse, AxiosError, InviteUserInput>(
@@ -23,6 +24,8 @@ export const useInviteUserToProject = () => {
 				if (response.data.errorCode !== 'OK') {
 					throw new Error(response.data?.errorCode);
 				}
+
+				queryClient.refetchQueries(ApiService.projectDetails(variables.projectId));
 
 				return response.data;
 			} catch (e) {
