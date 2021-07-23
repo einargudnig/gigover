@@ -9,6 +9,7 @@ import { LoadingSpinner } from '../LoadingSpinner';
 import { InviteUser } from '../InviteUser/InviteUser';
 import { TrashIcon } from '../icons/TrashIcon';
 import { validateEmail } from '../../utils/StringUtils';
+import { useRemoveUser } from '../../queries/useRemoveUser';
 
 const Divider = styled.div`
 	height: ${(props) => props.theme.padding(3)};
@@ -54,12 +55,22 @@ export const ManageProjectWorkers = ({
 	project
 }: ManageProjectWorkersProps): JSX.Element => {
 	const { mutate: removeWorker, isLoading } = useRemoveWorker();
+	const { mutate: removeUser, isLoading: isLoadingTwo } = useRemoveUser();
 
 	const remove = async (worker: WorkerItem) => {
-		await removeWorker({
-			projectId: project.projectId,
-			uId: worker.uId
-		});
+		if (validateEmail(worker.userName)) {
+			// Web User
+			await removeUser({
+				projectId: project.projectId,
+				uId: worker.uId
+			});
+		} else {
+			// App user
+			await removeWorker({
+				projectId: project.projectId,
+				uId: worker.uId
+			});
+		}
 	};
 
 	return (
@@ -77,7 +88,7 @@ export const ManageProjectWorkers = ({
 				<Divider />
 				<div>
 					<Heading as={'h3'} size={'md'}>
-						Team members {isLoading && <LoadingSpinner />}
+						Team members {(isLoading || isLoadingTwo) && <LoadingSpinner />}
 					</Heading>
 					<ul>
 						{project.workers.map((worker, workerIndex) => (
