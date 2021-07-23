@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Timesheet, useTrackerReport } from '../../queries/useTrackerReport';
 import { Moment } from 'moment';
 import { secondsToHHMMSS } from '../../utils/NumberUtils';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
 
 type TimeTrackerReportResultItem = {
 	projectName: string;
@@ -33,6 +34,8 @@ export const useTimeTrackerReport = (
 	const [totalTracked, setTotalTracked] = useState<string>(secondsToHHMMSS(0));
 	const { mutate: getReport, data, isLoading: isGetReportLoading } = useTrackerReport();
 	const { data: projects, isLoading: projectDataListLoading } = useProjectList();
+
+	const openProjects = useOpenProjects(projects);
 
 	const projectMap: Map<number, Project> = useMemo(() => {
 		const pMap = new Map<number, Project>();
@@ -117,7 +120,7 @@ export const useTimeTrackerReport = (
 
 	return {
 		projectMap,
-		projectList: projects,
+		projectList: openProjects,
 		users,
 		results,
 		totalTracked,
