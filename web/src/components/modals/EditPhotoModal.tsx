@@ -75,7 +75,7 @@ export const EditPhotoModal = ({onClose, file}: FileSidebarProps): JSX.Element =
     const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
         devInfo('onChangeFileName', event.target! as Element);
     };
-    const [, setModalContext] = useContext(ModalContext);
+    const [context, setModalContext] = useContext(ModalContext);
 
     const {data, refetch: refetchImageDots} = useImageDots(file.imageId);
 

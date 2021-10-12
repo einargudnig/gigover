@@ -1,16 +1,72 @@
-import {Avatar, Box, Button, Flex, Heading, Text} from '@chakra-ui/react';
-import {Input} from '../../../components/forms/Input';
-import React from 'react';
-import {Project} from '../../../models/Project';
-import {ProjectFolder} from '../../../models/ProjectFolder';
-import {ShareItemContext} from "../../../context/ModalContext";
+import { Controller, useForm } from 'react-hook-form';
 
+import {
+	Avatar,
+	Box,
+	Button,
+	Flex,
+	Heading,
+	InputRightElement,
+	Text,
+	InputGroup,
+	Input,
+	FormControl,
+	FormHelperText,
+	FormErrorMessage
+} from '@chakra-ui/react';
+import React from 'react';
+import { Project } from '../../../models/Project';
+import { ProjectFolder } from '../../../models/ProjectFolder';
+import { ShareItemContext } from '../../../context/ModalContext';
+
+type FormData = {
+	email: string;
+};
 const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors }
+	} = useForm<FormData>();
+
+	const onSubmit = handleSubmit(
+		async (data) => {
+			alert('submiting form');
+		},
+		() => console.log('invalid')
+	);
+	console.log(errors, 'rerrrrrr');
 	return (
 		<div>
-			<Flex direction={'column'}>
+			<Flex mb={4} direction={'column'}>
 				<Heading mb={4}>Share with other users</Heading>
-				<Input placeholder={'Add people'} />
+				<form onSubmit={onSubmit}>
+					<FormControl isInvalid={!!errors.email}>
+						<InputGroup size="md">
+							<Input
+								name={'email'}
+								pr="4.5rem"
+								placeholder="Add people via email"
+								ref={register({
+									required: "Required",
+									pattern: {
+										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+										message: "invalid email address"
+									}
+								})}
+							/>
+							<InputRightElement width="4.5rem">
+								<Button type="submit" h="1.75rem" size="sm">
+									{'Add'}
+								</Button>
+							</InputRightElement>
+						</InputGroup>
+						<FormErrorMessage>{errors.email && errors.email.message}</FormErrorMessage>
+						<FormHelperText>Add email of user you want to add</FormHelperText>
+					</FormControl>
+				</form>
+
 				{shareItem.project?.workers.map((s) => {
 					return (
 						<Flex my={4} justifyContent={'space-between'} alignItems={'center'}>
@@ -27,10 +83,6 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 						</Flex>
 					);
 				})}
-
-				<Flex justifyContent={'end'}>
-					<Button>Done</Button>
-				</Flex>
 			</Flex>
 			<Heading mb={4}>Get Link</Heading>
 
