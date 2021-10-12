@@ -37,6 +37,17 @@ export const AppPreloader = (): JSX.Element => {
 		}
 	}, [authUser, verify]);
 
+	useEffect(() => {
+		const userProperties = {name: data?.data.name, // Full name
+			email: data?.data?.userName, // Email address
+			user_id: authUser?.uid };
+		// @ts-ignore
+		window.Intercom('boot', {
+			app_id: "r645hk6a",
+			...userProperties
+		});
+	},[data])
+
 	if (loading || isLoadingFirebase) {
 		return <FullscreenLoader />;
 	}
@@ -69,6 +80,7 @@ const App = ({
 		}
 		return null;
 	}, [authUser, userProfile]);
+
 
 	return (
 		<Router>

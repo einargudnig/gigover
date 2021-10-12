@@ -9,4 +9,5 @@ export interface IUserProfile {
 	avatar: string;
 	name: string;
 	phoneNumber: string;
+	userName?: string;
 }
