@@ -32,8 +32,8 @@ import {devInfo} from '../../utils/ConsoleUtils';
 import {ConfirmDialog} from '../ConfirmDialog';
 import {useNavigate} from 'react-router-dom';
 import {useDeleteDocument} from '../../mutations/useDeleteDocument';
-import {UploadIcon} from '../icons/UploadIcon';
 import {ModalContext} from "../../context/ModalContext";
+import {ShareIcon} from "../icons/ShareIcon";
 
 interface FileSidebarProps {
     onClose: () => void;
@@ -285,7 +285,7 @@ export const EditPhotoModal = ({onClose, file}: FileSidebarProps): JSX.Element =
                         <IconButton
                             aria-label={'Delete'}
                             colorScheme={'black'}
-                            icon={<DownloadIcon color={'white'}/>}
+                            icon={<ShareIcon color={'white'}/>}
                             onClick={() => {
                                 setModalContext({shareItem: {file: file}})
                             }}
@@ -321,7 +321,7 @@ export const EditPhotoModal = ({onClose, file}: FileSidebarProps): JSX.Element =
                         >
                             <IconButton
                                 aria-label={'Delete'}
-                                colorScheme={'black'}
+                                colorScheme={'red'}
                                 icon={<TrashIcon color={'white'}/>}
                                 onClick={() => {
                                     setDialogOpen(true);
