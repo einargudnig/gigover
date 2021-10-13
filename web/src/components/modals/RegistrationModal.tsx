@@ -66,7 +66,7 @@ export const RegistrationModal = (): JSX.Element => {
 			});
 		} catch (e) {
 			devError('Error', e);
-			setRegistrationError(e);
+			setRegistrationError(e as string);
 		}
 	});
 

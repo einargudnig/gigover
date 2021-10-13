@@ -92,7 +92,7 @@ export const DropZone = ({
 			{children({ isDragActive, isUploading })}
 		</div>
 	) : (
-		<DropZoneContainer isDraggingOver={isDragActive} {...getRootProps()}>
+		<DropZoneContainer {...getRootProps()} isDraggingOver={isDragActive}>
 			<input {...getInputProps()} />
 			<FilterIcon size={64} color={'#838894'} />
 			{isUploading ? (

@@ -24,7 +24,9 @@ export const FolderFiles = ({ project, folderId }: FolderFilesProps): JSX.Elemen
 
 	useEffect(() => {
 		if (data && data.length > 0 && params.fileId) {
-			const file = data.find((d) => d.imageId === parseInt(params.fileId));
+			const file = data.find(
+				(d: ProjectImage) => d.imageId === parseInt(params.fileId || '-1')
+			);
 
 			if (file) {
 				setSelectedFile(file);
@@ -63,8 +65,10 @@ export const FolderFiles = ({ project, folderId }: FolderFilesProps): JSX.Elemen
 				) : data.length > 0 ? (
 					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4}>
 						{data
-							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
-							.map((p, pIndex) => (
+							.sort((a: ProjectImage, b: ProjectImage) =>
+								b.created && a.created ? b.created - a.created : -1
+							)
+							.map((p: ProjectImage, pIndex: number) => (
 								<GigoverFile key={pIndex} file={p} />
 							))}
 					</VStack>
