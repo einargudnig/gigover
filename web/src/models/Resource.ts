@@ -1,12 +1,20 @@
 export interface Resource {
-	name: string;
+	category: string;
+	cost: number;
 	description: string;
-	type: number;
+	id: number;
 	make: string;
 	model: string;
-	year: number;
+	name: string;
+	projectId: number;
 	serialNr: string;
-	cost: number;
+	startLat: number;
+	startLng: number;
+	stopLat: number;
+	stopLng: number;
+	type: number;
+	typeName: string;
+	year: number;
 }
 
 export interface ResourceCategory {

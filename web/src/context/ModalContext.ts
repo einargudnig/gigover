@@ -3,6 +3,9 @@ import { Project, WorkerItem } from '../models/Project';
 import { Task } from '../models/Task';
 import { Milestone } from '../models/Milestone';
 import { Resource } from '../models/Resource';
+import { ProjectFolder } from '../models/ProjectFolder';
+import { ProjectFile } from '../models/ProjectFile';
+import { ProjectImage } from '../models/ProjectImage';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -36,6 +39,12 @@ export interface IResourceModalContext {
 	resource?: Resource;
 }
 
+export interface ShareItemContext {
+	project?: Project;
+	folder?: ProjectFolder;
+	file?: ProjectImage;
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
@@ -43,6 +52,7 @@ export interface IModalContext {
 	timeTracker?: ITimeTrackerModalContext;
 	editTimeTracker?: IEditTimeTrackerModalContext;
 	milestone?: MilestoneModalContext;
+	shareItem?: ShareItemContext;
 	registered?: boolean;
 	taskDetails?: {
 		task: Task;

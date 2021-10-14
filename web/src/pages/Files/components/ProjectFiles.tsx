@@ -19,7 +19,7 @@ export const ProjectFiles = ({ project }: ProjectFilesProps): JSX.Element => {
 
 	useEffect(() => {
 		if (project.images.length > 0 && params.fileId) {
-			const file = project.images.find((d) => d.imageId === parseInt(params.fileId));
+			const file = project.images.find((d) => d.imageId === parseInt(params.fileId || '-1'));
 
 			if (file) {
 				setSelectedFile(file);

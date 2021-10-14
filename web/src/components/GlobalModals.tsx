@@ -8,6 +8,7 @@ import { TaskModal } from './modals/TaskModal/TaskModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
 import { ResourceModal } from './modals/ResourceModal';
+import ShareItem from '../pages/Files/components/ShareItem';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -42,6 +43,11 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 				</Modal>
 			)}
 			{modalContext.resources && <ResourceModal />}
+			{modalContext.shareItem && (
+				<Modal open={true} title={'Share options'} onClose={() => setModalContext({})}>
+					<ShareItem shareItem={modalContext.shareItem} />
+				</Modal>
+			)}
 		</>
 	);
 };

@@ -16,6 +16,7 @@ export type WorkerItem = {
 	name: string;
 	uId: string;
 	userName: string;
+	type?: number;
 };
 
 export interface Project {
