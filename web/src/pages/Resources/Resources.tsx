@@ -10,6 +10,8 @@ import styled from 'styled-components';
 import ResourceStatusLabel from './components/ResourceStatusLabel';
 import moment from 'moment';
 import GigoverMaps from './components/GigoverMaps';
+import { useResources } from '../../queries/useResources';
+import { Resource } from '../../models/Resource';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -19,7 +21,9 @@ const ResourceData = styled(CardBase)<{ color?: string }>`
 `;
 
 export const Resources = (): JSX.Element => {
-	const columns: Array<Column<any>> = useMemo(
+	const { data, isError, isLoading } = useResources();
+
+	const columns: Array<Column<Resource>> = useMemo(
 		() => [
 			{
 				Header: 'Resource',
@@ -46,17 +50,17 @@ export const Resources = (): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
-			{
+			/*			{
 				Header: 'Status',
 				accessor: 'status',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
 					return <ResourceStatusLabel status={value} />;
 				}
-			},
+			},*/
 			{
 				Header: 'Last update',
-				accessor: 'lastUpdate',
+				accessor: 'year',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
 					return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
@@ -83,29 +87,6 @@ export const Resources = (): JSX.Element => {
 		[]
 	);
 
-	const data = [
-		{
-			name: 'Truck',
-			id: 'JON29',
-			type: 'Car',
-			status: 0,
-			lastUpdate: new Date()
-		},
-		{
-			name: 'Other',
-			id: 'JON29',
-			type: 'Bus',
-			status: 1,
-			lastUpdate: new Date()
-		},
-		{
-			name: 'Truck',
-			id: 'JON29',
-			type: 'Join',
-			status: 0,
-			lastUpdate: new Date()
-		}
-	];
 	return (
 		<Page
 			title={'Resources'}
@@ -119,17 +100,19 @@ export const Resources = (): JSX.Element => {
 			}
 		>
 			<Flex mb={4}>
-				<ResourceData>Total resources: 9</ResourceData>
-				<ResourceData color={'#1FDF83'}>Available: 5</ResourceData>
-				<ResourceData color={'#EA4335'}>In use: 3</ResourceData>
+				<ResourceData>Total resources: {data?.length}</ResourceData>
+				<ResourceData color={'#1FDF83'}>Available: {data?.length}</ResourceData>
+				<ResourceData color={'#EA4335'}>In use: {data?.length}</ResourceData>
 			</Flex>
 
 			<CardBase>
-				<Table variant={'striped'} columns={columns} data={data} />
+				<Table loading={isLoading} variant={'striped'} columns={columns} data={data} />
 			</CardBase>
 
 			<CardBase mt={4}>
-				<Heading as={'h4'} fontSize={'16px'}>Where are your resources?</Heading>
+				<Heading as={'h4'} fontSize={'16px'}>
+					Where are your resources?
+				</Heading>
 			</CardBase>
 			<CardBase mt={4}>
 				<GigoverMaps

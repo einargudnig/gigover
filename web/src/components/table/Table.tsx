@@ -2,10 +2,12 @@ import React from 'react';
 import { Table as ChakraTable, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useExpanded, useTable } from 'react-table';
 import styled from 'styled-components';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 interface TableProps {
 	columns: any;
 	data: any;
+	loading: boolean;
 	getRowProps?: any;
 	getHeaderProps?: any;
 	getColumnProps?: any;
@@ -39,6 +41,7 @@ const StyledTd = styled.td`
 export const Table = ({
 	columns,
 	data,
+	loading = false,
 	variant = 'simple',
 	colorScheme = 'gray',
 	getHeaderProps = defaultPropGetter,
@@ -53,6 +56,10 @@ export const Table = ({
 		},
 		useExpanded
 	);
+
+	if (loading) {
+		return <LoadingSpinner />;
+	}
 
 	// Render the UI for your table
 	return (
