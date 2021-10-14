@@ -81,4 +81,5 @@ export class ApiService {
 	static updateDotStatus = API_BASE + 'contractor/updateDotStatus';
 	static removeDotComment = API_BASE + 'contractor/removeDotComment';
 	static editDotComment = API_BASE + 'contractor/editDotComment';
+
 }
