@@ -1,4 +1,3 @@
-import { Project } from '../models/Project';
 import { useQuery } from 'react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';

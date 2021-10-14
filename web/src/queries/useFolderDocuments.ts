@@ -9,7 +9,7 @@ interface FolderFilesResponse {
 
 export const useFolderDocuments = (folderId: number) => {
 	const { data, isLoading, isError, error } = useQuery<FolderFilesResponse, AxiosError>(
-		ApiService.folderFiles(folderId),
+		ApiService.folderFiles(folderId)
 	);
 
 	return {

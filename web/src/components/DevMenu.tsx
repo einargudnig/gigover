@@ -22,7 +22,7 @@ export const DevMenu = (): JSX.Element | null => {
 		if (uid.length > 0) {
 			mutate(uid);
 		}
-	}, [uid]);
+	}, [uid, mutate]);
 
 	if (!IS_LOCAL) {
 		return null;

@@ -82,6 +82,4 @@ export class ApiService {
 	static removeDotComment = API_BASE + 'contractor/removeDotComment';
 	static editDotComment = API_BASE + 'contractor/editDotComment';
 
-	// Resources
-	static resources = API_BASE + 'contractor/resources';
 }

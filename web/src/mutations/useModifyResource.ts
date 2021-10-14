@@ -8,9 +8,7 @@ interface ModifyResourceResponse {
 	errorText: 'OK';
 }
 
-interface ResourceVariables extends Resource {
-	id?: number;
-}
+interface ResourceVariables extends Resource {}
 
 export const useModifyResource = () => {
 	const queryClient = useQueryClient();
