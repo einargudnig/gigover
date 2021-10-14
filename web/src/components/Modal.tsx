@@ -26,11 +26,13 @@ export interface IModalContainerProps extends IWithFlexContainer {
 	onClose?: () => void;
 	closeIcon?: boolean;
 	centerModal?: boolean;
+	maxWidth?: number;
 }
 
 export interface IWithFlexContainer {
 	/* If you want to flex the container it will fill the remaining space (used in mobile) */
 	flexContainer?: boolean;
+	maxWidth?: number;
 }
 
 export const Modal: FC<IModalContainerProps> = ({
@@ -40,7 +42,8 @@ export const Modal: FC<IModalContainerProps> = ({
 	onClose,
 	children,
 	centerModal = false,
-	closeIcon = true
+	closeIcon = true,
+	maxWidth
 }: IModalContainerProps) => {
 	const closeModal = useCallback(() => {
 		if (onClose) {
@@ -67,7 +70,7 @@ export const Modal: FC<IModalContainerProps> = ({
 			<ModalOverlay>
 				<Wrapper flexContainer={flexContainer}>
 					<ModalHeader flexContainer={flexContainer}>
-						<ModalTitleContainer>
+						<ModalTitleContainer maxWidth={maxWidth}>
 							<span>{title}</span>
 						</ModalTitleContainer>
 						{onClose && closeIcon && (
@@ -83,7 +86,7 @@ export const Modal: FC<IModalContainerProps> = ({
 							</ModalCloseCross>
 						)}
 					</ModalHeader>
-					<ModalContentContainer flexContainer={flexContainer}>
+					<ModalContentContainer flexContainer={flexContainer} maxWidth={maxWidth}>
 						{children}
 					</ModalContentContainer>
 				</Wrapper>

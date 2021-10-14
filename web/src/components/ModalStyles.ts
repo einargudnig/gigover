@@ -43,8 +43,14 @@ export const ModalHeader = styled.div<IWithFlexContainer>`
 	`}
 `;
 
-export const ModalTitleContainer = styled.div`
+export const ModalTitleContainer = styled.div<{ maxWidth?: number }>`
 	max-width: calc(100% - 32px);
+
+	${(props) =>
+		props.maxWidth &&
+		css`
+			max-width: ${props.maxWidth}px;
+		`};
 
 	span {
 		max-width: 100%;
@@ -221,6 +227,12 @@ export const ModalContentContainer = styled.div<IWithFlexContainer>`
 			flex-direction: column;
 			flex-grow: 1;
 			justify-content: space-between;
+		`};
+
+	${(props) =>
+		props.maxWidth &&
+		css`
+			max-width: ${props.maxWidth}px;
 		`};
 
 	@media screen and (max-width: 800px) {

@@ -55,7 +55,12 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const projectTask = data?.projectTask;
 
 	return (
-		<Modal open={true} title={editing ? `Edit ${taskTitle}` : task.text} onClose={closeModal}>
+		<Modal
+			open={true}
+			title={editing ? `Edit ${taskTitle}` : task.text}
+			onClose={closeModal}
+			maxWidth={600}
+		>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
