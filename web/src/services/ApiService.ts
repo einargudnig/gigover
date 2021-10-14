@@ -41,7 +41,7 @@ export class ApiService {
 	// Resources
 	static resourceTypes = 'support/resourceTypes';
 	static resourceCategories = 'support/resourceCategories';
-	static resources = 'contractor/resources';
+	static resources = API_BASE + 'contractor/resources';
 	static addResource = 'contractor/resourceAdd';
 	static editResource = 'contractor/resourceEdit';
 	static holdResource = 'contractor/resourceHold';
