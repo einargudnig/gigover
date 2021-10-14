@@ -28,6 +28,8 @@ import { Theme } from '../Theme';
 import { FolderIcon } from './icons/FolderIcon';
 import { useLogout } from '../mutations/useLogout';
 import { DevMenu } from './DevMenu';
+import { GigoverLogo } from './GigoverLogo';
+import { ToolsIcon } from './icons/ToolsIcon';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -53,12 +55,12 @@ const PageStyled = styled.div`
 
 const Sidebar = styled.div`
 	background: #000;
-	flex: 0 1 80px;
-	padding: 24px 0;
+	flex: 0 1 240px;
+	padding: ${(props) => props.theme.padding(2)};
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	align-items: center;
+	align-items: flex-start;
 
 	small {
 		color: #333;
@@ -152,14 +154,14 @@ const SidebarNav = styled.nav`
 
 const IconLink = styled(NavLink)`
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	margin: 8px;
+	font-weight: bold;
+	color: #8d8d8d;
 
-	> div {
-		margin: 4px;
-		height: 60px;
-		width: 60px;
+	> div:first-child {
+		margin: 4px 12px 4px 4px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -175,12 +177,12 @@ const IconLink = styled(NavLink)`
 	}
 
 	&.active {
-		> div {
-			background: ${(props) => props.theme.colors.yellow};
+		color: ${(props) => props.theme.colors.yellow};
 
+		> div {
 			svg {
 				path {
-					fill: #000;
+					fill: ${(props) => props.theme.colors.yellow};
 				}
 			}
 		}
@@ -208,13 +210,14 @@ export const Page = ({
 		<PageStyled>
 			<Sidebar>
 				<Link to={'/'}>
-					<GoIcon size={40} />
+					<GigoverLogo scale={0.7} />
 				</Link>
 				<SidebarNav>
 					<IconLink to={'/'} end={true}>
 						<div>
 							<ProjectIcon />
 						</div>
+						<span>Tasks</span>
 					</IconLink>
 					{/*<IconLink to={'/organize'}>*/}
 					{/*	<div>*/}
@@ -225,21 +228,31 @@ export const Page = ({
 						<div>
 							<RoadmapIcon />
 						</div>
+						<span>Gantt chart</span>
 					</IconLink>
 					<IconLink to={'/files'}>
 						<div>
 							<FolderIcon color={Theme.colors.white} type={'bold'} />
 						</div>
+						<span>File storage</span>
+					</IconLink>
+					<IconLink to={'/settings'}>
+						<div>
+							<ToolsIcon color={Theme.colors.white} type={'bold'} />
+						</div>
+						<span>Resources</span>
 					</IconLink>
 					<IconLink to={'/time-tracker'}>
 						<div>
 							<TimeIcon />
 						</div>
+						<span>Time reports</span>
 					</IconLink>
 					<IconLink to={'/settings'}>
 						<div>
 							<SettingsIcon />
 						</div>
+						<span>Settings</span>
 					</IconLink>
 				</SidebarNav>
 				<small>v1.2</small>
