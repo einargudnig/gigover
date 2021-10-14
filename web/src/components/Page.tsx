@@ -236,7 +236,7 @@ export const Page = ({
 						</div>
 						<span>File storage</span>
 					</IconLink>
-					<IconLink to={'/settings'}>
+					<IconLink to={'/resources'}>
 						<div>
 							<ToolsIcon color={Theme.colors.white} type={'bold'} />
 						</div>
