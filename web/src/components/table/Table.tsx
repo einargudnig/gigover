@@ -10,16 +10,19 @@ interface TableProps {
 	getHeaderProps?: any;
 	getColumnProps?: any;
 	getCellProps?: any;
+	variant?: string;
+	colorScheme?: string;
 }
 
 const defaultPropGetter = () => ({});
 
 const StyledTh = styled.th`
+	border-bottom: 1px solid #e5e5e5 !important;
+	color: black !important;
 	&:first-child {
 		position: sticky;
 		left: 0;
 		background: #fbfbfb;
-		border-right: 1px inset #e5e5e5;
 		z-index: 2;
 	}
 `;
@@ -29,7 +32,6 @@ const StyledTd = styled.td`
 		position: sticky;
 		left: 0;
 		background: #fbfbfb;
-		border-right: 1px inset #e5e5e5;
 		z-index: 2;
 	}
 `;
@@ -37,6 +39,8 @@ const StyledTd = styled.td`
 export const Table = ({
 	columns,
 	data,
+	variant = 'simple',
+	colorScheme = 'gray',
 	getHeaderProps = defaultPropGetter,
 	getColumnProps = defaultPropGetter,
 	getRowProps = defaultPropGetter,
@@ -53,7 +57,7 @@ export const Table = ({
 	// Render the UI for your table
 	return (
 		<div style={{ maxWidth: '100%', overflowX: 'auto' }}>
-			<ChakraTable variant={'simple'} {...getTableProps()}>
+			<ChakraTable variant={variant} colorScheme={colorScheme} {...getTableProps()}>
 				<Thead>
 					{headerGroups.map((headerGroup, rowIndex) => (
 						<Tr {...headerGroup.getHeaderGroupProps()} key={rowIndex}>
