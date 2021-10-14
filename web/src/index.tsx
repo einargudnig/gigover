@@ -20,7 +20,7 @@ const firebaseApp = new Firebase();
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			queryFn: axiosQueryFetcher,
+			queryFn: axiosQueryFetcher as any,
 			refetchOnWindowFocus: false
 		}
 	}

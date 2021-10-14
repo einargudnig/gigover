@@ -2,6 +2,9 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Project, WorkerItem } from '../models/Project';
 import { Task } from '../models/Task';
 import { Milestone } from '../models/Milestone';
+import { ProjectFolder } from '../models/ProjectFolder';
+import { ProjectFile } from '../models/ProjectFile';
+import { ProjectImage } from '../models/ProjectImage';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -31,6 +34,12 @@ export interface IEditPhotoContext {
 	projectId: number;
 }
 
+export interface ShareItemContext {
+	project?: Project;
+	folder?: ProjectFolder;
+	file?: ProjectImage;
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
@@ -38,6 +47,7 @@ export interface IModalContext {
 	timeTracker?: ITimeTrackerModalContext;
 	editTimeTracker?: IEditTimeTrackerModalContext;
 	milestone?: MilestoneModalContext;
+	shareItem?: ShareItemContext;
 	registered?: boolean;
 	taskDetails?: {
 		task: Task;

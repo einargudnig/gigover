@@ -8,6 +8,7 @@ import { Settings } from './pages/Settings';
 import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
 import { RoadmapPreloader } from './pages/Roadmap/RoadmapPreloader';
 import { Files } from './pages/Files/Files';
+import {Resources} from "./pages/Resources/Resources";
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -21,7 +22,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':projectId/file/:folderId/:fileId'} element={<Files />} />
 			<Route path={':projectId'} element={<Files />} />
 			<Route path={':projectId/:folderId'} element={<Files />} />
-			<Route path={'/'} element={<Files />} />
 		</Route>
 		<Route path={'organize'} element={<Organize />}>
 			<Route path={':projectId'} element={<Organize />} />
@@ -33,6 +33,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':userId'} element={<Users />} />
 		</Route>
 		<Route path={'settings'} element={<Settings />} />
+		<Route path={'resources'} element={<Resources />} />
 		<Route path={'project'} element={<Dashboard />}>
 			<Route path={':id'} element={<Dashboard />} />
 		</Route>

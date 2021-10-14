@@ -10,9 +10,6 @@ interface ProjectFolderResponse {
 export const useProjectFoldersQuery = (projectId: number) => {
 	const { data, isLoading, isError, error } = useQuery<ProjectFolderResponse, AxiosError>(
 		ApiService.folderList(projectId),
-		{
-			queryKey: ApiService.folderList(projectId)
-		}
 	);
 
 	return {
