@@ -6,7 +6,7 @@ import { FormActions } from '../FormActions';
 import { Modal } from '../Modal';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { IEditTimeTrackerModalContext } from '../../context/ModalContext';
-import { useModifyTimeRecord } from '../../queries/useModifyTimeRecord';
+import { useModifyTimeRecord } from '../../mutations/useModifyTimeRecord';
 import { LoadingSpinner } from '../LoadingSpinner';
 import styled from 'styled-components';
 import { range } from '../../utils/ArrayUtils';

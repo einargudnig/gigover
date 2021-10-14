@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { Project, WorkerItem } from '../models/Project';
 import { Task } from '../models/Task';
 import { Milestone } from '../models/Milestone';
+import { Resource } from '../models/Resource';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -31,6 +32,10 @@ export interface IEditPhotoContext {
 	projectId: number;
 }
 
+export interface IResourceModalContext {
+	resource?: Resource;
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
@@ -44,6 +49,7 @@ export interface IModalContext {
 		projectId: number;
 	};
 	editPhoto?: IEditPhotoContext;
+	resources?: IResourceModalContext;
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

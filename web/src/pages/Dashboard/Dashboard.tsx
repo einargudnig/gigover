@@ -44,6 +44,12 @@ export const Dashboard = (): JSX.Element => {
 			}
 			actions={
 				<>
+					<Button
+						onClick={() => setModalContext({ resources: { resource: undefined } })}
+						leftIcon={<PlusIcon />}
+					>
+						TEMP New resource
+					</Button>
 					<IconButton
 						variant={'outline'}
 						colorScheme={'gray'}

@@ -7,6 +7,7 @@ import { TimeTrackerModal } from './modals/TimeTrackerModal';
 import { TaskModal } from './modals/TaskModal/TaskModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
+import { ResourceModal } from './modals/ResourceModal';
 
 export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -40,6 +41,7 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 					<RegistrationModal />
 				</Modal>
 			)}
+			{modalContext.resources && <ResourceModal />}
 		</>
 	);
 };

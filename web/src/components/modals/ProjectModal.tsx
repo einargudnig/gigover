@@ -1,7 +1,7 @@
 import React from 'react';
 import { Project, ProjectStatus, ProjectStatusType } from '../../models/Project';
 import { Controller, useForm } from 'react-hook-form';
-import { ProjectFormData, useModifyProject } from '../../queries/useModifyProject';
+import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
 import { InputWrapper } from '../forms/Input';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { FormActions } from '../FormActions';

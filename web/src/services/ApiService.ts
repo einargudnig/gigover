@@ -38,6 +38,15 @@ export class ApiService {
 	static addMilestone = API_BASE + 'contractor/addMilestone';
 	static milestoneDetails = (id: number): string => API_BASE + 'contractor/task/' + id;
 
+	// Resources
+	static resourceTypes = 'support/resourceTypes';
+	static resourceCategories = 'support/resourceCategories';
+	static resources = 'contractor/resources';
+	static addResource = 'contractor/resourceAdd';
+	static editResource = 'contractor/resourceEdit';
+	static holdResource = 'contractor/resourceHold';
+	static releaseResource = 'contractor/resourceRelease';
+
 	// Time tracking
 	static activeWorkers = API_BASE + 'contractor/activeWorkers';
 	static startTimer = API_BASE + 'contractor/start';

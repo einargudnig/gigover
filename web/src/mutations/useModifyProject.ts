@@ -1,6 +1,6 @@
 import { Project, ProjectStatus } from '../models/Project';
 import { useMutation, useQueryClient } from 'react-query';
-import { ProjectResponse } from './useProjectList';
+import { ProjectResponse } from '../queries/useProjectList';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import axios from 'axios';
