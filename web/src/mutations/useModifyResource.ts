@@ -13,7 +13,7 @@ interface ResourceVariables extends Resource {}
 export const useModifyResource = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ModifyResourceResponse, ErrorResponse, ResourceVariables>(
+	return useMutation<ModifyResourceResponse, ErrorResponse, Resource>(
 		async (resource) =>
 			await axios.post(
 				resource?.id ? ApiService.editResource : ApiService.addResource,

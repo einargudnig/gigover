@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { FormActions } from '../FormActions';
 import {
@@ -8,7 +8,9 @@ import {
 	FormErrorMessage,
 	FormHelperText,
 	FormLabel,
-	Input
+	HStack,
+	Input,
+	Tag
 } from '@chakra-ui/react';
 import { ModalContext } from '../../context/ModalContext';
 import { useModifyResource } from '../../mutations/useModifyResource';
@@ -16,10 +18,20 @@ import { devError } from '../../utils/ConsoleUtils';
 import { Resource } from '../../models/Resource';
 import { Modal } from '../Modal';
 import { Tabs } from '../tabs/Tabs';
+import styled from 'styled-components';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { TrackerSelect } from '../TrackerSelect';
+import { useResourceTypes } from '../../queries/useResourceTypes';
+
+const TabContent = styled.div`
+	background: #f9f9f9;
+	padding: ${(props) => props.theme.padding(3)};
+`;
 
 export const ResourceModal = (): JSX.Element => {
 	const closeModal = useCloseModal();
 	const [{ resources }] = useContext(ModalContext);
+	const { data: resourceTypes, isLoading: isLoadingResourceTypes } = useResourceTypes();
 	const { mutateAsync, isLoading, isError, error } = useModifyResource();
 	const { register, handleSubmit, errors, control } = useForm<Resource>({
 		defaultValues: resources?.resource,
@@ -98,23 +110,31 @@ export const ResourceModal = (): JSX.Element => {
 								</FormControl>
 							</div>
 							<Box mb={6} />
-							<FormControl
-								id={'description'}
-								isRequired
-								isInvalid={Boolean(errors.description)}
-							>
-								<FormLabel>Resource description</FormLabel>
-								<Input name="description" required={true} ref={register} />
-								{errors.description ? (
-									<FormErrorMessage>
-										{errors.description.message}
-									</FormErrorMessage>
-								) : (
-									<FormHelperText>Describe your resource</FormHelperText>
+							<HStack mb={4} spacing={4} justifyContent={'space-between'}>
+								<Tag>Resource Type</Tag>
+								{isLoadingResourceTypes && <LoadingSpinner />}
+							</HStack>
+							<Controller
+								name={'type'}
+								control={control}
+								render={({ onChange, value }) => (
+									<TrackerSelect
+										title={'Select type'}
+										value={value}
+										options={
+											resourceTypes?.areas?.map((type) => ({
+												value: type.type,
+												label: type.name
+											})) ?? []
+										}
+										valueChanged={(newValue) => onChange(newValue)}
+									/>
 								)}
-							</FormControl>
+							/>
+							<Box mb={6} />
 							<Tabs
 								labelKey={'name'}
+								defaultTab={{ name: 'Resource details', value: 1 }}
 								tabs={[
 									{ name: 'Resource details', value: 1 },
 									{ name: 'Resource cost', value: 2 },
@@ -124,11 +144,115 @@ export const ResourceModal = (): JSX.Element => {
 								{({ tab }) => {
 									switch (tab.value) {
 										case 1:
-											return <p>Resource details</p>;
+											return (
+												<TabContent>
+													<FormControl
+														id={'make'}
+														isInvalid={Boolean(errors.make)}
+														mb={6}
+													>
+														<FormLabel>Resource make</FormLabel>
+														<Input
+															name="make"
+															ref={register}
+															bg={'white'}
+														/>
+														{errors.make && (
+															<FormErrorMessage>
+																{errors.make.message}
+															</FormErrorMessage>
+														)}
+													</FormControl>
+													<FormControl
+														id={'model'}
+														isInvalid={Boolean(errors.model)}
+														mb={6}
+													>
+														<FormLabel>Resource model</FormLabel>
+														<Input
+															name="model"
+															ref={register}
+															bg={'white'}
+														/>
+														{errors.model && (
+															<FormErrorMessage>
+																{errors.model.message}
+															</FormErrorMessage>
+														)}
+													</FormControl>
+													<FormControl
+														id={'year'}
+														isInvalid={Boolean(errors.year)}
+													>
+														<FormLabel>Resource year</FormLabel>
+														<Input
+															name="year"
+															type="number"
+															min="1900"
+															ref={register}
+															bg={'white'}
+														/>
+														{errors.year && (
+															<FormErrorMessage>
+																{errors.year.message}
+															</FormErrorMessage>
+														)}
+													</FormControl>
+												</TabContent>
+											);
 										case 2:
-											return <p>Resource cost</p>;
+											return (
+												<TabContent>
+													<FormControl
+														id={'cost'}
+														isInvalid={Boolean(errors.cost)}
+														mb={6}
+													>
+														<FormLabel>Resource cost</FormLabel>
+														<Input
+															name="cost"
+															type="number"
+															min={0}
+															ref={register}
+															bg={'white'}
+														/>
+														{errors.cost ? (
+															<FormErrorMessage>
+																{errors.cost.message}
+															</FormErrorMessage>
+														) : (
+															<FormHelperText>
+																What is the hourly rental cost?
+															</FormHelperText>
+														)}
+													</FormControl>
+												</TabContent>
+											);
 										case 3:
-											return <p>Description</p>;
+											return (
+												<TabContent>
+													<FormControl
+														id={'description'}
+														isInvalid={Boolean(errors.description)}
+													>
+														<FormLabel>Resource description</FormLabel>
+														<Input
+															name="description"
+															ref={register}
+															bg={'white'}
+														/>
+														{errors.description ? (
+															<FormErrorMessage>
+																{errors.description.message}
+															</FormErrorMessage>
+														) : (
+															<FormHelperText>
+																Describe your resource
+															</FormHelperText>
+														)}
+													</FormControl>
+												</TabContent>
+											);
 										default:
 											return <p>...</p>;
 									}

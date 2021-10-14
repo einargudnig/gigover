@@ -17,7 +17,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':taskId'} element={<Organize />} />
 		</Route>
 		<Route path={'roadmap'} element={<RoadmapPreloader />} />
-		<Route path={'files'}>
+		<Route path={'files'} element={<Files />}>
 			<Route path={':projectId/file/:fileId'} element={<Files />} />
 			<Route path={':projectId/file/:folderId/:fileId'} element={<Files />} />
 			<Route path={':projectId'} element={<Files />} />

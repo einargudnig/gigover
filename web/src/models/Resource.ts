@@ -2,7 +2,7 @@ export interface Resource {
 	category: string;
 	cost: number;
 	description: string;
-	id: number;
+	id?: number;
 	make: string;
 	model: string;
 	name: string;

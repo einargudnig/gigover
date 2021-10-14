@@ -1,4 +1,21 @@
 import React from 'react';
+import styled, { css } from 'styled-components';
+
+const TabButton = styled.button<{ selected: boolean }>`
+	border-bottom: 2px solid transparent;
+	outline: 0;
+	padding: 8px 16px;
+	color: #000;
+	opacity: 0.5;
+	transition: all 0.2s linear;
+
+	${(props) =>
+		props.selected &&
+		css`
+			opacity: 1;
+			border-bottom: 2px solid ${props.theme.colors.yellow};
+		`};
+`;
 
 export type TabType = { value: string | number; label: string };
 
@@ -9,18 +26,10 @@ export interface TabProps<T> {
 	selected?: boolean;
 }
 
-const selectedTabClasses =
-	'border-heimkaup whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm focus:outline-none';
-const unselectedTabClasses =
-	'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm focus:outline-none';
-
 export function Tab<T>({ tab, labelKey, onClick, selected }: TabProps<T>) {
 	return (
-		<button
-			className={selected ? selectedTabClasses : unselectedTabClasses}
-			onClick={() => onClick(tab)}
-		>
+		<TabButton selected={selected ?? false} onClick={() => onClick(tab)}>
 			{tab[labelKey]}
-		</button>
+		</TabButton>
 	);
 }

@@ -1,17 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Page } from '../../components/Page';
 import { Table } from '../../components/table/Table';
 import { CellProps, Column } from 'react-table';
-import { Button, Flex, HStack, Text, Heading } from '@chakra-ui/react';
-import { UploadIcon } from '../../components/icons/UploadIcon';
+import { Button, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 import { SearchBar } from '../Files/components/SearchBar';
 import { CardBase } from '../../components/CardBase';
 import styled from 'styled-components';
-import ResourceStatusLabel from './components/ResourceStatusLabel';
 import moment from 'moment';
 import GigoverMaps from './components/GigoverMaps';
 import { useResources } from '../../queries/useResources';
 import { Resource } from '../../models/Resource';
+import { ToolsIcon } from '../../components/icons/ToolsIcon';
+import { ModalContext } from '../../context/ModalContext';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -21,6 +21,7 @@ const ResourceData = styled(CardBase)<{ color?: string }>`
 `;
 
 export const Resources = (): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
 	const { data, isError, isLoading } = useResources();
 
 	const columns: Array<Column<Resource>> = useMemo(
@@ -93,7 +94,10 @@ export const Resources = (): JSX.Element => {
 			tabs={<SearchBar files={[]} />}
 			actions={
 				<>
-					<Button onClick={() => alert('bla')} leftIcon={<UploadIcon />}>
+					<Button
+						onClick={() => setModalContext({ resources: { resource: undefined } })}
+						leftIcon={<ToolsIcon />}
+					>
 						New resource
 					</Button>
 				</>

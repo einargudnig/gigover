@@ -39,13 +39,13 @@ export class ApiService {
 	static milestoneDetails = (id: number): string => API_BASE + 'contractor/task/' + id;
 
 	// Resources
-	static resourceTypes = 'support/resourceTypes';
-	static resourceCategories = 'support/resourceCategories';
-	static resources = 'contractor/resources';
-	static addResource = 'contractor/resourceAdd';
-	static editResource = 'contractor/resourceEdit';
-	static holdResource = 'contractor/resourceHold';
-	static releaseResource = 'contractor/resourceRelease';
+	static resourceTypes = API_BASE + 'support/resourceTypes';
+	static resourceCategories = API_BASE + 'support/resourceCategories';
+	static resources = API_BASE + 'contractor/resources';
+	static addResource = API_BASE + 'contractor/resourceAdd';
+	static editResource = API_BASE + 'contractor/resourceEdit';
+	static holdResource = API_BASE + 'contractor/resourceHold';
+	static releaseResource = API_BASE + 'contractor/resourceRelease';
 
 	// Time tracking
 	static activeWorkers = API_BASE + 'contractor/activeWorkers';
@@ -81,5 +81,4 @@ export class ApiService {
 	static updateDotStatus = API_BASE + 'contractor/updateDotStatus';
 	static removeDotComment = API_BASE + 'contractor/removeDotComment';
 	static editDotComment = API_BASE + 'contractor/editDotComment';
-
 }
