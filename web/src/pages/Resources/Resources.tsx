@@ -10,9 +10,12 @@ import moment from 'moment';
 import GigoverMaps from './components/GigoverMaps';
 import { useResources } from '../../queries/useResources';
 import { Resource } from '../../models/Resource';
-import { ToolsIcon } from '../../components/icons/ToolsIcon';
 import { ModalContext } from '../../context/ModalContext';
 import { useResourceTypes } from '../../queries/useResourceTypes';
+import { HoldResource } from './HoldResource';
+import { useResourceDelete } from '../../mutations/useResourceDelete';
+import { TrashIcon } from '../../components/icons/TrashIcon';
+import { PlusIcon } from '../../components/icons/PlusIcon';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -24,6 +27,7 @@ const ResourceData = styled(CardBase)<{ color?: string }>`
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data, isError, isLoading } = useResources();
+	const { mutateAsync: deleteResourceAsync, isLoading: isLoadingDelete } = useResourceDelete();
 	const { data: resourceTypes } = useResourceTypes();
 
 	const columns: Array<Column<Resource>> = useMemo(
@@ -36,7 +40,6 @@ export const Resources = (): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
-
 			{
 				Header: 'Id',
 				accessor: 'id',
@@ -84,7 +87,7 @@ export const Resources = (): JSX.Element => {
 							>
 								View log
 							</Button>
-							<Button>Use</Button>
+							<HoldResource resource={row.original} />
 							<Button
 								variant={'outline'}
 								colorScheme={'black'}
@@ -94,12 +97,20 @@ export const Resources = (): JSX.Element => {
 							>
 								Edit
 							</Button>
+							<Button
+								variant={'outline'}
+								colorScheme={'black'}
+								isLoading={isLoadingDelete}
+								onClick={async () => await deleteResourceAsync(row.original)}
+							>
+								<TrashIcon />
+							</Button>
 						</HStack>
 					);
 				}
 			}
 		],
-		[setModalContext, resourceTypes]
+		[resourceTypes, isLoadingDelete, setModalContext, deleteResourceAsync]
 	);
 
 	return (
@@ -110,7 +121,7 @@ export const Resources = (): JSX.Element => {
 				<>
 					<Button
 						onClick={() => setModalContext({ resources: { resource: undefined } })}
-						leftIcon={<ToolsIcon />}
+						leftIcon={<PlusIcon />}
 					>
 						New resource
 					</Button>
@@ -135,9 +146,9 @@ export const Resources = (): JSX.Element => {
 			<CardBase mt={4}>
 				<GigoverMaps
 					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-					loadingElement={<div style={{ height: `100%` }} />}
-					containerElement={<div style={{ height: `400px` }} />}
-					mapElement={<div style={{ height: `100%` }} />}
+					loadingElement={<div style={{ height: '100%' }} />}
+					containerElement={<div style={{ height: '400px' }} />}
+					mapElement={<div style={{ height: '100%' }} />}
 				/>
 			</CardBase>
 		</Page>

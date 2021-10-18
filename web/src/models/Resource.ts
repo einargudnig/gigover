@@ -1,3 +1,9 @@
+export enum ResourceStatus {
+	Available = 0,
+	InUse = 1,
+	NotAvailable = 2
+}
+
 export interface Resource {
 	category: string;
 	cost: number;
@@ -8,13 +14,14 @@ export interface Resource {
 	name: string;
 	projectId: number;
 	serialNr: string;
-	startLat: number;
-	startLng: number;
-	stopLat: number;
-	stopLng: number;
+	startLat?: number;
+	startLng?: number;
+	stopLat?: number;
+	stopLng?: number;
 	type: number;
 	typeName: string;
 	year: number;
+	status: ResourceStatus;
 }
 
 export interface ResourceCategory {
