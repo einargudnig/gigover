@@ -28,7 +28,7 @@ export interface TabProps<T> {
 
 export function Tab<T>({ tab, labelKey, onClick, selected }: TabProps<T>) {
 	return (
-		<TabButton selected={selected ?? false} onClick={() => onClick(tab)}>
+		<TabButton type={'button'} selected={selected ?? false} onClick={() => onClick(tab)}>
 			{tab[labelKey]}
 		</TabButton>
 	);

@@ -43,7 +43,7 @@ export class ApiService {
 	static resourceCategories = API_BASE + 'support/resourceCategories';
 	static resources = API_BASE + 'contractor/resources';
 	static addResource = API_BASE + 'contractor/resourceAdd';
-	static editResource = API_BASE + 'contractor/resourceEdit';
+	static editResource = API_BASE + 'contractor/resourceUpdate';
 	static holdResource = API_BASE + 'contractor/resourceHold';
 	static releaseResource = API_BASE + 'contractor/resourceRelease';
 

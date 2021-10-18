@@ -41,6 +41,7 @@ export const ResourceModal = (): JSX.Element => {
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			await mutateAsync({
+				...resources?.resource,
 				...values
 			});
 			closeModal();
@@ -188,7 +189,6 @@ export const ResourceModal = (): JSX.Element => {
 														<Input
 															name="year"
 															type="number"
-															min="1900"
 															ref={register}
 															bg={'white'}
 														/>

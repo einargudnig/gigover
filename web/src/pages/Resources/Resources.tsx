@@ -12,6 +12,7 @@ import { useResources } from '../../queries/useResources';
 import { Resource } from '../../models/Resource';
 import { ToolsIcon } from '../../components/icons/ToolsIcon';
 import { ModalContext } from '../../context/ModalContext';
+import { useResourceTypes } from '../../queries/useResourceTypes';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -23,6 +24,7 @@ const ResourceData = styled(CardBase)<{ color?: string }>`
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data, isError, isLoading } = useResources();
+	const { data: resourceTypes } = useResourceTypes();
 
 	const columns: Array<Column<Resource>> = useMemo(
 		() => [
@@ -30,7 +32,7 @@ export const Resources = (): JSX.Element => {
 				Header: 'Resource',
 				accessor: 'name',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
+				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
@@ -39,7 +41,7 @@ export const Resources = (): JSX.Element => {
 				Header: 'Id',
 				accessor: 'id',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
+				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
@@ -47,37 +49,49 @@ export const Resources = (): JSX.Element => {
 				Header: 'Type',
 				accessor: 'type',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
+				Cell: ({ cell: { value }, row }: CellProps<Resource, number>): JSX.Element => {
+					if (resourceTypes) {
+						const type = resourceTypes?.areas?.find((t) => t.type === value);
+
+						if (type) {
+							return <div>{type.name}</div>;
+						}
+					}
+
 					return <div>{value}</div>;
 				}
 			},
-			/*			{
-				Header: 'Status',
-				accessor: 'status',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
-					return <ResourceStatusLabel status={value} />;
-				}
-			},*/
 			{
 				Header: 'Last update',
 				accessor: 'year',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
+				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
 					return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
 				}
 			},
 			{
 				Header: 'Actions',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<any, string>): JSX.Element => {
+				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
 					return (
 						<HStack spacing={4}>
-							<Button variant={'link'} colorScheme={'blue'}>
+							<Button
+								variant={'link'}
+								colorScheme={'blue'}
+								onClick={() =>
+									setModalContext({ resources: { resource: row.original } })
+								}
+							>
 								View log
 							</Button>
 							<Button>Use</Button>
-							<Button variant={'outline'} colorScheme={'black'}>
+							<Button
+								variant={'outline'}
+								colorScheme={'black'}
+								onClick={() =>
+									setModalContext({ resources: { resource: row.original } })
+								}
+							>
 								Edit
 							</Button>
 						</HStack>
@@ -85,7 +99,7 @@ export const Resources = (): JSX.Element => {
 				}
 			}
 		],
-		[]
+		[setModalContext, resourceTypes]
 	);
 
 	return (

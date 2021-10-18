@@ -4,20 +4,16 @@ import { ApiService } from '../services/ApiService';
 import axios from 'axios';
 import { Resource } from '../models/Resource';
 
-interface ModifyResourceResponse {
+interface ReleaseResourceResponse {
 	errorText: 'OK';
 }
 
-export const useModifyResource = () => {
+export const useReleaseResource = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ModifyResourceResponse, ErrorResponse, Resource>(
+	return useMutation<ReleaseResourceResponse, ErrorResponse, Resource>(
 		async (resource) =>
-			await axios.post(
-				resource?.id ? ApiService.editResource : ApiService.addResource,
-				resource,
-				{ withCredentials: true }
-			),
+			await axios.post(ApiService.releaseResource, resource, { withCredentials: true }),
 		{
 			onSuccess: async () => {
 				await queryClient.invalidateQueries(ApiService.resources);
