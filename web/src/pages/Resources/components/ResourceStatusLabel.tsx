@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
+import { ResourceStatus } from '../../../models/Resource';
 
 const StatusLabelWrapper = styled(Flex)`
 	border-radius: 16px;
@@ -16,30 +17,41 @@ const Ball = styled(Box)`
 	width: 8px;
 	border-radius: 50%;
 `;
-const ResourceStatusLabel = ({ status }) => {
-	const getLabelProps = (s: number) => {
-		if (status === 0) {
+
+interface ResourceStatusLabelProps {
+	status: ResourceStatus;
+}
+
+const getLabelProps = (s: ResourceStatus) => {
+	switch (s) {
+		case ResourceStatus.Available: {
 			return {
 				label: 'available',
 				color: 'green'
 			};
-		} else if (status === 1) {
+		}
+		case ResourceStatus.InUse: {
 			return {
 				label: 'in use',
 				color: 'red'
 			};
-		} else if (status === 2) {
+		}
+		case ResourceStatus.NotAvailable: {
 			return {
 				label: 'in repair',
 				color: 'orange'
 			};
 		}
-		return {
-			label: 'unknown',
-			color: 'black'
-		};
-	};
+		default: {
+			return {
+				label: 'unknown',
+				color: 'black'
+			};
+		}
+	}
+};
 
+export const ResourceStatusLabel = ({ status }: ResourceStatusLabelProps) => {
 	const labelProps = getLabelProps(status);
 
 	return (
@@ -56,5 +68,3 @@ const ResourceStatusLabel = ({ status }) => {
 		</StatusLabelWrapper>
 	);
 };
-
-export default ResourceStatusLabel;

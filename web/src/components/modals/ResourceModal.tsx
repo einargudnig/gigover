@@ -15,7 +15,7 @@ import {
 import { ModalContext } from '../../context/ModalContext';
 import { useModifyResource } from '../../mutations/useModifyResource';
 import { devError } from '../../utils/ConsoleUtils';
-import { Resource } from '../../models/Resource';
+import { Resource, ResourceStatus } from '../../models/Resource';
 import { Modal } from '../Modal';
 import { Tabs } from '../tabs/Tabs';
 import styled from 'styled-components';
@@ -133,6 +133,39 @@ export const ResourceModal = (): JSX.Element => {
 								)}
 							/>
 							<Box mb={6} />
+							{resources?.resource?.id && (
+								<>
+									<HStack mb={4} spacing={4} justifyContent={'space-between'}>
+										<Tag>Resource Status</Tag>
+									</HStack>
+									<Controller
+										name={'status'}
+										control={control}
+										render={({ onChange, value }) => (
+											<TrackerSelect
+												title={'Select status'}
+												value={value}
+												options={[
+													{
+														value: ResourceStatus.Available,
+														label: 'Available'
+													},
+													{
+														value: ResourceStatus.InUse,
+														label: 'In use'
+													},
+													{
+														value: ResourceStatus.NotAvailable,
+														label: 'Not available'
+													}
+												]}
+												valueChanged={(newValue) => onChange(newValue)}
+											/>
+										)}
+									/>
+									<Box mb={6} />
+								</>
+							)}
 							<Tabs
 								labelKey={'name'}
 								defaultTab={{ name: 'Resource details', value: 1 }}

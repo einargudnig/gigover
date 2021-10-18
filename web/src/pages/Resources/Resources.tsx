@@ -9,13 +9,14 @@ import styled from 'styled-components';
 import moment from 'moment';
 import GigoverMaps from './components/GigoverMaps';
 import { useResources } from '../../queries/useResources';
-import { Resource } from '../../models/Resource';
+import { Resource, ResourceStatus } from '../../models/Resource';
 import { ModalContext } from '../../context/ModalContext';
 import { useResourceTypes } from '../../queries/useResourceTypes';
 import { HoldResource } from './HoldResource';
 import { useResourceDelete } from '../../mutations/useResourceDelete';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
+import { ResourceStatusLabel } from './components/ResourceStatusLabel';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -36,7 +37,7 @@ export const Resources = (): JSX.Element => {
 				Header: 'Resource',
 				accessor: 'name',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
+				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
@@ -44,7 +45,7 @@ export const Resources = (): JSX.Element => {
 				Header: 'Id',
 				accessor: 'id',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
+				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
@@ -52,7 +53,7 @@ export const Resources = (): JSX.Element => {
 				Header: 'Type',
 				accessor: 'type',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<Resource, number>): JSX.Element => {
+				Cell: ({ cell: { value } }: CellProps<Resource, number>): JSX.Element => {
 					if (resourceTypes) {
 						const type = resourceTypes?.areas?.find((t) => t.type === value);
 
@@ -68,14 +69,22 @@ export const Resources = (): JSX.Element => {
 				Header: 'Last update',
 				accessor: 'year',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
+				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
 					return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
+				}
+			},
+			{
+				Header: 'Status',
+				accessor: 'status',
+				// eslint-disable-next-line react/display-name
+				Cell: ({ cell: { value } }: CellProps<Resource, ResourceStatus>): JSX.Element => {
+					return <ResourceStatusLabel status={value} />;
 				}
 			},
 			{
 				Header: 'Actions',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value }, row }: CellProps<Resource, string>): JSX.Element => {
+				Cell: ({ row }: CellProps<Resource, string>): JSX.Element => {
 					return (
 						<HStack spacing={4}>
 							<Button
@@ -130,8 +139,13 @@ export const Resources = (): JSX.Element => {
 		>
 			<Flex mb={4}>
 				<ResourceData>Total resources: {data?.length}</ResourceData>
-				<ResourceData color={'#1FDF83'}>Available: {data?.length}</ResourceData>
-				<ResourceData color={'#EA4335'}>In use: {data?.length}</ResourceData>
+				<ResourceData color={'#1FDF83'}>
+					Available:{' '}
+					{data?.filter((r) => r.status === ResourceStatus.Available)?.length ?? 0}
+				</ResourceData>
+				<ResourceData color={'#EA4335'}>
+					In use: {data?.filter((r) => r.status === ResourceStatus.InUse)?.length ?? 0}
+				</ResourceData>
 			</Flex>
 
 			<CardBase>
