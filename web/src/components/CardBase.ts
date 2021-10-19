@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Box } from "@chakra-ui/react";
+import { Box } from '@chakra-ui/react';
 
 export const CardBase = styled(Box)`
 	max-width: 100%;

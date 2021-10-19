@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import styled, { css } from 'styled-components';
 import { UserContext } from '../context/UserContext';
-import { GoIcon } from './GoIcon';
 import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';

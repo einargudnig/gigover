@@ -87,15 +87,15 @@ export const Resources = (): JSX.Element => {
 				Cell: ({ row }: CellProps<Resource, string>): JSX.Element => {
 					return (
 						<HStack spacing={4}>
-							<Button
-								variant={'link'}
-								colorScheme={'blue'}
-								onClick={() =>
-									setModalContext({ resources: { resource: row.original } })
-								}
-							>
-								View log
-							</Button>
+							{/*<Button*/}
+							{/*	variant={'link'}*/}
+							{/*	colorScheme={'blue'}*/}
+							{/*	onClick={() =>*/}
+							{/*		setModalContext({ resources: { resource: row.original } })*/}
+							{/*	}*/}
+							{/*>*/}
+							{/*	View log*/}
+							{/*</Button>*/}
 							<HoldResource resource={row.original} />
 							<Button
 								variant={'outline'}

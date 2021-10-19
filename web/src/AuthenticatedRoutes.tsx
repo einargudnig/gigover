@@ -8,7 +8,7 @@ import { Settings } from './pages/Settings';
 import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
 import { RoadmapPreloader } from './pages/Roadmap/RoadmapPreloader';
 import { Files } from './pages/Files/Files';
-import {Resources} from "./pages/Resources/Resources";
+import { Resources } from './pages/Resources/Resources';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>

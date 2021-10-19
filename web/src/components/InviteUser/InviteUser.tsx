@@ -36,6 +36,7 @@ export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
 			//
 			devError(e);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchMutation, searchMail]);
 
 	useEffect(() => {

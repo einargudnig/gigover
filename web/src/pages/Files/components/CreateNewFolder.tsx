@@ -43,6 +43,7 @@ export const CreateNewFolderButton = ({ projectId }: { projectId: number }) => {
 			}
 			setIsOpen(false);
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inputRef, projectId]);
 
 	return (

@@ -47,6 +47,7 @@ export class ApiService {
 	static holdResource = API_BASE + 'contractor/resourceHold';
 	static releaseResource = API_BASE + 'contractor/resourceRelease';
 	static deleteResource = API_BASE + 'contractor/resourceDel';
+	static resourceHistory = (id: number) => API_BASE + 'contractor/resourceHistory/' + id;
 
 	// Time tracking
 	static activeWorkers = API_BASE + 'contractor/activeWorkers';

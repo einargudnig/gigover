@@ -71,6 +71,7 @@ export const DropZone = ({
 				}, []);
 			}
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[fileService, uploadType, projectId, folderId, externalId]
 	);
 

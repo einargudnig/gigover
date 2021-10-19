@@ -33,7 +33,7 @@ export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Eleme
 		if (selectedProject) {
 			mutateAsync({ projectId: selectedProject }).finally(() => null);
 		}
-	}, [selectedProject]);
+	}, [mutateAsync, selectedProject]);
 
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file'}>

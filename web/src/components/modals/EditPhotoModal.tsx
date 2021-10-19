@@ -68,14 +68,10 @@ export interface ICommentComment {
 export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
-	/*
-    const user = useContext(UserContext);
-*/
-
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		devInfo('onChangeFileName', event.target! as Element);
 	};
-	const [context, setModalContext] = useContext(ModalContext);
+	const [, setModalContext] = useContext(ModalContext);
 
 	const { data, refetch: refetchImageDots } = useImageDots(file.imageId);
 

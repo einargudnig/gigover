@@ -22,6 +22,7 @@ import styled from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { TrackerSelect } from '../TrackerSelect';
 import { useResourceTypes } from '../../queries/useResourceTypes';
+import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
 
 const TabContent = styled.div`
 	background: #f9f9f9;
@@ -49,6 +50,8 @@ export const ResourceModal = (): JSX.Element => {
 			devError('Error', e);
 		}
 	});
+
+	const isEditing = Boolean(resources?.resource?.id);
 
 	return (
 		<Modal
@@ -133,7 +136,7 @@ export const ResourceModal = (): JSX.Element => {
 								)}
 							/>
 							<Box mb={6} />
-							{resources?.resource?.id && (
+							{isEditing && (
 								<>
 									<HStack mb={4} spacing={4} justifyContent={'space-between'}>
 										<Tag>Resource Status</Tag>
@@ -168,15 +171,31 @@ export const ResourceModal = (): JSX.Element => {
 							)}
 							<Tabs
 								labelKey={'name'}
-								defaultTab={{ name: 'Resource details', value: 1 }}
-								tabs={[
+								defaultTab={
+									isEditing
+										? { name: 'Resource log', value: 0 }
+										: { name: 'Resource details', value: 1 }
+								}
+								tabs={Array.from(
+									isEditing ? [{ name: 'Resource log', value: 0 }] : []
+								).concat([
 									{ name: 'Resource details', value: 1 },
 									{ name: 'Resource cost', value: 2 },
 									{ name: 'Description', value: 3 }
-								]}
+								])}
 							>
 								{({ tab }) => {
 									switch (tab.value) {
+										case 0:
+											return (
+												<TabContent>
+													{isEditing && resources?.resource && (
+														<ResourceHistoryLog
+															resource={resources.resource}
+														/>
+													)}
+												</TabContent>
+											);
 										case 1:
 											return (
 												<TabContent>

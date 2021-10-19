@@ -22,7 +22,8 @@ import { pdfjs } from 'react-pdf';
 // We need this for loading PDF viewer on production.
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
-declare const window: Window & { Intercom: any };
+type Intercom = (type: 'boot', options: Record<string, unknown>) => void;
+declare const window: Window & { Intercom: Intercom };
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -51,7 +52,7 @@ export const AppPreloader = (): JSX.Element => {
 			app_id: 'r645hk6a',
 			...userProperties
 		});
-	}, [data]);
+	}, [authUser?.uid, data]);
 
 	if (loading || isLoadingFirebase) {
 		return <FullscreenLoader />;

@@ -1,22 +1,19 @@
-import { Controller, useForm } from 'react-hook-form';
-
+import { useForm } from 'react-hook-form';
 import {
 	Avatar,
 	Box,
 	Button,
 	Flex,
-	Heading,
-	InputRightElement,
-	Text,
-	InputGroup,
-	Input,
 	FormControl,
+	FormErrorMessage,
 	FormHelperText,
-	FormErrorMessage
+	Heading,
+	Input,
+	InputGroup,
+	InputRightElement,
+	Text
 } from '@chakra-ui/react';
 import React from 'react';
-import { Project } from '../../../models/Project';
-import { ProjectFolder } from '../../../models/ProjectFolder';
 import { ShareItemContext } from '../../../context/ModalContext';
 
 type FormData = {
@@ -26,13 +23,12 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 	const {
 		register,
 		handleSubmit,
-		reset,
 		formState: { errors }
 	} = useForm<FormData>();
 
 	const onSubmit = handleSubmit(
-		async (data) => {
-			alert('submiting form');
+		async () => {
+			// alert('submiting form');
 		},
 		() => console.log('invalid')
 	);
