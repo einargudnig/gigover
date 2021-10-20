@@ -66,14 +66,14 @@ export const Resources = (): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
-			{
-				Header: 'Last update',
-				accessor: 'year',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
-					return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
-				}
-			},
+			// {
+			// 	Header: 'Last update',
+			// 	accessor: 'year',
+			// 	// eslint-disable-next-line react/display-name
+			// 	Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
+			// 		return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
+			// 	}
+			// },
 			{
 				Header: 'Status',
 				accessor: 'status',

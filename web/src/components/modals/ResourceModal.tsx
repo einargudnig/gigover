@@ -18,15 +18,24 @@ import { devError } from '../../utils/ConsoleUtils';
 import { Resource, ResourceStatus } from '../../models/Resource';
 import { Modal } from '../Modal';
 import { Tabs } from '../tabs/Tabs';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { TrackerSelect } from '../TrackerSelect';
 import { useResourceTypes } from '../../queries/useResourceTypes';
 import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
 
-const TabContent = styled.div`
+const TabContent = styled.div<{ show: boolean }>`
 	background: #f9f9f9;
 	padding: ${(props) => props.theme.padding(3)};
+	visibility: visible;
+	position: relative;
+
+	${(props) =>
+		!props.show &&
+		css`
+			visibility: hidden;
+			position: absolute;
+		`};
 `;
 
 export const ResourceModal = (): JSX.Element => {
@@ -184,131 +193,111 @@ export const ResourceModal = (): JSX.Element => {
 									{ name: 'Description', value: 3 }
 								])}
 							>
-								{({ tab }) => {
-									switch (tab.value) {
-										case 0:
-											return (
-												<TabContent>
-													{isEditing && resources?.resource && (
-														<ResourceHistoryLog
-															resource={resources.resource}
-														/>
-													)}
-												</TabContent>
-											);
-										case 1:
-											return (
-												<TabContent>
-													<FormControl
-														id={'make'}
-														isInvalid={Boolean(errors.make)}
-														mb={6}
-													>
-														<FormLabel>Resource make</FormLabel>
-														<Input
-															name="make"
-															ref={register}
-															bg={'white'}
-														/>
-														{errors.make && (
-															<FormErrorMessage>
-																{errors.make.message}
-															</FormErrorMessage>
-														)}
-													</FormControl>
-													<FormControl
-														id={'model'}
-														isInvalid={Boolean(errors.model)}
-														mb={6}
-													>
-														<FormLabel>Resource model</FormLabel>
-														<Input
-															name="model"
-															ref={register}
-															bg={'white'}
-														/>
-														{errors.model && (
-															<FormErrorMessage>
-																{errors.model.message}
-															</FormErrorMessage>
-														)}
-													</FormControl>
-													<FormControl
-														id={'year'}
-														isInvalid={Boolean(errors.year)}
-													>
-														<FormLabel>Resource year</FormLabel>
-														<Input
-															name="year"
-															type="number"
-															ref={register}
-															bg={'white'}
-														/>
-														{errors.year && (
-															<FormErrorMessage>
-																{errors.year.message}
-															</FormErrorMessage>
-														)}
-													</FormControl>
-												</TabContent>
-											);
-										case 2:
-											return (
-												<TabContent>
-													<FormControl
-														id={'cost'}
-														isInvalid={Boolean(errors.cost)}
-														mb={6}
-													>
-														<FormLabel>Resource cost</FormLabel>
-														<Input
-															name="cost"
-															type="number"
-															min={0}
-															ref={register}
-															bg={'white'}
-														/>
-														{errors.cost ? (
-															<FormErrorMessage>
-																{errors.cost.message}
-															</FormErrorMessage>
-														) : (
-															<FormHelperText>
-																What is the hourly rental cost?
-															</FormHelperText>
-														)}
-													</FormControl>
-												</TabContent>
-											);
-										case 3:
-											return (
-												<TabContent>
-													<FormControl
-														id={'description'}
-														isInvalid={Boolean(errors.description)}
-													>
-														<FormLabel>Resource description</FormLabel>
-														<Input
-															name="description"
-															ref={register}
-															bg={'white'}
-														/>
-														{errors.description ? (
-															<FormErrorMessage>
-																{errors.description.message}
-															</FormErrorMessage>
-														) : (
-															<FormHelperText>
-																Describe your resource
-															</FormHelperText>
-														)}
-													</FormControl>
-												</TabContent>
-											);
-										default:
-											return <p>...</p>;
-									}
-								}}
+								{({ tab }) => (
+									<>
+										<TabContent show={tab.value === 0}>
+											{isEditing && resources?.resource && (
+												<ResourceHistoryLog resource={resources.resource} />
+											)}
+										</TabContent>
+										<TabContent show={tab.value === 1}>
+											<FormControl
+												id={'make'}
+												isInvalid={Boolean(errors.make)}
+												mb={6}
+											>
+												<FormLabel>Resource make</FormLabel>
+												<Input
+													bg={'white'}
+													name={'make'}
+													{...register('make')}
+												/>
+												{errors.make && (
+													<FormErrorMessage>
+														{errors.make.message}
+													</FormErrorMessage>
+												)}
+											</FormControl>
+											<FormControl
+												id={'model'}
+												isInvalid={Boolean(errors.model)}
+												mb={6}
+											>
+												<FormLabel>Resource model</FormLabel>
+												<Input bg={'white'} {...register('model')} />
+												{errors.model && (
+													<FormErrorMessage>
+														{errors.model.message}
+													</FormErrorMessage>
+												)}
+											</FormControl>
+											<FormControl
+												id={'year'}
+												isInvalid={Boolean(errors.year)}
+											>
+												<FormLabel>Resource year</FormLabel>
+												<Input
+													bg={'white'}
+													name="year"
+													{...register('year')}
+													type="number"
+												/>
+												{errors.year && (
+													<FormErrorMessage>
+														{errors.year.message}
+													</FormErrorMessage>
+												)}
+											</FormControl>
+										</TabContent>
+										<TabContent show={tab.value === 2}>
+											<FormControl
+												id={'cost'}
+												isInvalid={Boolean(errors.cost)}
+												mb={6}
+											>
+												<FormLabel>Resource cost</FormLabel>
+												<Input
+													name="cost"
+													{...register('cost')}
+													type="number"
+													min={0}
+													bg={'white'}
+												/>
+												{errors.cost ? (
+													<FormErrorMessage>
+														{errors.cost.message}
+													</FormErrorMessage>
+												) : (
+													<FormHelperText>
+														What is the hourly rental cost?
+													</FormHelperText>
+												)}
+											</FormControl>
+										</TabContent>
+										<TabContent show={tab.value === 3}>
+											<FormControl
+												id={'description'}
+												isInvalid={Boolean(errors.description)}
+											>
+												<FormLabel>Resource description</FormLabel>
+												<Input
+													bg={'white'}
+													name="description"
+													{...register('description')}
+												/>
+												{errors.description ? (
+													<FormErrorMessage>
+														{errors.description.message}
+													</FormErrorMessage>
+												) : (
+													<FormHelperText>
+														Describe your resource
+													</FormHelperText>
+												)}
+											</FormControl>
+										</TabContent>
+									</>
+								)}
 							</Tabs>
 						</div>
 						<FormActions
