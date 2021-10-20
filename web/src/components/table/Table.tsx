@@ -5,12 +5,18 @@ import styled from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 interface TableProps {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	columns: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	data: any;
 	loading: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getRowProps?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getHeaderProps?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getColumnProps?: any;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	getCellProps?: any;
 	variant?: string;
 	colorScheme?: string;
@@ -75,6 +81,7 @@ export const Table = ({
 										getColumnProps(column),
 										getHeaderProps(column)
 									])}
+									key={colIndex}
 								>
 									{column.render('Header')}
 								</Th>

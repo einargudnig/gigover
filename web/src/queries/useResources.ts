@@ -16,7 +16,6 @@ export const useResources = () => {
 		refetchOnWindowFocus: true
 	});
 
-	console.log(data, 'data');
 	return {
 		data: data?.resources || [],
 		isLoading,

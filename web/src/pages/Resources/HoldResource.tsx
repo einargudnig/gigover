@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@chakra-ui/react';
 import { Resource } from '../../models/Resource';
 import { useHoldResource } from '../../mutations/useHoldResource';

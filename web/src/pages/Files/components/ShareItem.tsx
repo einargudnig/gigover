@@ -45,10 +45,10 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 								pr="4.5rem"
 								placeholder="Add people via email"
 								ref={register({
-									required: "Required",
+									required: 'Required',
 									pattern: {
 										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-										message: "invalid email address"
+										message: 'invalid email address'
 									}
 								})}
 							/>
@@ -63,22 +63,25 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 					</FormControl>
 				</form>
 
-				{shareItem.project?.workers.map((s) => {
-					return (
-						<Flex my={4} justifyContent={'space-between'} alignItems={'center'}>
-							<Flex alignItems={'center'}>
-								<Avatar name={s.name} mr={4} />
-								<Box>
-									<Text color={'black'} fontSize={'lg'} fontWeight={'500'}>
-										{s.name}
-									</Text>
-									<Text>{s.userName}</Text>
-								</Box>
-							</Flex>
-							<Text a={'i'}>{s.type === 0 ? 'Owner' : 'Worker'}</Text>
+				{shareItem.project?.workers.map((s, sIndex) => (
+					<Flex
+						my={4}
+						justifyContent={'space-between'}
+						alignItems={'center'}
+						key={sIndex}
+					>
+						<Flex alignItems={'center'}>
+							<Avatar name={s.name} mr={4} />
+							<Box>
+								<Text color={'black'} fontSize={'lg'} fontWeight={'500'}>
+									{s.name}
+								</Text>
+								<Text>{s.userName}</Text>
+							</Box>
 						</Flex>
-					);
-				})}
+						<Text a={'i'}>{s.type === 0 ? 'Owner' : 'Worker'}</Text>
+					</Flex>
+				))}
 			</Flex>
 			<Heading mb={4}>Get Link</Heading>
 

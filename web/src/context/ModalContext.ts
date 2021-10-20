@@ -4,7 +4,6 @@ import { Task } from '../models/Task';
 import { Milestone } from '../models/Milestone';
 import { Resource } from '../models/Resource';
 import { ProjectFolder } from '../models/ProjectFolder';
-import { ProjectFile } from '../models/ProjectFile';
 import { ProjectImage } from '../models/ProjectImage';
 
 export interface ITimeTrackerModalContext {

@@ -17,6 +17,7 @@ import { useResourceDelete } from '../../mutations/useResourceDelete';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -27,7 +28,7 @@ const ResourceData = styled(CardBase)<{ color?: string }>`
 
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const { data, isError, isLoading } = useResources();
+	const { data, isLoading } = useResources();
 	const { mutateAsync: deleteResourceAsync, isLoading: isLoadingDelete } = useResourceDelete();
 	const { data: resourceTypes } = useResourceTypes();
 
@@ -159,8 +160,12 @@ export const Resources = (): JSX.Element => {
 			</CardBase>
 			<CardBase mt={4}>
 				<GigoverMaps
-					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-					loadingElement={<div style={{ height: '100%' }} />}
+					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8"
+					loadingElement={
+						<div>
+							<LoadingSpinner />
+						</div>
+					}
 					containerElement={<div style={{ height: '400px' }} />}
 					mapElement={<div style={{ height: '100%' }} />}
 				/>

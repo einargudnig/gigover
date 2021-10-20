@@ -20,6 +20,7 @@ const firebaseApp = new Firebase();
 const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			queryFn: axiosQueryFetcher as any,
 			refetchOnWindowFocus: false
 		}

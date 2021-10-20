@@ -36,7 +36,9 @@ export const Files = (): JSX.Element => {
 
 	useEffect(() => {
 		if (projects.length > 0 && params.projectId) {
-			const findProject = projects.find((p) => p.projectId === parseInt(params.projectId as string));
+			const findProject = projects.find(
+				(p) => p.projectId === parseInt(params.projectId as string)
+			);
 
 			if (findProject) {
 				setProject(findProject);

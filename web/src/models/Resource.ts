@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-shadow
 export enum ResourceStatus {
 	Available = 0,
 	InUse = 1,

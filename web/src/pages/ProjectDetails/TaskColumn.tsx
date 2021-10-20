@@ -52,7 +52,9 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 			setIsCreatingTask(false);
 		} catch (e) {
 			devError(e);
-			setTaskError(e as any);
+
+			// @ts-ignore
+			setTaskError(e.toString());
 		}
 	};
 
