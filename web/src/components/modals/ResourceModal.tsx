@@ -207,11 +207,7 @@ export const ResourceModal = (): JSX.Element => {
 												mb={6}
 											>
 												<FormLabel>Resource make</FormLabel>
-												<Input
-													bg={'white'}
-													name={'make'}
-													ref={register}
-												/>
+												<Input bg={'white'} name={'make'} ref={register} />
 												{errors.make && (
 													<FormErrorMessage>
 														{errors.make.message}
