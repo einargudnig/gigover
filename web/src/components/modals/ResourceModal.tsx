@@ -210,7 +210,7 @@ export const ResourceModal = (): JSX.Element => {
 												<Input
 													bg={'white'}
 													name={'make'}
-													{...register('make')}
+													ref={register}
 												/>
 												{errors.make && (
 													<FormErrorMessage>
@@ -239,7 +239,7 @@ export const ResourceModal = (): JSX.Element => {
 												<Input
 													bg={'white'}
 													name="year"
-													{...register('year')}
+													ref={register}
 													type="number"
 												/>
 												{errors.year && (
@@ -258,7 +258,7 @@ export const ResourceModal = (): JSX.Element => {
 												<FormLabel>Resource cost</FormLabel>
 												<Input
 													name="cost"
-													{...register('cost')}
+													ref={register}
 													type="number"
 													min={0}
 													bg={'white'}
@@ -283,7 +283,7 @@ export const ResourceModal = (): JSX.Element => {
 												<Input
 													bg={'white'}
 													name="description"
-													{...register('description')}
+													ref={register}
 												/>
 												{errors.description ? (
 													<FormErrorMessage>
