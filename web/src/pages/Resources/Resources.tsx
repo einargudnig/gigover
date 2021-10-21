@@ -3,7 +3,6 @@ import { Page } from '../../components/Page';
 import { Table } from '../../components/table/Table';
 import { CellProps, Column } from 'react-table';
 import { Button, Flex, Heading, HStack } from '@chakra-ui/react';
-import { SearchBar } from '../Files/components/SearchBar';
 import { CardBase } from '../../components/CardBase';
 import styled from 'styled-components';
 import GigoverMaps from './components/GigoverMaps';
@@ -34,16 +33,16 @@ export const Resources = (): JSX.Element => {
 	const columns: Array<Column<Resource>> = useMemo(
 		() => [
 			{
-				Header: 'Resource',
-				accessor: 'name',
+				Header: 'Id',
+				accessor: 'serialNr',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
 			{
-				Header: 'Id',
-				accessor: 'id',
+				Header: 'Resource',
+				accessor: 'name',
 				// eslint-disable-next-line react/display-name
 				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
 					return <div>{value}</div>;
@@ -125,7 +124,6 @@ export const Resources = (): JSX.Element => {
 	return (
 		<Page
 			title={'Resources'}
-			tabs={<SearchBar files={[]} />}
 			actions={
 				<>
 					<Button

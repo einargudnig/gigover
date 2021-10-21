@@ -220,7 +220,7 @@ export const ResourceModal = (): JSX.Element => {
 												mb={6}
 											>
 												<FormLabel>Resource model</FormLabel>
-												<Input bg={'white'} {...register('model')} />
+												<Input bg={'white'} name={'model'} ref={register} />
 												{errors.model && (
 													<FormErrorMessage>
 														{errors.model.message}
