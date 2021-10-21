@@ -97,12 +97,8 @@ export const ProjectFolderComponent = ({
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [, setModalContext] = useContext(ModalContext);
-
 	const { mutate } = useDeleteFolder();
 
-	console.log(data, 'datatafolder');
-	console.log(folder);
-	console.log(project);
 	return (
 		<div style={{ position: 'relative' }}>
 			<div style={{ position: 'absolute', right: '8px', top: '8px' }}>

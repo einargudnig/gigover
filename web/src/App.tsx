@@ -20,7 +20,7 @@ import { FileSystemService } from './services/FileSystemService';
 import { pdfjs } from 'react-pdf';
 
 // We need this for loading PDF viewer on production.
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 type Intercom = (type: 'boot', options: Record<string, unknown>) => void;
 declare const window: Window & { Intercom: Intercom };

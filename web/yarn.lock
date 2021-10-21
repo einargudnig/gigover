@@ -2875,11 +2875,6 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/pdfjs-dist@*":
-  version "2.7.5"
-  resolved "https://registry.yarnpkg.com/@types/pdfjs-dist/-/pdfjs-dist-2.7.5.tgz#53fc13e30b6bd18acdb3617fb6332a43225e0ffa"
-  integrity sha512-QdKChstEcREV+imniONC3JvSSFOeYv0RL12QOpzSfTpGg7xRAZcJXpWdJEtuH6FAPXX5V+sp9i/sBHJ9bsU7JA==
-
 "@types/prettier@^2.0.0":
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.4.1.tgz#e1303048d5389563e130f5bdd89d37a99acb75eb"
@@ -2934,13 +2929,13 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-pdf@^5.0.2":
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-5.0.7.tgz#befcde41da992998a55d41068b8033266923e431"
-  integrity sha512-WMEPH4BooaZjbBmahGQa9GmqWro3H78UFttKSocX8z8LWgA4LyuXPILpZM+WZuTpbXMXNPcQXce+Ef82EElQMQ==
+"@types/react-pdf@^5.0.8":
+  version "5.0.8"
+  resolved "https://registry.yarnpkg.com/@types/react-pdf/-/react-pdf-5.0.8.tgz#872cf81a193f56aee2ede1351c8ff94b3e48b087"
+  integrity sha512-SClOJ0+9by7bxGaDILu5svo1yCI6aTJdSntOT+h9qWMc6SZlILMrMjyA7A6pMRNkLD0TAZwfk72awlDsZtCPSQ==
   dependencies:
-    "@types/pdfjs-dist" "*"
     "@types/react" "*"
+    pdfjs-dist "^2.9.359"
 
 "@types/react-redux@^7.1.16":
   version "7.1.19"
@@ -9867,6 +9862,11 @@ pdfjs-dist@2.9.359:
   resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.9.359.tgz#e67bafebf20e50fc41f1a5c189155ad008ac4f81"
   integrity sha512-P2nYtkacdlZaNNwrBLw1ZyMm0oE2yY/5S/GDCAmMJ7U4+ciL/D0mrlEC/o4HZZc/LNE3w8lEVzBEyVgEQlPVKQ==
 
+pdfjs-dist@^2.9.359:
+  version "2.10.377"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.10.377.tgz#feadc9f31bf1790795994e54b18930974cf4970a"
+  integrity sha512-i0jRShtvgfsVQUNCoFYH4SVhPO3U0yhtiFLfZ0RR0B+68N+Vnwq+8B3cjWjLEwWGh8wg1XQ/sYMYKUlHn/Qpsw==
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -11202,10 +11202,10 @@ react-outside-click-handler@^1.2.4:
     object.values "^1.1.0"
     prop-types "^15.7.2"
 
-react-pdf@^5.3.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/react-pdf/-/react-pdf-5.4.0.tgz#57083f43f53d44ce4218e4431b5812dcce8526dd"
-  integrity sha512-wO+RESP4t9Dwq10ORiE1XSPohnsU/WYTgHf80mDhRxPqwzN2HrbBg1NUZRBqbxkd8ZM3HhBR47apYL4xmweMPg==
+react-pdf@^5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/react-pdf/-/react-pdf-5.4.1.tgz#b60924ea1ca9310ceca27ff64baa022691c5bd43"
+  integrity sha512-/MsRwGF9j+mPlPVMiwHejH92T55MmwpHfdRjobWxPbMGOY8bMq6zsTrKd+FMrZI0uhC1q8FNW40lBQ8rfY4R8Q==
   dependencies:
     "@babel/runtime" "^7.0.0"
     file-loader "^6.0.0"

@@ -1,7 +1,6 @@
 [
   {
-    "origin": ["http://gigover.com", "http://local.gigover.com"
-,"http://local.gigover.com:3000", "https://gigover.com", "https://web.gigover.com", "http://localhost:3000"],
+    "origin": ["http://gigover.com", "http://local.gigover.com","http://local.gigover.com:3000", "https://gigover.com", "https://web.gigover.com", "http://localhost:3000"],
     "responseHeader": ["Content-Type"],
     "method": ["GET", "POST"],
     "maxAgeSeconds": 3600
