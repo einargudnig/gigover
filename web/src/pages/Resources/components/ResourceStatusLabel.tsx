@@ -26,19 +26,19 @@ const getLabelProps = (s: ResourceStatus) => {
 	switch (s) {
 		case ResourceStatus.Available: {
 			return {
-				label: 'available',
+				label: 'Available',
 				color: 'green'
 			};
 		}
 		case ResourceStatus.InUse: {
 			return {
-				label: 'in use',
+				label: 'In use',
 				color: 'red'
 			};
 		}
 		case ResourceStatus.NotAvailable: {
 			return {
-				label: 'in repair',
+				label: 'Not available',
 				color: 'orange'
 			};
 		}
