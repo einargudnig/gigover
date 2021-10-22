@@ -95,8 +95,12 @@ export const TimeTracker = (): JSX.Element => {
 		data: reportData,
 		isLoading: reportDataLoading
 	} = useTrackerReport();
-	const { mutateAsync: activeTrackers, data } = useActiveTimeTrackers();
-	const { mutateAsync: stopTask } = useTrackerStop();
+	const {
+		mutateAsync: activeTrackers,
+		data,
+		isLoading: activeTimerLoading
+	} = useActiveTimeTrackers();
+	const { mutateAsync: stopTask, isLoading: stopTimerLoading } = useTrackerStop();
 
 	const totalTimesheets = useMemo(() => {
 		if (reportData?.data.report) {
@@ -155,17 +159,20 @@ export const TimeTracker = (): JSX.Element => {
 
 	const StartTrackingAction = () => (
 		<Button
+			isDisabled={reportDataLoading || activeTimerLoading || stopTimerLoading}
 			leftIcon={<TimeIcon color={Theme.colors.black} />}
-			onClick={() =>
-				setModalContext({
-					timeTracker: {
-						callback: () => {
-							setNow(new Date());
-							setRefetch(refetch + 1);
+			onClick={() => {
+				if (!(reportDataLoading || activeTimerLoading || stopTimerLoading)) {
+					setModalContext({
+						timeTracker: {
+							callback: () => {
+								setNow(new Date());
+								setRefetch(refetch + 1);
+							}
 						}
-					}
-				})
-			}
+					});
+				}
+			}}
 		>
 			<span>Start timer</span>
 		</Button>
@@ -178,6 +185,10 @@ export const TimeTracker = (): JSX.Element => {
 		getReport({});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refetch]);
+
+	useEffect(() => {
+		// Some NASTY bug happening when clicking the Start timer button too fast
+	}, []);
 
 	return (
 		<>

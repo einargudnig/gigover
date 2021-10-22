@@ -50,8 +50,14 @@ const GantGrid = styled(ClearGrid)<GridProps>`
 	grid-template-rows: repeat(${(props) => props.milestones}, ${GRID_ROW_HEIGHT});
 `;
 
-const GridRow = styled.div<{ length: number }>`
+const GridRow = styled.div<{ length: number; isToday: boolean }>`
 	grid-row: 1 / span ${(props) => props.length};
+
+	${(props) =>
+		props.isToday &&
+		css`
+			background: rgba(0, 0, 0, 0.05);
+		`};
 
 	&:not(:first-child) {
 		border-left: 1px solid #f4f5f6;
@@ -263,8 +269,12 @@ export const GantChart = (): JSX.Element => {
 				<GantGrid segments={state.segments} milestones={state.rows + 1 || 1}>
 					{columns.map((s, index) => (
 						<GridRow
+							isToday={Array.from(dates.dates.values())[index].moment.isSame(
+								new Date(),
+								'day'
+							)}
 							key={index}
-							length={state.project?.tasks.length || 1}
+							length={state.project?.tasks.length ?? 1}
 							style={{ gridColumn: index + 1 }}
 						/>
 					))}
