@@ -37,6 +37,11 @@ const GigoverMaps = withScriptjs(
 								position={findLastPos(r)}
 								key={rIdx}
 								onClick={() => setIsOpen(!isOpen)}
+								icon={{
+									url: '/img/MarkPin2.svg',
+									// @ts-ignore
+									anchor: new google.maps.Point(16, 32)
+								}}
 							>
 								{isOpen && (
 									<InfoBox
