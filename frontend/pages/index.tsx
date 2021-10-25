@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { HeadTitle } from '../components/HeadTitle';
 import { PageBlock } from '../components/PageContainer';
 import { PageQuery, PageWithBlocks, PageWithBlocksResponse } from '../queries/usePage';
@@ -14,27 +14,26 @@ import { Testimonial } from '../components/page-blocks/Testimonial';
 import { Image } from '../components/page-blocks/Image';
 import { PageId } from '../models/Page';
 import { PricePlans } from '../components/page-blocks/PricePlans';
-import {loadIntercom} from "next-intercom";
+import { loadIntercom } from 'next-intercom';
 
 interface PageProps {
 	page: PageWithBlocks;
 }
 
 const Index = ({ page }: PageProps): JSX.Element => {
-
-
 	useEffect(() => {
 		loadIntercom({
 			appId: process.env.INTERCOM_ID, // default : ''
 			ssr: true, // default: false
 			initWindow: true, // default: true
-			delay: 0, // default: 0  - usefull for mobile devices to prevent blocking the main thread
+			delay: 0 // default: 0  - usefull for mobile devices to prevent blocking the main thread
 		});
-	},[])
+	}, []);
+
 	return (
 		<>
 			<HeadTitle
-				title={page.name}
+				title={page?.name ?? ''}
 				description={
 					'Gigover allows you to create projects, assign tasks seamlessly, keep track of what needs to be done versus what’s completed.'
 				}
