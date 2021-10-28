@@ -8,7 +8,7 @@ export interface ResourceResponse {
 }
 
 export const useResources = () => {
-	const { data, isLoading, isError, error } = useQuery<
+	const { data, isLoading, isError, error, ...rest } = useQuery<
 		ResourceResponse,
 		ErrorResponse,
 		ResourceResponse
@@ -20,6 +20,7 @@ export const useResources = () => {
 		data: data?.resources || [],
 		isLoading,
 		isError,
-		error
+		error,
+		...rest
 	};
 };

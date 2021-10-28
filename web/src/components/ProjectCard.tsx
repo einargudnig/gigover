@@ -8,6 +8,7 @@ import { Theme } from '../Theme';
 import { TaskStatus } from '../models/Task';
 import { CardBaseLink } from './CardBase';
 import { ProjectTimeStatus } from './ProjectTimeStatus';
+import { ToolsIcon } from './icons/ToolsIcon';
 
 interface ProjectCardProps {
 	project: Project;
@@ -53,7 +54,11 @@ const ProjectCardEdit = styled.div`
 	}
 `;
 
-export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
+const ProjectCardActions = styled.div`
+	display: flex;
+`;
+
+export const ProjectCard = React.memo(({ project }: ProjectCardProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
 	const tasks = project.tasks.filter((task) => task.status !== TaskStatus.Archived) || [];
@@ -69,14 +74,24 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 					<h3>{project.name}</h3>
 					<p>{project.description}</p>
 				</div>
-				<ProjectCardEdit
-					onClick={(event) => {
-						event.preventDefault();
-						setModalContext({ modifyProject: { project } });
-					}}
-				>
-					<Edit size={20} color={Theme.colors.darkLightBlue} />
-				</ProjectCardEdit>
+				<ProjectCardActions>
+					<ProjectCardEdit
+						onClick={(event) => {
+							event.preventDefault();
+							setModalContext({ resourceTracker: { project } });
+						}}
+					>
+						<ToolsIcon size={22} color={Theme.colors.darkLightBlue} />
+					</ProjectCardEdit>
+					<ProjectCardEdit
+						onClick={(event) => {
+							event.preventDefault();
+							setModalContext({ modifyProject: { project } });
+						}}
+					>
+						<Edit size={20} color={Theme.colors.darkLightBlue} />
+					</ProjectCardEdit>
+				</ProjectCardActions>
 			</ProjectCardTitle>
 			<div>
 				{project.endDate && <ProjectTimeStatus project={project} />}
@@ -84,4 +99,4 @@ export const ProjectCard = ({ project }: ProjectCardProps): JSX.Element => {
 			</div>
 		</ProjectCardStyled>
 	);
-};
+});

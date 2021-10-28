@@ -1,36 +1,35 @@
 import React from 'react';
 import { Button } from '@chakra-ui/react';
 import { Resource } from '../../models/Resource';
-import { useHoldResource } from '../../mutations/useHoldResource';
 import { useReleaseResource } from '../../mutations/useReleaseResource';
 import { useGetLocation } from '../../hooks/useGetLocation';
+import { useHoldResourceButton } from '../../hooks/useHoldResource';
 
 export interface HoldResourceProps {
 	resource: Resource;
+	title?: string;
 }
 
-export const HoldResource = ({ resource }: HoldResourceProps): JSX.Element => {
+export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JSX.Element => {
 	const location = useGetLocation();
-	const { mutateAsync: holdResource, isLoading: isHoldLoading } = useHoldResource();
+	const holdResource = useHoldResourceButton();
 	const { mutateAsync: releaseResource, isLoading: isReleaseLoading } = useReleaseResource();
 
 	const isAvailable = resource.status === 0;
 
 	const holdOrReleaseResource = async (type: 'hold' | 'release') => {
-		let gps: GeolocationPosition | null = null;
-		try {
-			gps = await location.getPosition();
-		} catch (e) {
-			console.info('Could not get GeoLocation', e);
-		}
-
 		if (type === 'hold') {
-			await holdResource({
-				...resource,
-				startLat: gps?.coords.latitude,
-				startLng: gps?.coords.longitude
+			await holdResource.execute({
+				...resource
 			});
 		} else {
+			let gps: GeolocationPosition | null = null;
+			try {
+				gps = await location.getPosition();
+			} catch (e) {
+				console.info('Could not get GeoLocation', e);
+			}
+
 			await releaseResource({
 				...resource,
 				stopLat: gps?.coords.latitude,
@@ -43,10 +42,10 @@ export const HoldResource = ({ resource }: HoldResourceProps): JSX.Element => {
 		<>
 			{isAvailable ? (
 				<Button
-					isLoading={location.loading || isHoldLoading}
+					isLoading={holdResource.isLoading}
 					onClick={() => holdOrReleaseResource('hold')}
 				>
-					Use
+					{title}
 				</Button>
 			) : (
 				<Button

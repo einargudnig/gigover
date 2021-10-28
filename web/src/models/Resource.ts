@@ -13,7 +13,8 @@ export interface Resource {
 	make: string;
 	model: string;
 	name: string;
-	projectId: number;
+	projectId?: number;
+	taskId?: number;
 	serialNr: string;
 	startLat?: number;
 	startLng?: number;

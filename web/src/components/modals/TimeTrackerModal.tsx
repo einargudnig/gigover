@@ -8,10 +8,12 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { ITimeTrackerModalContext } from '../../context/ModalContext';
 import { useProjectList } from '../../queries/useProjectList';
 import { EmptyState } from '../empty/EmptyState';
-import { ProjectStatus, WorkerItem } from '../../models/Project';
+import { WorkerItem } from '../../models/Project';
 import { Task } from '../../models/Task';
 import { SubstringText } from '../../utils/StringUtils';
 import { useTrackerStart } from '../../queries/useTrackerStart';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { useProjectTasks } from '../../hooks/useProjectTasks';
 
 interface TimeTrackerModalProps {
 	context: ITimeTrackerModalContext;
@@ -24,12 +26,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 	const [selectedWorker, setSelectedWorker] = useState<string | undefined>();
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
 	const { mutateAsync: startTask } = useTrackerStart();
-	const openProjects = useMemo(() => {
-		if (data) {
-			return data.filter((p) => p.status === ProjectStatus.OPEN);
-		}
-		return [];
-	}, [data]);
+	const openProjects = useOpenProjects(data);
 	const isEmpty = !data || openProjects.length <= 0;
 
 	const currentProject = useMemo(() => {
@@ -51,13 +48,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 		}
 	}, [currentProject]);
 
-	const tasks: Task[] = useMemo(() => {
-		if (currentProject) {
-			return currentProject ? currentProject.tasks : [];
-		} else {
-			return [];
-		}
-	}, [currentProject]);
+	const tasks: Task[] = useProjectTasks(currentProject);
 
 	const isSubmitDisabled = useMemo(() => {
 		return !(selectedProject && selectedTask && selectedWorker);

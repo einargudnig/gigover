@@ -9,14 +9,16 @@ import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
 import { ResourceModal } from './modals/ResourceModal';
 import ShareItem from '../pages/Files/components/ShareItem';
+import { UseResourceModal } from './modals/UseResourceModal';
+import { ToolsIcon } from './icons/ToolsIcon';
+import { Theme } from '../Theme';
 
-export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.Element => {
+export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
 
 	return (
 		<>
-			{children}
 			{modalContext.taskDetails && (
 				<TaskModal
 					task={modalContext.taskDetails.task}
@@ -46,6 +48,22 @@ export const GlobalModals = ({ children }: { children: React.ReactNode }): JSX.E
 			{modalContext.shareItem && (
 				<Modal open={true} title={'Share options'} onClose={() => setModalContext({})}>
 					<ShareItem shareItem={modalContext.shareItem} />
+				</Modal>
+			)}
+			{modalContext.resourceTracker && (
+				<Modal
+					title={
+						<>
+							<ToolsIcon size={32} color={Theme.colors.yellow} type={'solid'} />
+							<div>Resources</div>
+						</>
+					}
+					open={true}
+					centerModal={true}
+					closeIcon={true}
+					onClose={() => setModalContext({})}
+				>
+					<UseResourceModal resourceTracker={modalContext.resourceTracker} />
 				</Modal>
 			)}
 		</>

@@ -1,7 +1,10 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { devError } from './utils/ConsoleUtils';
+import { Page } from './components/Page';
+import { Box } from '@chakra-ui/react';
 
 interface Props {
+	withPage?: boolean;
 	children: ReactNode;
 }
 
@@ -36,20 +39,45 @@ class ErrorBoundary extends Component<Props, State> {
 	}
 
 	public render() {
+		const { withPage, children } = this.props;
 		const { hasError, errorName, errorDetails, stack } = this.state;
+
+		if (hasError && withPage) {
+			return (
+				<Page onLinkClick={() => window.location.reload()}>
+					<div
+						style={{
+							flex: 1,
+							width: '100%',
+							height: '100%',
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center'
+						}}
+					>
+						<Box bg="white" borderRadius="base" p={4} boxShadow="base" maxWidth="60%">
+							<h1>Sorry.. there was an error</h1>
+							<p>Error: {errorName}</p>
+							<p>Details: {errorDetails}</p>
+							<p>Stack: {stack}</p>
+						</Box>
+					</div>
+				</Page>
+			);
+		}
 
 		if (hasError) {
 			return (
-				<>
+				<div>
 					<h1>Sorry.. there was an error</h1>
 					<p>Error: {errorName}</p>
 					<p>Details: {errorDetails}</p>
 					<p>Stack: {stack}</p>
-				</>
+				</div>
 			);
 		}
 
-		return this.props.children;
+		return children;
 	}
 }
 

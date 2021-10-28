@@ -18,6 +18,7 @@ import { QueryParamProvider } from 'use-query-params';
 import { FileSystemContext } from './context/FileSystemContext';
 import { FileSystemService } from './services/FileSystemService';
 import { pdfjs } from 'react-pdf';
+import ErrorBoundary from './ErrorBoundary';
 
 // We need this for loading PDF viewer on production.
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -73,7 +74,7 @@ const App = ({
 	authUser: FirebaseUser | null;
 }): JSX.Element => {
 	const fileSystem = useMemo(() => new FileSystemService(), []);
-	const [modalContext, setModalContext] = useState<IModalContext>(
+	const modalContext = useState<IModalContext>(
 		userProfile ? { registered: userProfile.registered } : {}
 	);
 
@@ -90,17 +91,18 @@ const App = ({
 	return (
 		<Router>
 			{user !== null ? (
-				<ModalContext.Provider value={[modalContext, setModalContext]}>
+				<QueryParamProvider>
 					<UserContext.Provider value={user}>
 						<FileSystemContext.Provider value={fileSystem}>
-							<GlobalModals>
-								<QueryParamProvider>
+							<ModalContext.Provider value={modalContext}>
+								<ErrorBoundary withPage={true}>
+									<GlobalModals />
 									<AuthenticatedRoutes />
-								</QueryParamProvider>
-							</GlobalModals>
+								</ErrorBoundary>
+							</ModalContext.Provider>
 						</FileSystemContext.Provider>
 					</UserContext.Provider>
-				</ModalContext.Provider>
+				</QueryParamProvider>
 			) : (
 				<Routes>
 					<Route path={'*'} element={<Login />} />

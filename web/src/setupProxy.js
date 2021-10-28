@@ -5,7 +5,7 @@ module.exports = function (app) {
 	app.use(
 		'/rest',
 		createProxyMiddleware({
-			// target: 'http://localhost:8080/gigover-sdk-2.6.1-SNAPSHOT/',
+		//	target: 'http://localhost:8080/gigover-sdk-2.6.1-SNAPSHOT/',
 			target: 'https://rest.gigover.com/',
 			changeOrigin: true
 		})

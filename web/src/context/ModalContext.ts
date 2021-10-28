@@ -44,6 +44,12 @@ export interface ShareItemContext {
 	file?: ProjectImage;
 }
 
+export interface ResourceTrackerContext {
+	project: Project;
+	resource?: Resource;
+	task?: Task;
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
@@ -59,6 +65,7 @@ export interface IModalContext {
 	};
 	editPhoto?: IEditPhotoContext;
 	resources?: IResourceModalContext;
+	resourceTracker?: ResourceTrackerContext;
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

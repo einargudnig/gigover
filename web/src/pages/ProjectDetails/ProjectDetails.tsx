@@ -8,7 +8,7 @@ import { TaskColumn } from './TaskColumn';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
-import { Button, HStack } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
 
@@ -100,11 +100,12 @@ export const ProjectDetails = (): JSX.Element | null => {
 					...(isLoading ? [] : [{ title: project?.name || '' }, { title: 'Tasks' }])
 				]}
 				actions={
+					!isLoading &&
 					project && (
-						<HStack spacing={4}>
+						<>
 							{project.owner && (
 								<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
-									Add team members
+									Team members
 								</Button>
 							)}
 							<Button
@@ -121,7 +122,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 							>
 								Project Files
 							</Button>
-						</HStack>
+						</>
 					)
 				}
 			>

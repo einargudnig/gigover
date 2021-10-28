@@ -41,6 +41,7 @@ interface PageProps {
 	backgroundColor?: string;
 	actions?: React.ReactNode;
 	contentPadding?: boolean;
+	onLinkClick?: () => void;
 }
 
 const PageStyled = styled.div`
@@ -142,7 +143,7 @@ const HeaderActions = styled.div`
 	align-items: center;
 
 	> *:not(:last-child) {
-		margin-right: 24px;
+		margin-right: 8px;
 	}
 `;
 
@@ -195,7 +196,8 @@ export const Page = ({
 	children,
 	backgroundColor,
 	contentPadding = true,
-	actions
+	actions,
+	onLinkClick
 }: PageProps): JSX.Element | null => {
 	const { mutateAsync: logout } = useLogout();
 	const user = useContext(UserContext);
@@ -208,11 +210,11 @@ export const Page = ({
 	return (
 		<PageStyled>
 			<Sidebar>
-				<Link to={'/'}>
+				<Link to={'/'} onClick={onLinkClick}>
 					<GigoverLogo scale={0.7} />
 				</Link>
 				<SidebarNav>
-					<IconLink to={'/'} end={true}>
+					<IconLink to={'/'} end={true} onClick={onLinkClick}>
 						<div>
 							<ProjectIcon />
 						</div>
@@ -223,38 +225,38 @@ export const Page = ({
 					{/*		<OrganizeIcon />*/}
 					{/*	</div>*/}
 					{/*</IconLink>*/}
-					<IconLink to={'/roadmap'}>
+					<IconLink onClick={onLinkClick} to={'/roadmap'}>
 						<div>
 							<RoadmapIcon />
 						</div>
 						<span>Gantt chart</span>
 					</IconLink>
-					<IconLink to={'/files'}>
+					<IconLink onClick={onLinkClick} to={'/files'}>
 						<div>
 							<FolderIcon color={Theme.colors.white} type={'bold'} />
 						</div>
 						<span>File storage</span>
 					</IconLink>
-					<IconLink to={'/resources'}>
+					<IconLink onClick={onLinkClick} to={'/resources'}>
 						<div>
 							<ToolsIcon color={Theme.colors.white} type={'bold'} />
 						</div>
 						<span>Resources</span>
 					</IconLink>
-					<IconLink to={'/time-tracker'}>
+					<IconLink onClick={onLinkClick} to={'/time-tracker'}>
 						<div>
 							<TimeIcon />
 						</div>
 						<span>Time reports</span>
 					</IconLink>
-					<IconLink to={'/settings'}>
+					<IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
 							<SettingsIcon />
 						</div>
 						<span>Settings</span>
 					</IconLink>
 				</SidebarNav>
-				<small>v1.2</small>
+				<small>v1.3</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>

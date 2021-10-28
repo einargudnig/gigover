@@ -10,7 +10,7 @@ export const ResourceTimeRenderer: CountdownRendererFn = ({ days, hours, minutes
 	if (nd < 1) {
 		return (
 			<span>
-				{nh}:{nm}:{ns}
+				{nh}h {nm}m {ns}s
 			</span>
 		);
 	}
@@ -19,7 +19,7 @@ export const ResourceTimeRenderer: CountdownRendererFn = ({ days, hours, minutes
 		<span>
 			{nd} days &{' '}
 			<span>
-				{nh}:{nm}:{ns}
+				{nh}h {nm}m {ns}s
 			</span>
 		</span>
 	);
