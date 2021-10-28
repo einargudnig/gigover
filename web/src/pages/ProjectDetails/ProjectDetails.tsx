@@ -99,7 +99,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 					{ title: 'Projects', url: '/' },
 					...(isLoading ? [] : [{ title: project?.name || '' }, { title: 'Tasks' }])
 				]}
-				tabs={
+				actions={
 					project && (
 						<HStack spacing={4}>
 							{project.owner && (
@@ -112,7 +112,14 @@ export const ProjectDetails = (): JSX.Element | null => {
 								as={Link}
 								to={'/roadmap?project=' + project.projectId}
 							>
-								Open Gantt Chart
+								Gantt Chart
+							</Button>
+							<Button
+								colorScheme={'gray'}
+								as={Link}
+								to={'/files/' + project.projectId}
+							>
+								Project Files
 							</Button>
 						</HStack>
 					)
