@@ -18,16 +18,6 @@ const GigoverMaps = withScriptjs(
 			<GoogleMap defaultZoom={8} defaultCenter={defaultCenter}>
 				{resourcesWithGpsCoord.map((r, rIdx) => (
 					<GigoverPin resource={r} key={rIdx} />
-					// <Marker
-					// 	position={findLastPos(r)}
-					// 	key={rIdx}
-					// 	onClick={() => setModalContext({ resources: { resource: r } })}
-					// 	icon={{
-					// 		url: '/img/MarkPin2.svg',
-					// 		// @ts-ignore
-					// 		anchor: new google.maps.Point(16, 32)
-					// 	}}
-					// />
 				))}
 			</GoogleMap>
 		);

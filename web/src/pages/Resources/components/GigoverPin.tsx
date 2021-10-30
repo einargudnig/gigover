@@ -10,21 +10,12 @@ export interface GigoverPinProps {
 export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const findLastPos = (
-		r: Resource
-	): {
-		lng: number;
-		lat: number;
-	} => {
-		return {
-			lng: r.stopLng || r.startLng || 0,
-			lat: r.stopLat || r.startLat || 0
-		};
-	};
-
 	return (
 		<Marker
-			position={findLastPos(resource)}
+			position={{
+				lng: resource.startLng || 0,
+				lat: resource.startLat || 0
+			}}
 			onClick={() => setIsOpen(!isOpen)}
 			icon={{
 				url: '/img/MarkPin2.svg',
