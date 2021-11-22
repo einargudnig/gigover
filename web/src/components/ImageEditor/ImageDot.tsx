@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Image as ChakraImage, Button } from '@chakra-ui/react';
+import { Box, Image as ChakraImage, Button, Flex } from '@chakra-ui/react';
 import useResizeObserver from 'use-resize-observer';
 import { IImageDot } from '../modals/EditPhotoModal';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import styled from 'styled-components';
 import ImagePoint from './ImagePoint';
 import { DocumentTypes } from '../../models/ProjectImage';
+import { Chevron } from '../icons/Chevron';
 
 const StyledDiv = styled(Box)`
 	canvas {
@@ -65,7 +66,11 @@ export const ImageDot = ({
 	updateStatus,
 	dots,
 	setActivePoint,
-	activePoint
+	activePoint,
+	nextImage,
+	prevImage,
+	isNextImage,
+	isPrevImage
 }: {
 	dots?: IImageDot[];
 	imageSrc: string;
@@ -76,6 +81,10 @@ export const ImageDot = ({
 	updateStatus: (dotId: number, commentId: number) => void;
 	setActivePoint: (id: number) => void;
 	activePoint: number;
+	isNextImage: boolean;
+	isPrevImage: boolean;
+	nextImage: () => void;
+	prevImage: () => void;
 }): JSX.Element => {
 	const [dot, setDot] = useState<{
 		coordinateX: number;
@@ -197,6 +206,30 @@ export const ImageDot = ({
 				justifyContent: 'center'
 			}}
 		>
+			{isPrevImage && (
+				<Button
+					size={'sm'}
+					zIndex={9}
+					position={'absolute'}
+					top={'50%'}
+					left={'-8px'}
+					onClick={() => prevImage()}
+				>
+					<Chevron direction={'left'} />
+				</Button>
+			)}
+			{isNextImage && (
+				<Button
+					size={'sm'}
+					zIndex={9}
+					position={'absolute'}
+					top={'50%'}
+					right={'-8px'}
+					onClick={() => nextImage()}
+				>
+					<Chevron direction={'right'} />
+				</Button>
+			)}
 			<Box
 				style={{
 					position: 'relative',
