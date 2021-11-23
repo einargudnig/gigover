@@ -46,11 +46,12 @@ export const AppPreloader = (): JSX.Element => {
 		const userProperties = {
 			name: data?.data.name, // Full name
 			email: data?.data?.userName, // Email address
-			user_id: authUser?.uid
+			user_id: authUser?.uid,
+			phone_number: data?.data.phoneNumber,
 		};
 
 		window.Intercom('boot', {
-			app_id: 'r645hk6a',
+			app_id: 'jsp3pks1',
 			...userProperties
 		});
 	}, [authUser?.uid, data]);
