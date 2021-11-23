@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FilterIcon } from './icons/FilterIcon';
-import { Progress, Text } from '@chakra-ui/react';
+import { Button, Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
@@ -32,9 +32,9 @@ interface DropZoneProps {
 	uploadType?: FileUploadType;
 	folderId?: number;
 	externalId?: number;
-	callback? : () => void;
+	callback?: () => void;
 
-	children?(props: { isDragActive: boolean; isUploading: boolean }): React.ReactNode;
+	children?(props: { isDragActive: boolean; isUploading: boolean ,open: () => void }): React.ReactNode;
 }
 
 export const DropZone = ({
@@ -53,6 +53,10 @@ export const DropZone = ({
 			// Do something with the files
 			if (acceptedFiles.length > 0) {
 				acceptedFiles.forEach(async (file) => {
+
+					console.log(projectId,'projectId');
+					console.log(folderId,'projectId');
+					console.log(externalId,'projectId');
 					try {
 						setIsUploading(true);
 						const response = await fileService.uploadFile(
@@ -66,7 +70,7 @@ export const DropZone = ({
 							externalId
 						);
 
-						mutate.mutateAsync(response).finally(() => callback ? callback() : null);
+						mutate.mutateAsync(response).finally(() => (callback ? callback() : null));
 					} finally {
 						setIsUploading(false);
 					}
@@ -77,7 +81,7 @@ export const DropZone = ({
 		[fileService, uploadType, projectId, folderId, externalId]
 	);
 
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
+	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
 		multiple: true,
 		onDrop
 	});
@@ -92,7 +96,8 @@ export const DropZone = ({
 			})}
 		>
 			<input {...getInputProps()} />
-			{children({ isDragActive, isUploading })}
+
+			{children({ isDragActive, isUploading, open })}
 		</div>
 	) : (
 		<DropZoneContainer {...getRootProps()} isDraggingOver={isDragActive}>
@@ -104,11 +109,14 @@ export const DropZone = ({
 					<Progress colorScheme="green" size="sm" value={fileUploadProgress || 0} />
 				</div>
 			) : (
-				<Text>
-					{isDragActive
-						? 'Drop files here'
-						: 'Drag and drop files here or click to select a file'}
-				</Text>
+				<div>
+					<Text>
+						{isDragActive
+							? 'Drop files here'
+							: 'Drag and drop files here or click to select a file'}
+					</Text>
+					<Button onClick={() => open()}>Or click here</Button>
+				</div>
 			)}
 		</DropZoneContainer>
 	);

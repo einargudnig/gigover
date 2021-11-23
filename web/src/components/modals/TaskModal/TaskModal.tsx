@@ -134,16 +134,26 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 									);
 								}}
 							>
-								{({ isDragActive }) => (
+								{({ isDragActive, open }) => (
 									<TaskFilesContainer isDragActive={isDragActive}>
 										{projectTask?.images && projectTask?.images.length > 0 ? (
-											projectTask?.images.map((f, fIndex) => (
-												<GigoverFile file={f} key={fIndex} />
-											))
+											<div>
+												<Button ml={2} onClick={() => open()}>
+													Upload
+												</Button>
+												{projectTask?.images.map((f, fIndex) => (
+													<GigoverFile file={f} key={fIndex} />
+												))}
+											</div>
 										) : (
-											<span>
-												No task files, drop files here to upload some.
-											</span>
+											<div>
+												<span>
+													No task files, drop files here to upload some.
+												</span>
+												<Button ml={2} onClick={() => open()}>
+													Upload
+												</Button>
+											</div>
 										)}
 									</TaskFilesContainer>
 								)}

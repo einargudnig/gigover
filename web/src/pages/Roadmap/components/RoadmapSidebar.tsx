@@ -113,7 +113,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 										onClick={() => {
 											setModalState({
 												taskDetails: {
-													projectId: mTask.projectId,
+													projectId: state.project!.projectId!,
 													task: mTask
 												}
 											});
@@ -159,7 +159,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 							onClick={() => {
 								setModalState({
 									taskDetails: {
-										projectId: t.projectId,
+										projectId: state.project!.projectId!,
 										task: t
 									}
 								});
