@@ -32,6 +32,7 @@ interface DropZoneProps {
 	uploadType?: FileUploadType;
 	folderId?: number;
 	externalId?: number;
+	callback? : () => void;
 
 	children?(props: { isDragActive: boolean; isUploading: boolean }): React.ReactNode;
 }
@@ -41,6 +42,7 @@ export const DropZone = ({
 	projectId,
 	folderId,
 	externalId,
+	callback,
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
@@ -64,7 +66,7 @@ export const DropZone = ({
 							externalId
 						);
 
-						mutate.mutateAsync(response).finally(() => null);
+						mutate.mutateAsync(response).finally(() => callback ? callback() : null);
 					} finally {
 						setIsUploading(false);
 					}

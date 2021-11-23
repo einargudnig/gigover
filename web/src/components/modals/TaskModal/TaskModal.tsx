@@ -20,6 +20,8 @@ import { GigoverFile } from '../../../pages/Files/components/File';
 import { ProjectImage } from '../../../models/ProjectImage';
 import { UseResourceOnTask } from './UseResourceOnTask';
 import { BorderDiv } from '../../BorderDiv';
+import { ApiService } from '../../../services/ApiService';
+import { useQueryClient } from 'react-query';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -57,33 +59,10 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const [taskTitle, setTaskTitle] = useState(task.text);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
-	const [taskFiles] = useState<ProjectImage[]>([]);
+	// Get QueryClient from the context
+	const queryClient = useQueryClient();
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
-
-	useEffect(() => {
-		// fileService.getProjectFilesDb(projectId, (snapshot) => {
-		// 	if (snapshot !== null && snapshot.exists()) {
-		// 		const files: ProjectFile[] = [];
-		//
-		// 		// // TODO convert to File model
-		// 		// const map = Object.entries<FileDocument>(snapshot.val());
-		// 		// console.log(snapshot.val());
-		// 		//
-		// 		// map.forEach(([, value]) => {
-		// 		// 	if (
-		// 		// 		value.type === FileUploadType.Task &&
-		// 		// 		value.externalId &&
-		// 		// 		value.externalId === task.taskId
-		// 		// 	) {
-		// 		// 		files.push(new ProjectFile(projectId, value));
-		// 		// 	}
-		// 		// });
-		//
-		// 		setTaskFiles(files);
-		// 	}
-		// });
-	}, []);
 
 	return (
 		<Modal
@@ -149,11 +128,16 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 								projectId={projectId}
 								uploadType={FileUploadType.Task}
 								externalId={task.taskId}
+								callback={() => {
+									queryClient.invalidateQueries(
+										ApiService.taskDetails(task.taskId)
+									);
+								}}
 							>
 								{({ isDragActive }) => (
 									<TaskFilesContainer isDragActive={isDragActive}>
-										{taskFiles.length > 0 ? (
-											taskFiles.map((f, fIndex) => (
+										{projectTask?.images && projectTask?.images.length > 0 ? (
+											projectTask?.images.map((f, fIndex) => (
 												<GigoverFile file={f} key={fIndex} />
 											))
 										) : (

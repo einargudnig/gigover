@@ -163,7 +163,8 @@ export class FileSystemService {
 						name: originalFileName,
 						type: fileType,
 						url: downloadURL,
-						bytes: file.size
+						bytes: file.size,
+						taskId: externalId ?? undefined
 					};
 
 					devInfo('File uploaded');

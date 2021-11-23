@@ -5,7 +5,8 @@ import { devError } from '../utils/ConsoleUtils';
 import { ProjectImage } from '../models/ProjectImage';
 
 export interface DocumentInput
-	extends Pick<ProjectImage, 'projectId' | 'folderId' | 'name' | 'type' | 'url' | 'bytes'> {}
+	extends Pick<ProjectImage, 'projectId' | 'folderId' | 'name' | 'type' | 'url' | 'bytes' | 'taskId'>{}
+
 
 export const useAddDocument = () => {
 	const client = useQueryClient();

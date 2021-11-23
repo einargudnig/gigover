@@ -1,5 +1,6 @@
 import { TaskComment } from './TaskComment';
 import { GantChartItem } from './GantChartItem';
+import { ProjectImage } from "./ProjectImage";
 
 export const TaskStatus = {
 	Backlog: 0,
@@ -22,6 +23,7 @@ export interface Task {
 	priority: number;
 	startDate: number | null;
 	endDate: number | null;
+	images: ProjectImage[];
 }
 
 export class TaskItem extends GantChartItem implements Task {
@@ -33,6 +35,7 @@ export class TaskItem extends GantChartItem implements Task {
 	minutes: number; // Minutes tracked
 	comments: TaskComment[];
 	priority: number;
+	images: ProjectImage[];
 
 	constructor(task: Task) {
 		super(task.startDate, task.endDate);
@@ -44,6 +47,7 @@ export class TaskItem extends GantChartItem implements Task {
 		this.minutes = task.minutes;
 		this.comments = task.comments;
 		this.priority = task.priority;
+		this.images = task.images;
 	}
 
 	get taskJson(): Task {
@@ -57,7 +61,8 @@ export class TaskItem extends GantChartItem implements Task {
 			comments: this.comments,
 			priority: this.priority,
 			startDate: this.startDate,
-			endDate: this.endDate
+			endDate: this.endDate,
+			images: this.images
 		};
 	}
 }

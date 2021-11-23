@@ -11,7 +11,7 @@ export type ProjectTask = {
 		projectId: number;
 		status: ProjectStatusType;
 	};
-} & Pick<Task, 'status' | 'taskId' | 'comments' | 'text' | 'startDate' | 'endDate' | 'typeId'>;
+} & Pick<Task, 'status' | 'taskId' | 'comments' | 'text' | 'startDate' | 'endDate' | 'typeId' | 'images'>;
 
 interface TaskDetailsResponse {
 	projectTask: ProjectTask;
