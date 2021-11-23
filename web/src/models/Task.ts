@@ -15,7 +15,7 @@ export type TaskStatusType = 0 | 1 | 2 | 3 | -1;
 export interface Task {
 	taskId: number;
 	projectId: number;
-	typeId: number;
+	typeId?: number;
 	text: string;
 	status: TaskStatusType;
 	minutes: number; // Minutes tracked
@@ -29,7 +29,7 @@ export interface Task {
 export class TaskItem extends GantChartItem implements Task {
 	taskId: number;
 	projectId: number;
-	typeId: number;
+	typeId?: number;
 	text: string;
 	status: TaskStatusType;
 	minutes: number; // Minutes tracked

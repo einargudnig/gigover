@@ -52,15 +52,11 @@ export const TaskCardInput = ({
 
 	const submit = handleSubmit(async (values) => {
 		if (onSubmit) {
-			if (!values.typeId) {
-				alert('You need to select a type first!');
-			} else {
-				onSubmit({
-					text: values.text,
-					// Sending string because of the select value..
-					typeId: parseInt(values.typeId.toString())
-				});
-			}
+			onSubmit({
+				text: values.text,
+				// Sending string because of the select value..
+				typeId: values.typeId ? parseInt(values.typeId?.toString()) : undefined
+			});
 		}
 	});
 
