@@ -14,7 +14,7 @@ import { Testimonial } from '../components/page-blocks/Testimonial';
 import { Image } from '../components/page-blocks/Image';
 import { PageId } from '../models/Page';
 import { PricePlans } from '../components/page-blocks/PricePlans';
-import { loadIntercom } from 'next-intercom';
+import { loadIntercom } from 'intercom-next';
 
 interface PageProps {
 	page: PageWithBlocks;
@@ -23,11 +23,12 @@ interface PageProps {
 const Index = ({ page }: PageProps): JSX.Element => {
 	useEffect(() => {
 		loadIntercom({
-			appId: process.env.INTERCOM_ID, // default : ''
-			ssr: true, // default: false
+			appId: 'jsp3pks1', // default : ''
+			ssr: false, // default: false
 			initWindow: true, // default: true
 			delay: 0 // default: 0  - usefull for mobile devices to prevent blocking the main thread
 		});
+
 	}, []);
 
 	return (
