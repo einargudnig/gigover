@@ -8,7 +8,7 @@ import { Modal } from '../Modal';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { InviteUser } from '../InviteUser/InviteUser';
 import { TrashIcon } from '../icons/TrashIcon';
-import { validateEmail } from '../../utils/StringUtils';
+// import { validateEmail } from '../../utils/StringUtils';
 import { useRemoveUser } from '../../queries/useRemoveUser';
 
 const Divider = styled.div`
@@ -58,7 +58,7 @@ export const ManageProjectWorkers = ({
 	const { mutate: removeUser, isLoading: isLoadingTwo } = useRemoveUser();
 
 	const remove = async (worker: WorkerItem) => {
-		if (validateEmail(worker.userName)) {
+		if (worker.type === 1) {
 			// Web User
 			await removeUser({
 				projectId: project.projectId,
@@ -93,8 +93,7 @@ export const ManageProjectWorkers = ({
 					<ul>
 						{project.workers.map((worker, workerIndex) => (
 							<li key={workerIndex}>
-								{worker.name}{' '}
-								{validateEmail(worker.userName) ? '(Web user)' : '(App user)'}
+								{worker.name} {worker.type === 1 ? '(Web user)' : '(App user)'}
 								<Button
 									size={'sm'}
 									variant={'outline'}

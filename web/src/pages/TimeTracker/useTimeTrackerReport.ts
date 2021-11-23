@@ -6,7 +6,9 @@ import { Moment } from 'moment';
 import { secondsToHHMMSS } from '../../utils/NumberUtils';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 
-type TimeTrackerReportResultItem = {
+export type TimeTrackerReportResultItem = {
+	projectId: number;
+	taskId: number;
 	projectName: string;
 	taskName: string;
 	worker: WorkerItem;
@@ -81,6 +83,8 @@ export const useTimeTrackerReport = (
 						const task = project?.tasks.find((t) => t.taskId === ts.taskId);
 
 						return {
+							projectId: project?.projectId ?? -1,
+							taskId: task?.taskId ?? -1,
 							projectName: project?.name ?? 'Unknown Project',
 							taskName: task?.text ?? 'Unknown',
 							timesheet: { start: ts.start, stop: ts.stop, workId: ts.workId },

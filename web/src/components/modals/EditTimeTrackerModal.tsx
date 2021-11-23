@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TimeIcon } from '../icons/TimeIcon';
 import { Theme } from '../../Theme';
 import { TrackerSelect } from '../TrackerSelect';
@@ -8,42 +8,77 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { IEditTimeTrackerModalContext } from '../../context/ModalContext';
 import { useModifyTimeRecord } from '../../mutations/useModifyTimeRecord';
 import { LoadingSpinner } from '../LoadingSpinner';
-import styled from 'styled-components';
 import { range } from '../../utils/ArrayUtils';
-
-const MultiSelectWrapper = styled.div`
-	display: flex;
-	justify-content: stretch;
-
-	> div {
-		flex: 1;
-	}
-
-	> div:first-child {
-		margin-right: ${(props) => props.theme.padding(2)};
-	}
-`;
+import { useProjectList } from '../../queries/useProjectList';
+import { Project } from '../../models/Project';
+import { Task } from '../../models/Task';
+import { SingleDatePicker } from 'react-dates';
+import moment from 'moment';
+import { DatePickerWrapper } from '../../pages/TimeTracker/TimeTrackerReport';
+import { addZeroBefore } from '../../utils/NumberUtils';
+import { Box, HStack, Tag, Text } from '@chakra-ui/react';
+import { MomentDateFormat } from '../../utils/MomentDateFormat';
 
 interface TimeTrackerModalProps {
 	context: IEditTimeTrackerModalContext;
 }
 
-export const EditTimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Element => {
-	const closeModal = useCloseModal(context.callback);
-	const [hours, setHours] = useState(context.hours);
-	const [minutes, setMinutes] = useState(context.minutes);
-	const { mutateAsync: modifyTimeRecord, isLoading } = useModifyTimeRecord();
+export const EditTimeTrackerModal = ({
+	context: { callback, reportItem }
+}: TimeTrackerModalProps): JSX.Element => {
+	const firstRun = useRef(true);
+	const { data: projects, isLoading: projectsLoading } = useProjectList();
+	const [startTime, setStartTime] = useState(new Date(reportItem.timesheet.start));
+	const [endTime, setEndTime] = useState(new Date(reportItem.timesheet.stop));
+
+	// @ts-ignore
+	const [selectedProject, setSelectedProject] = useState<Project | undefined>({
+		name: reportItem.projectName,
+		projectId: reportItem.projectId,
+		tasks: []
+	});
+
+	// @ts-ignore
+	const [selectedTask, setSelectedTask] = useState<Task | undefined>({
+		text: reportItem.taskName,
+		taskId: reportItem.taskId
+	});
+
+	const closeModal = useCloseModal(callback);
+	const { mutateAsync: modifyTimeRecord, isLoading, isError, error } = useModifyTimeRecord();
+
+	const [focusedStart, setFocusedStart] = useState<boolean>(false);
+	const [focusedEnd, setFocusedEnd] = useState<boolean>(false);
 
 	const update = async () => {
-		const newMins = hours * 60 + minutes;
+		if (!selectedProject?.projectId || !selectedTask?.taskId) {
+			alert('You need to select a project and a task.');
+			return;
+		}
 
-		await modifyTimeRecord({
-			workId: context.workId,
-			minutes: newMins
-		});
+		try {
+			await modifyTimeRecord({
+				workId: reportItem.timesheet.workId,
+				projectId: selectedProject?.projectId,
+				taskId: selectedTask?.taskId,
+				start: startTime.getTime(),
+				stop: endTime.getTime()
+			});
 
-		closeModal();
+			closeModal();
+		} catch (e) {
+			console.error('Error', e);
+		}
 	};
+
+	useEffect(() => {
+		if (firstRun.current) {
+			firstRun.current = false;
+			return;
+		}
+		// Changing project needs to reset the selected task
+		setSelectedTask(undefined);
+	}, [selectedProject]);
 
 	return (
 		<Modal
@@ -55,54 +90,147 @@ export const EditTimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.El
 				</>
 			}
 			open={true}
-			centerModal={true}
+			centerModal={false}
 			closeIcon={false}
 			onClose={() => closeModal()}
 		>
-			<TrackerSelect
-				title={'Project'}
-				value={context.projectName}
-				disabled={true}
-				options={[{ value: context.projectName, label: context.projectName }]}
-				valueChanged={() => null}
-			/>
+			{isError && (
+				<Box mb={4}>
+					<Text color="red">
+						{error?.toString() ?? 'Unknown error, please try again.'}
+					</Text>
+				</Box>
+			)}
 			<TrackerSelect
 				title={'Worker'}
-				value={context.workerName}
+				value={reportItem.worker.uId}
+				options={[{ value: reportItem.worker.uId, label: reportItem.worker.name }]}
 				disabled={true}
-				options={[{ value: context.workerName, label: context.workerName }]}
 				isNumber={false}
 				valueChanged={() => null}
 			/>
 			<TrackerSelect
-				title={'Task'}
-				value={context.taskName}
-				disabled={true}
-				options={[{ value: context.taskName, label: context.taskName }]}
-				valueChanged={() => null}
+				title={'Project'}
+				value={selectedProject?.projectId}
+				options={
+					projects?.map((project) => {
+						return { value: project.projectId, label: project.name };
+					}) ?? [{ value: reportItem.projectId, label: reportItem.projectName }]
+				}
+				valueChanged={(newValue) =>
+					setSelectedProject(projects.find((p) => p.projectId === newValue)!)
+				}
 			/>
-			<MultiSelectWrapper>
-				<TrackerSelect
-					title={'Hours'}
-					value={hours}
-					isNumber={true}
-					options={range(-1, 59).map((i) => ({
-						value: i + 1,
-						label: (i + 1).toString()
-					}))}
-					valueChanged={(newValue) => setHours(newValue as number)}
-				/>
-				<TrackerSelect
-					title={'Minutes'}
-					value={minutes}
-					isNumber={true}
-					options={range(-1, 58).map((i) => ({
-						value: i + 1,
-						label: (i + 1).toString()
-					}))}
-					valueChanged={(newValue) => setMinutes(newValue as number)}
-				/>
-			</MultiSelectWrapper>
+			<TrackerSelect
+				title={'Task'}
+				value={selectedTask?.taskId}
+				options={
+					projects
+						.find((p) => p.projectId === selectedProject?.projectId)
+						?.tasks.map((task) => {
+							return { value: task.taskId, label: task.text };
+						}) ?? [{ value: reportItem.taskId, label: reportItem.taskName }]
+				}
+				valueChanged={(newValue) =>
+					setSelectedTask(selectedProject?.tasks.find((pt) => pt.taskId === newValue))
+				}
+			/>
+			<Box my={4}>
+				<Tag mb={4}>Start date and time</Tag>
+				<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
+					<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
+						<SingleDatePicker
+							id={'startTime'}
+							displayFormat={MomentDateFormat}
+							date={moment(startTime)}
+							onDateChange={(md) => setStartTime(md?.toDate() ?? startTime)}
+							focused={focusedStart}
+							isOutsideRange={() => false}
+							onFocusChange={(f) => setFocusedStart(f.focused)}
+						/>
+					</DatePickerWrapper>
+					<Box flex={1}>
+						<TrackerSelect
+							title={'Hours'}
+							value={startTime.getHours()}
+							isNumber={true}
+							options={range(0, 60).map((i) => ({
+								value: i,
+								label: addZeroBefore(i)
+							}))}
+							valueChanged={(newValue) => {
+								const date = startTime;
+								date.setHours(Number(newValue));
+								setStartTime(date);
+							}}
+						/>
+					</Box>
+					<Box flex={1}>
+						<TrackerSelect
+							title={'Minutes'}
+							value={startTime.getMinutes()}
+							isNumber={true}
+							options={range(0, 59).map((i) => ({
+								value: i,
+								label: addZeroBefore(i)
+							}))}
+							valueChanged={(newValue) => {
+								const date = startTime;
+								date.setMinutes(Number(newValue));
+								setStartTime(date);
+							}}
+						/>
+					</Box>
+				</HStack>
+			</Box>
+			<Box my={4}>
+				<Tag mb={4}>End date and time</Tag>
+				<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
+					<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
+						<SingleDatePicker
+							id={'endTime'}
+							displayFormat={MomentDateFormat}
+							date={moment(endTime)}
+							onDateChange={(md) => setEndTime(md?.toDate() ?? endTime)}
+							focused={focusedEnd}
+							isOutsideRange={() => false}
+							onFocusChange={(f) => setFocusedEnd(f.focused)}
+						/>
+					</DatePickerWrapper>
+					<Box flex={1}>
+						<TrackerSelect
+							title={'Hours'}
+							value={endTime.getHours()}
+							isNumber={true}
+							options={range(0, 60).map((i) => ({
+								value: i,
+								label: addZeroBefore(i)
+							}))}
+							valueChanged={(newValue) => {
+								const date = endTime;
+								date.setHours(Number(newValue));
+								setEndTime(date);
+							}}
+						/>
+					</Box>
+					<Box flex={1}>
+						<TrackerSelect
+							title={'Minutes'}
+							value={endTime.getMinutes()}
+							isNumber={true}
+							options={range(0, 59).map((i) => ({
+								value: i,
+								label: addZeroBefore(i)
+							}))}
+							valueChanged={(newValue) => {
+								const date = endTime;
+								date.setMinutes(Number(newValue));
+								setEndTime(date);
+							}}
+						/>
+					</Box>
+				</HStack>
+			</Box>
 			<FormActions
 				submitDisabled={false}
 				onSubmit={() => update()}

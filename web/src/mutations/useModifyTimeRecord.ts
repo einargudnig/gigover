@@ -1,21 +1,31 @@
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../services/ApiService';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { ErrorResponse, ErrorTypes } from '../models/ErrorResponse';
 import axios, { AxiosResponse } from 'axios';
 
 interface ModifyTimeRecordInput {
 	workId: number;
-	minutes: number;
+	projectId: number;
+	taskId: number;
+	start: number;
+	stop: number;
 }
 
 export const useModifyTimeRecord = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<AxiosResponse, ErrorResponse, ModifyTimeRecordInput>(
-		async (variables) =>
-			await axios.post(ApiService.changeTimeRecord, variables, {
+		async (variables) => {
+			const response = await axios.post(ApiService.workChange, variables, {
 				withCredentials: true
-			}),
+			});
+
+			if (response.data && response.data.errorCode !== ErrorTypes.OK) {
+				throw new Error(response.data.errorText);
+			}
+
+			return response.data;
+		},
 		{
 			onSuccess: async () => {
 				await queryClient.invalidateQueries(ApiService.timerReport);

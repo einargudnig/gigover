@@ -10,20 +10,22 @@ export const intToString = (value: number) => {
 	return shortValue + suffixes[suffixNum];
 };
 
+export const addZeroBefore = (num: number): string => {
+	if (num < 10) {
+		return `0${num}`;
+	}
+
+	return num.toString();
+};
+
 export const secondsToHHMMSS = (sec_num: number): string => {
 	let hours: number | string = Math.floor(sec_num / 3600);
 	let minutes: number | string = Math.floor((sec_num - hours * 3600) / 60);
 	let seconds: number | string = sec_num - hours * 3600 - minutes * 60;
 
-	if (hours < 10) {
-		hours = '0' + hours;
-	}
-	if (minutes < 10) {
-		minutes = '0' + minutes;
-	}
-	if (seconds < 10) {
-		seconds = '0' + seconds;
-	}
+	hours = addZeroBefore(hours);
+	minutes = addZeroBefore(minutes);
+	seconds = addZeroBefore(seconds);
 
 	return hours + ':' + minutes + ':' + seconds;
 };

@@ -56,6 +56,9 @@ export class ApiService {
 	static timerReport = API_BASE + 'contractor/report';
 	static changeTimeRecord = API_BASE + 'contractor/changeTimeRecord';
 
+	// Time sheets
+	static workChange = API_BASE + 'timesheet/workChange';
+
 	// User registration
 	static registerUser = API_BASE + 'user/store';
 

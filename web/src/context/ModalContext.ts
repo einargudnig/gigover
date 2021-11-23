@@ -5,6 +5,7 @@ import { Milestone } from '../models/Milestone';
 import { Resource } from '../models/Resource';
 import { ProjectFolder } from '../models/ProjectFolder';
 import { ProjectImage } from '../models/ProjectImage';
+import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -14,12 +15,7 @@ export interface ITimeTrackerModalContext {
 }
 
 export interface IEditTimeTrackerModalContext {
-	projectName: string;
-	taskName: string;
-	workerName: string;
-	workId: number;
-	hours: number;
-	minutes: number;
+	reportItem: TimeTrackerReportResultItem;
 	callback: () => void;
 }
 

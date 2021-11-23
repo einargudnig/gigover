@@ -16,6 +16,7 @@ import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
 import { secondsToHours, secondsToMinutes } from '../../utils/NumberUtils';
 import { Center } from '../../components/Center';
+import { MomentDateFormat } from '../../utils/MomentDateFormat';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -32,7 +33,18 @@ const TimeTrackerReportFilter = styled.div`
 	}
 `;
 
-const DatePickerWrapper = styled.div`
+export const DatePickerWrapper = styled.div`
+	.SingleDatePicker,
+	.SingleDatePicker_1,
+	.SingleDatePickerInput {
+		width: 100%;
+		height: 100%;
+
+		.DateInput_input {
+			line-height: 54px;
+		}
+	}
+
 	.DateRangePickerInput__withBorder {
 		padding: 12px;
 		border-radius: 8px;
@@ -57,11 +69,13 @@ const DatePickerWrapper = styled.div`
 	}
 `;
 
+interface TimeTrackerReportProps {
+	refetch: [number, React.Dispatch<React.SetStateAction<number>>];
+}
+
 export const TimeTrackerReport = ({
 	refetch: [refetchValue, setRefetch]
-}: {
-	refetch: [number, React.Dispatch<React.SetStateAction<number>>];
-}): JSX.Element => {
+}: TimeTrackerReportProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const [selectedUser, setSelectedUser] = useState<string | undefined>();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
@@ -81,6 +95,7 @@ export const TimeTrackerReport = ({
 			<TimeTrackerReportFilter>
 				<DatePickerWrapper>
 					<DateRangePicker
+						displayFormat={MomentDateFormat}
 						isOutsideRange={() => false}
 						startDate={startDate}
 						startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
@@ -188,18 +203,7 @@ export const TimeTrackerReport = ({
 												onClick={() => {
 													setModalContext({
 														editTimeTracker: {
-															projectName: result.projectName,
-															taskName: result.taskName,
-															workerName: result.worker.name,
-															workId: result.timesheet.workId,
-															minutes: secondsToMinutes(
-																result.timesheet.stop -
-																	result.timesheet.start
-															),
-															hours: secondsToHours(
-																result.timesheet.stop -
-																	result.timesheet.start
-															),
+															reportItem: result,
 															callback: () => {
 																setRefetch(refetchValue + 1);
 															}
