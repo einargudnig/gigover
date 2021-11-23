@@ -7,6 +7,7 @@ import { EmptyState } from '../../../components/empty/EmptyState';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProjectImage } from '../../../models/ProjectImage';
 import { EditPhotoModal } from '../../../components/modals/EditPhotoModal';
+import useKeyPress from '../../../hooks/useArrowKey';
 
 interface ProjectFilesProps {
 	project: Project;
@@ -16,11 +17,16 @@ export const ProjectFiles = ({ project }: ProjectFilesProps): JSX.Element => {
 	const params = useParams();
 	const navigate = useNavigate();
 	const [selectedFile, setSelectedFile] = useState<ProjectImage | null>(null);
+	const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
 	useEffect(() => {
 		if (project.images.length > 0 && params.fileId) {
-			const file = project.images.find((d) => d.imageId === parseInt(params.fileId || '-1'));
+			const index = project.images.findIndex(
+				(d) => d.imageId === parseInt(params.fileId || '-1')
+			);
 
+			const file = project.images[index];
+			setSelectedIndex(index);
 			if (file) {
 				setSelectedFile(file);
 				return;
@@ -30,6 +36,21 @@ export const ProjectFiles = ({ project }: ProjectFilesProps): JSX.Element => {
 		setSelectedFile(null);
 	}, [project.images, params.fileId]);
 
+	const moveFile = (direction: 'left' | 'right') => {
+		let file;
+		if (direction === 'left') {
+			file = project.images[selectedIndex - 1];
+		} else {
+			file = project.images[selectedIndex + 1];
+		}
+		if (file) {
+			navigate('/files/' + project.projectId + '/file/' + file.imageId, { replace: true });
+		}
+	};
+
+	useKeyPress('ArrowLeft', () => moveFile('left'));
+	useKeyPress('ArrowRight', () => moveFile('right'));
+
 	return (
 		<>
 			{selectedFile && (
@@ -37,6 +58,7 @@ export const ProjectFiles = ({ project }: ProjectFilesProps): JSX.Element => {
 					projectId={project.projectId}
 					file={selectedFile}
 					onClose={() => navigate(-1)}
+					moveFile={moveFile}
 				/>
 			)}
 			<HStack spacing={4}>

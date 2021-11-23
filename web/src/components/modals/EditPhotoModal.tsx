@@ -39,6 +39,7 @@ interface FileSidebarProps {
 	onClose: () => void;
 	file: ProjectImage;
 	projectId?: number;
+	moveFile: (direction: 'left' | 'right') => void;
 }
 
 export interface IImageDot extends ICommentChord {
@@ -65,7 +66,7 @@ export interface ICommentComment {
 	userName: string;
 }
 
-export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element => {
+export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
@@ -244,7 +245,7 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 							</Flex>
 						</Flex>
 
-						<Flex p={2} flex={1}>
+						<Flex p={2} flex={1} position={'relative'}>
 							<ImageDot
 								newComment={newComment}
 								documentType={file.type}
@@ -255,6 +256,10 @@ export const EditPhotoModal = ({ onClose, file }: FileSidebarProps): JSX.Element
 								dots={dots}
 								setActivePoint={setActivePoint}
 								activePoint={activePoint}
+								isNextImage={true}
+								isPrevImage={true}
+								prevImage={() => moveFile('left')}
+								nextImage={() => moveFile('right')}
 							/>
 						</Flex>
 					</Flex>
