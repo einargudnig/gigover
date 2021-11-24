@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import ImagePoint from './ImagePoint';
 import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
-
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 const StyledDiv = styled(Box)`
 	canvas {
 		width: auto !important;
@@ -99,6 +100,7 @@ export const ImageDot = ({
 		height: 1,
 		width: 1
 	});
+	const [zoomAllowed, setZoomAllowed] = useState(false);
 	const [num, setNumPages] = useState(-1);
 	const [pageNumber, setPageNumber] = useState(1);
 
@@ -192,44 +194,8 @@ export const ImageDot = ({
 		[imageDimmensions, boxDimmensions]
 	);
 
-	// @ts-ignore
-	return (
-		<StyledDiv
-			borderRadius={12}
-			width={'100%'}
-			maxHeight={'60vh'}
-			background={'black'}
-			style={{
-				position: 'relative',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center'
-			}}
-		>
-			{isPrevImage && (
-				<Button
-					size={'sm'}
-					zIndex={9}
-					position={'absolute'}
-					top={'50%'}
-					left={'-8px'}
-					onClick={() => prevImage()}
-				>
-					<Chevron direction={'left'} />
-				</Button>
-			)}
-			{isNextImage && (
-				<Button
-					size={'sm'}
-					zIndex={9}
-					position={'absolute'}
-					top={'50%'}
-					right={'-8px'}
-					onClick={() => nextImage()}
-				>
-					<Chevron direction={'right'} />
-				</Button>
-			)}
+	const renderImage = () => {
+		return (
 			<Box
 				style={{
 					position: 'relative',
@@ -271,6 +237,17 @@ export const ImageDot = ({
 							</Document>
 						</div>
 					</>
+				) : zoomAllowed ? (
+					<Zoom>
+						<ChakraImage
+							ref={ref}
+							onMouseUp={addDot}
+							src={imageSrc}
+							maxHeight={'100%'}
+							maxWidth={'100%'}
+							fit={'contain'}
+						/>
+					</Zoom>
 				) : (
 					<ChakraImage
 						ref={ref}
@@ -333,6 +310,57 @@ export const ImageDot = ({
 					/>
 				)}
 			</Box>
+		);
+	};
+	// @ts-ignore
+	return (
+		<StyledDiv
+			borderRadius={12}
+			width={'100%'}
+			maxHeight={'60vh'}
+			background={'black'}
+			style={{
+				position: 'relative',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center'
+			}}
+		>
+			<Button
+				size={'sm'}
+				zIndex={9}
+				position={'absolute'}
+				top={'0'}
+				right={'0'}
+				onClick={() => setZoomAllowed(!zoomAllowed)}
+			>
+				{!zoomAllowed ? 'Allow Zoom' : 'Disable zoom'}
+			</Button>
+			{isPrevImage && (
+				<Button
+					size={'sm'}
+					zIndex={9}
+					position={'absolute'}
+					top={'50%'}
+					left={'-8px'}
+					onClick={() => prevImage()}
+				>
+					<Chevron direction={'left'} />
+				</Button>
+			)}
+			{isNextImage && (
+				<Button
+					size={'sm'}
+					zIndex={9}
+					position={'absolute'}
+					top={'50%'}
+					right={'-8px'}
+					onClick={() => nextImage()}
+				>
+					<Chevron direction={'right'} />
+				</Button>
+			)}
+			{zoomAllowed ? <Zoom>{renderImage()}</Zoom> : renderImage()}
 		</StyledDiv>
 	);
 };
