@@ -24,6 +24,7 @@ export interface Task {
 	startDate: number | null;
 	endDate: number | null;
 	images: ProjectImage[];
+	rank?: string;
 }
 
 export class TaskItem extends GantChartItem implements Task {

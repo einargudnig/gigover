@@ -11,6 +11,7 @@ export interface UpdateTaskFormData extends Pick<Task, 'taskId' | 'status' | 'ty
 	endDate?: number | null;
 	comment?: string;
 	priority?: number;
+	rank?: string;
 }
 
 export const useUpdateTask = (projectId: number) => {

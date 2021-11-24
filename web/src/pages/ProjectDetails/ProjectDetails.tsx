@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { Link, useParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorke
 import { Button } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
+import { LexoRank } from 'lexorank';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -62,7 +63,75 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
 	const project: Project | undefined = data && data.project;
 
+	const taskSorter = (a, b) => {
+		if (a.rank) {
+			return 1;
+		}
+		if (b.rank) {
+			return -1;
+		}
+		if (a.rank && b.rank) {
+			return a.rank > b.rank ? 1 : -1;
+		}
+		return a.primary > b.priority ? 1 : -1;
+	};
+	const tasks = useMemo(() => {
+		return {
+			[TaskStatus.Backlog]: project?.tasks
+				.filter((task) => task.status === TaskStatus.Backlog)
+				.sort(taskSorter),
+			[TaskStatus.Todo]: project?.tasks
+				.filter((task) => task.status === TaskStatus.Todo)
+				.sort(taskSorter),
+			[TaskStatus.Doing]: project?.tasks
+				.filter((task) => task.status === TaskStatus.Doing)
+				.sort(taskSorter),
+			[TaskStatus.Done]: project?.tasks
+				.filter((task) => task.status === TaskStatus.Done)
+				.sort(taskSorter)
+		};
+	}, [project?.tasks]);
+
 	const onDragEnd = async (result: DropResult) => {
+		//Sort it baby
+		const nextStatus = result.destination?.droppableId ?? 0;
+		const nextIndex = result.destination?.index ?? 0;
+
+		const nextRow = tasks[nextStatus];
+
+		const currentItem = nextRow[nextIndex];
+		const prevItem = nextRow[nextIndex - 1];
+		const nextItem = nextRow[nextIndex + 1];
+
+		let lexo;
+		//If it goes into a row that is empty
+
+		// Bottom of list
+		if (prevItem && !nextItem && !currentItem) {
+			lexo = prevItem.rank ? LexoRank.parse(prevItem.rank).genNext() : LexoRank.middle();
+			console.log('bottom');
+		}
+		//in between
+		else if (currentItem && prevItem) {
+			lexo =
+				currentItem.rank && prevItem.rank
+					? LexoRank.parse(prevItem.rank).between(LexoRank.parse(currentItem.rank))
+					: LexoRank.middle();
+			console.log('midddle');
+		}
+		//Top of list
+		else if (currentItem && !prevItem) {
+			lexo = currentItem.rank
+				? LexoRank.parse(currentItem.rank).genPrev()
+				: LexoRank.middle();
+			console.log('top');
+		}
+		//Empty list
+		else {
+			lexo = LexoRank.middle();
+			console.log('empty');
+		}
+
 		const status: TaskStatusType = parseInt(
 			result.destination?.droppableId || '0'
 		) as TaskStatusType;
@@ -73,6 +142,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 			return;
 		}
 
+		// USE LEXO RANK INSTEAD
 		const priority = result.destination ? result.destination.index : result.source.index;
 
 		await updateTask({
@@ -80,6 +150,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 			text: task.text,
 			typeId: task.typeId,
 			priority,
+			rank: lexo.toString(),
 			status,
 			taskId
 		});
@@ -145,6 +216,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 												<TaskColumn
 													project={project!}
 													status={taskStatus}
+													tasks={tasks[taskStatus]}
 												/>
 											</FeedColumn>
 										))}

@@ -9,10 +9,12 @@ import { useEventListener } from '../../hooks/useEventListener';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { devError } from '../../utils/ConsoleUtils';
 import { Button, Heading } from '@chakra-ui/react';
+import { LexoRank } from 'lexorank';
 
 interface TaskColumnProps {
 	project: Project;
 	status: TaskStatusType;
+	tasks: Task[];
 }
 
 const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
@@ -20,24 +22,21 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 	background: !isDraggingOver ? 'transparent' : '#e7fff3'
 });
 
-export const TaskColumn = ({ project, status }: TaskColumnProps) => {
+export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [taskError, setTaskError] = useState<string>();
 	const { mutateAsync: addTask, isLoading } = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
-	const tasks = useMemo(() => {
-		return (
-			project.tasks
-				?.sort((a, b) => (a.priority < b.priority ? -1 : 1))
-				.filter((task) => task.status === status) ?? []
-		);
-	}, [project.tasks, status]);
-
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'text'>) => {
 		try {
 			const response = await addTask({
 				...taskValues,
+				rank: tasks[tasks.length - 1].rank
+					? LexoRank.parse(tasks[tasks.length - 1].rank ?? '')
+							.genNext()
+							.toString()
+					: LexoRank.middle().toString(),
 				projectId: project.projectId,
 				status
 			});
@@ -77,9 +76,9 @@ export const TaskColumn = ({ project, status }: TaskColumnProps) => {
 					>
 						{tasks.map((task, taskIndex) => (
 							<Draggable
-								key={taskIndex}
+								key={task.taskId}
 								draggableId={task.taskId.toString()}
-								index={status + taskIndex + task.priority}
+								index={taskIndex}
 							>
 								{(provided): JSX.Element => (
 									<div

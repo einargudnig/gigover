@@ -5,7 +5,7 @@ import { ApiService } from '../services/ApiService';
 import axios from 'axios';
 import { Task } from '../models/Task';
 
-export interface TaskFormData extends Pick<Task, 'projectId' | 'typeId' | 'text' | 'status'> {
+export interface TaskFormData extends Pick<Task, 'projectId' | 'typeId' | 'text' | 'status' | 'rank'> {
 	taskId?: number;
 }
 
