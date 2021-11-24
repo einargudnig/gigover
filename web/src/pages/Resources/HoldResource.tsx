@@ -16,6 +16,7 @@ export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JS
 	const { mutateAsync: releaseResource, isLoading: isReleaseLoading } = useReleaseResource();
 
 	const isAvailable = resource.status === 0;
+	const notAvailable = resource.status === 2;
 
 	const holdOrReleaseResource = async (type: 'hold' | 'release') => {
 		if (type === 'hold') {
@@ -47,7 +48,7 @@ export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JS
 				>
 					{title}
 				</Button>
-			) : (
+			) : notAvailable ? null : (
 				<Button
 					isLoading={location.loading || isReleaseLoading}
 					onClick={() => holdOrReleaseResource('release')}
