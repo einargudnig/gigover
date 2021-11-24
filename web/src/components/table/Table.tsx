@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table as ChakraTable, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
-import { useExpanded, useTable } from 'react-table';
+import { useExpanded, useSortBy, useTable } from 'react-table';
 import styled from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';
 
@@ -60,6 +60,7 @@ export const Table = ({
 			columns,
 			data
 		},
+		useSortBy,
 		useExpanded
 	);
 
@@ -68,6 +69,7 @@ export const Table = ({
 	}
 
 	// Render the UI for your table
+	// @ts-ignore
 	return (
 		<div style={{ maxWidth: '100%', overflowX: 'auto' }}>
 			<ChakraTable variant={variant} colorScheme={colorScheme} {...getTableProps()}>
@@ -81,9 +83,22 @@ export const Table = ({
 										getColumnProps(column),
 										getHeaderProps(column)
 									])}
+									//@ts-ignore
+									 {...column.getHeaderProps(column.getSortByToggleProps())}
 									key={colIndex}
 								>
 									{column.render('Header')}
+									<span>
+
+                    {
+                    	//@ts-ignore
+											column.isSorted
+											? //@ts-ignore
+												column.isSortedDesc
+												? ' 🔽'
+												: ' 🔼'
+											: ''}
+                  </span>
 								</Th>
 							))}
 						</Tr>

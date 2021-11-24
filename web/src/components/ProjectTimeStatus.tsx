@@ -19,7 +19,7 @@ const getColorScheme = (hoursTotal: number): string => {
 	if (hoursTotal > 50) {
 		return 'green';
 	} else if (hoursTotal > 40) {
-		return 'yellow';
+		return 'yellow.300';
 	} else if (hoursTotal > 25) {
 		return 'orange';
 	} else if (hoursTotal < 0) {
