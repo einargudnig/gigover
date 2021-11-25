@@ -22,6 +22,8 @@ import { UseResourceOnTask } from './UseResourceOnTask';
 import { BorderDiv } from '../../BorderDiv';
 import { ApiService } from '../../../services/ApiService';
 import { useQueryClient } from 'react-query';
+import { DescriptionUpdate } from "./DescriptionUpdate";
+import { WorkerAssigneUpdate } from "./WorkerAssigneUpdate";
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -121,6 +123,9 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							/>
 						</div>
 						{data && data.projectTask && <TaskDateChanger task={data.projectTask} />}
+						<StatusUpdate task={task} projectId={projectId} />
+						<DescriptionUpdate task={task} projectId={projectId} />
+						<WorkerAssigneUpdate task={task} projectId={projectId} />
 						<StatusUpdate task={task} projectId={projectId} />
 						<div style={{ width: '100%' }}>
 							<Tag mb={4}>Task files</Tag>

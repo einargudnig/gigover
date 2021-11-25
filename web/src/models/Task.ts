@@ -26,6 +26,10 @@ export interface Task {
 	images: ProjectImage[];
 	lexoRank?: string;
 	subject?: string;
+	worker?: {
+		uId: string;
+		name: string;
+	}
 }
 
 export class TaskItem extends GantChartItem implements Task {
