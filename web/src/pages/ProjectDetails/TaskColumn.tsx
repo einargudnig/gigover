@@ -28,12 +28,12 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	const { mutateAsync: addTask, isLoading } = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
-	const createTask = async (taskValues: Pick<Task, 'typeId' | 'text'>) => {
+	const createTask = async (taskValues: Pick<Task, 'typeId' | 'subject'>) => {
 		try {
 			const response = await addTask({
 				...taskValues,
-				rank: tasks[tasks.length - 1].rank
-					? LexoRank.parse(tasks[tasks.length - 1].rank ?? '')
+				lexoRank: tasks[tasks.length - 1]?.lexoRank
+					? LexoRank.parse(tasks[tasks.length - 1].lexoRank ?? '')
 							.genNext()
 							.toString()
 					: LexoRank.middle().toString(),

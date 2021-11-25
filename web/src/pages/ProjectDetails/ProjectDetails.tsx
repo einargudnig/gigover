@@ -64,14 +64,14 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const project: Project | undefined = data && data.project;
 
 	const taskSorter = (a, b) => {
-		if (a.rank) {
+		if (a.lexoRank && b.lexoRank) {
+			return a.lexoRank > b.lexoRank ? 1 : -1;
+		}
+		if (a.lexoRank) {
 			return 1;
 		}
-		if (b.rank) {
+		if (b.lexoRank) {
 			return -1;
-		}
-		if (a.rank && b.rank) {
-			return a.rank > b.rank ? 1 : -1;
 		}
 		return a.primary > b.priority ? 1 : -1;
 	};
@@ -108,28 +108,34 @@ export const ProjectDetails = (): JSX.Element | null => {
 
 		// Bottom of list
 		if (prevItem && !nextItem && !currentItem) {
-			lexo = prevItem.rank ? LexoRank.parse(prevItem.rank).genNext() : LexoRank.middle();
-			console.log('bottom');
+			lexo = prevItem.lexoRank
+				? LexoRank.parse(prevItem.lexoRank).genNext()
+				: LexoRank.middle();
+			console.log('bottom', prevItem);
+			console.log('bottom', lexo.toString());
 		}
 		//in between
 		else if (currentItem && prevItem) {
 			lexo =
-				currentItem.rank && prevItem.rank
-					? LexoRank.parse(prevItem.rank).between(LexoRank.parse(currentItem.rank))
+				currentItem.lexoRank && prevItem.lexoRank
+					? LexoRank.parse(prevItem.lexoRank).between(
+							LexoRank.parse(currentItem.lexoRank)
+					  )
 					: LexoRank.middle();
-			console.log('midddle');
+			console.log('midddle', lexo.toString());
 		}
 		//Top of list
 		else if (currentItem && !prevItem) {
-			lexo = currentItem.rank
-				? LexoRank.parse(currentItem.rank).genPrev()
+			console.log(currentItem, 'currentItem');
+			lexo = currentItem.lexoRank
+				? LexoRank.parse(currentItem.lexoRank).genPrev()
 				: LexoRank.middle();
-			console.log('top');
+			console.log('top', lexo.toString());
 		}
 		//Empty list
 		else {
 			lexo = LexoRank.middle();
-			console.log('empty');
+			console.log('empty', lexo.toString());
 		}
 
 		const status: TaskStatusType = parseInt(
@@ -149,8 +155,9 @@ export const ProjectDetails = (): JSX.Element | null => {
 			comment: '',
 			text: task.text,
 			typeId: task.typeId,
+			subject: task.subject,
 			priority,
-			rank: lexo.toString(),
+			lexoRank: lexo.toString(),
 			status,
 			taskId
 		});

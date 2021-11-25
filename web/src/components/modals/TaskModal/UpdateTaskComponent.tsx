@@ -26,6 +26,7 @@ export const UpdateTaskComponent = ({
 			taskId: task.taskId,
 			typeId: task.typeId,
 			text: task.text,
+			subject: task.subject,
 			status: TaskStatus.Archived
 		});
 
@@ -33,12 +34,13 @@ export const UpdateTaskComponent = ({
 	};
 
 	const submitChanges = useCallback(
-		async (newValue: Pick<Task, 'text' | 'typeId'>) => {
+		async (newValue: Pick<Task, 'subject' | 'typeId'>) => {
 			await updateTask({
 				status: task.status,
 				taskId: task.taskId,
+				text: task.text,
 				typeId: newValue.typeId,
-				text: newValue.text
+				subject: newValue.subject
 			});
 
 			onClose(true);
@@ -54,11 +56,11 @@ export const UpdateTaskComponent = ({
 				<Box p={6} borderRadius={6} borderWidth="1px">
 					<TaskCardInput
 						task={task}
-						value={task.text}
+						value={task.subject}
 						error={error?.errorText}
 						loading={isLoading}
 						onChange={(newValue: string) => onChange(newValue)}
-						onSubmit={(newValue: Pick<Task, 'text' | 'typeId'>) =>
+						onSubmit={(newValue: Pick<Task, 'subject' | 'typeId'>) =>
 							submitChanges(newValue)
 						}
 					/>

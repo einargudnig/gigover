@@ -84,7 +84,7 @@ interface TaskProps {
 	error?: string;
 	loading?: boolean;
 	task?: Task;
-	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
+	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'subject'>) => void;
 }
 
 export const TaskCard = ({
@@ -119,7 +119,7 @@ export const TaskCard = ({
 				>
 					{task ? (
 						<TaskItem>
-							<h4>{task.text}</h4>
+							<h4>{task.subject}</h4>
 							<div>
 								<Label
 									style={{ display: 'inline-block', marginTop: 16 }}

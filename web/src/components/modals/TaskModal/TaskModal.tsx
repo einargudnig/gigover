@@ -57,7 +57,7 @@ interface TaskModalProps {
 
 export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const [taskTitle, setTaskTitle] = useState(task.text);
+	const [taskTitle, setTaskTitle] = useState(task.subject);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	// Get QueryClient from the context
 	const queryClient = useQueryClient();
@@ -67,7 +67,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	return (
 		<Modal
 			open={true}
-			title={editing ? `Edit ${taskTitle}` : task.text}
+			title={editing ? `Edit ${taskTitle}` : task.subject}
 			onClose={closeModal}
 			maxWidth={600}
 		>

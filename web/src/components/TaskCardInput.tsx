@@ -27,7 +27,7 @@ interface TaskCardInputProps {
 	error?: string;
 	loading?: boolean;
 	onChange?: (newValue: string) => void;
-	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'text'>) => void;
+	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'subject'>) => void;
 }
 
 export const TaskCardInput = ({
@@ -43,9 +43,9 @@ export const TaskCardInput = ({
 	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
-	const { control, register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'text'>>({
+	const { control, register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'subject'>>({
 		defaultValues: {
-			text: value,
+			subject: value,
 			typeId: task?.typeId
 		}
 	});
@@ -53,7 +53,7 @@ export const TaskCardInput = ({
 	const submit = handleSubmit(async (values) => {
 		if (onSubmit) {
 			onSubmit({
-				text: values.text,
+				subject: values.subject,
 				// Sending string because of the select value..
 				typeId: values.typeId ? parseInt(values.typeId?.toString()) : undefined
 			});
@@ -86,13 +86,13 @@ export const TaskCardInput = ({
 			{error && <div style={{ color: 'red' }}>{error}</div>}
 			<div style={{ minHeight: parentHeight }}>
 				<TaskInput
-					name={'text'}
+					name={'subject'}
 					required={true}
 					placeholder={'Write the task name'}
 					onChange={onChangeHandler}
 					style={{ height: textAreaHeight }}
 					ref={(e) => {
-						register(e, { required: true });
+						register(e, { required: true, maxLength: 100 });
 
 						if (e) {
 							textInputRef.current = e;
