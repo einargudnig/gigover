@@ -13,7 +13,15 @@ export type ProjectTask = {
 	};
 } & Pick<
 	Task,
-	'status' | 'taskId' | 'comments' | 'text' | 'startDate' | 'endDate' | 'typeId' | 'images' | 'subject'
+	| 'status'
+	| 'taskId'
+	| 'comments'
+	| 'text'
+	| 'startDate'
+	| 'endDate'
+	| 'typeId'
+	| 'images'
+	| 'subject'
 >;
 
 interface TaskDetailsResponse {
