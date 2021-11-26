@@ -9,6 +9,8 @@ import { TaskCardInput } from './TaskCardInput';
 import { CardBase } from './CardBase';
 import { FileUploadType } from '../models/FileUploadType';
 import { DropZone } from './DropZone';
+import { Project } from '../models/Project';
+import { Avatar, Flex } from '@chakra-ui/react';
 
 const TaskCardStyled = styled(CardBase)<{
 	isEditing: boolean;
@@ -113,22 +115,26 @@ export const TaskCard = ({
 						isEditing
 							? null
 							: setModalContext({
-									taskDetails: { task: task!, projectId: projectId }
+									taskDetails: {
+										task: task!,
+										projectId: projectId
+									}
 							  })
 					}
 				>
 					{task ? (
 						<TaskItem>
 							<h4>{task.subject}</h4>
-							<div>
+							<Flex mt={4} align={'center'}>
 								<Label
-									style={{ display: 'inline-block', marginTop: 16 }}
+									style={{ display: 'inline-block'}}
 									text={
 										data?.projectTypes.find((pt) => pt.typeId === task?.typeId)
 											?.name || 'unknown'
 									}
 								/>
-							</div>
+								{task.worker && <Avatar size="xs" ml={2} name={task.worker.name} />}
+							</Flex>
 						</TaskItem>
 					) : (
 						<TaskCardInput loading={loading} error={error} onSubmit={onSubmit} />
