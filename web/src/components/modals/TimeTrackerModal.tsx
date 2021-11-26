@@ -135,7 +135,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 							title={'Select a task'}
 							value={selectedTask}
 							options={tasks.map((task) => ({
-								label: SubstringText(task.text, 70),
+								label: SubstringText(task.subject ?? task.text ?? '', 70),
 								value: task.taskId
 							}))}
 							valueChanged={(newValue) => {

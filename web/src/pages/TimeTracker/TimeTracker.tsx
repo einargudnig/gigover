@@ -143,7 +143,7 @@ export const TimeTracker = (): JSX.Element => {
 				const task = pj.tasks.find((t) => t.taskId === taskId);
 
 				if (task) {
-					taskName = SubstringText(task.text, 70);
+					taskName = SubstringText(task.subject ?? task.text ?? '', 70);
 				}
 			}
 		}
