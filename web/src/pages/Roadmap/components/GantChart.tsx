@@ -156,7 +156,7 @@ const convertTaskToRow = (
 	task: TaskItem,
 	setModalContext: Dispatch<SetStateAction<IModalContext>>
 ): GridItemRow | null => {
-	const colors = colorGenerator(task.text);
+	const colors = colorGenerator(task.subject ?? task.text ?? '');
 	const result = task.getColPositions(dates, type);
 
 	if (!result) {
@@ -169,7 +169,7 @@ const convertTaskToRow = (
 		start,
 		end,
 		color: colors,
-		title: task.text,
+		title: task.subject ?? task.text ?? '',
 		onClick: () => {
 			setModalContext({
 				taskDetails: {

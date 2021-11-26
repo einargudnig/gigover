@@ -25,7 +25,7 @@ export interface Task {
 	endDate: number | null;
 	images: ProjectImage[];
 	lexoRank?: string;
-	subject?: string;
+	subject: string;
 	worker?: {
 		uId: string;
 		name: string;
@@ -37,6 +37,7 @@ export class TaskItem extends GantChartItem implements Task {
 	projectId: number;
 	typeId?: number;
 	text: string;
+	subject: string;
 	status: TaskStatusType;
 	minutes: number; // Minutes tracked
 	comments: TaskComment[];
@@ -49,6 +50,7 @@ export class TaskItem extends GantChartItem implements Task {
 		this.projectId = task.projectId;
 		this.typeId = task.typeId;
 		this.text = task.text;
+		this.subject = task.subject;
 		this.status = task.status;
 		this.minutes = task.minutes;
 		this.comments = task.comments;
@@ -62,6 +64,7 @@ export class TaskItem extends GantChartItem implements Task {
 			projectId: this.projectId,
 			typeId: this.typeId,
 			text: this.text,
+			subject: this.subject,
 			status: this.status,
 			minutes: this.minutes,
 			comments: this.comments,
