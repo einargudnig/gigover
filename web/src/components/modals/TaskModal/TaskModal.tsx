@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Modal } from '../../Modal';
 import { Task } from '../../../models/Task';
@@ -17,15 +17,14 @@ import { Edit } from '../../icons/Edit';
 import { FileUploadType } from '../../../models/FileUploadType';
 import { DropZone } from '../../DropZone';
 import { GigoverFile } from '../../../pages/Files/components/File';
-import { ProjectImage } from '../../../models/ProjectImage';
 import { UseResourceOnTask } from './UseResourceOnTask';
 import { BorderDiv } from '../../BorderDiv';
 import { ApiService } from '../../../services/ApiService';
 import { useQueryClient } from 'react-query';
-import { DescriptionUpdate } from "./DescriptionUpdate";
-import { WorkerAssigneUpdate } from "./WorkerAssigneUpdate";
-import { useProjectDetails } from "../../../queries/useProjectDetails";
-import { Project } from "../../../models/Project";
+import { DescriptionUpdate } from './DescriptionUpdate';
+import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
+import { useProjectDetails } from '../../../queries/useProjectDetails';
+import { Project } from '../../../models/Project';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -130,7 +129,11 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 						{data && data.projectTask && <TaskDateChanger task={data.projectTask} />}
 						<StatusUpdate task={task} projectId={projectId} />
 						<DescriptionUpdate task={task} projectId={projectId} />
-						<WorkerAssigneUpdate workers={project?.workers} task={task} projectId={projectId} />
+						<WorkerAssigneUpdate
+							workers={project?.workers}
+							task={task}
+							projectId={projectId}
+						/>
 						<StatusUpdate task={task} projectId={projectId} />
 						<div style={{ width: '100%' }}>
 							<Tag mb={4}>Task files</Tag>

@@ -1,6 +1,6 @@
 import { TaskComment } from './TaskComment';
 import { GantChartItem } from './GantChartItem';
-import { ProjectImage } from "./ProjectImage";
+import { ProjectImage } from './ProjectImage';
 
 export const TaskStatus = {
 	Backlog: 0,
@@ -29,7 +29,7 @@ export interface Task {
 	worker?: {
 		uId: string;
 		name: string;
-	}
+	};
 }
 
 export class TaskItem extends GantChartItem implements Task {

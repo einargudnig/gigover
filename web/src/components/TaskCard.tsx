@@ -9,7 +9,6 @@ import { TaskCardInput } from './TaskCardInput';
 import { CardBase } from './CardBase';
 import { FileUploadType } from '../models/FileUploadType';
 import { DropZone } from './DropZone';
-import { Project } from '../models/Project';
 import { Avatar, Flex } from '@chakra-ui/react';
 
 const TaskCardStyled = styled(CardBase)<{
@@ -127,7 +126,7 @@ export const TaskCard = ({
 							<h4>{task.subject}</h4>
 							<Flex mt={4} align={'center'}>
 								<Label
-									style={{ display: 'inline-block'}}
+									style={{ display: 'inline-block' }}
 									text={
 										data?.projectTypes.find((pt) => pt.typeId === task?.typeId)
 											?.name || 'unknown'

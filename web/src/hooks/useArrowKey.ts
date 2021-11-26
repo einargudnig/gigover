@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const useKeyPress = function (targetKey, onPress) {
 	const upHandler = ({ key }) => {
-	  console.log('uphandler', key)
 		if (key === targetKey) {
 			onPress();
 		}

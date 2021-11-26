@@ -1,5 +1,5 @@
 import React from 'react';
-import { Task, TaskStatus, TaskStatusType } from '../../../models/Task';
+import { Task } from '../../../models/Task';
 import { TrackerSelect } from '../../TrackerSelect';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';

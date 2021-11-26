@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Image as ChakraImage, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Image as ChakraImage } from '@chakra-ui/react';
 import useResizeObserver from 'use-resize-observer';
 import { IImageDot } from '../modals/EditPhotoModal';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -10,6 +10,7 @@ import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+
 const StyledDiv = styled(Box)`
 	canvas {
 		width: auto !important;

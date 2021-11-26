@@ -47,7 +47,7 @@ export const AppPreloader = (): JSX.Element => {
 			name: data?.data.name, // Full name
 			email: data?.data?.userName, // Email address
 			user_id: authUser?.uid,
-			phone_number: data?.data.phoneNumber,
+			phone_number: data?.data.phoneNumber
 		};
 
 		window.Intercom('boot', {

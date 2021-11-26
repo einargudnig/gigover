@@ -84,21 +84,21 @@ export const Table = ({
 										getHeaderProps(column)
 									])}
 									//@ts-ignore
-									 {...column.getHeaderProps(column.getSortByToggleProps())}
+									{...column.getHeaderProps(column.getSortByToggleProps())}
 									key={colIndex}
 								>
 									{column.render('Header')}
 									<span>
-
-                    {
-                    	//@ts-ignore
+										{
+											//@ts-ignore
 											column.isSorted
-											? //@ts-ignore
-												column.isSortedDesc
-												? ' 🔽'
-												: ' 🔼'
-											: ''}
-                  </span>
+												? //@ts-ignore
+												  column.isSortedDesc
+													? ' 🔽'
+													: ' 🔼'
+												: ''
+										}
+									</span>
 								</Th>
 							))}
 						</Tr>

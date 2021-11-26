@@ -34,7 +34,11 @@ interface DropZoneProps {
 	externalId?: number;
 	callback?: () => void;
 
-	children?(props: { isDragActive: boolean; isUploading: boolean ,open: () => void }): React.ReactNode;
+	children?(props: {
+		isDragActive: boolean;
+		isUploading: boolean;
+		open: () => void;
+	}): React.ReactNode;
 }
 
 export const DropZone = ({
@@ -53,10 +57,6 @@ export const DropZone = ({
 			// Do something with the files
 			if (acceptedFiles.length > 0) {
 				acceptedFiles.forEach(async (file) => {
-
-					console.log(projectId,'projectId');
-					console.log(folderId,'projectId');
-					console.log(externalId,'projectId');
 					try {
 						setIsUploading(true);
 						const response = await fileService.uploadFile(

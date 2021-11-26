@@ -14,7 +14,6 @@ import { TimerContainer, TimerWrapper } from './TimeTracker';
 import { formatDate } from '../../utils/StringUtils';
 import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
-import { secondsToHours, secondsToMinutes } from '../../utils/NumberUtils';
 import { Center } from '../../components/Center';
 import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { CsvReportModal } from './components/CsvReportModal';
