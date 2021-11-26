@@ -58,9 +58,10 @@ const ProjectDetailsPage = styled.div`
 export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
 	const projectIdNumber = parseInt(projectId as string);
-	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const [manageWorkers, setManageWorkers] = useState(false);
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
+
+	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const project: Project | undefined = data && data.project;
 
 	const taskSorter = (a, b) => {

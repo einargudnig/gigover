@@ -6,13 +6,13 @@ import axios from 'axios';
 import { Task } from '../models/Task';
 import { Project } from '../models/Project';
 
-export interface UpdateTaskFormData extends Pick<Task, 'taskId' | 'status' | 'typeId' | 'text' | 'lexoRank' | 'subject'> {
+export interface UpdateTaskFormData
+	extends Pick<Task, 'taskId' | 'status' | 'typeId' | 'text' | 'lexoRank' | 'subject'> {
 	startDate?: number | null;
 	endDate?: number | null;
 	comment?: string;
 	priority?: number;
-	workerId?: number | string;
-
+	worker?: { uId?: number | string };
 }
 
 export const useUpdateTask = (projectId: number) => {
