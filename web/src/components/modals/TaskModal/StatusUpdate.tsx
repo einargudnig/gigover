@@ -15,9 +15,7 @@ export const StatusUpdate = ({ task, projectId }: StatusUpdateProps): JSX.Elemen
 
 	const updateTaskStatus = async (status: TaskStatusType) => {
 		await updateTask({
-			taskId: task.taskId,
-			typeId: task.typeId,
-			text: task.text,
+			...task,
 			status: status,
 			comment: ''
 		});

@@ -30,10 +30,7 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 		const { startDate, endDate } = getValues(['startDate', 'endDate']);
 
 		updateTask({
-			taskId: task.taskId,
-			typeId: task.typeId,
-			text: task.text,
-			status: task.status,
+			...task,
 			startDate: startDate,
 			endDate: endDate,
 			comment: ''

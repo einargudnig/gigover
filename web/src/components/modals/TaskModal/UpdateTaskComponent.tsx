@@ -23,10 +23,7 @@ export const UpdateTaskComponent = ({
 
 	const archiveTask = async () => {
 		await updateTask({
-			taskId: task.taskId,
-			typeId: task.typeId,
-			text: task.text,
-			subject: task.subject,
+			...task,
 			status: TaskStatus.Archived
 		});
 
@@ -36,9 +33,7 @@ export const UpdateTaskComponent = ({
 	const submitChanges = useCallback(
 		async (newValue: Pick<Task, 'subject' | 'typeId'>) => {
 			await updateTask({
-				status: task.status,
-				taskId: task.taskId,
-				text: task.text,
+				...task,
 				typeId: newValue.typeId,
 				subject: newValue.subject
 			});

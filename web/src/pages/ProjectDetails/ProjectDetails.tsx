@@ -153,10 +153,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 		const priority = result.destination ? result.destination.index : result.source.index;
 
 		await updateTask({
-			comment: '',
-			text: task.text,
-			typeId: task.typeId,
-			subject: task.subject,
+			...task,
 			priority,
 			lexoRank: lexo.toString(),
 			status,
