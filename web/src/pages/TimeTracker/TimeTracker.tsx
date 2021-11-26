@@ -186,10 +186,6 @@ export const TimeTracker = (): JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refetch]);
 
-	useEffect(() => {
-		// Some NASTY bug happening when clicking the Start timer button too fast
-	}, []);
-
 	return (
 		<>
 			<Page title={'Time tracker'}>

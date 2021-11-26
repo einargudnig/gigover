@@ -58,6 +58,7 @@ export class ApiService {
 
 	// Time sheets
 	static workChange = API_BASE + 'timesheet/workChange';
+	static report = API_BASE + 'timesheet/reportCsv';
 
 	// User registration
 	static registerUser = API_BASE + 'user/store';

@@ -17,6 +17,7 @@ import { ModalContext } from '../../context/ModalContext';
 import { secondsToHours, secondsToMinutes } from '../../utils/NumberUtils';
 import { Center } from '../../components/Center';
 import { MomentDateFormat } from '../../utils/MomentDateFormat';
+import { CsvReportModal } from './components/CsvReportModal';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -76,6 +77,7 @@ interface TimeTrackerReportProps {
 export const TimeTrackerReport = ({
 	refetch: [refetchValue, setRefetch]
 }: TimeTrackerReportProps): JSX.Element => {
+	const [reportModal, setReportModal] = useState(false);
 	const [, setModalContext] = useContext(ModalContext);
 	const [selectedUser, setSelectedUser] = useState<string | undefined>();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
@@ -92,6 +94,13 @@ export const TimeTrackerReport = ({
 
 	return (
 		<div>
+			{reportModal && (
+				<CsvReportModal
+					startDate={startDate}
+					endDate={endDate}
+					onClose={() => setReportModal(false)}
+				/>
+			)}
 			<TimeTrackerReportFilter>
 				<DatePickerWrapper>
 					<DateRangePicker
@@ -112,6 +121,14 @@ export const TimeTrackerReport = ({
 						focusedInput={focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
 						onFocusChange={(fInput) => setFocusedInput(fInput)} // PropTypes.func.isRequired,
 					/>
+					<Button
+						onClick={() => setReportModal(true)}
+						height={'100%'}
+						lineHeight="72px"
+						ml={4}
+					>
+						Export CSV
+					</Button>
 				</DatePickerWrapper>
 				<div>
 					<TrackerSelect
