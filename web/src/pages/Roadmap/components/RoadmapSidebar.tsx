@@ -148,7 +148,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 					>
 						<HStack maxWidth={`calc(${GRID_SIDEBAR_WIDTH} - 40px)`} spacing={4}>
 							<Text isTruncated color={'black'} fontSize={'sm'}>
-								{t.text}
+								{displayTaskTitle(t)}
 							</Text>
 						</HStack>
 						<IconButton
