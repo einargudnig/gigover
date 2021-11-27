@@ -18,6 +18,7 @@ import { DatePickerWrapper } from '../../pages/TimeTracker/TimeTrackerReport';
 import { addZeroBefore } from '../../utils/NumberUtils';
 import { Box, HStack, Tag, Text } from '@chakra-ui/react';
 import { MomentDateFormat } from '../../utils/MomentDateFormat';
+import { displayTaskTitle } from '../../utils/TaskUtils';
 
 interface TimeTrackerModalProps {
 	context: IEditTimeTrackerModalContext;
@@ -128,7 +129,7 @@ export const EditTimeTrackerModal = ({
 					projects
 						.find((p) => p.projectId === selectedProject?.projectId)
 						?.tasks.map((task) => {
-							return { value: task.taskId, label: task.text };
+							return { value: task.taskId, label: displayTaskTitle(task) };
 						}) ?? [{ value: reportItem.taskId, label: reportItem.taskName }]
 				}
 				valueChanged={(newValue) =>

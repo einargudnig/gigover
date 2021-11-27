@@ -6,6 +6,7 @@ import { ModalContext } from '../../../context/ModalContext';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { EmptyProjects } from '../../../components/empty/EmptyProjects';
 import { Edit } from '../../../components/icons/Edit';
+import { displayTaskTitle } from '../../../utils/TaskUtils';
 
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
@@ -101,7 +102,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 										spacing={4}
 									>
 										<Text isTruncated color={'black'} fontSize={'sm'}>
-											{mTask.text}
+											{displayTaskTitle(mTask)}
 										</Text>
 									</HStack>
 									<IconButton

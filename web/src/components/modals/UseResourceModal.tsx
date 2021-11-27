@@ -6,6 +6,7 @@ import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { ResourceTrackerContext } from '../../context/ModalContext';
 import { HStack } from '@chakra-ui/react';
 import { UseResourceOnTask } from './TaskModal/UseResourceOnTask';
+import { displayTaskTitle } from '../../utils/TaskUtils';
 
 export const UseResourceModal = ({
 	resourceTracker
@@ -23,7 +24,7 @@ export const UseResourceModal = ({
 				title={'Select a task'}
 				value={selectedTask?.taskId}
 				options={tasks.map((task) => ({
-					label: SubstringText(task.subject ?? task.text ?? '', 70),
+					label: SubstringText(displayTaskTitle(task), 70),
 					value: task.taskId
 				}))}
 				isNumber={true}

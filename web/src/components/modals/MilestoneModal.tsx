@@ -22,6 +22,7 @@ import { Task, TaskStatus } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Options } from '../forms/Options';
+import { displayTaskTitle } from '../../utils/TaskUtils';
 
 interface MilestoneModalProps {
 	context: MilestoneModalContext;
@@ -181,7 +182,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 										onBlur={onBlur}
 										onChange={(v: number) => onChange(v)}
 										value={value}
-										getOptionLabel={(option: Task) => option.text}
+										getOptionLabel={(option: Task) => displayTaskTitle(option)}
 										getOptionValue={(option: Task) => option.taskId}
 										options={tasks}
 									/>

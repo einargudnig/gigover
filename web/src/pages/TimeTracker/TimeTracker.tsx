@@ -17,6 +17,7 @@ import { EmptyState } from '../../components/empty/EmptyState';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TimeIcon } from '../../components/icons/TimeIcon';
 import { Theme } from '../../Theme';
+import { displayTaskTitle } from '../../utils/TaskUtils';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -143,7 +144,7 @@ export const TimeTracker = (): JSX.Element => {
 				const task = pj.tasks.find((t) => t.taskId === taskId);
 
 				if (task) {
-					taskName = SubstringText(task.subject ?? task.text ?? '', 70);
+					taskName = SubstringText(displayTaskTitle(task), 70);
 				}
 			}
 		}

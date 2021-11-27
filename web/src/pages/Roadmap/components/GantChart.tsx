@@ -9,6 +9,7 @@ import { GantChartDates } from '../GantChartDates';
 import { Milestone } from '../../../models/Milestone';
 import { TaskItem } from '../../../models/Task';
 import { IModalContext, ModalContext } from '../../../context/ModalContext';
+import { displayTaskTitle } from '../../../utils/TaskUtils';
 
 interface GridProps {
 	segments: number;
@@ -156,7 +157,7 @@ const convertTaskToRow = (
 	task: TaskItem,
 	setModalContext: Dispatch<SetStateAction<IModalContext>>
 ): GridItemRow | null => {
-	const colors = colorGenerator(task.subject ?? task.text ?? '');
+	const colors = colorGenerator(displayTaskTitle(task));
 	const result = task.getColPositions(dates, type);
 
 	if (!result) {
@@ -169,7 +170,7 @@ const convertTaskToRow = (
 		start,
 		end,
 		color: colors,
-		title: task.subject ?? task.text ?? '',
+		title: displayTaskTitle(task),
 		onClick: () => {
 			setModalContext({
 				taskDetails: {

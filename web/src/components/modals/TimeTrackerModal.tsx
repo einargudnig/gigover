@@ -14,6 +14,7 @@ import { SubstringText } from '../../utils/StringUtils';
 import { useTrackerStart } from '../../queries/useTrackerStart';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { useProjectTasks } from '../../hooks/useProjectTasks';
+import { displayTaskTitle } from '../../utils/TaskUtils';
 
 interface TimeTrackerModalProps {
 	context: ITimeTrackerModalContext;
@@ -135,7 +136,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 							title={'Select a task'}
 							value={selectedTask}
 							options={tasks.map((task) => ({
-								label: SubstringText(task.subject ?? task.text ?? '', 70),
+								label: SubstringText(displayTaskTitle(task), 70),
 								value: task.taskId
 							}))}
 							valueChanged={(newValue) => {

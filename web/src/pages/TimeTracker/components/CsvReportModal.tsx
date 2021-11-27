@@ -8,6 +8,7 @@ import { Project, WorkerItem } from '../../../models/Project';
 import { Task } from '../../../models/Task';
 import { useReportToCSV } from '../../../mutations/useReportToCSV';
 import { Button, Flex } from '@chakra-ui/react';
+import { displayTaskTitle } from '../../../utils/TaskUtils';
 
 export interface CsvReportModalProps {
 	startDate: Moment;
@@ -79,8 +80,10 @@ export const CsvReportModal = ({
 						options={
 							projects
 								.find((p) => p.projectId === selectedProject?.projectId)
-								?.tasks.map((task) => ({ value: task.taskId, label: task.text })) ??
-							[]
+								?.tasks.map((task) => ({
+									value: task.taskId,
+									label: displayTaskTitle(task)
+								})) ?? []
 						}
 						valueChanged={(newValue) =>
 							setSelectedTask(
