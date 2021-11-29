@@ -92,7 +92,7 @@ export const TaskCardInput = ({
 					onChange={onChangeHandler}
 					style={{ height: textAreaHeight }}
 					ref={(e) => {
-						register(e, { required: true, maxLength: 100 });
+						register(e, { required: true, maxLength: 200 });
 
 						if (e) {
 							textInputRef.current = e;
