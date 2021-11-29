@@ -22,6 +22,10 @@ class Task {
     this.minutes,
   });
 
+  String getTitle() {
+    return this.subject ?? this.text ?? "Unknown";
+  }
+
   static Task fromJson(Map<String, dynamic> json) {
     try {
       int? statusIndex = json["status"];

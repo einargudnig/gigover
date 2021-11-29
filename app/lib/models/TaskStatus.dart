@@ -7,7 +7,7 @@ enum TaskStatus {
 }
 
 TaskStatus statusFromString(String status) {
-  return TaskStatus.values.firstWhere((e) => getTaskStatusString(e) == status);
+  return TaskStatus.values.firstWhere((e) => getTaskStatusString(e) == status, orElse: () => TaskStatus.Backlog);
 }
 
 String getTaskStatusString(TaskStatus? status) {

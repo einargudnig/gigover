@@ -9,7 +9,7 @@ class ProjectType {
     this.image,
   });
 
-  static ProjectType? fromJson(Map<String, dynamic> json) {
+  static ProjectType fromJson(Map<String, dynamic> json) {
     try {
       return ProjectType(
         typeId: json["typeId"],
@@ -17,7 +17,7 @@ class ProjectType {
         image: json["image"],
       );
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 }

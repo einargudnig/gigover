@@ -84,9 +84,7 @@ class ProjectListScreen extends StatelessWidget {
               backgroundColor: MVTheme.appBarBackgroundColor,
               onRefresh: () {
                 return homeProvider.getProjects().then((v) {
-                  homeProvider.getStopWatchData().then((s) {
-                    homeProvider.setCurrentProject(homeProvider.projects[0]);
-                  });
+                  homeProvider.getStopWatchData();
                 });
               },
               child: SizedBox.expand(

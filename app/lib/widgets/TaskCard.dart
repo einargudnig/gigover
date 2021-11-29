@@ -43,7 +43,7 @@ class TaskCardState extends State<TaskCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-                  CardTitle(title: widget.task!.text),
+              CardTitle(title: widget.task!.getTitle()),
               Spacing(isVertical: true, amount: 1,),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

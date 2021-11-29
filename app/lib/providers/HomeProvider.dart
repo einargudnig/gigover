@@ -74,6 +74,7 @@ class TimerItem {
 enum StopWatchStatus { OnGoing, Paused, Stopped, Idle }
 
 String currentProjectString = 'currentProject';
+
 class StopWatchData {
   Project currentProject;
   Task currentTask;
@@ -95,7 +96,7 @@ class HomeProvider with ChangeNotifier {
   String? projectsError;
   bool loadingProjects = true;
   List<Project> projects = [];
-  List<ProjectType>? projectTypes = [];
+  List<ProjectType> projectTypes = [];
 
   Project? currentTrackedProject;
   Task? currentTrackedTask;
@@ -130,22 +131,19 @@ class HomeProvider with ChangeNotifier {
       getProjectTypes();
 
       if (user!.registered!) {
-        //skoda
+        // skoda
         this.getProjects().then((v) {
           this.getStopWatchData().then((s) async {
-            if (this.currentTrackedProject == null && this.projects.length > 0) {
-              //TODO here set current project as last selected
+            if (this.currentTrackedProject == null &&
+                this.projects.length > 0) {
+              // TODO here set current project as last selected
               SharedPreferences prefs = await SharedPreferences.getInstance();
               var lastProjectId = prefs.getInt(currentProjectString);
-              if(lastProjectId != null) {
-                Project project = this.projects.firstWhere((Project element) => element.projectId == lastProjectId);
-                if (project != null) {
-                  this.setCurrentProject(project);
-                } else {
-                  this.setCurrentProject(this.projects[0]);
-                }
-              } else {
-                this.setCurrentProject(this.projects[0]);
+              if (lastProjectId != null) {
+                Project project = this.projects.firstWhere(
+                    (Project element) => element.projectId == lastProjectId,
+                    orElse: () => this.projects[0]);
+                this.setCurrentProject(project);
               }
             }
           });
@@ -160,12 +158,13 @@ class HomeProvider with ChangeNotifier {
   void getProjectTypes() async {
     try {
       Response response = await ApiService.getProjectTypes();
-      List<ProjectType>? projectsMapped =
-          response.data["projectTypes"].map<ProjectType?>((p) {
+      List<ProjectType> projectsMapped =
+          response.data["projectTypes"].map<ProjectType>((p) {
         return ProjectType.fromJson(p);
       }).toList();
       projectTypes = projectsMapped;
     } catch (e) {
+      print('ERROR GETTING PROJECT TYPES');
       print(e);
       // Do nothing here, nothing major happens without ProjectTypes
     }
@@ -214,15 +213,20 @@ class HomeProvider with ChangeNotifier {
         !response.data["timeSheet"].isEmpty) {
       // Set the data
       // Calculate current time from the stopwatch data
+
+      print('TIMESHEET PROJECTS');
+      print(this.projects);
+
       Project tempP = this.projects.firstWhere((Project t) {
         return t.projectId == response.data["timeSheet"]["projectId"];
       });
+
       Task tempT = tempP.tasks!.firstWhere((Task t) {
         return t.taskId == response.data["timeSheet"]["taskId"];
       });
 
       if (tempP != null) {
-        this.setCurrentProject(tempP);
+        this.setCurrentProject(tempP, updateTaskValue: false);
       }
       if (tempT != null) {
         this.setCurrentTask(tempT);
@@ -257,14 +261,16 @@ class HomeProvider with ChangeNotifier {
     this.projectsError = '';
   }
 
-  Future<String> getProjects() async {
-    Response response = await ApiService.projectList();
-    print(response);
-    print('resss--');
-
+  Future<void> getUserDetailsForDebugging() async {
+    print('GIGOVER - Fetching User Details (Debug)');
     Response res2 = await ApiService.getUserDetails();
     print(res2);
-    print('Getting projects..');
+  }
+
+  Future<String> getProjects() async {
+    print('GIGOVER - Getting projects..');
+    Response response = await ApiService.projectList();
+    await getUserDetailsForDebugging();
 
     if (response.statusCode != 200) {
       projectsError = 'Error came up while fetching projects';
@@ -279,13 +285,15 @@ class HomeProvider with ChangeNotifier {
           }).toList();
 
           print('Got projects!');
-          this.projects = projectsMapped.where((Project? element) => element!.status != ProjectStatus.DONE).toList();
+          this.projects = projectsMapped
+              .where(
+                  (Project? element) => element!.status != ProjectStatus.DONE)
+              .toList();
           this.clearErrors();
         } else {
           projectsError = 'No projects available';
         }
       } catch (e) {
-        print('herna}');
         print("ERROR WHILE PARSING PROJECTS");
         print(e);
         projectsError = 'Could not load projects';
@@ -298,16 +306,21 @@ class HomeProvider with ChangeNotifier {
     return 'done';
   }
 
-  Future<void> setCurrentProject(Project project) async {
+  Future<void> setCurrentProject(
+    Project project, {
+    bool updateTaskValue = true,
+  }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs);
     prefs.setInt(currentProjectString, project.projectId!).then((bool success) {
-      return  project.projectId;
+      return project.projectId;
     });
     prefs.setInt(currentProjectString, project.projectId!);
     this.currentTrackedProject = project;
-    this.currentTrackedTask =
-        project.tasks!.length > 0 ? project.tasks![0] : null;
+
+    if (updateTaskValue) {
+      this.currentTrackedTask =
+          project.tasks!.length > 0 ? project.tasks![0] : null;
+    }
     notifyListeners();
   }
 

@@ -245,7 +245,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     FocusScope.of(context).unfocus();
     String currentText = commentInputController.value.text;
 
-    if (currentText != null && currentText.length > 0) {
+    if (currentText.length > 0) {
       setState(() {
         addCommentLoading = true;
       });
@@ -275,7 +275,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       child: Container(
         child: Column(
           children: [
-            taskDetailItemWrapper(TaskDetailHeader(this._task!.subject ?? this._task!.text!)),
+            taskDetailItemWrapper(TaskDetailHeader(this._task!.getTitle())),
             taskDetailItemWrapper(IgitalDropdownButton<dynamic>(
               context,
               'Current status',
@@ -358,19 +358,21 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 8.0, bottom: 8.0),
-                              child: RoundedButton(
-                                loading: addCommentLoading,
-                                fillBackground: MVTheme.mainGreen,
-                                padding: EdgeInsets.only(
-                                    right: 12.0, left: 12, top: 8, bottom: 8),
-                                textColor: Colors.white,
-                                onTap: () {
-                                  addComment();
-                                },
-                                text: 'Add comment',
+                            SafeArea(
+                              bottom: true,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: RoundedButton(
+                                  loading: addCommentLoading,
+                                  fillBackground: MVTheme.mainGreen,
+                                  padding: EdgeInsets.only(
+                                      right: 12.0, left: 12, top: 8, bottom: 8),
+                                  textColor: Colors.white,
+                                  onTap: () {
+                                    addComment();
+                                  },
+                                  text: 'Add comment',
+                                ),
                               ),
                             ),
                           ],

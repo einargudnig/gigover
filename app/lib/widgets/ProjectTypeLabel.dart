@@ -19,8 +19,8 @@ class ProjectTypeLabel extends StatelessWidget {
       builder: (context, homeProvider, child) {
         String? typeLabel = 'Unknown';
 
-        if (homeProvider.projectTypes!.length > 0) {
-          ProjectType type = homeProvider.projectTypes!.singleWhere((pt) => pt.typeId == typeId);
+        if (homeProvider.projectTypes.length > 0) {
+          ProjectType type = homeProvider.projectTypes.singleWhere((pt) => pt.typeId == typeId, orElse: () => homeProvider.projectTypes[0]);
 
           if (type != null) {
             typeLabel = type.name;

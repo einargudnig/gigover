@@ -32,8 +32,6 @@ class Project {
 
   static Project fromJson(Map<String, dynamic> json) {
     try {
-      print(json);
-      print('herna');
       return Project(
         projectId: json["projectId"],
         name: json["name"],
