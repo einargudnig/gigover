@@ -43,7 +43,7 @@ Widget IgitalDropdownButton<T>(
         onChanged: (T? newItem) {
           onTap!(newItem);
         },
-        items: items.map<DropdownMenuItem<T>>((T value) {
+        items: [...items].map<DropdownMenuItem<T>>((T value) {
           return DropdownMenuItem<T>(
             value: value,
             child: Text(value.toString()),

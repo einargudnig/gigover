@@ -64,4 +64,11 @@ class Task {
   void setStatus(TaskStatus status) {
     this.status = status;
   }
+
+  @override
+  bool operator ==(Object other) => other is Task && other.taskId == this.taskId;
+
+  @override
+  int get hashCode => this.taskId.hashCode;
+
 }

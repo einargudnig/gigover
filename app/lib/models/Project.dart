@@ -72,9 +72,17 @@ class Project {
     return 0;
   }
 
+  @override
+  bool operator ==(Object other) => other is Project && other.projectId == this.projectId;
+
   // USED FOR GENERIC FUNCTIONS DO NOT REMOVE
   @override
   String toString() {
     return this.name!;
   }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => this.projectId.hashCode;
+
 }
