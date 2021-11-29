@@ -46,7 +46,7 @@ class TaskComment {
     }
   }
 
-  static TaskComment? fromJson(Map<String, dynamic> json) {
+  static TaskComment fromJson(Map<String, dynamic> json) {
     try {
       return TaskComment(
         taskId: json["taskId"],
@@ -58,7 +58,7 @@ class TaskComment {
     } catch (e) {
       print('taskCommentErr');
       print(e);
-      return null;
+      throw e;
     }
   }
 }

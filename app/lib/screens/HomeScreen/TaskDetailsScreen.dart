@@ -312,7 +312,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                 ],
               ),
               child: Column(
-                children: <Widget?>[
+                children: <Widget>[
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -375,8 +375,8 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                             ),
                           ],
                         )
-                      : null,
-                ].where(notNull).toList() as List<Widget>,
+                      : Container(),
+                ].where(notNull).toList(),
               ),
             )
           ],
