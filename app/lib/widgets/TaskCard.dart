@@ -11,7 +11,7 @@ import 'package:mittverk/widgets/ProjectTypeLabel.dart';
 import 'package:provider/provider.dart';
 
 class TaskCard extends StatefulWidget {
-  final Task task;
+  final Task? task;
 
   TaskCard(this.task);
 
@@ -43,14 +43,14 @@ class TaskCardState extends State<TaskCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-                  CardTitle(title: widget.task.text),
+                  CardTitle(title: widget.task!.text),
               Spacing(isVertical: true, amount: 1,),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(timeTrackedFromMinutes(widget.task.minutes), style: AvailableFonts.getTextStyle(context, fontSize: 11)),
-              ProjectTypeLabel(typeId: widget.task.typeId),
+                  Text(timeTrackedFromMinutes(widget.task!.minutes!), style: AvailableFonts.getTextStyle(context, fontSize: 11)),
+              ProjectTypeLabel(typeId: widget.task!.typeId),
                 ],
               ),
             ],

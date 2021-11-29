@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Input extends StatelessWidget {
-  final TextEditingController controller;
-  final String hintText;
+  final TextEditingController? controller;
+  final String? hintText;
   final TextInputType textInputType;
 
   Input({this.controller, this.hintText, this.textInputType = TextInputType.text});

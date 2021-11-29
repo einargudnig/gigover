@@ -8,11 +8,11 @@ import 'package:mittverk/igital/extensions/num_extensions.dart';
 import '../../../igital/utils/AvailableFonts.dart';
 
 class LoginForm extends StatelessWidget {
-  final TextEditingController phoneNumberInput;
-  final TextEditingController verificationCodeInput;
-  final Function onSubmit;
-  final bool verificationCodeSent;
-  final String errorMessage;
+  final TextEditingController? phoneNumberInput;
+  final TextEditingController? verificationCodeInput;
+  final Function? onSubmit;
+  final bool? verificationCodeSent;
+  final String? errorMessage;
 
   LoginForm({
     this.phoneNumberInput,
@@ -23,7 +23,7 @@ class LoginForm extends StatelessWidget {
   });
 
   Input getInput() {
-    if (verificationCodeSent) {
+    if (verificationCodeSent!) {
       return Input(
         hintText: 'Verification code',
         controller: this.verificationCodeInput,
@@ -43,11 +43,11 @@ class LoginForm extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.only(bottom: Spacing.modifier * 2),
         child: Text(
-          errorMessage,
+          errorMessage!,
           style: AvailableFonts.getTextStyle(
             context,
             color: Colors.red,
-            fontSize: 16.scale,
+            fontSize: 16.scale as double,
           ),
         ),
       );
@@ -69,7 +69,7 @@ class LoginForm extends StatelessWidget {
             fillBackground: Color.fromRGBO(31, 223, 131, 1),
             textColor: Color.fromRGBO(7, 16, 41, 1),
             onTap: onSubmit,
-            text: verificationCodeSent ? 'Verify code' : 'Sign in',
+            text: verificationCodeSent! ? 'Verify code' : 'Sign in',
           ),
         ],
       ),

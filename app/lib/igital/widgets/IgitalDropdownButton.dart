@@ -7,7 +7,7 @@ import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 Widget IgitalDropdownButton<T>(
     context, String prefixTitle, T item, List<T> items,
-    {Function onTap}) {
+    {Function? onTap}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -16,7 +16,7 @@ Widget IgitalDropdownButton<T>(
         style: AvailableFonts.getTextStyle(
           context,
           color: MVTheme.grayFont,
-          fontSize: 14.scale,
+          fontSize: 14.scale as double,
         ),
       ),
       Spacing(
@@ -31,7 +31,7 @@ Widget IgitalDropdownButton<T>(
         style: AvailableFonts.getTextStyle(
           context,
           color: MVTheme.mainFont,
-          fontSize: 16.scale,
+          fontSize: 16.scale as double,
           weight: FontWeight.bold,
         ),
         isDense: true,
@@ -40,8 +40,8 @@ Widget IgitalDropdownButton<T>(
           height: 2,
           color: MVTheme.secondaryColor,
         ),
-        onChanged: (T newItem) {
-          onTap(newItem);
+        onChanged: (T? newItem) {
+          onTap!(newItem);
         },
         items: items.map<DropdownMenuItem<T>>((T value) {
           return DropdownMenuItem<T>(

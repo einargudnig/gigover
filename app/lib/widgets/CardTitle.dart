@@ -5,12 +5,12 @@ import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:mittverk/utils/Theme.dart';
 
 class CardTitle extends StatelessWidget {
-  final String subtitle;
-  final String title;
-  final Widget icon;
+  final String? subtitle;
+  final String? title;
+  final Widget? icon;
 
   CardTitle({
-    @required this.title,
+    required this.title,
     this.subtitle,
     this.icon,
   });
@@ -21,22 +21,22 @@ class CardTitle extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         subtitle != null ? Text(
-          subtitle,
+          subtitle!,
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.grayFont,
-            fontSize: 14.scale,
+            fontSize: 14.scale as double,
           ),
         ) : Container(),
         subtitle != null ? Spacing(
           isVertical: true,
         ) : Container(),
         Text(
-          title,
+          title!,
           style: AvailableFonts.getTextStyle(
             context,
             color: MVTheme.mainFont,
-            fontSize: 16.scale,
+            fontSize: 16.scale as double,
             weight: FontWeight.bold,
           ),
         )

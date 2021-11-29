@@ -49,7 +49,7 @@ class TimeTrackerDialog extends StatelessWidget {
           Container(
             child: Column(
               children: <Widget>[
-                IgitalDropdownButton<Project>(
+                IgitalDropdownButton<Project?>(
                   context,
                   'Select project',
                   homeProvider.currentTrackedProject,
@@ -68,16 +68,15 @@ class TimeTrackerDialog extends StatelessWidget {
           Container(
             child: Column(
               children: <Widget>[
-                IgitalDropdownButton<Task>(
+                IgitalDropdownButton<Task?>(
                   context,
                   'Select task',
                   homeProvider.currentTrackedTask,
                   homeProvider
-                      .currentTrackedProject
-                      .tasks
+                      .currentTrackedProject!
+                      .tasks!
                       .where((t) => t.status != TaskStatus.Archived)
-                      .toList()
-                      ?? [],
+                      .toList(),
                   onTap: (Task task) {
                     homeProvider.setCurrentTask(task);
                   },
@@ -106,7 +105,7 @@ class TimeTrackerDialog extends StatelessWidget {
                   style: AvailableFonts.getTextStyle(
                     context,
                     weight: FontWeight.bold,
-                    fontSize: 16.scale,
+                    fontSize: 16.scale as double,
                     color: Color.fromRGBO(176, 189, 220, 1),
                   ),
                 ),
@@ -129,7 +128,7 @@ class TimeTrackerDialog extends StatelessWidget {
                     style: AvailableFonts.getTextStyle(
                       context,
                       weight: FontWeight.bold,
-                      fontSize: 16.scale,
+                      fontSize: 16.scale as double,
                       color: MVTheme.mainFont,
                     ),
                   ),

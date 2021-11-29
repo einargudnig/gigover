@@ -22,9 +22,9 @@ class LoginScreenState extends State<LoginScreen> {
   TextEditingController _phoneNumberInput = TextEditingController();
   TextEditingController _verificationCodeInput = TextEditingController();
 
-  String _phoneNumber;
-  String _verificationCode;
-  String _errorMessage;
+  String? _phoneNumber;
+  late String _verificationCode;
+  String? _errorMessage;
   bool _verificationCodeSent = false;
   int _sendCount = 0;
 
@@ -58,7 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  bool validatePhoneNumber(String number) {
+  bool validatePhoneNumber(String? number) {
     if (number == null || number.length < 7) {
       setErrorMessage("Phone number must be at least 7 digits");
 
@@ -111,7 +111,7 @@ class LoginScreenState extends State<LoginScreen> {
           _sendCount = _sendCount + 1;
         });
       } else {
-        mainNavigatorKey.currentState.pushReplacementNamed('/home');
+        mainNavigatorKey.currentState!.pushReplacementNamed('/home');
       }
     }
   }

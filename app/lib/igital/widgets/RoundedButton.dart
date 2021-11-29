@@ -7,20 +7,20 @@ import '../utils/AvailableFonts.dart';
 
 // ignore: must_be_immutable
 class RoundedButton extends StatefulWidget {
-  Function onTap;
-  Widget icon;
-  String text;
-  Color fillBackground;
-  Color disabledFillBackground;
-  Color textColor;
-  bool loading;
-  bool disabled;
-  Widget child;
-  bool small;
-  bool borderColorFromTextColor;
-  List<String> subtitle;
-  double borderRadius;
-  EdgeInsets padding;
+  Function? onTap;
+  Widget? icon;
+  String? text;
+  Color? fillBackground;
+  Color? disabledFillBackground;
+  Color? textColor;
+  late bool loading;
+  late bool disabled;
+  Widget? child;
+  late bool small;
+  late bool borderColorFromTextColor;
+  List<String>? subtitle;
+  late double borderRadius;
+  EdgeInsets? padding;
 
   RoundedButton({
     onTap,
@@ -63,8 +63,8 @@ class RoundedButton extends StatefulWidget {
 
 class RoundedButtonState extends State<RoundedButton>
     with SingleTickerProviderStateMixin {
-  double _scale;
-  AnimationController _controller;
+  late double _scale;
+  AnimationController? _controller;
 
   @override
   void initState() {
@@ -81,12 +81,12 @@ class RoundedButtonState extends State<RoundedButton>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
   void tapDownRoundedButton(TapDownDetails details) {
-    _controller.forward();
+    _controller!.forward();
   }
 
   void tapUpRoundedButton(TapUpDetails details) {
@@ -94,7 +94,7 @@ class RoundedButtonState extends State<RoundedButton>
   }
 
   void resetButton() {
-    _controller.reverse();
+    _controller!.reverse();
   }
 
   Widget buttonChild(BuildContext context) {
@@ -111,30 +111,30 @@ class RoundedButtonState extends State<RoundedButton>
       );
     }
 
-    Widget text = widget.child != null
+    Widget? text = widget.child != null
         ? widget.child
         : Text(
-            widget.text,
+            widget.text!,
             style: AvailableFonts.getTextStyle(
               context,
               color: widget.textColor,
-              fontSize: widget.small ? 16.scale : 20.scale,
+              fontSize: widget.small ? 16.scale as double : 20.scale as double,
             ),
           );
 
-    if (widget.subtitle != null && widget.subtitle.length > 0) {
-      text = Column(
+    if (widget.subtitle != null && widget.subtitle!.length > 0) {
+      Widget text2 = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           SizedBox(height: 4),
-          text,
-          ...widget.subtitle.map(
+          text ?? Container(),
+          ...widget.subtitle!.map(
             (w) => Text(
               w,
               style: AvailableFonts.getTextStyle(
                 context,
                 color: widget.textColor,
-                fontSize: widget.small ? 14.scale : 16.scale,
+                fontSize: widget.small ? 14.scale as double : 16.scale as double,
               ),
             ),
           ),
@@ -147,7 +147,7 @@ class RoundedButtonState extends State<RoundedButton>
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[text, widget.icon],
+        children: <Widget>[text ?? Container(), widget.icon ?? Container()],
       );
     }
 
@@ -156,7 +156,7 @@ class RoundedButtonState extends State<RoundedButton>
     );
   }
 
-  Color getBorderColor() {
+  Color? getBorderColor() {
     if (widget.borderColorFromTextColor) {
       return widget.textColor;
     }
@@ -166,7 +166,7 @@ class RoundedButtonState extends State<RoundedButton>
         : widget.fillBackground;
   }
 
-  EdgeInsets getButtonPadding() {
+  EdgeInsets? getButtonPadding() {
     if (widget.padding != null) {
       return widget.padding;
     }
@@ -179,7 +179,7 @@ class RoundedButtonState extends State<RoundedButton>
   @override
   Widget build(BuildContext context) {
     if (_controller != null) {
-      _scale = 1 - _controller.value;
+      _scale = 1 - _controller!.value;
     } else {
       _scale = 1;
     }
@@ -187,7 +187,7 @@ class RoundedButtonState extends State<RoundedButton>
     return GestureDetector(
       onTap: () {
         if (!widget.disabled) {
-          widget.onTap();
+          widget.onTap!();
         } else {
           // Dev
           print('Button is disabled');
@@ -202,7 +202,7 @@ class RoundedButtonState extends State<RoundedButton>
           padding: getButtonPadding(),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.borderRadius),
-            border: Border.all(color: getBorderColor(), width: 2),
+            border: Border.all(color: getBorderColor()!, width: 2),
             color: widget.disabled
                 ? widget.disabledFillBackground
                 : widget.fillBackground,

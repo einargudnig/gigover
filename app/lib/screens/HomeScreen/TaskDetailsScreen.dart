@@ -21,16 +21,16 @@ import 'package:provider/provider.dart';
 import '../../main.dart';
 
 class TaskDetailsArguments {
-  Task task;
+  Task? task;
 
   TaskDetailsArguments(this.task);
 }
 
 class TaskDetailsView extends StatefulWidget {
-  Task task;
+  Task? task;
 
   TaskDetailsView(BuildContext context) {
-    final TaskDetailsArguments args = ModalRoute.of(context).settings.arguments;
+    final TaskDetailsArguments args = ModalRoute.of(context)!.settings.arguments as TaskDetailsArguments;
     this.task = args.task;
   }
 
@@ -42,7 +42,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   bool addCommentLoading = false;
   TextEditingController commentInputController = TextEditingController();
   String _commentText = '';
-  Task _task;
+  Task? _task;
 
   final FocusNode commentFocus = FocusNode();
 
@@ -58,7 +58,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   }
 
   Future<void> getTaskDetail() async {
-    Response response = await ApiService.getTaskDetails(widget.task.taskId);
+    Response response = await ApiService.getTaskDetails(widget.task!.taskId);
     if (response.statusCode != 200) {
       print('errorFetchin');
       // TODO Implement error screen here
@@ -67,7 +67,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
         print(response.data);
         if (response.data != null && response.data["projectTask"] != null) {
           dynamic projectTask = response.data["projectTask"];
-          Task tempTasks = Task.fromJson(projectTask);
+          Task? tempTasks = Task.fromJson(projectTask);
           setState(() {
             _task = tempTasks;
           });
@@ -122,7 +122,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
               style: AvailableFonts.getTextStyle(
                 context,
                 color: MVTheme.mainFont,
-                fontSize: 16.scale,
+                fontSize: 16.scale as double,
                 weight: FontWeight.bold,
               ),
             )
@@ -132,7 +132,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     );
   }
 
-  Widget TaskDetailInfo(String subHeader, String header, {Icon widget}) {
+  Widget TaskDetailInfo(String subHeader, String header, {Icon? widget}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -164,7 +164,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                 style: AvailableFonts.getTextStyle(
                   context,
                   color: MVTheme.mainFont,
-                  fontSize: 16.scale,
+                  fontSize: 16.scale as double,
                   weight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -185,16 +185,16 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(comment.fullName,
+              Text(comment.fullName!,
                   style: AvailableFonts.getTextStyle(context,
                       color: MVTheme.mainFont,
-                      fontSize: 14.scale,
+                      fontSize: 14.scale as double,
                       weight: FontWeight.bold)),
               Text(comment.formattedDate,
                   style: AvailableFonts.getTextStyle(
                     context,
                     color: MVTheme.grayFont,
-                    fontSize: 14.scale,
+                    fontSize: 14.scale as double,
                   ))
             ],
           ),
@@ -211,11 +211,11 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
                       child: Text(
-                        comment.comment,
+                        comment.comment!,
                         style: AvailableFonts.getTextStyle(
                           context,
                           color: MVTheme.mainFont,
-                          fontSize: 14.scale,
+                          fontSize: 14.scale as double,
                         ),
                       ),
                     )),
@@ -231,11 +231,11 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     return Expanded(
       child: Container(
         child: ListView.builder(
-            itemCount: this._task.comments.length,
+            itemCount: this._task!.comments!.length,
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return comment(this._task.comments[index]);
+              return comment(this._task!.comments![index]);
             }),
       ),
     );
@@ -251,7 +251,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       });
 
       // TODO Error component
-      await ApiService.addComment(currentText, _task.projectId, _task.taskId);
+      await ApiService.addComment(currentText, _task!.projectId, _task!.taskId);
       await this.getTaskDetail();
       commentInputController.clear();
 
@@ -275,18 +275,18 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       child: Container(
         child: Column(
           children: [
-            taskDetailItemWrapper(TaskDetailHeader(this._task.text)),
+            taskDetailItemWrapper(TaskDetailHeader(this._task!.text!)),
             taskDetailItemWrapper(IgitalDropdownButton<dynamic>(
               context,
               'Current status',
-              getTaskStatusString(this._task.status),
+              getTaskStatusString(this._task!.status),
               TaskStatus.values.where((v) => v != TaskStatus.Archived).map((s) {
                 return getTaskStatusString(s);
               }).toList(),
               onTap: (String p) async {
                 print(p);
                 TaskStatus newStatus = statusFromString(p);
-                this._task.setStatus(newStatus);
+                this._task!.setStatus(newStatus);
                 this.setState(() {
                   _task = _task;
                 });
@@ -295,7 +295,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                     Provider.of<ProjectProvider>(context, listen: true);
                 projectProvider.updateTask(_task);
                 await ApiService.setProjectTaskStatus(
-                    this._task.taskId, newStatus);
+                    this._task!.taskId, newStatus);
               },
             )),
             commentHeader(),
@@ -312,7 +312,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                 ],
               ),
               child: Column(
-                children: <Widget>[
+                children: <Widget?>[
                   Row(
                     children: <Widget>[
                       Expanded(
@@ -331,7 +331,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                             focusColor: Colors.black.withAlpha(150),
                             hintStyle: TextStyle(
                               color: Colors.black.withAlpha(150),
-                              fontSize: 18.scale,
+                              fontSize: 18.scale as double?,
                             ),
                             hintText: 'Write a comment..',
                             border: OutlineInputBorder(),
@@ -376,7 +376,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                           ],
                         )
                       : null,
-                ].where(notNull).toList(),
+                ].where(notNull).toList() as List<Widget>,
               ),
             )
           ],

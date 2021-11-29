@@ -15,15 +15,15 @@ import 'TimeTrackerDialog.dart';
 class TimeTracker extends StatelessWidget {
   TimeTracker();
 
-  String formatTime(ElapsedTime time) {
+  String formatTime(ElapsedTime? time) {
     if (time == null || (time.minutes == null && time.seconds == null && time.hours == null)) {
       return '00:00';
     }
 
-    String minutesStr = (time.minutes % 60).toString().padLeft(2, '0');
-    String secondsStr = (time.seconds % 60).toString().padLeft(2, '0');
+    String minutesStr = (time.minutes! % 60).toString().padLeft(2, '0');
+    String secondsStr = (time.seconds! % 60).toString().padLeft(2, '0');
 
-    if (time.hours > 0) {
+    if (time.hours! > 0) {
       return '${time.hours.toString()}:$minutesStr:$secondsStr';
     }
     return '$minutesStr:$secondsStr';

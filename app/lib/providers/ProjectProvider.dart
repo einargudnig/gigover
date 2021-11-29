@@ -5,14 +5,14 @@ import 'package:mittverk/services/ApiService.dart';
 
 class ProjectProvider with ChangeNotifier {
   bool _loadingTasks = true;
-  String _taskError;
-  List<Task> _tasks = [];
+  String? _taskError;
+  List<Task?> _tasks = [];
 
-  List<Task> get tasks => _tasks;
+  List<Task?> get tasks => _tasks;
 
-  void updateTask(Task task) {
-    int taskIndex = this._tasks.indexWhere((Task t) {
-      return t.taskId == task.taskId;
+  void updateTask(Task? task) {
+    int taskIndex = this._tasks.indexWhere((Task? t) {
+      return t!.taskId == task!.taskId;
     });
     //TODO update task
 
@@ -24,7 +24,7 @@ class ProjectProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void getTasks(int projectId) async {
+  void getTasks(int? projectId) async {
     Response response = await ApiService.getProjectTaskList(projectId);
 
     print('Getting tasks..');
@@ -40,7 +40,7 @@ class ProjectProvider with ChangeNotifier {
           print('Got tasks!');
           print(projectTasks[0]);
 
-          List<Task> tempTasks = [];
+          List<Task?> tempTasks = [];
 
           projectTasks.forEach((task) {
             tempTasks.add(Task.fromJson(task));
@@ -52,6 +52,7 @@ class ProjectProvider with ChangeNotifier {
           setError('No tasks available');
         }
       } catch (e) {
+        print('rassgat');
         print("ERROR WHILE PARSING PROJECTS");
         setError('Could not load projects');
       }

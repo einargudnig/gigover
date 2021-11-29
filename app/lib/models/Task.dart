@@ -2,17 +2,19 @@ import 'TaskComment.dart';
 import 'TaskStatus.dart';
 
 class Task {
-  int taskId;
-  String text;
-  int typeId;
-  List<TaskComment> comments = [];
-  TaskStatus status;
-  int projectId;
-  int minutes;
+  int? taskId;
+  String? text;
+  String? subject;
+  int? typeId;
+  List<TaskComment>? comments = [];
+  TaskStatus? status;
+  int? projectId;
+  int? minutes;
 
   Task({
     this.taskId,
     this.text,
+    this.subject,
     this.status,
     this.typeId,
     this.comments,
@@ -22,14 +24,15 @@ class Task {
 
   static Task fromJson(Map<String, dynamic> json) {
     try {
-      int statusIndex = json["status"];
+      int? statusIndex = json["status"];
 
       return Task(
         taskId: json["taskId"],
         projectId:
             json["project"] != null ? json["project"]["projectId"] : null,
         text: json["text"],
-        status: statusIndex != -1 ? TaskStatus.values[statusIndex] : TaskStatus.Archived,
+        subject: json["subject"],
+        status: statusIndex != -1 ? TaskStatus.values[statusIndex!] : TaskStatus.Archived,
         typeId: json["typeId"],
         minutes: json["minutes"],
         comments: json["comments"] != null && json["comments"].length > 0
@@ -39,9 +42,8 @@ class Task {
             : [],
       );
     } catch (e) {
-      print('error');
       print(e);
-      return null;
+      throw(e);
     }
   }
 
@@ -52,7 +54,7 @@ class Task {
   // USED FOR GENERIC FUNCTIONS DO NOT REMOVE
   @override
   String toString() {
-    return this.text;
+    return this.text!;
   }
 
   void setStatus(TaskStatus status) {

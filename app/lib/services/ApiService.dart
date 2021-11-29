@@ -4,8 +4,8 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:mittverk/models/TaskStatus.dart';
 
 class ApiService {
-  static Dio dio;
-  static CookieJar cookieJar;
+  static late Dio dio;
+  static late CookieJar cookieJar;
   static String apiPrefix = 'https://rest.gigover.com/rest/';
 
   static setCookieJar() {
@@ -19,15 +19,15 @@ class ApiService {
 
   /// Start a timer
   static Future<Response> workStart(
-      int projectId, int taskId, int workType) async {
+      int? projectId, int? taskId, int workType) async {
     return await dio.post(apiPrefix + '/work/start',
         data: {'projectId': projectId, 'workType': taskId, 'taskId': taskId});
   }
 
   /// Stop a timer
   static Future<Response> workEnd(
-    int projectId, {
-    String comment,
+    int? projectId, {
+    String? comment,
   }) async {
     return await dio.post(apiPrefix + '/work/stop', data: {
       'projectId': projectId,
@@ -36,7 +36,7 @@ class ApiService {
   }
 
   /// Verify the user you are logged in as
-  static Future<Response> verifyUser(String token) async {
+  static Future<Response> verifyUser(String? token) async {
     String url = apiPrefix + '/user/verify';
     Response response = await dio.post(url, data: {'token': token});
     cookieJar.loadForRequest(Uri.parse(url));
@@ -61,7 +61,7 @@ class ApiService {
   }
 
   /// Task details
-  static Future<Response> getTaskDetails(int taskId) async {
+  static Future<Response> getTaskDetails(int? taskId) async {
     return await dio.get(apiPrefix + '/workers/task/' + taskId.toString());
   }
 
@@ -71,7 +71,7 @@ class ApiService {
   }
 
   /// Get a task list for a project
-  static Future<Response> getProjectTaskList(int projectId) async {
+  static Future<Response> getProjectTaskList(int? projectId) async {
     return await dio.get(apiPrefix + '/workers/tasks/' + projectId.toString());
   }
 
@@ -83,9 +83,9 @@ class ApiService {
 
   /// Update a project task status with an optional comment
   static Future<Response> setProjectTaskStatus(
-    int taskId,
+    int? taskId,
     TaskStatus status, {
-    String comment,
+    String? comment,
   }) async {
     return await dio.post(apiPrefix + '/workers/updateTask', data: {
       'taskId': taskId,
@@ -97,8 +97,8 @@ class ApiService {
   /// Add a comment to a project task
   static Future<Response> addComment(
     String comment,
-    int projectId,
-    int taskId, {
+    int? projectId,
+    int? taskId, {
     bool isContractor = false,
   }) async {
     return await dio.post(

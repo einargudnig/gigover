@@ -6,13 +6,13 @@ enum UserType {
 }
 
 class VerifyUser {
-  String name;
-  String zipCode;
-  String userName;
+  String? name;
+  String? zipCode;
+  String? userName;
 
-  bool registered;
-  UserType type;
-  bool authenticated;
+  bool? registered;
+  UserType? type;
+  bool? authenticated;
 
   VerifyUser(
       {this.name,
@@ -22,7 +22,7 @@ class VerifyUser {
       this.type,
       this.authenticated});
 
-  static VerifyUser fromJson(Map<String, dynamic> json) {
+  static VerifyUser? fromJson(Map<String, dynamic> json) {
     try {
       return VerifyUser(
         name: json["name"],

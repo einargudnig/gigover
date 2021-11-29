@@ -30,10 +30,10 @@ Widget projectCardDaysLeft(BuildContext context, Project item) {
           ),
           Spacing(overridePadding: 6, isVertical: false),
           Text(
-            timeTrackedFromMinutes(item.minutes),
+            timeTrackedFromMinutes(item.minutes!),
             style: AvailableFonts.getTextStyle(
               context,
-              fontSize: 12.scale,
+              fontSize: 12.scale as double,
               color: MVTheme.darkOrange,
             ),
           ),
@@ -44,7 +44,7 @@ Widget projectCardDaysLeft(BuildContext context, Project item) {
 }
 
 class ProjectCard extends StatelessWidget implements CardBoxProps {
-  final Project item;
+  final Project? item;
 
   @override
   final double borderRadius;
@@ -57,7 +57,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: 'ProjectCard_${item.projectId}',
+      tag: 'ProjectCard_${item!.projectId}',
       child: CardBox(
         hasBoxShadow: true,
         borderRadius: borderRadius,
@@ -70,10 +70,10 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    item.name,
+                    item!.name!,
                     style: AvailableFonts.getTextStyle(
                       context,
-                      fontSize: 16.scale,
+                      fontSize: 16.scale as double,
                       color: MVTheme.mainFont,
                       weight: FontWeight.bold,
                     ),
@@ -89,26 +89,26 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                 isVertical: true,
               ),
               Text(
-                item.description,
+                item!.description!,
                 style: AvailableFonts.getTextStyle(
                   context,
                   color: MVTheme.grayFont,
-                  fontSize: 14.scale,
+                  fontSize: 14.scale as double,
                 ),
               ),
               Spacing(
                 isVertical: true,
               ),
-              projectCardDaysLeft(context, item),
+              projectCardDaysLeft(context, item!),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    item.amountDonePercentage,
+                    item!.amountDonePercentage,
                     style: AvailableFonts.getTextStyle(
                       context,
                       color: MVTheme.grayFont,
-                      fontSize: 12.scale,
+                      fontSize: 12.scale as double,
                     ),
                   ),
                   Spacing(
@@ -120,7 +120,7 @@ class ProjectCard extends StatelessWidget implements CardBoxProps {
                     child: Container(
                       height: 8,
                       child: LinearProgressIndicator(
-                        value: item.amountDoneValue / 100, // percent filled
+                        value: item!.amountDoneValue / 100, // percent filled
                         valueColor:
                             AlwaysStoppedAnimation<Color>(MVTheme.mainGreen),
                         backgroundColor: MVTheme.backgroundGray,

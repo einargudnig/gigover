@@ -10,7 +10,7 @@ TaskStatus statusFromString(String status) {
   return TaskStatus.values.firstWhere((e) => getTaskStatusString(e) == status);
 }
 
-String getTaskStatusString(TaskStatus status) {
+String getTaskStatusString(TaskStatus? status) {
   switch (status) {
     case TaskStatus.Backlog:
       return "Backlog";

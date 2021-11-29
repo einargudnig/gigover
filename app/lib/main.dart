@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
@@ -15,10 +16,11 @@ import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/FullscreenLoader.dart';
 import 'package:provider/provider.dart';
 
-bool notNull(Object o) => o != null;
+bool notNull(Object? o) => o != null;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MittVerkApp());
@@ -59,7 +61,7 @@ class MittVerkAppState extends State<MittVerkApp> {
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: IgitalScrollBehaviour(),
-          child: child,
+          child: child!,
         );
       },
       home: Container(
@@ -76,8 +78,8 @@ class MittVerkAppState extends State<MittVerkApp> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: authInstance.onAuthStateChanged,
-      builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+      stream: authInstance.authStateChanges(),
+      builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.hasError) {
           // TODO
           return splashScreen(Text('ERROR'));
@@ -103,7 +105,7 @@ class MittVerkAppState extends State<MittVerkApp> {
             builder: (context, child) {
               return ScrollConfiguration(
                 behavior: IgitalScrollBehaviour(),
-                child: child,
+                child: child!,
               );
             },
             navigatorKey: mainNavigatorKey,

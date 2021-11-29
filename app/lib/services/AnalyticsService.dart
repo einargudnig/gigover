@@ -5,8 +5,8 @@ import 'package:firebase_analytics/observer.dart';
 
 class AnalyticsService {
 
-  static FirebaseAnalytics analytics;
-  static FirebaseAnalyticsObserver observer;
+  static late FirebaseAnalytics analytics;
+  static FirebaseAnalyticsObserver? observer;
 
   static Future<void> sendEvent(String name, Map<String, dynamic> params) async {
     log('Debug: Sending analytics event $name - with params? ${params != null ? 'Yes' : 'No'}');

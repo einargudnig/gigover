@@ -11,7 +11,7 @@ class FullscreenLoader extends StatelessWidget {
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: IgitalScrollBehaviour(),
-          child: child,
+          child: child!,
         );
       },
       home: Container(

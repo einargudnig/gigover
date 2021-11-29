@@ -7,7 +7,7 @@ class AvailableFonts {
   static TextStyle getTextStyle(
     BuildContext context, {
     double fontSize = 14,
-    Color color = Colors.black,
+    Color? color = Colors.black,
     FontWeight weight = FontWeight.normal,
     FontStyle fontStyle = FontStyle.normal,
   }) {

@@ -73,7 +73,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
       builder: (context, child) {
         return ScrollConfiguration(
           behavior: IgitalScrollBehaviour(),
-          child: child,
+          child: child!,
         );
       },
       home: Container(
@@ -102,7 +102,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
         homeProvider.errorVerifiedUser != null) {
       // TODO Full screen error
       return Container(
-        child: Text(homeProvider.errorVerifiedUser),
+        child: Text(homeProvider.errorVerifiedUser!),
       );
     }
 
@@ -112,22 +112,22 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
     return ScreenLayout(
       child: SlidingUpPanel(
         controller: homeProvider.panelController,
-        renderPanelSheet: config.renderPanelSheet,
-        minHeight: config.minHeight + bottomPadding,
-        maxHeight: config.maxHeight + bottomPadding,
-        isDraggable: config.isDraggable,
-        backdropEnabled: config.backdropEnabled,
+        renderPanelSheet: config.renderPanelSheet!,
+        minHeight: config.minHeight! + bottomPadding,
+        maxHeight: config.maxHeight! + bottomPadding,
+        isDraggable: config.isDraggable!,
+        backdropEnabled: config.backdropEnabled!,
         panel: TimeTracker(),
         body: Scaffold(
           appBar: MittVerkAppBar(
               navigationSettings: homeProvider.navigationSettings,
               onBack: () {
-                if (homeProvider.homeNavigationKey.currentState.canPop()) {
-                  homeProvider.homeNavigationKey.currentState.pop();
+                if (homeProvider.homeNavigationKey.currentState!.canPop()) {
+                  homeProvider.homeNavigationKey.currentState!.pop();
                 }
               },
               onSettings: () {
-                homeProvider.homeNavigationKey.currentState
+                homeProvider.homeNavigationKey.currentState!
                     .pushNamed('/settings');
               }),
           body: NestedNavigator(
@@ -135,7 +135,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
             navigationKey: homeProvider.homeNavigationKey,
             initialRoute:
                 // TODO REMOVE Settings as initial
-                homeProvider.verifiedUser.registered ? '/' : '/signup',
+                homeProvider.verifiedUser!.registered! ? '/' : '/signup',
             routes: {
               // default route as '/' is necessary!
               '/': (context) => ProjectListScreen(),

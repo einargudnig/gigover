@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DebugBorder extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   DebugBorder({ this.child });
 

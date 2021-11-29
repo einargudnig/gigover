@@ -4,12 +4,12 @@ class ScaleTap extends StatefulWidget {
   final double lowerBound;
   final double upperBound;
   final int milliseconds;
-  final Function onTap;
-  final Widget child;
+  final Function? onTap;
+  final Widget? child;
 
   ScaleTap({
-    @required this.onTap,
-    @required this.child,
+    required this.onTap,
+    required this.child,
     this.lowerBound = 0.0,
     this.upperBound = 0.08,
     this.milliseconds = 50,
@@ -21,8 +21,8 @@ class ScaleTap extends StatefulWidget {
 
 class ScaleTapState extends State<ScaleTap>
     with SingleTickerProviderStateMixin {
-  double _scale;
-  AnimationController _ctrl;
+  late double _scale;
+  AnimationController? _ctrl;
 
   @override
   void initState() {
@@ -40,12 +40,12 @@ class ScaleTapState extends State<ScaleTap>
 
   @override
   void dispose() {
-    _ctrl.dispose();
+    _ctrl!.dispose();
     super.dispose();
   }
 
   void tapDownScale(TapDownDetails details) {
-    _ctrl.forward();
+    _ctrl!.forward();
   }
 
   void tapUpScale(TapUpDetails details) {
@@ -53,20 +53,20 @@ class ScaleTapState extends State<ScaleTap>
   }
 
   void resetAnimation() {
-    _ctrl.reverse();
+    _ctrl!.reverse();
   }
 
   @override
   Widget build(BuildContext context) {
     if (_ctrl != null) {
-      _scale = 1 - _ctrl.value;
+      _scale = 1 - _ctrl!.value;
     } else {
       _scale = 1;
     }
 
     return GestureDetector(
       onTap: () {
-        widget.onTap();
+        widget.onTap!();
       },
       onTapDown: tapDownScale,
       onTapUp: tapUpScale,

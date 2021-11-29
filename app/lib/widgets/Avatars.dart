@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 
-Widget onlyAvatar(BuildContext context, {String text, bool special = false, double circleSize = 16 }) {
+Widget onlyAvatar(BuildContext context, {required String text, bool special = false, double circleSize = 16 }) {
   return CircleAvatar(
     maxRadius: circleSize + 1,
     backgroundColor: Colors.white,

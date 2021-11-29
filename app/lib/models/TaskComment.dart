@@ -1,17 +1,17 @@
 import 'package:intl/intl.dart';
 
 class TaskComment {
-  int projectId;
-  int taskId;
-  String comment;
-  String fullName;
+  int? projectId;
+  int? taskId;
+  String? comment;
+  String? fullName;
 
   /// Timestamp
-  int sent;
+  int? sent;
 
-  String content;
-  String userIdFrom; // userId
-  String dateSent;
+  String? content;
+  String? userIdFrom; // userId
+  String? dateSent;
 
   TaskComment({
     this.projectId,
@@ -23,7 +23,7 @@ class TaskComment {
 
   String get formattedDate {
     var dateFormat = new DateFormat('yyyy/MM/dd HH:mm');
-    DateTime currentDate = new DateTime.fromMillisecondsSinceEpoch(this.sent);
+    DateTime currentDate = new DateTime.fromMillisecondsSinceEpoch(this.sent!);
     Duration diff = DateTime.now().difference(currentDate);
 
     if (diff.inDays > 6) {
@@ -46,7 +46,7 @@ class TaskComment {
     }
   }
 
-  static TaskComment fromJson(Map<String, dynamic> json) {
+  static TaskComment? fromJson(Map<String, dynamic> json) {
     try {
       return TaskComment(
         taskId: json["taskId"],

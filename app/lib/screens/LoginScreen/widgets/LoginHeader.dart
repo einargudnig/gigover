@@ -7,7 +7,7 @@ import 'package:mittverk/igital/widgets/Spacing.dart';
 
 class LoginHeader extends StatelessWidget {
   final bool verificationCodeSent;
-  final String phoneNumber;
+  final String? phoneNumber;
 
   LoginHeader({this.verificationCodeSent = false, this.phoneNumber = ''});
 
@@ -22,8 +22,8 @@ class LoginHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 192.scaleHorizontal,
-            height: 43.scaleVertical,
+            width: 192.scaleHorizontal as double?,
+            height: 43.scaleVertical as double?,
             child: SvgPicture.asset("assets/logo/gigover.svg"),
           ),
           Padding(

@@ -19,8 +19,8 @@ class SignupScreen extends StatefulWidget {
 
 class SignupScreenState extends State<SignupScreen> {
 
-  bool _signupProcessing;
-  String _errorMessage;
+  bool? _signupProcessing;
+  String? _errorMessage;
 
   TextEditingController fullName = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -39,7 +39,7 @@ class SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  bool setError(String message) {
+  bool setError(String? message) {
     setState(() {
       _errorMessage = message;
     });
@@ -142,7 +142,7 @@ class SignupScreenState extends State<SignupScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Spacing(amount: 2, isVertical: true),
-            Text(_errorMessage, style: AvailableFonts.getTextStyle(context, color: MVTheme.redColor, weight: FontWeight.bold)),
+            Text(_errorMessage!, style: AvailableFonts.getTextStyle(context, color: MVTheme.redColor, weight: FontWeight.bold)),
           ],
         )
       );
@@ -165,7 +165,7 @@ class SignupScreenState extends State<SignupScreen> {
                 context,
                 weight: FontWeight.bold,
                 color: MVTheme.primaryColor,
-                fontSize: 16.scale,
+                fontSize: 16.scale as double,
               ),
               textAlign: TextAlign.center,
             ),
@@ -175,7 +175,7 @@ class SignupScreenState extends State<SignupScreen> {
                 style: AvailableFonts.getTextStyle(
                   context,
                   color: MVTheme.primaryColor,
-                  fontSize: 15.scale,
+                  fontSize: 15.scale as double,
                 )),
             Spacing(amount: 2, isVertical: true),
             Input(

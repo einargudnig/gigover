@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CardBoxProps {
-  final double borderRadius;
-  final bool hasBoxShadow;
+  final double? borderRadius;
+  final bool? hasBoxShadow;
 
   CardBoxProps({
     this.borderRadius,
@@ -13,7 +13,7 @@ class CardBoxProps {
 }
 
 class CardBox extends StatelessWidget implements CardBoxProps {
-  final Widget child;
+  final Widget? child;
 
   @override
   final double borderRadius;
@@ -22,7 +22,7 @@ class CardBox extends StatelessWidget implements CardBoxProps {
   final bool hasBoxShadow;
 
   CardBox({
-    @required this.child,
+    required this.child,
     this.borderRadius = 8.0,
     this.hasBoxShadow = true,
   });

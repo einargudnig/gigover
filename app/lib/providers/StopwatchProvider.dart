@@ -4,17 +4,17 @@ import 'package:mittverk/providers/HomeProvider.dart';
 
 class StopwatchProvider {
   Stopwatch currentStopwatch = Stopwatch();
-  int milliseconds;
+  int? milliseconds;
 
   Duration currentStopWatchDuration = Duration.zero;
-  ElapsedTime currentElapsedTime;
+  ElapsedTime? currentElapsedTime;
 
   // This is if the timer is old then we have some additionalTime
-  Duration addedTime = Duration.zero;
-  ElapsedTime addedElapsedTime;
+  Duration? addedTime = Duration.zero;
+  ElapsedTime? addedElapsedTime;
 
-  Timer _timer;
-  Function callback;
+  Timer? _timer;
+  Function? callback;
 
   get isRunning => this.currentStopWatchDuration != Duration.zero;
 
@@ -29,14 +29,14 @@ class StopwatchProvider {
     this.currentStopWatchDuration = duration;
   }
 
-  void _onTick(Timer timer) {
+  void _onTick(Timer? timer) {
     if (milliseconds != currentStopwatch.elapsedMilliseconds) {
       milliseconds = this.addedTime != null &&
-              this.addedTime.inMilliseconds != null
-          ? currentStopwatch.elapsedMilliseconds + this.addedTime.inMilliseconds
+              this.addedTime!.inMilliseconds != null
+          ? currentStopwatch.elapsedMilliseconds + this.addedTime!.inMilliseconds
           : currentStopwatch.elapsedMilliseconds;
 
-      int hundreds = (milliseconds / 10).truncate();
+      int hundreds = (milliseconds! / 10).truncate();
       int seconds = (hundreds / 100).truncate();
       int minutes = (seconds / 60).truncate();
       int hours = (minutes / 60).truncate();

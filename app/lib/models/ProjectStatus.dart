@@ -5,7 +5,7 @@ enum ProjectStatus {
   UNKNOWN,
 }
 
-ProjectStatus getProjectStatusFromString(String status) {
+ProjectStatus getProjectStatusFromString(String? status) {
   switch (status) {
     case "OPEN": return ProjectStatus.OPEN;
     case "CLOSED": return ProjectStatus.CLOSED;
@@ -15,7 +15,7 @@ ProjectStatus getProjectStatusFromString(String status) {
   return ProjectStatus.UNKNOWN;
 }
 
-String getProjectStatus(ProjectStatus status) {
+String? getProjectStatus(ProjectStatus status) {
   switch (status) {
     case ProjectStatus.OPEN: return "OPEN";
     case ProjectStatus.CLOSED: return "CLOSED";

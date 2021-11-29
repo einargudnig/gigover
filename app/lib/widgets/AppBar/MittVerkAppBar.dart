@@ -7,15 +7,15 @@ import 'package:mittverk/utils/NavigationSettings.dart';
 import 'package:mittverk/utils/Theme.dart';
 
 class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Function onBack;
-  final Function onSettings;
-  final NavigationSettings navigationSettings;
+  final Function? onBack;
+  final Function? onSettings;
+  final NavigationSettings? navigationSettings;
 
   MittVerkAppBar({
-    @required this.navigationSettings,
-    @required this.onBack,
-    @required this.onSettings,
-    Key key,
+     this.navigationSettings,
+     this.onBack,
+     this.onSettings,
+    Key? key,
   })  : preferredSize = Size.fromHeight(kToolbarHeight),
         super(key: key);
 
@@ -38,23 +38,23 @@ class MittVerkAppBarState extends State<MittVerkAppBar> {
       backgroundColor: MVTheme.appBarBackgroundColor,
       title: SvgPicture.asset(
         'assets/logo/gigover.svg',
-        height: 26.scale,
+        height: 26.scale as double?,
       ),
       centerTitle: true,
       automaticallyImplyLeading: false,
-      leading: widget.navigationSettings.showBackButton
+      leading: widget.navigationSettings!.showBackButton
           ? new IconButton(
               icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
-              onPressed: () => widget.onBack(),
+              onPressed: () => widget.onBack!(),
             )
           : Container(),
       actions: <Widget>[
-        widget.navigationSettings.showSettingsIcon
+        widget.navigationSettings!.showSettingsIcon
             ? IconButton(
                 icon:
-                    SvgPicture.asset('assets/icons/gear.svg', height: 24.scale),
+                    SvgPicture.asset('assets/icons/gear.svg', height: 24.scale as double?),
                 onPressed: () {
-                  widget.onSettings();
+                  widget.onSettings!();
                 },
               )
             : Container(),

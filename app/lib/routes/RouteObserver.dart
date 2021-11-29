@@ -2,27 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
 
 class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
-  HomeProvider homeProvider;
-  List<Route<dynamic>> routeStack = List();
+  HomeProvider? homeProvider;
+  List<Route<dynamic>?> routeStack = [];
 
   RouteObserverHelper({ this.homeProvider });
 
-  var screenName = "";
-  var previousScreenName = "";
+  String? screenName = "";
+  String? previousScreenName = "";
 
   void _sendScreenView(
       PageRoute<dynamic> route, PageRoute<dynamic> previousRoute) {
     this.screenName = route.settings.name;
 
     if(screenName == '/' || screenName == '/project') {
-      homeProvider.showTimePanel();
+      homeProvider!.showTimePanel();
     } else {
-      homeProvider.hideTimePanel();
+      homeProvider!.hideTimePanel();
     }
 
-    homeProvider.navigationSettings.showBackButton = (routeStack.length > 0 && homeProvider.homeNavigationKey.currentState.canPop()) || screenName == '/project';
-    homeProvider.navigationSettings.showSettingsIcon = !(screenName == '/settings');
-    homeProvider.notifyListenersAfterNavigationSettings();
+    homeProvider!.navigationSettings.showBackButton = (routeStack.length > 0 && homeProvider!.homeNavigationKey.currentState!.canPop()) || screenName == '/project';
+    homeProvider!.navigationSettings.showSettingsIcon = !(screenName == '/settings');
+    homeProvider!.notifyListenersAfterNavigationSettings();
 
     print('==== New screen view: $screenName ====');
     if (previousRoute != null) {
@@ -38,7 +38,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   }
 
   @override
-  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
     routeStack.add(route);
 
@@ -48,7 +48,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   }
 
   @override
-  void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     removeLast();
     routeStack.add(newRoute);
@@ -59,7 +59,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     removeLast();
 
@@ -69,7 +69,7 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
   }
 
   @override
-  void didRemove(Route route, Route previousRoute) {
+  void didRemove(Route route, Route? previousRoute) {
     //removeLast();
 
     if (previousRoute is PageRoute && route is PageRoute) {

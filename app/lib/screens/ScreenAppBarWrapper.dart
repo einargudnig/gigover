@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mittverk/widgets/AppBar/MittVerkAppBar.dart';
 
 class ScreenAppBarWrapper extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   ScreenAppBarWrapper({this.child});
 

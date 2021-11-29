@@ -15,13 +15,13 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SlidePanelConfig {
-  double minHeight;
-  double maxHeight;
-  bool renderPanelSheet;
-  bool backdropEnabled;
-  bool isDraggable;
+  double? minHeight;
+  double? maxHeight;
+  bool? renderPanelSheet;
+  bool? backdropEnabled;
+  bool? isDraggable;
 
-  bool isCollapsed;
+  bool? isCollapsed;
 
   SlidePanelConfig({
     this.minHeight,
@@ -52,10 +52,10 @@ SlidePanelConfig activeSlidePanelConfig = new SlidePanelConfig(
 );
 
 class ElapsedTime {
-  final int hundreds;
-  final int hours;
-  final int seconds;
-  final int minutes;
+  final int? hundreds;
+  final int? hours;
+  final int? seconds;
+  final int? minutes;
 
   ElapsedTime({
     this.hundreds,
@@ -66,9 +66,9 @@ class ElapsedTime {
 }
 
 class TimerItem {
-  String dateStarted;
-  String id;
-  String dateFinished;
+  String? dateStarted;
+  String? id;
+  String? dateFinished;
 }
 
 enum StopWatchStatus { OnGoing, Paused, Stopped, Idle }
@@ -92,28 +92,28 @@ class HomeProvider with ChangeNotifier {
 
   bool loadingUserVerification = true;
 
-  String projectsError;
+  String? projectsError;
   bool loadingProjects = true;
-  List<Project> projects = List();
-  List<ProjectType> projectTypes = List();
+  List<Project> projects = [];
+  List<ProjectType>? projectTypes = [];
 
-  Project currentTrackedProject;
-  Task currentTrackedTask;
-  StopwatchProvider stopwatch;
+  Project? currentTrackedProject;
+  Task? currentTrackedTask;
+  late StopwatchProvider stopwatch;
   SlidePanelConfig slidePanelConfig = defaultSlidePanelConfig;
   PanelController panelController = new PanelController();
-  StopWatchData stopWatchData;
+  StopWatchData? stopWatchData;
 
-  IdTokenResult userToken;
-  VerifyUser verifiedUser;
+  String? userToken;
+  VerifyUser? verifiedUser;
   bool loadingVerifiedUser = true;
-  String errorVerifiedUser;
+  String? errorVerifiedUser;
 
   int get count => _count;
 
   NavigationSettings navigationSettings = NavigationSettings();
 
-  HomeProvider(IdTokenResult userToken) {
+  HomeProvider(String? userToken) {
     this.userToken = userToken;
     this.stopwatch = new StopwatchProvider();
     initVerifyUser();
@@ -129,7 +129,8 @@ class HomeProvider with ChangeNotifier {
 
       getProjectTypes();
 
-      if (user.registered) {
+      if (user!.registered!) {
+        //skoda
         this.getProjects().then((v) {
           this.getStopWatchData().then((s) async {
             if (this.currentTrackedProject == null && this.projects.length > 0) {
@@ -159,8 +160,8 @@ class HomeProvider with ChangeNotifier {
   void getProjectTypes() async {
     try {
       Response response = await ApiService.getProjectTypes();
-      List<ProjectType> projectsMapped =
-          response.data["projectTypes"].map<ProjectType>((p) {
+      List<ProjectType>? projectsMapped =
+          response.data["projectTypes"].map<ProjectType?>((p) {
         return ProjectType.fromJson(p);
       }).toList();
       projectTypes = projectsMapped;
@@ -170,9 +171,9 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  Future<VerifyUser> verifyUser() async {
+  Future<VerifyUser?> verifyUser() async {
     if (userToken != null) {
-      Response response = await ApiService.verifyUser(userToken.token);
+      Response response = await ApiService.verifyUser(userToken!);
 
       try {
         verifiedUser = VerifyUser.fromJson(response.data);
@@ -192,7 +193,7 @@ class HomeProvider with ChangeNotifier {
   void signupCompleted() {
     // Re-verify to make sure the user was registered
     initVerifyUser();
-    homeNavigationKey.currentState.pushReplacementNamed('/');
+    homeNavigationKey.currentState!.pushReplacementNamed('/');
   }
 
   //TIMER STUFF
@@ -216,7 +217,7 @@ class HomeProvider with ChangeNotifier {
       Project tempP = this.projects.firstWhere((Project t) {
         return t.projectId == response.data["timeSheet"]["projectId"];
       });
-      Task tempT = tempP.tasks.firstWhere((Task t) {
+      Task tempT = tempP.tasks!.firstWhere((Task t) {
         return t.taskId == response.data["timeSheet"]["taskId"];
       });
 
@@ -271,18 +272,20 @@ class HomeProvider with ChangeNotifier {
     } else {
       try {
         if (response.data != null && response.data["projects"] != null) {
+          print(response.data["projects"]);
           List<Project> projectsMapped =
               response.data["projects"].map<Project>((p) {
             return Project.fromJson(p);
           }).toList();
 
           print('Got projects!');
-          this.projects = projectsMapped.where((element) => element.status != ProjectStatus.DONE).toList();
+          this.projects = projectsMapped.where((Project? element) => element!.status != ProjectStatus.DONE).toList();
           this.clearErrors();
         } else {
           projectsError = 'No projects available';
         }
       } catch (e) {
+        print('herna}');
         print("ERROR WHILE PARSING PROJECTS");
         print(e);
         projectsError = 'Could not load projects';
@@ -298,13 +301,13 @@ class HomeProvider with ChangeNotifier {
   Future<void> setCurrentProject(Project project) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print(prefs);
-    prefs.setInt(currentProjectString, project.projectId).then((bool success) {
+    prefs.setInt(currentProjectString, project.projectId!).then((bool success) {
       return  project.projectId;
     });
-    prefs.setInt(currentProjectString, project.projectId);
+    prefs.setInt(currentProjectString, project.projectId!);
     this.currentTrackedProject = project;
     this.currentTrackedTask =
-        project.tasks.length > 0 ? project.tasks[0] : null;
+        project.tasks!.length > 0 ? project.tasks![0] : null;
     notifyListeners();
   }
 
@@ -339,8 +342,8 @@ class HomeProvider with ChangeNotifier {
 
     //TODO  not posibly wait for callback
     Response res = await ApiService.workStart(
-        this.currentTrackedProject.projectId,
-        this.currentTrackedTask.taskId,
+        this.currentTrackedProject!.projectId,
+        this.currentTrackedTask!.taskId,
         1);
 
     this.stopwatch.startStopWatch(() {
@@ -352,7 +355,7 @@ class HomeProvider with ChangeNotifier {
   void resetTimer() {
     //TODO perhaps show some dialog to tell the user about the time he just logged
     //TODO and do not
-    ApiService.workEnd(this.currentTrackedProject.projectId);
+    ApiService.workEnd(this.currentTrackedProject!.projectId);
     this.stopwatch.resetStopWatch();
     this.slidePanelConfig = defaultSlidePanelConfig;
     notifyListeners();
@@ -360,9 +363,9 @@ class HomeProvider with ChangeNotifier {
 
   ///TIMMMMER STUFF
 
-  void goToTaskDetail(Task task) {
+  void goToTaskDetail(Task? task) {
     this.hideTimePanel();
-    this.homeNavigationKey.currentState.pushNamed(
+    this.homeNavigationKey.currentState!.pushNamed(
           '/task',
           arguments: TaskDetailsArguments(task),
         );

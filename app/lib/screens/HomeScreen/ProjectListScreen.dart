@@ -39,7 +39,7 @@ class ProjectListScreen extends StatelessWidget {
             title,
             style: AvailableFonts.getTextStyle(
               context,
-              fontSize: 18.scale,
+              fontSize: 18.scale as double,
               weight: FontWeight.bold,
               color: MVTheme.mainFont,
             ),
@@ -52,7 +52,7 @@ class ProjectListScreen extends StatelessWidget {
             text,
             style: AvailableFonts.getTextStyle(
               context,
-              fontSize: 16.scale,
+              fontSize: 16.scale as double,
               color: MVTheme.mainFont,
             ),
           ),
@@ -72,7 +72,7 @@ class ProjectListScreen extends StatelessWidget {
           padding: const EdgeInsets.all(12.0),
           child: Text('PULL DOWN TO REFRESH',
               style: AvailableFonts.getTextStyle(context,
-                  fontSize: 12.scale,
+                  fontSize: 12.scale as double,
                   weight: FontWeight.bold,
                   color: Colors.black.withAlpha(100))),
         ),
@@ -103,7 +103,7 @@ class ProjectListScreen extends StatelessWidget {
                         return emptyContainer(
                           context,
                           'Oh, nothing to see..',
-                          homeProvider.projectsError,
+                          homeProvider.projectsError!,
                         );
                       }
 
@@ -118,7 +118,7 @@ class ProjectListScreen extends StatelessWidget {
 
                     return GestureDetector(
                       onTap: () {
-                        homeProvider.homeNavigationKey.currentState.pushNamed(
+                        homeProvider.homeNavigationKey.currentState!.pushNamed(
                           '/project',
                           arguments: ProjectListScreenArgs(
                             project,

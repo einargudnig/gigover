@@ -10,7 +10,7 @@ class Consts {
 
 // ignore: must_be_immutable
 class LSDialog extends StatelessWidget {
-  List<Widget> children;
+  List<Widget>? children;
   Color backgroundColor = Colors.white;
 
   LSDialog({ children, backgroundColor }) {
@@ -23,15 +23,15 @@ class LSDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (this.children == null || this.children.length <= 0) {
-      return null;
+    if (this.children == null || this.children!.length <= 0) {
+      return Container();
     }
 
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[...this.children],
+        children: <Widget>[...this.children!],
       ),
       padding: EdgeInsets.only(
         top: Consts.padding * 2,

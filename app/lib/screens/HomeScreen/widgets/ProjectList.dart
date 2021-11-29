@@ -32,7 +32,7 @@ class _ProjectListState extends State<ProjectList> {
 
         return GestureDetector(
           onTap: () {
-            homeProvider.homeNavigationKey.currentState.pushNamed('/project', arguments: ProjectListScreenArgs(project));
+            homeProvider.homeNavigationKey.currentState!.pushNamed('/project', arguments: ProjectListScreenArgs(project));
           },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),

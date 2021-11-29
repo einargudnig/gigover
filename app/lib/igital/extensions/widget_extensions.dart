@@ -28,11 +28,11 @@ extension WidgetPadding on Widget {
 
 /* Positioned */
 extension WidgetPosition on Widget {
-  Widget positioned({num left, num top, num right, num bottom}) => Positioned(
-        left: left,
-        top: top,
-        right: right,
-        bottom: bottom,
+  Widget positioned({num? left, num? top, num? right, num? bottom}) => Positioned(
+        left: left as double?,
+        top: top as double?,
+        right: right as double?,
+        bottom: bottom as double?,
         child: this,
       );
 }

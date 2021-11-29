@@ -7,20 +7,20 @@ import 'package:provider/provider.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class ProjectTypeLabel extends StatelessWidget {
-  final int typeId;
+  final int? typeId;
 
   ProjectTypeLabel({
-    @required this.typeId,
+    required this.typeId,
   });
 
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(
       builder: (context, homeProvider, child) {
-        var typeLabel = 'Unknown';
+        String? typeLabel = 'Unknown';
 
-        if (homeProvider.projectTypes.length > 0) {
-          ProjectType type = homeProvider.projectTypes.singleWhere((pt) => pt.typeId == typeId);
+        if (homeProvider.projectTypes!.length > 0) {
+          ProjectType type = homeProvider.projectTypes!.singleWhere((pt) => pt.typeId == typeId);
 
           if (type != null) {
             typeLabel = type.name;
@@ -35,10 +35,10 @@ class ProjectTypeLabel extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 6, 8, 6),
             child: Text(
-              typeLabel,
+              typeLabel!,
               style: AvailableFonts.getTextStyle(
                 context,
-                fontSize: 13.scale,
+                fontSize: 13.scale as double,
                 weight: FontWeight.bold,
                 color: MVTheme.blueLabelText,
               ),

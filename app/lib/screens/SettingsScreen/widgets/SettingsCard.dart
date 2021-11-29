@@ -49,14 +49,14 @@ class SettingsCardState extends State<SettingsCard> {
             Text('Logged in with phone number:', style: AvailableFonts.getTextStyle(context,
                 weight: FontWeight.bold, fontSize: 14)),
             SizedBox(height: 4),
-            Text(widget.authProvider.getUser().phoneNumber),
+            Text(widget.authProvider.getUser()!.phoneNumber!),
             Divider(height: 24),
             RoundedButton(
               fillBackground: Colors.black,
               textColor: Colors.white,
               text: 'Back to projects',
               onTap: () async {
-                homeProvider.homeNavigationKey.currentState.pop();
+                homeProvider.homeNavigationKey.currentState!.pop();
               },
             ),
             SizedBox(height: 16),
@@ -66,7 +66,7 @@ class SettingsCardState extends State<SettingsCard> {
               text: 'Logout',
               onTap: () async {
                 await widget.authProvider.logout();
-                mainNavigatorKey.currentState.pushReplacementNamed('/login');
+                mainNavigatorKey.currentState!.pushReplacementNamed('/login');
               },
             ),
           ],

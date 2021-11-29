@@ -19,11 +19,11 @@ class ProjectListScreenArgs {
 }
 
 class ProjectScreen extends StatefulWidget {
-  Project project;
+  Project? project;
 
   ProjectScreen(BuildContext context) {
     final ProjectListScreenArgs args =
-        ModalRoute.of(context).settings.arguments;
+        ModalRoute.of(context)!.settings.arguments as ProjectListScreenArgs;
     this.project = args.project;
   }
 
@@ -38,7 +38,7 @@ class ProjectScreenState extends State<ProjectScreen> {
 
     final projectProvider =
         Provider.of<ProjectProvider>(context, listen: false);
-    projectProvider.getTasks(widget.project.projectId);
+    projectProvider.getTasks(widget.project!.projectId);
   }
 
   @override
@@ -58,8 +58,8 @@ class ProjectScreenState extends State<ProjectScreen> {
 
     final tasks = projectProvider.tasks;
 
-    List<Task> tasksForStatus = tasks != null && tasks.length > 0
-        ? tasks.where((t) => t.status == status).toList()
+    List<Task?> tasksForStatus = tasks != null && tasks.length > 0
+        ? tasks.where((t) => t!.status == status).toList()
         : [];
 
     if (tasksForStatus.length == 0) {
@@ -109,12 +109,12 @@ class ProjectScreenState extends State<ProjectScreen> {
               unselectedLabelColor: MVTheme.mainFont,
               labelStyle: AvailableFonts.getTextStyle(
                 context,
-                fontSize: 15.scale,
+                fontSize: 15.scale as double,
                 weight: FontWeight.bold,
               ),
               unselectedLabelStyle: AvailableFonts.getTextStyle(
                 context,
-                fontSize: 15.scale,
+                fontSize: 15.scale as double,
                 weight: FontWeight.normal,
               ),
               isScrollable: tabs.length > 4,

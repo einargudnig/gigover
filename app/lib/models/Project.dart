@@ -4,14 +4,14 @@ import 'Task.dart';
 import 'TaskStatus.dart';
 
 class Project {
-  int projectId;
-  String name;
-  String description;
-  String zipCode;
-  ProjectStatus status;
-  int workId;
-  List<Task> tasks;
-  int minutes;
+  int? projectId;
+  String? name;
+  String? description;
+  String? zipCode;
+  ProjectStatus? status;
+  int? workId;
+  List<Task>? tasks;
+  int? minutes;
 
   Project({
     this.projectId,
@@ -26,12 +26,14 @@ class Project {
     if (tasks == null) {
       this.tasks = [];
     } else {
-      this.tasks = this.tasks.where((t) => t.status != TaskStatus.Archived).toList();
+      this.tasks = this.tasks!.where((t) => t.status != TaskStatus.Archived).toList();
     }
   }
 
   static Project fromJson(Map<String, dynamic> json) {
     try {
+      print(json);
+      print('herna');
       return Project(
         projectId: json["projectId"],
         name: json["name"],
@@ -47,7 +49,7 @@ class Project {
             : [],
       );
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 
@@ -63,10 +65,10 @@ class Project {
   }
 
   double get amountDoneValue {
-    if (tasks.length > 0) {
+    if (tasks!.length > 0) {
       int tasksDone = 0;
-      tasks.forEach((t) => tasksDone += (t.status == TaskStatus.Done ? 1 : 0));
-      return (tasksDone / tasks.length) * 100;
+      tasks!.forEach((t) => tasksDone += (t.status == TaskStatus.Done ? 1 : 0));
+      return (tasksDone / tasks!.length) * 100;
     }
 
     return 0;
@@ -75,6 +77,6 @@ class Project {
   // USED FOR GENERIC FUNCTIONS DO NOT REMOVE
   @override
   String toString() {
-    return this.name;
+    return this.name!;
   }
 }
