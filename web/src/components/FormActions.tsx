@@ -7,6 +7,10 @@ const FormActionsContainer = styled.div`
 	justify-content: space-between;
 	align-items: center;
 	padding: ${(props) => props.theme.padding(3)} 0;
+	position: sticky;
+	bottom: 0px;
+	right: 0px;
+	background: white;
 `;
 
 interface FormActionsProps {
