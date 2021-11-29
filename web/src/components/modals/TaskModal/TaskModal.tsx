@@ -134,7 +134,6 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							task={task}
 							projectId={projectId}
 						/>
-						<StatusUpdate task={task} projectId={projectId} />
 						<div style={{ width: '100%' }}>
 							<Tag mb={4}>Task files</Tag>
 							<DropZone
