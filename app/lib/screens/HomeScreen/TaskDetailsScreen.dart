@@ -275,7 +275,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       child: Container(
         child: Column(
           children: [
-            taskDetailItemWrapper(TaskDetailHeader(this._task!.text!)),
+            taskDetailItemWrapper(TaskDetailHeader(this._task!.subject ?? this._task!.text!)),
             taskDetailItemWrapper(IgitalDropdownButton<dynamic>(
               context,
               'Current status',
