@@ -204,61 +204,88 @@ export const ImageDot = ({
 					maxHeight: '100%'
 				}}
 			>
-				{documentType === 2 || documentType === 'DOCUMENT' ? (
-					<>
-						{num !== -1 && (
-							<Box position={'absolute'} zIndex={2} right={0} bottom={0}>
-								<p>
-									Page {pageNumber} of {num}
-								</p>
-								<Button
-									onClick={() => {
-										setPageNumber(Math.max(pageNumber - 1, 1));
+				{(() => {
+					switch (documentType) {
+						case 2:
+						case 'DOCUMENT':
+							return (
+								<>
+									{num !== -1 && (
+										<Box position={'absolute'} zIndex={2} right={0} bottom={0}>
+											<p>
+												Page {pageNumber} of {num}
+											</p>
+											<Button
+												onClick={() => {
+													setPageNumber(Math.max(pageNumber - 1, 1));
+												}}
+											>
+												Left
+											</Button>
+											<Button
+												onClick={() => {
+													setPageNumber(Math.min(pageNumber + 1, num));
+												}}
+											>
+												Right
+											</Button>
+										</Box>
+									)}
+									<div onMouseUp={addDot}>
+										<Document
+											file={imageSrc}
+											onLoadSuccess={onDocumentLoadSuccess}
+										>
+											<Page
+												canvasRef={ref}
+												renderTextLayer={false}
+												pageNumber={pageNumber}
+											/>
+										</Document>
+									</div>
+								</>
+							);
+						case 1:
+						case 'VIDEO':
+							return (
+								<video
+									style={{
+										maxHeight: '100%',
+										maxWidth: '100%',
+										objectFit: 'contain'
 									}}
+									controls={true}
 								>
-									Left
-								</Button>
-								<Button
-									onClick={() => {
-										setPageNumber(Math.min(pageNumber + 1, num));
-									}}
-								>
-									Right
-								</Button>
-							</Box>
-						)}
-
-						<div onMouseUp={addDot}>
-							<Document file={imageSrc} onLoadSuccess={onDocumentLoadSuccess}>
-								<Page
-									canvasRef={ref}
-									renderTextLayer={false}
-									pageNumber={pageNumber}
+									<source src={imageSrc} type={'video/mp4'} />
+								</video>
+							);
+						case 0:
+						case 'IMAGE':
+							return zoomAllowed ? (
+								<Zoom>
+									<ChakraImage
+										ref={ref}
+										onMouseUp={addDot}
+										src={imageSrc}
+										maxHeight={'100%'}
+										maxWidth={'100%'}
+										fit={'contain'}
+									/>
+								</Zoom>
+							) : (
+								<ChakraImage
+									ref={ref}
+									onMouseUp={addDot}
+									src={imageSrc}
+									maxHeight={'100%'}
+									maxWidth={'100%'}
+									fit={'contain'}
 								/>
-							</Document>
-						</div>
-					</>
-				) : zoomAllowed ? (
-					<Zoom>
-						<ChakraImage
-							ref={ref}
-							onMouseUp={addDot}
-							src={imageSrc}
-							maxHeight={'100%'}
-							maxWidth={'100%'}
-							fit={'contain'}
-						/>
-					</Zoom>
-				) : (
-					<ChakraImage
-						ref={ref}
-						onMouseUp={addDot}
-						src={imageSrc}
-						maxHeight={'100%'}
-						maxWidth={'100%'}
-						fit={'contain'}
-					/>
-				)}
+							);
+						default:
+							return <h1>INVALID FILE TYPE</h1>;
+					}
+				})()}
 				{dots &&
 					dots.map((s, i) => {
 						const chord = getPosition(s);
@@ -327,16 +354,18 @@ export const ImageDot = ({
 				justifyContent: 'center'
 			}}
 		>
-			<Button
-				size={'sm'}
-				zIndex={9}
-				position={'absolute'}
-				top={'0'}
-				right={'0'}
-				onClick={() => setZoomAllowed(!zoomAllowed)}
-			>
-				{!zoomAllowed ? 'Allow Zoom' : 'Disable zoom'}
-			</Button>
+			{!(documentType === 2 || documentType === 'VIDEO') && (
+				<Button
+					size={'sm'}
+					zIndex={9}
+					position={'absolute'}
+					top={'0'}
+					right={'0'}
+					onClick={() => setZoomAllowed(!zoomAllowed)}
+				>
+					{!zoomAllowed ? 'Allow Zoom' : 'Disable zoom'}
+				</Button>
+			)}
 			{isPrevImage && (
 				<Button
 					size={'sm'}
