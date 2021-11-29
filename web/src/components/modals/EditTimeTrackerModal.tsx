@@ -137,7 +137,7 @@ export const EditTimeTrackerModal = ({
 				}
 			/>
 			<Box my={4}>
-				<Tag mb={4}>Start date and time</Tag>
+				<Tag mb={4}>Work start date and time</Tag>
 				<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
 					<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
 						<SingleDatePicker
@@ -152,7 +152,7 @@ export const EditTimeTrackerModal = ({
 					</DatePickerWrapper>
 					<Box flex={1}>
 						<TrackerSelect
-							title={'Hours'}
+							title={'Hour started'}
 							value={startTime.getHours()}
 							isNumber={true}
 							options={range(0, 60).map((i) => ({
@@ -168,7 +168,7 @@ export const EditTimeTrackerModal = ({
 					</Box>
 					<Box flex={1}>
 						<TrackerSelect
-							title={'Minutes'}
+							title={'Minute started'}
 							value={startTime.getMinutes()}
 							isNumber={true}
 							options={range(0, 59).map((i) => ({
@@ -185,7 +185,7 @@ export const EditTimeTrackerModal = ({
 				</HStack>
 			</Box>
 			<Box my={4}>
-				<Tag mb={4}>End date and time</Tag>
+				<Tag mb={4}>Work end date and time</Tag>
 				<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
 					<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
 						<SingleDatePicker
@@ -200,7 +200,7 @@ export const EditTimeTrackerModal = ({
 					</DatePickerWrapper>
 					<Box flex={1}>
 						<TrackerSelect
-							title={'Hours'}
+							title={'Hour started'}
 							value={endTime.getHours()}
 							isNumber={true}
 							options={range(0, 60).map((i) => ({
@@ -216,7 +216,7 @@ export const EditTimeTrackerModal = ({
 					</Box>
 					<Box flex={1}>
 						<TrackerSelect
-							title={'Minutes'}
+							title={'Minute started'}
 							value={endTime.getMinutes()}
 							isNumber={true}
 							options={range(0, 59).map((i) => ({
