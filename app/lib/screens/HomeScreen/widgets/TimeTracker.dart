@@ -213,8 +213,6 @@ class TimeTracker extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(bottom: bottomPadding),
         child: RoundedButton(
-          disabled: homeProvider.currentTrackedProject == null ||
-              homeProvider.currentTrackedTask == null,
           disabledFillBackground: Color.fromRGBO(31, 200, 131, 1),
           fillBackground: Color.fromRGBO(31, 223, 131, 1),
           textColor: Color.fromRGBO(7, 16, 41, 1),
