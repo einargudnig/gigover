@@ -1,23 +1,28 @@
+// @ts-nocheck
 import React from 'react';
-import { Table as ChakraTable, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
-import { useExpanded, useSortBy, useTable } from 'react-table';
+import { Flex, Table as ChakraTable, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+	CellPropGetter,
+	Column,
+	HeaderPropGetter,
+	TableRowProps,
+	useExpanded,
+	useSortBy,
+	useTable,
+	UseTableColumnProps
+} from 'react-table';
 import styled from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';
 
-interface TableProps {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	columns: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	data: any;
+// eslint-disable-next-line @typescript-eslint/ban-types
+interface TableProps<T extends object = {}, C extends object = {}> {
+	columns: Column<C>[];
+	data: T;
 	loading: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	getRowProps?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	getHeaderProps?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	getColumnProps?: any;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	getCellProps?: any;
+	getRowProps?: TableRowProps;
+	getHeaderProps?: HeaderPropGetter<T>;
+	getColumnProps?: UseTableColumnProps<T>;
+	getCellProps?: CellPropGetter<T>;
 	variant?: string;
 	colorScheme?: string;
 }
@@ -27,6 +32,7 @@ const defaultPropGetter = () => ({});
 const StyledTh = styled.th`
 	border-bottom: 1px solid #e5e5e5 !important;
 	color: black !important;
+
 	&:first-child {
 		position: sticky;
 		left: 0;
@@ -44,7 +50,8 @@ const StyledTd = styled.td`
 	}
 `;
 
-export const Table = ({
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function Table<T extends object = {}, C extends object = {}>({
 	columns,
 	data,
 	loading = false,
@@ -54,8 +61,8 @@ export const Table = ({
 	getColumnProps = defaultPropGetter,
 	getRowProps = defaultPropGetter,
 	getCellProps = defaultPropGetter
-}: TableProps): JSX.Element => {
-	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+}: TableProps<T, C>): JSX.Element {
+	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable<T>(
 		{
 			columns,
 			data
@@ -69,38 +76,63 @@ export const Table = ({
 	}
 
 	// Render the UI for your table
-	// @ts-ignore
 	return (
 		<div style={{ maxWidth: '100%', overflowX: 'auto' }}>
 			<ChakraTable variant={variant} colorScheme={colorScheme} {...getTableProps()}>
 				<Thead>
 					{headerGroups.map((headerGroup, rowIndex) => (
 						<Tr {...headerGroup.getHeaderGroupProps()} key={rowIndex}>
-							{headerGroup.headers.map((column, colIndex) => (
-								<Th
-									as={StyledTh}
-									{...column.getHeaderProps([
-										getColumnProps(column),
-										getHeaderProps(column)
-									])}
-									//@ts-ignore
-									{...column.getHeaderProps(column.getSortByToggleProps())}
-									key={colIndex}
-								>
-									{column.render('Header')}
-									<span>
-										{
-											//@ts-ignore
-											column.isSorted
-												? //@ts-ignore
-												  column.isSortedDesc
-													? ' 🔽'
-													: ' 🔼'
-												: ''
-										}
-									</span>
-								</Th>
-							))}
+							{headerGroup.headers.map((column, colIndex) => {
+								console.log('column', column);
+
+								return (
+									<Th
+										as={StyledTh}
+										{...column.getHeaderProps([
+											getColumnProps(column),
+											getHeaderProps(column)
+										])}
+										{...column.getHeaderProps(column.getSortByToggleProps())}
+										key={colIndex}
+									>
+										<Flex justify="space-between" align="center">
+											<div>
+												{column.render('Header')}
+												<span>
+													{column.isSorted
+														? column.isSortedDesc
+															? ' 🔽'
+															: ' 🔼'
+														: ''}
+												</span>
+											</div>
+											{column.canSort && (
+												<div>
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														width={22}
+														height={26}
+														viewBox="0 0 100 125"
+													>
+														<path
+															d="M50,5A28.12,28.12,0,0,0,21.88,33.13V66.88a28.13,28.13,0,0,0,56.25,0V33.13A28.12,28.12,0,0,0,50,5ZM27.5,33.13a22.5,22.5,0,0,1,45,0V47.19h-45ZM50,89.38a22.53,22.53,0,0,1-22.5-22.5V52.81h45V66.88A22.53,22.53,0,0,1,50,89.38Z"
+															fill="currentColor"
+														/>
+														<path
+															d="M50,21.41,39.16,32.25a1.41,1.41,0,0,0,0,2l2,2a1.41,1.41,0,0,0,2,0L50,29.37l6.86,6.86a1.41,1.41,0,0,0,2,0l2-2a1.41,1.41,0,0,0,0-2Z"
+															fill="currentColor"
+														/>
+														<path
+															d="M58.85,64a1.41,1.41,0,0,0-2,0L50,70.87,43.14,64a1.41,1.41,0,0,0-2,0l-2,2a1.41,1.41,0,0,0,0,2L50,78.83,60.84,68a1.41,1.41,0,0,0,0-2Z"
+															fill="currentColor"
+														/>
+													</svg>
+												</div>
+											)}
+										</Flex>
+									</Th>
+								);
+							})}
 						</Tr>
 					))}
 				</Thead>
@@ -130,4 +162,4 @@ export const Table = ({
 			</ChakraTable>
 		</div>
 	);
-};
+}

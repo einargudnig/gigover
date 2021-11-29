@@ -44,17 +44,15 @@ export const CsvReportModal = ({
 				parameterString.push(`workerId=${selectedWorker.uId}`);
 			}
 
-			const response = await reportToCSV.mutateAsync({
+			await reportToCSV.mutateAsync({
 				name: 'workReport',
 				parameters: parameterString.join('|')
 			});
-
-			console.log('response', response);
 		} catch (e) {
 			console.error(e);
 			alert('Could not export to CSV, contact support or try again later.');
 		}
-	}, [selectedProject, selectedTask, selectedWorker]);
+	}, [reportToCSV, selectedProject, selectedTask, selectedWorker]);
 
 	return (
 		<Modal open={true} onClose={onClose} title={'Report to CSV'} centerModal={true}>
