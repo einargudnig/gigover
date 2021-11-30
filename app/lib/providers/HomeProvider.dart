@@ -74,6 +74,7 @@ class TimerItem {
 enum StopWatchStatus { OnGoing, Paused, Stopped, Idle }
 
 String currentProjectString = 'currentProject';
+String currentTaskString = 'currentTask';
 
 class StopWatchData {
   Project currentProject;
@@ -88,6 +89,9 @@ class StopWatchData {
 class HomeProvider with ChangeNotifier {
   final GlobalKey<NavigatorState> homeNavigationKey =
       GlobalKey<NavigatorState>();
+  bool _unMounted = false;
+
+  bool get unMounted => _unMounted;
 
   int _count = 0;
 
@@ -97,9 +101,15 @@ class HomeProvider with ChangeNotifier {
   bool loadingProjects = true;
   List<Project> projects = [];
   List<ProjectType> projectTypes = [];
+  Project? _currentTrackedProject;
+  Task? _currentTrackedTask;
 
-  Project? currentTrackedProject;
-  Task? currentTrackedTask;
+  Project? get currentTrackedProject =>
+      _currentTrackedProject ?? this.projects.first;
+
+  Task? get currentTrackedTask =>
+      _currentTrackedTask ?? this.projects.first.tasks!.first;
+
   late StopwatchProvider stopwatch;
   SlidePanelConfig slidePanelConfig = defaultSlidePanelConfig;
   PanelController panelController = new PanelController();
@@ -120,6 +130,13 @@ class HomeProvider with ChangeNotifier {
     initVerifyUser();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    this.stopwatch.stopStopWatch();
+    _unMounted = true;
+  }
+
   void notifyListenersAfterNavigationSettings() {
     notifyListeners();
   }
@@ -132,21 +149,9 @@ class HomeProvider with ChangeNotifier {
 
       if (user!.registered!) {
         // skoda
-        this.getProjects().then((v) {
-          this.getStopWatchData().then((s) async {
-            if (this.currentTrackedProject == null &&
-                this.projects.length > 0) {
-              // TODO here set current project as last selected
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              var lastProjectId = prefs.getInt(currentProjectString);
-              if (lastProjectId != null) {
-                Project project = this.projects.firstWhere(
-                    (Project element) => element.projectId == lastProjectId,
-                    orElse: () => this.projects[0]);
-                this.setCurrentProject(project);
-              }
-            }
-          });
+        this.getProjects().then((v) async {
+          await this.getStopWatchData();
+          this.getLocalProject();
         });
       }
     }).catchError((err) {
@@ -200,8 +205,6 @@ class HomeProvider with ChangeNotifier {
     //TODO do API call to fetch the stopWatchDetails
 
     Response response = await ApiService.getTimer();
-    print(response);
-    print('res');
 
     //If error just do nothing
     if (response.statusCode != 200) {
@@ -233,7 +236,8 @@ class HomeProvider with ChangeNotifier {
       }
 
       DateTime startTime = new DateTime.fromMillisecondsSinceEpoch(
-          response.data["timeSheet"]["start"]);
+          response.data["timeSheet"]["start"],
+          isUtc: true);
       DateTime now = DateTime.now();
 
       var inMilliseconds = now.difference(startTime).inMilliseconds;
@@ -314,18 +318,37 @@ class HomeProvider with ChangeNotifier {
     prefs.setInt(currentProjectString, project.projectId!).then((bool success) {
       return project.projectId;
     });
-    prefs.setInt(currentProjectString, project.projectId!);
-    this.currentTrackedProject = project;
+    this._currentTrackedProject = project;
 
     if (updateTaskValue) {
-      this.currentTrackedTask =
-          project.tasks!.length > 0 ? project.tasks![0] : null;
+      this.setCurrentTask(project.tasks!.length > 0 ? project.tasks![0] : null);
     }
     notifyListeners();
   }
 
-  void setCurrentTask(Task task) {
-    this.currentTrackedTask = task;
+  Future<Project?> getLocalProject() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var lastProjectId = prefs.getInt(currentProjectString);
+    var lastTaskId = prefs.getInt(currentTaskString);
+
+    if (lastProjectId != null) {
+      Project project = this.projects.firstWhere(
+          (Project element) => element.projectId == lastProjectId,
+          orElse: () => this.projects[0]);
+      this.setCurrentProject(project, updateTaskValue: false);
+    }
+    if (lastTaskId != null) {
+      this.setCurrentTask(this.currentTrackedProject!.tasks!.firstWhere(
+          (Task task) => task.taskId == lastTaskId,
+          orElse: () => this.currentTrackedProject!.tasks!.first));
+    }
+  }
+
+  Future<void> setCurrentTask(Task? task) async {
+    this._currentTrackedTask = task;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(currentTaskString, task!.taskId!);
+
     notifyListeners();
   }
 
@@ -342,7 +365,9 @@ class HomeProvider with ChangeNotifier {
   void resumeTimer() {
     this.showSlidePanel();
     this.stopwatch.startStopWatch(() {
-      notifyListeners();
+      if (!this.unMounted) {
+        notifyListeners();
+      }
     });
     notifyListeners();
   }
@@ -360,7 +385,9 @@ class HomeProvider with ChangeNotifier {
         1);
 
     this.stopwatch.startStopWatch(() {
-      notifyListeners();
+      if (!this.unMounted) {
+        notifyListeners();
+      }
     });
     notifyListeners();
   }
@@ -375,7 +402,6 @@ class HomeProvider with ChangeNotifier {
   }
 
   ///TIMMMMER STUFF
-
   void goToTaskDetail(Task? task) {
     this.hideTimePanel();
     this.homeNavigationKey.currentState!.pushNamed(
