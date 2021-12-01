@@ -6,6 +6,7 @@ import 'package:mittverk/models/Project.dart';
 import 'package:mittverk/models/ProjectStatus.dart';
 import 'package:mittverk/models/ProjectType.dart';
 import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/Timesheet.dart';
 import 'package:mittverk/models/VerifyUser.dart';
 import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
@@ -104,6 +105,10 @@ class HomeProvider with ChangeNotifier {
   Project? _currentTrackedProject;
   Task? _currentTrackedTask;
 
+  // NEW Active timer
+  Timesheet? currentTimer;
+
+  // Old tracking timer variables, now used for storing the latest selected project / task
   Project? get currentTrackedProject =>
       _currentTrackedProject ?? this.projects.first;
 
@@ -148,7 +153,7 @@ class HomeProvider with ChangeNotifier {
       getProjectTypes();
 
       if (user!.registered!) {
-        // skoda
+        // skoda octavia
         this.getProjects().then((v) async {
           await this.getStopWatchData();
           this.getLocalProject();
@@ -216,28 +221,25 @@ class HomeProvider with ChangeNotifier {
         !response.data["timeSheet"].isEmpty) {
       // Set the data
       // Calculate current time from the stopwatch data
+      dynamic timesheetResponse = response.data["timeSheet"];
 
-      print('TIMESHEET PROJECTS');
-      print(this.projects);
+      print(response.data["timeSheet"]);
+      print(timesheetResponse);
 
-      Project tempP = this.projects.firstWhere((Project t) {
-        return t.projectId == response.data["timeSheet"]["projectId"];
-      });
-
-      Task tempT = tempP.tasks!.firstWhere((Task t) {
-        return t.taskId == response.data["timeSheet"]["taskId"];
-      });
-
-      if (tempP != null) {
-        this.setCurrentProject(tempP, updateTaskValue: false);
-      }
-      if (tempT != null) {
-        this.setCurrentTask(tempT);
-      }
+      Timesheet ts = Timesheet(
+        startTime: timesheetResponse["start"],
+        projectName: timesheetResponse["projectName"],
+        taskSubject: timesheetResponse["taskSubject"],
+        projectId: timesheetResponse["projectId"],
+        taskId: timesheetResponse["taskId"],
+      );
+      print('TIMESHEET');
+      print(ts);
 
       DateTime startTime = new DateTime.fromMillisecondsSinceEpoch(
-          response.data["timeSheet"]["start"],
-          isUtc: true);
+        ts.startTime,
+        isUtc: true,
+      );
       DateTime now = DateTime.now();
 
       var inMilliseconds = now.difference(startTime).inMilliseconds;
@@ -251,8 +253,9 @@ class HomeProvider with ChangeNotifier {
       this.stopwatch.resetStopWatch();
       this.stopwatch.setAddedTime(elapsedTime, duration);
 
+      // Set the current timer data
+      this.currentTimer = ts;
       this.resumeTimer();
-
       this.showSlidePanel();
     } else {
       this.stopwatch.resetStopWatch();
@@ -335,12 +338,14 @@ class HomeProvider with ChangeNotifier {
       Project project = this.projects.firstWhere(
           (Project element) => element.projectId == lastProjectId,
           orElse: () => this.projects[0]);
+
       this.setCurrentProject(project, updateTaskValue: false);
-    }
-    if (lastTaskId != null) {
-      this.setCurrentTask(this.currentTrackedProject!.tasks!.firstWhere(
-          (Task task) => task.taskId == lastTaskId,
-          orElse: () => this.currentTrackedProject!.tasks!.first));
+
+      if (lastTaskId != null) {
+        this.setCurrentTask(project.tasks!.firstWhere(
+            (Task task) => task.taskId == lastTaskId,
+            orElse: () => project.tasks!.first));
+      }
     }
   }
 
@@ -379,23 +384,22 @@ class HomeProvider with ChangeNotifier {
     }
 
     //TODO  not posibly wait for callback
-    Response res = await ApiService.workStart(
-        this.currentTrackedProject!.projectId,
-        this.currentTrackedTask!.taskId,
-        1);
+    await ApiService.workStart(
+      this.currentTrackedProject!.projectId,
+      this.currentTrackedTask!.taskId,
+      1,
+    );
 
-    this.stopwatch.startStopWatch(() {
-      if (!this.unMounted) {
-        notifyListeners();
-      }
-    });
-    notifyListeners();
+    await this.getStopWatchData();
   }
 
   void resetTimer() {
     //TODO perhaps show some dialog to tell the user about the time he just logged
     //TODO and do not
-    ApiService.workEnd(this.currentTrackedProject!.projectId);
+    if (this.currentTimer != null) {
+      ApiService.workEnd(this.currentTimer!.projectId);
+    }
+    this.currentTimer = null;
     this.stopwatch.resetStopWatch();
     this.slidePanelConfig = defaultSlidePanelConfig;
     notifyListeners();

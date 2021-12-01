@@ -16,7 +16,8 @@ class TimeTracker extends StatelessWidget {
   TimeTracker();
 
   String formatTime(ElapsedTime? time) {
-    if (time == null || (time.minutes == null && time.seconds == null && time.hours == null)) {
+    if (time == null ||
+        (time.minutes == null && time.seconds == null && time.hours == null)) {
       return '00:00';
     }
 
@@ -144,7 +145,8 @@ class TimeTracker extends StatelessWidget {
     final homeProvider = Provider.of<HomeProvider>(context);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-    if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero) {
+    if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero &&
+        homeProvider.currentTimer != null) {
       return Container(
         padding: EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
         decoration: new BoxDecoration(
@@ -172,18 +174,22 @@ class TimeTracker extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    homeProvider.currentTrackedProject.toString(),
+                    homeProvider.currentTimer!.projectName,
                     style: AvailableFonts.getTextStyle(context,
                         color: MVTheme.grayFont, weight: FontWeight.bold),
                   ),
                   Spacing(
                     amount: 0.5,
                   ),
-                  Text(homeProvider.currentTrackedTask.toString(),
-                      style: AvailableFonts.getTextStyle(context,
-                          color: MVTheme.mainFont,
-                          weight: FontWeight.bold,
-                          fontSize: 20))
+                  Text(
+                    homeProvider.currentTimer!.taskSubject,
+                    style: AvailableFonts.getTextStyle(
+                      context,
+                      color: MVTheme.mainFont,
+                      weight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  )
                 ],
               ),
               Spacing(
