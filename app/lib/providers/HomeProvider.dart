@@ -223,7 +223,6 @@ class HomeProvider with ChangeNotifier {
       // Calculate current time from the stopwatch data
       dynamic timesheetResponse = response.data["timeSheet"];
 
-      print("WTF");
       print(response.data["timeSheet"]);
       print(timesheetResponse);
 
@@ -385,17 +384,13 @@ class HomeProvider with ChangeNotifier {
     }
 
     //TODO  not posibly wait for callback
-    Response res = await ApiService.workStart(
-        this.currentTrackedProject!.projectId,
-        this.currentTrackedTask!.taskId,
-        1);
+    await ApiService.workStart(
+      this.currentTrackedProject!.projectId,
+      this.currentTrackedTask!.taskId,
+      1,
+    );
 
-    this.stopwatch.startStopWatch(() {
-      if (!this.unMounted) {
-        notifyListeners();
-      }
-    });
-    notifyListeners();
+    await this.getStopWatchData();
   }
 
   void resetTimer() {
