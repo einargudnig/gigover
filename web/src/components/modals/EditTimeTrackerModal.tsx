@@ -58,6 +58,10 @@ export const EditTimeTrackerModal = ({
 		}
 
 		try {
+			// Make sure its on the 0 second.
+			startTime.setSeconds(0);
+			endTime.setSeconds(0);
+
 			await modifyTimeRecord({
 				workId: reportItem.timesheet.workId,
 				projectId: selectedProject?.projectId,
@@ -153,9 +157,9 @@ export const EditTimeTrackerModal = ({
 					<Box flex={1}>
 						<TrackerSelect
 							title={'Hour started'}
-							value={startTime.getHours()}
+							value={addZeroBefore(startTime.getHours())}
 							isNumber={true}
-							options={range(0, 60).map((i) => ({
+							options={range(0, 23).map((i) => ({
 								value: i,
 								label: addZeroBefore(i)
 							}))}
@@ -169,7 +173,7 @@ export const EditTimeTrackerModal = ({
 					<Box flex={1}>
 						<TrackerSelect
 							title={'Minute started'}
-							value={startTime.getMinutes()}
+							value={addZeroBefore(startTime.getMinutes())}
 							isNumber={true}
 							options={range(0, 59).map((i) => ({
 								value: i,
@@ -200,10 +204,10 @@ export const EditTimeTrackerModal = ({
 					</DatePickerWrapper>
 					<Box flex={1}>
 						<TrackerSelect
-							title={'Hour started'}
-							value={endTime.getHours()}
+							title={'Hour ended'}
+							value={addZeroBefore(endTime.getHours())}
 							isNumber={true}
-							options={range(0, 60).map((i) => ({
+							options={range(0, 23).map((i) => ({
 								value: i,
 								label: addZeroBefore(i)
 							}))}
@@ -216,8 +220,8 @@ export const EditTimeTrackerModal = ({
 					</Box>
 					<Box flex={1}>
 						<TrackerSelect
-							title={'Minute started'}
-							value={endTime.getMinutes()}
+							title={'Minute ended'}
+							value={addZeroBefore(endTime.getMinutes())}
 							isNumber={true}
 							options={range(0, 59).map((i) => ({
 								value: i,
