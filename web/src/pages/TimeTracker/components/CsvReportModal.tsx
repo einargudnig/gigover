@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal } from '../../../components/Modal';
 import { useTimeTrackerReport } from '../useTimeTrackerReport';
 import { Moment } from 'moment';
@@ -6,7 +6,6 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { TrackerSelect } from '../../../components/TrackerSelect';
 import { Project, WorkerItem } from '../../../models/Project';
 import { Task } from '../../../models/Task';
-import { useReportToCSV } from '../../../mutations/useReportToCSV';
 import { Button, Flex } from '@chakra-ui/react';
 import { displayTaskTitle } from '../../../utils/TaskUtils';
 
@@ -26,33 +25,6 @@ export const CsvReportModal = ({
 	const [selectedProject, setSelectedProject] = useState<Project | undefined>();
 	const [selectedWorker, setSelectedWorker] = useState<WorkerItem | undefined>();
 	const [selectedTask, setSelectedTask] = useState<Task | undefined>();
-	const reportToCSV = useReportToCSV();
-
-	const exportToCsv = useCallback(async () => {
-		try {
-			const parameterString: string[] = [];
-
-			if (selectedProject) {
-				parameterString.push(`projectId=${selectedProject.projectId}`);
-			}
-
-			if (selectedTask) {
-				parameterString.push(`taskId=${selectedTask.taskId}`);
-			}
-
-			if (selectedWorker) {
-				parameterString.push(`workerId=${selectedWorker.uId}`);
-			}
-
-			await reportToCSV.mutateAsync({
-				name: 'workReport',
-				parameters: parameterString.join('|')
-			});
-		} catch (e) {
-			console.error(e);
-			alert('Could not export to CSV, contact support or try again later.');
-		}
-	}, [reportToCSV, selectedProject, selectedTask, selectedWorker]);
 
 	return (
 		<Modal open={true} onClose={onClose} title={'Report to CSV'} centerModal={true}>
@@ -109,7 +81,6 @@ export const CsvReportModal = ({
 						<Button onClick={() => onClose()}>Close</Button>
 						<Button
 							onClick={async () => {
-								await exportToCsv();
 								onClose();
 							}}
 						>

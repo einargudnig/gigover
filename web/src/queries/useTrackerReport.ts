@@ -32,6 +32,7 @@ interface TrackerReportInput {
 	projectId?: number;
 	from?: number;
 	to?: number;
+	taskId?: number;
 }
 
 export const useTrackerReport = () => {

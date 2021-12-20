@@ -30,7 +30,8 @@ export const useTimeTrackerReport = (
 	endDate: Moment,
 	refetch = 0,
 	workerId?: string,
-	projectId?: number
+	projectId?: number,
+	selectedTask?: number
 ): TimeTrackerReportResult => {
 	const startDateTimestamp = startDate.unix() * 1000;
 	const endDateTimestamp = endDate.unix() * 1000;
@@ -118,10 +119,11 @@ export const useTimeTrackerReport = (
 		getReport({
 			from: startDateTimestamp,
 			to: endDateTimestamp,
-			projectId
+			projectId,
+			taskId: selectedTask
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [refetch, startDateTimestamp, endDateTimestamp, projectId]);
+	}, [refetch, startDateTimestamp, endDateTimestamp, projectId, selectedTask]);
 
 	return {
 		projectMap,

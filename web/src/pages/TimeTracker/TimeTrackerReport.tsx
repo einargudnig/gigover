@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { DateRangePicker } from 'react-dates';
@@ -16,7 +16,9 @@ import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
 import { Center } from '../../components/Center';
 import { MomentDateFormat } from '../../utils/MomentDateFormat';
-import { CsvReportModal } from './components/CsvReportModal';
+import { useProjectTasks } from '../../hooks/useProjectTasks';
+import { displayTaskTitle } from '../../utils/TaskUtils';
+import { useReportToCSV } from '../../mutations/useReportToCSV';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -76,76 +78,88 @@ interface TimeTrackerReportProps {
 export const TimeTrackerReport = ({
 	refetch: [refetchValue, setRefetch]
 }: TimeTrackerReportProps): JSX.Element => {
-	const [reportModal, setReportModal] = useState(false);
 	const [, setModalContext] = useContext(ModalContext);
 	const [selectedUser, setSelectedUser] = useState<string | undefined>();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
+	const [selectedTask, setSelectedTask] = useState<number | undefined>();
 	const [startDate, setStartDate] = useState(moment().subtract(14, 'days'));
 	const [endDate, setEndDate] = useState(moment());
 	const [focusedInput, setFocusedInput] = useState<'startDate' | 'endDate' | null>(null);
+	const reportToCSV = useReportToCSV();
 	const { projectList, results, isLoading, totalTracked, users } = useTimeTrackerReport(
 		startDate,
 		endDate,
 		refetchValue,
 		selectedUser,
-		selectedProject
+		selectedProject,
+		selectedTask
+	);
+
+	const exportToCsv = useCallback(async () => {
+		try {
+			const parameterString: string[] = [];
+
+			if (selectedProject) {
+				parameterString.push(`projectId=${selectedProject}`);
+			}
+
+			if (selectedTask) {
+				parameterString.push(`taskId=${selectedTask}`);
+			}
+
+			if (selectedUser) {
+				parameterString.push(`workerId=${selectedUser}`);
+			}
+
+			if (startDate) {
+				parameterString.push(
+					`from=${startDate.startOf('day').format('YYYY-MM-DD HH:mm:ss')}`
+				);
+			}
+
+			if (endDate) {
+				parameterString.push(`to=${endDate.endOf('day').format('YYYY-MM-DD HH:mm:ss')}`);
+			}
+
+			await reportToCSV.mutateAsync({
+				name: 'workReport',
+				parameters: parameterString.join('|')
+			});
+		} catch (e) {
+			console.error(e);
+			alert('Could not export to CSV, contact support or try again later.');
+		}
+	}, [reportToCSV, selectedProject, selectedTask, selectedUser, startDate, endDate]);
+
+	const projectTasks = useProjectTasks(
+		projectList.find((pl) => pl.projectId === selectedProject)
 	);
 
 	return (
 		<div>
-			{reportModal && (
-				<CsvReportModal
-					startDate={startDate}
-					endDate={endDate}
-					onClose={() => setReportModal(false)}
-				/>
-			)}
 			<TimeTrackerReportFilter>
-				<DatePickerWrapper>
-					<DateRangePicker
-						displayFormat={MomentDateFormat}
-						isOutsideRange={() => false}
-						startDate={startDate}
-						startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
-						endDate={endDate} // momentPropTypes.momentObj or null,
-						endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
-						onDatesChange={({ startDate: sDate, endDate: eDate }) => {
-							if (sDate !== null) {
-								setStartDate(sDate);
-							}
-							if (eDate !== null) {
-								setEndDate(eDate);
-							}
-						}} // PropTypes.func.isRequired,
-						focusedInput={focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
-						onFocusChange={(fInput) => setFocusedInput(fInput)} // PropTypes.func.isRequired,
-					/>
-					<Button
-						onClick={() => setReportModal(true)}
-						height={'100%'}
-						lineHeight="72px"
-						ml={4}
-					>
-						Export CSV
-					</Button>
-				</DatePickerWrapper>
-				<div>
-					<TrackerSelect
-						minWidth={200}
-						title={'Select user'}
-						placeholder={'All users'}
-						isNumber={false}
-						value={selectedUser}
-						options={users.map((u) => ({ value: u.userId, label: u.name }))}
-						valueChanged={(newValue) => {
-							const v = newValue.toString();
-							if (v.length > 0) {
-								setSelectedUser(newValue as string);
-							} else {
-								setSelectedUser(undefined);
-							}
-						}}
-					/>
+				<div style={{ display: 'flex', flex: 1 }}>
+					<DatePickerWrapper>
+						<DateRangePicker
+							displayFormat={MomentDateFormat}
+							isOutsideRange={() => false}
+							startDate={startDate}
+							startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
+							endDate={endDate} // momentPropTypes.momentObj or null,
+							endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
+							onDatesChange={({ startDate: sDate, endDate: eDate }) => {
+								if (sDate !== null) {
+									setStartDate(sDate);
+								}
+								if (eDate !== null) {
+									setEndDate(eDate);
+								}
+							}} // PropTypes.func.isRequired,
+							focusedInput={focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+							onFocusChange={(fInput) => setFocusedInput(fInput)} // PropTypes.func.isRequired,
+						/>
+					</DatePickerWrapper>
+					<div style={{ width: 8 }} />
 					<TrackerSelect
 						minWidth={200}
 						title={'Select project'}
@@ -164,7 +178,58 @@ export const TimeTrackerReport = ({
 								setSelectedProject(undefined);
 							}
 						}}
+						margin={0}
 					/>
+					<div style={{ width: 8 }} />
+					<TrackerSelect
+						minWidth={200}
+						title={'Select task'}
+						placeholder={'All tasks'}
+						isNumber={true}
+						value={selectedTask}
+						options={projectTasks.map((p) => ({
+							label: displayTaskTitle(p),
+							value: p.taskId
+						}))}
+						valueChanged={(newValue) => {
+							const v = newValue as number;
+							if (v > 0) {
+								setSelectedTask(newValue as number);
+							} else {
+								setSelectedTask(undefined);
+							}
+						}}
+						margin={0}
+					/>
+					<div style={{ width: 8 }} />
+					<TrackerSelect
+						minWidth={200}
+						title={'Select user'}
+						placeholder={'All users'}
+						isNumber={false}
+						value={selectedUser}
+						options={users.map((u) => ({ value: u.userId, label: u.name }))}
+						valueChanged={(newValue) => {
+							const v = newValue.toString();
+							if (v.length > 0) {
+								setSelectedUser(newValue as string);
+							} else {
+								setSelectedUser(undefined);
+							}
+						}}
+						margin={0}
+					/>
+				</div>
+				<div>
+					<Button
+						disabled={!selectedProject}
+						onClick={() => exportToCsv()}
+						height={'100%'}
+						lineHeight="72px"
+						ml={4}
+					>
+						Export CSV
+					</Button>
 				</div>
 			</TimeTrackerReportFilter>
 			<div style={{ marginTop: 24 }}>

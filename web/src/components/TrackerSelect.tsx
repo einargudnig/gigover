@@ -3,13 +3,13 @@ import styled, { css } from 'styled-components';
 import { CaretIcon } from './icons/CaretIcon';
 import { darken } from 'polished';
 
-const TrackerSelectStyled = styled.div<{ minWidth?: number }>`
+const TrackerSelectStyled = styled.div<{ minWidth?: number; margin: number }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	background: ${(props) => props.theme.colors.grayBackground};
-	padding: 16px;
-	margin: 8px 0;
+	padding: 12px;
+	margin: ${(props) => props.margin * 8}px 0;
 	cursor: pointer;
 	user-select: none;
 	transition: all 0.2s linear;
@@ -21,7 +21,6 @@ const TrackerSelectStyled = styled.div<{ minWidth?: number }>`
 		css`
 			min-width: ${props.minWidth}px;
 		`}
-
 	&:hover {
 		background-color: ${(props) => darken(0.05, props.theme.colors.grayBackground)};
 	}
@@ -65,6 +64,7 @@ interface TrackerSelectProps {
 	isNumber?: boolean;
 	minWidth?: number;
 	placeholder?: string;
+	margin?: number;
 }
 
 export const TrackerSelect = ({
@@ -75,9 +75,10 @@ export const TrackerSelect = ({
 	valueChanged,
 	minWidth,
 	disabled = false,
-	isNumber = true
+	isNumber = true,
+	margin = 1
 }: TrackerSelectProps): JSX.Element => (
-	<TrackerSelectStyled minWidth={minWidth}>
+	<TrackerSelectStyled minWidth={minWidth} margin={margin}>
 		<select
 			disabled={disabled}
 			defaultValue={`${value ? value : ''}`}
