@@ -189,6 +189,7 @@ class HomeProvider with ChangeNotifier {
         return verifiedUser;
       } catch (e) {
         print(e);
+        print("COULD NOT VERIFY HEHE");
         throw new Exception("Could not verify user");
       } finally {
         loadingVerifiedUser = false;

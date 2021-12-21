@@ -18,9 +18,10 @@ import 'package:provider/provider.dart';
 
 bool notNull(Object? o) => o != null;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MittVerkApp());

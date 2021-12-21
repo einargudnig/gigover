@@ -44,7 +44,7 @@ class SettingsCardState extends State<SettingsCard> {
                 style: AvailableFonts.getTextStyle(context,
                     weight: FontWeight.bold, fontSize: 16)),
             Divider(height: 24),
-            Text('Gigover project manager app version 1.0'),
+            Text('Gigover project manager app version 2.0.7'),
             Divider(height: 24),
             Text('Logged in with phone number:', style: AvailableFonts.getTextStyle(context,
                 weight: FontWeight.bold, fontSize: 14)),
