@@ -160,18 +160,20 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			</form>
 			{project?.projectId && project.status === ProjectStatus.OPEN ? (
 				<InputWrapper>
-					<Button
-						type={'button'}
-						size={'0'}
-						variant={'link'}
-						colorScheme={'red'}
-						onClick={async (event) => {
-							event.preventDefault();
-							await updateStatus(ProjectStatus.CLOSED);
-						}}
-					>
-						Close this project
-					</Button>
+					{project.owner && (
+						<Button
+							type={'button'}
+							size={'0'}
+							variant={'link'}
+							colorScheme={'red'}
+							onClick={async (event) => {
+								event.preventDefault();
+								await updateStatus(ProjectStatus.CLOSED);
+							}}
+						>
+							Close this project
+						</Button>
+					)}
 				</InputWrapper>
 			) : project?.projectId ? (
 				<InputWrapper>
