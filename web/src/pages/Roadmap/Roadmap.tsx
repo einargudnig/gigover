@@ -1,5 +1,5 @@
-import { Box, Grid, Portal, Select } from '@chakra-ui/react';
-import React, { useCallback, useEffect } from 'react';
+import { Box, Button, Grid, Portal, Select } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Page } from '../../components/Page';
 import { Project } from '../../models/Project';
 import { RoadmapHeader } from './components/RoadmapHeader';
@@ -12,6 +12,7 @@ import { Chevron } from '../../components/icons/Chevron';
 import { useMilestones } from '../../queries/useMilestones';
 import { Milestone } from '../../models/Milestone';
 import { useQueryParam, NumberParam } from 'use-query-params';
+import ReactToPdf from 'react-to-pdf';
 
 interface RoadmapProps {
 	projects: Project[];
@@ -19,6 +20,8 @@ interface RoadmapProps {
 }
 
 export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Element => {
+	const ref = useRef<HTMLDivElement | null>(null);
+
 	const [, setProjectQuery] = useQueryParam('project', NumberParam);
 	const [state, dispatch] = useGantChart({
 		initialState: {
@@ -67,6 +70,27 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		<Page
 			title={'Gantt chart'}
 			backgroundColor={'#fff'}
+			actions={
+				state.project && (
+					<ReactToPdf
+						targetRef={ref}
+						filename={`Gigover-gantt-${state.project?.projectId}.pdf`}
+						options={
+							ref.current && {
+								orientation: 'landscape',
+								unit: 'px',
+								hotfixes: ['px_scaling'],
+								format: [
+									ref.current?.clientWidth ?? 1920,
+									ref.current?.clientHeight ?? 1080
+								]
+							}
+						}
+					>
+						{({ toPdf }) => <Button onClick={toPdf}>Download as PDF</Button>}
+					</ReactToPdf>
+				)
+			}
 			tabs={
 				<Select
 					value={state.project?.projectId}
@@ -97,18 +121,20 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		>
 			<>
 				<GantChartContext.Provider value={[state, dispatch]}>
-					<RoadmapHeader />
-					<Box mt={8}>
-						<Grid
-							templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
-							templateRows={'auto 1fr'}
-							rowGap={4}
-							columnGap={8}
-						>
-							<RoadmapSidebar />
-							<GantChart />
-						</Grid>
-					</Box>
+					<div ref={ref} id={'gc-container'}>
+						<RoadmapHeader />
+						<Box mt={8}>
+							<Grid
+								templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
+								templateRows={'auto 1fr'}
+								rowGap={4}
+								columnGap={8}
+							>
+								<RoadmapSidebar />
+								<GantChart />
+							</Grid>
+						</Box>
+					</div>
 					<Portal>
 						<DateAmountSlider />
 					</Portal>
