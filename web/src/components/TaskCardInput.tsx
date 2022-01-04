@@ -6,6 +6,7 @@ import { useProjectTypes } from '../queries/useProjectTypes';
 import { Options } from './forms/Options';
 import { FormControl, HStack, Button } from '@chakra-ui/react';
 import { ProjectType } from '../models/ProjectType';
+import { ErrorMessage } from '@hookform/error-message';
 
 const TaskInput = styled.textarea`
 	background: transparent;
@@ -43,7 +44,12 @@ export const TaskCardInput = ({
 	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
-	const { control, register, handleSubmit } = useForm<Pick<Task, 'typeId' | 'subject'>>({
+	const {
+		control,
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm<Pick<Task, 'typeId' | 'subject'>>({
 		defaultValues: {
 			subject: value,
 			typeId: task?.typeId
@@ -52,6 +58,10 @@ export const TaskCardInput = ({
 
 	const submit = handleSubmit(async (values) => {
 		if (onSubmit) {
+			if (values.subject.length > 600) {
+				throw new Error('Subject cannot be longer than 600 characters');
+			}
+
 			onSubmit({
 				subject: values.subject,
 				// Sending string because of the select value..
@@ -85,14 +95,16 @@ export const TaskCardInput = ({
 		<form onSubmit={submit}>
 			{error && <div style={{ color: 'red' }}>{error}</div>}
 			<div style={{ minHeight: parentHeight }}>
+				<ErrorMessage errors={errors} name="subject" />
 				<TaskInput
 					name={'subject'}
+					maxLength={599}
 					required={true}
 					placeholder={'Write the task name'}
 					onChange={onChangeHandler}
 					style={{ height: textAreaHeight }}
 					ref={(e) => {
-						register(e, { required: true, maxLength: 200 });
+						register(e, { required: true });
 
 						if (e) {
 							textInputRef.current = e;
