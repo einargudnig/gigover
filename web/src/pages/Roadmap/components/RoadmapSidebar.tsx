@@ -168,7 +168,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 						/>
 					</Flex>
 				))}
-				{(state.tasks.length === 0 && state.milestones.length === 0) && (
+				{state.tasks.length === 0 && state.milestones.length === 0 && (
 					<EmptyState
 						icon={<EmptyProjects scale={0.5} />}
 						title={'No deliverables'}
