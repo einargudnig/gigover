@@ -23,6 +23,8 @@ import { LoadingSpinner } from '../LoadingSpinner';
 import { TrackerSelect } from '../TrackerSelect';
 import { useResourceTypes } from '../../queries/useResourceTypes';
 import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
+import { ResourceComments } from '../Resources/ResourceComments';
+import { CommentInput } from '../Resources/ResourceCommentInput';
 
 const TabContent = styled.div<{ show: boolean }>`
 	background: #f9f9f9;
@@ -187,11 +189,13 @@ export const ResourceModal = (): JSX.Element => {
 								}
 								tabs={Array.from(
 									isEditing ? [{ name: 'Resource log', value: 0 }] : []
-								).concat([
-									{ name: 'Resource details', value: 1 },
-									{ name: 'Resource cost', value: 2 },
-									{ name: 'Description', value: 3 }
-								])}
+								)
+									.concat([
+										{ name: 'Resource details', value: 1 },
+										{ name: 'Resource cost', value: 2 },
+										{ name: 'Description', value: 3 }
+									])
+									.concat(isEditing ? [{ name: 'Comments', value: 4 }] : [])}
 							>
 								{({ tab }) => (
 									<>
@@ -292,6 +296,12 @@ export const ResourceModal = (): JSX.Element => {
 												)}
 											</FormControl>
 										</TabContent>
+										{isEditing && resources?.resource && (
+											<TabContent show={tab.value === 4}>
+												<ResourceComments resource={resources.resource} />
+												<CommentInput resourceId={resources.resource.id!} />
+											</TabContent>
+										)}
 									</>
 								)}
 							</Tabs>
