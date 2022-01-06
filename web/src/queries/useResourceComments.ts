@@ -1,10 +1,16 @@
 import { useQuery } from 'react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
-import { TaskComment } from '../models/TaskComment';
+
+export interface ResourceComment {
+	comment: string;
+	fullName: string;
+	resourceId: number;
+	sent: number;
+}
 
 export interface ResourceCommentsResponse {
-	comments: Omit<TaskComment, 'taskId'>[];
+	resources: ResourceComment[];
 }
 
 export const useResourceComments = (resourceId: number) =>
