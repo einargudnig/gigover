@@ -109,4 +109,10 @@ class ApiService {
           'comment': comment,
         });
   }
+
+  static storePushToken(String token) async {
+    return await dio.post(
+      apiPrefix + '/workers/pushToken/' + token,
+    );
+  }
 }
