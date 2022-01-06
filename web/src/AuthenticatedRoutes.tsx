@@ -9,6 +9,10 @@ import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
 import { RoadmapPreloader } from './pages/Roadmap/RoadmapPreloader';
 import { Files } from './pages/Files/Files';
 import { Resources } from './pages/Resources/Resources';
+import { FileId } from './pages/Files/new/FileId';
+import { FolderFolder } from './pages/Files/new/FolderFolder';
+import { FilesHome } from './pages/Files/new/FilesHome';
+import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -18,10 +22,14 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 		<Route path={'roadmap'} element={<RoadmapPreloader />} />
 		<Route path={'files'} element={<Files />}>
-			<Route path={':projectId/file/:fileId'} element={<Files />} />
-			<Route path={':projectId/file/:folderId/:fileId'} element={<Files />} />
-			<Route path={':projectId'} element={<Files />} />
-			<Route path={':projectId/:folderId'} element={<Files />} />
+			<Route index element={<FilesHome />} />
+{/*			<Route path={':projectId/file/:fileId'} element={<FileId />} />
+			<Route path={':projectId/file/:folderId/:fileId'} element={<FileId />} />*/}
+			<Route path={':projectId'} element={<ProjectFolder />} />
+			<Route path={':projectId/folder/:folderId/:fileId'} element={<FolderFolder />} />
+			<Route path={':projectId/folder/:folderId'} element={<FolderFolder />} />
+			<Route path={':projectId/:fileId'} element={<ProjectFolder />} />
+
 		</Route>
 		<Route path={'organize'} element={<Organize />}>
 			<Route path={':projectId'} element={<Organize />} />

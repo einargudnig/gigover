@@ -13,13 +13,24 @@ export const useAddFolder = () => {
 
 	return useMutation<ProjectFolder, AxiosError, FolderInput>(async (variables) => {
 		try {
-			const response = await axios.post<ProjectFolder>(ApiService.addFolder, variables, {
-				withCredentials: true
-			});
+			const response = await axios.post<ProjectFolder>(
+				ApiService.addFolder,
+				{ ...variables, parentId: variables.folderId ?? 0 },
+				{
+					withCredentials: true
+				}
+			);
 
 			if (response.status === 200) {
 				// Refetch the new folder list after creation
-				await client.refetchQueries(ApiService.folderList(variables.projectId));
+				if (variables.folderId) {
+					console.log('refetch');
+					await client.refetchQueries(
+						ApiService.folderFolders(variables.projectId, variables.folderId)
+					);
+				} else {
+					await client.refetchQueries(ApiService.folderList(variables.projectId));
+				}
 			}
 
 			return response.data;

@@ -115,7 +115,6 @@ export const DropZone = ({
 							? 'Drop files here'
 							: 'Drag and drop files here or click to select a file'}
 					</Text>
-					<Button onClick={() => open()}>Or click here</Button>
 				</div>
 			)}
 		</DropZoneContainer>

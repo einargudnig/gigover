@@ -61,6 +61,7 @@ export const AppPreloader = (): JSX.Element => {
 	}
 
 	if (error) {
+		console.log(error, 'error');
 		throw new Error('The server is down for maintenance, please try again later.');
 	}
 

@@ -75,10 +75,14 @@ export class ApiService {
 	static getUserIdByEmail = 'https://us-central1-gigover2.cloudfunctions.net/getUserIdForEmail';
 
 	// File system
-	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId;
+
+	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId; //old
 	static addFolder = API_BASE + 'contractor/addFolder';
 	static deleteFolder = API_BASE + 'contractor/removeFolder';
 	static folderFiles = (folderId: number) => API_BASE + 'contractor/documents/' + folderId;
+	static projectFiles = (projectId: number) => API_BASE + 'contractor/documents/project/' + projectId;
+	static folderFolders = (projectId: number, folderId: number) =>
+		API_BASE + 'contractor/folder/' + projectId + '/' + folderId;
 
 	// Image dots and comments
 	static addImage = API_BASE + 'contractor/addDocument'; // Used for all kinds of files
