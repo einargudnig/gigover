@@ -1,4 +1,4 @@
-import { Button, Heading, HStack, VStack } from '@chakra-ui/react';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';

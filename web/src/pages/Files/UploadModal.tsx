@@ -8,7 +8,6 @@ import { useProjectList } from '../../queries/useProjectList';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { useProjectFolders } from '../../mutations/useProjectFolders';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
-import { useProjectFoldersQuery } from '../../queries/useProjectFoldersQuery';
 import { useFolderFolders } from '../../queries/useFolderFolders';
 
 interface UploadModalProps {

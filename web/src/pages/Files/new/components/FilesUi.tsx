@@ -1,21 +1,18 @@
+import React, { useEffect, useState } from 'react';
 import { EditPhotoModal } from '../../../../components/modals/EditPhotoModal';
-import React, { useEffect, useState } from "react";
 import { Heading, HStack, VStack } from '@chakra-ui/react';
 import { FilePdfIcon } from '../../../../components/icons/FileTypes/FilePdfIcon';
 import { GigoverFile } from '../../components/File';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 import useKeyPress from '../../../../hooks/useArrowKey';
-import { useNavigate, useParams } from "react-router-dom";
-import { ProjectImage } from "../../../../models/ProjectImage";
+import { useNavigate, useParams } from 'react-router-dom';
+import { ProjectImage } from '../../../../models/ProjectImage';
 
 export const FilesUi = ({ files, title, projectId }) => {
 	const params = useParams();
 	const [selectedFile, setSelectedFile] = useState<ProjectImage | null>(null);
 	const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 	const navigate = useNavigate();
-
-	const fileId = params.fileId || null;
-
 
 	useEffect(() => {
 		if (files && files.length > 0 && params.fileId) {
@@ -35,24 +32,25 @@ export const FilesUi = ({ files, title, projectId }) => {
 	}, [files, params.fileId]);
 
 	const moveFile = (direction: 'left' | 'right') => {
-    let file;
-    if (direction === 'left') {
-      file = files[selectedIndex - 1];
-    } else {
-      file = files[selectedIndex + 1];
-    }
-/*    if (file) {
+		let file;
+		if (direction === 'left') {
+			file = files[selectedIndex - 1];
+		} else {
+			file = files[selectedIndex + 1];
+		}
+
+		console.log(file);
+		/*    if (file) {
       navigate('/files/' + project.projectId + '/file/' + file.imageId, { replace: true });
     }*/
-  };
+	};
 
-  useKeyPress('ArrowLeft', () => moveFile('left'));
-  useKeyPress('ArrowRight', () => moveFile('right'));
-
+	useKeyPress('ArrowLeft', () => moveFile('left'));
+	useKeyPress('ArrowRight', () => moveFile('right'));
 
 	return (
 		<>
-				{selectedFile && (
+			{selectedFile && (
 				<EditPhotoModal
 					projectId={projectId}
 					file={selectedFile}

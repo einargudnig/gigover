@@ -1,21 +1,14 @@
 import React from 'react';
-import { Project } from '../../../models/Project';
 import { devError } from '../../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { EmptyState } from '../../../components/empty/EmptyState';
 import { useProjectFoldersQuery } from '../../../queries/useProjectFoldersQuery';
 import { useParams } from 'react-router-dom';
 import { CreateNewFolder } from '../components/CreateNewFolder';
 import { ProjectFolderComponent } from '../components/Folder';
 import { FilesUi } from './components/FilesUi';
-import { Box, Spacer, VStack } from '@chakra-ui/react';
+import { Spacer, VStack } from '@chakra-ui/react';
 import { SimpleGrid } from '../../../components/SimpleGrid';
 import { useProjectDocuments } from '../../../queries/useProjectDocuments';
-
-interface ProjectFoldersProps {
-	project: Project;
-	selectedFolderId?: number;
-}
 
 export const ProjectFolder = (): JSX.Element => {
 	const params = useParams();
@@ -24,7 +17,7 @@ export const ProjectFolder = (): JSX.Element => {
 	const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
 	const projectDocuments = useProjectDocuments(projectId);
 
-	console.log(data, 'projectFolders');
+	// console.log(data, 'projectFolders');
 	if (isLoading) {
 		return <LoadingSpinner />;
 	}
@@ -35,9 +28,8 @@ export const ProjectFolder = (): JSX.Element => {
 	}
 
 	if (!projectId) {
-		return <div>'missing projectid'</div>;
+		return <div>Missing Project Id</div>;
 	}
-
 
 	return (
 		<>
