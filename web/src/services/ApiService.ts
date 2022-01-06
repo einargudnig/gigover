@@ -60,7 +60,9 @@ export class ApiService {
 	static changeTimeRecord = API_BASE + 'contractor/changeTimeRecord';
 
 	// Time sheets
+	static workAdd = API_BASE + 'timesheet/workAdd';
 	static workChange = API_BASE + 'timesheet/workChange';
+	static workRemove = API_BASE + 'timesheet/workRemove';
 	static report = API_BASE + 'timesheet/reportCsv';
 
 	// User registration
@@ -80,7 +82,8 @@ export class ApiService {
 	static addFolder = API_BASE + 'contractor/addFolder';
 	static deleteFolder = API_BASE + 'contractor/removeFolder';
 	static folderFiles = (folderId: number) => API_BASE + 'contractor/documents/' + folderId;
-	static projectFiles = (projectId: number) => API_BASE + 'contractor/documents/project/' + projectId;
+	static projectFiles = (projectId: number) =>
+		API_BASE + 'contractor/documents/project/' + projectId;
 	static folderFolders = (projectId: number, folderId: number) =>
 		API_BASE + 'contractor/folder/' + projectId + '/' + folderId;
 

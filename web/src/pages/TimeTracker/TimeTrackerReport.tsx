@@ -19,6 +19,9 @@ import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { useReportToCSV } from '../../mutations/useReportToCSV';
+import { TrashIcon } from '../../components/icons/TrashIcon';
+import { useDeleteTimeRecord } from '../../mutations/useDeleteTimeRecord';
+import { Timesheet } from '../../queries/useTrackerReport';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -86,6 +89,7 @@ export const TimeTrackerReport = ({
 	const [endDate, setEndDate] = useState(moment());
 	const [focusedInput, setFocusedInput] = useState<'startDate' | 'endDate' | null>(null);
 	const reportToCSV = useReportToCSV();
+	const deleteTimeRecord = useDeleteTimeRecord();
 	const { projectList, results, isLoading, totalTracked, users } = useTimeTrackerReport(
 		startDate,
 		endDate,
@@ -134,6 +138,16 @@ export const TimeTrackerReport = ({
 	const projectTasks = useProjectTasks(
 		projectList.find((pl) => pl.projectId === selectedProject)
 	);
+
+	const deleteRecord = async (timesheet: Timesheet) => {
+		try {
+			await deleteTimeRecord.mutateAsync(timesheet);
+			setRefetch(++refetchValue);
+		} catch (e) {
+			console.error(e);
+			alert('Could not delete timesheet, please try again');
+		}
+	};
 
 	return (
 		<div>
@@ -293,6 +307,21 @@ export const TimeTrackerReport = ({
 												}}
 											>
 												<Edit size={26} color={'#fff'} />
+											</Button>
+											<Button
+												colorScheme={'red'}
+												onClick={() => {
+													if (
+														confirm(
+															'Are you sure you want to delete this report?'
+														)
+													) {
+														// @ts-ignore
+														deleteRecord(result.timesheet);
+													}
+												}}
+											>
+												<TrashIcon size={26} color={'#fff'} />
 											</Button>
 										</TimerWrapper>
 									</td>
