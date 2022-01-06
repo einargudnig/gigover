@@ -9,7 +9,7 @@ export interface ResourceCommentsProps {
 }
 
 export const ResourceComments = ({ resource }: ResourceCommentsProps): JSX.Element => {
-	const { data, isError, isLoading, error } = useResourceComments(resource.id!);
+	const { data, isError, isLoading } = useResourceComments(resource.id!);
 
 	if (isLoading) {
 		return <LoadingSpinner />;
@@ -19,11 +19,11 @@ export const ResourceComments = ({ resource }: ResourceCommentsProps): JSX.Eleme
 		return <p>Error fetching Resource comments</p>;
 	}
 
-	const { comments } = data!;
+	const { resources: comments } = data!;
 
 	return (
 		<>
-			<div>
+			<div style={{ flex: '0 0' }}>
 				{comments && comments.length > 0 ? (
 					comments.map((taskComment, taskCommentId) => (
 						<Comment
@@ -34,7 +34,7 @@ export const ResourceComments = ({ resource }: ResourceCommentsProps): JSX.Eleme
 						/>
 					))
 				) : (
-					<p>No comments yet</p>
+					<p style={{ marginBottom: 24 }}>No comments yet</p>
 				)}
 			</div>
 		</>

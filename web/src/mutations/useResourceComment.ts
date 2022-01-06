@@ -11,7 +11,7 @@ interface ResourceCommentInput {
 export const useResourceComment = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<{ data: ErrorResponse }, ErrorResponse, ResourceCommentInput>(
+	return useMutation<{ data: { id: number } }, ErrorResponse, ResourceCommentInput>(
 		async (variables) =>
 			await axios.post(ApiService.resourceComment, variables, { withCredentials: true }),
 		{
