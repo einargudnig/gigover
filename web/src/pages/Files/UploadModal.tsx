@@ -8,11 +8,14 @@ import { useProjectList } from '../../queries/useProjectList';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { useProjectFolders } from '../../mutations/useProjectFolders';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { useProjectFoldersQuery } from '../../queries/useProjectFoldersQuery';
+import { useFolderFolders } from '../../queries/useFolderFolders';
 
 interface UploadModalProps {
 	onClose: () => void;
 	onComplete: (status: boolean) => void;
 	projectId?: number;
+	folderId?: string;
 }
 
 const UploadModalStyled = styled.div`
@@ -21,11 +24,19 @@ const UploadModalStyled = styled.div`
 	}
 `;
 
-export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Element => {
+export const UploadModal = ({ projectId, folderId, onClose }: UploadModalProps): JSX.Element => {
 	const { data } = useProjectList();
 	const { mutateAsync, data: projectFolders } = useProjectFolders();
+
+	const { data: foldersFolders } = useFolderFolders(
+		projectId ?? -1,
+		folderId ? parseInt(folderId) : -1
+	);
+
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
-	const [selectedFolder, setSelectedFolder] = useState<number | undefined>(undefined);
+	const [selectedFolder, setSelectedFolder] = useState<number | undefined>(
+		folderId ? parseInt(folderId) : undefined
+	);
 	const [isUploading] = useState(false);
 	const openProjects = useOpenProjects(data);
 
@@ -64,10 +75,11 @@ export const UploadModal = ({ projectId, onClose }: UploadModalProps): JSX.Eleme
 							</Text>
 						</>
 					)}
+					{folderId && <div>Selected subfolder: {folderId}</div>}
 					<TrackerSelect
 						title={'Folder'}
 						options={
-							projectFolders?.map((folder) => ({
+							(foldersFolders ? foldersFolders : projectFolders)?.map((folder) => ({
 								label: folder.name,
 								value: folder.folderId
 							})) ?? []

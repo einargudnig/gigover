@@ -3,21 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';
 import styled from 'styled-components';
-import { FolderIcon } from '../../components/icons/FolderIcon';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { Folder } from './components/Folder';
 import { Project } from '../../models/Project';
-import { SimpleGrid } from '../../components/SimpleGrid';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { UploadModal } from './UploadModal';
 import { SearchBar } from './components/SearchBar';
-import { ProjectFolders } from './components/ProjectFolders';
 import { devInfo } from '../../utils/ConsoleUtils';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
-import { FolderFiles } from './components/FolderFiles';
-import { ProjectFiles } from './components/ProjectFiles';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 
 const Container = styled.div`
@@ -54,6 +47,7 @@ export const Files = (): JSX.Element => {
 			{upload && (
 				<UploadModal
 					projectId={project?.projectId || undefined}
+					folderId={params?.folderId || undefined}
 					onClose={() => {
 						setUpload(false);
 					}}
@@ -104,66 +98,7 @@ export const Files = (): JSX.Element => {
 					) : (
 						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 							<Container>
-								<VStack
-									alignItems={'flex-start'}
-									style={{ width: '100%' }}
-									spacing={4}
-								>
-									<HStack
-										justifyContent={'space-between'}
-										align={'center'}
-										mb={4}
-										style={{ width: '100%' }}
-									>
-										<HStack spacing={4}>
-											<FolderIcon />
-											<Heading as={'h4'} size={'md'}>
-												{!project ? 'All folders' : project.name}
-											</Heading>
-										</HStack>
-									</HStack>
-									{projects && projects.length > 0 ? (
-										<SimpleGrid itemWidth={320}>
-											{!project ? (
-												projects.map((p) => (
-													<Folder key={p.projectId} project={p} />
-												))
-											) : (
-												<ProjectFolders
-													project={project}
-													selectedFolderId={
-														params.folderId
-															? parseInt(params.folderId)
-															: undefined
-													}
-												/>
-											)}
-										</SimpleGrid>
-									) : (
-										<NoProjectsFound />
-									)}
-								</VStack>
-								<VStack
-									mt={8}
-									alignItems={'flex-start'}
-									style={{ width: '100%' }}
-									spacing={4}
-								>
-									{project && (
-										<>
-											{params.folderId ? (
-												<>
-													<FolderFiles
-														project={project}
-														folderId={parseInt(params.folderId)}
-													/>
-												</>
-											) : (
-												<ProjectFiles project={project} />
-											)}
-										</>
-									)}
-								</VStack>
+								<Outlet />
 							</Container>
 						</HStack>
 					)}

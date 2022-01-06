@@ -18,7 +18,13 @@ const NewFolderCard = styled(CardBase)`
 	}
 `;
 
-export const CreateNewFolderButton = ({ projectId }: { projectId: number }) => {
+export const CreateNewFolderButton = ({
+	projectId,
+	folderId
+}: {
+	projectId: number;
+	folderId?: number;
+}) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const { mutateAsync, isLoading, isError, error } = useAddFolder();
@@ -36,7 +42,8 @@ export const CreateNewFolderButton = ({ projectId }: { projectId: number }) => {
 
 		return mutateAsync({
 			name: folderName,
-			projectId: projectId
+			projectId: projectId,
+			folderId
 		}).then(() => {
 			if (inputRef.current) {
 				inputRef.current = null;
@@ -81,11 +88,17 @@ export const CreateNewFolderButton = ({ projectId }: { projectId: number }) => {
 	);
 };
 
-export const CreateNewFolder = ({ projectId }: { projectId: number }) => {
+export const CreateNewFolder = ({
+	projectId,
+	folderId
+}: {
+	projectId: number;
+	folderId?: number;
+}) => {
 	return (
 		<NewFolderCard>
 			<Text>Create a new folder</Text>
-			<CreateNewFolderButton projectId={projectId} />
+			<CreateNewFolderButton projectId={projectId} folderId={folderId} />
 		</NewFolderCard>
 	);
 };

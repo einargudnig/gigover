@@ -26,6 +26,7 @@ import { useDeleteFolder } from '../../../mutations/useDeleteFolder';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
 import { ModalContext } from '../../../context/ModalContext';
+import { useFolderFolders } from '../../../queries/useFolderFolders';
 
 interface FolderProps {
 	project: Project;
@@ -82,17 +83,21 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 };
 
 interface ProjectFolderProps {
-	project: Project;
+	projectId: number;
 	folder: ProjectFolder;
 	selectedFolderId?: number;
 }
 
 export const ProjectFolderComponent = ({
-	project,
+	projectId,
 	folder,
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
 	const { data, isLoading } = useFolderDocuments(folder.folderId);
+	const { data: folderData, isLoading: folderIsLoading } = useFolderFolders(
+		projectId,
+		folder.folderId
+	);
 	const isSelected = folder.folderId === selectedFolderId;
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -113,14 +118,14 @@ export const ProjectFolderComponent = ({
 								setIsOpen={setDialogOpen}
 								callback={async (b) => {
 									if (b) {
-										await mutate({ ...folder, projectId: project.projectId });
-										navigate(`/files/${project.projectId}`);
+										await mutate({ ...folder, projectId: projectId });
+										navigate(`/files/${projectId}`);
 									}
 									setDialogOpen(false);
 								}}
 								isOpen={dialogOpen}
 							>
-								<MenuItem
+								{/*	<MenuItem
 									onClick={() => {
 										setModalContext({
 											shareItem: { folder: folder, project: project }
@@ -128,7 +133,7 @@ export const ProjectFolderComponent = ({
 									}}
 								>
 									Share folder
-								</MenuItem>
+								</MenuItem>*/}
 
 								<MenuItem
 									onClick={() => {
@@ -144,13 +149,13 @@ export const ProjectFolderComponent = ({
 			</div>
 
 			<DropZone
-				projectId={project.projectId}
+				projectId={projectId}
 				folderId={folder.folderId}
 				uploadType={FileUploadType.Project}
 			>
 				{({ isDragActive, isUploading }) => (
 					<FolderCard
-						to={`/files/${project.projectId}/${folder.folderId}`}
+						to={`/files/${projectId}/folder/${folder.folderId}`}
 						selected={isSelected}
 						isDragActive={isDragActive}
 					>

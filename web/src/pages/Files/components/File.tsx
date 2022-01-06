@@ -84,10 +84,10 @@ export const File = ({ file }: FileProps): JSX.Element => {
 
 export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
-	let href = `/files/${file.projectId}/file/${file.imageId}`;
+	let href = `/files/${file.projectId}/${file.imageId}`;
 
 	if (file.folderId) {
-		href = `/files/${file.projectId}/file/${file.folderId}/${file.imageId}`;
+		href = `/files/${file.projectId}/folder/${file.folderId}/${file.imageId}`;
 	}
 
 	return (
