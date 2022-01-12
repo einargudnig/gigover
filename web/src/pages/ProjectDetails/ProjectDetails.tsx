@@ -103,12 +103,38 @@ export const ProjectDetails = (): JSX.Element | null => {
 		const currentItem = nextRow[nextIndex];
 		const prevItem = nextRow[nextIndex - 1];
 		const nextItem = nextRow[nextIndex + 1];
-
+		const taskId = parseInt(result.draggableId || '0');
 		let lexo;
 		//If it goes into a row that is empty
 
+		console.log(prevItem, 'prev');
+		console.log(nextItem, 'next');
+		console.log(currentItem, 'current');
+
+		//Check if prev or nextitem is our item
+
+		let prevIsDraggable = prevItem && prevItem.taskId === taskId;
+		let nextIsDraggable = nextItem && nextItem.taskId === taskId;
+
+		if (!nextItem) {
+			if (currentItem) {
+				console.log('currentItem plus 1');
+				lexo = LexoRank.parse(currentItem.lexoRank).genNext();
+			} else {
+				lexo = LexoRank.middle();
+			}
+			console.log('bottom', lexo.toString());
+		}
+		else if(!prevItem){
+			if (currentItem) {
+				console.log('currentItem plus 1');
+				lexo = LexoRank.parse(currentItem.lexoRank).genPrev();
+			} else {
+				lexo = LexoRank.middle();
+			}
+		}
 		// Bottom of list
-		if (prevItem && !nextItem && !currentItem) {
+		else if (prevItem && !nextItem && !currentItem) {
 			lexo = prevItem.lexoRank
 				? LexoRank.parse(prevItem.lexoRank).genNext()
 				: LexoRank.middle();
@@ -142,7 +168,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 		const status: TaskStatusType = parseInt(
 			result.destination?.droppableId || '0'
 		) as TaskStatusType;
-		const taskId = parseInt(result.draggableId || '0');
+
 		const task = project?.tasks.find((t) => t.taskId === taskId);
 
 		if (taskId === 0 || !task) {
