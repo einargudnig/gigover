@@ -34,6 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDeleteDocument } from '../../mutations/useDeleteDocument';
 import { ModalContext } from '../../context/ModalContext';
 import { ShareIcon } from '../icons/ShareIcon';
+import Canvas from "../ImageEditor/ImageCanvas";
 
 interface FileSidebarProps {
 	onClose: () => void;

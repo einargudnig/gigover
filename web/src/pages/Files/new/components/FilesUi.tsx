@@ -55,8 +55,8 @@ export const FilesUi = ({ files, title, projectId }) => {
 		}
 	};
 
-	useKeyPress('ArrowLeft', () => moveFile('left'));
-	useKeyPress('ArrowRight', () => moveFile('right'));
+/*	useKeyPress('ArrowLeft', () => moveFile('left'));
+	useKeyPress('ArrowRight', () => moveFile('right'));*/
 
 	return (
 		<>

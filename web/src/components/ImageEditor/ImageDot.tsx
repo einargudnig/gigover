@@ -10,6 +10,7 @@ import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import useKeyPress from '../../hooks/useArrowKey';
 
 const StyledDiv = styled(Box)`
 	canvas {
@@ -109,6 +110,27 @@ export const ImageDot = ({
 	function onDocumentLoadSuccess({ numPages }) {
 		setNumPages(numPages);
 	}
+
+	const moveFile = (direction: 'left' | 'right') => {
+		let file;
+		if (direction === 'left') {
+			if (pageNumber - 1 < 1) {
+				return;
+			} else {
+				setPageNumber(pageNumber - 1);
+			}
+		} else {
+			if (pageNumber + 1 > num) {
+				return;
+			}
+			{
+				setPageNumber(pageNumber + 1);
+			}
+		}
+	};
+
+	useKeyPress('ArrowLeft', () => moveFile('left'));
+	useKeyPress('ArrowRight', () => moveFile('right'));
 
 	const { ref } = useResizeObserver<HTMLDivElement | HTMLCanvasElement>({
 		// eslint-disable-next-line no-shadow
