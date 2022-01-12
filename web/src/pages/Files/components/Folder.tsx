@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../hooks/colorGenerator';
@@ -25,8 +25,6 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { useDeleteFolder } from '../../../mutations/useDeleteFolder';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { useNavigate } from 'react-router-dom';
-import { ModalContext } from '../../../context/ModalContext';
-import { useFolderFolders } from '../../../queries/useFolderFolders';
 
 interface FolderProps {
 	project: Project;
@@ -94,14 +92,13 @@ export const ProjectFolderComponent = ({
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
 	const { data, isLoading } = useFolderDocuments(folder.folderId);
-	const { data: folderData, isLoading: folderIsLoading } = useFolderFolders(
-		projectId,
-		folder.folderId
-	);
+	// const { data: folderData, isLoading: folderIsLoading } = useFolderFolders(
+	// 	projectId,
+	// 	folder.folderId
+	// );
 	const isSelected = folder.folderId === selectedFolderId;
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [, setModalContext] = useContext(ModalContext);
 	const { mutate } = useDeleteFolder();
 
 	return (

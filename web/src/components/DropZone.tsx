@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { FilterIcon } from './icons/FilterIcon';
-import { Button, Progress, Text } from '@chakra-ui/react';
+import { Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';

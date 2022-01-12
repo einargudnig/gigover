@@ -1,8 +1,6 @@
 import React from 'react';
-import { Project } from '../../../models/Project';
 import { devError } from '../../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { EmptyState } from '../../../components/empty/EmptyState';
 import { useParams } from 'react-router-dom';
 import { CreateNewFolder } from '../components/CreateNewFolder';
 import { ProjectFolderComponent } from '../components/Folder';
@@ -11,11 +9,6 @@ import { VStack } from '@chakra-ui/react';
 import { SimpleGrid } from '../../../components/SimpleGrid';
 import { useFolderDocuments } from '../../../queries/useFolderDocuments';
 import { useFolderFolders } from '../../../queries/useFolderFolders';
-
-interface ProjectFoldersProps {
-	project: Project;
-	selectedFolderId?: number;
-}
 
 export const FolderFolder = (): JSX.Element => {
 	const params = useParams();
@@ -35,7 +28,7 @@ export const FolderFolder = (): JSX.Element => {
 	}
 
 	if (!projectId) {
-		return <div>'missing projectid'</div>;
+		return <div>Missing ProjectID</div>;
 	}
 
 	return (

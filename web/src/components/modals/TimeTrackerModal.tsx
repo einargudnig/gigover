@@ -15,6 +15,14 @@ import { useTrackerStart } from '../../queries/useTrackerStart';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { displayTaskTitle } from '../../utils/TaskUtils';
+import { Box, HStack, Text } from '@chakra-ui/react';
+import { DatePickerWrapper } from '../../pages/TimeTracker/TimeTrackerReport';
+import { SingleDatePicker } from 'react-dates';
+import { MomentDateFormat } from '../../utils/MomentDateFormat';
+import moment from 'moment';
+import { addZeroBefore } from '../../utils/NumberUtils';
+import { range } from '../../utils/ArrayUtils';
+import { useWorkAdd } from '../../queries/useWorkAdd';
 
 interface TimeTrackerModalProps {
 	context: ITimeTrackerModalContext;
@@ -23,6 +31,16 @@ interface TimeTrackerModalProps {
 export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Element => {
 	const { data } = useProjectList();
 	const closeModal = useCloseModal();
+
+	// For creation
+	const [isCreate, setIsCreate] = useState(false);
+	const [startTime, setStartTime] = useState(new Date());
+	const [endTime, setEndTime] = useState(new Date());
+	const [focusedStart, setFocusedStart] = useState<boolean>(false);
+	const [focusedEnd, setFocusedEnd] = useState<boolean>(false);
+	const { mutateAsync: workAdd } = useWorkAdd();
+
+	// For starting timers
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
 	const [selectedWorker, setSelectedWorker] = useState<string | undefined>();
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
@@ -55,28 +73,59 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 		return !(selectedProject && selectedTask && selectedWorker);
 	}, [selectedProject, selectedTask, selectedWorker]);
 
-	const startTracker = useCallback(() => {
+	const startTracker = useCallback(async () => {
 		if (selectedProject && selectedTask && selectedWorker) {
-			startTask({
-				projectId: selectedProject,
-				taskId: selectedTask,
-				uId: selectedWorker
-			})
-				.then(() => {
+			if (isCreate) {
+				try {
+					await workAdd({
+						projectId: selectedProject,
+						taskId: selectedTask!,
+						workerUId: selectedWorker,
+						start: startTime.getTime(),
+						stop: endTime.getTime()
+					});
+
 					if (!context.callback) {
 						window.location.pathname = '/time-tracker';
 					} else {
 						context.callback();
 					}
 					closeModal();
-				})
-				.catch((e) => {
-					// eslint-disable-next-line no-console
+				} catch (e) {
 					console.error(e);
-				});
+					alert("Couldn't create timer, please try again");
+				}
+			} else {
+				try {
+					await startTask({
+						projectId: selectedProject,
+						taskId: selectedTask,
+						uId: selectedWorker
+					});
+
+					if (!context.callback) {
+						window.location.pathname = '/time-tracker';
+					} else {
+						context.callback();
+					}
+					closeModal();
+				} catch (e) {
+					console.error(e);
+					alert("Couldn't start timer, please try again");
+				}
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [closeModal, selectedProject, selectedTask, selectedWorker, startTask]);
+	}, [
+		closeModal,
+		selectedProject,
+		selectedTask,
+		selectedWorker,
+		startTask,
+		isCreate,
+		startTime,
+		endTime
+	]);
 
 	return (
 		<Modal
@@ -87,7 +136,6 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 				</>
 			}
 			open={true}
-			centerModal={true}
 			closeIcon={false}
 			onClose={() => closeModal()}
 		>
@@ -147,6 +195,116 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 								}
 							}}
 						/>
+						<div>
+							<Text
+								mt={2}
+								textDecoration={'underline'}
+								cursor={'pointer'}
+								onClick={() => setIsCreate(!isCreate)}
+							>
+								{!isCreate
+									? 'Start a timer with start and end date.'
+									: 'Start timer manually'}
+							</Text>
+							{isCreate && (
+								<Box mt={4}>
+									<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
+										<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
+											<SingleDatePicker
+												id={'startTime'}
+												displayFormat={MomentDateFormat}
+												date={moment(startTime)}
+												onDateChange={(md) =>
+													setStartTime(md?.toDate() ?? startTime)
+												}
+												focused={focusedStart}
+												isOutsideRange={() => false}
+												onFocusChange={(f) => setFocusedStart(f.focused)}
+											/>
+										</DatePickerWrapper>
+										<Box flex={1}>
+											<TrackerSelect
+												title={'Hour started'}
+												value={addZeroBefore(startTime.getHours())}
+												isNumber={true}
+												options={range(0, 23).map((i) => ({
+													value: i,
+													label: addZeroBefore(i)
+												}))}
+												valueChanged={(newValue) => {
+													const date = startTime;
+													date.setHours(Number(newValue));
+													setStartTime(date);
+												}}
+											/>
+										</Box>
+										<Box flex={1}>
+											<TrackerSelect
+												title={'Minute started'}
+												value={addZeroBefore(startTime.getMinutes())}
+												isNumber={true}
+												options={range(0, 59).map((i) => ({
+													value: i,
+													label: addZeroBefore(i)
+												}))}
+												valueChanged={(newValue) => {
+													const date = startTime;
+													date.setMinutes(Number(newValue));
+													setStartTime(date);
+												}}
+											/>
+										</Box>
+									</HStack>
+									<HStack mt={4} spacing={4} width="100%" sx={{ flex: 1 }}>
+										<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
+											<SingleDatePicker
+												id={'endTime'}
+												displayFormat={MomentDateFormat}
+												date={moment(endTime)}
+												onDateChange={(md) =>
+													setEndTime(md?.toDate() ?? endTime)
+												}
+												focused={focusedEnd}
+												isOutsideRange={() => false}
+												onFocusChange={(f) => setFocusedEnd(f.focused)}
+											/>
+										</DatePickerWrapper>
+										<Box flex={1}>
+											<TrackerSelect
+												title={'Hour ended'}
+												value={addZeroBefore(endTime.getHours())}
+												isNumber={true}
+												options={range(0, 23).map((i) => ({
+													value: i,
+													label: addZeroBefore(i)
+												}))}
+												valueChanged={(newValue) => {
+													const date = endTime;
+													date.setHours(Number(newValue));
+													setEndTime(date);
+												}}
+											/>
+										</Box>
+										<Box flex={1}>
+											<TrackerSelect
+												title={'Minute ended'}
+												value={addZeroBefore(endTime.getMinutes())}
+												isNumber={true}
+												options={range(0, 59).map((i) => ({
+													value: i,
+													label: addZeroBefore(i)
+												}))}
+												valueChanged={(newValue) => {
+													const date = endTime;
+													date.setMinutes(Number(newValue));
+													setEndTime(date);
+												}}
+											/>
+										</Box>
+									</HStack>
+								</Box>
+							)}
+						</div>
 					</>
 				)}
 				<FormActions
