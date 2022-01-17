@@ -111,11 +111,6 @@ export const ProjectDetails = (): JSX.Element | null => {
 		console.log(nextItem, 'next');
 		console.log(currentItem, 'current');
 
-		//Check if prev or nextitem is our item
-
-		let prevIsDraggable = prevItem && prevItem.taskId === taskId;
-		let nextIsDraggable = nextItem && nextItem.taskId === taskId;
-
 		if (!nextItem) {
 			if (currentItem) {
 				console.log('currentItem plus 1');
@@ -124,8 +119,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 				lexo = LexoRank.middle();
 			}
 			console.log('bottom', lexo.toString());
-		}
-		else if(!prevItem){
+		} else if (!prevItem) {
 			if (currentItem) {
 				console.log('currentItem plus 1');
 				lexo = LexoRank.parse(currentItem.lexoRank).genPrev();

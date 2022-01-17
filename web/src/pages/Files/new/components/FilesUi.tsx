@@ -4,7 +4,6 @@ import { Heading, HStack, VStack } from '@chakra-ui/react';
 import { FilePdfIcon } from '../../../../components/icons/FileTypes/FilePdfIcon';
 import { GigoverFile } from '../../components/File';
 import { EmptyState } from '../../../../components/empty/EmptyState';
-import useKeyPress from '../../../../hooks/useArrowKey';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProjectImage } from '../../../../models/ProjectImage';
 
@@ -14,7 +13,6 @@ export const FilesUi = ({ files, title, projectId }) => {
 	const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 	const navigate = useNavigate();
 
-	const fileId = params.fileId || null;
 	const folderId = params.folderId || null;
 
 	useEffect(() => {

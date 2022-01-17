@@ -45,7 +45,7 @@ export default function Canvas(props: CanvasProps) {
 	const [img, setImage] = useState<any>();
 
 	useEffect(() => {
-		var img = new Image();
+		const img = new Image();
 		img.src = props.imageUrl;
 
 		setImage(img);
@@ -221,7 +221,7 @@ export default function Canvas(props: CanvasProps) {
 
 	return (
 		<div>
-{/*			<button onClick={() => context && reset(context)}>Reset</button>
+			{/*			<button onClick={() => context && reset(context)}>Reset</button>
 			<pre color={'white'}>scale: {scale}</pre>
 			<pre color={'white'}>offset: {JSON.stringify(offset)}</pre>
 			<pre color={'white'}>viewportTopLeft: {JSON.stringify(viewportTopLeft)}</pre>*/}
@@ -237,7 +237,7 @@ export default function Canvas(props: CanvasProps) {
 					maxWidth: '100%',
 					maxHeight: '100%'
 				}}
-			></canvas>
+			/>
 		</div>
 	);
 }
