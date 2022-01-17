@@ -11,6 +11,8 @@ import { Chevron } from '../icons/Chevron';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import useKeyPress from '../../hooks/useArrowKey';
+import ImageCanvas from './ImageCanvas';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const StyledDiv = styled(Box)`
 	canvas {
@@ -253,18 +255,54 @@ export const ImageDot = ({
 											</Button>
 										</Box>
 									)}
-									<div onMouseUp={addDot}>
-										<Document
-											file={imageSrc}
-											onLoadSuccess={onDocumentLoadSuccess}
+									{zoomAllowed ? (
+										<Box
+											height={'100%'}
+											width={'100%'}
+											background={'black'}
+											zIndex={999999999}
+											position={'fixed'}
+											top={0}
+											left={0}
 										>
-											<Page
-												canvasRef={ref}
-												renderTextLayer={false}
-												pageNumber={pageNumber}
-											/>
-										</Document>
-									</div>
+											<Button m={4} onClick={() => setZoomAllowed(false)}>
+												Exit zoom
+											</Button>
+											<TransformWrapper zoomAnimation={{ size: 0.1 }}>
+												<TransformComponent
+													wrapperStyle={{ width: '100%', height: '100%' }}
+												>
+													<Document
+														file={imageSrc}
+														onLoadSuccess={onDocumentLoadSuccess}
+													>
+														<Page
+															canvasRef={ref}
+															renderTextLayer={false}
+															pageNumber={pageNumber}
+															scale={1.9}
+															height={window.innerHeight}
+														/>
+													</Document>
+												</TransformComponent>
+											</TransformWrapper>
+										</Box>
+									) : (
+										<div onMouseUp={addDot}>
+											<Document
+												file={imageSrc}
+												onLoadSuccess={onDocumentLoadSuccess}
+											>
+												<Page
+													canvasRef={ref}
+													renderTextLayer={false}
+													pageNumber={pageNumber}
+													scale={1.9}
+													height={window.innerHeight}
+												/>
+											</Document>{' '}
+										</div>
+									)}
 								</>
 							);
 						case 1:
@@ -284,7 +322,26 @@ export const ImageDot = ({
 						case 0:
 						case 'IMAGE':
 							return zoomAllowed ? (
-								<Zoom>
+								<Box
+									height={'100%'}
+									width={'100%'}
+									background={'black'}
+									zIndex={999999999}
+									position={'fixed'}
+									top={0}
+									left={0}
+								>
+									<Button m={4} onClick={() => setZoomAllowed(false)}>
+										Exit zoom
+									</Button>
+									<ImageCanvas
+										canvasHeight={window.innerHeight}
+										canvasWidth={window.innerWidth}
+										imageUrl={imageSrc}
+									/>
+								</Box>
+							) : (
+								/*	<Zoom>
 									<ChakraImage
 										ref={ref}
 										onMouseUp={addDot}
@@ -293,8 +350,7 @@ export const ImageDot = ({
 										maxWidth={'100%'}
 										fit={'contain'}
 									/>
-								</Zoom>
-							) : (
+								</Zoom>*/
 								<ChakraImage
 									ref={ref}
 									onMouseUp={addDot}
@@ -412,7 +468,7 @@ export const ImageDot = ({
 					<Chevron direction={'right'} />
 				</Button>
 			)}
-			{zoomAllowed ? <Zoom>{renderImage()}</Zoom> : renderImage()}
+			{zoomAllowed ? renderImage() : renderImage()}
 		</StyledDiv>
 	);
 };

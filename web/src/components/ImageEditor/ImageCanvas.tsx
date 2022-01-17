@@ -29,12 +29,12 @@ function scalePoint(p1: Point, scale: number) {
 	return { x: p1.x / scale, y: p1.y / scale };
 }
 
-const ZOOM_SENSITIVITY = 500; // bigger for lower zoom per scroll
+const ZOOM_SENSITIVITY = 200; // bigger for lower zoom per scroll
 
 export default function Canvas(props: CanvasProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-	const [scale, setScale] = useState<number>(1);
+	const [scale, setScale] = useState<number>(0.5);
 	const [offset, setOffset] = useState<Point>(ORIGIN);
 	const [mousePos, setMousePos] = useState<Point>(ORIGIN);
 	const [viewportTopLeft, setViewportTopLeft] = useState<Point>(ORIGIN);
@@ -63,7 +63,7 @@ export default function Canvas(props: CanvasProps) {
 				context.canvas.width = props.canvasWidth * ratio;
 				context.canvas.height = props.canvasHeight * ratio;
 				context.scale(ratio, ratio);
-				setScale(1);
+				setScale(0.5);
 
 				// reset state and refs
 				setContext(context);
@@ -221,10 +221,10 @@ export default function Canvas(props: CanvasProps) {
 
 	return (
 		<div>
-			<button onClick={() => context && reset(context)}>Reset</button>
-			<pre>scale: {scale}</pre>
-			<pre>offset: {JSON.stringify(offset)}</pre>
-			<pre>viewportTopLeft: {JSON.stringify(viewportTopLeft)}</pre>
+{/*			<button onClick={() => context && reset(context)}>Reset</button>
+			<pre color={'white'}>scale: {scale}</pre>
+			<pre color={'white'}>offset: {JSON.stringify(offset)}</pre>
+			<pre color={'white'}>viewportTopLeft: {JSON.stringify(viewportTopLeft)}</pre>*/}
 			<canvas
 				onMouseDown={startPan}
 				ref={canvasRef}
@@ -233,7 +233,9 @@ export default function Canvas(props: CanvasProps) {
 				style={{
 					border: '2px solid #000',
 					width: `${props.canvasWidth}px`,
-					height: `${props.canvasHeight}px`
+					height: `${props.canvasHeight}px`,
+					maxWidth: '100%',
+					maxHeight: '100%'
 				}}
 			></canvas>
 		</div>
