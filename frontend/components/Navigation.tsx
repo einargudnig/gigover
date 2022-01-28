@@ -95,7 +95,7 @@ export const Navigation = ({ pages }: NavigationProps): JSX.Element => {
 								openProjects();
 							}}
 						>
-							{authenticated ? <span>Your projects</span> : <span>Sign in</span>}
+							{authenticated ? <span>Your projects</span> : <span>Sign up</span>}
 						</Button>
 						<Burger onClick={() => setShowDrawer(true)}>
 							<svg

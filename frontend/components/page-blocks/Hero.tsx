@@ -93,7 +93,7 @@ export const Hero = ({ pageId, pageBlock, centerText = false }: HeroProps): JSX.
 									style={{ marginLeft: -12, marginTop: -10, marginBottom: -10 }}
 								/>
 								<span style={{ marginLeft: theme.padding(1) }}>
-									Sign in with Google
+									Sign up with Google
 								</span>
 							</Div>
 						)}
