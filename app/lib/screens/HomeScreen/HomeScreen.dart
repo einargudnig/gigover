@@ -53,23 +53,11 @@ class HomeScreenView extends StatefulWidget {
 
 class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
   late FCM firebaseMessaging;
-  String notificationTitle = 'No Title';
-  String notificationBody = 'No Body';
-  String notificationData = 'No Data';
-
-  _changeData(String msg) => setState(() => notificationData = msg);
-  _changeBody(String msg) => setState(() => notificationBody = msg);
-  _changeTitle(String msg) => setState(() => notificationTitle = msg);
 
   @override
   void initState() {
     firebaseMessaging = FCM();
-    firebaseMessaging.setNotifications();
 
-    firebaseMessaging.streamCtlr.stream.listen(_changeData);
-    firebaseMessaging.bodyCtlr.stream.listen(_changeBody);
-    firebaseMessaging.titleCtlr.stream.listen(_changeTitle);
-    
     setPushNotificationToken();
 
     super.initState();
@@ -84,14 +72,18 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
   void dispose() {
     super.dispose();
   }
-  
+
   void setPushNotificationToken() {
     HomeProvider homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    
-    homeProvider.verifyUser().then((value) {
+
+    firebaseMessaging.setNotifications(homeProvider);
+
+    homeProvider.verifyUser().then((value) async {
       firebaseMessaging.setUserIdAndPushToken();
     });
-    
+
+    // Set the onLaunch events, to navigate the messages
+    firebaseMessaging.setOnLaunch(homeProvider);
   }
 
   // TODO FIXXX
@@ -133,10 +125,10 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
         child: Text(homeProvider.errorVerifiedUser!),
       );
     }
-    
-    final bottomPadding = MediaQuery.of(context).padding.bottom;
 
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
     SlidePanelConfig config = homeProvider.slidePanelConfig;
+
     return ScreenLayout(
       child: SlidingUpPanel(
         controller: homeProvider.panelController,

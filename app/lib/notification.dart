@@ -2,7 +2,12 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:mittverk/models/TaskStatus.dart';
+import 'package:mittverk/providers/HomeProvider.dart';
+import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
+
+import 'models/Task.dart';
 
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -27,31 +32,26 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
 class FCM {
   final _firebaseMessaging = FirebaseMessaging.instance;
 
-  final streamCtlr = StreamController<String>.broadcast();
-  final titleCtlr = StreamController<String>.broadcast();
-  final bodyCtlr = StreamController<String>.broadcast();
-
-  setNotifications() {
+  setNotifications(HomeProvider homeProvider) {
     // FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     FirebaseMessaging.onMessage.listen(
           (message) async {
-        if (message.data.containsKey('data')) {
-          // Handle data message
-          streamCtlr.sink.add(message.data['data']);
-        }
-        if (message.data.containsKey('notification')) {
-          // Handle notification message
-          streamCtlr.sink.add(message.data['notification']);
-        }
-        // Or do other work.
-        titleCtlr.sink.add(message.notification!.title!);
-        bodyCtlr.sink.add(message.notification!.body!);
+        handleMessage(message, homeProvider);
       },
     );
   }
 
+  FirebaseMessaging getInstance() {
+    return _firebaseMessaging;
+  }
+
+  requestPermission() async {
+    return await _firebaseMessaging.requestPermission(alert: true, badge: true, sound: true);
+  }
+
   setUserIdAndPushToken() async {
     try {
+      await requestPermission();
       // With this token you can test it easily on your phone
       String? token = await _firebaseMessaging.getToken();
 
@@ -68,9 +68,26 @@ class FCM {
     }
   }
 
-  dispose() {
-    streamCtlr.close();
-    bodyCtlr.close();
-    titleCtlr.close();
+  handleMessage(RemoteMessage message, HomeProvider homeProvider) async {
+    print("PROCESSING NOTIFICATION MESSAGE");
+    print(message);
+    print(message.data);
+    print(message.messageType);
+
+    if (message.data.containsKey('taskId')) {
+      int taskId = int.parse(message.data['taskId']);
+
+      Task task = new Task(taskId: taskId);
+
+      print("CONTAINS TASK ID.... : " + taskId.toString());
+      homeProvider.homeNavigationKey.currentState!
+          .pushNamed('/task', arguments: TaskDetailsArguments(task));
+    }
+  }
+
+  void setOnLaunch(HomeProvider homeProvider) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      handleMessage(message, homeProvider);
+    });
   }
 }
