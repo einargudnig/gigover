@@ -40,8 +40,6 @@ export const FilesUi = ({ files, title, projectId }) => {
 			file = files[selectedIndex + 1];
 		}
 		if (file) {
-			if (folderId) {
-			}
 			navigate(
 				'/files/' +
 					projectId +
@@ -52,9 +50,10 @@ export const FilesUi = ({ files, title, projectId }) => {
 			);
 		}
 	};
-
-/*	useKeyPress('ArrowLeft', () => moveFile('left'));
-	useKeyPress('ArrowRight', () => moveFile('right'));*/
+	/*
+		useKeyPress('ArrowLeft', () => moveFile('left'));
+		useKeyPress('ArrowRight', () => moveFile('right'));
+	*/
 
 	return (
 		<>

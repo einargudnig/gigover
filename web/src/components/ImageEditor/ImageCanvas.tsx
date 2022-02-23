@@ -42,13 +42,13 @@ export default function Canvas(props: CanvasProps) {
 	const lastMousePosRef = useRef<Point>(ORIGIN);
 	const lastOffsetRef = useRef<Point>(ORIGIN);
 
-	const [img, setImage] = useState<any>();
+	const [img, setImage] = useState<HTMLImageElement | undefined>();
 
 	useEffect(() => {
-		const img = new Image();
-		img.src = props.imageUrl;
+		const imageEl = new Image();
+		imageEl.src = props.imageUrl;
 
-		setImage(img);
+		setImage(imageEl);
 	}, []);
 	// update last offset
 	useEffect(() => {
@@ -57,16 +57,16 @@ export default function Canvas(props: CanvasProps) {
 
 	// reset
 	const reset = useCallback(
-		(context: CanvasRenderingContext2D) => {
-			if (context && !isResetRef.current) {
+		(ctx: CanvasRenderingContext2D) => {
+			if (ctx && !isResetRef.current) {
 				// adjust for device pixel density
-				context.canvas.width = props.canvasWidth * ratio;
-				context.canvas.height = props.canvasHeight * ratio;
-				context.scale(ratio, ratio);
+				ctx.canvas.width = props.canvasWidth * ratio;
+				ctx.canvas.height = props.canvasHeight * ratio;
+				ctx.scale(ratio, ratio);
 				setScale(0.5);
 
 				// reset state and refs
-				setContext(context);
+				setContext(ctx);
 				setOffset(ORIGIN);
 				setMousePos(ORIGIN);
 				setViewportTopLeft(ORIGIN);
@@ -140,7 +140,8 @@ export default function Canvas(props: CanvasProps) {
 
 			// clear canvas but maintain transform
 			const storedTransform = context.getTransform();
-			context.canvas.width = context.canvas.width;
+			// eslint-disable-next-line no-self-assign
+			// context.canvas.width = context.canvas.width;
 			context.setTransform(storedTransform);
 
 			context.fillRect(
@@ -150,7 +151,7 @@ export default function Canvas(props: CanvasProps) {
 				squareSize
 			);
 
-			context.drawImage(img, 0, 0); // Or at whatever offset you like
+			context.drawImage(img as CanvasImageSource, 0, 0); // Or at whatever offset you like
 
 			/*			context.arc(viewportTopLeft.x, viewportTopLeft.y, 5, 0, 2 * Math.PI);
 			context.fillStyle = 'red';
@@ -179,6 +180,7 @@ export default function Canvas(props: CanvasProps) {
 
 		canvasElem.addEventListener('mousemove', handleUpdateMouse);
 		canvasElem.addEventListener('wheel', handleUpdateMouse);
+		// eslint-disable-next-line consistent-return
 		return () => {
 			canvasElem.removeEventListener('mousemove', handleUpdateMouse);
 			canvasElem.removeEventListener('wheel', handleUpdateMouse);
@@ -216,6 +218,7 @@ export default function Canvas(props: CanvasProps) {
 		}
 
 		canvasElem.addEventListener('wheel', handleWheel);
+		// eslint-disable-next-line consistent-return
 		return () => canvasElem.removeEventListener('wheel', handleWheel);
 	}, [context, mousePos.x, mousePos.y, viewportTopLeft, scale]);
 

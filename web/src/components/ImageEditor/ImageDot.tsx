@@ -8,11 +8,10 @@ import styled from 'styled-components';
 import ImagePoint from './ImagePoint';
 import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
-import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 import useKeyPress from '../../hooks/useArrowKey';
 import ImageCanvas from './ImageCanvas';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 const StyledDiv = styled(Box)`
 	canvas {
@@ -114,7 +113,7 @@ export const ImageDot = ({
 	}
 
 	const moveFile = (direction: 'left' | 'right') => {
-		let file;
+		// let file;
 		if (direction === 'left') {
 			if (pageNumber - 1 < 1) {
 				return;
@@ -124,8 +123,7 @@ export const ImageDot = ({
 		} else {
 			if (pageNumber + 1 > num) {
 				return;
-			}
-			{
+			} else {
 				setPageNumber(pageNumber + 1);
 			}
 		}

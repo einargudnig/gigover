@@ -128,6 +128,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 			}
 		}
 		// Bottom of list
+		// eslint-disable-next-line no-dupe-else-if
 		else if (prevItem && !nextItem && !currentItem) {
 			lexo = prevItem.lexoRank
 				? LexoRank.parse(prevItem.lexoRank).genNext()
@@ -146,6 +147,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 			console.log('midddle', lexo.toString());
 		}
 		//Top of list
+		// eslint-disable-next-line no-dupe-else-if
 		else if (currentItem && !prevItem) {
 			console.log(currentItem, 'currentItem');
 			lexo = currentItem.lexoRank
