@@ -198,8 +198,9 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							</div>
 							<div>
 								<CommentInput
-									projectId={projectTask?.project.projectId || -1}
+									projectId={project?.projectId || -1}
 									taskId={task.taskId}
+									workers={project?.workers ?? []}
 								/>
 							</div>
 						</div>

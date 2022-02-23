@@ -20,14 +20,12 @@ export const WorkerAssigneUpdate = ({
 	const { mutateAsync: updateTask, isLoading } = useUpdateTask(projectId);
 
 	const updateWorker = async (workerId: string) => {
-		console.log(workerId, 'workerId');
 		await updateTask({
 			...task,
 			worker: { uId: workerId }
 		});
 	};
 
-	console.log(workers, 'workers');
 	return (
 		<div style={{ width: '100%' }}>
 			<HStack mb={4} spacing={4} justifyContent={'space-between'}>
