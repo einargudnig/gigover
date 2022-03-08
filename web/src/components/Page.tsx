@@ -5,20 +5,30 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
+import { BellIcon } from '@chakra-ui/icons';
+
 import {
 	Avatar,
+	AvatarBadge,
+	Box,
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
+	Button,
 	Center,
+	Text,
 	Fade,
+	Flex,
 	Heading,
 	Menu,
 	MenuButton,
 	MenuDivider,
 	MenuGroup,
 	MenuItem,
-	MenuList
+	MenuList,
+	PopoverTrigger,
+	PopoverContent,
+	Popover
 } from '@chakra-ui/react';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { RoadmapIcon } from './icons/RoadmapIcon';
@@ -29,6 +39,7 @@ import { useLogout } from '../mutations/useLogout';
 import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
 import { ToolsIcon } from './icons/ToolsIcon';
+import { Notifications } from './notifications/Notifications';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -287,7 +298,45 @@ export const Page = ({
 					)}
 					<HeaderActions>
 						{actions}
-						<div>
+						<Flex>
+							<Popover>
+								<PopoverTrigger>
+									<Button
+										justify={'center'}
+										align={'center'}
+										height={'48px'}
+										width={'48px'}
+										bg={'white.400'}
+										mr={4}
+										borderRadius={'50%'}
+										position={'relative'}
+									>
+										<BellIcon w={8} h={8} />
+										<Flex
+											align={'center'}
+											justify={'center'}
+											bg={'red.500'}
+											borderRadius={'200px'}
+											position={'absolute'}
+											bottom={'4px'}
+											right={'4px'}
+											height={'16px'}
+											width={'16px'}
+										>
+											<Box
+												color={'white'}
+												fontSize={'10px'}
+												fontWeight={'bold'}
+											>
+												4
+											</Box>
+										</Flex>
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent width={'400px'}>
+									<Notifications />
+								</PopoverContent>
+							</Popover>
 							<Menu>
 								<MenuButton>
 									<Avatar size={'md'} name={user.email} src={user.avatar} />
@@ -313,7 +362,7 @@ export const Page = ({
 									</MenuGroup>
 								</MenuList>
 							</Menu>
-						</div>
+						</Flex>
 					</HeaderActions>
 				</PageHeader>
 				<PageContent contentPadding={contentPadding} backgroundColor={backgroundColor}>
