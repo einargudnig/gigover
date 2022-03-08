@@ -68,6 +68,13 @@ export class ApiService {
 	// User registration
 	static registerUser = API_BASE + 'user/store';
 
+	// User notifications
+	static notifications = API_BASE + 'contractor/notifications';
+	static readNotification = (notificationId: number) =>
+		API_BASE + 'contractor/notification/read/' + notificationId;
+	static deleteNotification = (notificationId: number) =>
+		API_BASE + 'contractor/notification/delete/' + notificationId;
+
 	// Support
 	static projectTypes = API_BASE + 'workers/types';
 

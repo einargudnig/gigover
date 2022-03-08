@@ -1,44 +1,168 @@
-import { Avatar, Box, Flex, Heading, Text } from '@chakra-ui/react';
-import React, { CSSProperties } from 'react';
-import styled from 'styled-components';
+import {
+	Box,
+	Button,
+	Flex,
+	Heading,
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+	Text,
+	useDisclosure
+} from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { useNotifications, Notification as NotificationType } from '../../hooks/useNotifications';
+import { useReadNotification } from '../../mutations/useReadNotification';
+import { OpenTaskNotification } from './OpenTaskNotification';
+import { timeSince } from '../../utils/TimeAndDateUtils';
+import { BellIcon } from '@chakra-ui/icons';
+import { useDeleteNotification } from '../../mutations/useDeleteNotification';
+import styled from '@emotion/styled';
+import { CrossIcon } from '../icons/CrossIcon';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { Center } from '../Center';
 
-interface NotificationsProps {}
+export const Notifications = (): JSX.Element => {
+	const { onOpen, onClose, isOpen } = useDisclosure();
+	const notifications = useNotifications();
 
-export const Notifications = ({ ...props }: NotificationsProps): JSX.Element => {
 	return (
-		<Box p={6}>
-			<Heading mb={4} fontSize={'18px'}>
-				Notifications
-			</Heading>
-			<Box width={'100%'} height={'400px'} overflow={'scroll'}>
-				{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((s) => {
-					return <Notification key={s} />;
-				})}
-			</Box>
-		</Box>
+		<Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnBlur={true}>
+			<PopoverTrigger>
+				<Button
+					justify={'center'}
+					align={'center'}
+					height={'48px'}
+					width={'48px'}
+					bg={'transparent'}
+					mr={4}
+					borderRadius={'50%'}
+					position={'relative'}
+				>
+					<BellIcon w={6} h={6} />
+					{notifications.unread > 0 && (
+						<Flex
+							align={'center'}
+							justify={'center'}
+							bg={'red.500'}
+							borderRadius={'200px'}
+							position={'absolute'}
+							bottom={'4px'}
+							right={'4px'}
+							height={'16px'}
+							width={'16px'}
+						>
+							<Box color={'white'} fontSize={'10px'} fontWeight={'bold'}>
+								{notifications.unread}
+							</Box>
+						</Flex>
+					)}
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent width={'400px'}>
+				<Box p={6}>
+					<Heading mb={4} fontSize={'18px'}>
+						Notifications
+					</Heading>
+					<Box width={'100%'} height={'400px'} overflow={'scroll'}>
+						{notifications.notifications.map((s) => (
+							<Notification data={s} key={s.id} onClick={() => onClose()} />
+						))}
+					</Box>
+				</Box>
+			</PopoverContent>
+		</Popover>
 	);
 };
 
-const Notification = () => {
+const StyledFlex = styled.div`
+	position: relative;
+
+	.delete-notification-icon {
+		position: absolute;
+		top: 28px;
+		right: -6px;
+		padding: 6px;
+		cursor: pointer;
+		display: none;
+		transition: all 0.2s linear;
+	}
+
+	&:hover {
+		.delete-notification-icon {
+			display: block;
+		}
+	}
+`;
+
+const Notification = ({ data, onClick }: { data: NotificationType; onClick: () => void }) => {
+	const [openTask, setOpenTask] = useState(false);
+	const readNotificationMutation = useReadNotification();
+	const deleteNotificationMutation = useDeleteNotification();
+
+	const openNotification = async () => {
+		// mark as read
+		if (data.taskId) {
+			await readNotificationMutation.mutateAsync(data);
+
+			// Open Task
+			setOpenTask(true);
+			onClick();
+		}
+	};
+
+	const deleteNotification = async () => {
+		await deleteNotificationMutation.mutateAsync(data);
+	};
+
+	useEffect(() => {
+		// Unload
+		return () => {
+			setOpenTask(false);
+		};
+	}, []);
+
 	return (
-		<Flex
-			my={1}
-			borderTop={'2px solid #f3f3f3'}
-			py={2}
-			align={'center'}
-			cursor={'pointer'}
-			onClick={() => alert('do something')}
-		>
-			<Avatar size={'md'} mr={4} />
-			<Box flex={1}>
-				<Flex justify={'space-between'}>
-					<Text fontWeight={'bold'}>Jon peturssson</Text>
-					<Text fontSize={'12px'} color={'gray.400'}>
-						29 min ago
-					</Text>
-				</Flex>
-				<Text fontSize={'14px'}>Commentaði á task 29</Text>
-			</Box>
-		</Flex>
+		<>
+			<Flex
+				as={StyledFlex}
+				my={1}
+				borderTop={'2px solid #f3f3f3'}
+				py={2}
+				align={'center'}
+				cursor={'pointer'}
+				onClick={openNotification}
+			>
+				{deleteNotificationMutation.isLoading ? (
+					<Center>
+						<LoadingSpinner />
+					</Center>
+				) : (
+					<Box flex={1}>
+						<Flex justify={'space-between'}>
+							<Text
+								fontWeight={data.status === 0 ? 'bold' : 'normal'}
+								color={'black'}
+								fontSize={'12px'}
+							>
+								{data.subject ?? 'Unknown name'}
+							</Text>
+							<div>
+								<Text fontSize={'12px'} color={'gray.400'}>
+									{timeSince(new Date(data.created))}
+								</Text>
+								<div
+									className={'delete-notification-icon'}
+									onClick={() => deleteNotification()}
+								>
+									<CrossIcon size={16} />
+								</div>
+							</div>
+						</Flex>
+						<Text fontSize={'14px'}>{data.text ?? 'Unknown content'}</Text>
+					</Box>
+				)}
+			</Flex>
+			{openTask && <OpenTaskNotification notification={data} />}
+		</>
 	);
 };

@@ -83,8 +83,6 @@ export function Table<T extends object = {}, C extends object = {}>({
 					{headerGroups.map((headerGroup, rowIndex) => (
 						<Tr {...headerGroup.getHeaderGroupProps()} key={rowIndex}>
 							{headerGroup.headers.map((column, colIndex) => {
-								console.log('column', column);
-
 								return (
 									<Th
 										as={StyledTh}
