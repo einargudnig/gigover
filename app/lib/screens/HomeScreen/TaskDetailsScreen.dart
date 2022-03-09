@@ -10,6 +10,7 @@ import 'package:mittverk/models/Task.dart';
 import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/providers/ProjectProvider.dart';
+import 'package:mittverk/screens/HomeScreen/widgets/CommentBody.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/CardTitle.dart';
@@ -210,14 +211,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                         borderRadius: BorderRadius.all(Radius.circular(16))),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                      child: Text(
-                        comment.comment!,
-                        style: AvailableFonts.getTextStyle(
-                          context,
-                          color: MVTheme.mainFont,
-                          fontSize: 14.scale as double,
-                        ),
-                      ),
+                      child: CommentBody(comment),
                     )),
               ),
             ],

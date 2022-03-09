@@ -19,6 +19,7 @@ import 'package:mittverk/widgets/FullscreenLoader.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'NotificationScreen.dart';
 import 'ProjectListScreen.dart';
 import 'ProjectScreen.dart';
 
@@ -149,7 +150,12 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
               onSettings: () {
                 homeProvider.homeNavigationKey.currentState!
                     .pushNamed('/settings');
-              }),
+              },
+            onNotification: () {
+              homeProvider.homeNavigationKey.currentState!
+                  .pushNamed('/notifications');
+            },
+          ),
           body: NestedNavigator(
             routeObserver: RouteObserverHelper(homeProvider: homeProvider),
             navigationKey: homeProvider.homeNavigationKey,
@@ -161,6 +167,7 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
               '/': (context) => ProjectListScreen(),
               '/signup': (context) => SignupScreen(),
               '/settings': (context) => SettingsScreen(),
+              '/notifications': (context) => NotificationsScreen(),
               '/project': (context) => ProjectScreen(context),
               '/task': (context) => TaskDetailsView(context),
             },

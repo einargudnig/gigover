@@ -9,12 +9,14 @@ import 'package:mittverk/utils/Theme.dart';
 class MittVerkAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Function? onBack;
   final Function? onSettings;
+  final Function? onNotification;
   final NavigationSettings? navigationSettings;
 
   MittVerkAppBar({
-     this.navigationSettings,
-     this.onBack,
-     this.onSettings,
+    this.navigationSettings,
+    this.onBack,
+    this.onSettings,
+    this.onNotification,
     Key? key,
   })  : preferredSize = Size.fromHeight(kToolbarHeight),
         super(key: key);
@@ -51,13 +53,26 @@ class MittVerkAppBarState extends State<MittVerkAppBar> {
       actions: <Widget>[
         widget.navigationSettings!.showSettingsIcon
             ? IconButton(
-                icon:
-                    SvgPicture.asset('assets/icons/gear.svg', height: 24.scale as double?),
+                icon: SvgPicture.asset('assets/icons/gear.svg',
+                    height: 20.scale as double?),
                 onPressed: () {
                   widget.onSettings!();
                 },
               )
             : Container(),
+        //
+        // TODO Enable this later for app users also...
+        // Currently the notifications only work for Contractors
+        //
+        // widget.navigationSettings!.showNotificationsIcon && widget.onNotification != null
+        //     ? IconButton(
+        //         icon: SvgPicture.asset('assets/icons/bell.svg',
+        //             height: 24.scale as double?),
+        //         onPressed: () {
+        //           widget.onNotification!();
+        //         },
+        //       )
+        //     : Container(),
       ],
     );
   }

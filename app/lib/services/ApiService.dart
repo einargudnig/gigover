@@ -50,7 +50,7 @@ class ApiService {
     return response;
   }
 
-  /// Get a list of projects
+  /// Get user notifications
   static Future<Response> projectList() async {
     return await dio.get(apiPrefix + '/workers/list');
   }

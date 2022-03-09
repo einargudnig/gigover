@@ -20,8 +20,9 @@ class RouteObserverHelper extends RouteObserver<PageRoute<dynamic>> {
       homeProvider!.hideTimePanel();
     }
 
-    homeProvider!.navigationSettings.showBackButton = (routeStack.length > 0 && homeProvider!.homeNavigationKey.currentState!.canPop()) || screenName == '/project';
-    homeProvider!.navigationSettings.showSettingsIcon = !(screenName == '/settings');
+    homeProvider!.navigationSettings.showBackButton = (routeStack.length > 0 && homeProvider!.homeNavigationKey.currentState!.canPop()) || screenName == '/project' || screenName == '/notifications' || screenName == '/settings';
+    homeProvider!.navigationSettings.showSettingsIcon = !(screenName == '/settings' || screenName == '/notifications');
+    homeProvider!.navigationSettings.showNotificationsIcon = !(screenName == '/settings' || screenName == '/notifications');
     homeProvider!.notifyListenersAfterNavigationSettings();
 
     print('==== New screen view: $screenName ====');
