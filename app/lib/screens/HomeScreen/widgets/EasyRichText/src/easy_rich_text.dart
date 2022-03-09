@@ -451,7 +451,7 @@ class EasyRichText extends StatelessWidget {
         var urlType = pattern.urlType;
 
         if (null != pattern.matchBuilder && match is RegExpMatch) {
-          inlineSpan = pattern.matchBuilder!(context, match);
+          inlineSpan = pattern.matchBuilder(context, match!);
         } else if (urlType != null) {
           inlineSpan = TextSpan(
             text: str,

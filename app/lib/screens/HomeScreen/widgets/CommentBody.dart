@@ -6,14 +6,12 @@ import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 
 class CommentBody extends StatelessWidget {
-
   final TaskComment comment;
 
   CommentBody(this.comment);
 
   @override
   Widget build(BuildContext context) {
-
     return EasyRichText(
       comment.comment!,
       defaultStyle: AvailableFonts.getTextStyle(
@@ -22,15 +20,22 @@ class CommentBody extends StatelessWidget {
         fontSize: 14.scale as double,
       ),
       patternList: [
-        // EasyRichTextPattern(
-        //   targetString: '@\[(?:.*?)\]\((.*?)\)',
-        //   matchBuilder: (BuildContext context, RegExpMatch match) {
-        //     return InlineSpan(
-        //       text: match[0].replaceAll('*', ''),
-        //       style: TextStyle(fontWeight: FontWeight.bold),
-        //     );
-        //   },
-        // ),
+        EasyRichTextPattern(
+          targetString: '@\[(?:.*?)\]\((.*?)\)',
+          matchBuilder: (BuildContext context, RegExpMatch match) {
+
+            print(match);
+
+            if (match[0] != null) {
+              return TextSpan(
+                text: match[0]!.replaceAll('*', ''),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              );
+            } else {
+              return TextSpan(text: "Default");
+            }
+          },
+        ),
         // EasyRichTextPattern(
         //   targetString: '@\\[(.*?)\\]\\((?:.*?)\\)',
         //   matchBuilder: (BuildContext context, RegExpMatch match) {

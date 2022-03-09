@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 typedef EasyRichTextMatchBuilder = InlineSpan Function(
-    BuildContext context, RegExpMatch? match);
+    BuildContext context, RegExpMatch match);
 
 class EasyRichTextPattern {
   ///target string that you want to format
@@ -53,7 +53,7 @@ class EasyRichTextPattern {
   ///default match all
   final dynamic matchOption;
 
-  final EasyRichTextMatchBuilder? matchBuilder;
+  final EasyRichTextMatchBuilder matchBuilder;
 
   EasyRichTextPattern({
     Key? key,
@@ -70,7 +70,7 @@ class EasyRichTextPattern {
     this.recognizer,
     this.hasSpecialCharacters = false,
     this.matchOption = 'all',
-    this.matchBuilder,
+    required this.matchBuilder,
   });
 
   EasyRichTextPattern copyWith({
@@ -87,6 +87,7 @@ class EasyRichTextPattern {
     recognizer,
     hasSpecialCharacters,
     matchOption,
+    matchBuilder,
   }) {
     return EasyRichTextPattern(
       targetString: targetString ?? this.targetString,
@@ -104,6 +105,9 @@ class EasyRichTextPattern {
       recognizer: recognizer ?? this.recognizer,
       hasSpecialCharacters: hasSpecialCharacters ?? this.hasSpecialCharacters,
       matchOption: matchOption ?? this.matchOption,
+      matchBuilder: matchBuilder ?? (BuildContext context, RegExpMatch match) {
+        return TextSpan(text: "Default");
+      }
     );
   }
 }
