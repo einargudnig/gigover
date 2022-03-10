@@ -202,6 +202,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.2"
+  flutter_mentions:
+    dependency: "direct main"
+    description:
+      name: flutter_mentions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
+  flutter_portal:
+    dependency: "direct main"
+    description:
+      name: flutter_portal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -347,6 +361,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.2"
+  rich_text_controller:
+    dependency: "direct main"
+    description:
+      name: rich_text_controller
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.0"
   shared_preferences:
     dependency: "direct main"
     description:

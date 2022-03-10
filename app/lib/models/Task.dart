@@ -1,3 +1,5 @@
+import 'package:mittverk/models/TaskWorkers.dart';
+
 import 'TaskComment.dart';
 import 'TaskStatus.dart';
 
@@ -7,6 +9,7 @@ class Task {
   String? subject;
   int? typeId;
   List<TaskComment>? comments = [];
+  List<TaskWorker>? workers = [];
   TaskStatus? status;
   int? projectId;
   int? minutes;
@@ -20,6 +23,7 @@ class Task {
     this.comments,
     this.projectId,
     this.minutes,
+    this.workers,
   });
 
   String getTitle() {
@@ -36,7 +40,9 @@ class Task {
             json["project"] != null ? json["project"]["projectId"] : null,
         text: json["text"],
         subject: json["subject"],
-        status: statusIndex != -1 ? TaskStatus.values[statusIndex!] : TaskStatus.Archived,
+        status: statusIndex != -1
+            ? TaskStatus.values[statusIndex!]
+            : TaskStatus.Archived,
         typeId: json["typeId"],
         minutes: json["minutes"],
         comments: json["comments"] != null && json["comments"].length > 0
@@ -44,10 +50,15 @@ class Task {
                 return TaskComment.fromJson(t);
               }).toList()
             : [],
+        workers: json["workers"] != null && json["workers"].length > 0
+            ? json["workers"].map<TaskWorker>((t) {
+                return TaskWorker.fromJson(t);
+              }).toList()
+            : [],
       );
     } catch (e) {
       print(e);
-      throw(e);
+      throw (e);
     }
   }
 
@@ -66,9 +77,9 @@ class Task {
   }
 
   @override
-  bool operator ==(Object other) => other is Task && other.taskId == this.taskId;
+  bool operator ==(Object other) =>
+      other is Task && other.taskId == this.taskId;
 
   @override
   int get hashCode => this.taskId.hashCode;
-
 }

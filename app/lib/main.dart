@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:mittverk/igital/widgets/IgitalScrollBehaviour.dart';
 import 'package:mittverk/providers/AuthProvider.dart';
 import 'package:mittverk/screens/HomeScreen/HomeScreen.dart';
@@ -96,25 +97,27 @@ class MittVerkAppState extends State<MittVerkApp> {
               create: (context) => AuthProvider(authInstance, snapshot.data),
             ),
           ],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primaryColor: Color.fromRGBO(7, 16, 41, 1),
-              backgroundColor: Color.fromRGBO(251, 251, 251, 1),
-              accentColor: Color.fromRGBO(131, 136, 148, 1),
+          child: Portal(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(
+                primaryColor: Color.fromRGBO(7, 16, 41, 1),
+                backgroundColor: Color.fromRGBO(251, 251, 251, 1),
+                accentColor: Color.fromRGBO(131, 136, 148, 1),
+              ),
+              builder: (context, child) {
+                return ScrollConfiguration(
+                  behavior: IgitalScrollBehaviour(),
+                  child: child!,
+                );
+              },
+              navigatorKey: mainNavigatorKey,
+              initialRoute: snapshot.data != null ? '/home' : '/login',
+              routes: {
+                '/login': (context) => LoginScreen(),
+                '/home': (context) => HomeScreen(),
+              },
             ),
-            builder: (context, child) {
-              return ScrollConfiguration(
-                behavior: IgitalScrollBehaviour(),
-                child: child!,
-              );
-            },
-            navigatorKey: mainNavigatorKey,
-            initialRoute: snapshot.data != null ? '/home' : '/login',
-            routes: {
-              '/login': (context) => LoginScreen(),
-              '/home': (context) => HomeScreen(),
-            },
           ),
         );
       },

@@ -5,6 +5,8 @@ import 'package:mittverk/screens/HomeScreen/widgets/EasyRichText/easy_rich_text.
 import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 
+final String userRegex = '@\\[(?<user>.*?)\\]\\((?:.*?)\\)';
+
 class CommentBody extends StatelessWidget {
   final TaskComment comment;
 
@@ -21,14 +23,11 @@ class CommentBody extends StatelessWidget {
       ),
       patternList: [
         EasyRichTextPattern(
-          targetString: '@\[(?:.*?)\]\((.*?)\)',
+          targetString: userRegex,
           matchBuilder: (BuildContext context, RegExpMatch match) {
-
-            print(match);
-
-            if (match[0] != null) {
+            if (match.namedGroup("user") != null) {
               return TextSpan(
-                text: match[0]!.replaceAll('*', ''),
+                text: "@" + match.namedGroup("user")!,
                 style: TextStyle(fontWeight: FontWeight.bold),
               );
             } else {

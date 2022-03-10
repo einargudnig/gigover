@@ -24,25 +24,30 @@ class TaskComment {
   String get formattedDate {
     var dateFormat = new DateFormat('yyyy/MM/dd HH:mm');
     DateTime currentDate = new DateTime.fromMillisecondsSinceEpoch(this.sent!);
-    Duration diff = DateTime.now().difference(currentDate);
 
-    if (diff.inDays > 6) {
+    final date2 = DateTime.now();
+    final difference = date2.difference(currentDate);
+
+    if (difference.inDays > 8) {
       return dateFormat.format(currentDate);
+    } else if ((difference.inDays / 7).floor() >= 1) {
+      return 'Last week';
+    } else if (difference.inDays >= 2) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inDays >= 1) {
+      return 'Yesterday';
+    } else if (difference.inHours >= 2) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inHours >= 1) {
+      return 'An hour ago';
+    } else if (difference.inMinutes >= 2) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inMinutes >= 1) {
+      return 'A minute ago';
+    } else if (difference.inSeconds >= 3) {
+      return '${difference.inSeconds} seconds ago';
     } else {
-      if (diff.inDays < 1) {
-        if (diff.inHours < 1) {
-          return 'Just now';
-        }
-        if (diff.inHours < 10) {
-          return '${diff.inHours} hours ago';
-        }
-        return 'Today';
-      }
-      if (diff.inDays < 2) {
-        return 'Yesterday';
-      }
-
-      return '${diff.inDays} days ago';
+      return 'Just now';
     }
   }
 

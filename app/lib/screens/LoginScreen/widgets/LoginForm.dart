@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
+import 'package:mittverk/utils/Theme.dart';
 import 'package:mittverk/widgets/Input.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 
@@ -66,7 +67,7 @@ class LoginForm extends StatelessWidget {
           getInput(),
           Spacing(amount: 2),
           RoundedButton(
-            fillBackground: Color.fromRGBO(31, 223, 131, 1),
+            fillBackground: MVTheme.secondaryColor,
             textColor: Color.fromRGBO(7, 16, 41, 1),
             onTap: onSubmit,
             text: verificationCodeSent! ? 'Verify code' : 'Sign in',

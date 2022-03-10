@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_mentions/flutter_mentions.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
@@ -18,6 +17,7 @@ import 'package:mittverk/widgets/LoadingSpinner.dart';
 import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:provider/provider.dart';
+import 'package:rich_text_controller/rich_text_controller.dart';
 
 import '../../main.dart';
 
@@ -31,7 +31,8 @@ class TaskDetailsView extends StatefulWidget {
   Task? task;
 
   TaskDetailsView(BuildContext context) {
-    final TaskDetailsArguments args = ModalRoute.of(context)!.settings.arguments as TaskDetailsArguments;
+    final TaskDetailsArguments args =
+        ModalRoute.of(context)!.settings.arguments as TaskDetailsArguments;
     this.task = args.task;
   }
 
@@ -41,17 +42,37 @@ class TaskDetailsView extends StatefulWidget {
 
 class TaskDetailsViewState extends State<TaskDetailsView> {
   bool addCommentLoading = false;
-  TextEditingController commentInputController = TextEditingController();
+
+  // TextEditingController commentInputController = TextEditingController();
   String _commentText = '';
   Task? _task;
 
+  late RichTextController _controller;
+
   final FocusNode commentFocus = FocusNode();
+  final GlobalKey<FlutterMentionsState> commentKey =
+      GlobalKey<FlutterMentionsState>();
+
+  Map<RegExp, TextStyle> patternUser = {
+    RegExp(userRegex):
+        TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)
+  };
 
   @override
   void initState() {
     super.initState();
     getTaskDetail();
-    commentInputController.addListener(commentInputChange);
+
+    _controller = RichTextController(
+      patternMatchMap: patternUser,
+      deleteOnBack: true,
+      onMatch: (List<String> match) {
+        print(match);
+      },
+    );
+
+    _controller.addListener(commentInputChange);
+    commentFocus.addListener(_onCommentFocusChange);
   }
 
   void _onCommentFocusChange() {
@@ -86,12 +107,13 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   @override
   void dispose() {
     super.dispose();
-    commentInputController.dispose();
+    _controller.dispose();
   }
 
   void commentInputChange() {
     setState(() {
-      _commentText = commentInputController.value.text;
+      _commentText = _controller.value.text;
+      print("new text $_commentText");
     });
   }
 
@@ -99,9 +121,11 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     return Container(
       child: Container(
         decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-                bottom: BorderSide(color: MVTheme.borderColor, width: 2))),
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(color: MVTheme.borderColor, width: 2),
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: child,
@@ -205,14 +229,15 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             children: <Widget>[
               Flexible(
                 child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                      child: CommentBody(comment),
-                    )),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+                    child: CommentBody(comment),
+                  ),
+                ),
               ),
             ],
           )
@@ -237,18 +262,26 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   void addComment() async {
     FocusScope.of(context).unfocus();
-    String currentText = commentInputController.value.text;
+
+    String currentText = "";
+
+    if (commentKey.currentState != null &&
+        commentKey.currentState!.controller != null) {
+      currentText = commentKey.currentState!.controller!.markupText;
+    }
 
     if (currentText.length > 0) {
       setState(() {
         addCommentLoading = true;
       });
 
+      print("Sending comment: $currentText");
+
       // TODO Error component
       await ApiService.addComment(currentText, _task!.projectId, _task!.taskId);
       await this.getTaskDetail();
-      commentInputController.clear();
 
+      commentKey.currentState!.controller!.clear();
       setState(() {
         addCommentLoading = false;
       });
@@ -311,40 +344,89 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                            child: TextField(
-                          textInputAction: TextInputAction.send,
-                          onSubmitted: (value) {
-                            print("search");
-                            addComment();
-                          },
-                          focusNode: commentFocus,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 3,
-                          decoration: InputDecoration(
-                            fillColor: Colors.white,
-                            focusColor: Colors.black.withAlpha(150),
-                            hintStyle: TextStyle(
-                              color: Colors.black.withAlpha(150),
-                              fontSize: 18.scale as double?,
-                            ),
-                            hintText: 'Write a comment..',
-                            border: OutlineInputBorder(),
-                            filled: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                              borderSide: BorderSide(
-                                color: Colors.white,
+                          child: FlutterMentions(
+                            key: commentKey,
+                            suggestionPosition: SuggestionPosition.Top,
+                            maxLines: 3,
+                            minLines: 3,
+                            textInputAction: TextInputAction.send,
+                            keyboardType: TextInputType.multiline,
+                            onSubmitted: (value) {
+                              addComment();
+                            },
+                            autofocus: true,
+                            focusNode: commentFocus,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              focusColor: Colors.black.withAlpha(150),
+                              hintStyle: TextStyle(
+                                color: Colors.black.withAlpha(150),
+                                fontSize: 18.scale as double?,
+                              ),
+                              hintText: 'Write a comment..',
+                              border: OutlineInputBorder(),
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
+                            mentions: [
+                              Mention(
+                                trigger: "@",
+                                style: TextStyle(
+                                    backgroundColor: Colors.black,
+                                    color: Colors.yellow),
+                                suggestionBuilder: (data) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withAlpha(15),
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(10.0, 16.0, 10.0, 16.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Column(
+                                          children: <Widget>[
+                                            Text('@${data['display']}'),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                                markupBuilder: (String trigger, String mention,
+                                    String value) {
+                                  return trigger +
+                                      "[" +
+                                      value +
+                                      "](" +
+                                      mention +
+                                      ")";
+                                },
+                                data: _task != null && _task!.workers != null
+                                    ? _task!.workers!.map((worker) {
+                                        return {
+                                          "id": worker.uId,
+                                          "display": worker.name,
+                                          "photo": "",
+                                        };
+                                      }).toList()
+                                    : [],
+                              )
+                            ],
                           ),
-                          controller: commentInputController,
-                        )),
+                        ),
                       ),
                     ],
                   ),
@@ -361,7 +443,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                                   fillBackground: MVTheme.mainGreen,
                                   padding: EdgeInsets.only(
                                       right: 12.0, left: 12, top: 8, bottom: 8),
-                                  textColor: Colors.white,
+                                  textColor: MVTheme.primaryColor,
                                   onTap: () {
                                     addComment();
                                   },

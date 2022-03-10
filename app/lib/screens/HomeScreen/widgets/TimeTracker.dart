@@ -39,13 +39,14 @@ class TimeTracker extends StatelessWidget {
           Expanded(
             child: RoundedButton(
               padding: EdgeInsets.all(20.0),
-              fillBackground: Color.fromRGBO(31, 223, 131, 1),
-              textColor: Color.fromRGBO(7, 16, 41, 1),
+              fillBackground: MVTheme.secondaryColor,
+              textColor: Colors.black,
               onTap: () {
                 homeProvider.resetTimer();
               },
               child: SvgPicture.asset(
                 'assets/icons/stop.svg',
+                color: MVTheme.primaryColor,
                 width: 28,
                 height: 28,
               ),
@@ -54,8 +55,8 @@ class TimeTracker extends StatelessWidget {
 /*          Expanded(
             child: RoundedButton(
                 padding: EdgeInsets.all(20.0),
-                fillBackground: Color.fromRGBO(31, 223, 131, 1),
-                textColor: Color.fromRGBO(7, 16, 41, 1),
+                fillBackground: MVTheme.secondaryColor,
+                textColor: Colors.black,
                 onTap: () {
                   homeProvider.pauseTimer();
                 },
@@ -72,13 +73,14 @@ class TimeTracker extends StatelessWidget {
           Expanded(
             child: RoundedButton(
               padding: EdgeInsets.all(20.0),
-              fillBackground: Color.fromRGBO(31, 223, 131, 1),
-              textColor: Color.fromRGBO(7, 16, 41, 1),
+              fillBackground: MVTheme.secondaryColor,
+              textColor: Colors.black,
               onTap: () {
                 homeProvider.goToTaskDetail(homeProvider.currentTrackedTask);
               },
               child: SvgPicture.asset(
                 'assets/icons/comment.svg',
+                color: MVTheme.primaryColor,
                 width: 28,
                 height: 28,
               ),
@@ -92,7 +94,7 @@ class TimeTracker extends StatelessWidget {
           Expanded(
             child: RoundedButton(
               padding: EdgeInsets.all(20.0),
-              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              fillBackground: MVTheme.secondaryColor,
               textColor: Color.fromRGBO(7, 16, 41, 1),
               onTap: () {
                 homeProvider.startTimer();
@@ -111,7 +113,7 @@ class TimeTracker extends StatelessWidget {
           Expanded(
             child: RoundedButton(
               padding: EdgeInsets.all(20.0),
-              fillBackground: Color.fromRGBO(31, 223, 131, 1),
+              fillBackground: MVTheme.secondaryColor,
               textColor: Color.fromRGBO(7, 16, 41, 1),
               onTap: () {
                 homeProvider.resetTimer();
@@ -132,7 +134,7 @@ class TimeTracker extends StatelessWidget {
     return Expanded(
       child: RoundedButton(
         padding: EdgeInsets.all(20.0),
-        textColor: Color.fromRGBO(7, 16, 41, 1),
+        textColor: MVTheme.secondaryColor,
         borderColorFromTextColor: true,
         onTap: () {},
         text: currentTime,
@@ -150,7 +152,7 @@ class TimeTracker extends StatelessWidget {
       return Container(
         padding: EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
         decoration: new BoxDecoration(
-          color: Colors.white,
+          color: Colors.black,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(16),
             topLeft: Radius.circular(16),
@@ -161,11 +163,12 @@ class TimeTracker extends StatelessWidget {
             top: 0,
             right: 0,
             child: Icon(
-                !homeProvider.panelController.isPanelOpen
-                    ? Icons.arrow_drop_up
-                    : Icons.arrow_drop_down,
-                size: 36,
-                color: Color.fromRGBO(31, 223, 131, 1)),
+              !homeProvider.panelController.isPanelOpen
+                  ? Icons.arrow_drop_up
+                  : Icons.arrow_drop_down,
+              size: 36,
+              color: MVTheme.secondaryColor,
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +179,7 @@ class TimeTracker extends StatelessWidget {
                   Text(
                     homeProvider.currentTimer!.projectName,
                     style: AvailableFonts.getTextStyle(context,
-                        color: MVTheme.grayFont, weight: FontWeight.bold),
+                        color: Colors.white, weight: FontWeight.bold),
                   ),
                   Spacing(
                     amount: 0.5,
@@ -185,7 +188,7 @@ class TimeTracker extends StatelessWidget {
                     homeProvider.currentTimer!.taskSubject,
                     style: AvailableFonts.getTextStyle(
                       context,
-                      color: MVTheme.mainFont,
+                      color: Colors.white,
                       weight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -220,7 +223,7 @@ class TimeTracker extends StatelessWidget {
         padding: EdgeInsets.only(bottom: bottomPadding),
         child: RoundedButton(
           disabledFillBackground: Color.fromRGBO(31, 200, 131, 1),
-          fillBackground: Color.fromRGBO(31, 223, 131, 1),
+          fillBackground: MVTheme.secondaryColor,
           textColor: Color.fromRGBO(7, 16, 41, 1),
           onTap: () {
             showCupertinoModalPopup(

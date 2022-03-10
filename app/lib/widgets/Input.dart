@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mittverk/utils/Theme.dart';
 
 class Input extends StatelessWidget {
   final TextEditingController? controller;
@@ -26,7 +27,7 @@ class Input extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            color: Color.fromRGBO(31, 223, 131, 1),
+            color: MVTheme.secondaryColor,
           ),
         ),
       ),

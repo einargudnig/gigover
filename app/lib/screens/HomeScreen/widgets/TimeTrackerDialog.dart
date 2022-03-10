@@ -27,7 +27,7 @@ class TimeTrackerDialog extends StatelessWidget {
         children: [
           Row(
             children: <Widget>[
-              Icon(Icons.access_alarm, color: Color.fromRGBO(31, 223, 131, 1)),
+              Icon(Icons.access_alarm, color: MVTheme.secondaryColor),
               Spacing(
                 isVertical: false,
                 amount: 1,
@@ -117,7 +117,7 @@ class TimeTrackerDialog extends StatelessWidget {
                   disabled: homeProvider.currentTrackedTask == null ||
                       homeProvider.currentTrackedProject == null,
                   padding: EdgeInsets.all(20.0),
-                  fillBackground: Color.fromRGBO(31, 223, 131, 1),
+                  fillBackground: MVTheme.secondaryColor,
                   onTap: () {
                     homeProvider.startTimer();
                     Navigator.of(context, rootNavigator: true).pop("Discard");
