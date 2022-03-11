@@ -25,7 +25,7 @@ interface NotificationHook {
 const useNotificationQuery = () => {
 	return useQuery<Notification[]>(ApiService.notifications, async () => {
 		try {
-			const res = await axios.get(ApiService.notifications);
+			const res = await axios.get(ApiService.notifications, { withCredentials: true });
 
 			if (!(res.data && res.data.notifications)) {
 				throw new Error(res.data);
