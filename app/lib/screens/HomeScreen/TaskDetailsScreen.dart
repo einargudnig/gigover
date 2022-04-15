@@ -67,7 +67,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       patternMatchMap: patternUser,
       deleteOnBack: true,
       onMatch: (List<String> match) {
-        print(match);
+        // print(match);
       },
     );
 
@@ -86,9 +86,14 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       // TODO Implement error screen here
     } else {
       try {
+        print('TaskDetailsScreen.getTaskDetail()');
         print(response.data);
         if (response.data != null && response.data["projectTask"] != null) {
           dynamic projectTask = response.data["projectTask"];
+
+          print('TaskDetailsScreen.getTaskDetail().workers');
+          print(response.data["projectTask"]["workers"]);
+
           Task? tempTasks = Task.fromJson(projectTask);
           setState(() {
             _task = tempTasks;

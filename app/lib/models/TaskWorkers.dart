@@ -12,6 +12,7 @@ class TaskWorker {
 
   static TaskWorker fromJson(Map<String, dynamic> json) {
     try {
+      print(json.toString());
       return TaskWorker(
         uId: json["uId"],
         userName: json["userName"],
@@ -19,6 +20,7 @@ class TaskWorker {
         type: json["type"] as int,
       );
     } catch (e) {
+      print("Issue in TaskWorker.fromJson");
       print(e);
       throw (e);
     }

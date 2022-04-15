@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
-import 'package:mittverk/igital/widgets/DebugBorder.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
 import 'package:mittverk/providers/HomeProvider.dart';
@@ -13,11 +12,11 @@ import 'package:provider/provider.dart';
 import 'TimeTrackerDialog.dart';
 
 class TimeTracker extends StatelessWidget {
+
   TimeTracker();
 
   String formatTime(ElapsedTime? time) {
-    if (time == null ||
-        (time.minutes == null && time.seconds == null && time.hours == null)) {
+    if (time == null || (time.minutes == null && time.seconds == null && time.hours == null)) {
       return '00:00';
     }
 
@@ -38,7 +37,7 @@ class TimeTracker extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: RoundedButton(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(12.0),
               fillBackground: MVTheme.secondaryColor,
               textColor: Colors.black,
               onTap: () {
@@ -52,27 +51,13 @@ class TimeTracker extends StatelessWidget {
               ),
             ),
           ),
-/*          Expanded(
-            child: RoundedButton(
-                padding: EdgeInsets.all(20.0),
-                fillBackground: MVTheme.secondaryColor,
-                textColor: Colors.black,
-                onTap: () {
-                  homeProvider.pauseTimer();
-                },
-                child: SvgPicture.asset(
-                  'assets/icons/pause.svg',
-                  width: 28,
-                  height: 28,
-                )),
-          ),*/
           Spacing(
             isVertical: false,
             amount: 2,
           ),
           Expanded(
             child: RoundedButton(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(12.0),
               fillBackground: MVTheme.secondaryColor,
               textColor: Colors.black,
               onTap: () {
@@ -133,7 +118,7 @@ class TimeTracker extends StatelessWidget {
   Widget timeItem(String currentTime) {
     return Expanded(
       child: RoundedButton(
-        padding: EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(16.0),
         textColor: MVTheme.secondaryColor,
         borderColorFromTextColor: true,
         onTap: () {},
@@ -147,102 +132,125 @@ class TimeTracker extends StatelessWidget {
     final homeProvider = Provider.of<HomeProvider>(context);
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-    if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero &&
-        homeProvider.currentTimer != null) {
-      return Container(
-        padding: EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
-        decoration: new BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(16),
-            topLeft: Radius.circular(16),
-          ),
-        ),
-        child: Stack(children: [
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Icon(
-              !homeProvider.panelController.isPanelOpen
-                  ? Icons.arrow_drop_up
-                  : Icons.arrow_drop_down,
-              size: 36,
-              color: MVTheme.secondaryColor,
+    if (homeProvider.stopwatch.currentStopWatchDuration != Duration.zero && homeProvider.currentTimer != null) {
+      return Material(
+        child: Container(
+          padding: EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 16),
+          decoration: new BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16),
+              topLeft: Radius.circular(16),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    homeProvider.currentTimer!.projectName,
-                    style: AvailableFonts.getTextStyle(context,
-                        color: Colors.white, weight: FontWeight.bold),
-                  ),
-                  Spacing(
-                    amount: 0.5,
-                  ),
-                  Text(
-                    homeProvider.currentTimer!.taskSubject,
-                    style: AvailableFonts.getTextStyle(
-                      context,
-                      color: Colors.white,
-                      weight: FontWeight.bold,
-                      fontSize: 20,
+          child: Stack(children: [
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Icon(
+                !homeProvider.panelController.isPanelOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                size: 36,
+                color: MVTheme.secondaryColor,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      homeProvider.currentTimer!.projectName,
+                      style: AvailableFonts.getTextStyle(context, color: Colors.white, weight: FontWeight.bold),
                     ),
-                  )
-                ],
-              ),
-              Spacing(
-                amount: 2,
-              ),
-              Row(
-                children: <Widget>[
-                  timeItem(
-                      formatTime(homeProvider.stopwatch.currentElapsedTime)),
-                  Spacing(
-                    isVertical: false,
-                    amount: 2,
+                    Spacing(
+                      amount: 0.5,
+                    ),
+                    Text(
+                      homeProvider.currentTimer!.taskSubject,
+                      style: AvailableFonts.getTextStyle(
+                        context,
+                        color: Colors.white,
+                        weight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    )
+                  ],
+                ),
+                Spacing(amount: 4),
+                Container(
+                  child: TextField(
+                    controller: homeProvider.timerCommentCtrl,
+                    cursorColor: MVTheme.primaryColor,
+                    keyboardAppearance: Brightness.dark,
+                    style: TextStyle(color: MVTheme.secondaryColor),
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(color: MVTheme.secondaryColor.withAlpha(100)),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(color: MVTheme.secondaryColor, width: 2.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(color: MVTheme.secondaryColor.withAlpha(100), width: 2.0),
+                      ),
+                      focusColor: MVTheme.primaryColor,
+                      hintText: 'Add a comment',
+                    ),
                   ),
-                  Expanded(
-                    child: timerActions(context),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ]),
+                ),
+                Spacing(
+                  amount: 1.5,
+                ),
+                Row(
+                  children: <Widget>[
+                    timeItem(formatTime(homeProvider.stopwatch.currentElapsedTime)),
+                    Spacing(
+                      isVertical: false,
+                      amount: 2,
+                    ),
+                    Expanded(
+                      child: timerActions(context),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ]),
+        ),
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
       child: Padding(
-        padding: EdgeInsets.only(bottom: bottomPadding),
-        child: RoundedButton(
-          disabledFillBackground: Color.fromRGBO(31, 200, 131, 1),
-          fillBackground: MVTheme.secondaryColor,
-          textColor: Color.fromRGBO(7, 16, 41, 1),
-          onTap: () {
-            showCupertinoModalPopup(
-              context: context,
-              builder: (_) {
-                return ChangeNotifierProvider.value(
-                  value: homeProvider,
-                  child: TimeTrackerDialog(),
+        padding: const EdgeInsets.all(8.0),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: Material(
+            child: RoundedButton(
+              disabledFillBackground: Color.fromRGBO(31, 200, 131, 1),
+              fillBackground: MVTheme.secondaryColor,
+              textColor: Color.fromRGBO(7, 16, 41, 1),
+              onTap: () {
+                showCupertinoModalPopup(
+                  context: context,
+                  builder: (_) {
+                    return ChangeNotifierProvider.value(
+                      value: homeProvider,
+                      child: TimeTrackerDialog(),
+                    );
+                  },
                 );
               },
-            );
-          },
-          child: Text(
-            'Log time',
-            style: AvailableFonts.getTextStyle(
-              context,
-              color: MVTheme.primaryColor,
-              fontSize: 18,
-              weight: FontWeight.bold,
+              child: Text(
+                'Log time',
+                style: AvailableFonts.getTextStyle(
+                  context,
+                  color: MVTheme.primaryColor,
+                  fontSize: 18,
+                  weight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ),

@@ -25,8 +25,7 @@ import 'ProjectScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: true);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: true);
 
     print('AUTH TOKEN: ${authProvider.userToken}');
     if (authProvider.userToken == null) {
@@ -112,15 +111,13 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
   Widget build(BuildContext context) {
     ScaleFactor(context);
 
-    HomeProvider homeProvider =
-        Provider.of<HomeProvider>(context, listen: true);
+    HomeProvider homeProvider = Provider.of<HomeProvider>(context, listen: true);
 
     if (homeProvider.loadingVerifiedUser) {
       return FullscreenLoader();
     }
 
-    if (!homeProvider.loadingVerifiedUser &&
-        homeProvider.errorVerifiedUser != null) {
+    if (!homeProvider.loadingVerifiedUser && homeProvider.errorVerifiedUser != null) {
       // TODO Full screen error
       return Container(
         child: Text(homeProvider.errorVerifiedUser!),
@@ -130,30 +127,37 @@ class HomeScreenViewState extends State<HomeScreenView> with RouteAware {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
     SlidePanelConfig config = homeProvider.slidePanelConfig;
 
+    double maxHeight = MediaQuery.of(context).size.height * 0.80;
+
+    if (config.maxHeight == defaultSlidePanelConfig.maxHeight) {
+      maxHeight = config.maxHeight! + bottomPadding;
+    }
+
     return ScreenLayout(
       child: SlidingUpPanel(
         controller: homeProvider.panelController,
         renderPanelSheet: config.renderPanelSheet!,
         minHeight: config.minHeight! + bottomPadding,
-        maxHeight: config.maxHeight! + bottomPadding,
+        maxHeight: maxHeight,
         isDraggable: config.isDraggable!,
         backdropEnabled: config.backdropEnabled!,
         panel: TimeTracker(),
+        onPanelClosed: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
         body: Scaffold(
           appBar: MittVerkAppBar(
-              navigationSettings: homeProvider.navigationSettings,
-              onBack: () {
-                if (homeProvider.homeNavigationKey.currentState!.canPop()) {
-                  homeProvider.homeNavigationKey.currentState!.pop();
-                }
-              },
-              onSettings: () {
-                homeProvider.homeNavigationKey.currentState!
-                    .pushNamed('/settings');
-              },
+            navigationSettings: homeProvider.navigationSettings,
+            onBack: () {
+              if (homeProvider.homeNavigationKey.currentState!.canPop()) {
+                homeProvider.homeNavigationKey.currentState!.pop();
+              }
+            },
+            onSettings: () {
+              homeProvider.homeNavigationKey.currentState!.pushNamed('/settings');
+            },
             onNotification: () {
-              homeProvider.homeNavigationKey.currentState!
-                  .pushNamed('/notifications');
+              homeProvider.homeNavigationKey.currentState!.pushNamed('/notifications');
             },
           ),
           body: NestedNavigator(

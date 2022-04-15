@@ -22,8 +22,8 @@ class TimeTrackerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
-    return Material(
-      child: LSDialog(
+    return Scaffold(
+      body: LSDialog(
         children: [
           Row(
             children: <Widget>[

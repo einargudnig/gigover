@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mittverk/models/Project.dart';
@@ -12,8 +11,8 @@ import 'package:mittverk/providers/StopwatchProvider.dart';
 import 'package:mittverk/screens/HomeScreen/TaskDetailsScreen.dart';
 import 'package:mittverk/services/ApiService.dart';
 import 'package:mittverk/utils/NavigationSettings.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class SlidePanelConfig {
   double? minHeight;
@@ -45,7 +44,7 @@ SlidePanelConfig defaultSlidePanelConfig = new SlidePanelConfig(
 
 SlidePanelConfig activeSlidePanelConfig = new SlidePanelConfig(
   minHeight: 70,
-  maxHeight: 170,
+  maxHeight: 300,
   isDraggable: true,
   backdropEnabled: false,
   renderPanelSheet: false,
@@ -104,6 +103,8 @@ class HomeProvider with ChangeNotifier {
   List<ProjectType> projectTypes = [];
   Project? _currentTrackedProject;
   Task? _currentTrackedTask;
+
+  final timerCommentCtrl = TextEditingController();
 
   // NEW Active timer
   Timesheet? currentTimer;
@@ -398,9 +399,12 @@ class HomeProvider with ChangeNotifier {
     //TODO perhaps show some dialog to tell the user about the time he just logged
     //TODO and do not
     if (this.currentTimer != null) {
-      ApiService.workEnd(this.currentTimer!.projectId);
+      print("Closing timer with comment: " + timerCommentCtrl.text);
+      ApiService.workEnd(this.currentTimer!.projectId, comment: timerCommentCtrl.text);
     }
+
     this.currentTimer = null;
+    timerCommentCtrl.text = "";
     this.stopwatch.resetStopWatch();
     this.slidePanelConfig = defaultSlidePanelConfig;
     notifyListeners();
