@@ -18,6 +18,8 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TimeIcon } from '../../components/icons/TimeIcon';
 import { Theme } from '../../Theme';
 import { displayTaskTitle } from '../../utils/TaskUtils';
+import { TimeTrackerInput } from '../../queries/useTrackerStart';
+import { StopTrackerConfirmation } from './StopTrackerConfirmation';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -90,6 +92,9 @@ export const TimeTracker = (): JSX.Element => {
 	const [now, setNow] = useState(new Date());
 	const [refetch, setRefetch] = useState(0);
 	const [, setModalContext] = useContext(ModalContext);
+	const [stopConfirmationModal, setStopConfirmationModal] = useState<
+		TimeTrackerInput | undefined
+	>();
 	const { data: projectList } = useProjectList();
 	const {
 		mutateAsync: getReport,
@@ -101,7 +106,6 @@ export const TimeTracker = (): JSX.Element => {
 		data,
 		isLoading: activeTimerLoading
 	} = useActiveTimeTrackers();
-	const { mutateAsync: stopTask, isLoading: stopTimerLoading } = useTrackerStop();
 
 	const totalTimesheets = useMemo(() => {
 		if (reportData?.data.report) {
@@ -121,16 +125,6 @@ export const TimeTracker = (): JSX.Element => {
 
 		return 0;
 	}, [reportData]);
-
-	const stopTracker = async (projectId: number, taskId: number, uId: string) => {
-		await stopTask({
-			projectId: projectId,
-			taskId: taskId,
-			uId: uId
-		});
-
-		await activeTrackers({});
-	};
 
 	const getActiveTrackerHeader = (projectId: number, taskId: number): React.ReactNode => {
 		let projectName = `Unknown project (${projectId})`;
@@ -160,10 +154,10 @@ export const TimeTracker = (): JSX.Element => {
 
 	const StartTrackingAction = () => (
 		<Button
-			isDisabled={reportDataLoading || activeTimerLoading || stopTimerLoading}
+			isDisabled={reportDataLoading || activeTimerLoading}
 			leftIcon={<TimeIcon color={Theme.colors.black} />}
 			onClick={() => {
-				if (!(reportDataLoading || activeTimerLoading || stopTimerLoading)) {
+				if (!(reportDataLoading || activeTimerLoading)) {
 					setModalContext({
 						timeTracker: {
 							callback: () => {
@@ -283,11 +277,11 @@ export const TimeTracker = (): JSX.Element => {
 														</TimerContainer>
 														<Button
 															onClick={() =>
-																stopTracker(
-																	timeSheet.projectId,
-																	timeSheet.taskId,
-																	worker.uId
-																)
+																setStopConfirmationModal({
+																	projectId: timeSheet.projectId,
+																	taskId: timeSheet.taskId,
+																	uId: worker.uId
+																})
 															}
 														>
 															|&nbsp;|
@@ -309,6 +303,18 @@ export const TimeTracker = (): JSX.Element => {
 					<TimeTrackerReport refetch={[refetch, setRefetch]} />
 				</ActiveTimeTrackers>
 			</Page>
+			{stopConfirmationModal && (
+				<StopTrackerConfirmation
+					onClose={() => setStopConfirmationModal(undefined)}
+					onComplete={async () => {
+						setStopConfirmationModal(undefined);
+						await activeTrackers({});
+					}}
+					projectId={stopConfirmationModal.projectId}
+					taskId={stopConfirmationModal.taskId}
+					uId={stopConfirmationModal.uId}
+				/>
+			)}
 		</>
 	);
 };

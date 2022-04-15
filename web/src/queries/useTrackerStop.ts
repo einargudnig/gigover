@@ -3,10 +3,14 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ApiService } from '../services/ApiService';
 import { TimeTrackerInput } from './useTrackerStart';
 
+interface TimeTrackerInputWithComment extends TimeTrackerInput {
+	comment: string | null;
+}
+
 export const useTrackerStop = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<AxiosResponse, AxiosError, TimeTrackerInput>(
+	return useMutation<AxiosResponse, AxiosError, TimeTrackerInputWithComment>(
 		async (variables) =>
 			await axios.post(ApiService.stopTimer, variables, { withCredentials: true }),
 		{

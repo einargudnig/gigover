@@ -11,7 +11,7 @@ import Timer from 'react-compound-timer';
 import { Button } from '@chakra-ui/react';
 import { Table } from '../../components/Table';
 import { TimerContainer, TimerWrapper } from './TimeTracker';
-import { formatDate } from '../../utils/StringUtils';
+import { formatDate, showTimeSheetRange } from '../../utils/StringUtils';
 import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
 import { Center } from '../../components/Center';
@@ -257,8 +257,8 @@ export const TimeTrackerReport = ({
 							<tr>
 								<th>Project</th>
 								<th>Worker</th>
-								<th>Start</th>
-								<th>End</th>
+								<th>Time</th>
+								<th />
 								<th align={'center'} style={{ width: 200 }}>
 									Timer
 								</th>
@@ -273,8 +273,13 @@ export const TimeTrackerReport = ({
 										<p>{result.taskName}</p>
 									</td>
 									<td>{result.worker.name}</td>
-									<td>{formatDate(new Date(result.timesheet.start))}</td>
-									<td>{formatDate(new Date(result.timesheet.stop))}</td>
+									<td>
+										{showTimeSheetRange(
+											new Date(result.timesheet.start),
+											new Date(result.timesheet.stop)
+										)}
+									</td>
+									<td />
 									<td>
 										<TimerWrapper>
 											<TimerContainer>
