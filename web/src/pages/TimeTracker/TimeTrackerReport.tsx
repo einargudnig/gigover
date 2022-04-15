@@ -11,7 +11,7 @@ import Timer from 'react-compound-timer';
 import { Button } from '@chakra-ui/react';
 import { Table } from '../../components/Table';
 import { TimerContainer, TimerWrapper } from './TimeTracker';
-import { formatDate, showTimeSheetRange } from '../../utils/StringUtils';
+import { showTimeSheetRange } from '../../utils/StringUtils';
 import { Edit } from '../../components/icons/Edit';
 import { ModalContext } from '../../context/ModalContext';
 import { Center } from '../../components/Center';

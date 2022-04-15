@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { useActiveTimeTrackers } from '../../queries/useActiveTimeTrackers';
 import { useTrackerReport } from '../../queries/useTrackerReport';
-import { useTrackerStop } from '../../queries/useTrackerStop';
 import { CardBase } from '../../components/CardBase';
 import { secondsToString } from '../../utils/NumberUtils';
 import { useProjectList } from '../../queries/useProjectList';
