@@ -19,6 +19,7 @@ import { addZeroBefore } from '../../utils/NumberUtils';
 import { Box, HStack, Tag, Text } from '@chakra-ui/react';
 import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { displayTaskTitle } from '../../utils/TaskUtils';
+import { Input } from '../forms/Input';
 
 interface TimeTrackerModalProps {
 	context: IEditTimeTrackerModalContext;
@@ -29,6 +30,7 @@ export const EditTimeTrackerModal = ({
 }: TimeTrackerModalProps): JSX.Element => {
 	const firstRun = useRef(true);
 	const { data: projects } = useProjectList();
+	const [comment, setComment] = useState('');
 	const [startTime, setStartTime] = useState(new Date(reportItem.timesheet.start));
 	const [endTime, setEndTime] = useState(new Date(reportItem.timesheet.stop));
 
@@ -67,7 +69,8 @@ export const EditTimeTrackerModal = ({
 				projectId: selectedProject?.projectId,
 				taskId: selectedTask?.taskId,
 				start: startTime.getTime(),
-				stop: endTime.getTime()
+				stop: endTime.getTime(),
+				comment: comment
 			});
 
 			closeModal();
@@ -235,6 +238,14 @@ export const EditTimeTrackerModal = ({
 						/>
 					</Box>
 				</HStack>
+			</Box>
+			<Box mt={4}>
+				<Input
+					name={'comment'}
+					placeholder={'Write a comment..'}
+					value={comment}
+					onChange={(e) => setComment(e.target.value)}
+				/>
 			</Box>
 			<FormActions
 				submitDisabled={false}

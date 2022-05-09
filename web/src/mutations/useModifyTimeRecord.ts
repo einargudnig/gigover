@@ -9,6 +9,7 @@ interface ModifyTimeRecordInput {
 	taskId: number;
 	start: number;
 	stop: number;
+	comment: string;
 }
 
 export const useModifyTimeRecord = () => {
