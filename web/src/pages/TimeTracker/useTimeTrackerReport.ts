@@ -13,7 +13,7 @@ export type TimeTrackerReportResultItem = {
 	projectName: string;
 	taskName: string;
 	worker: WorkerItem;
-	timesheet: Pick<Timesheet, 'start' | 'stop' | 'workId'>;
+	timesheet: Pick<Timesheet, 'start' | 'stop' | 'workId' | 'comment'>;
 };
 
 interface TimeTrackerReportResult {
@@ -89,7 +89,12 @@ export const useTimeTrackerReport = (
 							taskId: task?.taskId ?? -1,
 							projectName: project?.name ?? 'Unknown Project',
 							taskName: displayTaskTitle(task),
-							timesheet: { start: ts.start, stop: ts.stop, workId: ts.workId },
+							timesheet: {
+								start: ts.start,
+								stop: ts.stop,
+								workId: ts.workId,
+								comment: ts.comment
+							},
 							worker: value
 						};
 					})

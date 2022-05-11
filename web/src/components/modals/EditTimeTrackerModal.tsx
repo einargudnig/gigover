@@ -30,7 +30,7 @@ export const EditTimeTrackerModal = ({
 }: TimeTrackerModalProps): JSX.Element => {
 	const firstRun = useRef(true);
 	const { data: projects } = useProjectList();
-	const [comment, setComment] = useState('');
+	const [comment, setComment] = useState(reportItem.timesheet.comment ?? '');
 	const [startTime, setStartTime] = useState(new Date(reportItem.timesheet.start));
 	const [endTime, setEndTime] = useState(new Date(reportItem.timesheet.stop));
 

@@ -11,6 +11,7 @@ export interface Timesheet {
 	stop: number; // Timestamp
 	taskId: number;
 	workId: number;
+	comment?: string;
 }
 
 export interface TrackerReportItem {
