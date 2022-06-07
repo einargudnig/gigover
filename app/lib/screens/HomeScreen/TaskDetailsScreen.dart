@@ -102,6 +102,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
           print('nopthing available');
         }
       } catch (e) {
+        print(e);
         print("ERROR WHILE PARSING PROJECTS");
         // TODO Implement error screen here
       }

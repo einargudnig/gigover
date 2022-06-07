@@ -12,6 +12,7 @@ class TaskWorker {
 
   static TaskWorker fromJson(Map<String, dynamic> json) {
     try {
+      json.putIfAbsent("userName", () => "userName.null");
       print(json.toString());
       return TaskWorker(
         uId: json["uId"],
