@@ -85,7 +85,11 @@ export const CommentInput = ({ projectId, taskId, workers }: CommentInputProps):
 								placeholder={'Write a comment'}
 								allowSpaceInQuery={true}
 								allowSuggestionsAboveCursor={true}
-								onKeyPress={(e) => onKeyPress(e)}
+								onKeyPress={(e) => {
+									if (!isUploading) {
+										onKeyPress(e);
+									}
+								}}
 								value={commentValue}
 								classNames={isDragActive ? mentionsDraggingCls : mentionsCls}
 								onChange={(event, newValue) => setCommentValue(newValue)}
