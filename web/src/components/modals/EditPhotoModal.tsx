@@ -314,7 +314,11 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 							callback={async (b) => {
 								if (b) {
 									await deleteDocument(file);
-									navigate(`/files/${file.projectId}/${file.folderId}`);
+									navigate(
+										`/files/${file.projectId}/${
+											file.folderId > 0 ? file.folderId : ''
+										}`
+									);
 								}
 								setDialogOpen(false);
 							}}

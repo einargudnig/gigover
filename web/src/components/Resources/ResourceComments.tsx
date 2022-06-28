@@ -30,6 +30,8 @@ export const ResourceComments = ({ resource }: ResourceCommentsProps): JSX.Eleme
 							key={taskCommentId}
 							author={taskComment.fullName}
 							comment={taskComment.comment}
+							imageId={0}
+							images={[]}
 							date={new Date(taskComment.sent)}
 						/>
 					))

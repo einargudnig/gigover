@@ -3,5 +3,6 @@ export interface TaskComment {
 	taskId: number;
 	comment: string;
 	fullName: string;
+	imageId: number;
 	sent: number; /// Timestamp
 }

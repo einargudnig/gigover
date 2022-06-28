@@ -6,6 +6,8 @@ import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
 import { useAddDocument } from '../mutations/useAddDocument';
+import { devError } from '../utils/ConsoleUtils';
+import { ProjectImage } from '../models/ProjectImage';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
@@ -32,7 +34,7 @@ interface DropZoneProps {
 	uploadType?: FileUploadType;
 	folderId?: number;
 	externalId?: number;
-	callback?: () => void;
+	callback?: (projectImage?: ProjectImage, file?: File) => void;
 
 	children?(props: {
 		isDragActive: boolean;
@@ -70,7 +72,17 @@ export const DropZone = ({
 							externalId
 						);
 
-						mutate.mutateAsync(response).finally(() => (callback ? callback() : null));
+						let uploadedFile: { projectImage: ProjectImage } | undefined;
+
+						try {
+							uploadedFile = await mutate.mutateAsync(response);
+						} catch (e) {
+							devError('FileUpload', e);
+						} finally {
+							if (callback) {
+								callback(uploadedFile?.projectImage, file);
+							}
+						}
 					} finally {
 						setIsUploading(false);
 					}

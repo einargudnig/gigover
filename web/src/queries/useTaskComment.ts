@@ -6,6 +6,7 @@ import axios from 'axios';
 interface TaskCommentData {
 	projectId: number;
 	taskId: number;
+	imageId?: number;
 	comment: string;
 }
 

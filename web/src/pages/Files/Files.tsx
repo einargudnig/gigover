@@ -69,7 +69,7 @@ export const Files = (): JSX.Element => {
 								...(params.fileId
 									? [
 											{
-												title: 'File',
+												title: '/**/File',
 												url:
 													'/files/' +
 													project.projectId +

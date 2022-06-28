@@ -86,13 +86,19 @@ const GigoverThumbnail = (file: ProjectImage) => {
 	return <img data-src={file.previewImage + '&mode=crop&w=60&h=60'} width={60} height={60} />;
 };
 
-export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
-	const Icon = GigoverFileIconForType(file.type);
+export const GetFileLink = (file: ProjectImage) => {
 	let href = `/files/${file.projectId}/${file.imageId}`;
 
 	if (file.folderId) {
 		href = `/files/${file.projectId}/folder/${file.folderId}/${file.imageId}`;
 	}
+
+	return href;
+};
+
+export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
+	const Icon = GigoverFileIconForType(file.type);
+	const href = GetFileLink(file);
 
 	return (
 		<FileStyled to={href}>

@@ -4,7 +4,8 @@ import { devError } from '../utils/ConsoleUtils';
 import { ApiService } from '../services/ApiService';
 import { ProjectImage } from '../models/ProjectImage';
 
-export interface DocumentInput extends Pick<ProjectImage, 'projectId' | 'folderId' | 'imageId'> {}
+export interface DocumentInput
+	extends Pick<ProjectImage, 'projectId' | 'folderId' | 'imageId' | 'taskId'> {}
 
 export const useDeleteDocument = () => {
 	const client = useQueryClient();
@@ -15,10 +16,14 @@ export const useDeleteDocument = () => {
 				withCredentials: true
 			});
 
-			await client.refetchQueries(ApiService.projectList);
+			await client.invalidateQueries(ApiService.projectList);
 
 			if (variables.folderId) {
-				await client.refetchQueries(ApiService.folderFiles(variables.folderId));
+				await client.invalidateQueries(ApiService.folderFiles(variables.folderId));
+			}
+
+			if (variables.taskId) {
+				await client.invalidateQueries(ApiService.taskDetails(variables.taskId));
 			}
 
 			return response.data;

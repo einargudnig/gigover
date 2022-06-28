@@ -59,11 +59,12 @@ interface TaskModalProps {
 }
 
 export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
+	// Get QueryClient from the context
+	const queryClient = useQueryClient();
+
 	const closeModal = useCloseModal();
 	const [taskTitle, setTaskTitle] = useState(task.subject);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
-	// Get QueryClient from the context
-	const queryClient = useQueryClient();
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
 
@@ -189,6 +190,8 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 											key={taskCommentId}
 											author={taskComment.fullName}
 											comment={taskComment.comment}
+											images={projectTask?.images ?? []}
+											imageId={taskComment.imageId}
 											date={new Date(taskComment.sent)}
 										/>
 									))

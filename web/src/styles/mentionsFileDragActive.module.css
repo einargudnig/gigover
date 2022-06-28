@@ -26,7 +26,7 @@
 }
 
 .mentions--multiLine .mentions__input {
-    border: 1px solid var(--chakra-colors-border);
+    border: 1px solid var(--chakra-colors-green-500);
     border-radius: 8px;
     padding: 9px;
     outline: 0;
@@ -54,12 +54,4 @@
     color: #fae44d;
     pointer-events: none;
     display: inline-block;
-}
-
-.isUploading {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    color: #000;
-    font-size: 14px;
 }

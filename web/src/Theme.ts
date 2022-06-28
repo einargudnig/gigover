@@ -47,7 +47,8 @@ export const ChakraThemeColors = {
 		300: '#fced86',
 		200: '#fcf099',
 		100: '#fdf2ac'
-	}
+	},
+	border: '#e0e5f2'
 };
 
 export const Theme = {
@@ -60,7 +61,7 @@ export const Theme = {
 		darkBlue: '#071029',
 		darkLightBlue: '#A0ADCD',
 		blueBackground: '#f4f7fc',
-		border: '#e0e5f2',
+		border: ChakraThemeColors.border,
 		grayBackground: '#F8F8F8',
 		red: '#DE2727',
 		taskBorder: '#E9E9EF',

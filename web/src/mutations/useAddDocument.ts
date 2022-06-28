@@ -13,22 +13,28 @@ export interface DocumentInput
 export const useAddDocument = () => {
 	const client = useQueryClient();
 
-	return useMutation<ProjectImage, AxiosError, DocumentInput>(async (variables) => {
-		try {
-			const response = await axios.post<ProjectImage>(ApiService.addImage, variables, {
-				withCredentials: true
-			});
+	return useMutation<{ projectImage: ProjectImage }, AxiosError, DocumentInput>(
+		async (variables) => {
+			try {
+				const response = await axios.post<{ projectImage: ProjectImage }>(
+					ApiService.addImage,
+					variables,
+					{
+						withCredentials: true
+					}
+				);
 
-			await client.refetchQueries(ApiService.projectList);
+				await client.refetchQueries(ApiService.projectList);
 
-			if (variables.folderId) {
-				await client.refetchQueries(ApiService.folderFiles(variables.folderId));
+				if (variables.folderId) {
+					await client.refetchQueries(ApiService.folderFiles(variables.folderId));
+				}
+
+				return response.data;
+			} catch (e) {
+				devError(e);
+				throw new Error('Could not upload image');
 			}
-
-			return response.data;
-		} catch (e) {
-			devError(e);
-			throw new Error('Could not upload image');
 		}
-	});
+	);
 };
