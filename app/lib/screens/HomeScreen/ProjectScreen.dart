@@ -99,7 +99,7 @@ class ProjectScreenState extends State<ProjectScreen> {
 
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(top: 2.0),
+        padding: const EdgeInsets.only(top: 2.0, bottom: 50),
         child: DefaultTabController(
           length: tabs.length,
           child: Scaffold(

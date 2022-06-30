@@ -1,3 +1,4 @@
+import 'package:mittverk/models/ProjectImage.dart';
 import 'package:mittverk/models/TaskWorkers.dart';
 
 import 'TaskComment.dart';
@@ -10,6 +11,7 @@ class Task {
   int? typeId;
   List<TaskComment>? comments = [];
   List<TaskWorker>? workers = [];
+  List<ProjectImage>? images = [];
   TaskStatus? status;
   int? projectId;
   int? minutes;
@@ -24,6 +26,7 @@ class Task {
     this.projectId,
     this.minutes,
     this.workers,
+    this.images,
   });
 
   String getTitle() {
@@ -45,6 +48,11 @@ class Task {
             : TaskStatus.Archived,
         typeId: json["typeId"],
         minutes: json["minutes"],
+        images: json["images"] != null && json["images"].length > 0
+            ? json["images"].map<ProjectImage>((t) {
+          return ProjectImage.fromJson(t);
+        }).toList()
+            : [],
         comments: json["comments"] != null && json["comments"].length > 0
             ? json["comments"].map<TaskComment>((t) {
                 return TaskComment.fromJson(t);

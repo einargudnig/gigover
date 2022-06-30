@@ -18,10 +18,9 @@ class ApiService {
   }
 
   /// Start a timer
-  static Future<Response> workStart(
-      int? projectId, int? taskId, int workType) async {
-    return await dio.post(apiPrefix + '/work/start',
-        data: {'projectId': projectId, 'workType': taskId, 'taskId': taskId});
+  static Future<Response> workStart(int? projectId, int? taskId, int workType) async {
+    return await dio
+        .post(apiPrefix + '/work/start', data: {'projectId': projectId, 'workType': taskId, 'taskId': taskId});
   }
 
   /// Stop a timer
@@ -65,6 +64,28 @@ class ApiService {
     return await dio.get(apiPrefix + '/workers/task/' + taskId.toString());
   }
 
+  /// Add Document (File upload)
+  static Future<Response> addDocument({
+    required int folderId,
+    required int projectId,
+    required int taskId,
+    required String name,
+    required String url,
+    required int bytes,
+    // required int status,
+    int type = 0, // Type IMAGE
+  }) async {
+    return await dio.post(apiPrefix + '/workers/addDocument', data: {
+      'folderId': folderId,
+      'projectId': projectId,
+      'taskId': taskId,
+      'name': name,
+      'url': url,
+      'bytes': bytes,
+      // status,
+    });
+  }
+
   /// Get project types, these are used on tasks
   static Future<Response> getProjectTypes() async {
     return await dio.get(apiPrefix + '/workers/types');
@@ -100,14 +121,14 @@ class ApiService {
     int? projectId,
     int? taskId, {
     bool isContractor = false,
+    int? imageId,
   }) async {
-    return await dio.post(
-        apiPrefix + '/${!isContractor ? 'workers' : 'contractor'}/comment',
-        data: {
-          'projectId': projectId,
-          'taskId': taskId,
-          'comment': comment,
-        });
+    return await dio.post(apiPrefix + '/${!isContractor ? 'workers' : 'contractor'}/comment', data: {
+      'imageId': imageId,
+      'projectId': projectId,
+      'taskId': taskId,
+      'comment': comment,
+    });
   }
 
   static storePushToken(String token) async {

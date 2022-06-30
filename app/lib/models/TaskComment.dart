@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 class TaskComment {
   int? projectId;
   int? taskId;
+  int? imageId;
   String? comment;
   String? fullName;
 
@@ -16,6 +17,7 @@ class TaskComment {
   TaskComment({
     this.projectId,
     this.taskId,
+    this.imageId,
     this.comment,
     this.fullName,
     this.sent,
@@ -53,8 +55,11 @@ class TaskComment {
 
   static TaskComment fromJson(Map<String, dynamic> json) {
     try {
+      json.putIfAbsent('imageId', () => 0);
+
       return TaskComment(
         taskId: json["taskId"],
+        imageId: json["imageId"],
         projectId: json["projectId"],
         comment: json["comment"],
         fullName: json["fullName"],

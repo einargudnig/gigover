@@ -1,11 +1,19 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mentions/flutter_mentions.dart';
 import 'package:mittverk/igital/utils/AvailableFonts.dart';
 import 'package:mittverk/igital/widgets/IgitalDropdownButton.dart';
 import 'package:mittverk/igital/widgets/RoundedButton.dart';
+import 'package:mittverk/igital/widgets/ScaleTap.dart';
 import 'package:mittverk/igital/widgets/Spacing.dart';
-import 'package:mittverk/models/Task.dart';
+import 'package:mittverk/models/ProjectImage.dart';
+import 'package:mittverk/models/Task.dart' as ProjectTask;
 import 'package:mittverk/models/TaskComment.dart';
 import 'package:mittverk/models/TaskStatus.dart';
 import 'package:mittverk/providers/ProjectProvider.dart';
@@ -18,21 +26,22 @@ import 'package:mittverk/widgets/ScreenLayout.dart';
 import 'package:mittverk/igital/extensions/num_extensions.dart';
 import 'package:provider/provider.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../main.dart';
 
 class TaskDetailsArguments {
-  Task? task;
+  ProjectTask.Task? task;
 
   TaskDetailsArguments(this.task);
 }
 
 class TaskDetailsView extends StatefulWidget {
-  Task? task;
+  ProjectTask.Task? task;
 
   TaskDetailsView(BuildContext context) {
-    final TaskDetailsArguments args =
-        ModalRoute.of(context)!.settings.arguments as TaskDetailsArguments;
+    final TaskDetailsArguments args = ModalRoute.of(context)!.settings.arguments as TaskDetailsArguments;
     this.task = args.task;
   }
 
@@ -45,18 +54,18 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
   // TextEditingController commentInputController = TextEditingController();
   String _commentText = '';
-  Task? _task;
+  ProjectTask.Task? _task;
+
+  late double _progress = 0;
+  late bool _isUploading = false;
+  late int? _imageId;
 
   late RichTextController _controller;
 
   final FocusNode commentFocus = FocusNode();
-  final GlobalKey<FlutterMentionsState> commentKey =
-      GlobalKey<FlutterMentionsState>();
+  final GlobalKey<FlutterMentionsState> commentKey = GlobalKey<FlutterMentionsState>();
 
-  Map<RegExp, TextStyle> patternUser = {
-    RegExp(userRegex):
-        TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)
-  };
+  Map<RegExp, TextStyle> patternUser = {RegExp(userRegex): TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)};
 
   @override
   void initState() {
@@ -91,12 +100,12 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
         if (response.data != null && response.data["projectTask"] != null) {
           dynamic projectTask = response.data["projectTask"];
 
-          print('TaskDetailsScreen.getTaskDetail().workers');
-          print(response.data["projectTask"]["workers"]);
+          print(response.data["projectTask"]["images"]);
 
-          Task? tempTasks = Task.fromJson(projectTask);
+          ProjectTask.Task? tempTask = ProjectTask.Task.fromJson(projectTask);
+
           setState(() {
-            _task = tempTasks;
+            _task = tempTask;
           });
         } else {
           print('nopthing available');
@@ -207,20 +216,32 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
     );
   }
 
-  Widget comment(TaskComment comment) {
+  ProjectImage? findProjectImage(List<ProjectImage> images, int? imageId) {
+    if (images.isNotEmpty && imageId != null) {
+      for (ProjectImage img in images) {
+        if (img.imageId == imageId) {
+          return img;
+        }
+      }
+    }
+    return null;
+  }
+
+  Widget comment(TaskComment comment, ProjectTask.Task task) {
+    ProjectImage? image = findProjectImage(task.images ?? [], comment.imageId);
+
     return Container(
         child: Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(comment.fullName!,
                   style: AvailableFonts.getTextStyle(context,
-                      color: MVTheme.mainFont,
-                      fontSize: 14.scale as double,
-                      weight: FontWeight.bold)),
+                      color: MVTheme.mainFont, fontSize: 14.scale as double, weight: FontWeight.bold)),
               Text(comment.formattedDate,
                   style: AvailableFonts.getTextStyle(
                     context,
@@ -229,6 +250,16 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                   ))
             ],
           ),
+          image != null ? Spacing(isVertical: true) : Container(),
+          image != null
+              ? ScaleTap(
+                  onTap: () async {
+                    if (await canLaunch(image.url ?? '')) {
+                      await launch(image.url ?? '');
+                    }
+                  },
+                  child: Image.network(image.url ?? '', width: 120, height: 120, fit: BoxFit.contain))
+              : Container(),
           Spacing(isVertical: true),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -260,7 +291,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
-              return comment(this._task!.comments![index]);
+              return comment(this._task!.comments![index], this._task!);
             }),
       ),
     );
@@ -271,8 +302,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
 
     String currentText = "";
 
-    if (commentKey.currentState != null &&
-        commentKey.currentState!.controller != null) {
+    if (commentKey.currentState != null && commentKey.currentState!.controller != null) {
       currentText = commentKey.currentState!.controller!.markupText;
     }
 
@@ -284,13 +314,130 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
       print("Sending comment: $currentText");
 
       // TODO Error component
-      await ApiService.addComment(currentText, _task!.projectId, _task!.taskId);
+      await ApiService.addComment(currentText, _task!.projectId, _task!.taskId, imageId: _imageId);
       await this.getTaskDetail();
 
       commentKey.currentState!.controller!.clear();
       setState(() {
         addCommentLoading = false;
       });
+    }
+  }
+
+  String getFileExtension(String fileName) {
+    try {
+      if (fileName.contains('.')) {
+        return "." + fileName.split('.').last;
+      }
+      return "";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  void completedUpload(String fileName, TaskSnapshot taskSnapshot) async {
+    String url = await taskSnapshot.ref.getDownloadURL();
+    print("DOWNLOAD URL $url");
+
+    Response response = await ApiService.addDocument(
+      folderId: 0,
+      projectId: _task!.projectId!,
+      taskId: _task!.taskId!,
+      name: fileName,
+      url: url,
+      bytes: taskSnapshot.totalBytes,
+    );
+
+    print("addDocument responseCode: ${response.statusCode}");
+    print(response.data);
+
+    if (response.statusCode == 200) {
+      if (response.data['projectImage'] != null && response.data['projectImage']['imageId'] != null) {
+        setState(() {
+          try {
+            _imageId = response.data['projectImage']['imageId'] as int;
+            print("IMAGE ID SET TO $_imageId");
+          } catch (e) {
+            print(e);
+          }
+        });
+      }
+    }
+  }
+
+  pickImageAndUpload() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      print("Result is not null.");
+      File file = File(result.files.single.path!);
+
+      try {
+        int? projectId = _task!.projectId;
+
+        if (projectId != null) {
+          final storageRef = FirebaseStorage.instance.refFromURL("gs://gigover-fileystem");
+
+          print('Uploading to ${projectId}');
+
+          var uuid = Uuid();
+          String filePath = "${projectId}/${uuid.v4()}${getFileExtension(file.path)}";
+
+          print("FilePath: $filePath");
+
+          final bucketRef = storageRef.child(filePath);
+
+          UploadTask uploadTask = bucketRef.putFile(file);
+
+          // Listen for state changes, errors, and completion of the upload.
+          uploadTask.snapshotEvents.listen((TaskSnapshot taskSnapshot) {
+            switch (taskSnapshot.state) {
+              case TaskState.running:
+                final progress = 100.0 * (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes);
+
+                setState(() {
+                  _progress = max(90, progress);
+                  _isUploading = true;
+                });
+
+                print("Upload is $progress% complete.");
+                break;
+              case TaskState.paused:
+                print("Upload is paused.");
+                break;
+              case TaskState.canceled:
+                print("Upload was canceled");
+                setState(() {
+                  _isUploading = false;
+                });
+                break;
+              case TaskState.error:
+                // Handle unsuccessful uploads
+                setState(() {
+                  _isUploading = false;
+                });
+                break;
+              case TaskState.success:
+                {
+                  // Handle successful uploads on complete
+                  setState(() {
+                    _isUploading = false;
+                    _progress = 90;
+                  });
+
+                  completedUpload(file.path, taskSnapshot);
+                }
+                // ...
+                break;
+            }
+          });
+        }
+      } on FirebaseException catch (e) {
+        // ...
+        print(e);
+      }
     }
   }
 
@@ -324,11 +471,9 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                   _task = _task;
                 });
 
-                ProjectProvider projectProvider =
-                    Provider.of<ProjectProvider>(context, listen: true);
+                ProjectProvider projectProvider = Provider.of<ProjectProvider>(context, listen: true);
                 projectProvider.updateTask(_task);
-                await ApiService.setProjectTaskStatus(
-                    this._task!.taskId, newStatus);
+                await ApiService.setProjectTaskStatus(this._task!.taskId, newStatus);
               },
             )),
             commentHeader(),
@@ -373,14 +518,11 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                               border: OutlineInputBorder(),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
                                 borderSide: BorderSide(
                                   color: Colors.white,
                                 ),
@@ -389,9 +531,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                             mentions: [
                               Mention(
                                 trigger: "@",
-                                style: TextStyle(
-                                    backgroundColor: Colors.black,
-                                    color: Colors.yellow),
+                                style: TextStyle(backgroundColor: Colors.black, color: Colors.yellow),
                                 suggestionBuilder: (data) {
                                   return Container(
                                     decoration: BoxDecoration(
@@ -411,14 +551,8 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                                     ),
                                   );
                                 },
-                                markupBuilder: (String trigger, String mention,
-                                    String value) {
-                                  return trigger +
-                                      "[" +
-                                      value +
-                                      "](" +
-                                      mention +
-                                      ")";
+                                markupBuilder: (String trigger, String mention, String value) {
+                                  return trigger + "[" + value + "](" + mention + ")";
                                 },
                                 data: _task != null && _task!.workers != null
                                     ? _task!.workers!.map((worker) {
@@ -443,17 +577,33 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                             SafeArea(
                               bottom: true,
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: RoundedButton(
-                                  loading: addCommentLoading,
-                                  fillBackground: MVTheme.mainGreen,
-                                  padding: EdgeInsets.only(
-                                      right: 12.0, left: 12, top: 8, bottom: 8),
-                                  textColor: MVTheme.primaryColor,
-                                  onTap: () {
-                                    addComment();
-                                  },
-                                  text: 'Add comment',
+                                padding: const EdgeInsets.only(
+                                  right: 8.0,
+                                  bottom: 8.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    RoundedButton(
+                                      loading: _isUploading,
+                                      fillBackground: Colors.black,
+                                      padding: EdgeInsets.only(right: 12.0, left: 12, top: 8, bottom: 8),
+                                      text: 'Image',
+                                      onTap: () async {
+                                        pickImageAndUpload();
+                                      },
+                                    ),
+                                    SizedBox(width: 8.0),
+                                    RoundedButton(
+                                      loading: addCommentLoading,
+                                      fillBackground: MVTheme.mainGreen,
+                                      padding: EdgeInsets.only(right: 12.0, left: 12, top: 8, bottom: 8),
+                                      textColor: MVTheme.primaryColor,
+                                      onTap: () {
+                                        addComment();
+                                      },
+                                      text: 'Add comment',
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
