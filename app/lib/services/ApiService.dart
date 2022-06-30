@@ -82,6 +82,7 @@ class ApiService {
       'name': name,
       'url': url,
       'bytes': bytes,
+      'type': type,
       // status,
     });
   }

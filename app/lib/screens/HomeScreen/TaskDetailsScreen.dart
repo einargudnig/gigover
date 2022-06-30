@@ -56,9 +56,9 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
   String _commentText = '';
   ProjectTask.Task? _task;
 
-  late double _progress = 0;
-  late bool _isUploading = false;
-  late int? _imageId;
+  double _progress = 0;
+  bool _isUploading = false;
+  int? _imageId;
 
   late RichTextController _controller;
 
@@ -380,12 +380,9 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
         if (projectId != null) {
           final storageRef = FirebaseStorage.instance.refFromURL("gs://gigover-fileystem");
 
-          print('Uploading to ${projectId}');
-
           var uuid = Uuid();
-          String filePath = "${projectId}/${uuid.v4()}${getFileExtension(file.path)}";
-
-          print("FilePath: $filePath");
+          var fileName = "${uuid.v4()}${getFileExtension(file.path)}";
+          String filePath = "${projectId}/$fileName";
 
           final bucketRef = storageRef.child(filePath);
 
@@ -427,7 +424,7 @@ class TaskDetailsViewState extends State<TaskDetailsView> {
                     _progress = 90;
                   });
 
-                  completedUpload(file.path, taskSnapshot);
+                  completedUpload(fileName, taskSnapshot);
                 }
                 // ...
                 break;
