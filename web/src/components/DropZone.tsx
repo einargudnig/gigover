@@ -4,12 +4,11 @@ import { FilterIcon } from './icons/FilterIcon';
 import { Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
-import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import { useAddDocument } from '../mutations/useAddDocument';
 import { devError } from '../utils/ConsoleUtils';
 import { ProjectImage } from '../models/ProjectImage';
 import { useAddFolder } from '../mutations/useAddFolder';
-import { ProjectFolder } from '../models/ProjectFolder';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
