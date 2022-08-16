@@ -4,10 +4,12 @@ import { FilterIcon } from './icons/FilterIcon';
 import { Progress, Text } from '@chakra-ui/react';
 import { FileUploadType } from '../models/FileUploadType';
 import { useFileService } from '../hooks/useFileService';
-import { useDropzone } from 'react-dropzone';
+import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
 import { useAddDocument } from '../mutations/useAddDocument';
 import { devError } from '../utils/ConsoleUtils';
 import { ProjectImage } from '../models/ProjectImage';
+import { useAddFolder } from '../mutations/useAddFolder';
+import { ProjectFolder } from '../models/ProjectFolder';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
@@ -52,19 +54,52 @@ export const DropZone = ({
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
+	const folder = useAddFolder();
 	const mutate = useAddDocument();
 
+	const createFolder = async (folderName: string) => {
+		try {
+			const folderResponse = await folder.mutateAsync({
+				projectId: projectId,
+				folderId: folderId,
+				name: folderName
+			});
+
+			if (folderResponse.id) {
+				return folderResponse.id;
+			}
+
+			throw Error('Could not create');
+		} catch (e) {
+			alert(
+				'Could not create folder and upload items, please create folder manually and then upload items manually. This feature is supported by Google Chrome and not many other browsers.'
+			);
+			console.error('Folder creation', e);
+			throw e;
+		}
+	};
+
 	const onDrop = useCallback(
-		(acceptedFiles: File[]) => {
+		async (acceptedFiles: (File & { path: string })[]) => {
 			// Do something with the files
+
 			if (acceptedFiles.length > 0) {
+				let createdFolder: number | undefined;
+				const fPath = acceptedFiles[0]?.path ?? '';
+
+				if (fPath.includes('/')) {
+					setIsUploading(true);
+					const folderName = fPath.substr(1, fPath.indexOf('/', 1));
+					createdFolder = await createFolder(folderName.replace('/', ''));
+				}
+
 				acceptedFiles.forEach(async (file) => {
 					try {
 						setIsUploading(true);
 						const response = await fileService.uploadFile(
 							file,
 							projectId,
-							folderId || 0,
+							createdFolder ?? folderId ?? 0,
 							uploadType!,
 							(status: number) => {
 								setFileUploadProgress(status);
@@ -95,6 +130,7 @@ export const DropZone = ({
 
 	const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
 		multiple: true,
+		// @ts-ignore
 		onDrop
 	});
 
@@ -106,6 +142,7 @@ export const DropZone = ({
 			{...getRootProps({
 				onClick: (event) => event.stopPropagation()
 			})}
+			style={{ width: '100%' }}
 		>
 			<input {...getInputProps()} />
 

@@ -1,11 +1,13 @@
 import { EditPhotoModal } from '../../../../components/modals/EditPhotoModal';
 import React, { useEffect, useState } from 'react';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
-import { FilePdfIcon } from '../../../../components/icons/FileTypes/FilePdfIcon';
 import { GigoverFile } from '../../components/File';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProjectImage } from '../../../../models/ProjectImage';
+import { DropZone } from '../../../../components/DropZone';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { CardBase } from '../../../../components/CardBase';
 
 export const FilesUi = ({ files, title, projectId }) => {
 	const params = useParams();
@@ -67,7 +69,6 @@ export const FilesUi = ({ files, title, projectId }) => {
 			)}
 
 			<HStack spacing={4}>
-				<FilePdfIcon />
 				<Heading as={'h4'} size={'md'}>
 					{title}
 				</Heading>
@@ -79,7 +80,7 @@ export const FilesUi = ({ files, title, projectId }) => {
 				style={{ width: '100%' }}
 			>
 				{files.length > 0 ? (
-					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4}>
+					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
 						{files
 							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 							.map((p, pIndex) => (
@@ -87,12 +88,30 @@ export const FilesUi = ({ files, title, projectId }) => {
 							))}
 					</VStack>
 				) : (
-					<EmptyState
-						title={'No files yet'}
-						text={
-							'No files have been uploaded yet, you can drop files on to projects or folders to upload them.'
-						}
-					/>
+					<DropZone
+						projectId={projectId}
+						folderId={folderId ? parseInt(folderId) : undefined}
+					>
+						{({ isDragActive, isUploading }) => (
+							<CardBase
+								style={{
+									width: '100%',
+									border: isDragActive
+										? '1px solid var(--chakra-colors-green-400)'
+										: '1px solid transparent'
+								}}
+							>
+								{isUploading ? (
+									<LoadingSpinner />
+								) : (
+									<EmptyState
+										title={'No files yet'}
+										text={'Drop files here to start uploading!'}
+									/>
+								)}
+							</CardBase>
+						)}
+					</DropZone>
 				)}
 			</HStack>
 		</>

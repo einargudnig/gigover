@@ -6,6 +6,8 @@ import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { CardBase } from '../../../components/CardBase';
 import { Modal } from '../../../components/Modal';
 import { FormActions } from '../../../components/FormActions';
+import { DropZone } from '../../../components/DropZone';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 const NewFolderCard = styled(CardBase)`
 	display: flex;
@@ -96,9 +98,28 @@ export const CreateNewFolder = ({
 	folderId?: number;
 }) => {
 	return (
-		<NewFolderCard>
-			<Text>Create a new folder</Text>
-			<CreateNewFolderButton projectId={projectId} folderId={folderId} />
-		</NewFolderCard>
+		<DropZone projectId={projectId} folderId={folderId}>
+			{({ isDragActive, isUploading }) => (
+				<NewFolderCard
+					style={{
+						width: '100%',
+						border: isDragActive
+							? '1px solid var(--chakra-colors-green-400)'
+							: '1px solid transparent'
+					}}
+				>
+					{isUploading ? (
+						<LoadingSpinner />
+					) : (
+						<>
+							<Text>
+								Create a new folder or drop a folder here to start uploading
+							</Text>
+							<CreateNewFolderButton projectId={projectId} folderId={folderId} />
+						</>
+					)}
+				</NewFolderCard>
+			)}
+		</DropZone>
 	);
 };
