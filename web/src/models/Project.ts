@@ -36,4 +36,5 @@ export interface Project {
 	totalBytes: number;
 	fileCount: number;
 	owner: boolean;
+	lexoRank?: string;
 }

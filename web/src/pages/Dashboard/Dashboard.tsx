@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
-import { ProjectCard } from '../../components/ProjectCard';
 import { DashboardTabs } from './DashboardTabs';
 import { ProjectStatus } from '../../models/Project';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -9,9 +8,9 @@ import { Center } from '../../components/Center';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { ClockIcon } from '../../components/icons/ClockIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
-import { Button, IconButton, SimpleGrid, VStack } from '@chakra-ui/react';
+import { Button, IconButton, VStack } from '@chakra-ui/react';
 import { ModalContext } from '../../context/ModalContext';
-import { Theme } from '../../Theme';
+import { SortableProjectList } from '../../components/SortableProjectList';
 
 export const Dashboard = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -72,18 +71,12 @@ export const Dashboard = (): JSX.Element => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<VStack>
-					<Center>
-						{!projects || projects.length <= 0 ? (
-							<NoProjectsFound />
-						) : (
-							<SimpleGrid columns={[1, null, 3]} spacing={Theme.padding(3)}>
-								{projects.map((project) => (
-									<ProjectCard key={project.projectId} project={project} />
-								))}
-							</SimpleGrid>
-						)}
-					</Center>
+				<VStack width={'100%'} align={'stretch'}>
+					{!projects || projects.length <= 0 ? (
+						<NoProjectsFound />
+					) : (
+						<SortableProjectList list={projects} />
+					)}
 				</VStack>
 			)}
 		</Page>

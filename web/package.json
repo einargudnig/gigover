@@ -23,6 +23,7 @@
     "query-string": "^6.14.1",
     "react": "^17.0.1",
     "react-beautiful-dnd": "^13.0.0",
+    "react-beautiful-dnd-grid": "^0.1.3-alpha",
     "react-compound-timer": "^1.2.0",
     "react-countdown": "^2.3.2",
     "react-datepicker": "^3.6.0",

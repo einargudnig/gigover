@@ -9,18 +9,20 @@ import { TaskStatus } from '../models/Task';
 import { CardBaseLink } from './CardBase';
 import { ProjectTimeStatus } from './ProjectTimeStatus';
 import { ToolsIcon } from './icons/ToolsIcon';
+import { HStack } from '@chakra-ui/react';
 
 interface ProjectCardProps {
 	project: Project;
 }
 
 const ProjectCardStyled = styled(CardBaseLink)`
-	width: 440px;
+	width: 100%;
 	max-width: 100%;
-	height: 220px;
+	height: auto;
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;
+	margin-bottom: 16px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -71,8 +73,12 @@ export const ProjectCard = React.memo(({ project }: ProjectCardProps): JSX.Eleme
 		<ProjectCardStyled to={`/project/${project.projectId}`}>
 			<ProjectCardTitle>
 				<div>
-					<h3>{project.name}</h3>
-					<p>{project.description}</p>
+					<HStack>
+						<h3>{project.name}</h3>
+						<div style={{ marginTop: -16 }}>
+							{project.endDate && <ProjectTimeStatus project={project} />}
+						</div>
+					</HStack>
 				</div>
 				<ProjectCardActions>
 					<ProjectCardEdit
@@ -94,7 +100,7 @@ export const ProjectCard = React.memo(({ project }: ProjectCardProps): JSX.Eleme
 				</ProjectCardActions>
 			</ProjectCardTitle>
 			<div>
-				{project.endDate && <ProjectTimeStatus project={project} />}
+				<p style={{ marginBottom: -16, fontSize: 14 }}>{project.description}</p>
 				<ProgressBar percent={percent} secondaryProgress={progress} />
 			</div>
 		</ProjectCardStyled>
