@@ -20,6 +20,10 @@ import {
 } from '@chakra-ui/react';
 import { DatePicker } from '../forms/DatePicker';
 import { InviteUser } from '../InviteUser/InviteUser';
+import { useProjectList } from '../../queries/useProjectList';
+import { LexoRank } from 'lexorank';
+import { useQueryClient } from 'react-query';
+import { ApiService } from '../../services/ApiService';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -27,6 +31,8 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
+	const queryClient = useQueryClient();
+	const { data: projects } = useProjectList();
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
 	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>({
 		defaultValues: project,
@@ -35,14 +41,29 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
 		try {
+			let lexo = LexoRank.middle();
+
+			try {
+				const currentFirst = projects.length > 0 ? projects[0] : null;
+
+				if (currentFirst !== null && currentFirst.lexoRank) {
+					lexo = LexoRank.parse(currentFirst.lexoRank);
+				}
+			} catch (e) {
+				lexo = LexoRank.middle();
+			}
+
 			await modify({
 				projectId: project?.projectId,
 				name,
 				description,
 				startDate,
 				endDate,
+				lexoRank: lexo.genPrev().toString(),
 				status: project?.status || 'OPEN'
 			});
+
+			queryClient.refetchQueries(ApiService.projectList);
 			closeModal();
 		} catch (e) {
 			devError('Error', e);

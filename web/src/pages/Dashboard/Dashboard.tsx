@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
 import { DashboardTabs } from './DashboardTabs';
@@ -13,9 +13,9 @@ import { ModalContext } from '../../context/ModalContext';
 import { SortableProjectList } from '../../components/SortableProjectList';
 
 export const Dashboard = (): JSX.Element => {
+	const { data, isLoading, isError, error } = useProjectList();
 	const [, setModalContext] = useContext(ModalContext);
 	const [activeTab, setActiveTab] = useState(ProjectStatus.OPEN);
-	const { data, isLoading, isError, error } = useProjectList();
 
 	if (isError) {
 		return (
@@ -25,11 +25,13 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
-	const projects = data.filter(
-		(project) =>
-			project.status !== ProjectStatus.DONE &&
-			(activeTab === ProjectStatus.ALL || project.status === activeTab)
-	);
+	const projects = useMemo(() => {
+		return data.filter(
+			(project) =>
+				project.status !== ProjectStatus.DONE &&
+				(activeTab === ProjectStatus.ALL || project.status === activeTab)
+		);
+	}, [data, activeTab]);
 
 	return (
 		<Page
@@ -75,7 +77,10 @@ export const Dashboard = (): JSX.Element => {
 					{!projects || projects.length <= 0 ? (
 						<NoProjectsFound />
 					) : (
-						<SortableProjectList list={projects} />
+						<SortableProjectList
+							key={`projects_${activeTab}_${projects.length}`}
+							list={projects}
+						/>
 					)}
 				</VStack>
 			)}

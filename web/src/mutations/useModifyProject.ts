@@ -26,6 +26,7 @@ export const useModifyProject = () => {
 		{
 			onSuccess: async (data, variables) => {
 				await queryClient.invalidateQueries(ApiService.projectList);
+				await queryClient.refetchQueries(ApiService.projectList);
 
 				if (variables.projectId) {
 					await queryClient.invalidateQueries(
