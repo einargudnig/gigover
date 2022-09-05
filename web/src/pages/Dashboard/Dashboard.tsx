@@ -17,14 +17,6 @@ export const Dashboard = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const [activeTab, setActiveTab] = useState(ProjectStatus.OPEN);
 
-	if (isError) {
-		return (
-			<p>
-				Error: {error?.errorText} - Code: {error?.errorCode}
-			</p>
-		);
-	}
-
 	const projects = useMemo(() => {
 		return data.filter(
 			(project) =>
@@ -32,6 +24,14 @@ export const Dashboard = (): JSX.Element => {
 				(activeTab === ProjectStatus.ALL || project.status === activeTab)
 		);
 	}, [data, activeTab]);
+
+	if (isError) {
+		return (
+			<p>
+				Error: {error?.errorText} - Code: {error?.errorCode}
+			</p>
+		);
+	}
 
 	return (
 		<Page
