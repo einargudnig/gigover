@@ -24,6 +24,7 @@ import { useProjectList } from '../../queries/useProjectList';
 import { LexoRank } from 'lexorank';
 import { useQueryClient } from 'react-query';
 import { ApiService } from '../../services/ApiService';
+import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -41,25 +42,13 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
 		try {
-			let lexo = LexoRank.middle();
-
-			try {
-				const currentFirst = projects.length > 0 ? projects[0] : null;
-
-				if (currentFirst !== null && currentFirst.lexoRank) {
-					lexo = LexoRank.parse(currentFirst.lexoRank);
-				}
-			} catch (e) {
-				lexo = LexoRank.middle();
-			}
-
 			await modify({
 				projectId: project?.projectId,
 				name,
 				description,
 				startDate,
 				endDate,
-				lexoRank: lexo.genPrev().toString(),
+				lexoRank: GetNextLexoRank(projects, -1, 0).toString(),
 				status: project?.status || 'OPEN'
 			});
 

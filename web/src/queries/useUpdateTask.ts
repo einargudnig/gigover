@@ -5,12 +5,14 @@ import { ApiService } from '../services/ApiService';
 import axios from 'axios';
 import { Task } from '../models/Task';
 import { Project } from '../models/Project';
+import { LexoRank } from 'lexorank';
 
 export interface UpdateTaskFormData
-	extends Pick<Task, 'taskId' | 'status' | 'typeId' | 'text' | 'lexoRank' | 'subject'> {
+	extends Pick<Task, 'taskId' | 'status' | 'typeId' | 'text' | 'subject'> {
 	startDate?: number | null;
 	endDate?: number | null;
 	comment?: string;
+	lexoRank?: string;
 	priority?: number;
 	worker?: { uId?: number | string };
 }
@@ -37,7 +39,7 @@ export const useUpdateTask = (projectId: number) => {
 							subject: variables.subject,
 							typeId: variables.typeId,
 							status: variables.status,
-							lexoRank: variables.lexoRank
+							lexoRank: variables.lexoRank ?? LexoRank.middle().toString()
 						};
 
 						const newProjectDetails = {

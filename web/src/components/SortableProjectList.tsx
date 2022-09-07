@@ -5,6 +5,7 @@ import { ProjectCard } from './ProjectCard';
 import { LexoRank } from 'lexorank';
 import { projectSorter } from '../queries/useProjectList';
 import { useModifyProject } from '../mutations/useModifyProject';
+import { GetNextLexoRank } from '../utils/GetNextLexoRank';
 
 interface SortableGridProps {
 	list: Project[];
@@ -59,51 +60,8 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 				return;
 			}
 
-			const firstItem = projects[0];
-			const firstItemLexo = firstItem.lexoRank
-				? LexoRank.parse(firstItem.lexoRank)
-				: LexoRank.min();
-
-			const lastItem = projects[projects.length - 1];
-			const lastItemLexo = lastItem.lexoRank
-				? LexoRank.parse(lastItem.lexoRank)
-				: LexoRank.max();
-
-			const currentItem = projects[sourceIndex];
-			console.log(currentItem.name);
-
-			const currentLexoRank = currentItem.lexoRank
-				? LexoRank.parse(currentItem.lexoRank)
-				: LexoRank.middle();
-
-			const prevItem = projects[destinationIndex - 1];
-			const prevLexoRank =
-				prevItem && prevItem.lexoRank
-					? LexoRank.parse(prevItem.lexoRank)
-					: currentLexoRank.genPrev();
-
-			const nextItem = projects[destinationIndex + 1];
-			const nextLexoRank =
-				nextItem && nextItem.lexoRank
-					? LexoRank.parse(nextItem.lexoRank)
-					: currentLexoRank.genNext();
-
-			let lexo: LexoRank;
-
-			if (!nextItem) {
-				// Moving to the bottom
-				lexo = lastItemLexo.genNext();
-			} else if (!prevItem) {
-				// Top of the list
-				lexo = firstItemLexo.genPrev();
-			} else {
-				lexo =
-					sourceIndex > destinationIndex
-						? prevLexoRank.genNext()
-						: nextLexoRank.genPrev();
-			}
-
-			updateState(sourceIndex, destinationIndex, lexo);
+			const nextRank = GetNextLexoRank(projects, sourceIndex, destinationIndex);
+			updateState(sourceIndex, destinationIndex, nextRank);
 		},
 		[projects, updateState]
 	);

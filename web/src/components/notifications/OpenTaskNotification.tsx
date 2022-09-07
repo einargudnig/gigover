@@ -30,6 +30,7 @@ export const OpenTaskNotification = ({ notification }: OpenTaskNotificationProps
 						...data.projectTask,
 						minutes: 0,
 						priority: 1,
+						lexoRank: '',
 						projectId: data.projectTask.project.projectId
 					},
 					projectId: data.projectTask.project.projectId
