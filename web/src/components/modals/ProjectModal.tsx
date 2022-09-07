@@ -21,7 +21,6 @@ import {
 import { DatePicker } from '../forms/DatePicker';
 import { InviteUser } from '../InviteUser/InviteUser';
 import { useProjectList } from '../../queries/useProjectList';
-import { LexoRank } from 'lexorank';
 import { useQueryClient } from 'react-query';
 import { ApiService } from '../../services/ApiService';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
