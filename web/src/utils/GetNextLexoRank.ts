@@ -5,6 +5,8 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 	sourceIndex: number,
 	destinationIndex: number
 ): LexoRank => {
+	const undefinedLexoRank = LexoRank.min();
+
 	if (list.length === 0) {
 		return LexoRank.middle();
 	}
@@ -19,7 +21,7 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 
 	const destinationItem: T | undefined = list[destinationIndex];
 	const destinationItemRank = destinationItem
-		? LexoRank.parse(destinationItem.lexoRank)
+		? LexoRank.parse(destinationItem.lexoRank ?? undefinedLexoRank.toString())
 		: LexoRank.middle();
 
 	// If it is supposed to go to the top.
@@ -30,7 +32,9 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 	// Dropping to the bottom
 	if (destinationIndex === list.length - 1) {
 		const lastItem: T | undefined = list[list.length - 1];
-		const lastItemRank = lastItem ? LexoRank.parse(lastItem.lexoRank) : LexoRank.max();
+		const lastItemRank = lastItem
+			? LexoRank.parse(lastItem.lexoRank ?? undefinedLexoRank.toString())
+			: LexoRank.max();
 		return lastItemRank.genNext();
 	}
 
@@ -38,7 +42,7 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 	if (sourceIndex < destinationIndex) {
 		const nextItem: T | undefined = list[destinationIndex + 1];
 		if (nextItem) {
-			const nextItemRank = LexoRank.parse(nextItem.lexoRank ?? '');
+			const nextItemRank = LexoRank.parse(nextItem.lexoRank ?? undefinedLexoRank.toString());
 
 			if (nextItem.lexoRank === destinationItemRank.toString()) {
 				return destinationItemRank.genNext();
@@ -52,7 +56,7 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 		// Moving up
 		const prevItem: T | undefined = list[destinationIndex - 1];
 		if (prevItem) {
-			const prevItemRank = LexoRank.parse(prevItem.lexoRank ?? '');
+			const prevItemRank = LexoRank.parse(prevItem.lexoRank ?? undefinedLexoRank.toString());
 
 			if (prevItem.lexoRank === destinationItemRank.toString()) {
 				return destinationItemRank.genPrev();

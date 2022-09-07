@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { Link, useParams } from 'react-router-dom';
 import { useProjectDetails } from '../../queries/useProjectDetails';
-import { TaskStatus, TaskStatusType } from '../../models/Task';
+import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
 import { TaskColumn } from './TaskColumn';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useUpdateTask } from '../../queries/useUpdateTask';
@@ -11,7 +11,7 @@ import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorke
 import { Button } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
-import { LexoRank } from 'lexorank';
+import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -78,18 +78,20 @@ export const ProjectDetails = (): JSX.Element | null => {
 	};
 	const tasks = useMemo(() => {
 		return {
-			[TaskStatus.Backlog]: project?.tasks
-				.filter((task) => task.status === TaskStatus.Backlog)
-				.sort(taskSorter),
-			[TaskStatus.Todo]: project?.tasks
-				.filter((task) => task.status === TaskStatus.Todo)
-				.sort(taskSorter),
-			[TaskStatus.Doing]: project?.tasks
-				.filter((task) => task.status === TaskStatus.Doing)
-				.sort(taskSorter),
-			[TaskStatus.Done]: project?.tasks
-				.filter((task) => task.status === TaskStatus.Done)
-				.sort(taskSorter)
+			[TaskStatus.Backlog]:
+				project?.tasks
+					.filter((task) => task.status === TaskStatus.Backlog)
+					.sort(taskSorter) ?? [],
+			[TaskStatus.Todo]:
+				project?.tasks.filter((task) => task.status === TaskStatus.Todo).sort(taskSorter) ??
+				[],
+			[TaskStatus.Doing]:
+				project?.tasks
+					.filter((task) => task.status === TaskStatus.Doing)
+					.sort(taskSorter) ?? [],
+			[TaskStatus.Done]:
+				project?.tasks.filter((task) => task.status === TaskStatus.Done).sort(taskSorter) ??
+				[]
 		};
 	}, [project?.tasks]);
 
@@ -98,68 +100,10 @@ export const ProjectDetails = (): JSX.Element | null => {
 		const nextStatus = result.destination?.droppableId ?? 0;
 		const nextIndex = result.destination?.index ?? 0;
 
-		const nextRow = tasks[nextStatus];
+		const nextRow: Task[] = tasks[nextStatus];
+		const nextRank = GetNextLexoRank(nextRow, result.source.index ?? -1, nextIndex);
 
-		const currentItem = nextRow[nextIndex];
-		const prevItem = nextRow[nextIndex - 1];
-		const nextItem = nextRow[nextIndex + 1];
 		const taskId = parseInt(result.draggableId || '0');
-		let lexo;
-		//If it goes into a row that is empty
-
-		console.log(prevItem, 'prev');
-		console.log(nextItem, 'next');
-		console.log(currentItem, 'current');
-
-		if (!nextItem) {
-			if (currentItem) {
-				console.log('currentItem plus 1');
-				lexo = LexoRank.parse(currentItem.lexoRank).genNext();
-			} else {
-				lexo = LexoRank.middle();
-			}
-			console.log('bottom', lexo.toString());
-		} else if (!prevItem) {
-			if (currentItem) {
-				console.log('currentItem plus 1');
-				lexo = LexoRank.parse(currentItem.lexoRank).genPrev();
-			} else {
-				lexo = LexoRank.middle();
-			}
-		}
-		// Bottom of list
-		// eslint-disable-next-line no-dupe-else-if
-		else if (prevItem && !nextItem && !currentItem) {
-			lexo = prevItem.lexoRank
-				? LexoRank.parse(prevItem.lexoRank).genNext()
-				: LexoRank.middle();
-			console.log('bottom', prevItem);
-			console.log('bottom', lexo.toString());
-		}
-		//in between
-		else if (currentItem && prevItem) {
-			lexo =
-				currentItem.lexoRank && prevItem.lexoRank
-					? LexoRank.parse(prevItem.lexoRank).between(
-							LexoRank.parse(currentItem.lexoRank)
-					  )
-					: LexoRank.middle();
-			console.log('midddle', lexo.toString());
-		}
-		//Top of list
-		// eslint-disable-next-line no-dupe-else-if
-		else if (currentItem && !prevItem) {
-			console.log(currentItem, 'currentItem');
-			lexo = currentItem.lexoRank
-				? LexoRank.parse(currentItem.lexoRank).genPrev()
-				: LexoRank.middle();
-			console.log('top', lexo.toString());
-		}
-		//Empty list
-		else {
-			lexo = LexoRank.middle();
-			console.log('empty', lexo.toString());
-		}
 
 		const status: TaskStatusType = parseInt(
 			result.destination?.droppableId || '0'
@@ -177,7 +121,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 		await updateTask({
 			...task,
 			priority,
-			lexoRank: lexo.toString(),
+			lexoRank: nextRank.toString(),
 			status,
 			taskId
 		});

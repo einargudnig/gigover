@@ -9,7 +9,6 @@ import { useEventListener } from '../../hooks/useEventListener';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { devError } from '../../utils/ConsoleUtils';
 import { Button, Heading } from '@chakra-ui/react';
-import { LexoRank } from 'lexorank';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 
 interface TaskColumnProps {
@@ -33,7 +32,7 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 		try {
 			const response = await addTask({
 				...taskValues,
-				lexoRank: GetNextLexoRank(tasks, 0, 9999999).toString(),
+				lexoRank: GetNextLexoRank(tasks, -1, tasks.length - 1).toString(),
 				projectId: project.projectId,
 				status
 			});
