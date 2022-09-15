@@ -1,4 +1,4 @@
-import { IconButton, Tab, TabList, Tabs } from '@chakra-ui/react';
+import { Tab, TabList, Tabs } from '@chakra-ui/react';
 import React from 'react';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';

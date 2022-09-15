@@ -22,11 +22,13 @@ export const Dashboard = (): JSX.Element => {
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 
-	const projects = useFilterProjectsBy(activeTab, data);
+	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
 
 	useEffect(() => {
-		setCounter((v) => ++v);
-	}, [projects, activeTab]);
+		if (!isLoadingProjects) {
+			setCounter((v) => ++v);
+		}
+	}, [projects, activeTab, isLoadingProjects]);
 
 	if (isError) {
 		return (

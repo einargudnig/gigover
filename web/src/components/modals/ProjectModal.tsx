@@ -146,9 +146,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 								};
 								setProgressStatus({ id: -1, name: createdValue.label });
 							} else {
-								setProgressStatus(
-									newValue as unknown as ProgressStatus
-								);
+								setProgressStatus(newValue as unknown as ProgressStatus);
 							}
 						}}
 						getOptionLabel={(option: unknown) => (option as ProgressStatus).name}

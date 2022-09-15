@@ -2,8 +2,16 @@ import { ProgressStatus } from '../../../models/ProgressStatus';
 import { Project, ProjectStatus } from '../../../models/Project';
 import { useMemo } from 'react';
 
-export const useFilterProjectsBy = (filter: string | ProgressStatus, projects: Project[]) => {
+export const useFilterProjectsBy = (
+	filter: string | ProgressStatus,
+	projects: Project[],
+	isLoading: boolean
+) => {
 	return useMemo(() => {
+		if (isLoading) {
+			return [];
+		}
+
 		if (typeof filter === 'string') {
 			return projects.filter(
 				(project) =>
@@ -15,5 +23,5 @@ export const useFilterProjectsBy = (filter: string | ProgressStatus, projects: P
 		return projects.filter(
 			(project) => project.progressStatus === (filter as ProgressStatus).name
 		);
-	}, [filter, projects]);
+	}, [filter, projects, isLoading]);
 };
