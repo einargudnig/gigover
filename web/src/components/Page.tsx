@@ -8,6 +8,7 @@ import { SettingsIcon } from './icons/SettingsIcon';
 
 import {
 	Avatar,
+	Box,
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
@@ -95,7 +96,7 @@ const PageContent = styled.div<Pick<PageProps, 'contentPadding' | 'backgroundCol
 	${(props) =>
 		props.contentPadding &&
 		css`
-			padding: ${props.theme.padding(3)};
+			padding: ${props.theme.padding(2)};
 
 			@media screen and (max-width: 768px) {
 				padding: ${props.theme.padding(2)};
@@ -104,13 +105,16 @@ const PageContent = styled.div<Pick<PageProps, 'contentPadding' | 'backgroundCol
 `;
 
 const PageHeader = styled.header`
-	display: flex;
+	border-bottom: 1px solid ${(props) => props.theme.colors.border};
 	box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.03);
-	justify-content: space-between;
-	align-items: center;
 	padding: 12px 16px;
 	background: #fff;
-	border-bottom: 1px solid ${(props) => props.theme.colors.border};
+
+	> div:first-child {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
 	h3 {
 		user-select: none;
@@ -259,66 +263,70 @@ export const Page = ({
 						<span>Settings</span>
 					</IconLink>
 				</SidebarNav>
-				<small>v1.3</small>
+				<small>v1.4</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>
 					<div>
-						{breadcrumbs ? (
-							<Breadcrumb
-								spacing={'8px'}
-								separator={
-									<Chevron direction={'right'} color={Theme.colors.green} />
-								}
-							>
-								{breadcrumbs.map((breadcrumb, bIndex) => (
-									<BreadcrumbItem key={bIndex}>
-										<BreadcrumbLink as={Link} to={breadcrumb.url || ''}>
-											{breadcrumb.title}
-										</BreadcrumbLink>
-									</BreadcrumbItem>
-								))}
-							</Breadcrumb>
-						) : (
-							<Heading size={'md'}>{title}</Heading>
-						)}
+						<div>
+							{breadcrumbs ? (
+								<Breadcrumb
+									spacing={'8px'}
+									separator={
+										<Chevron direction={'right'} color={Theme.colors.green} />
+									}
+								>
+									{breadcrumbs.map((breadcrumb, bIndex) => (
+										<BreadcrumbItem key={bIndex}>
+											<BreadcrumbLink as={Link} to={breadcrumb.url || ''}>
+												{breadcrumb.title}
+											</BreadcrumbLink>
+										</BreadcrumbItem>
+									))}
+								</Breadcrumb>
+							) : (
+								<Heading size={'md'}>{title}</Heading>
+							)}
+						</div>
+						<HeaderActions>
+							{actions}
+							<Flex>
+								<Notifications />
+								<Menu>
+									<MenuButton ml={2}>
+										<Avatar size={'sm'} name={user.email} src={user.avatar} />
+									</MenuButton>
+									<MenuList>
+										<MenuGroup title="Profile">
+											<NavLink to={'/settings'}>
+												<MenuItem>Settings</MenuItem>
+											</NavLink>
+											<MenuItem
+												onClick={async () => {
+													await firebase.signOut();
+													await logout(undefined, undefined);
+												}}
+											>
+												Sign out
+											</MenuItem>
+										</MenuGroup>
+										<MenuDivider />
+										<MenuGroup title="Help">
+											<MenuItem>Helpdesk</MenuItem>
+											<MenuItem>FAQ</MenuItem>
+										</MenuGroup>
+									</MenuList>
+								</Menu>
+							</Flex>
+						</HeaderActions>
 					</div>
 					{tabs && (
-						<Center>
-							<div>{tabs}</div>
-						</Center>
+						<Box mt={2}>
+							<Center>
+								<div>{tabs}</div>
+							</Center>
+						</Box>
 					)}
-					<HeaderActions>
-						{actions}
-						<Flex>
-							<Notifications />
-							<Menu>
-								<MenuButton>
-									<Avatar size={'md'} name={user.email} src={user.avatar} />
-								</MenuButton>
-								<MenuList>
-									<MenuGroup title="Profile">
-										<NavLink to={'/settings'}>
-											<MenuItem>Settings</MenuItem>
-										</NavLink>
-										<MenuItem
-											onClick={async () => {
-												await firebase.signOut();
-												await logout(undefined, undefined);
-											}}
-										>
-											Sign out
-										</MenuItem>
-									</MenuGroup>
-									<MenuDivider />
-									<MenuGroup title="Help">
-										<MenuItem>Helpdesk</MenuItem>
-										<MenuItem>FAQ</MenuItem>
-									</MenuGroup>
-								</MenuList>
-							</Menu>
-						</Flex>
-					</HeaderActions>
 				</PageHeader>
 				<PageContent contentPadding={contentPadding} backgroundColor={backgroundColor}>
 					<Fade in={true} style={{ flex: 1, height: '100%' }}>

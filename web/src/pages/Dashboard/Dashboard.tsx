@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
 import { DashboardTabs } from './DashboardTabs';
@@ -11,19 +11,22 @@ import { PlusIcon } from '../../components/icons/PlusIcon';
 import { Button, IconButton, VStack } from '@chakra-ui/react';
 import { ModalContext } from '../../context/ModalContext';
 import { SortableProjectList } from '../../components/SortableProjectList';
+import { useProgressStatusList } from '../../queries/useProgressStatusList';
+import { ProgressStatus } from '../../models/ProgressStatus';
+import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 
 export const Dashboard = (): JSX.Element => {
-	const { data, isLoading, isError, error } = useProjectList();
+	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
+	const { data, isLoading: isLoadingProjects, isError, error } = useProjectList();
 	const [, setModalContext] = useContext(ModalContext);
-	const [activeTab, setActiveTab] = useState(ProjectStatus.OPEN);
+	const [counter, setCounter] = useState(0);
+	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 
-	const projects = useMemo(() => {
-		return data.filter(
-			(project) =>
-				project.status !== ProjectStatus.DONE &&
-				(activeTab === ProjectStatus.ALL || project.status === activeTab)
-		);
-	}, [data, activeTab]);
+	const projects = useFilterProjectsBy(activeTab, data);
+
+	useEffect(() => {
+		setCounter((v) => ++v);
+	}, [projects, activeTab]);
 
 	if (isError) {
 		return (
@@ -33,12 +36,14 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
+	const isLoading = isLoadingProjects || isLoadingStatuses;
+
 	return (
 		<Page
 			title={'Dashboard'}
 			tabs={
 				<DashboardTabs
-					tabs={[ProjectStatus.ALL, ProjectStatus.OPEN, ProjectStatus.CLOSED]}
+					statuses={statuses?.progressStatusList ?? []}
 					activeTab={activeTab}
 					onChange={(tab) => setActiveTab(tab)}
 				/>
@@ -78,7 +83,7 @@ export const Dashboard = (): JSX.Element => {
 						<NoProjectsFound />
 					) : (
 						<SortableProjectList
-							key={`projects_${activeTab}_${projects.length}`}
+							key={`projects_${counter}_${projects.length}`}
 							list={projects}
 						/>
 					)}

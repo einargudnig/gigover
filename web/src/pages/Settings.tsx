@@ -11,7 +11,7 @@ export const Settings = (): JSX.Element => {
 	return (
 		<Page title={'Settings'}>
 			<div>
-				<CardBase style={{ marginBottom: 24 }}>Gigover Project Manager v1.2</CardBase>
+				<CardBase style={{ marginBottom: 24 }}>Gigover Project Manager v1.4</CardBase>
 				<InputWrapper>
 					<Button onClick={() => firebase.signOut()}>Sign out</Button>
 				</InputWrapper>

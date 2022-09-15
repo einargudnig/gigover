@@ -180,10 +180,17 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									<Options
 										isMulti={true}
 										onBlur={onBlur}
-										onChange={(v: number) => onChange(v)}
+										onChange={(newValue) => {
+											const v = newValue as Task;
+											onChange(v);
+										}}
 										value={value}
-										getOptionLabel={(option: Task) => displayTaskTitle(option)}
-										getOptionValue={(option: Task) => option.taskId}
+										getOptionValue={(option: unknown) =>
+											option as Task as unknown as string
+										}
+										getOptionLabel={(option: unknown) =>
+											displayTaskTitle(option as Task)
+										}
 										options={tasks}
 									/>
 								)}

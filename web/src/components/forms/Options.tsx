@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactSelect from 'react-select';
-import { SelectComponentsProps } from 'react-select/base';
+import { StateManagerProps } from 'react-select/dist/declarations/src/stateManager';
 
-export const Options = (props: SelectComponentsProps): JSX.Element => {
-	const { isMulti, onBlur, onChange, value, options, getOptionLabel, getOptionValue } = props;
-
+export const Options = ({
+	isMulti,
+	onBlur,
+	onChange,
+	value,
+	options,
+	getOptionLabel,
+	getOptionValue,
+	...props
+}: StateManagerProps): JSX.Element => {
 	return (
 		<ReactSelect
+			{...props}
 			isMulti={isMulti}
 			onBlur={onBlur}
 			onChange={onChange}
 			value={value}
 			getOptionLabel={getOptionLabel}
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			getOptionValue={getOptionValue}
 			options={options}
 			theme={(theme) => ({
@@ -29,7 +35,6 @@ export const Options = (props: SelectComponentsProps): JSX.Element => {
 					primary: 'var(--chakra-colors-yellow-400)'
 				}
 			})}
-			{...props}
 		/>
 	);
 };

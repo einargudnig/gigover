@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Project, ProjectStatus, ProjectStatusType } from '../../models/Project';
 import { Controller, useForm } from 'react-hook-form';
 import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
@@ -24,6 +24,9 @@ import { useProjectList } from '../../queries/useProjectList';
 import { useQueryClient } from 'react-query';
 import { ApiService } from '../../services/ApiService';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
+import { useProgressStatusList } from '../../queries/useProgressStatusList';
+import { ProgressStatus } from '../../models/ProgressStatus';
+import CreatableSelect from 'react-select/creatable';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -32,7 +35,16 @@ interface ProjectModalProps {
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const queryClient = useQueryClient();
+	const { data: progressStatuses } = useProgressStatusList();
 	const { data: projects } = useProjectList();
+	const [progressStatus, setProgressStatus] = useState(
+		project?.progressStatus
+			? {
+					name: project?.progressStatus,
+					id: -1
+			  }
+			: undefined
+	);
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
 	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>({
 		defaultValues: project,
@@ -48,10 +60,12 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				startDate,
 				endDate,
 				lexoRank: GetNextLexoRank(projects, -1, 0).toString(),
-				status: project?.status || 'OPEN'
+				status: project?.status || 'OPEN',
+				progressStatus: progressStatus?.name ?? null
 			});
 
 			queryClient.refetchQueries(ApiService.projectList);
+			queryClient.refetchQueries(ApiService.getProgressStatusList);
 			closeModal();
 		} catch (e) {
 			devError('Error', e);
@@ -106,6 +120,44 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					) : (
 						<FormHelperText>Describe your project</FormHelperText>
 					)}
+				</FormControl>
+				<Box mb={6} />
+				<FormControl id={'progressStatus'}>
+					<FormLabel>Progress (optional)</FormLabel>
+					<CreatableSelect
+						theme={(theme) => ({
+							...theme,
+							borderRadius: 8,
+							colors: {
+								...theme.colors,
+								neutral20: 'var(--chakra-colors-gray-200)',
+								neutral30: 'var(--chakra-colors-gray-400)',
+								primary25: 'var(--chakra-colors-yellow-100)',
+								primary50: 'var(--chakra-colors-yellow-200)',
+								primary75: 'var(--chakra-colors-yellow-300)',
+								primary: 'var(--chakra-colors-yellow-400)'
+							}
+						})}
+						onChange={(newValue, actionMeta) => {
+							if (actionMeta.action === 'create-option') {
+								const createdValue = newValue as unknown as {
+									label: string;
+									value: string;
+								};
+								setProgressStatus({ id: -1, name: createdValue.label });
+							} else {
+								setProgressStatus(
+									newValue as unknown as ProgressStatus
+								);
+							}
+						}}
+						getOptionLabel={(option: unknown) => (option as ProgressStatus).name}
+						getOptionValue={(option: unknown) => {
+							return (option as ProgressStatus).id as unknown as string;
+						}}
+						value={progressStatus}
+						options={progressStatuses?.progressStatusList || []}
+					/>
 				</FormControl>
 				<Box mb={6} />
 				<FormControl>

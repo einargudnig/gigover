@@ -1,8 +1,8 @@
 import {
 	Box,
-	Button,
 	Flex,
 	Heading,
+	IconButton,
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
@@ -10,7 +10,7 @@ import {
 	useDisclosure
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { useNotifications, Notification as NotificationType } from '../../hooks/useNotifications';
+import { Notification as NotificationType, useNotifications } from '../../hooks/useNotifications';
 import { useReadNotification } from '../../mutations/useReadNotification';
 import { OpenTaskNotification } from './OpenTaskNotification';
 import { timeSince } from '../../utils/TimeAndDateUtils';
@@ -28,35 +28,32 @@ export const Notifications = (): JSX.Element => {
 	return (
 		<Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnBlur={true}>
 			<PopoverTrigger>
-				<Button
-					justify={'center'}
-					align={'center'}
-					height={'48px'}
-					width={'48px'}
-					bg={'transparent'}
-					mr={4}
-					borderRadius={'50%'}
-					position={'relative'}
-				>
-					<BellIcon w={6} h={6} />
-					{notifications.unread > 0 && (
-						<Flex
-							align={'center'}
-							justify={'center'}
-							bg={'red.500'}
-							borderRadius={'200px'}
-							position={'absolute'}
-							bottom={'4px'}
-							right={'4px'}
-							height={'16px'}
-							width={'16px'}
-						>
-							<Box color={'white'} fontSize={'10px'} fontWeight={'bold'}>
-								{notifications.unread}
-							</Box>
-						</Flex>
-					)}
-				</Button>
+				<IconButton
+					colorScheme={'yellow'}
+					aria-label={'Notifications'}
+					icon={
+						<>
+							{notifications.unread > 0 && (
+								<Flex
+									align={'center'}
+									justify={'center'}
+									bg={'red.500'}
+									borderRadius={'200px'}
+									position={'absolute'}
+									bottom={'-4px'}
+									right={'-4px'}
+									height={'16px'}
+									width={'16px'}
+								>
+									<Box color={'white'} fontSize={'10px'} fontWeight={'bold'}>
+										{notifications.unread}
+									</Box>
+								</Flex>
+							)}
+							<BellIcon />
+						</>
+					}
+				></IconButton>
 			</PopoverTrigger>
 			<PopoverContent width={'400px'}>
 				<Box p={6}>

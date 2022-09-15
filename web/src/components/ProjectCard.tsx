@@ -22,7 +22,7 @@ const ProjectCardStyled = styled(CardBaseLink)`
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;
-	margin-bottom: 16px;
+	margin-bottom: 8px;
 
 	h3 {
 		margin-bottom: 16px;

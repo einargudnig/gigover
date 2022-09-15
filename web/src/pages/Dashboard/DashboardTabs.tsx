@@ -1,29 +1,58 @@
-import { Tab, TabList, Tabs } from '@chakra-ui/react';
+import { IconButton, Tab, TabList, Tabs } from '@chakra-ui/react';
 import React from 'react';
+import { ProgressStatus } from '../../models/ProgressStatus';
+import { ProjectStatus } from '../../models/Project';
 
 interface DashboardTabsProps {
-	tabs: string[];
-	activeTab: string;
-	onChange: (tab: string) => void;
+	activeTab: string | ProgressStatus;
+	statuses: ProgressStatus[];
+	onChange: (tab: string | ProgressStatus) => void;
 }
 
-export const DashboardTabs = ({ tabs, activeTab, onChange }: DashboardTabsProps): JSX.Element => (
-	<Tabs
-		defaultIndex={tabs.findIndex((t) => t === activeTab)}
-		variant="soft-rounded"
-		colorScheme="green"
-	>
+export const DashboardTabs = ({
+	statuses,
+	activeTab,
+	onChange
+}: DashboardTabsProps): JSX.Element => (
+	<Tabs defaultIndex={1} variant="soft-rounded" colorScheme="green" size={'sm'}>
 		<TabList>
-			{tabs.map((tab, tabIndex) => (
+			<Tab
+				onClick={() => onChange(ProjectStatus.ALL)}
+				active={activeTab === ProjectStatus.ALL}
+				style={{ textTransform: 'capitalize' }}
+			>
+				{ProjectStatus.ALL.toLowerCase()}
+			</Tab>
+			<Tab
+				onClick={() => onChange(ProjectStatus.OPEN)}
+				active={activeTab === ProjectStatus.OPEN}
+				style={{ textTransform: 'capitalize' }}
+			>
+				{ProjectStatus.OPEN.toLowerCase()}
+			</Tab>
+			{statuses.map((s, sIdx) => (
 				<Tab
-					key={tabIndex}
-					onClick={() => onChange(tab)}
-					active={tab === activeTab}
-					style={{ textTransform: 'capitalize' }}
+					key={sIdx}
+					onClick={() => onChange(s)}
+					active={(activeTab as ProgressStatus)?.id === s.id}
 				>
-					{tab.toLowerCase()}
+					{s.name}
 				</Tab>
 			))}
+			<Tab
+				onClick={() => onChange(ProjectStatus.CLOSED)}
+				active={activeTab === ProjectStatus.CLOSED}
+				style={{ textTransform: 'capitalize' }}
+			>
+				{ProjectStatus.CLOSED.toLowerCase()}
+			</Tab>
+			{/*<IconButton*/}
+			{/*	aria-label={'Add'}*/}
+			{/*	icon={<PlusIcon />}*/}
+			{/*	variant={'outline'}*/}
+			{/*	colorScheme={'gray'}*/}
+			{/*	borderRadius={'24px'}*/}
+			{/*/>*/}
 		</TabList>
 	</Tabs>
 );

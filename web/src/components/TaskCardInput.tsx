@@ -121,12 +121,15 @@ export const TaskCardInput = ({
 							<Options
 								isMulti={false}
 								onBlur={onBlur}
-								onChange={(v: ProjectType) => {
-									ptChange(v.typeId);
+								onChange={(newValue) => {
+									const v = (newValue as ProjectType).typeId;
+									ptChange(parseInt(`${v}`));
 								}}
 								value={data?.projectTypes.find((pt) => pt.typeId === ptValue)}
-								getOptionLabel={(option: ProjectType) => option.name}
-								getOptionValue={(option: ProjectType) => option.typeId}
+								getOptionLabel={(option: unknown) => (option as ProjectType).name}
+								getOptionValue={(option: unknown) =>
+									(option as ProjectType).typeId as unknown as string
+								}
 								options={data?.projectTypes || []}
 							/>
 						)}

@@ -37,4 +37,5 @@ export interface Project {
 	fileCount: number;
 	owner: boolean;
 	lexoRank: string;
+	progressStatus?: string | null;
 }
