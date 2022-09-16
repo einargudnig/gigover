@@ -123,7 +123,10 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				</FormControl>
 				<Box mb={6} />
 				<FormControl id={'progressStatus'}>
-					<FormLabel>Progress (optional)</FormLabel>
+					<FormLabel>
+						Progress (optional) - Select or create a new one (Press enter after creating
+						a new status)
+					</FormLabel>
 					<CreatableSelect
 						theme={(theme) => ({
 							...theme,
