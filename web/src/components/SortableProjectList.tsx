@@ -25,6 +25,7 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 					startDate: project.startDate,
 					endDate: project.endDate,
 					status: project.status,
+					progressStatus: project.progressStatus,
 					lexoRank: lexoRank
 				});
 			} catch (e) {
