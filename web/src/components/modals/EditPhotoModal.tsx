@@ -78,6 +78,7 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 
 	const dots = data?.dots;
 
+	// connected to adding, deleting and updating the dots and their comments
 	const { mutateAsync: addImgageDot } = useAddImageDot();
 	const { mutateAsync: removeImageDot } = useRemoveImageDot();
 	const { mutateAsync: addImageDotComment } = useAddImageDotComment();
@@ -164,89 +165,7 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 					>
 						{/* Comment section used to be here, now moved below */}
 						{/* Removed this containing flex so that the image uses the whole with of the modal */}
-						{/* <Flex
-							width={{
-								base: '100%', // 0-48em
-								lg: '300px'
-							}}
-						>
-						<Flex direction={'column'} width={'100%'}>
-								<Heading p={2} pl={0}>
-									Notes
-								</Heading>
-								<Box mb={2} p={4} bg={'#EFEFEF'} borderRadius={6}>
-									<ImportantIcon />
-									<Text pt={4}>
-										Click the image to add notes that will be shared with your
-										co-workers
-									</Text>
-								</Box>
-
-								<Box overflow={'scroll'} maxHeight={'450px'}>
-									{dots &&
-										dots.map((s) => {
-											if (s.comments.length === 0) {
-												return null;
-											}
-											const currentComment =
-												s.comments[s.comments.length - 1];
-
-											return (
-												<>
-													<Flex
-														p={2}
-														py={2}
-														direction={'column'}
-														key={s.dotId}
-														_hover={{ background: '#ececf1' }}
-														cursor={'pointer'}
-														onClick={() => setActivePoint(s.dotId)}
-													>
-														<Flex>
-															<Text
-																pr={2}
-																fontSize={'11px'}
-																isTruncated
-															>
-																{currentComment?.userName}
-															</Text>
-															<Text fontSize={'11px'} isTruncated>
-																{formatDate(
-																	new Date(
-																		currentComment?.created ||
-																			new Date()
-																	)
-																)}
-															</Text>
-														</Flex>
-														<Text
-															color={'black'}
-															fontWeight={'400'}
-															fontSize={'11px'}
-															isTruncated
-														>
-															{currentComment.comment}
-														</Text>
-														<Flex>
-															<Text fontSize={'11px'} isTruncated>
-																{s.comments.length} comments
-															</Text>
-															{s.dotId === activePoint && (
-																<>
-																	<Spacer />
-																	<Tag size={'sm'}>Active</Tag>
-																</>
-															)}
-														</Flex>
-													</Flex>
-													<Divider />
-												</>
-											);
-										})}
-								</Box>
-							</Flex>
-						 </Flex> */}
-
+						{/* This is the "container" that holds the photo and its dots */}
 						<Flex p={2} flex={1} position={'relative'}>
 							<ImageDot
 								newComment={newComment}

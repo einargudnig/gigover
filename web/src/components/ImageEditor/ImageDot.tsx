@@ -332,11 +332,26 @@ export const ImageDot = ({
 									<Button m={4} onClick={() => setZoomAllowed(false)}>
 										Exit zoom
 									</Button>
-									<ImageCanvas
+									{/* This it the broken ZOOM */}
+									{/* <ImageCanvas
 										canvasHeight={window.innerHeight}
 										canvasWidth={window.innerWidth}
 										imageUrl={imageSrc}
-									/>
+									/> */}
+									<TransformWrapper zoomAnimation={{ size: 0.1 }}>
+										<TransformComponent
+											wrapperStyle={{ width: '100%', height: '100%' }}
+										>
+											<ChakraImage
+												ref={ref}
+												onMouseUp={addDot}
+												src={imageSrc}
+												maxHeight={'100%'}
+												maxWidth={'100%'}
+												fit={'contain'}
+											/>
+										</TransformComponent>
+									</TransformWrapper>
 								</Box>
 							) : (
 								/*	<Zoom>

@@ -124,9 +124,11 @@ export default function Canvas(props: CanvasProps) {
 	// pan when offset or scale changes
 	useLayoutEffect(() => {
 		console.log('panning');
+		console.log('pannig potato');
 		if (context && lastOffsetRef.current) {
 			const offsetDiff = scalePoint(diffPoints(offset, lastOffsetRef.current), scale);
 			context.translate(offsetDiff.x, offsetDiff.y);
+			console.log('before setting viewport top left');
 			setViewportTopLeft((prevVal) => diffPoints(prevVal, offsetDiff));
 			isResetRef.current = false;
 		}
@@ -142,8 +144,11 @@ export default function Canvas(props: CanvasProps) {
 			const storedTransform = context.getTransform();
 			// eslint-disable-next-line no-self-assign
 			// context.canvas.width = context.canvas.width;
+			console.log('before setting transform as context');
 			context.setTransform(storedTransform);
 
+			// drawing rectangle
+			// https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#drawing_rectangles
 			context.fillRect(
 				props.canvasWidth / 2 - squareSize / 2,
 				props.canvasHeight / 2 - squareSize / 2,
@@ -153,11 +158,11 @@ export default function Canvas(props: CanvasProps) {
 
 			context.drawImage(img as CanvasImageSource, 0, 0); // Or at whatever offset you like
 
-			/*			context.arc(viewportTopLeft.x, viewportTopLeft.y, 5, 0, 2 * Math.PI);
-			context.fillStyle = 'red';
-			context.fill();*/
+			// context.arc(viewportTopLeft.x, viewportTopLeft.y, 5, 0, 2 * Math.PI);
+			// context.fillStyle = 'red';
+			// context.fill();
 		}
-	}, [props.canvasWidth, props.canvasHeight, context, scale, offset, viewportTopLeft]);
+	}, [props.canvasWidth, props.canvasHeight, context, scale, offset, viewportTopLeft, img]);
 
 	// add event listener on canvas for mouse position
 	useEffect(() => {
