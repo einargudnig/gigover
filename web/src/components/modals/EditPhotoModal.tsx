@@ -10,7 +10,8 @@ import {
 	Spacer,
 	Tag,
 	Text,
-	VStack
+	VStack,
+	VisuallyHidden
 } from '@chakra-ui/react';
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { DownloadIcon } from '../icons/DownloadIcon';
@@ -34,6 +35,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDeleteDocument } from '../../mutations/useDeleteDocument';
 import { ModalContext } from '../../context/ModalContext';
 import { ShareIcon } from '../icons/ShareIcon';
+import moment from 'moment';
+import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
+// import { Project } from '../../models/Project';
+// import ScrollTo from 'react-scroll-into-view';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -69,6 +74,7 @@ export interface ICommentComment {
 export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
+	// const [project, setProject] = useState<Project | null>(null)
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		devInfo('onChangeFileName', event.target! as Element);
 	};
@@ -167,6 +173,9 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 						{/* Removed this containing flex so that the image uses the whole with of the modal */}
 						{/* This is the "container" that holds the photo and its dots */}
 						<Flex p={2} flex={1} position={'relative'}>
+							<VisuallyHidden>
+								<div id="#comments" />
+							</VisuallyHidden>
 							<ImageDot
 								newComment={newComment}
 								documentType={file.type}
@@ -204,6 +213,7 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 							</Box>
 
 							{/* List of comments */}
+							{/* I want to add a scroll snap of some sort, when I press a comment, it auto scrolls to the image.  */}
 							<Box overflow={'scroll'} maxHeight={'350px'}>
 								{dots &&
 									dots.map((s) => {
@@ -250,8 +260,10 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 														</Text>
 														{s.dotId === activePoint && (
 															<>
+																{/* <ScrollTo selector={`#dot${dotId}`}> */}
 																<Spacer />
 																<Tag size={'sm'}>Active</Tag>
+																{/* </ScrollTo> */}
 															</>
 														)}
 													</Flex>
@@ -274,7 +286,11 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 							</HStack>
 							<HStack justify={'space-between'} align={'center'}>
 								<Heading size={'md'}>Size</Heading>
-								<Text>{humanFileSize(0)}</Text>
+								<Text>{humanFileSize(file.bytes)}</Text>
+							</HStack>
+							<HStack justify={'space-between'} align={'center'}>
+								<Heading size={'md'}>Created</Heading>
+								<Text>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 							</HStack>
 							<div style={{ height: 2 }} />
 						</VStack>

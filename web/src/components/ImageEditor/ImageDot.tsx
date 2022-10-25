@@ -10,7 +10,7 @@ import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
 import 'react-medium-image-zoom/dist/styles.css';
 import useKeyPress from '../../hooks/useArrowKey';
-import ImageCanvas from './ImageCanvas';
+// import ImageCanvas from './ImageCanvas';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
 const StyledDiv = styled(Box)`
@@ -338,6 +338,9 @@ export const ImageDot = ({
 										canvasWidth={window.innerWidth}
 										imageUrl={imageSrc}
 									/> */}
+									{/* This is the working ZOOM */}
+									{/* Replaced it with the react zoom pan pinch and the chakra image */}
+									{/* Still need to work the other thing out! */}
 									<TransformWrapper zoomAnimation={{ size: 0.1 }}>
 										<TransformComponent
 											wrapperStyle={{ width: '100%', height: '100%' }}
