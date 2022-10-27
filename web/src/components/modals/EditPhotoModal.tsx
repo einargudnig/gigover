@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Modal } from '../Modal';
 import {
 	Box,
@@ -31,13 +31,15 @@ import { ProjectImage } from '../../models/ProjectImage';
 import { GigoverFileIconForType } from '../../pages/Files/components/File';
 import { devInfo } from '../../utils/ConsoleUtils';
 import { ConfirmDialog } from '../ConfirmDialog';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDeleteDocument } from '../../mutations/useDeleteDocument';
 import { ModalContext } from '../../context/ModalContext';
 import { ShareIcon } from '../icons/ShareIcon';
 import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
-// import { Project } from '../../models/Project';
+import { useProjectList } from '../../queries/useProjectList';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { Project } from '../../models/Project';
 // import ScrollTo from 'react-scroll-into-view';
 
 interface FileSidebarProps {
@@ -74,7 +76,10 @@ export interface ICommentComment {
 export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): JSX.Element => {
 	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
-	// const [project, setProject] = useState<Project | null>(null)
+	const params = useParams();
+	const [project, setProject] = useState<Project | null>(null);
+	const { data: projectData } = useProjectList();
+	const projects = useOpenProjects(projectData);
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
 		devInfo('onChangeFileName', event.target! as Element);
 	};
@@ -135,6 +140,24 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 		}
 		refetchImageDots();
 	};
+
+	// To fetch the project name
+	// Can we get it with some ather way?
+	// What about propdrilling the project?
+	useEffect(() => {
+		if (projects.length > 0 && params.projectId) {
+			const findProject = projects.find(
+				(p) => p.projectId === parseInt(params.projectId as string)
+			);
+
+			if (findProject) {
+				setProject(findProject);
+				return;
+			}
+		}
+
+		setProject(null);
+	}, [projects, params.projectId]);
 
 	return (
 		<Modal title={'Photo edit'} open={true} onClose={() => onClose()} centerModal={true}>
@@ -282,7 +305,7 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 							<div style={{ height: 20 }} />
 							<HStack justify={'space-between'} align={'center'}>
 								<Heading size={'md'}>Project</Heading>
-								<Text>Name</Text>
+								<Text>{project?.name}</Text>
 							</HStack>
 							<HStack justify={'space-between'} align={'center'}>
 								<Heading size={'md'}>Size</Heading>
