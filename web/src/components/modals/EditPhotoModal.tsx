@@ -40,7 +40,7 @@ import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
 import { useProjectList } from '../../queries/useProjectList';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { Project } from '../../models/Project';
-// import ScrollTo from 'react-scroll-into-view';
+import ScrollIntoView from 'react-scroll-into-view';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -193,12 +193,8 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 						}}
 					>
 						{/* Comment section used to be here, now moved below */}
-						{/* Removed this containing flex so that the image uses the whole with of the modal */}
-						{/* This is the "container" that holds the photo and its dots */}
 						<Flex p={2} flex={1} position={'relative'}>
-							<VisuallyHidden>
-								<div id="#comments" />
-							</VisuallyHidden>
+							<div id="image" />
 							<ImageDot
 								newComment={newComment}
 								documentType={file.type}
@@ -247,51 +243,55 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 
 										return (
 											<>
-												<Flex
-													p={2}
-													py={2}
-													direction={'column'}
-													key={s.dotId}
-													_hover={{ background: '#ececf1' }}
-													cursor={'pointer'}
-													onClick={() => setActivePoint(s.dotId)}
-												>
-													<Flex>
-														<Text pr={2} fontSize={'11px'} isTruncated>
-															{currentComment?.userName}
-														</Text>
-														<Text fontSize={'11px'} isTruncated>
-															{formatDate(
-																new Date(
-																	currentComment?.created ||
-																		new Date()
-																)
-															)}
-														</Text>
-													</Flex>
-													<Text
-														color={'black'}
-														fontWeight={'400'}
-														fontSize={'11px'}
-														isTruncated
+												<ScrollIntoView selector="#image">
+													<Flex
+														p={2}
+														py={2}
+														direction={'column'}
+														key={s.dotId}
+														_hover={{ background: '#ececf1' }}
+														cursor={'pointer'}
+														onClick={() => setActivePoint(s.dotId)}
 													>
-														{currentComment.comment}
-													</Text>
-													<Flex>
-														<Text fontSize={'11px'} isTruncated>
-															{s.comments.length} comments
+														<Flex>
+															<Text
+																pr={2}
+																fontSize={'11px'}
+																isTruncated
+															>
+																{currentComment?.userName}
+															</Text>
+															<Text fontSize={'11px'} isTruncated>
+																{formatDate(
+																	new Date(
+																		currentComment?.created ||
+																			new Date()
+																	)
+																)}
+															</Text>
+														</Flex>
+														<Text
+															color={'black'}
+															fontWeight={'400'}
+															fontSize={'11px'}
+															isTruncated
+														>
+															{currentComment.comment}
 														</Text>
-														{s.dotId === activePoint && (
-															<>
-																{/* <ScrollTo selector={`#dot${dotId}`}> */}
-																<Spacer />
-																<Tag size={'sm'}>Active</Tag>
-																{/* </ScrollTo> */}
-															</>
-														)}
+														<Flex>
+															<Text fontSize={'11px'} isTruncated>
+																{s.comments.length} comments
+															</Text>
+															{s.dotId === activePoint && (
+																<>
+																	<Spacer />
+																	<Tag size={'sm'}>Active</Tag>
+																</>
+															)}
+														</Flex>
 													</Flex>
-												</Flex>
-												<Divider />
+													<Divider />
+												</ScrollIntoView>
 											</>
 										);
 									})}
