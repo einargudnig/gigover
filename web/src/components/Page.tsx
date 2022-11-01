@@ -225,7 +225,7 @@ export const Page = ({
 						<div>
 							<ProjectIcon />
 						</div>
-						<span>Tasks</span>
+						<span>Projects</span>
 					</IconLink>
 					{/*<IconLink to={'/organize'}>*/}
 					{/*	<div>*/}
@@ -310,11 +310,11 @@ export const Page = ({
 												Sign out
 											</MenuItem>
 										</MenuGroup>
-										<MenuDivider />
+										{/* <MenuDivider />
 										<MenuGroup title="Help">
 											<MenuItem>Helpdesk</MenuItem>
 											<MenuItem>FAQ</MenuItem>
-										</MenuGroup>
+										</MenuGroup> */}
 									</MenuList>
 								</Menu>
 							</Flex>
