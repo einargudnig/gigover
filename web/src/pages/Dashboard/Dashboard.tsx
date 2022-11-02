@@ -6,7 +6,7 @@ import { ProjectStatus } from '../../models/Project';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Center } from '../../components/Center';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { ClockIcon } from '../../components/icons/ClockIcon';
+import { TimeIcon } from '../../components/icons/TimeIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { Button, IconButton, VStack } from '@chakra-ui/react';
 import { ModalContext } from '../../context/ModalContext';
@@ -14,6 +14,7 @@ import { SortableProjectList } from '../../components/SortableProjectList';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
+import { Theme } from '../../Theme';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
@@ -64,7 +65,7 @@ export const Dashboard = (): JSX.Element => {
 								}
 							});
 						}}
-						icon={<ClockIcon />}
+						icon={<TimeIcon color={Theme.colors.darkBlue} />}
 					/>
 					<Button
 						onClick={() => setModalContext({ modifyProject: { project: undefined } })}
