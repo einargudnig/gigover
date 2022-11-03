@@ -18,7 +18,7 @@ import {
 	Heading,
 	Menu,
 	MenuButton,
-	MenuDivider,
+	// MenuDivider,
 	MenuGroup,
 	MenuItem,
 	MenuList
