@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Task } from '../../../models/Task';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Button, HStack, Tag, Text, Textarea, VStack } from '@chakra-ui/react';
+import { Button, HStack, Tag, Textarea, VStack } from '@chakra-ui/react';
 
 interface StatusUpdateProps {
 	projectId: number;
@@ -15,7 +15,38 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 	const [value, setValue] = useState(task.text);
 	const [editing, setEditing] = useState(false);
 
+	// make a function that handles the change of the input
+	// it should set the value of the input to the state and also make the button visible
+
+	// const handleChange = (event?.target.value) => {
+
+	// }
+
+	// (s) => setValue(s.target.value)
+
 	return (
+		<div style={{ width: '100%' }}>
+			<VStack mb={4} spacing={4} align={'start'}>
+				<Tag>Description</Tag>
+				{isLoading ? (
+					<LoadingSpinner />
+				) : (
+					<Textarea value={value} onChange={(s) => setValue(s.target.value)} />
+				)}{' '}
+				{editing ? null : (
+					<Button
+						onClick={() => {
+							updateTask({ ...task, text: value });
+							setEditing(false);
+						}}
+						mt={2}
+					>
+						Save
+					</Button>
+				)}
+			</VStack>
+		</div>
+
 		// 	<div style={{ width: '100%' }}>
 		// 		<HStack mb={4} spacing={4} justifyContent={'space-between'}>
 		// 			<Tag>Description</Tag>
@@ -43,28 +74,5 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 		// 		)}
 		// 	</div>
 		// );
-
-		<div style={{ width: '100%' }}>
-			<VStack mb={4} spacing={4} align={'start'}>
-				<Tag>Description</Tag>
-				{isLoading ? (
-					<LoadingSpinner />
-				) : (
-					<Textarea value={value} onChange={(s) => setValue(s.target.value)} />
-				)}{' '}
-				{editing ? null : (
-					<Button
-						onClick={() => {
-							updateTask({ ...task, text: value });
-							setEditing(false);
-							setValue(value);
-						}}
-						mt={2}
-					>
-						Save
-					</Button>
-				)}
-			</VStack>
-		</div>
 	);
 };
