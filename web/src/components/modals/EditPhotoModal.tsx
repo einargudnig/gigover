@@ -10,8 +10,7 @@ import {
 	Spacer,
 	Tag,
 	Text,
-	VStack,
-	VisuallyHidden
+	VStack
 } from '@chakra-ui/react';
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { DownloadIcon } from '../icons/DownloadIcon';

@@ -10,7 +10,7 @@ import { CommentInput } from './CommentInput';
 import { Comment } from '../../Comment';
 import { StatusUpdate } from './StatusUpdate';
 import { UpdateTaskComponent } from './UpdateTaskComponent';
-import { Button, Center, HStack, Tag, VStack } from '@chakra-ui/react';
+import { Button, Center, HStack, IconButton, Tag, VStack, Text } from '@chakra-ui/react';
 import { TaskDateChanger } from './TaskDateChanger';
 import { Theme } from '../../../Theme';
 import { Edit } from '../../icons/Edit';
@@ -25,6 +25,8 @@ import { DescriptionUpdate } from './DescriptionUpdate';
 import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
 import { useProjectDetails } from '../../../queries/useProjectDetails';
 import { Project } from '../../../models/Project';
+import { TrashIcon } from '../../icons/TrashIcon';
+import { ConfirmDialog } from '../../ConfirmDialog';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -71,6 +73,8 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const { data: projectData } = useProjectDetails(projectId);
 	const project: Project | undefined = projectData && projectData.project;
 
+	const [dialogOpen, setDialogOpen] = useState(false);
+
 	return (
 		<Modal
 			open={true}
@@ -110,16 +114,43 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 						alignItems={'flex-start'}
 						style={{ width: '100%' }}
 					>
-						<div>
+						<VStack justify={'center'}>
 							<Button
 								variant={'link'}
+								marginBottom={2}
 								colorScheme={'gray'}
 								leftIcon={<Edit size={20} color={Theme.colors.darkLightBlue} />}
 								onClick={() => setEditing(true)}
 							>
 								Edit task
 							</Button>
-						</div>
+							<ConfirmDialog
+								header={'Archive task'}
+								setIsOpen={setDialogOpen}
+								callback={async (b) => {
+									if (b) {
+										await console.log('Einsi');
+									}
+									setDialogOpen(false);
+								}}
+								isOpen={dialogOpen}
+							>
+								<HStack>
+									<IconButton
+										aria-label={'Archive task'}
+										colorScheme={'red'}
+										size={'sm'}
+										icon={<TrashIcon color={'white'} />}
+										onClick={() => {
+											setDialogOpen(true);
+										}}
+									/>
+									<Text color={'black'} fontSize={'md'}>
+										Archive task
+									</Text>
+								</HStack>
+							</ConfirmDialog>
+						</VStack>
 						<div>
 							<Tag mb={4}>Project owner</Tag>
 							<User

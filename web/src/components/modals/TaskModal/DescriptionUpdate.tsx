@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Task } from '../../../models/Task';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Button, HStack, Tag, Textarea, VStack } from '@chakra-ui/react';
+import { Button, Tag, Textarea, VStack } from '@chakra-ui/react';
 
 interface StatusUpdateProps {
 	projectId: number;
@@ -13,16 +13,14 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 	const { mutateAsync: updateTask, isLoading } = useUpdateTask(projectId);
 
 	const [value, setValue] = useState(task.text);
-	const [editing, setEditing] = useState(false);
+	// const [editing, setEditing] = useState(false);
+	const [showButton, setShowButton] = useState(false);
 
-	// make a function that handles the change of the input
-	// it should set the value of the input to the state and also make the button visible
-
-	// const handleChange = (event?.target.value) => {
-
-	// }
-
-	// (s) => setValue(s.target.value)
+	// We want a function that shows the button when the user has typed something into the text area
+	const handleChange = (event) => {
+		setValue(event.target.value);
+		setShowButton(true);
+	};
 
 	return (
 		<div style={{ width: '100%' }}>
@@ -31,48 +29,20 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 				{isLoading ? (
 					<LoadingSpinner />
 				) : (
-					<Textarea value={value} onChange={(s) => setValue(s.target.value)} />
+					<Textarea value={value} onChange={handleChange} />
 				)}{' '}
-				{editing ? null : (
+				{showButton ? (
 					<Button
 						onClick={() => {
 							updateTask({ ...task, text: value });
-							setEditing(false);
+							// setEditing(false);
 						}}
 						mt={2}
 					>
 						Save
 					</Button>
-				)}
+				) : null}
 			</VStack>
 		</div>
-
-		// 	<div style={{ width: '100%' }}>
-		// 		<HStack mb={4} spacing={4} justifyContent={'space-between'}>
-		// 			<Tag>Description</Tag>
-		// 			<Button variant={'outline'} size={'sm'} onClick={() => setEditing(!editing)}>
-		// 				{editing ? 'Close' : 'Edit'}
-		// 			</Button>
-		// 			{isLoading && <LoadingSpinner />}
-		// 		</HStack>
-
-		// 		{editing ? (
-		// 			<div>
-		// 				<Textarea value={value} onChange={(s) => setValue(s.target.value)} />{' '}
-		// 				<Button
-		// 					onClick={() => {
-		// 						updateTask({ ...task, text: value });
-		// 						setEditing(false);
-		// 					}}
-		// 					mt={2}
-		// 				>
-		// 					Save
-		// 				</Button>
-		// 			</div>
-		// 		) : (
-		// 			<Text>{value}</Text>
-		// 		)}
-		// 	</div>
-		// );
 	);
 };
