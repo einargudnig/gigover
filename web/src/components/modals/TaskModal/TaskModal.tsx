@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Modal } from '../../Modal';
-import { Task } from '../../../models/Task';
+import { Task, TaskStatus } from '../../../models/Task';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useTaskDetails } from '../../../queries/useTaskDetails';
 import { User } from '../../User';
@@ -10,7 +10,7 @@ import { CommentInput } from './CommentInput';
 import { Comment } from '../../Comment';
 import { StatusUpdate } from './StatusUpdate';
 import { UpdateTaskComponent } from './UpdateTaskComponent';
-import { Button, Center, HStack, IconButton, Tag, VStack, Text } from '@chakra-ui/react';
+import { Button, Center, HStack, Tag, VStack } from '@chakra-ui/react';
 import { TaskDateChanger } from './TaskDateChanger';
 import { Theme } from '../../../Theme';
 import { Edit } from '../../icons/Edit';
@@ -27,6 +27,7 @@ import { useProjectDetails } from '../../../queries/useProjectDetails';
 import { Project } from '../../../models/Project';
 import { TrashIcon } from '../../icons/TrashIcon';
 import { ConfirmDialog } from '../../ConfirmDialog';
+import { useUpdateTask } from '../../../queries/useUpdateTask';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -69,11 +70,27 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
+	const [dialogOpen, setDialogOpen] = useState(false);
 
 	const { data: projectData } = useProjectDetails(projectId);
 	const project: Project | undefined = projectData && projectData.project;
 
-	const [dialogOpen, setDialogOpen] = useState(false);
+	const {
+		mutateAsync: updateTask
+		// isLoading: taskLoading,
+		// error: taskError
+	} = useUpdateTask(projectId);
+
+	// const archiveTask = async () => {
+	// 	await updateTask({
+	// 		...task,
+	// 		status: TaskStatus.Archived
+	// 	});
+
+	// 	setDialogOpen(false);
+	// 	// i want to close the task modal after archiving the task
+	// 	closeModal();
+	// };
 
 	return (
 		<Modal
@@ -114,7 +131,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 						alignItems={'flex-start'}
 						style={{ width: '100%' }}
 					>
-						<VStack justify={'center'}>
+						<VStack align={'start'}>
 							<Button
 								variant={'link'}
 								marginBottom={2}
@@ -129,26 +146,26 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 								setIsOpen={setDialogOpen}
 								callback={async (b) => {
 									if (b) {
-										await console.log('Einsi');
+										await updateTask({
+											...task,
+											status: TaskStatus.Archived
+										});
 									}
 									setDialogOpen(false);
+									closeModal();
 								}}
 								isOpen={dialogOpen}
 							>
-								<HStack>
-									<IconButton
-										aria-label={'Archive task'}
-										colorScheme={'red'}
-										size={'sm'}
-										icon={<TrashIcon color={'white'} />}
-										onClick={() => {
-											setDialogOpen(true);
-										}}
-									/>
-									<Text color={'black'} fontSize={'md'}>
-										Archive task
-									</Text>
-								</HStack>
+								<Button
+									variant={'link'}
+									colorScheme={'red'}
+									leftIcon={<TrashIcon size={20} color={Theme.colors.red} />}
+									onClick={() => {
+										setDialogOpen(true);
+									}}
+								>
+									Archive task
+								</Button>
 							</ConfirmDialog>
 						</VStack>
 						<div>
@@ -166,8 +183,10 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							task={task}
 							projectId={projectId}
 						/>
+						{/* TASK FILES */}
 						<div style={{ width: '100%' }}>
 							<Tag mb={4}>Task files</Tag>
+							{/* <Progress size={'sm'} isIndeterminate /> */}
 							<DropZone
 								projectId={projectId}
 								uploadType={FileUploadType.Task}

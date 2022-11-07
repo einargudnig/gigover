@@ -59,6 +59,7 @@ export const RoadmapHeader = (): JSX.Element => {
 				</Heading>
 			</Center>
 			<div>
+				{/* I want the value to hold. So I select weeks, and that is the default value. */}
 				<Menu>
 					<MenuButton as={Button} colorScheme={'gray'} rightIcon={<Chevron />}>
 						{state.type}
