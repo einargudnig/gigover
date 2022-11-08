@@ -145,7 +145,7 @@ export const DropZone = ({
 		>
 			<input {...getInputProps()} />
 			{isUploading ? (
-				<div style={{ width: '100%', textAlign: 'center', marginBottom: '4px' }}>
+				<div style={{ width: '100%', textAlign: 'center', marginBottom: '6px' }}>
 					<Text>Uploading ({fileUploadProgress}%)</Text>
 					<Progress colorScheme="green" size="sm" value={fileUploadProgress || 0} />
 				</div>
