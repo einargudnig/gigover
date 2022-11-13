@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { TaskCardInput } from '../../TaskCardInput';
-import { Task, TaskStatus } from '../../../models/Task';
+import { Task } from '../../../models/Task';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Tag, VStack, HStack, Button, Box } from '@chakra-ui/react';
+import { Tag, VStack, Box, Text, Button } from '@chakra-ui/react';
 
 interface UpdateTaskComponentProps {
 	task: Task;
@@ -21,15 +21,6 @@ export const UpdateTaskComponent = ({
 }: UpdateTaskComponentProps): JSX.Element => {
 	const { mutateAsync: updateTask, isLoading, error } = useUpdateTask(projectId);
 
-	const archiveTask = async () => {
-		await updateTask({
-			...task,
-			status: TaskStatus.Archived
-		});
-
-		onClose(true);
-	};
-
 	const submitChanges = useCallback(
 		async (newValue: Pick<Task, 'subject' | 'typeId'>) => {
 			await updateTask({
@@ -45,10 +36,10 @@ export const UpdateTaskComponent = ({
 	);
 
 	return (
-		<VStack spacing={8} alignItems={'flex-start'}>
+		<VStack spacing={4} alignItems={'flex-start'}>
 			<div style={{ width: '100%' }}>
 				<Tag mb={4}>Task details</Tag>
-				<Box p={6} borderRadius={6} borderWidth="1px">
+				<Box p={4} borderRadius={6} borderWidth="1px">
 					<TaskCardInput
 						task={task}
 						value={task.subject}
@@ -61,17 +52,17 @@ export const UpdateTaskComponent = ({
 					/>
 				</Box>
 			</div>
-			<VStack spacing={8} alignItems={'flex-start'}>
-				<Tag>Actions</Tag>
-				<HStack justifyContent={'space-between'}>
-					<Button onClick={() => onClose(false)} colorScheme={'gray'}>
-						Cancel & close
-					</Button>
-					<Button onClick={() => archiveTask()} colorScheme={'red'}>
-						Archive this task
-					</Button>
-				</HStack>
-			</VStack>
+			<div>
+				<Text>
+					You can edit the task name and type in the box above. Make sure you press save
+					after you have made the changes
+				</Text>
+			</div>
+			<div>
+				<Button onClick={() => onClose(false)} colorScheme={'gray'}>
+					Cancel & close
+				</Button>
+			</div>
 		</VStack>
 	);
 };

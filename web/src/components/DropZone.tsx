@@ -81,7 +81,7 @@ export const DropZone = ({
 	const onDrop = useCallback(
 		async (acceptedFiles: (File & { path: string })[]) => {
 			// Do something with the files
-
+			console.log(isUploading, 'ISUPLOADING');
 			if (acceptedFiles.length > 0) {
 				let createdFolder: number | undefined;
 				const fPath = acceptedFiles[0]?.path ?? '';
@@ -144,7 +144,12 @@ export const DropZone = ({
 			style={{ width: '100%' }}
 		>
 			<input {...getInputProps()} />
-
+			{isUploading ? (
+				<div style={{ width: '100%', textAlign: 'center', marginBottom: '6px' }}>
+					<Text>Uploading ({fileUploadProgress}%)</Text>
+					<Progress colorScheme="green" size="sm" value={fileUploadProgress || 0} />
+				</div>
+			) : null}
 			{children({ isDragActive, isUploading, open })}
 		</div>
 	) : (

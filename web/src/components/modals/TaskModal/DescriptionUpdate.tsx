@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Task } from '../../../models/Task';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Button, HStack, Tag, Text, Textarea } from '@chakra-ui/react';
+import { Button, Tag, Textarea, VStack } from '@chakra-ui/react';
 
 interface StatusUpdateProps {
 	projectId: number;
@@ -13,34 +13,36 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 	const { mutateAsync: updateTask, isLoading } = useUpdateTask(projectId);
 
 	const [value, setValue] = useState(task.text);
-	const [editing, setEditing] = useState(false);
+	// const [editing, setEditing] = useState(false);
+	const [showButton, setShowButton] = useState(false);
+
+	// We want a function that shows the button when the user has typed something into the text area
+	const handleChange = (event) => {
+		setValue(event.target.value);
+		setShowButton(true);
+	};
 
 	return (
 		<div style={{ width: '100%' }}>
-			<HStack mb={4} spacing={4} justifyContent={'space-between'}>
+			<VStack mb={4} spacing={4} align={'start'}>
 				<Tag>Description</Tag>
-				<Button variant={'outline'} size={'sm'} onClick={() => setEditing(!editing)}>
-					{editing ? 'Close' : 'Edit'}
-				</Button>
-				{isLoading && <LoadingSpinner />}
-			</HStack>
-
-			{editing ? (
-				<div>
-					<Textarea value={value} onChange={(s) => setValue(s.target.value)} />{' '}
+				{isLoading ? (
+					<LoadingSpinner />
+				) : (
+					<Textarea value={value} onChange={handleChange} />
+				)}{' '}
+				{showButton ? (
 					<Button
 						onClick={() => {
 							updateTask({ ...task, text: value });
-							setEditing(false);
+							// setEditing(false);
 						}}
 						mt={2}
 					>
 						Save
 					</Button>
-				</div>
-			) : (
-				<Text>{value}</Text>
-			)}
+				) : null}
+			</VStack>
 		</div>
 	);
 };

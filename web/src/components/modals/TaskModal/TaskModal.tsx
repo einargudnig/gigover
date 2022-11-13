@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Modal } from '../../Modal';
-import { Task } from '../../../models/Task';
+import { Task, TaskStatus } from '../../../models/Task';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useTaskDetails } from '../../../queries/useTaskDetails';
 import { User } from '../../User';
@@ -25,6 +25,9 @@ import { DescriptionUpdate } from './DescriptionUpdate';
 import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
 import { useProjectDetails } from '../../../queries/useProjectDetails';
 import { Project } from '../../../models/Project';
+import { TrashIcon } from '../../icons/TrashIcon';
+import { ConfirmDialog } from '../../ConfirmDialog';
+import { useUpdateTask } from '../../../queries/useUpdateTask';
 
 const TaskModalStyled = styled.div`
 	h3 {
@@ -67,9 +70,27 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
+	const [dialogOpen, setDialogOpen] = useState(false);
 
 	const { data: projectData } = useProjectDetails(projectId);
 	const project: Project | undefined = projectData && projectData.project;
+
+	const {
+		mutateAsync: updateTask
+		// isLoading: taskLoading,
+		// error: taskError
+	} = useUpdateTask(projectId);
+
+	// const archiveTask = async () => {
+	// 	await updateTask({
+	// 		...task,
+	// 		status: TaskStatus.Archived
+	// 	});
+
+	// 	setDialogOpen(false);
+	// 	// i want to close the task modal after archiving the task
+	// 	closeModal();
+	// };
 
 	return (
 		<Modal
@@ -110,16 +131,43 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 						alignItems={'flex-start'}
 						style={{ width: '100%' }}
 					>
-						<div>
+						<VStack align={'start'}>
 							<Button
 								variant={'link'}
+								marginBottom={2}
 								colorScheme={'gray'}
 								leftIcon={<Edit size={20} color={Theme.colors.darkLightBlue} />}
 								onClick={() => setEditing(true)}
 							>
 								Edit task
 							</Button>
-						</div>
+							<ConfirmDialog
+								header={'Archive task'}
+								setIsOpen={setDialogOpen}
+								callback={async (b) => {
+									if (b) {
+										await updateTask({
+											...task,
+											status: TaskStatus.Archived
+										});
+									}
+									setDialogOpen(false);
+									closeModal();
+								}}
+								isOpen={dialogOpen}
+							>
+								<Button
+									variant={'link'}
+									colorScheme={'red'}
+									leftIcon={<TrashIcon size={20} color={Theme.colors.red} />}
+									onClick={() => {
+										setDialogOpen(true);
+									}}
+								>
+									Archive task
+								</Button>
+							</ConfirmDialog>
+						</VStack>
 						<div>
 							<Tag mb={4}>Project owner</Tag>
 							<User
@@ -135,8 +183,10 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							task={task}
 							projectId={projectId}
 						/>
+						{/* TASK FILES */}
 						<div style={{ width: '100%' }}>
 							<Tag mb={4}>Task files</Tag>
+							{/* <Progress size={'sm'} isIndeterminate /> */}
 							<DropZone
 								projectId={projectId}
 								uploadType={FileUploadType.Task}
