@@ -5,6 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
+import { ProcurementIcon } from './icons/ProcurementIcon';
 
 import {
 	Avatar,
@@ -254,6 +255,12 @@ export const Page = ({
 							<TimeIcon />
 						</div>
 						<span>Time reports</span>
+					</IconLink>
+					<IconLink onClick={onLinkClick} to={'/procurement'}>
+						<div>
+							<ProcurementIcon color={Theme.colors.red} />
+						</div>
+						<span>Procurement</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
