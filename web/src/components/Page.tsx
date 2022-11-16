@@ -258,7 +258,8 @@ export const Page = ({
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/procurement'}>
 						<div>
-							<ProcurementIcon color={Theme.colors.red} />
+							{/* <ProcurementIcon color={Theme.colors.white} /> */}
+							<TimeIcon />
 						</div>
 						<span>Procurement</span>
 					</IconLink>
