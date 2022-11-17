@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Center, Flex, Heading, HStack, VStack, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 
 export const ProcurementHeader = (): JSX.Element => {
 	return (
