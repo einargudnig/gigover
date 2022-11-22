@@ -1,17 +1,17 @@
-import { HStack, VStack } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import { HStack, VStack, Button } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { Page } from '../../components/Page';
-// import { PlusIcon } from '../../components/icons/PlusIcon';
+import { PlusIcon } from '../../components/icons/PlusIcon';
 import styled from 'styled-components';
 import { Outlet, useParams } from 'react-router-dom';
 // import { ProcurementHeader } from './components/ProcurementHeader';
 import { useProjectList } from '../../queries/useProjectList';
-// import { Project } from '../../models/Project';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
-// import { CreateNewFolderButton } from '../Files/components/CreateNewFolder';
+import { Project } from '../../models/Project';
+import { CreateNewFolderButton } from '../Files/components/CreateNewFolder';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-// import { ProcurementModal } from './ProcurementModal';
-// import { devInfo } from '../../utils/ConsoleUtils';
+import { ProcurementModal } from './ProcurementModal';
+import { devInfo } from '../../utils/ConsoleUtils';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -24,8 +24,8 @@ export const Procurement = (): JSX.Element => {
 	const { data, isLoading } = useProjectList();
 	const params = useParams();
 	// const [procurement, setProcurement] = useState(null);
-	// const [upload, setUpload] = useState(false);
-	// const [project, setProject] = useState<Project | null>(null);
+	const [upload, setUpload] = useState(false);
+	const [project, setProject] = useState<Project | null>(null);
 	const projects = useOpenProjects(data);
 
 	useEffect(() => {
@@ -35,34 +35,34 @@ export const Procurement = (): JSX.Element => {
 			);
 
 			if (findProject) {
-				// setProject(findProject);
+				setProject(findProject);
 				return;
 			}
 		}
 
-		// setProject(null);
+		setProject(null);
 	}, [projects, params.projectId]);
 
 	return (
 		<>
-			{/* {upload && (
-				// <ProcurementModal
-				// 	projectId={project?.projectId || undefined}
-				// 	onClose={() => setUpload(false)}
-				// 	onComplete={(status) => {
-				// 		devInfo('status', status);
-				// 	}}
-				// />
-			)} */}
+			{upload && (
+				<ProcurementModal
+					projectId={project?.projectId || undefined}
+					onClose={() => setUpload(false)}
+					onComplete={(status) => {
+						devInfo('status', status);
+					}}
+				/>
+			)}
 			<Page
 				title={'Procurement'}
 				contentPadding={false}
 				actions={
 					<>
-						{/* {project && <CreateNewFolderButton projectId={project.projectId} />}
+						{project && <CreateNewFolderButton projectId={project.projectId} />}
 						<Button onClick={() => setUpload(true)} leftIcon={<PlusIcon />}>
 							New Procurement
-						</Button> */}
+						</Button>
 					</>
 				}
 			>
