@@ -107,4 +107,14 @@ export class ApiService {
 
 	// Progress status
 	static getProgressStatusList = API_BASE + 'contractor/progressStatus';
+
+	// Tender
+	//! TODO: add parameters where needed.
+	static addTender = API_BASE + 'tender/addTender';
+	static editTender = API_BASE + 'tender/editTender';
+	static deleteTender = API_BASE + 'tender/deleteTender';
+	static addTenderItem = API_BASE + 'tender/addTenderItem';
+	static editTenderItem = API_BASE + 'tender/editTenderItem';
+	static deleteTenderItem = API_BASE + 'tender/deleteTenderItem';
+	static publishTender = API_BASE + 'tender/publishTender';
 }
