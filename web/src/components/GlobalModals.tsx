@@ -11,6 +11,7 @@ import { ResourceModal } from './modals/ResourceModal';
 import ShareItem from '../pages/Files/components/ShareItem';
 import { UseResourceModal } from './modals/UseResourceModal';
 import { ToolsIcon } from './icons/ToolsIcon';
+import { ProcurementModal } from './modals/ProcurementModal';
 import { Theme } from '../Theme';
 
 export const GlobalModals = (): JSX.Element => {
@@ -48,6 +49,11 @@ export const GlobalModals = (): JSX.Element => {
 			{modalContext.shareItem && (
 				<Modal open={true} title={'Share options'} onClose={() => setModalContext({})}>
 					<ShareItem shareItem={modalContext.shareItem} />
+				</Modal>
+			)}
+			{modalContext.tender && (
+				<Modal open={true} title={'Procurement'} onClose={() => setModalContext({})}>
+					<ProcurementModal />
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (

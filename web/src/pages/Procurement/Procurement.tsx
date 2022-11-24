@@ -10,8 +10,7 @@ import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { Project } from '../../models/Project';
 import { CreateNewFolderButton } from '../Files/components/CreateNewFolder';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { ProcurementModal } from './ProcurementModal';
-import { devInfo } from '../../utils/ConsoleUtils';
+import { ProcurementModal } from '../../components/modals/ProcurementModal';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -45,15 +44,7 @@ export const Procurement = (): JSX.Element => {
 
 	return (
 		<>
-			{upload && (
-				<ProcurementModal
-					projectId={project?.projectId || undefined}
-					onClose={() => setUpload(false)}
-					onComplete={(status) => {
-						devInfo('status', status);
-					}}
-				/>
-			)}
+			{/* {upload && <ProcurementModal tender={tender} />} */}
 			<Page
 				title={'Procurement'}
 				contentPadding={false}
