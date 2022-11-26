@@ -12,10 +12,17 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
+// import { useProjectFolders } from '../../mutations/useProjectFolders';
 
 interface TenderModalProps {
 	tender?: Tender;
 }
+
+// interface TenderModal {
+// 	onClose: () => void;
+// 	onComplete: (status: boolean) => void;
+// 	projectId?: number;
+// }
 
 const ProcurementModalStyled = styled.div`
 	@media screen and (max-width: 500px) {
@@ -25,9 +32,10 @@ const ProcurementModalStyled = styled.div`
 
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	// const queryClient = useQueryClient();
 	const { data } = useProjectList();
+	// const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const openProjects = useOpenProjects(data);
+
 	// const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
 	const { register, handleSubmit, errors, reset, control } = useForm<TenderFormData>({
 		// defaultValues: {
