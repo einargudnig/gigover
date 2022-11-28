@@ -63,11 +63,10 @@ export interface IModalContext {
 	editPhoto?: IEditPhotoContext;
 	resources?: IResourceModalContext;
 	resourceTracker?: ResourceTrackerContext;
-	tender?: {
-		tender?: Tender;
-		projectId?: number;
-		taskId?: number;
-	};
+	// modifyTender?: {
+	// 	tender?: Tender;
+	// };
+	tender?: Tender;
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

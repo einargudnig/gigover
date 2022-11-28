@@ -30,25 +30,27 @@ const ProcurementModalStyled = styled.div`
 	}
 `;
 
-export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
+export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { data } = useProjectList();
 	// const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const openProjects = useOpenProjects(data);
 
+	const { data: tenderData } = useAddTender();
+	console.log({ tenderData }, 'TNEDER DATA MUTATTION');
+
 	// const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
 	const { register, handleSubmit, errors, reset, control } = useForm<TenderFormData>({
-		// defaultValues: {
-		// 	projectId = 977,
-		// 	taskId = 2,
-		// 	description = 'testing',
-		// 	terms = 'has to arrive by noon',
-		// 	finishDate = 167189508,
-		// 	delivery = '1',
-		// 	address = 'dufnaholar 10',
-		// 	phoneNumber = '1234567'
-		// },
-		defaultValues: tender,
+		defaultValues: {
+			// projectId = 977,
+			// taskId = 2,
+			// description = 'testing',
+			// terms = 'has to arrive by noon',
+			// finishDate = 167189508,
+			// delivery = '1',
+			// address = 'dufnaholar 10',
+			// phoneNumber = '1234567'
+		},
 		mode: 'onBlur'
 	});
 
