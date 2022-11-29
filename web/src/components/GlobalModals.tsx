@@ -57,11 +57,7 @@ export const GlobalModals = (): JSX.Element => {
 					title={!project ? 'Create new Tender' : 'Edit tender'}
 					onClose={() => setModalContext({})}
 				>
-					<ProcurementModal
-						projectId={modalContext.tender.projectId}
-						onClose={() => setModalContext({})}
-						onComplete={() => setModalContext({})}
-					/>
+					<ProcurementModal />
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (

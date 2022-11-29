@@ -8,10 +8,12 @@ import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { TrackerSelect } from '../TrackerSelect';
 import { useProjectList } from '../../queries/useProjectList';
 import { useCloseModal } from '../../hooks/useCloseModal';
-// import { useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
+import { useModifyTender, TenderFormData } from '../../mutations/useModifyTender';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 // import { useProjectFolders } from '../../mutations/useProjectFolders';
 
 interface TenderModalProps {
@@ -30,33 +32,60 @@ const ProcurementModalStyled = styled.div`
 	}
 `;
 
-export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Element => {
+export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
+	const queryClient = useQueryClient();
 	const { data } = useProjectList();
 	// const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const openProjects = useOpenProjects(data);
 
-	const { data: tenderData } = useAddTender();
-	console.log({ tenderData }, 'TNEDER DATA MUTATTION');
-
-	// const [selectedProject, setSelectedProject] = useState<number | undefined>(projectId);
-	const { register, handleSubmit, errors, reset, control } = useForm<TenderFormData>({
-		defaultValues: {
-			// projectId = 977,
-			// taskId = 2,
-			// description = 'testing',
-			// terms = 'has to arrive by noon',
-			// finishDate = 167189508,
-			// delivery = '1',
-			// address = 'dufnaholar 10',
-			// phoneNumber = '1234567'
-		},
+	const { mutateAsync: modify, isLoading, isError, error } = useModifyTender();
+	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
+		defaultValues: tender,
 		mode: 'onBlur'
 	});
 
+	const onSubmit = handleSubmit(
+		async ({
+			projectId,
+			taskId,
+			description,
+			terms,
+			finishDate,
+			delivery,
+			address,
+			phoneNumber
+		}) => {
+			console.log({ projectId, taskId, description, finishDate, terms }, 'TENDER DATA');
+			try {
+				await modify({
+					projectId,
+					taskId,
+					description,
+					terms,
+					finishDate,
+					delivery,
+					address,
+					phoneNumber
+				});
+
+				queryClient.refetchQueries(ApiService.addTender);
+				closeModal();
+			} catch (e) {
+				devError('Error', e);
+			}
+		}
+	);
+
 	return (
 		<div>
-			{/* {} */}
+			{isError && (
+				<>
+					{/* Server errors */}
+					<p>{error?.errorText}</p>
+					<small>{error?.errorCode}</small>
+				</>
+			)}
 			<Modal open={true} onClose={closeModal} title={'New Procurement'}>
 				<ProcurementModalStyled>
 					<VStack mb={-6} align={'stretch'}>
@@ -102,7 +131,7 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 								/>
 							</FormControl>
 							<Box mb={6} />
-							<FormControl>
+							<FormControl id={'description'}>
 								<FormLabel>Procurement Description</FormLabel>
 								<Input
 									name="description"
@@ -113,7 +142,7 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 								/>
 							</FormControl>
 							<Box mb={6} />
-							<FormControl>
+							<FormControl id={'terms'}>
 								<FormLabel>Terms</FormLabel>
 								<Input
 									name="terms"
@@ -122,10 +151,10 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 								/>
 							</FormControl>
 							<Box mb={6} />
-							<FormControl>
+							<FormControl id={'finishDate'}>
 								<FormLabel>Finish Date</FormLabel>
 								<Controller
-									name="endDate"
+									name="finishDate"
 									control={control}
 									// defaultValue={
 									// 	project?.endDate ? new Date(project.endDate) : null
@@ -146,7 +175,7 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 								/>
 							</FormControl>
 							<Box mb={6} />
-							<FormControl>
+							<FormControl id={'delivery'}>
 								<FormLabel>Delivery</FormLabel>
 								<Input
 									name="delivery"
@@ -155,7 +184,7 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 								/>
 							</FormControl>
 							<Box mb={6} />
-							<FormControl>
+							<FormControl id={'address'}>
 								<FormLabel>Address</FormLabel>
 								<Input
 									name="address"
@@ -164,7 +193,7 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 								/>
 							</FormControl>
 							<Box mb={6} />
-							<FormControl>
+							<FormControl id={'phoneNumber'}>
 								<FormLabel>Phone Number</FormLabel>
 								<Input
 									name="phoneNumber"
@@ -177,6 +206,7 @@ export const ProcurementModal = ({ projectId, onClose, onComplete }): JSX.Elemen
 							cancelText={'Close'}
 							onCancel={() => closeModal()}
 							submitText={'Create'}
+							onSubmit={onSubmit}
 						/>
 					</VStack>
 				</ProcurementModalStyled>

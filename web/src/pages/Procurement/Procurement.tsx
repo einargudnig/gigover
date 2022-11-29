@@ -55,15 +55,7 @@ export const Procurement = (): JSX.Element => {
 				// 		devInfo('status', status);
 				// 	}}
 				// />
-				<ProcurementModal
-					projectId={project?.projectId || undefined}
-					onClose={() => {
-						setUpload(false);
-					}}
-					onComplete={(status) => {
-						devInfo('status', status);
-					}}
-				/>
+				<ProcurementModal />
 			)}
 			<Page
 				title={'Procurement'}
