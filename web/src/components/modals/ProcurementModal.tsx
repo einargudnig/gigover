@@ -11,7 +11,7 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import { useModifyTender, TenderFormData } from '../../mutations/useModifyTender';
+import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 // import { useProjectFolders } from '../../mutations/useProjectFolders';
@@ -39,7 +39,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	// const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const openProjects = useOpenProjects(data);
 
-	const { mutateAsync: modify, isLoading, isError, error } = useModifyTender();
+	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
+
+	const { mutateAsync: modify, isLoading, isError, error } = useAddTender();
 	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
 		defaultValues: tender,
 		mode: 'onBlur'
@@ -47,8 +49,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 
 	const onSubmit = handleSubmit(
 		async ({
-			projectId,
-			taskId,
+			// projectId,
+			// taskId,
 			description,
 			terms,
 			finishDate,
@@ -56,11 +58,23 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			address,
 			phoneNumber
 		}) => {
-			console.log({ projectId, taskId, description, finishDate, terms }, 'TENDER DATA');
+			console.log(
+				{
+					// projectId,
+					// taskId,
+					description,
+					terms,
+					finishDate,
+					delivery,
+					address,
+					phoneNumber
+				},
+				'TENDER DATA'
+			);
 			try {
 				await modify({
-					projectId,
-					taskId,
+					// projectId,
+					// taskId,
 					description,
 					terms,
 					finishDate,
@@ -94,16 +108,16 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 								<Heading size={'md'}>Select a project for your procurement</Heading>
 								<TrackerSelect
 									title={'Select a project'}
-									// value={selectedProject}
+									value={selectedProject}
 									options={openProjects.map((project) => ({
 										label: project.name,
 										value: project.projectId
 									}))}
 									valueChanged={(newValue) => {
 										if (newValue === '') {
-											// setSelectedProject(undefined);
+											setSelectedProject(undefined);
 										} else {
-											// setSelectedProject((newValue as number) ?? undefined);
+											setSelectedProject((newValue as number) ?? undefined);
 										}
 									}}
 								/>
