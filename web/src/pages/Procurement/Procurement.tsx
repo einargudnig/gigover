@@ -60,27 +60,27 @@ export const Procurement = (): JSX.Element => {
 			<Page
 				title={'Procurement'}
 				breadcrumbs={[
-					{ title: 'Your procurement', url: '/procurement/' },
-					...(project
-						? [
-								{
-									title: project.name,
-									url: '/procurement/' + project.projectId
-								},
-								...(params.fileId
-									? [
-											{
-												title: '/**/File',
-												url:
-													'/procurement/' +
-													project.projectId +
-													'/procurement/' +
-													params.fileId
-											}
-									  ]
-									: [])
-						  ]
-						: [])
+					{ title: 'Your procurement', url: '/procurement/' }
+					// ...(project
+					// 	? [
+					// 			{
+					// 				title: project.name,
+					// 				url: '/procurement/' + project.projectId
+					// 			},
+					// 			...(params.fileId
+					// 				? [
+					// 						{
+					// 							title: '/**/File',
+					// 							url:
+					// 								'/procurement/' +
+					// 								project.projectId +
+					// 								'/procurement/' +
+					// 								params.fileId
+					// 						}
+					// 				  ]
+					// 				: [])
+					// 	  ]
+					// 	: [])
 				]}
 				tabs={<SearchBar files={[]} />}
 				contentPadding={false}

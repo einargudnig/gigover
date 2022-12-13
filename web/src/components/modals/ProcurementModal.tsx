@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tender } from '../../models/Tender';
 import { Box, Heading, Text, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import styled from 'styled-components';
@@ -14,6 +14,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
+import { useProjectFolders } from '../../mutations/useProjectFolders';
 // import { useProjectFolders } from '../../mutations/useProjectFolders';
 
 interface TenderModalProps {
@@ -36,8 +37,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const queryClient = useQueryClient();
 	const { data } = useProjectList();
-	// const { mutateAsync, data: projectFolders } = useProjectFolders();
 	const openProjects = useOpenProjects(data);
+	const { mutateAsync, data: projectfolders } = useProjectFolders();
 
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
 
@@ -47,10 +48,16 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		mode: 'onBlur'
 	});
 
+	useEffect(() => {
+		if (selectedProject) {
+			mutateAsync({ projectId: selectedProject }).finally(() => null);
+		}
+	}, [mutateAsync, selectedProject]);
+
 	const onSubmit = handleSubmit(
 		async ({
-			// projectId,
-			// taskId,
+			projectId,
+			taskId,
 			description,
 			terms,
 			finishDate,
@@ -60,8 +67,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		}) => {
 			console.log(
 				{
-					// projectId,
-					// taskId,
+					projectId,
+					taskId,
 					description,
 					terms,
 					finishDate,
@@ -73,8 +80,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			);
 			try {
 				await modify({
-					// projectId,
-					// taskId,
+					projectId: openProjects?.find((project) => project.projectId === projectId)
+						?.projectId,
+					taskId,
 					description,
 					terms,
 					finishDate,
