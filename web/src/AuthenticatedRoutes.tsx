@@ -44,7 +44,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'procurement'} element={<Procurement />}>
 			{/* ProcurementHome */}
 			<Route path={':projectId'} element={<ProcurementHome />} />
-			{/* <Route path={':projectId/tenderId'} element={<Tender />} /> */}
+			{/* <Route path={':projectId/:tenderId'} element={<Tender />} /> */}
 		</Route>
 
 		<Route path={'settings'} element={<Settings />} />
