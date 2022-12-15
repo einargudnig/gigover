@@ -14,6 +14,7 @@ import { FilesHome } from './pages/Files/new/FilesHome';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
+import { ProcurementFolder } from './pages/Procurement/components/ProcurementFolder';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -42,8 +43,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 		{/* This procurement route should be protected. */}
 		<Route path={'procurement'} element={<Procurement />}>
-			<Route index element={<ProcurementHome />} />
-			{/* <Route path={':projectId'} element={<ProcurementHome />} /> */}
+			<Route index element={<ProcurementFolder />} />
+			{/* <Route path={':projectId'} element={<ProcurementFolder />} /> */}
 			{/* <Route path={':projectId/:tenderId'} element={<Tender />} /> */}
 		</Route>
 

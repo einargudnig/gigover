@@ -118,13 +118,13 @@ export const ProcurementHome = () => {
 					{projectsWithTenders.map((p) => (
 						<ProcurementFolder
 							key={p.projectId}
-							projectId={p.projectId}
+							// projectId={p.projectId}
 							name={p.name}
-							description={p.description}
-							finishDate={p.finishDate}
-							startDate={p.startDate}
-							owner={p.owner}
-							status={p.status}
+							// description={p.description}
+							// finishDate={p.finishDate}
+							// startDate={p.startDate}
+							// owner={p.owner}
+							// status={p.status}
 							tenders={p.tenders}
 						/>
 					))}
