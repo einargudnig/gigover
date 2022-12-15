@@ -1,58 +1,81 @@
-import React from 'react';
-import { devError } from '../../../utils/ConsoleUtils';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
+import { FolderIcon } from '../../../components/icons/FolderIcon';
+import { colorGenerator } from '../../../hooks/colorGenerator';
+import { CardBaseLink } from '../../../components/CardBase';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Project } from '../../../models/Project';
+import { humanFileSize } from '../../../utils/FileSizeUtils';
+import { DropZone } from '../../../components/DropZone';
+import { FileUploadType } from '../../../models/FileUploadType';
+
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { useProjectFoldersQuery } from '../../../queries/useProjectFoldersQuery';
-import { CreateNewFolder } from '../../Files/components/CreateNewFolder';
-import { VStack, Spacer } from '@chakra-ui/react';
-import { SimpleGrid } from '../../../components/SimpleGrid';
 
-export const ProcurementFolder = (): JSX.Element => {
-	const params = useParams();
-	const projectId = params.projectId ? parseInt(params.projectId) : -1;
+interface FolderProps {
+	project: Project;
+	url?: string;
+}
 
-	const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
-	// ! We need a endpoint that gets all tenders with certain projectId
-	// All tenders for project x -> similar to useProjectDocuements
-	// const projectDocuments = useProjectDocuments(projectId);
+const ProcurementFolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: boolean }>`
+	${(props) =>
+		props.isDragActive &&
+		css`
+			outline: 3px solid ${props.theme.colors.green};
+		`};
 
-	if (isLoading) {
-		return <LoadingSpinner />;
-	}
+	${(props) =>
+		props.selected &&
+		css`
+			background: #000;
+			color: #fff !important;
+			box-shadow: none;
+		`};
+`;
 
-	if (isError && error) {
-		devError(error);
-		throw new Error('Error loading procurement folders, Reason: ' + error);
-	}
-
-	if (!projectId) {
-		return <div>Missing Project Id</div>;
-	}
-
+// Folder that contains the Tenders
+//! not delete
+export const ProcurementFolder = ({
+	projectId,
+	name,
+	description,
+	owner,
+	finishDate,
+	startDate,
+	status,
+	tenders
+}): JSX.Element => {
 	return (
 		<>
-			{data.length ? (
-				<CreateNewFolder projectId={projectId} />
-			) : (
-				<>
-					<VStack
-						mb={'4'}
-						alignItems={'flex-start'}
-						style={{ width: '100%' }}
-						spacing={4}
-					>
-						<SimpleGrid itemWidth={320}>
-							{/* {data?.map((folder) => (
-								<ProjectFolderComponent />
-							))} */}
-						</SimpleGrid>
+			{({ isDragActive, isUploading }) => (
+				<ProcurementFolderCard
+					// to={`/procurement/${projectId}/${url || ''}`}
+					to={'/procurement'}
+					isDragActive={isDragActive}
+				>
+					<VStack align={'stretch'} spacing={4}>
+						<HStack justify={'space-between'} align={'center'}>
+							<FolderIcon
+								size={38}
+								color={colorGenerator(`${name}/`, 150, 50).backgroundColor}
+								// color={colorGenerator(`${name}/${url}`, 150, 50).backgroundColor}
+							/>
+							{isUploading && <LoadingSpinner color={'black'} />}
+						</HStack>
+						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+							{name}
+						</Heading>
+						<HStack justify={'space-between'}>
+							<Text>{tenders.fileCount || 0} files</Text>
+						</HStack>
 					</VStack>
-					<CreateNewFolder projectId={projectId} />
-				</>
+				</ProcurementFolderCard>
 			)}
-
-			<Spacer height={4} />
-			{/* <FilesUi title={''} files={projectDocuments?.data ?? []} projectId={projectId} /> */}
 		</>
 	);
 };
+
+// Folder creation and deletion inside folders.
+// I don't think we'll need to go down one more level.
+// It would be nice, but I think it's just too much code to maintain for now!
+// See how it is on Folder.tsx for reference.
+// export const ProcurementProjectFolderComponent = () => { }

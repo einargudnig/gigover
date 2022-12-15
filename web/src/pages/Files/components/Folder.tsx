@@ -67,7 +67,7 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 							{isUploading && <LoadingSpinner color={'black'} />}
 						</HStack>
 						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
-							{project.name}
+							{project.name}AAA
 						</Heading>
 						<HStack justify={'space-between'}>
 							<Text>{project.fileCount || 0} files</Text>
