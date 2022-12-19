@@ -26,6 +26,7 @@ export const Files = (): JSX.Element => {
 	const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
 	const projects = useOpenProjects(data);
+	console.log({ projects }, 'PROJECTS WITH FILEs?');
 
 	useEffect(() => {
 		if (projects.length > 0 && params.projectId) {

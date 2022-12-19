@@ -43,7 +43,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 		{/* This procurement route should be protected. */}
 		<Route path={'procurement'} element={<Procurement />}>
-			<Route index element={<ProcurementFolder />} />
+			<Route index element={<ProcurementHome />} />
 			{/* <Route path={':projectId'} element={<ProcurementFolder />} /> */}
 			{/* <Route path={':projectId/:tenderId'} element={<Tender />} /> */}
 		</Route>

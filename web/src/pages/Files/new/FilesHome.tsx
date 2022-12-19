@@ -9,6 +9,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 export const FilesHome = () => {
 	const { data, isLoading } = useProjectList();
 	const projects = useOpenProjects(data);
+	console.log({ projects }, 'PROJECTS');
 
 	if (isLoading) {
 		return <LoadingSpinner />;

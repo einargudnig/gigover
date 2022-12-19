@@ -13,8 +13,7 @@ const projectsWithTenders = [
 		name: 'Another test project',
 		description: 'This is an upcoming test project',
 		finishDate: 1668038400000,
-		owner: true,
-		startDate: 1666224000000,
+		owner: 'Einar',
 		status: 'OPEN',
 		tenders: [
 			{
@@ -60,8 +59,7 @@ const projectsWithTenders = [
 		name: 'Another test project',
 		description: 'More test',
 		endDate: 1669420800000,
-		owner: true,
-		startDate: 1669075200000,
+		owner: 'Jona',
 		status: 'OPEN',
 		tenders: [
 			{
@@ -93,7 +91,7 @@ const projectsWithTenders = [
 ];
 
 export const ProcurementHome = () => {
-	// ! I would like to have one query that returns all of our projects,
+	// ! I would like to have one query that returns all of our tenders,
 	// but so it is tender based.
 	// Returns all projects and their tenders.
 	// const { data, isLoading } = useProjectList();
@@ -109,23 +107,17 @@ export const ProcurementHome = () => {
 	return (
 		<div>
 			<VStack alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
-				{/* <SimpleGrid itemWidth={320}>
-					{projects.map((p) => (
-						<Folder key={p.projectId} project={p} />
-					))}
-				</SimpleGrid> */}
 				<SimpleGrid itemWidth={320}>
-					{projectsWithTenders.map((p) => (
+					{projectsWithTenders.map((t) => (
 						<ProcurementFolder
-							key={p.projectId}
-							// projectId={p.projectId}
-							name={p.name}
-							// description={p.description}
-							// finishDate={p.finishDate}
-							// startDate={p.startDate}
-							// owner={p.owner}
-							// status={p.status}
-							tenders={p.tenders}
+							key={t.projectId}
+							projectId={t.projectId}
+							name={t.name}
+							description={t.description}
+							finishDate={t.finishDate}
+							owner={t.owner}
+							status={t.status}
+							tenders={t.tenders}
 						/>
 					))}
 				</SimpleGrid>

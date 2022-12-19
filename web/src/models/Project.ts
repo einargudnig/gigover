@@ -1,6 +1,7 @@
 import { Task } from './Task';
 import { TaskComment } from './TaskComment';
 import { ProjectImage } from './ProjectImage';
+import { Tender } from './Tender';
 
 export const ProjectStatus = {
 	ALL: 'ALL',
@@ -34,6 +35,7 @@ export interface Project {
 	workers: WorkerItem[];
 	images: ProjectImage[];
 	totalBytes: number;
+	tender: Tender[];
 	fileCount: number;
 	owner: boolean;
 	lexoRank: string;

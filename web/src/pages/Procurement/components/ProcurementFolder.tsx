@@ -4,17 +4,22 @@ import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import { Project } from '../../../models/Project';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
 import { DropZone } from '../../../components/DropZone';
 import { FileUploadType } from '../../../models/FileUploadType';
 
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+// import { Tender } from '../../../models/Tender';
 
-interface FolderProps {
-	project: Project;
-	url?: string;
-}
+// interface ProcurementFolderProps {
+// 	projectId: number;
+// 	name: string;
+// 	description: string;
+// 	finishDate: number;
+// 	owner: string;
+// 	status: string;
+// 	tenders: Tender;
+// }
 
 const ProcurementFolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: boolean }>`
 	${(props) =>
@@ -40,10 +45,12 @@ export const ProcurementFolder = ({
 	description,
 	owner,
 	finishDate,
-	startDate,
 	status,
 	tenders
 }): JSX.Element => {
+	console.log('TENDER', { tenders });
+	console.log(name, 'NAME');
+
 	return (
 		<>
 			{({ isDragActive, isUploading }) => (
@@ -56,7 +63,7 @@ export const ProcurementFolder = ({
 						<HStack justify={'space-between'} align={'center'}>
 							<FolderIcon
 								size={38}
-								color={colorGenerator(`${name}/`, 150, 50).backgroundColor}
+								color={colorGenerator(`${tenders.name}`, 150, 50).backgroundColor}
 								// color={colorGenerator(`${name}/${url}`, 150, 50).backgroundColor}
 							/>
 							{isUploading && <LoadingSpinner color={'black'} />}
@@ -65,7 +72,7 @@ export const ProcurementFolder = ({
 							{name}
 						</Heading>
 						<HStack justify={'space-between'}>
-							<Text>{tenders.fileCount || 0} files</Text>
+							{/* <Text>{tenders.fileCount || 0} files</Text> */}
 						</HStack>
 					</VStack>
 				</ProcurementFolderCard>
