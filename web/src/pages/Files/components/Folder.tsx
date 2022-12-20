@@ -48,6 +48,9 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: bool
 `;
 
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
+	console.log('project', { project });
+	console.log('url', { url });
+
 	return (
 		<DropZone projectId={project.projectId} uploadType={FileUploadType.Project}>
 			{({ isDragActive, isUploading }) => (
@@ -67,7 +70,7 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 							{isUploading && <LoadingSpinner color={'black'} />}
 						</HStack>
 						<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
-							{project.name}AAA
+							{project.name}
 						</Heading>
 						<HStack justify={'space-between'}>
 							<Text>{project.fileCount || 0} files</Text>

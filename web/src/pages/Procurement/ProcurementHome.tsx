@@ -56,7 +56,7 @@ const projectsWithTenders = [
 	},
 	{
 		projectId: 1439,
-		name: 'Another test project',
+		name: 'More test',
 		description: 'More test',
 		endDate: 1669420800000,
 		owner: 'Jona',
@@ -114,11 +114,28 @@ export const ProcurementHome = () => {
 							projectId={t.projectId}
 							name={t.name}
 							description={t.description}
-							finishDate={t.finishDate}
-							owner={t.owner}
-							status={t.status}
 							tenders={t.tenders}
+							// url={url}
 						/>
+						// <div key={t.projectId}>
+						// 	<div>{t.name}</div>
+						// 	<div>{t.description}</div>
+						// 	<div>
+						// 		{t.tenders.map((tender) => {
+						// 			return (
+						// 				<div key={tender.tenderId}>
+						// 					<div>{tender.name}</div>
+						// 					<div>{tender.description}</div>
+						// 					<div>{tender.terms}</div>
+						// 					<div>{tender.finishDate}</div>
+						// 					<div>{tender.delivery}</div>
+						// 					<div>{tender.address}</div>
+						// 					<div>{tender.phoneNumber}</div>
+						// 				</div>
+						// 			);
+						// 		})}
+						// 	</div>
+						// </div>
 					))}
 				</SimpleGrid>
 			</VStack>
