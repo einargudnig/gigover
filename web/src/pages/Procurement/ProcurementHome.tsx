@@ -1,7 +1,6 @@
 import React from 'react';
 import { useProjectList } from '../../queries/useProjectList';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
-import { Folder } from '../Files/components/Folder';
 import { SimpleGrid } from '../../components/SimpleGrid';
 import { VStack } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -87,6 +86,15 @@ const projectsWithTenders = [
 				phoneNumber: '1234567'
 			}
 		]
+	},
+	{
+		projectId: 1413,
+		name: 'Gigover New items',
+		description: 'More test',
+		endDate: 1669420800000,
+		owner: 'Jona',
+		status: 'OPEN',
+		tenders: []
 	}
 ];
 
@@ -115,27 +123,7 @@ export const ProcurementHome = () => {
 							name={t.name}
 							description={t.description}
 							tenders={t.tenders}
-							// url={url}
 						/>
-						// <div key={t.projectId}>
-						// 	<div>{t.name}</div>
-						// 	<div>{t.description}</div>
-						// 	<div>
-						// 		{t.tenders.map((tender) => {
-						// 			return (
-						// 				<div key={tender.tenderId}>
-						// 					<div>{tender.name}</div>
-						// 					<div>{tender.description}</div>
-						// 					<div>{tender.terms}</div>
-						// 					<div>{tender.finishDate}</div>
-						// 					<div>{tender.delivery}</div>
-						// 					<div>{tender.address}</div>
-						// 					<div>{tender.phoneNumber}</div>
-						// 				</div>
-						// 			);
-						// 		})}
-						// 	</div>
-						// </div>
 					))}
 				</SimpleGrid>
 			</VStack>

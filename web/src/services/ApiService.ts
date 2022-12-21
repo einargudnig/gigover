@@ -117,4 +117,10 @@ export class ApiService {
 	static editTenderItem = API_BASE + 'tender/editTenderItem';
 	static deleteTenderItem = API_BASE + 'tender/deleteTenderItem';
 	static publishTender = API_BASE + 'tender/publishTender';
+	static userTenders = API_BASE + 'tender/tenders';
+	static projectTenders = (projectId: number) => API_BASE + 'tender/tenders/' + projectId;
+	static addOffer = API_BASE + 'tender/addOffer';
+	static editOffer = API_BASE + 'tender/editOffer';
+	static addOfferItem = API_BASE + 'tender/addOfferItem';
+	static editOfferItem = API_BASE + 'tender/editOfferItem';
 }

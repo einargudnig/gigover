@@ -48,9 +48,6 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: bool
 `;
 
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
-	console.log('project', { project });
-	console.log('url', { url });
-
 	return (
 		<DropZone projectId={project.projectId} uploadType={FileUploadType.Project}>
 			{({ isDragActive, isUploading }) => (
