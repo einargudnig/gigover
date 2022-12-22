@@ -1,6 +1,6 @@
 import React from 'react';
 import { Heading, HStack, VStack, Text } from '@chakra-ui/react';
-import { CardBase } from '../../../components/CardBase';
+import { CardBaseLink } from '../../../components/CardBase';
 
 const tenders = [
 	{
@@ -34,6 +34,9 @@ export const Tenders = (): JSX.Element => {
 	// I could have a state for selectedTender. When I have a selectedTender
 	// I will show the Tender Modal, note that this would most likley have to be
 	// a different modal from the one I have where I "start" the tender.
+
+	// Here I could fetch the tenders for certain projects!
+	// I have to use react-query but using the endpoint.
 	return (
 		<>
 			<HStack spacing={4}>
@@ -43,7 +46,7 @@ export const Tenders = (): JSX.Element => {
 			</HStack>
 			<VStack justify={'space-between'} align={'center'} mb={4} style={{ width: '100%' }}>
 				{tenders.map((tender) => (
-					<CardBase key={tender.tenderId}>
+					<CardBaseLink to={`${tender.tenderId}`} key={tender.tenderId}>
 						<VStack align={'stretch'} spacing={4}>
 							<HStack justify={'space-between'} align={'center'}>
 								<VStack>
@@ -54,7 +57,7 @@ export const Tenders = (): JSX.Element => {
 								</VStack>
 							</HStack>
 						</VStack>
-					</CardBase>
+					</CardBaseLink>
 				))}
 			</VStack>
 		</>

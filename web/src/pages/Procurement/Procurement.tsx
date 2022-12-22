@@ -86,7 +86,6 @@ export const Procurement = (): JSX.Element => {
 				contentPadding={false}
 				actions={
 					<>
-						{project && <CreateNewFolderButton projectId={project.projectId} />}
 						<Button onClick={() => setUpload(true)} leftIcon={<PlusIcon />}>
 							New tender
 						</Button>

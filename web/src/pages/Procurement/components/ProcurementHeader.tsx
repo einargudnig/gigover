@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Center, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 
 export const ProcurementHeader = (): JSX.Element => {
 	return (
@@ -12,16 +12,58 @@ export const ProcurementHeader = (): JSX.Element => {
 			<Flex direction={'column'}>
 				<Box mb={2} p={2} borderRadius={6} bg={'#EFEFEF'} borderColor={'#EFEFEE'}>
 					<HStack>
-						<Text>Buyer:</Text>
-						<Text>Name:</Text>
-						<Text>Address:</Text>
-						<Text>Delivery:</Text>
-					</HStack>
-					<HStack>
-						<Text>Date:</Text>
-						<Text>Seller:</Text>
-						<Text>Phone:</Text>
-						<Text>Delivery Address:</Text>
+						<VStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Buyer:
+								</Text>
+								<Text>Einar</Text>
+							</HStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Name:
+								</Text>
+								<Text>Einar</Text>
+							</HStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Address:
+								</Text>
+								<Text>Dufnaholar 10</Text>
+							</HStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Delivery:
+								</Text>
+								<Text>Yes, I need a big car</Text>
+							</HStack>
+						</VStack>
+						<VStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Date:
+								</Text>
+								<Text>22 December</Text>
+							</HStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Seller:
+								</Text>
+								<Text>BYKO</Text>
+							</HStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Phone:
+								</Text>
+								<Text>12345678</Text>
+							</HStack>
+							<HStack>
+								<Text fontWeight={'semibold'} fontSize={'large'}>
+									Delivery Address:
+								</Text>
+								<Text>Dufnaholar 10</Text>
+							</HStack>
+						</VStack>
 					</HStack>
 				</Box>
 			</Flex>

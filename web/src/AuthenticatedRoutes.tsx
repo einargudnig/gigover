@@ -15,6 +15,7 @@ import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
 import { Tenders } from './pages/Procurement/components/Tenders';
+import { Tender } from './pages/Procurement/components/Tender';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -45,7 +46,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'procurement'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':projectId'} element={<Tenders />} />
-			{/* <Route path={':projectId/:tenderId'} element={<Tender />} /> */}
+			<Route path={':projectId/:tenderId'} element={<Tender />} />
 		</Route>
 
 		<Route path={'settings'} element={<Settings />} />
