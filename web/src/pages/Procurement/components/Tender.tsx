@@ -2,6 +2,7 @@ import React from 'react';
 import { HStack, VStack, Heading, Text, Spacer } from '@chakra-ui/react';
 import { useProjectTenders } from '../../../queries/useProjectTenders';
 import { ProcurementHeader } from './ProcurementHeader';
+import { ProcurementOffer } from './ProcurementOffer';
 import { TenderTable } from './TenderTable';
 
 const tenderItems = [
@@ -10,35 +11,40 @@ const tenderItems = [
 		nr: 1234,
 		description: '2x4 planks',
 		volume: '30',
-		unit: 'm3'
+		unit: 'm3',
+		price: 250
 	},
 	{
 		tenderId: 4,
 		nr: 35423,
 		description: 'Reinforcing bars',
 		volume: '45',
-		unit: 'pieces'
+		unit: 'pieces',
+		price: 250
 	},
 	{
 		tenderId: 4,
 		nr: 9834,
 		description: 'Sand',
 		volume: '30',
-		unit: 'm3'
+		unit: 'm3',
+		price: 250
 	},
 	{
 		tenderId: 4,
 		nr: 4564,
 		description: 'Cement',
 		volume: '230',
-		unit: 'kg'
+		unit: 'kg',
+		price: 250
 	},
 	{
 		tenderId: 4,
 		nr: 6546,
 		description: 'Nails',
 		volume: '150',
-		unit: 'pieces'
+		unit: 'pieces',
+		price: 250
 	}
 ];
 
@@ -60,6 +66,8 @@ export const Tender = (): JSX.Element => {
 			<ProcurementHeader />
 			<Spacer />
 			<TenderTable tender={tenderItems} />
+			<Spacer />
+			{/* <ProcurementOffer /> */}
 		</div>
 	);
 };
