@@ -7,9 +7,6 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
 import { Outlet, useParams } from 'react-router-dom';
 import { ProcurementModal } from '../../components/modals/ProcurementModal';
-import { SearchBar } from '../Files/components/SearchBar';
-import { devInfo } from '../../utils/ConsoleUtils';
-import { CreateNewFolderButton } from '../Files/components/CreateNewFolder';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 
@@ -82,12 +79,11 @@ export const Procurement = (): JSX.Element => {
 					// 	  ]
 					// 	: [])
 				]}
-				tabs={<SearchBar files={[]} />}
 				contentPadding={false}
 				actions={
 					<>
 						<Button onClick={() => setUpload(true)} leftIcon={<PlusIcon />}>
-							New tender
+							New Procurement
 						</Button>
 					</>
 				}

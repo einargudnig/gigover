@@ -12,7 +12,7 @@ const tenderItems = [
 		description: '2x4 planks',
 		volume: '30',
 		unit: 'm3',
-		price: 250
+		price: 359
 	},
 	{
 		tenderId: 4,
@@ -20,7 +20,7 @@ const tenderItems = [
 		description: 'Reinforcing bars',
 		volume: '45',
 		unit: 'pieces',
-		price: 250
+		price: 678
 	},
 	{
 		tenderId: 4,
@@ -28,7 +28,7 @@ const tenderItems = [
 		description: 'Sand',
 		volume: '30',
 		unit: 'm3',
-		price: 250
+		price: 1209
 	},
 	{
 		tenderId: 4,
@@ -36,7 +36,7 @@ const tenderItems = [
 		description: 'Cement',
 		volume: '230',
 		unit: 'kg',
-		price: 250
+		price: 237
 	},
 	{
 		tenderId: 4,
