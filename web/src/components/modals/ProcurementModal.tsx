@@ -35,12 +35,15 @@ const ProcurementModalStyled = styled.div`
 
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const queryClient = useQueryClient();
+	// const queryClient = useQueryClient();
 	const { data } = useProjectList();
+	// console.log({ data }, 'DATA');
+
 	const openProjects = useOpenProjects(data);
 	const { mutateAsync, data: projectfolders } = useProjectFolders();
 
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
+	// const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
 
 	const { mutateAsync: modify, isLoading, isError, error } = useAddTender();
 	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
@@ -53,6 +56,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			mutateAsync({ projectId: selectedProject }).finally(() => null);
 		}
 	}, [mutateAsync, selectedProject]);
+
+	// A function that returns all of the tasks from a given tasks.
+	// It uses the selectedProjects variable to find tasks for that project
 
 	const onSubmit = handleSubmit(
 		async ({
@@ -80,9 +86,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			);
 			try {
 				await modify({
-					projectId: openProjects?.find((project) => project.projectId === projectId)
-						?.projectId,
-					taskId,
+					projectId: selectedProject,
+					taskId: 1646,
 					description,
 					terms,
 					finishDate,
@@ -91,7 +96,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					phoneNumber
 				});
 
-				queryClient.refetchQueries(ApiService.addTender);
+				// queryClient.refetchQueries(ApiService.addTender);
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
