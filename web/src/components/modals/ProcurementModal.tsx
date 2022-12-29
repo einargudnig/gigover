@@ -15,7 +15,6 @@ import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 import { useProjectFolders } from '../../mutations/useProjectFolders';
-// import { useProjectFolders } from '../../mutations/useProjectFolders';
 
 interface TenderModalProps {
 	tender?: Tender;
@@ -37,10 +36,10 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	// const queryClient = useQueryClient();
 	const { data } = useProjectList();
-	// console.log({ data }, 'DATA');
 
+	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
-	const { mutateAsync, data: projectfolders } = useProjectFolders();
+	console.log(openProjects, 'OPEN');
 
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
 	// const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
@@ -51,11 +50,11 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		mode: 'onBlur'
 	});
 
-	useEffect(() => {
-		if (selectedProject) {
-			mutateAsync({ projectId: selectedProject }).finally(() => null);
-		}
-	}, [mutateAsync, selectedProject]);
+	// useEffect(() => {
+	// 	if (selectedProject) {
+	// 		mutateAsync({ projectId: selectedProject }).finally(() => null);
+	// 	}
+	// }, [mutateAsync, selectedProject]);
 
 	// A function that returns all of the tasks from a given tasks.
 	// It uses the selectedProjects variable to find tasks for that project

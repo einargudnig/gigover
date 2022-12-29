@@ -6,6 +6,7 @@ import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ProcurementIcon } from './icons/ProcurementIcon';
+import { Procurement2 } from './icons/Procurement2';
 
 import {
 	Avatar,
@@ -259,7 +260,7 @@ export const Page = ({
 					<IconLink onClick={onLinkClick} to={'/procurement'}>
 						<div>
 							{/* <ProcurementIcon color={Theme.colors.white} /> */}
-							<TimeIcon />
+							<Procurement2 />
 						</div>
 						<span>Procurement</span>
 					</IconLink>
@@ -317,11 +318,6 @@ export const Page = ({
 												Sign out
 											</MenuItem>
 										</MenuGroup>
-										{/* <MenuDivider />
-										<MenuGroup title="Help">
-											<MenuItem>Helpdesk</MenuItem>
-											<MenuItem>FAQ</MenuItem>
-										</MenuGroup> */}
 									</MenuList>
 								</Menu>
 							</Flex>
