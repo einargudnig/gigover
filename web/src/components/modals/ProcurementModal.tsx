@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
 import { Box, Heading, Text, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import styled from 'styled-components';
@@ -14,7 +14,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
-import { useProjectFolders } from '../../mutations/useProjectFolders';
 
 interface TenderModalProps {
 	tender?: Tender;

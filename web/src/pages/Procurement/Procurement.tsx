@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Project } from '../../models/Project';
-import { Outlet, useParams } from 'react-router-dom';
+// import { Project } from '../../models/Project';
+import { Outlet } from 'react-router-dom';
 import { ProcurementModal } from '../../components/modals/ProcurementModal';
-import { useOpenProjects } from '../../hooks/useAvailableProjects';
+// import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 
 const Container = styled.div`
@@ -19,25 +19,9 @@ const Container = styled.div`
 
 export const Procurement = (): JSX.Element => {
 	const { data, isLoading } = useProjectList();
-	const params = useParams();
-	const [project, setProject] = useState<Project | null>(null);
+	// const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
-	const projects = useOpenProjects(data);
-
-	useEffect(() => {
-		if (projects.length > 0 && params.projectId) {
-			const findProject = projects.find(
-				(p) => p.projectId === parseInt(params.projectId as string)
-			);
-
-			if (findProject) {
-				setProject(findProject);
-				return;
-			}
-		}
-
-		setProject(null);
-	}, [projects, params.projectId]);
+	// const projects = useOpenProjects(data);
 
 	return (
 		<>

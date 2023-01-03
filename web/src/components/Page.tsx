@@ -6,7 +6,6 @@ import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ProcurementIcon } from './icons/ProcurementIcon';
-import { Procurement2 } from './icons/Procurement2';
 
 import {
 	Avatar,
@@ -259,8 +258,7 @@ export const Page = ({
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/procurement'}>
 						<div>
-							{/* <ProcurementIcon color={Theme.colors.white} /> */}
-							<Procurement2 />
+							<ProcurementIcon />
 						</div>
 						<span>Procurement</span>
 					</IconLink>

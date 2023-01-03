@@ -45,7 +45,7 @@ export const TenderTable = ({ tender }): JSX.Element => {
 						{tender.map((item) => {
 							return (
 								<>
-									<Tr>
+									<Tr key={item.number}>
 										<Td>
 											<Input
 												value={item.description}

@@ -1,8 +1,8 @@
 import React from 'react';
-import { HStack, VStack, Heading, Text, Spacer } from '@chakra-ui/react';
-import { useProjectTenders } from '../../../queries/useProjectTenders';
+import { Spacer } from '@chakra-ui/react';
+// import { useProjectTenders } from '../../../queries/useProjectTenders';
 import { ProcurementHeader } from './ProcurementHeader';
-import { ProcurementOffer } from './ProcurementOffer';
+// import { ProcurementOffer } from './ProcurementOffer';
 import { TenderTable } from './TenderTable';
 
 const tenderItems = [

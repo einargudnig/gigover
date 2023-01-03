@@ -1,9 +1,6 @@
 import React from 'react';
-import { useProjectList } from '../../queries/useProjectList';
-import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { SimpleGrid } from '../../components/SimpleGrid';
 import { VStack } from '@chakra-ui/react';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ProcurementFolder } from './components/ProcurementFolder';
 
 const projectsWithTenders = [

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+// import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Tender } from '../../../models/Tender';
 import { Theme } from '../../../Theme';
 
