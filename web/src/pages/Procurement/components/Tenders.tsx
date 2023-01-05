@@ -40,10 +40,10 @@ export const Tenders = (): JSX.Element => {
 	// I will show the Tender Modal, note that this would most likley have to be
 	// a different modal from the one I have where I "start" the tender.
 
-	// Here I could fetch the tenders for certain projects!
+	//! Here I could fetch the tenders for certain projects!
 	// I have to use react-query but using the endpoint.
-	const response = useQuery(ApiService.projectTenders(projectId));
-	console.log(response.data, 'projectTenders');
+	// const response = useQuery(ApiService.projectTenders(projectId));
+	// console.log(response.data, 'projectTenders');
 	//! This is undefined
 	// see useGetProjectTenders in useQueries
 	return (

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
 import {
 	Table,
 	Thead,
@@ -16,16 +17,48 @@ import {
 	Spacer
 } from '@chakra-ui/react';
 
+interface Rows {
+	description: string;
+	number: string;
+	volume: string;
+	unit: string;
+	price: string;
+}
+
 export const TenderTable = ({ tender }): JSX.Element => {
-	// we would want to handle this as a useState I suspect
+	// add rows to the table
+	// const [rows, setRows] = useState<Rows | null>(null);
 
 	const [addedItems, setAddedItems] = useState(null);
 	const [showText, setShowText] = useState(false);
 	const [disabledInput, setDisabledInput] = useState(true);
 
+	// This is to add the single item
+	const mutate = useAddTenderItem();
+
 	const handleClick = () => {
 		setShowText(true);
 		setDisabledInput(false);
+	};
+
+	const addNewRow = () => {
+		// const data: Rows = { description: '', number: '', volume: '', unit: '', price: '' };
+		// setRows([...rows, data]);
+		// setRows(...rows, data);
+	};
+
+	// const response = {
+	// 	description: 'test1',
+	// 	number: 'test1',
+	// 	volume: 'test1',
+	// 	unit: 'test1',
+	// 	price: 'test1'
+	// };
+
+	const addItem = async () => {
+		// const response = await axios.post(ApiService.addTenderItem);
+		// return response.data;
+		// await mutate.mutateAsync(response);
 	};
 
 	return (
@@ -85,6 +118,23 @@ export const TenderTable = ({ tender }): JSX.Element => {
 								</>
 							);
 						})}
+						{/* <Tr>
+							<Td>
+								<Input disabled={disabledInput} width={'60'} />
+							</Td>
+							<Td>
+								<Input disabled={disabledInput} width={'20'} />
+							</Td>
+							<Td>
+								<Input disabled={disabledInput} width={'24'} />
+							</Td>
+							<Td>
+								<Input disabled={disabledInput} width={'20'} />
+							</Td>
+							<Td>
+								<Input disabled={disabledInput} width={'20'} />
+							</Td>
+						</Tr> */}
 					</Tbody>
 					<Tfoot>
 						<Tr>
@@ -117,7 +167,8 @@ export const TenderTable = ({ tender }): JSX.Element => {
 					<Box>
 						<HStack>
 							<Button onClick={() => handleClick()}>Edit Items</Button>
-							<Button>Add Items</Button>
+							<Button onClick={() => addItem()}>Add Items</Button>
+							<Button onClick={() => addNewRow()}>Add new Row</Button>
 						</HStack>
 					</Box>
 				</HStack>
