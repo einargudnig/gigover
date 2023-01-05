@@ -26,6 +26,21 @@ export const CommentInput = ({ projectId, taskId, workers }: CommentInputProps):
 	const { mutateAsync: addComment, isLoading } = useTaskComment();
 	const { mutateAsync: deleteDocument, isLoading: isDeleting } = useDeleteDocument();
 
+	// map over the workers object and add '(mobile app)' to the end of the name if the worker type is 0
+	const workersWithMobileApp = workers.map((worker) => {
+		if (worker.type === 0) {
+			return {
+				...worker,
+				displayName: `${worker.name} (mobile app)` || `${worker.userName} (mobile app)`
+			};
+		} else {
+			return {
+				...worker,
+				displayName: worker.name || worker.userName
+			};
+		}
+	});
+
 	const onKeyPress = useCallback(
 		async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 			if (!e.shiftKey && e.key === 'Enter' && !isLoading && commentValue.trim().length > 0) {
@@ -96,10 +111,11 @@ export const CommentInput = ({ projectId, taskId, workers }: CommentInputProps):
 							>
 								<Mention
 									trigger="@"
-									data={workers.map((w) => ({
+									data={workersWithMobileApp.map((w) => ({
 										id: w.uId,
-										display: w.name ?? w.userName ?? 'Unknown user'
+										display: w.displayName ?? 'Unknown user'
 									}))}
+									displayTransform={(id, display) => `@${display}`}
 								/>
 							</MentionsInput>
 							{isUploading && (
