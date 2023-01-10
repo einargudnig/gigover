@@ -69,19 +69,6 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			address,
 			phoneNumber
 		}) => {
-			console.log(
-				{
-					projectId,
-					taskId,
-					description,
-					terms,
-					finishDate,
-					delivery,
-					address,
-					phoneNumber
-				},
-				'TENDER DATA'
-			);
 			try {
 				await modify({
 					projectId: selectedProject,
