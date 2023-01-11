@@ -19,17 +19,22 @@ interface TenderModalProps {
 	tender?: Tender;
 }
 
-// interface TenderModal {
-// 	onClose: () => void;
-// 	onComplete: (status: boolean) => void;
-// 	projectId?: number;
-// }
-
 const ProcurementModalStyled = styled.div`
 	@media screen and (max-width: 500px) {
 		width: 500px;
 	}
 `;
+
+const testData = {
+	projectId: 1418, // Another test project
+	taskId: 1646, // Hello, testingtesting
+	description: 'test procurement',
+	terms: 'test procurement',
+	finishDate: 20210901,
+	delivery: '1',
+	address: 'dufnaholar 10',
+	phoneNumber: '1234567'
+};
 
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
@@ -38,10 +43,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
-	console.log(openProjects, 'OPEN');
 
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
-	// const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
+	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
 
 	const { mutateAsync: modify, isLoading, isError, error } = useAddTender();
 	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
@@ -55,8 +59,12 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	// 	}
 	// }, [mutateAsync, selectedProject]);
 
-	// A function that returns all of the tasks from a given tasks.
-	// It uses the selectedProjects variable to find tasks for that project
+	// selectedProject as a parameter
+	const findTasks = (projectId: number) => {
+		const taskFromProject = data?.find((project) => project.projectId === projectId);
+		return taskFromProject?.tasks;
+	};
+	console.log('TASKFORPROJECT', findTasks(1418));
 
 	const onSubmit = handleSubmit(
 		async ({
@@ -129,12 +137,28 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 								</Text>
 							</>
 						)}
-						{/* Task
-						   We want to be able to find aldready open tasks
-							 to connect to the tender!
-						*/}
+						{selectedProject && (
+							<>
+								<Heading size={'md'}>Select a task for your procurement</Heading>
+								<TrackerSelect
+									title={'Select a task'}
+									value={selectedTask}
+									options={findTasks(selectedProject ?? 0).map((task) => ({
+										label: task.text,
+										value: task.taskId
+									}))}
+									valueChanged={(newValue) => {
+										if (newValue === '') {
+											setSelectedTask(undefined);
+										} else {
+											setSelectedTask((newValue as number) ?? undefined);
+										}
+									}}
+								/>
+							</>
+						)}
 						<form>
-							<FormControl id={'name'} isRequired>
+							{/* <FormControl id={'name'} isRequired>
 								<FormLabel>Procurement name</FormLabel>
 								<Input
 									name="name"
@@ -142,7 +166,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 									ref={register({ required: 'Procurement name is required' })}
 								/>
 							</FormControl>
-							<Box mb={6} />
+							<Box mb={6} /> */}
 							<FormControl id={'description'}>
 								<FormLabel>Procurement Description</FormLabel>
 								<Input
