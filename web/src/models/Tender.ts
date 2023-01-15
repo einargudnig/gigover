@@ -5,7 +5,7 @@ export interface Tender {
 	description: string;
 	terms: string;
 	finishDate: number;
-	delivery: string;
+	delivery: number;
 	address: string;
 	phoneNumber: string;
 }

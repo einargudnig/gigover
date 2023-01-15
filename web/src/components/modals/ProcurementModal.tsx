@@ -31,14 +31,14 @@ const testData = {
 	description: 'test procurement',
 	terms: 'test procurement',
 	finishDate: 20210901,
-	delivery: '1',
+	delivery: 1,
 	address: 'dufnaholar 10',
 	phoneNumber: '1234567'
 };
 
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 	const { data } = useProjectList();
 
 	// I'm using the openProjects for the selecting of projects.
@@ -47,7 +47,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
 	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
 
-	const { mutateAsync: modify, isLoading, isError, error } = useAddTender();
+	// mustateAsync: modify
+	const { mutate: modify, isLoading, isError, error } = useAddTender();
 	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
 		defaultValues: tender,
 		mode: 'onBlur'
@@ -64,7 +65,10 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		const taskFromProject = data?.find((project) => project.projectId === projectId);
 		return taskFromProject?.tasks;
 	};
-	console.log('TASKFORPROJECT', findTasks(1418));
+	const tasksFromSelectedProject = findTasks(selectedProject ?? 0);
+	// const taskNumbers = () => {
+	// 	return tasksFromSelectedProject!.length;
+	// };
 
 	const onSubmit = handleSubmit(
 		async ({
@@ -88,8 +92,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					address,
 					phoneNumber
 				});
-
-				// queryClient.refetchQueries(ApiService.addTender);
+				console.log('success');
+				queryClient.refetchQueries(ApiService.addTender);
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
@@ -109,55 +113,62 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			<Modal open={true} onClose={closeModal} title={'New Procurement'}>
 				<ProcurementModalStyled>
 					<VStack mb={-6} align={'stretch'}>
-						{openProjects ? (
-							<>
-								<Heading size={'md'}>Select a project for your procurement</Heading>
-								<TrackerSelect
-									title={'Select a project'}
-									value={selectedProject}
-									options={openProjects.map((project) => ({
-										label: project.name,
-										value: project.projectId
-									}))}
-									valueChanged={(newValue) => {
-										if (newValue === '') {
-											setSelectedProject(undefined);
-										} else {
-											setSelectedProject((newValue as number) ?? undefined);
-										}
-									}}
-								/>
-							</>
-						) : (
-							<>
-								<Heading>No projects</Heading>
-								<Text>
-									You do not have any projects, you have to create a project
-									before you can make a procurement
-								</Text>
-							</>
-						)}
-						{selectedProject && (
-							<>
-								<Heading size={'md'}>Select a task for your procurement</Heading>
-								<TrackerSelect
-									title={'Select a task'}
-									value={selectedTask}
-									options={findTasks(selectedProject ?? 0).map((task) => ({
-										label: task.text,
-										value: task.taskId
-									}))}
-									valueChanged={(newValue) => {
-										if (newValue === '') {
-											setSelectedTask(undefined);
-										} else {
-											setSelectedTask((newValue as number) ?? undefined);
-										}
-									}}
-								/>
-							</>
-						)}
 						<form>
+							{openProjects ? (
+								<>
+									<Heading size={'md'}>
+										Select a project for your procurement
+									</Heading>
+									<TrackerSelect
+										title={'Select a project'}
+										value={selectedProject}
+										options={openProjects.map((project) => ({
+											label: project.name,
+											value: project.projectId
+										}))}
+										valueChanged={(newValue) => {
+											if (newValue === '') {
+												setSelectedProject(undefined);
+											} else {
+												setSelectedProject(
+													(newValue as number) ?? undefined
+												);
+											}
+										}}
+									/>
+								</>
+							) : (
+								<>
+									<Heading>No projects</Heading>
+									<Text>
+										You do not have any projects, you have to create a project
+										before you can make a procurement
+									</Text>
+								</>
+							)}
+							{selectedProject && (
+								<>
+									<Heading size={'md'}>
+										Select a task for your procurement
+									</Heading>
+									<TrackerSelect
+										title={'Select a task'}
+										value={selectedTask}
+										options={tasksFromSelectedProject!.map((task) => ({
+											label: task.text,
+											value: task.taskId
+										}))}
+										valueChanged={(newValue) => {
+											if (newValue === '') {
+												setSelectedTask(undefined);
+											} else {
+												setSelectedTask((newValue as number) ?? undefined);
+											}
+										}}
+									/>
+								</>
+							)}
+							{/* <form> */}
 							{/* <FormControl id={'name'} isRequired>
 								<FormLabel>Procurement name</FormLabel>
 								<Input

@@ -87,7 +87,7 @@ export const TrackerSelect = ({
 			}
 		>
 			<option value="">{placeholder}</option>
-			{options.map((option, optionIndex) => (
+			{options?.map((option, optionIndex) => (
 				<option key={optionIndex} value={option.value}>
 					{option.label}
 				</option>

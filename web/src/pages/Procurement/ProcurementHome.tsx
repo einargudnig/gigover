@@ -20,7 +20,7 @@ const projectsWithTenders = [
 				description: 'This is a test tender',
 				terms: 'This is a test tenderr description',
 				finishDate: 1668038400000,
-				delivery: 'Yes',
+				delivery: 1,
 				address: 'dufnaholar 10',
 				phoneNumber: '1234567'
 			},
@@ -32,7 +32,7 @@ const projectsWithTenders = [
 				description: 'This is a second test tender',
 				terms: 'This is a second test tender description',
 				finishDate: 1668038400000,
-				delivery: 'Yes',
+				delivery: 1,
 				address: 'dufnaholar 11',
 				phoneNumber: '1234567'
 			},
@@ -44,7 +44,7 @@ const projectsWithTenders = [
 				description: 'This is a third test tender',
 				terms: 'This is a third test tender description',
 				finishDate: 1668038400000,
-				delivery: 'Yes',
+				delivery: 1,
 				address: 'dufnaholar 12',
 				phoneNumber: '1234567'
 			}
@@ -66,7 +66,7 @@ const projectsWithTenders = [
 				description: 'This is a new test tender',
 				terms: 'This is a new test tender description',
 				finishDate: 1668038400000,
-				delivery: 'Yes',
+				delivery: 1,
 				address: 'dufnaholar 12',
 				phoneNumber: '1234567'
 			},
@@ -78,7 +78,7 @@ const projectsWithTenders = [
 				description: 'This is a second test tender',
 				terms: 'This is a second new test tender description',
 				finishDate: 1668038400000,
-				delivery: 'Yes',
+				delivery: 1,
 				address: 'dufnaholar 12',
 				phoneNumber: '1234567'
 			}

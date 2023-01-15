@@ -41,10 +41,9 @@ export const Tenders = (): JSX.Element => {
 	// a different modal from the one I have where I "start" the tender.
 
 	//! Here I could fetch the tenders for certain projects!
-	//! This works, I'm getting an empty list! -> what I should get,since there are no tenders.
-	const testProjectId = 1418;
+	// const testProjectId = 1418;
 	// I have to use react-query but using the endpoint.
-	const response = useQuery(ApiService.projectTenders(testProjectId));
+	const response = useQuery(ApiService.projectTenders(projectId));
 	console.log(response.data, 'projectTenders');
 	return (
 		<>
