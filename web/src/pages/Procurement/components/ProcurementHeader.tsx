@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { ProjectFormData, useModifyTender } from '../../../mutations/useModifyTender';
 import { Controller, useForm } from 'react-hook-form';
+import { DatePicker } from '../../../components/forms/DatePicker';
 
 // const update = await axios.post(ApiService.editTender);
 
@@ -42,60 +43,84 @@ export const ProcurementHeader = (): JSX.Element => {
 						<HStack pos={'relative'} pb={'16'}>
 							<VStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Description:
-									</Text>
-									{/* <Text>Einar</Text> */}
-									<Input value="This needs to be good" />
+									<FormControl id={'description'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Description:
+										</FormLabel>
+										<Input value="This needs to be good" />
+									</FormControl>
 								</HStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Terms:
-									</Text>
-									{/* <Text>Einar</Text> */}
-									<Input value="This are the terms" />
+									<FormControl id={'terms'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Terms:
+										</FormLabel>
+										{/* <Text>Einar</Text> */}
+										<Input value="This are the terms" />
+									</FormControl>
 								</HStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Address:
-									</Text>
-									{/* <Text>Dufnaholar 10</Text> */}
-									<Input value="Dufnaholar 10" />
+									<FormControl id={'address'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Address:
+										</FormLabel>
+										{/* <Text>Dufnaholar 10</Text> */}
+										<Input value="Dufnaholar 10" />
+									</FormControl>
 								</HStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Delivery:
-									</Text>
-									{/* <Text>Yes, I need a big car</Text> */}
-									<Input value="yes" />
+									<FormControl id={'delivery'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Delivery:
+										</FormLabel>
+										{/* <Text>Yes, I need a big car</Text> */}
+										<Input value="yes" />
+									</FormControl>
 								</HStack>
 							</VStack>
 							<VStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Date:
-									</Text>
-									<Text>22 December</Text>
+									<FormControl id={'finishDate'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Finish Date:
+										</FormLabel>
+										<Controller
+											name="finishDate"
+											control={control}
+											// defaultValue={tender?.finishDate ? new Date(tender.finishDate) : null}
+											defaultValue={new Date()}
+											render={({ onChange, value, onBlur }) => (
+												<DatePicker
+													selected={value}
+													onChange={(date) => {
+														if (date) {
+															onChange((date as Date).getTime());
+														} else {
+															onChange(null);
+														}
+													}}
+													onBlur={onBlur}
+												/>
+											)}
+										/>
+									</FormControl>
 								</HStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Seller:
-									</Text>
-									<Text>BYKO</Text>
+									<FormControl id={'phoneNumber'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Phone:
+										</FormLabel>
+										<Input value="1234567" />
+									</FormControl>
 								</HStack>
 								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Phone:
-									</Text>
-									{/* <Text>12345678</Text> */}
-									<Input value="1234567" />
-								</HStack>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'lg'}>
-										Delivery Address:
-									</Text>
-									{/* <Text>Dufnaholar 10</Text> */}
-									<Input value="Dufnaholar 10" />
+									<FormControl id={'address'}>
+										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+											Delivery Address:
+										</FormLabel>
+										{/* <Text>Dufnaholar 10</Text> */}
+										<Input value="Dufnaholar 10" />
+									</FormControl>
 								</HStack>
 							</VStack>
 							<Button pos={'absolute'} bottom={'0'} right={'0'}>
