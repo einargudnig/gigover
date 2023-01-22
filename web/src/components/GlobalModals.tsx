@@ -17,6 +17,7 @@ import { Theme } from '../Theme';
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
+	const { tender } = modalContext.modifyTender || {};
 
 	return (
 		<>
@@ -51,10 +52,10 @@ export const GlobalModals = (): JSX.Element => {
 					<ShareItem shareItem={modalContext.shareItem} />
 				</Modal>
 			)}
-			{modalContext.tender && (
+			{modalContext.modifyTender && (
 				<Modal
 					open={true}
-					title={!project ? 'Create new Tender' : 'Edit tender'}
+					title={!tender ? 'Create new Tender' : 'Edit tender'}
 					onClose={() => setModalContext({})}
 				>
 					<ProcurementModal />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
@@ -21,54 +21,25 @@ export const Procurement = (): JSX.Element => {
 	const { data, isLoading } = useProjectList();
 	// const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
-	// const projects = useOpenProjects(data);
+	// I need to access the upload state in the modal? How do I do that?
 
 	return (
 		<>
-			{upload && (
-				// <UploadModal
-				// 	projectId={project?.projectId || undefined}
-				// 	folderId={params?.folderId || undefined}
-				// 	onClose={() => {
-				// 		setUpload(false);
-				// 	}}
-				// 	onComplete={(status) => {
-				// 		devInfo('status', status);
-				// 	}}
-				// />
-				<ProcurementModal />
-			)}
+			{upload && <ProcurementModal />}
 			<Page
 				title={'Procurement'}
-				breadcrumbs={[
-					{ title: 'Your procurement', url: '/procurement/' }
-					// ...(project
-					// 	? [
-					// 			{
-					// 				title: project.name,
-					// 				url: '/procurement/' + project.projectId
-					// 			},
-					// 			...(params.fileId
-					// 				? [
-					// 						{
-					// 							title: '/**/File',
-					// 							url:
-					// 								'/procurement/' +
-					// 								project.projectId +
-					// 								'/procurement/' +
-					// 								params.fileId
-					// 						}
-					// 				  ]
-					// 				: [])
-					// 	  ]
-					// 	: [])
-				]}
 				contentPadding={false}
 				actions={
 					<>
 						<Button onClick={() => setUpload(true)} leftIcon={<PlusIcon />}>
 							New Procurement
 						</Button>
+						{/* <Button
+						onClick={() => setModalContext({ modifyTender: { tender: undefined } })}
+						leftIcon={<PlusIcon />}
+					>
+						New Procurement
+					</Button> */}
 					</>
 				}
 			>

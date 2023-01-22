@@ -116,26 +116,28 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 						<form>
 							{openProjects ? (
 								<>
-									<Heading size={'md'}>
-										Select a project for your procurement
-									</Heading>
-									<TrackerSelect
-										title={'Select a project'}
-										value={selectedProject}
-										options={openProjects.map((project) => ({
-											label: project.name,
-											value: project.projectId
-										}))}
-										valueChanged={(newValue) => {
-											if (newValue === '') {
-												setSelectedProject(undefined);
-											} else {
-												setSelectedProject(
-													(newValue as number) ?? undefined
-												);
-											}
-										}}
-									/>
+									<FormControl id={'modal'}>
+										<Heading size={'md'}>
+											Select a project for your procurement
+										</Heading>
+										<TrackerSelect
+											title={'Select a project'}
+											value={selectedProject}
+											options={openProjects.map((project) => ({
+												label: project.name,
+												value: project.projectId
+											}))}
+											valueChanged={(newValue) => {
+												if (newValue === '') {
+													setSelectedProject(undefined);
+												} else {
+													setSelectedProject(
+														(newValue as number) ?? undefined
+													);
+												}
+											}}
+										/>
+									</FormControl>
 								</>
 							) : (
 								<>
