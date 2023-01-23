@@ -43,6 +43,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
 
+	// This is so the user can select a project and then the tasks from the selected project.
+	// we want the procurement to be linked to a task and a project.
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
 	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
 
@@ -59,6 +61,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	// 	}
 	// }, [mutateAsync, selectedProject]);
 
+	// We want to finde the tasks from the selected project so the user can select a task.
 	// selectedProject as a parameter
 	const findTasks = (projectId: number) => {
 		const taskFromProject = data?.find((project) => project.projectId === projectId);
@@ -99,12 +102,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			}
 		}
 	);
-	// TODO I need to update the closeModal, it is not working properly.
-	// this variable is invoking the useCLoseModal hook and I'm not using the modalContext
-	// TODO Either I have to change so it will be same as the GlobalModal -> projectModal
-	// TODO OR find another way to do this.
-	// I lean the first option, since I don't have to make something from scratch?
 
+	//! I've managed to make it use the ModalContext, except that nothing shows up in the modal.
+	//! Except the Title from the GlobalModal.tsx
 	return (
 		<div>
 			{isError && (
@@ -114,68 +114,60 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					<small>{error?.errorCode}</small>
 				</>
 			)}
-			<Modal open={true} onClose={closeModal} title={'New Procurement'}>
-				<ProcurementModalStyled>
-					<VStack mb={-6} align={'stretch'}>
-						<form>
-							{openProjects ? (
-								<>
-									<FormControl id={'modal'}>
-										<Heading size={'md'}>
-											Select a project for your procurement
-										</Heading>
-										<TrackerSelect
-											title={'Select a project'}
-											value={selectedProject}
-											options={openProjects.map((project) => ({
-												label: project.name,
-												value: project.projectId
-											}))}
-											valueChanged={(newValue) => {
-												if (newValue === '') {
-													setSelectedProject(undefined);
-												} else {
-													setSelectedProject(
-														(newValue as number) ?? undefined
-													);
-												}
-											}}
-										/>
-									</FormControl>
-								</>
-							) : (
-								<>
-									<Heading>No projects</Heading>
-									<Text>
-										You do not have any projects, you have to create a project
-										before you can make a procurement
-									</Text>
-								</>
-							)}
-							{selectedProject && (
-								<>
-									<Heading size={'md'}>
-										Select a task for your procurement
-									</Heading>
-									<TrackerSelect
-										title={'Select a task'}
-										value={selectedTask}
-										options={tasksFromSelectedProject!.map((task) => ({
-											label: task.text,
-											value: task.taskId
-										}))}
-										valueChanged={(newValue) => {
-											if (newValue === '') {
-												setSelectedTask(undefined);
-											} else {
-												setSelectedTask((newValue as number) ?? undefined);
-											}
-										}}
-									/>
-								</>
-							)}
-							{/* <form> */}
-							{/* <FormControl id={'name'} isRequired>
+			<form onSubmit={onSubmit}>
+				<VStack mb={-6} align={'stretch'}>
+					{openProjects ? (
+						<>
+							<FormControl id={'modal'}>
+								<Heading size={'md'}>Select a project for your procurement</Heading>
+								<TrackerSelect
+									title={'Select a project'}
+									value={selectedProject}
+									options={openProjects.map((project) => ({
+										label: project.name,
+										value: project.projectId
+									}))}
+									valueChanged={(newValue) => {
+										if (newValue === '') {
+											setSelectedProject(undefined);
+										} else {
+											setSelectedProject((newValue as number) ?? undefined);
+										}
+									}}
+								/>
+							</FormControl>
+						</>
+					) : (
+						<>
+							<Heading>No projects</Heading>
+							<Text>
+								You do not have any projects, you have to create a project before
+								you can make a procurement
+							</Text>
+						</>
+					)}
+					{selectedProject && (
+						<>
+							<Heading size={'md'}>Select a task for your procurement</Heading>
+							<TrackerSelect
+								title={'Select a task'}
+								value={selectedTask}
+								options={tasksFromSelectedProject!.map((task) => ({
+									label: task.text,
+									value: task.taskId
+								}))}
+								valueChanged={(newValue) => {
+									if (newValue === '') {
+										setSelectedTask(undefined);
+									} else {
+										setSelectedTask((newValue as number) ?? undefined);
+									}
+								}}
+							/>
+						</>
+					)}
+					{/* <form> */}
+					{/* <FormControl id={'name'} isRequired>
 								<FormLabel>Procurement name</FormLabel>
 								<Input
 									name="name"
@@ -184,86 +176,84 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 								/>
 							</FormControl>
 							<Box mb={6} /> */}
-							<FormControl id={'description'}>
-								<FormLabel>Procurement Description</FormLabel>
-								<Input
-									name="description"
-									required={true}
-									ref={register({
-										required: 'Procurement description is required'
-									})}
-								/>
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'terms'}>
-								<FormLabel>Terms</FormLabel>
-								<Input
-									name="terms"
-									required={true}
-									ref={register({ required: 'terms are required' })}
-								/>
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'finishDate'}>
-								<FormLabel>Finish Date</FormLabel>
-								<Controller
-									name="finishDate"
-									control={control}
-									// defaultValue={
-									// 	project?.endDate ? new Date(project.endDate) : null
-									// }
-									render={({ onChange, value, onBlur }) => (
-										<DatePicker
-											selected={value}
-											onChange={(date) => {
-												if (date) {
-													onChange((date as Date).getTime());
-												} else {
-													onChange(null);
-												}
-											}}
-											onBlur={onBlur}
-										/>
-									)}
-								/>
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'delivery'}>
-								<FormLabel>Delivery</FormLabel>
-								<Input
-									name="delivery"
-									required={true}
-									ref={register({ required: 'delivery is required' })}
-								/>
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'address'}>
-								<FormLabel>Address</FormLabel>
-								<Input
-									name="address"
-									required={true}
-									ref={register({ required: 'address is required' })}
-								/>
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'phoneNumber'}>
-								<FormLabel>Phone Number</FormLabel>
-								<Input
-									name="phoneNumber"
-									required={true}
-									ref={register({ required: 'phone number is required' })}
-								/>
-							</FormControl>
-						</form>
-						<FormActions
-							cancelText={'Cancel'}
-							onCancel={closeModal}
-							submitText={'Create'}
-							onSubmit={onSubmit}
+					<FormControl id={'description'}>
+						<FormLabel>Procurement Description</FormLabel>
+						<Input
+							name="description"
+							required={true}
+							ref={register({
+								required: 'Procurement description is required'
+							})}
 						/>
-					</VStack>
-				</ProcurementModalStyled>
-			</Modal>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'terms'}>
+						<FormLabel>Terms</FormLabel>
+						<Input
+							name="terms"
+							required={true}
+							ref={register({ required: 'terms are required' })}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'finishDate'}>
+						<FormLabel>Finish Date</FormLabel>
+						<Controller
+							name="finishDate"
+							control={control}
+							// defaultValue={
+							// 	project?.endDate ? new Date(project.endDate) : null
+							// }
+							render={({ onChange, value, onBlur }) => (
+								<DatePicker
+									selected={value}
+									onChange={(date) => {
+										if (date) {
+											onChange((date as Date).getTime());
+										} else {
+											onChange(null);
+										}
+									}}
+									onBlur={onBlur}
+								/>
+							)}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'delivery'}>
+						<FormLabel>Delivery</FormLabel>
+						<Input
+							name="delivery"
+							required={true}
+							ref={register({ required: 'delivery is required' })}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'address'}>
+						<FormLabel>Address</FormLabel>
+						<Input
+							name="address"
+							required={true}
+							ref={register({ required: 'address is required' })}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'phoneNumber'}>
+						<FormLabel>Phone Number</FormLabel>
+						<Input
+							name="phoneNumber"
+							required={true}
+							ref={register({ required: 'phone number is required' })}
+						/>
+					</FormControl>
+					<FormActions
+						cancelText={'Cancel'}
+						onCancel={closeModal}
+						submitText={'Create'}
+						onSubmit={onSubmit}
+					/>
+				</VStack>
+			</form>
 		</div>
 	);
 };

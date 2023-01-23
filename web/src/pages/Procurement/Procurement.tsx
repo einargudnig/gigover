@@ -9,6 +9,7 @@ import { Outlet } from 'react-router-dom';
 import { ProcurementModal } from '../../components/modals/ProcurementModal';
 // import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { PlusIcon } from '../../components/icons/PlusIcon';
+import { ModalContext } from '../../context/ModalContext';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -18,29 +19,28 @@ const Container = styled.div`
 `;
 
 export const Procurement = (): JSX.Element => {
-	// const [, setModalContext] = useContext(ModalContext);
+	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useProjectList();
 	// const [project, setProject] = useState<Project | null>(null);
-	const [upload, setUpload] = useState(false);
 	// I need to access the upload state in the modal? How do I do that?
 
 	return (
 		<>
-			{upload && <ProcurementModal />}
+			{/* {upload && <ProcurementModal />} */}
 			<Page
 				title={'Procurement'}
 				contentPadding={false}
 				actions={
 					<>
-						<Button onClick={() => setUpload(true)} leftIcon={<PlusIcon />}>
+						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use.
+						 * Why is the modal still empty?
+						 */}
+						<Button
+							onClick={() => setModalContext({ addTender: { tender: undefined } })}
+							leftIcon={<PlusIcon />}
+						>
 							New Procurement
 						</Button>
-						{/* <Button
-						onClick={() => setModalContext({ modifyTender: { tender: undefined } })}
-						leftIcon={<PlusIcon />}
-					>
-						New Procurement
-					</Button> */}
 					</>
 				}
 			>

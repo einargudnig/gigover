@@ -17,7 +17,8 @@ import { Theme } from '../Theme';
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
-	const { tender } = modalContext.modifyTender || {};
+	const { tender } = modalContext.addTender || {};
+	// const { tender } = modalContext.modifyTender || {};
 
 	return (
 		<>
@@ -54,14 +55,14 @@ export const GlobalModals = (): JSX.Element => {
 			)}
 			{modalContext.addTender && (
 				<Modal open={true} title={'Create tender'}>
-					<ProcurementModal />
-				</Modal>
-			)}
-			{modalContext.modifyTender && (
-				<Modal open={true} title={'Edit tender'}>
 					<ProcurementModal tender={tender} />
 				</Modal>
 			)}
+			{/* {modalContext.modifyTender && (
+				<Modal open={true} title={'Edit tender'}>
+					<ProcurementModal tender={tender} />
+				</Modal>
+			)} */}
 			{modalContext.resourceTracker && (
 				<Modal
 					title={

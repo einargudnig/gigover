@@ -65,11 +65,9 @@ export interface IModalContext {
 	resourceTracker?: ResourceTrackerContext;
 	modifyTender?: {
 		tender?: Tender;
-		onClose: () => void;
 	};
 	addTender?: {
 		tender?: Tender;
-		onClose: () => void;
 	};
 }
 
