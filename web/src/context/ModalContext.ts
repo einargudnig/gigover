@@ -64,7 +64,7 @@ export interface IModalContext {
 	resources?: IResourceModalContext;
 	resourceTracker?: ResourceTrackerContext;
 	modifyTender?: {
-		tender?: Tender;
+		modifyTender?: Tender;
 	};
 	addTender?: {
 		tender?: Tender;

@@ -18,7 +18,7 @@ export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
 	const { tender } = modalContext.addTender || {};
-	// const { tender } = modalContext.modifyTender || {};
+	const { modifyTender } = modalContext.modifyTender || {};
 
 	return (
 		<>
@@ -58,11 +58,11 @@ export const GlobalModals = (): JSX.Element => {
 					<ProcurementModal tender={tender} />
 				</Modal>
 			)}
-			{/* {modalContext.modifyTender && (
+			{modalContext.modifyTender && (
 				<Modal open={true} title={'Edit tender'}>
-					<ProcurementModal tender={tender} />
+					<ProcurementModal tender={modifyTender} />
 				</Modal>
-			)} */}
+			)}
 			{modalContext.resourceTracker && (
 				<Modal
 					title={

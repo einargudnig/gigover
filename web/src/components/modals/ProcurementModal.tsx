@@ -103,8 +103,6 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		}
 	);
 
-	//! I've managed to make it use the ModalContext, except that nothing shows up in the modal.
-	//! Except the Title from the GlobalModal.tsx
 	return (
 		<div>
 			{isError && (

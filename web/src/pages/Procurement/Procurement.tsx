@@ -6,7 +6,6 @@ import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 // import { Project } from '../../models/Project';
 import { Outlet } from 'react-router-dom';
-import { ProcurementModal } from '../../components/modals/ProcurementModal';
 // import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ModalContext } from '../../context/ModalContext';
@@ -22,11 +21,9 @@ export const Procurement = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useProjectList();
 	// const [project, setProject] = useState<Project | null>(null);
-	// I need to access the upload state in the modal? How do I do that?
 
 	return (
 		<>
-			{/* {upload && <ProcurementModal />} */}
 			<Page
 				title={'Procurement'}
 				contentPadding={false}

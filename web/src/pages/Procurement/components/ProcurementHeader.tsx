@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
 	Box,
 	Button,
@@ -15,14 +15,20 @@ import {
 import { ProjectFormData, useModifyTender } from '../../../mutations/useModifyTender';
 import { Controller, useForm } from 'react-hook-form';
 import { DatePicker } from '../../../components/forms/DatePicker';
+import { ModalContext } from '../../../context/ModalContext';
 
 // const update = await axios.post(ApiService.editTender);
 
 export const ProcurementHeader = (): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
 	const { mutate: modify, isLoading, isError, error } = useModifyTender();
 	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>();
 	// add tender as the default values? Means I have to send the tender as a prop to this component??
 
+	// TODO is it a good idea to use the GlobalModal for modifying the tender also?
+	// It would mean that I would either have to use the ProcuermentModal component and that one uses the addTender from the API.
+	// I would have to make it dynamic.... OR make anoother component for the modifyTender.
+	// In that way I could maybe just 'skip' the modal?
 	return (
 		<>
 			<Center>
@@ -123,7 +129,14 @@ export const ProcurementHeader = (): JSX.Element => {
 									</FormControl>
 								</HStack>
 							</VStack>
-							<Button pos={'absolute'} bottom={'0'} right={'0'}>
+							<Button
+								pos={'absolute'}
+								bottom={'0'}
+								right={'0'}
+								onClick={() =>
+									setModalContext({ modifyTender: { modifyTender: undefined } })
+								}
+							>
 								Edit
 							</Button>
 						</HStack>
