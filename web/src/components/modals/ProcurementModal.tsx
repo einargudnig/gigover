@@ -40,7 +40,6 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const queryClient = useQueryClient();
 	const { data } = useProjectList();
-
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
 
@@ -100,6 +99,11 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			}
 		}
 	);
+	// TODO I need to update the closeModal, it is not working properly.
+	// this variable is invoking the useCLoseModal hook and I'm not using the modalContext
+	// TODO Either I have to change so it will be same as the GlobalModal -> projectModal
+	// TODO OR find another way to do this.
+	// I lean the first option, since I don't have to make something from scratch?
 
 	return (
 		<div>
@@ -252,8 +256,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 							</FormControl>
 						</form>
 						<FormActions
-							cancelText={'Close'}
-							onCancel={() => closeModal()}
+							cancelText={'Cancel'}
+							onCancel={closeModal}
 							submitText={'Create'}
 							onSubmit={onSubmit}
 						/>

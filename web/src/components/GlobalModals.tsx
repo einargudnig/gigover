@@ -52,13 +52,14 @@ export const GlobalModals = (): JSX.Element => {
 					<ShareItem shareItem={modalContext.shareItem} />
 				</Modal>
 			)}
-			{modalContext.modifyTender && (
-				<Modal
-					open={true}
-					title={!tender ? 'Create new Tender' : 'Edit tender'}
-					onClose={() => setModalContext({})}
-				>
+			{modalContext.addTender && (
+				<Modal open={true} title={'Create tender'}>
 					<ProcurementModal />
+				</Modal>
+			)}
+			{modalContext.modifyTender && (
+				<Modal open={true} title={'Edit tender'}>
+					<ProcurementModal tender={tender} />
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (

@@ -65,8 +65,12 @@ export interface IModalContext {
 	resourceTracker?: ResourceTrackerContext;
 	modifyTender?: {
 		tender?: Tender;
+		onClose: () => void;
 	};
-	addTender?: Tender;
+	addTender?: {
+		tender?: Tender;
+		onClose: () => void;
+	};
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

@@ -18,6 +18,7 @@ const Container = styled.div`
 `;
 
 export const Procurement = (): JSX.Element => {
+	// const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useProjectList();
 	// const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
