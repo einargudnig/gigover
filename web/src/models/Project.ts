@@ -35,7 +35,7 @@ export interface Project {
 	workers: WorkerItem[];
 	images: ProjectImage[];
 	totalBytes: number;
-	tender: Tender[];
+	tender: Tender[]; // I think this one us wrong and can be removed!
 	fileCount: number;
 	owner: boolean;
 	lexoRank: string;

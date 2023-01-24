@@ -1,7 +1,9 @@
 import React from 'react';
 import { SimpleGrid } from '../../components/SimpleGrid';
-import { VStack } from '@chakra-ui/react';
+import { Center, VStack } from '@chakra-ui/react';
 import { ProcurementFolder } from './components/ProcurementFolder';
+import { useUserTenders } from '../../queries/useUserTenders';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const projectsWithTenders = [
 	{
@@ -99,31 +101,52 @@ export const ProcurementHome = () => {
 	// ! I would like to have one query that returns all of our tenders,
 	// but so it is tender based.
 	// Returns all projects and their tenders.
-	// const { data, isLoading } = useProjectList();
-	// console.log({ data }, 'data');
-	// const projects = useOpenProjects(data);
-	// console.log({ projects }, 'projects');
+	const { data, isLoading } = useUserTenders();
+	// console.log('DAtA', data);
 
-	//! I can use this one when I start fetching all tenders?
-	// if (isLoading) {
-	// 	return <LoadingSpinner />;
-	// }
+	// map over the filtered tenders and return the tenders by their projectId
+	const mappedTenders = data.map((t) => t.projectId);
 
+	console.log('mappedTenders', mappedTenders);
 	return (
-		<div>
-			<VStack alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
-				<SimpleGrid itemWidth={320}>
-					{projectsWithTenders.map((t) => (
-						<ProcurementFolder
-							key={t.projectId}
-							projectId={t.projectId}
-							name={t.name}
-							description={t.description}
-							tenders={t.tenders}
-						/>
-					))}
-				</SimpleGrid>
-			</VStack>
-		</div>
+		<>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<div>
+					<VStack alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
+						<SimpleGrid itemWidth={320}>
+							{data.map((t) => (
+								<ProcurementFolder
+									key={t.projectId}
+									projectId={t.projectId}
+									name={t.name}
+									description={t.description}
+									// tenders={t.tenders}
+								/>
+							))}
+						</SimpleGrid>
+					</VStack>
+				</div>
+
+				// <div>
+				// 	<VStack alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
+				// 		<SimpleGrid itemWidth={320}>
+				// 			{projectsWithTenders.map((t) => (
+				// 				<ProcurementFolder
+				// 					key={t.projectId}
+				// 					projectId={t.projectId}
+				// 					name={t.name}
+				// 					description={t.description}
+				// 					tenders={t.tenders}
+				// 				/>
+				// 			))}
+				// 		</SimpleGrid>
+				// 	</VStack>
+				// </div>
+			)}
+		</>
 	);
 };
