@@ -19,23 +19,6 @@ interface TenderModalProps {
 	tender?: Tender;
 }
 
-const ProcurementModalStyled = styled.div`
-	@media screen and (max-width: 500px) {
-		width: 500px;
-	}
-`;
-
-const testData = {
-	projectId: 1418, // Another test project
-	taskId: 1646, // Hello, testingtesting
-	description: 'test procurement',
-	terms: 'test procurement',
-	finishDate: 20210901,
-	delivery: 1,
-	address: 'dufnaholar 10',
-	phoneNumber: '1234567'
-};
-
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const queryClient = useQueryClient();
@@ -54,12 +37,6 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		defaultValues: tender,
 		mode: 'onBlur'
 	});
-
-	// useEffect(() => {
-	// 	if (selectedProject) {
-	// 		mutateAsync({ projectId: selectedProject }).finally(() => null);
-	// 	}
-	// }, [mutateAsync, selectedProject]);
 
 	// We want to finde the tasks from the selected project so the user can select a task.
 	// selectedProject as a parameter
@@ -86,7 +63,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			try {
 				await modify({
 					projectId: selectedProject,
-					taskId: 1646,
+					taskId: selectedTask,
 					description,
 					terms,
 					finishDate,
@@ -164,16 +141,6 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 							/>
 						</>
 					)}
-					{/* <form> */}
-					{/* <FormControl id={'name'} isRequired>
-								<FormLabel>Procurement name</FormLabel>
-								<Input
-									name="name"
-									required={true}
-									ref={register({ required: 'Procurement name is required' })}
-								/>
-							</FormControl>
-							<Box mb={6} /> */}
 					<FormControl id={'description'}>
 						<FormLabel>Procurement Description</FormLabel>
 						<Input

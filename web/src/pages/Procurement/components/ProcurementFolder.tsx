@@ -37,7 +37,7 @@ export const ProcurementFolder = ({
 				<HStack justify={'space-between'} align={'center'}>
 					<FolderIcon
 						size={38}
-						color={colorGenerator(`${name}/}`, 150, 50).backgroundColor}
+						color={colorGenerator(`${projectId}/}`, 150, 50).backgroundColor}
 					/>
 				</HStack>
 				<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
