@@ -1,9 +1,9 @@
 import { Project } from './Project';
 
 export interface Tender {
+	tenderId: number;
 	projectId: number;
 	taskId: number;
-	name: string;
 	description: string;
 	terms: string;
 	finishDate: number;

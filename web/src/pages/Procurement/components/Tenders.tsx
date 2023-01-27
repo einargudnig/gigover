@@ -10,7 +10,6 @@ const tenders = [
 		projectId: 1439,
 		taskId: 1852,
 		tenderId: 4,
-		name: 'Tender One',
 		description: 'This is a new test tender',
 		terms: 'This is a new test tender description',
 		finishDate: 1668038400000,
@@ -22,7 +21,6 @@ const tenders = [
 		projectId: 1439,
 		taskId: 1852,
 		tenderId: 5,
-		name: 'Tender Two',
 		description: 'This is a second test tender',
 		terms: 'This is a second new test tender description',
 		finishDate: 1668038400000,
@@ -60,9 +58,9 @@ export const Tenders = (): JSX.Element => {
 								<HStack justify={'space-between'} align={'center'}>
 									<VStack align={'center'}>
 										<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
-											{tender.name}
+											{tender.description}
 										</Heading>
-										<Text>{tender.description}</Text>
+										<Text>{tender.terms}</Text>
 									</VStack>
 								</HStack>
 							</VStack>

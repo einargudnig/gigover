@@ -11,10 +11,9 @@ import { Theme } from '../../../Theme';
 
 interface ProcurementProps {
 	projectId?: number;
-	name?: string;
 	description?: string;
 	finishDate?: number;
-	owner?: string;
+	terms?: string;
 	status?: string;
 	tenders?: Tender[];
 }
@@ -27,7 +26,7 @@ const ProcurementFolderStyled = styled(CardBaseLink)`
 
 export const ProcurementFolder = ({
 	projectId,
-	name,
+	terms,
 	description,
 	tenders
 }: ProcurementProps): JSX.Element => {
@@ -41,10 +40,10 @@ export const ProcurementFolder = ({
 					/>
 				</HStack>
 				<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
-					{name}
+					{description}
 				</Heading>
 				<HStack justify={'space-between'}>
-					<Text>{description}</Text>
+					<Text>{terms}</Text>
 				</HStack>
 				<HStack justify={'space-between'}>
 					<Text>{tenders?.length} tenders</Text>

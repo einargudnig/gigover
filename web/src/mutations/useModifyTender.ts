@@ -8,7 +8,7 @@ import { Tender } from '../models/Tender';
 export interface ProjectFormData
 	extends Pick<
 		Tender,
-		'name' | 'description' | 'terms' | 'finishDate' | 'delivery' | 'address' | 'phoneNumber'
+		'description' | 'terms' | 'finishDate' | 'delivery' | 'address' | 'phoneNumber'
 	> {}
 
 export const useModifyTender = () => {
