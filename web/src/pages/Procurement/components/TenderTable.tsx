@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 
 interface Rows {
+	tenderId: string;
 	description: string;
 	number: string;
 	volume: string;
@@ -25,16 +26,24 @@ interface Rows {
 	price: string;
 }
 
-export const TenderTable = ({ tender }): JSX.Element => {
-	// add rows to the table
-	// const [rows, setRows] = useState<Rows | null>(null);
+// in the table I could easily edit the data and send it back to the API.
+// I'll need to figure out how I handle that.
+// Maybe form?
 
+export const TenderTable = (): JSX.Element => {
+	// add rows to the table
+	const [rows, setRows] = useState<Rows[] | []>([]);
+	const [isEditing, setIsEditing] = useState(false);
 	const [addedItems, setAddedItems] = useState(null);
 	const [showText, setShowText] = useState(false);
 	const [disabledInput, setDisabledInput] = useState(true);
 
 	// This is to add the single item
-	const mutate = useAddTenderItem();
+	// const mutate = useAddTenderItem();
+
+	const handleEditClick = () => {
+		setIsEditing(!isEditing);
+	};
 
 	const handleClick = () => {
 		setShowText(true);
@@ -42,9 +51,16 @@ export const TenderTable = ({ tender }): JSX.Element => {
 	};
 
 	const addNewRow = () => {
-		// const data: Rows = { description: '', number: '', volume: '', unit: '', price: '' };
-		// setRows([...rows, data]);
-		// setRows(...rows, data);
+		const data: Rows = {
+			tenderId: '',
+			description: '',
+			number: 'b',
+			volume: 'c',
+			unit: 'd',
+			price: 'e'
+		};
+		setRows([...rows, data]);
+		// setDisabledInput(!disabledInput);
 	};
 
 	// const response = {
@@ -75,44 +91,50 @@ export const TenderTable = ({ tender }): JSX.Element => {
 						</Tr>
 					</Thead>
 					<Tbody>
-						{tender.map((item) => {
+						{rows.map((row) => {
 							return (
 								<>
-									<Tr key={item.number}>
+									<Tr key={row.number}>
 										<Td>
 											<Input
-												value={item.description}
-												disabled={disabledInput}
+												value={''}
+												// disabled={disabledInput}
 												width={'60'}
 											/>
 										</Td>
 										<Td>
 											<Input
-												value={item.nr}
-												disabled={disabledInput}
+												value={row.number}
+												// disabled={disabledInput}
 												width={'20'}
 											/>
 										</Td>
 										<Td>
 											<Input
-												value={item.volume}
-												disabled={disabledInput}
+												value={row.volume}
+												// disabled={disabledInput}
 												width={'24'}
 											/>
 										</Td>
 										<Td>
 											<Input
-												value={item.unit}
-												disabled={disabledInput}
+												value={row.unit}
+												// disabled={disabledInput}
 												width={'20'}
 											/>
 										</Td>
-										<Td>
+										{/* <Td>
 											<Input
-												value={item.price}
+												value={''}
 												disabled={disabledInput}
 												width={'20'}
 											/>
+										</Td> */}
+										<Td>{isEditing ? <Input value={''} /> : row.price}</Td>
+										<Td>
+											<Button onClick={handleEditClick}>
+												{isEditing ? 'Save' : 'Edit'}
+											</Button>
 										</Td>
 									</Tr>
 								</>
@@ -166,7 +188,7 @@ export const TenderTable = ({ tender }): JSX.Element => {
 					</Box>
 					<Box>
 						<HStack>
-							<Button onClick={() => handleClick()}>Edit Items</Button>
+							{/* <Button onClick={() => handleClick()}>Edit Items</Button> */}
 							<Button onClick={() => addItem()}>Add Items</Button>
 							<Button onClick={() => addNewRow()}>Add new Row</Button>
 						</HStack>

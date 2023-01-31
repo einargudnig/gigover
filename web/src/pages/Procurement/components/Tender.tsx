@@ -4,6 +4,7 @@ import { Spacer } from '@chakra-ui/react';
 import { ProcurementHeader } from './ProcurementHeader';
 // import { ProcurementOffer } from './ProcurementOffer';
 import { TenderTable } from './TenderTable';
+import { NewTable } from './NewTable';
 
 const tenderItems = [
 	{
@@ -48,14 +49,7 @@ const tenderItems = [
 	}
 ];
 
-// I'll want to fetch data from the API here,
-// I have the endpoint for Tenders from each project.
-// This data I can pass into the procurement Header and also to the table!
-
-// in the table I could easily edit the data and send it back to the API.
-// I'll need to figure out how I handle that.
-// Maybe form?
-
+//? I think this page is just a layout, I will fetch the data and do more stuff in the components.
 export const Tender = (): JSX.Element => {
 	// const testData = useProjectTenders(977);
 	// test the endpoint with a known Id
@@ -65,7 +59,8 @@ export const Tender = (): JSX.Element => {
 		<div>
 			<ProcurementHeader />
 			<Spacer />
-			<TenderTable tender={tenderItems} />
+			<TenderTable />
+			<NewTable />
 			<Spacer />
 			{/* <ProcurementOffer /> */}
 		</div>

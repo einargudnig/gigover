@@ -29,6 +29,9 @@ export const ProcurementHeader = (): JSX.Element => {
 	// It would mean that I would either have to use the ProcuermentModal component and that one uses the addTender from the API.
 	// I would have to make it dynamic.... OR make anoother component for the modifyTender.
 	// In that way I could maybe just 'skip' the modal?
+
+	//! Maybe I should ask for a tenders/tender/{tenderId} endpoint? That would help with this procurementHeader component.
+	// Maybe I could use the modifyTender endpoint for this, but I'll do it later.
 	return (
 		<>
 			<Center>
