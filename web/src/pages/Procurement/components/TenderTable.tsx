@@ -31,6 +31,12 @@ interface Rows {
 // Maybe form?
 
 export const TenderTable = (): JSX.Element => {
+	const [description, setDescription] = useState('');
+	const [number, setNumber] = useState(0);
+	const [volume, setVolume] = useState(0);
+	const [unit, setUnit] = useState('');
+	const [price, setPrice] = useState(0);
+
 	// add rows to the table
 	const [rows, setRows] = useState<Rows[] | []>([]);
 	const [isEditing, setIsEditing] = useState(false);
@@ -45,10 +51,10 @@ export const TenderTable = (): JSX.Element => {
 		setIsEditing(!isEditing);
 	};
 
-	const handleClick = () => {
-		setShowText(true);
-		setDisabledInput(false);
-	};
+	// const handleClick = () => {
+	// 	setShowText(true);
+	// 	setDisabledInput(false);
+	// };
 
 	const addNewRow = () => {
 		const data: Rows = {
@@ -97,66 +103,54 @@ export const TenderTable = (): JSX.Element => {
 									<Tr key={row.number}>
 										<Td>
 											<Input
-												value={''}
+												value={description}
 												// disabled={disabledInput}
+												onchange={(e) => setDescription(e.target.value)}
 												width={'60'}
 											/>
 										</Td>
 										<Td>
 											<Input
-												value={row.number}
+												value={number}
 												// disabled={disabledInput}
+												onchange={(e) => setNumber(e.target.value)}
 												width={'20'}
 											/>
 										</Td>
 										<Td>
 											<Input
-												value={row.volume}
+												value={volume}
 												// disabled={disabledInput}
+												onchange={(e) => setVolume(e.target.value)}
 												width={'24'}
 											/>
 										</Td>
 										<Td>
 											<Input
-												value={row.unit}
+												value={unit}
 												// disabled={disabledInput}
+												onchange={(e) => setUnit(e.target.value)}
 												width={'20'}
 											/>
 										</Td>
-										{/* <Td>
+										<Td>
 											<Input
-												value={''}
-												disabled={disabledInput}
+												value={price}
+												// disabled={disabledInput}
+												onchange={(e) => setPrice(e.target.value)}
 												width={'20'}
 											/>
-										</Td> */}
-										<Td>{isEditing ? <Input value={''} /> : row.price}</Td>
+										</Td>
+										{/* <Td>{isEditing ? <Input value={''} /> : row.price}</Td>
 										<Td>
 											<Button onClick={handleEditClick}>
 												{isEditing ? 'Save' : 'Edit'}
 											</Button>
-										</Td>
+										</Td> */}
 									</Tr>
 								</>
 							);
 						})}
-						{/* <Tr>
-							<Td>
-								<Input disabled={disabledInput} width={'60'} />
-							</Td>
-							<Td>
-								<Input disabled={disabledInput} width={'20'} />
-							</Td>
-							<Td>
-								<Input disabled={disabledInput} width={'24'} />
-							</Td>
-							<Td>
-								<Input disabled={disabledInput} width={'20'} />
-							</Td>
-							<Td>
-								<Input disabled={disabledInput} width={'20'} />
-							</Td>
-						</Tr> */}
 					</Tbody>
 					<Tfoot>
 						<Tr>
@@ -173,7 +167,7 @@ export const TenderTable = (): JSX.Element => {
 			<Box>
 				<HStack justifyContent={'space-between'}>
 					<Box>
-						{showText ? (
+						{/* {showText ? (
 							<>
 								{addedItems ? (
 									<Text>
@@ -184,7 +178,8 @@ export const TenderTable = (): JSX.Element => {
 									<Text>Add items to the Tender</Text>
 								)}
 							</>
-						) : null}
+						) : null} */}
+						BLah
 					</Box>
 					<Box>
 						<HStack>

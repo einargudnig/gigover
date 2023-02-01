@@ -59,7 +59,7 @@ export const Tender = (): JSX.Element => {
 		<div>
 			<ProcurementHeader />
 			<Spacer />
-			<TenderTable />
+			{/* <TenderTable /> */}
 			<NewTable />
 			<Spacer />
 			{/* <ProcurementOffer /> */}

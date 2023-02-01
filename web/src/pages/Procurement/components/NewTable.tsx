@@ -1,62 +1,165 @@
 import React, { useState } from 'react';
-import { Table, Tbody, Td, Thead, Tr, Th, Input } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	FormControl,
+	FormLabel,
+	Input,
+	Table,
+	Tbody,
+	Td,
+	Thead,
+	Tr
+} from '@chakra-ui/react';
 
-interface Data {
-	id: string;
-	name: string;
-	age: number;
+interface Item {
+	description: string;
+	number: number;
+	volume: number;
+	unit: string;
+	price: number;
 }
 
-const data: Data[] = [
-	{ id: '1', name: 'John Doe', age: 30 },
-	{ id: '2', name: 'Jane Doe', age: 25 },
-	{ id: '3', name: 'Jim Smith', age: 35 }
-];
-
 export const NewTable: React.FC = () => {
-	const [tableData, setTableData] = useState(data);
+	const [items, setItems] = useState<Item[]>([]);
+	const [editingItem, setEditingItem] = useState<Item | null>(null);
+	const [formData, setFormData] = useState<Item>({
+		description: '',
+		number: 0,
+		volume: 0,
+		unit: '',
+		price: 0
+	});
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-		const updatedData = tableData.map((d) => {
-			if (d.id === id) {
-				return {
-					...d,
-					[e.target.name]: e.target.value
-				};
-			}
-			return d;
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setFormData({
+			...formData,
+			[name]: value
 		});
-		setTableData(updatedData);
+	};
+
+	const handleAdd = () => {
+		setItems([...items, formData]);
+		setFormData({
+			description: '',
+			number: 0,
+			volume: 0,
+			unit: '',
+			price: 0
+		});
+	};
+
+	const handleEdit = (item: Item) => {
+		setEditingItem(item);
+		setFormData({ ...item });
+	};
+
+	const handleUpdate = () => {
+		setItems(
+			items.map((item) => (item.number === editingItem?.number ? { ...formData } : item))
+		);
+		setEditingItem(null);
+		setFormData({
+			description: '',
+			number: 0,
+			volume: 0,
+			unit: '',
+			price: 0
+		});
 	};
 
 	return (
-		<Table>
-			<Thead>
-				<Tr>
-					<Th>Name</Th>
-					<Th>Age</Th>
-				</Tr>
-			</Thead>
-			<Tbody>
-				{tableData.map((d) => (
-					<Tr key={d.id}>
-						<Td>
-							<Input
-								name="name"
-								value={d.name}
-								onChange={(e) => handleChange(e, d.id)}
-							/>
-						</Td>
-						<Td>
-							<Input
-								name="age"
-								value={d.age}
-								onChange={(e) => handleChange(e, d.id)}
-							/>
-						</Td>
+		<Box>
+			<Table>
+				<Thead>
+					<Tr>
+						<Td>Description</Td>
+						<Td>Number</Td>
+						<Td>Volume</Td>
+						<Td>Unit</Td>
+						<Td>Price</Td>
+						<Td>Actions</Td>
 					</Tr>
-				))}
-			</Tbody>
-		</Table>
+				</Thead>
+				<Tbody>
+					{items.map((item) => (
+						<Tr key={item.number}>
+							<Td>{item.description}</Td>
+							<Td>{item.number}</Td>
+							<Td>{item.volume}</Td>
+							<Td>{item.unit}</Td>
+							<Td>{item.price}</Td>
+							<Td>
+								<Button onClick={() => handleEdit(item)}>Edit</Button>
+							</Td>
+						</Tr>
+					))}
+				</Tbody>
+			</Table>
+			<br />
+			<FormControl>
+				{/* <Form></Form> */}
+
+				<FormLabel htmlFor="description">Description</FormLabel>
+				<Input
+					id="description"
+					name="description"
+					type="text"
+					value={formData.description}
+					onChange={handleChange}
+				/>
+			</FormControl>
+			<br />
+			<FormControl>
+				<FormLabel htmlFor="number">Number</FormLabel>
+				<Input
+					id="number"
+					name="number"
+					type="number"
+					value={formData.number}
+					onChange={handleChange}
+				/>
+			</FormControl>
+			<br />
+			<FormControl>
+				<FormLabel htmlFor="volume">Volume</FormLabel>
+				<Input
+					id="volume"
+					name="volume"
+					type="number"
+					value={formData.volume}
+					onChange={handleChange}
+				/>
+			</FormControl>
+			<br />
+			<FormControl>
+				<FormLabel htmlFor="unit">Unit</FormLabel>
+				<Input
+					id="unit"
+					name="unit"
+					type="text"
+					value={formData.unit}
+					onChange={handleChange}
+				/>
+			</FormControl>
+			<br />
+			<FormControl>
+				<FormLabel htmlFor="price">Price</FormLabel>
+				<Input
+					id="price"
+					name="price"
+					type="number"
+					value={formData.price}
+					onChange={handleChange}
+				/>
+			</FormControl>
+			<br />
+			{editingItem ? (
+				<Button onClick={handleUpdate}>Update</Button>
+			) : (
+				<Button onClick={handleAdd}>Add Item</Button>
+			)}
+		</Box>
 	);
 };
