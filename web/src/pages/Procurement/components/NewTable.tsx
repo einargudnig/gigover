@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import {
 	Box,
 	Button,
+	Flex,
 	FormControl,
 	FormLabel,
+	HStack,
 	Input,
+	Spacer,
 	Table,
+	Text,
 	Tbody,
 	Td,
 	Thead,
-	Tr
+	Tr,
+	VStack
 } from '@chakra-ui/react';
 
 interface Item {
@@ -24,10 +29,10 @@ export const NewTable: React.FC = () => {
 	const [items, setItems] = useState<Item[]>([]);
 	const [editingItem, setEditingItem] = useState<Item | null>(null);
 	const [formData, setFormData] = useState<Item>({
-		description: '',
+		description: 'Description',
 		number: 0,
 		volume: 0,
-		unit: '',
+		unit: 'Unit of measuerment',
 		price: 0
 	});
 
@@ -48,6 +53,7 @@ export const NewTable: React.FC = () => {
 			unit: '',
 			price: 0
 		});
+		//! mutate to POST data to backend
 	};
 
 	const handleEdit = (item: Item) => {
@@ -67,10 +73,11 @@ export const NewTable: React.FC = () => {
 			unit: '',
 			price: 0
 		});
+		//! Mutate to UPDATE data to backend
 	};
 
 	return (
-		<Box>
+		<>
 			<Table>
 				<Thead>
 					<Tr>
@@ -98,68 +105,85 @@ export const NewTable: React.FC = () => {
 				</Tbody>
 			</Table>
 			<br />
-			<FormControl>
-				{/* <Form></Form> */}
 
-				<FormLabel htmlFor="description">Description</FormLabel>
-				<Input
-					id="description"
-					name="description"
-					type="text"
-					value={formData.description}
-					onChange={handleChange}
-				/>
-			</FormControl>
+			<Text>
+				To get items into the table you need to write it into the form below, and press the
+				Add item button.
+			</Text>
 			<br />
-			<FormControl>
-				<FormLabel htmlFor="number">Number</FormLabel>
-				<Input
-					id="number"
-					name="number"
-					type="number"
-					value={formData.number}
-					onChange={handleChange}
-				/>
-			</FormControl>
+			<Text>
+				To edit items in the table you must press the Edit button in the Action column. You
+				will then be able to edit the item in the form below. When you are done editing the
+				item, press the Update item button.
+			</Text>
 			<br />
-			<FormControl>
-				<FormLabel htmlFor="volume">Volume</FormLabel>
-				<Input
-					id="volume"
-					name="volume"
-					type="number"
-					value={formData.volume}
-					onChange={handleChange}
-				/>
-			</FormControl>
+			<Box mb={2} mt={2} p={2} borderRadius={6} borderColor={'#EFEFEE'}>
+				<FormControl>
+					{/* <Form></Form> */}
+					<FormLabel htmlFor="description">Description</FormLabel>
+					<Input
+						id="description"
+						name="description"
+						type="text"
+						value={formData.description}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="number">Number</FormLabel>
+					<Input
+						id="number"
+						name="number"
+						type="number"
+						value={formData.number}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="volume">Volume</FormLabel>
+					<Input
+						id="volume"
+						name="volume"
+						type="number"
+						value={formData.volume}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="unit">Unit</FormLabel>
+					<Input
+						id="unit"
+						name="unit"
+						type="text"
+						value={formData.unit}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="price">Price</FormLabel>
+					<Input
+						id="price"
+						name="price"
+						type="number"
+						value={formData.price}
+						onChange={handleChange}
+					/>
+				</FormControl>
+			</Box>
 			<br />
-			<FormControl>
-				<FormLabel htmlFor="unit">Unit</FormLabel>
-				<Input
-					id="unit"
-					name="unit"
-					type="text"
-					value={formData.unit}
-					onChange={handleChange}
-				/>
-			</FormControl>
-			<br />
-			<FormControl>
-				<FormLabel htmlFor="price">Price</FormLabel>
-				<Input
-					id="price"
-					name="price"
-					type="number"
-					value={formData.price}
-					onChange={handleChange}
-				/>
-			</FormControl>
-			<br />
-			{editingItem ? (
-				<Button onClick={handleUpdate}>Update</Button>
-			) : (
-				<Button onClick={handleAdd}>Add Item</Button>
-			)}
-		</Box>
+			<Flex justifyContent={'end'}>
+				<HStack>
+					{editingItem ? (
+						<Button onClick={handleUpdate}>Update item</Button>
+					) : (
+						<Button onClick={handleAdd}>Add item</Button>
+					)}
+				</HStack>
+			</Flex>
+		</>
 	);
 };
