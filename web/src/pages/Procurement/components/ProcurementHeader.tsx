@@ -9,20 +9,19 @@ import {
 	Heading,
 	HStack,
 	Input,
-	Text,
 	VStack
 } from '@chakra-ui/react';
-import { ProjectFormData, useModifyTender } from '../../../mutations/useModifyTender';
-import { Controller, useForm } from 'react-hook-form';
-import { DatePicker } from '../../../components/forms/DatePicker';
+// import { ProjectFormData, useModifyTender } from '../../../mutations/useModifyTender';
+// import { Controller, useForm } from 'react-hook-form';
+// import { DatePicker } from '../../../components/forms/DatePicker';
 import { ModalContext } from '../../../context/ModalContext';
 
 // const update = await axios.post(ApiService.editTender);
 
 export const ProcurementHeader = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>();
+	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
+	// const { register, handleSubmit, errors, control } = useForm<ProjectFormData>();
 	// add tender as the default values? Means I have to send the tender as a prop to this component??
 
 	// TODO is it a good idea to use the GlobalModal for modifying the tender also?
@@ -93,7 +92,7 @@ export const ProcurementHeader = (): JSX.Element => {
 										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
 											Finish Date:
 										</FormLabel>
-										<Controller
+										{/* <Controller
 											name="finishDate"
 											control={control}
 											// defaultValue={tender?.finishDate ? new Date(tender.finishDate) : null}
@@ -111,7 +110,7 @@ export const ProcurementHeader = (): JSX.Element => {
 													onBlur={onBlur}
 												/>
 											)}
-										/>
+										/> */}
 									</FormControl>
 								</HStack>
 								<HStack>

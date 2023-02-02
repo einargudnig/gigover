@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
 import { Box, Heading, Text, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import styled from 'styled-components';
-import { Modal } from '../Modal';
 import { FormActions } from '../FormActions';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { TrackerSelect } from '../TrackerSelect';

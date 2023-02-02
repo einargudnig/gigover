@@ -23,8 +23,6 @@ export interface TenderFormData {
 // Sometime we might want to close the tender?
 // if so we might need to add a status field to the TenderFormData interface
 
-// this will be for the Tender itself, this will have more of the information regaarding the tender.
-// we will have tenderitem which will have more info about the individual items.
 export const useAddTender = () => {
 	const client = useQueryClient();
 

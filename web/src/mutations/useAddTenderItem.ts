@@ -1,11 +1,11 @@
 import { useMutation } from 'react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
+import { AxiosError } from 'axios';
 import axios from 'axios';
 
 export interface TenderItems {
-	tenderId: number;
-	nr: number;
+	number: number;
 	description: string;
 	volume: number;
 	unit: string;
@@ -14,7 +14,7 @@ export interface TenderItems {
 // this endpoint is for the item list on the tender.
 // Here we can add single items, volume, and more.
 export const useAddTenderItem = () => {
-	return useMutation<ErrorResponse, TenderItems>(async (variables) => {
+	return useMutation<ErrorResponse, AxiosError, TenderItems>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.addTenderItem, variables, {
 				withCredentials: true

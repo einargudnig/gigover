@@ -1,9 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
-import { useProjectList } from '../../queries/useProjectList';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 // import { Project } from '../../models/Project';
 import { Outlet } from 'react-router-dom';
 // import { useOpenProjects } from '../../hooks/useAvailableProjects';
@@ -19,8 +17,6 @@ const Container = styled.div`
 
 export const Procurement = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const { data, isLoading } = useProjectList();
-	// const [project, setProject] = useState<Project | null>(null);
 
 	return (
 		<>
@@ -42,15 +38,11 @@ export const Procurement = (): JSX.Element => {
 				}
 			>
 				<VStack style={{ height: '100%' }}>
-					{isLoading ? (
-						<LoadingSpinner />
-					) : (
-						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-							<Container>
-								<Outlet />
-							</Container>
-						</HStack>
-					)}
+					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+						<Container>
+							<Outlet />
+						</Container>
+					</HStack>
 				</VStack>
 			</Page>
 		</>

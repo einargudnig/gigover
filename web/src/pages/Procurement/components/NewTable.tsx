@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+// import { TenderItem } from '../../../models/TenderItems';
+import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
+import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
 import {
 	Box,
 	Button,
@@ -18,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 
 interface Item {
+	tenderItemId?: number;
 	description: string;
 	number: number;
 	volume: number;
@@ -36,6 +40,10 @@ export const NewTable: React.FC = () => {
 		price: 0
 	});
 
+	//! react-query stuff
+	const { mutate, isLoading, isError, error } = useAddTenderItem();
+	const { mutate: mutateUpdate } = useModifyTenderItem();
+
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
 		setFormData({
@@ -53,7 +61,13 @@ export const NewTable: React.FC = () => {
 			unit: '',
 			price: 0
 		});
-		//! mutate to POST data to backend
+		// mutate to POST data to backend
+		//! This does work, it returns a 200 status code
+		// BUT the ids are not increasing.
+		// I'll ask Tommi for a REST enpoint for GET request on tenderItems/{tenderId}
+		// I will need that to get the items I've already sent to the table.
+		mutate(formData);
+		console.log('Success', formData);
 	};
 
 	const handleEdit = (item: Item) => {
@@ -74,6 +88,8 @@ export const NewTable: React.FC = () => {
 			price: 0
 		});
 		//! Mutate to UPDATE data to backend
+		// mutateUpdate(formData);
+		// console.log('Success', formData);
 	};
 
 	return (
@@ -90,6 +106,14 @@ export const NewTable: React.FC = () => {
 					</Tr>
 				</Thead>
 				<Tbody>
+					{isError && (
+						<>
+							{/* Server errors */}
+							{/* <p>{error?.errorText}</p>
+							<small>{error?.errorCode}</small> */}
+							<p>Oh no! You have an error :(</p>
+						</>
+					)}
 					{items.map((item) => (
 						<Tr key={item.number}>
 							<Td>{item.description}</Td>

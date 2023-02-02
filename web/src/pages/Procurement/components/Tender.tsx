@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, Spacer } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 // import { useProjectTenders } from '../../../queries/useProjectTenders';
-import { ProcurementHeader } from './ProcurementHeader';
+// import { ProcurementHeader } from './ProcurementHeader';
 // import { ProcurementOffer } from './ProcurementOffer';
-import { TenderTable } from './TenderTable';
+// import { TenderTable } from './TenderTable';
 import { NewTable } from './NewTable';
 
 //? I think this page is just a layout, I will fetch the data and do more stuff in the components.
