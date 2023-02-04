@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-// import { TenderItem } from '../../../models/TenderItems';
+import { useParams } from 'react-router-dom';
+import { Tender } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
-import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
+// import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
+import { useTenderById } from '../../../mutations/getTenderById';
 import {
 	Box,
 	Button,
@@ -10,39 +12,51 @@ import {
 	FormLabel,
 	HStack,
 	Input,
-	Spacer,
 	Table,
 	Text,
 	Tbody,
 	Td,
 	Thead,
-	Tr,
-	VStack
+	Tr
 } from '@chakra-ui/react';
 
+// ! Not needed? -> imported from types folder?
 interface Item {
 	tenderItemId?: number;
 	description: string;
 	number: number;
 	volume: number;
 	unit: string;
-	price: number;
 }
 
 export const NewTable: React.FC = () => {
-	const [items, setItems] = useState<Item[]>([]);
+	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
+	//! GET from database
+	const {
+		data
+		// isLoading: isTenderLoading,
+		// isError: isTenderError,
+		// error: tenderError
+	} = useTenderById(Number(tenderId));
+	const tender: Tender | undefined = data?.tender;
+	const tenderItems = tender?.items;
+	// console.log('TENDERItems', tenderItems);
+
+	const [items, setItems] = useState<Item[] | undefined>(tenderItems);
 	const [editingItem, setEditingItem] = useState<Item | null>(null);
 	const [formData, setFormData] = useState<Item>({
 		description: 'Description',
 		number: 0,
 		volume: 0,
-		unit: 'Unit of measuerment',
-		price: 0
+		unit: 'Unit of measuerment'
 	});
 
 	//! react-query stuff
-	const { mutate, isLoading, isError, error } = useAddTenderItem();
-	const { mutate: mutateUpdate } = useModifyTenderItem();
+	//! POST
+	const { mutate, isLoading, isSuccess, isError, error } = useAddTenderItem();
+	// const { mutate: mutateUpdate } = useModifyTenderItem();
+	// const { data } = useTenderById(11); //from useParams
+	// console.log('DATA in TENDER', { data });
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -58,16 +72,13 @@ export const NewTable: React.FC = () => {
 			description: '',
 			number: 0,
 			volume: 0,
-			unit: '',
-			price: 0
+			unit: ''
 		});
 		// mutate to POST data to backend
 		//! This does work, it returns a 200 status code
-		// BUT the ids are not increasing.
-		// I'll ask Tommi for a REST enpoint for GET request on tenderItems/{tenderId}
-		// I will need that to get the items I've already sent to the table.
-		mutate(formData);
-		console.log('Success', formData);
+
+		// I have an endpoint now tender/tender/:id -> It returns the tender with the tenderItems. I can use that to show the items in the table AND for the table header.
+		// mutate(formData);
 	};
 
 	const handleEdit = (item: Item) => {
@@ -77,15 +88,14 @@ export const NewTable: React.FC = () => {
 
 	const handleUpdate = () => {
 		setItems(
-			items.map((item) => (item.number === editingItem?.number ? { ...formData } : item))
+			items?.map((item) => (item.number === editingItem?.number ? { ...formData } : item))
 		);
 		setEditingItem(null);
 		setFormData({
 			description: '',
 			number: 0,
 			volume: 0,
-			unit: '',
-			price: 0
+			unit: ''
 		});
 		//! Mutate to UPDATE data to backend
 		// mutateUpdate(formData);
@@ -101,7 +111,6 @@ export const NewTable: React.FC = () => {
 						<Td>Number</Td>
 						<Td>Volume</Td>
 						<Td>Unit</Td>
-						<Td>Price</Td>
 						<Td>Actions</Td>
 					</Tr>
 				</Thead>
@@ -114,18 +123,18 @@ export const NewTable: React.FC = () => {
 							<p>Oh no! You have an error :(</p>
 						</>
 					)}
-					{items.map((item) => (
+					{items?.map((item) => (
 						<Tr key={item.number}>
 							<Td>{item.description}</Td>
 							<Td>{item.number}</Td>
 							<Td>{item.volume}</Td>
 							<Td>{item.unit}</Td>
-							<Td>{item.price}</Td>
 							<Td>
 								<Button onClick={() => handleEdit(item)}>Edit</Button>
 							</Td>
 						</Tr>
 					))}
+					{isSuccess && console.log('Success', formData)}
 				</Tbody>
 			</Table>
 			<br />
@@ -183,17 +192,6 @@ export const NewTable: React.FC = () => {
 						name="unit"
 						type="text"
 						value={formData.unit}
-						onChange={handleChange}
-					/>
-				</FormControl>
-				<br />
-				<FormControl>
-					<FormLabel htmlFor="price">Price</FormLabel>
-					<Input
-						id="price"
-						name="price"
-						type="number"
-						value={formData.price}
 						onChange={handleChange}
 					/>
 				</FormControl>

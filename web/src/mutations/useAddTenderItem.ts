@@ -5,14 +5,15 @@ import { AxiosError } from 'axios';
 import axios from 'axios';
 
 export interface TenderItems {
+	tenderItemId: number;
 	number: number;
 	description: string;
 	volume: number;
 	unit: string;
 }
 
-// this endpoint is for the item list on the tender.
-// Here we can add single items, volume, and more.
+// I get a 200 response when POSTing tenderItems.
+// Now I need to check if it increases.
 export const useAddTenderItem = () => {
 	return useMutation<ErrorResponse, AxiosError, TenderItems>(async (variables) => {
 		try {

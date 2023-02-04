@@ -8,7 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import { useAddDocument } from '../mutations/useAddDocument';
 import { devError } from '../utils/ConsoleUtils';
 import { ProjectImage } from '../models/ProjectImage';
-import { useAddFolder } from '../mutations/useAddFolder';
+import { useAddFolder } from '../queries/useAddFolder';
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;

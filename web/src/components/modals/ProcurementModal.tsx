@@ -70,7 +70,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					phoneNumber
 				});
 				console.log('success');
-				queryClient.refetchQueries(ApiService.addTender);
+
+				// queryClient.refetchQueries(ApiService.addTender);
 				closeModal();
 			} catch (e) {
 				devError('Error', e);

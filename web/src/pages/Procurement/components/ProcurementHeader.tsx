@@ -1,4 +1,7 @@
 import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTenderById } from '../../../mutations/getTenderById';
+import { Tender } from '../../../models/Tender';
 import {
 	Box,
 	Button,
@@ -8,143 +11,130 @@ import {
 	FormLabel,
 	Heading,
 	HStack,
-	Input,
-	VStack
+	VStack,
+	Text
 } from '@chakra-ui/react';
-// import { ProjectFormData, useModifyTender } from '../../../mutations/useModifyTender';
-// import { Controller, useForm } from 'react-hook-form';
-// import { DatePicker } from '../../../components/forms/DatePicker';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ModalContext } from '../../../context/ModalContext';
-
-// const update = await axios.post(ApiService.editTender);
 
 export const ProcurementHeader = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
+	const { tenderId } = useParams();
+	const { data, isLoading, isError, error } = useTenderById(Number(tenderId));
+	const tender: Tender | undefined = data && data.tender;
+
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
 	// const { register, handleSubmit, errors, control } = useForm<ProjectFormData>();
 	// add tender as the default values? Means I have to send the tender as a prop to this component??
 
 	// TODO is it a good idea to use the GlobalModal for modifying the tender also?
-	// It would mean that I would either have to use the ProcuermentModal component and that one uses the addTender from the API.
-	// I would have to make it dynamic.... OR make anoother component for the modifyTender.
-	// In that way I could maybe just 'skip' the modal?
+	// make another modal component for the modifyTender.
 
-	//! Maybe I should ask for a tenders/tender/{tenderId} endpoint? That would help with this procurementHeader component.
-	// Maybe I could use the modifyTender endpoint for this, but I'll do it later.
+	// TODO change this to not be a form. The button opens the modal where you can edit the Tender
 	return (
 		<>
-			<Center>
-				<Heading as={'h4'} size={'md'}>
-					Procurement
-				</Heading>
-			</Center>
-			<Center>
-				<Flex direction={'column'}>
-					<Box
-						mb={2}
-						p={4}
-						borderRadius={8}
-						borderColor={'#EFEFEE'}
-						bg={'#EFEFEE'}
-						w={'100%'}
-					>
-						<HStack pos={'relative'} pb={'16'}>
-							<VStack>
-								<HStack>
-									<FormControl id={'description'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Description:
-										</FormLabel>
-										<Input value="This needs to be good" />
-									</FormControl>
-								</HStack>
-								<HStack>
-									<FormControl id={'terms'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Terms:
-										</FormLabel>
-										{/* <Text>Einar</Text> */}
-										<Input value="This are the terms" />
-									</FormControl>
-								</HStack>
-								<HStack>
-									<FormControl id={'address'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Address:
-										</FormLabel>
-										{/* <Text>Dufnaholar 10</Text> */}
-										<Input value="Dufnaholar 10" />
-									</FormControl>
-								</HStack>
-								<HStack>
-									<FormControl id={'delivery'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Delivery:
-										</FormLabel>
-										{/* <Text>Yes, I need a big car</Text> */}
-										<Input value="yes" />
-									</FormControl>
-								</HStack>
-							</VStack>
-							<VStack>
-								<HStack>
-									<FormControl id={'finishDate'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Finish Date:
-										</FormLabel>
-										{/* <Controller
-											name="finishDate"
-											control={control}
-											// defaultValue={tender?.finishDate ? new Date(tender.finishDate) : null}
-											defaultValue={new Date()}
-											render={({ onChange, value, onBlur }) => (
-												<DatePicker
-													selected={value}
-													onChange={(date) => {
-														if (date) {
-															onChange((date as Date).getTime());
-														} else {
-															onChange(null);
-														}
-													}}
-													onBlur={onBlur}
-												/>
-											)}
-										/> */}
-									</FormControl>
-								</HStack>
-								<HStack>
-									<FormControl id={'phoneNumber'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Phone:
-										</FormLabel>
-										<Input value="1234567" />
-									</FormControl>
-								</HStack>
-								<HStack>
-									<FormControl id={'address'}>
-										<FormLabel fontWeight={'bold'} fontSize={'lg'}>
-											Delivery Address:
-										</FormLabel>
-										{/* <Text>Dufnaholar 10</Text> */}
-										<Input value="Dufnaholar 10" />
-									</FormControl>
-								</HStack>
-							</VStack>
-							<Button
-								pos={'absolute'}
-								bottom={'0'}
-								right={'0'}
-								onClick={() =>
-									setModalContext({ modifyTender: { modifyTender: undefined } })
-								}
+			{isLoading ? (
+				<LoadingSpinner />
+			) : isError ? (
+				<Text>
+					{error?.errorCode} went wrong - {error?.errorCode}
+				</Text>
+			) : (
+				<>
+					<Center>
+						<Heading as={'h4'} size={'md'}>
+							Procurement
+						</Heading>
+					</Center>
+					<Center>
+						<Flex direction={'column'}>
+							<Box
+								mb={2}
+								p={4}
+								borderRadius={8}
+								borderColor={'#EFEFEE'}
+								bg={'#EFEFEE'}
+								w={'100%'}
 							>
-								Edit
-							</Button>
-						</HStack>
-					</Box>
-				</Flex>
-			</Center>
+								<HStack pos={'relative'} pb={'16'}>
+									<VStack>
+										<HStack>
+											<FormControl id={'description'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Description:
+												</FormLabel>
+												<Text>{tender?.description}</Text>
+											</FormControl>
+										</HStack>
+										<HStack>
+											<FormControl id={'terms'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Terms:
+												</FormLabel>
+												<Text>{tender?.terms}</Text>
+											</FormControl>
+										</HStack>
+										<HStack>
+											<FormControl id={'address'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Address:
+												</FormLabel>
+												<Text>{tender?.address}</Text>
+											</FormControl>
+										</HStack>
+										<HStack>
+											<FormControl id={'delivery'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Delivery:
+												</FormLabel>
+												<Text>{tender?.delivery}</Text>
+											</FormControl>
+										</HStack>
+									</VStack>
+									<VStack>
+										<HStack>
+											<FormControl id={'finishDate'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Finish Date:
+												</FormLabel>
+												<Text>{tender?.finishDate}</Text>
+											</FormControl>
+										</HStack>
+										<HStack>
+											<FormControl id={'phoneNumber'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Phone:
+												</FormLabel>
+												<Text>{tender?.phoneNumber}</Text>
+											</FormControl>
+										</HStack>
+										<HStack>
+											<FormControl id={'address'}>
+												<FormLabel fontWeight={'bold'} fontSize={'lg'}>
+													Project name:
+												</FormLabel>
+												<Text>{tender?.projectName}</Text>
+											</FormControl>
+										</HStack>
+									</VStack>
+									<Button
+										pos={'absolute'}
+										bottom={'0'}
+										right={'0'}
+										onClick={() =>
+											setModalContext({
+												modifyTender: { modifyTender: undefined }
+											})
+										}
+									>
+										Edit
+									</Button>
+								</HStack>
+							</Box>
+						</Flex>
+					</Center>
+				</>
+			)}
 		</>
 	);
 };

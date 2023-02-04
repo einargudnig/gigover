@@ -7,11 +7,17 @@ export interface TenderResponse {
 	list: Tender[];
 }
 
+export interface TenderHook {
+	isLoading: boolean;
+	ten;
+}
+
 export const useUserTenders = () => {
 	const { data, isLoading, isError, error } = useQuery<TenderResponse, ErrorResponse>(
 		ApiService.userTenders,
 		{
 			refetchOnWindowFocus: true
+			// withCredentials: true
 		}
 	);
 

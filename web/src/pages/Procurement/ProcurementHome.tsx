@@ -68,9 +68,10 @@ export const ProcurementHome = (): JSX.Element => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const { data, isLoading } = useUserTenders();
 	const { data: projects } = useProjectList(); // Just to get the projectName :/
+	// console.log('DATA', { data });
 
 	// Get the projectNames from projects and add them to the tenders
-	const projectsWithTenders = data.map((t) => {
+	const projectsWithTenders = data?.map((t) => {
 		const projectName = projects.find((p) => p.projectId === t.projectId);
 		return { ...t, projectName };
 	});
@@ -139,30 +140,6 @@ export const ProcurementHome = (): JSX.Element => {
 					))}
 				</>
 			)}
-			{/* {isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
-			) : (
-				<div>
-					<VStack alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
-						<SimpleGrid itemWidth={320}>
-							{
-								// Map through the projectNames and make a ProcurementFolder for each projectid
-								projectsWithTenders.map((p) => {
-									return (
-										<ProcurementFolder
-											key={p.projectId}
-											projectId={p.projectId}
-											name={p?.projectName?.name}
-										/>
-									);
-								})
-							}
-						</SimpleGrid>
-					</VStack>
-				</div>
-			)} */}
 		</>
 	);
 };
