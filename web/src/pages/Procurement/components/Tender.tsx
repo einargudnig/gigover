@@ -1,16 +1,10 @@
 import React from 'react';
 import { Text } from '@chakra-ui/react';
-// import { useProjectTenders } from '../../../queries/useProjectTenders';
 import { ProcurementHeader } from './ProcurementHeader';
 // import { ProcurementOffer } from './ProcurementOffer';
-// import { TenderTable } from './TenderTable';
 import { NewTable } from './NewTable';
 
 export const Tender = (): JSX.Element => {
-	// const testData = useProjectTenders(977);
-	// test the endpoint with a known Id
-	// console.log(testData)
-
 	return (
 		<div>
 			<ProcurementHeader />
