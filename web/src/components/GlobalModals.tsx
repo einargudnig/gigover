@@ -12,6 +12,7 @@ import ShareItem from '../pages/Files/components/ShareItem';
 import { UseResourceModal } from './modals/UseResourceModal';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { ProcurementModal } from './modals/ProcurementModal';
+import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
 import { Theme } from '../Theme';
 
 export const GlobalModals = (): JSX.Element => {
@@ -60,7 +61,7 @@ export const GlobalModals = (): JSX.Element => {
 			)}
 			{modalContext.modifyTender && (
 				<Modal open={true} title={'Edit tender'}>
-					<ProcurementModal tender={modifyTender} />
+					<ModifyProcurementModal tender={modifyTender} />
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (
