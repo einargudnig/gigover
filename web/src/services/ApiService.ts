@@ -111,7 +111,7 @@ export class ApiService {
 
 	// Tender
 	//! TODO: add parameters where needed.
-	static addTender = API_BASE + 'tender/addTender'; //! This does not work
+	static addTender = API_BASE + 'tender/addTender';
 	static editTender = API_BASE + 'tender/editTender';
 	static deleteTender = API_BASE + 'tender/deleteTender';
 	static getTenderById = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; //! Use this one to display both the tender details and the tender items

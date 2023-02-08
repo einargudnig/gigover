@@ -2,14 +2,11 @@ import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
 import { Box, Heading, Text, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
-import { useOpenProjects } from '../../hooks/useAvailableProjects';
-import { TrackerSelect } from '../TrackerSelect';
-import { useProjectList } from '../../queries/useProjectList';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
+import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
@@ -20,48 +17,18 @@ interface TenderModalProps {
 export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const queryClient = useQueryClient();
-	const { data } = useProjectList();
-	// I'm using the openProjects for the selecting of projects.
-	const openProjects = useOpenProjects(data);
 
-	// This is so the user can select a project and then the tasks from the selected project.
-	// we want the procurement to be linked to a task and a project.
-	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
-	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
-
-	// mustateAsync: modify
-	const { mutate: modify, isLoading, isError, error } = useAddTender();
-	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
+	const { mutate: modify, isLoading, isError, error } = useModifyTender();
+	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>({
 		defaultValues: tender,
 		mode: 'onBlur'
 	});
 
-	// We want to finde the tasks from the selected project so the user can select a task.
-	// selectedProject as a parameter
-	const findTasks = (projectId: number) => {
-		const taskFromProject = data?.find((project) => project.projectId === projectId);
-		return taskFromProject?.tasks;
-	};
-	const tasksFromSelectedProject = findTasks(selectedProject ?? 0);
-	// const taskNumbers = () => {
-	// 	return tasksFromSelectedProject!.length;
-	// };
-
 	const onSubmit = handleSubmit(
-		async ({
-			projectId,
-			taskId,
-			description,
-			terms,
-			finishDate,
-			delivery,
-			address,
-			phoneNumber
-		}) => {
+		async ({ description, terms, finishDate, delivery, address, phoneNumber }) => {
 			try {
 				await modify({
-					projectId: selectedProject,
-					taskId: selectedTask,
+					tenderId: tender?.tenderId,
 					description,
 					terms,
 					finishDate,
@@ -71,7 +38,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 				});
 				console.log('success');
 
-				// queryClient.refetchQueries(ApiService.addTender);
+				// queryClient.refetchQueries(ApiService.addTender); //! should we refetch the useTenders/id query?
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
@@ -79,6 +46,8 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 		}
 	);
 
+	//! I htink I should not be able as a user, to update the task and the project.
+	// So for the time being I'll leave it out of the modified modal.
 	return (
 		<div>
 			{isError && (
@@ -90,9 +59,10 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 			)}
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
-					{openProjects ? (
+					<Heading size={'md'}>Project</Heading>
+					{/* {openProjects ? (
 						<>
-							<FormControl id={'modal'}>
+							<FormControl id={'project'}>
 								<Heading size={'md'}>Select a project for your procurement</Heading>
 								<TrackerSelect
 									title={'Select a project'}
@@ -119,27 +89,29 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 								you can make a procurement
 							</Text>
 						</>
-					)}
-					{selectedProject && (
+					)} */}
+					{/* {selectedProject && (
 						<>
-							<Heading size={'md'}>Select a task for your procurement</Heading>
-							<TrackerSelect
-								title={'Select a task'}
-								value={selectedTask}
-								options={tasksFromSelectedProject!.map((task) => ({
-									label: task.text,
-									value: task.taskId
-								}))}
-								valueChanged={(newValue) => {
-									if (newValue === '') {
-										setSelectedTask(undefined);
-									} else {
-										setSelectedTask((newValue as number) ?? undefined);
-									}
-								}}
-							/>
+							<FormControl id={'task'}>
+								<Heading size={'md'}>Select a task for your procurement</Heading>
+								<TrackerSelect
+									title={'Select a task'}
+									value={selectedTask}
+									options={tasksFromSelectedProject!.map((task) => ({
+										label: task.text,
+										value: task.taskId
+									}))}
+									valueChanged={(newValue) => {
+										if (newValue === '') {
+											setSelectedTask(undefined);
+										} else {
+											setSelectedTask((newValue as number) ?? undefined);
+										}
+									}}
+								/>
+							</FormControl>
 						</>
-					)}
+					)} */}
 					<FormControl id={'description'}>
 						<FormLabel>Procurement Description</FormLabel>
 						<Input
