@@ -57,7 +57,6 @@ export const Comment = ({
 	if (comment.trim().length < 1 && imageId === 0) {
 		return null;
 	}
-
 	const commentText = comment.replace(
 		CommentRegex,
 		"<span class='usertag' style='font-weight: bold; color: #000'>$1</span>"

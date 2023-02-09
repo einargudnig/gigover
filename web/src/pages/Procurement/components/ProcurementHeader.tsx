@@ -5,7 +5,7 @@ import { Tender } from '../../../models/Tender';
 import { Box, Button, Center, Flex, Heading, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ModalContext } from '../../../context/ModalContext';
-// import { formatDate } from '../../../utils/StringUtils';
+import { formatDateWithoutTime } from '../../../utils/StringUtils';
 
 export const ProcurementHeader = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -28,6 +28,8 @@ export const ProcurementHeader = (): JSX.Element => {
 	// } else {
 	// 	return formatDate(tender?.finishDate);
 	// }
+	const time = tender?.finishDate;
+	let date = new Date(time!);
 
 	return (
 		<>
@@ -94,8 +96,8 @@ export const ProcurementHeader = (): JSX.Element => {
 												Finish Date:
 											</Text>
 											<Text fontSize={'lg'}>
-												{tender?.finishDate}
-												{/* {formatDate(tender?.finishDate)} */}
+												{/* {tender?.finishDate} */}
+												{formatDateWithoutTime(date)}
 											</Text>
 										</HStack>
 										<HStack>

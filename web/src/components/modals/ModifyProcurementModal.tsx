@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
-import { Box, Heading, Text, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
-import { ApiService } from '../../services/ApiService';
+// import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
 interface TenderModalProps {
@@ -185,7 +185,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					<FormActions
 						cancelText={'Cancel'}
 						onCancel={closeModal}
-						submitText={'Create'}
+						submitText={'Update'}
 						onSubmit={onSubmit}
 					/>
 				</VStack>
