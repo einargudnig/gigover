@@ -24,7 +24,6 @@ export const useModifyTender = () => {
 			});
 			const tenderId = variables?.tenderId || 0;
 			await queryClient.refetchQueries(ApiService.getTenderById(tenderId));
-			// await queryClient.refetchQueries(ApiService.editTender);
 
 			return response.data;
 		} catch (e) {

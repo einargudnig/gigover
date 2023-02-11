@@ -15,21 +15,10 @@ export const ProcurementHeader = (): JSX.Element => {
 
 	// TODO
 	//? Should I add the projectName like I do on the /procurement page?
-	// It would be nice but it's not necessary.
 
-	// wire the edit button to send the info to the modal
-	// make the modal modify work to update the tender
-
-	// TODO handle the finish date
-	// Should I handle the finishDate here?
-	// console.log(typeof tender?.finishDate); // number
-	// if (tender?.finishDate === undefined) {
-	// 	return <p>N/A</p>;
-	// } else {
-	// 	return formatDate(tender?.finishDate);
-	// }
+	// Handling the date from the backend, it's fine for now
 	const time = tender?.finishDate;
-	let date = new Date(time!);
+	const date = new Date(time!);
 
 	return (
 		<>
@@ -96,7 +85,6 @@ export const ProcurementHeader = (): JSX.Element => {
 												Finish Date:
 											</Text>
 											<Text fontSize={'lg'}>
-												{/* {tender?.finishDate} */}
 												{formatDateWithoutTime(date)}
 											</Text>
 										</HStack>

@@ -22,20 +22,16 @@ export const useAddTender = () => {
 	const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, TenderFormData>(async (variables) => {
-		// console.log('VARIABLES', variables);
 		try {
 			const response = await axios.post(ApiService.addTender, variables, {
 				withCredentials: true
 			});
-			console.log('REsPONSE', response);
 			await client.refetchQueries(ApiService.addTender);
 
 			return response.data;
 		} catch (e) {
-			console.log('IN CATCH BLOCK');
 			devError(e);
-			// ! For some reason I *always* get an error here when posting,
-			throw new Error('Could not add tender'); //! HERE
+			throw new Error('Could not add tender');
 		}
 	});
 };
