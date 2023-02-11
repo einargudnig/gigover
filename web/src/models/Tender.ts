@@ -11,7 +11,7 @@ export interface Tender {
 	address: string;
 	phoneNumber: string;
 	projectName?: Project[]; // I'm not sure if I should do this? I want to have the projectName on the tender object. This does work but it's kinda sloppy.
-	items?: TenderItem[];
+	items: TenderItem[];
 }
 
 export interface TenderItem {

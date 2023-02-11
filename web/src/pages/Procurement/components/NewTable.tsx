@@ -26,8 +26,8 @@ export const NewTable: React.FC = () => {
 	//! GET from database
 	const {
 		data,
-		isLoading: isTenderLoading, // I should use this to show a loading spinner
-		isError: isTenderError, // I should use this to show an error message
+		isLoading: isTenderLoading,
+		isError: isTenderError,
 		error: tenderError
 	} = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
@@ -40,7 +40,6 @@ export const NewTable: React.FC = () => {
 	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
 	const [formData, setFormData] = useState<TenderItem>({
 		tenderId: Number(tenderId),
-		// description: 'Description',
 		description: 'Description',
 		nr: 0,
 		volume: 0,
@@ -89,14 +88,14 @@ export const NewTable: React.FC = () => {
 		const updatedFormData = tenderItems?.map((item) =>
 			item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item
 		);
-
+		console.log({ updatedFormData });
+		console.log(typeof updatedFormData);
 		// setItems(
 		// 	tenderItems?.map((item) =>
 		// 		item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item
 		// 	)
 		// );
 
-		// const updatedFormData = tenderItems?.map((item)) => item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item);
 		setEditingItem(null);
 		setFormData({
 			tenderId: Number(tenderId),

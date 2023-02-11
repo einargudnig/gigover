@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Tender } from '../../models/Tender';
 import { Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
 // import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 interface TenderModalProps {
 	tender?: Tender;
@@ -19,7 +20,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 	const queryClient = useQueryClient();
 
 	const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>({
+	const { register, handleSubmit, control } = useForm<ProjectFormData>({
 		defaultValues: tender,
 		mode: 'onBlur'
 	});
@@ -185,7 +186,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					<FormActions
 						cancelText={'Cancel'}
 						onCancel={closeModal}
-						submitText={'Update'}
+						submitText={isLoading ? <LoadingSpinner /> : 'Update'}
 						onSubmit={onSubmit}
 					/>
 				</VStack>

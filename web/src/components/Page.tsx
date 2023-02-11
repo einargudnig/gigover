@@ -256,12 +256,12 @@ export const Page = ({
 						</div>
 						<span>Time reports</span>
 					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/procurement'}>
+					{/* <IconLink onClick={onLinkClick} to={'/procurement'}>
 						<div>
 							<ProcurementIcon />
 						</div>
 						<span>Procurement</span>
-					</IconLink>
+					</IconLink> */}
 					<IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
 							<SettingsIcon />
