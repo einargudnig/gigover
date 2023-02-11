@@ -23,7 +23,6 @@ export const useAddDocument = () => {
 						withCredentials: true
 					}
 				);
-
 				await client.refetchQueries(ApiService.projectList);
 
 				if (variables.folderId) {

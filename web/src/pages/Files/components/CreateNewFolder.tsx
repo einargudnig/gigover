@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useAddFolder } from '../../../mutations/useAddFolder';
+import { useAddFolder } from '../../../queries/useAddFolder';
 import { Button, FormControl, FormErrorMessage, Input, FormLabel, Text } from '@chakra-ui/react';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { CardBase } from '../../../components/CardBase';

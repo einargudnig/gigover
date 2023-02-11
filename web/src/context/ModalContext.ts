@@ -6,6 +6,7 @@ import { Resource } from '../models/Resource';
 import { ProjectFolder } from '../models/ProjectFolder';
 import { ProjectImage } from '../models/ProjectImage';
 import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
+import { Tender } from '../models/Tender';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -62,6 +63,12 @@ export interface IModalContext {
 	editPhoto?: IEditPhotoContext;
 	resources?: IResourceModalContext;
 	resourceTracker?: ResourceTrackerContext;
+	modifyTender?: {
+		modifyTender?: Tender;
+	};
+	addTender?: {
+		tender?: Tender;
+	};
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

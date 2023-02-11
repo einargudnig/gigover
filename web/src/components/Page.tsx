@@ -5,6 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
+import { ProcurementIcon } from './icons/ProcurementIcon';
 
 import {
 	Avatar,
@@ -255,6 +256,12 @@ export const Page = ({
 						</div>
 						<span>Time reports</span>
 					</IconLink>
+					{/* <IconLink onClick={onLinkClick} to={'/procurement'}>
+						<div>
+							<ProcurementIcon />
+						</div>
+						<span>Procurement</span>
+					</IconLink> */}
 					<IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
 							<SettingsIcon />
@@ -309,11 +316,6 @@ export const Page = ({
 												Sign out
 											</MenuItem>
 										</MenuGroup>
-										{/* <MenuDivider />
-										<MenuGroup title="Help">
-											<MenuItem>Helpdesk</MenuItem>
-											<MenuItem>FAQ</MenuItem>
-										</MenuGroup> */}
 									</MenuList>
 								</Menu>
 							</Flex>

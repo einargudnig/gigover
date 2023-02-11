@@ -66,6 +66,8 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		});
 	}, [data, dispatch]);
 
+	// Should I put the "setCalendarType" in a callbakc or useEffect?
+
 	return (
 		<Page
 			title={'Gantt chart'}

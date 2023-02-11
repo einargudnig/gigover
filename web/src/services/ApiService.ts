@@ -3,7 +3,8 @@ export const IS_LOCAL = process.env.NODE_ENV !== 'production';
 export const API_BASE =
 	process.env.NODE_ENV === 'production'
 		? 'https://rest.gigover.com/rest/'
-		: 'http://localhost:3000/rest/';
+		: // : 'http://localhost:3000/rest/';
+		  'http://localhost:8080/gigover-sdk-2.5.0-SNAPSHOT/rest/'; // 🤦‍♂️
 // If using proxy.
 // If hosting backend locally use :8080 instead of :3000
 
@@ -107,4 +108,21 @@ export class ApiService {
 
 	// Progress status
 	static getProgressStatusList = API_BASE + 'contractor/progressStatus';
+
+	// Tender
+	//! TODO: add parameters where needed.
+	static addTender = API_BASE + 'tender/addTender';
+	static editTender = API_BASE + 'tender/editTender';
+	static deleteTender = API_BASE + 'tender/deleteTender';
+	static getTenderById = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; //! Use this one to display both the tender details and the tender items
+	static addTenderItem = API_BASE + 'tender/addTenderItem';
+	static editTenderItem = API_BASE + 'tender/editTenderItem';
+	static deleteTenderItem = API_BASE + 'tender/deleteTenderItem';
+	static publishTender = API_BASE + 'tender/publishTender';
+	static userTenders = API_BASE + 'tender/tenders';
+	static projectTenders = (projectId: number) => API_BASE + 'tender/tenders/' + projectId;
+	static addOffer = API_BASE + 'tender/addOffer';
+	static editOffer = API_BASE + 'tender/editOffer';
+	static addOfferItem = API_BASE + 'tender/addOfferItem';
+	static editOfferItem = API_BASE + 'tender/editOfferItem';
 }

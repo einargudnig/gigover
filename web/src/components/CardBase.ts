@@ -18,6 +18,7 @@ export const CardBaseLink = styled(Link)`
 	background: #fff;
 	box-shadow: ${(props) => props.theme.boxShadow()};
 	padding: 24px;
+	margin-bottom: 24px;
 	transition: all 0.2s linear;
 
 	&:hover {
