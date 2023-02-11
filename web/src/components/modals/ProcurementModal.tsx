@@ -48,7 +48,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 
 	const onSubmit = handleSubmit(
 		async ({
+			// eslint-disable-next-line
 			projectId,
+			// eslint-disable-next-line
 			taskId,
 			description,
 			terms,

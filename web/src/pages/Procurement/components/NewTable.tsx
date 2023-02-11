@@ -53,6 +53,7 @@ export const NewTable: React.FC = () => {
 		isError: isMutateError,
 		error: mutateError
 	} = useAddTenderItem();
+	// eslint-disable-next-line
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
