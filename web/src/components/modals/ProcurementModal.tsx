@@ -6,11 +6,10 @@ import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { TrackerSelect } from '../TrackerSelect';
 import { useProjectList } from '../../queries/useProjectList';
 import { useCloseModal } from '../../hooks/useCloseModal';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
-import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
 interface TenderModalProps {
@@ -19,7 +18,7 @@ interface TenderModalProps {
 
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const queryClient = useQueryClient();
+	// const queryClient = useQueryClient();
 	const { data } = useProjectList();
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
@@ -30,8 +29,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
 
 	// mustateAsync: modify
-	const { mutate: modify, isLoading, isError, error } = useAddTender();
-	const { register, handleSubmit, errors, control } = useForm<TenderFormData>({
+	const { mutate: modify, isError, error } = useAddTender();
+	const { register, handleSubmit, control } = useForm<TenderFormData>({
 		defaultValues: tender,
 		mode: 'onBlur'
 	});

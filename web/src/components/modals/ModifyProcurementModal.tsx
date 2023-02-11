@@ -3,7 +3,7 @@ import { Tender } from '../../models/Tender';
 import { Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
@@ -17,7 +17,7 @@ interface TenderModalProps {
 
 export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const queryClient = useQueryClient();
+	// const queryClient = useQueryClient();
 
 	const { mutate: modify, isLoading, isError, error } = useModifyTender();
 	const { register, handleSubmit, control } = useForm<ProjectFormData>({
