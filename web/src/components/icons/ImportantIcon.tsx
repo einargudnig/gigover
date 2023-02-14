@@ -1,10 +1,10 @@
 import React from 'react';
 
-export const ImportantIcon = (): JSX.Element => {
+export const ImportantIcon = ({ size = 29 }): JSX.Element => {
 	return (
 		<svg
-			width="29"
-			height="29"
+			width={size}
+			height={size}
 			viewBox="0 0 29 29"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"

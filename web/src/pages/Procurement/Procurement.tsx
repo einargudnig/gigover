@@ -25,9 +25,7 @@ export const Procurement = (): JSX.Element => {
 				contentPadding={false}
 				actions={
 					<>
-						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use.
-						 * Why is the modal still empty?
-						 */}
+						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use. */}
 						<Button
 							onClick={() => setModalContext({ addTender: { tender: undefined } })}
 							leftIcon={<PlusIcon />}

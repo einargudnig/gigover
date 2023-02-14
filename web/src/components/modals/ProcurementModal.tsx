@@ -6,7 +6,8 @@ import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { TrackerSelect } from '../TrackerSelect';
 import { useProjectList } from '../../queries/useProjectList';
 import { useCloseModal } from '../../hooks/useCloseModal';
-// import { useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
+import { ApiService } from '../../services/ApiService';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
@@ -18,7 +19,7 @@ interface TenderModalProps {
 
 export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 	const { data } = useProjectList();
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
@@ -49,9 +50,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const onSubmit = handleSubmit(
 		async ({
 			// eslint-disable-next-line
-			projectId,
+			projectId, //TODO Why is this underlined?
 			// eslint-disable-next-line
-			taskId,
+			taskId, //TODO Why is this underlined?
 			description,
 			terms,
 			finishDate,
@@ -72,7 +73,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 				});
 				console.log('success');
 
-				// queryClient.refetchQueries(ApiService.addTender);
+				queryClient.refetchQueries(ApiService.userTenders);
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
@@ -185,6 +186,9 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 						/>
 					</FormControl>
 					<Box mb={6} />
+					{/* // TODO Need to validate this!, it should be a number?
+							// Maybe I amke it a checkbox? that returns 1 or 0?
+					*/}
 					<FormControl id={'delivery'}>
 						<FormLabel>Delivery</FormLabel>
 						<Input

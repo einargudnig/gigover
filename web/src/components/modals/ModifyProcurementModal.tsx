@@ -29,7 +29,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 		async ({ description, terms, finishDate, delivery, address, phoneNumber }) => {
 			try {
 				await modify({
-					tenderId: tender?.tenderId,
+					tenderId: tender!.tenderId,
 					description,
 					terms,
 					finishDate,

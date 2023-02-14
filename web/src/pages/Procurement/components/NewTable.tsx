@@ -3,13 +3,15 @@ import { useParams } from 'react-router-dom';
 import { Tender, TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
 import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
-import { useTenderById } from '../../../mutations/getTenderById';
+import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
+import { useTenderById } from '../../../queries/useGetTenderById';
 import {
 	Box,
 	Button,
 	Flex,
 	FormControl,
 	FormLabel,
+	FormHelperText,
 	HStack,
 	Input,
 	Table,
@@ -17,26 +19,34 @@ import {
 	Tbody,
 	Td,
 	Thead,
-	Tr
+	Th,
+	Tr,
+	Tooltip
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { ImportantIcon } from '../../../components/icons/ImportantIcon';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
+import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
 
 export const NewTable: React.FC = () => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
-	//! GET from database
+	// GET user tenders from database
 	const {
 		data,
 		isLoading: isTenderLoading,
 		isError: isTenderError,
 		error: tenderError
 	} = useTenderById(Number(tenderId));
+	//! This will cause me annoying trouble that I have to deal with
+	// Fx, when I want to modify or delete items they can be undefined, which is no bueno.
+	// There is a way around this, but it's not pretty.
 	const tender: Tender | undefined = data?.tender;
-	const tenderItems = tender?.items;
+	const tenderItems: TenderItem[] | undefined = tender?.items;
 
-	//! NOTE I need to refactor this one out.
-	// By using the state variable here I'm not able to re-render the table when I add a new item
-	// I think it will be better when done!
-	// const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
+	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
+	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
 	const [formData, setFormData] = useState<TenderItem>({
 		tenderId: Number(tenderId),
@@ -46,7 +56,7 @@ export const NewTable: React.FC = () => {
 		unit: 'Unit of measuerment'
 	});
 
-	//! POST / Update
+	// POST / Update / DELETE
 	const {
 		mutate,
 		isLoading: isMutateLoading,
@@ -55,6 +65,10 @@ export const NewTable: React.FC = () => {
 	} = useAddTenderItem();
 	// eslint-disable-next-line
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
+	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
+
+	//! We need to make a validation for the unit form field
+	const isInvalidUnit = formData.unit.length > 4;
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -64,10 +78,8 @@ export const NewTable: React.FC = () => {
 		});
 	};
 
-	//! Maybe I don't need to add it to the state?
-	// I can send it to the backend and then revalidate the get REQUEST
 	const handleAdd = () => {
-		// setItems([...[items], formData]); //! I think this here would help me update the table on submit. Since it adds it to the state
+		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
 			tenderId: Number(tenderId),
 			description: formData.description,
@@ -86,16 +98,14 @@ export const NewTable: React.FC = () => {
 	};
 
 	const handleUpdate = () => {
-		const updatedFormData = tenderItems?.map((item) =>
-			item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item
+		setItems(
+			tenderItems?.map((item) =>
+				item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item
+			)
 		);
-		console.log({ updatedFormData });
-		console.log(typeof updatedFormData);
-		// setItems(
-		// 	tenderItems?.map((item) =>
-		// 		item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item
-		// 	)
-		// );
+
+		mutateUpdate(formData);
+		// console.log('Mutating tenderItem with this formData:', formData); // Good for debugging
 
 		setEditingItem(null);
 		setFormData({
@@ -105,8 +115,6 @@ export const NewTable: React.FC = () => {
 			volume: 0,
 			unit: ''
 		});
-		// mutateUpdate(updatedFormData);
-		console.log('Mutating tenderItem with this formData:', formData);
 	};
 
 	return (
@@ -118,17 +126,60 @@ export const NewTable: React.FC = () => {
 					Something went wrong - {tenderError?.errorText} - {tenderError?.errorCode}
 				</Text>
 			) : (
-				<Table>
+				<Table variant={'striped'}>
+					{/* <Thead position="sticky" top={0} zIndex="docked">
+						// This migh come in handy, it makes the table header sticky. It does not look suuper good, but the funcitonality is there.
+						// Let's keep it commented out and see where it goes.
+					*/}
 					<Thead>
 						<Tr>
-							<Td>Description</Td>
-							<Td>Number</Td>
-							<Td>Volume</Td>
-							<Td>Unit</Td>
-							<Td>Actions</Td>
+							<Tooltip label="Description of a item">
+								<Th>
+									<HStack>
+										<p>Description</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+							<Tooltip label="Does this item have a special number?">
+								<Th>
+									<HStack>
+										<p>Number</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Tooltip label="Volume">
+								<Th>
+									<HStack>
+										<p color={'black'}>Volume</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Tooltip label="Unit of meaurement. For example: m2, kg, t">
+								<Th>
+									<HStack>
+										<p>Unit</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Th>
+								<p>Actions</p>
+							</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
+						{tenderItems?.length === 0 ? (
+							<Text fontSize="xl">
+								The table is empty! To add items into the table you need to write it
+								into the form below, and press the Add item button.
+							</Text>
+						) : null}
 						{tenderItems?.map((item) => (
 							<Tr key={item.tenderItemId}>
 								<Td>{item.description}</Td>
@@ -136,11 +187,9 @@ export const NewTable: React.FC = () => {
 								<Td>{item.volume}</Td>
 								<Td>{item.unit}</Td>
 								<Td>
-									<Button onClick={() => handleEdit(item)}>Edit</Button>
-								</Td>
-								<Td>
-									{/* Need a clickHandler and a function to delete the Item */}
-									<Button colorScheme={'red'}>Delete</Button>
+									<ScrollIntoView selector="#editItem">
+										<Button onClick={() => handleEdit(item)}>Edit</Button>
+									</ScrollIntoView>
 								</Td>
 							</Tr>
 						))}
@@ -152,20 +201,16 @@ export const NewTable: React.FC = () => {
 			)}
 			<br />
 
-			<Text>
-				To get items into the table you need to write it into the form below, and press the
-				Add item button.
-			</Text>
+			{tenderItems?.length !== 0 ? (
+				<Text fontSize="md">
+					To edit or delete items in the table you must press the Edit button in the
+					Action column. You will then be able to edit the item in the form below. When
+					you are done editing the item, press the Update item button.
+				</Text>
+			) : null}
 			<br />
-			<Text>
-				To edit items in the table you must press the Edit button in the Action column. You
-				will then be able to edit the item in the form below. When you are done editing the
-				item, press the Update item button.
-			</Text>
-			<br />
-			<Box mb={2} mt={2} p={2} borderRadius={6} borderColor={'#EFEFEE'}>
+			<Box mb={2} mt={2} p={2} borderRadius={6} borderColor={'#EFEFEE'} id="editItem">
 				<FormControl>
-					{/* <Form></Form> */}
 					<FormLabel htmlFor="description">Description</FormLabel>
 					<Input
 						id="description"
@@ -199,7 +244,7 @@ export const NewTable: React.FC = () => {
 				</FormControl>
 				<br />
 				{/* //! I should put some validation here! */}
-				<FormControl>
+				<FormControl id={'unit'} isInvalid={isInvalidUnit}>
 					<FormLabel htmlFor="unit">Unit</FormLabel>
 					<Input
 						id="unit"
@@ -208,15 +253,46 @@ export const NewTable: React.FC = () => {
 						value={formData.unit}
 						onChange={handleChange}
 					/>
+					{isInvalidUnit ? (
+						<FormHelperText>
+							The measurement unit should be in a short format: kg, m, m2
+						</FormHelperText>
+					) : null}
 				</FormControl>
 			</Box>
 			<br />
 			<Flex justifyContent={'end'}>
 				<HStack>
-					{editingItem ? (
-						<Button onClick={handleUpdate}>
-							{isUpdateLoading ? <LoadingSpinner /> : 'Update item'}
-						</Button>
+					{tender === undefined ? null : editingItem ? (
+						<HStack>
+							<Button onClick={handleUpdate}>
+								{isUpdateLoading ? <LoadingSpinner /> : 'Update item'}
+							</Button>
+							{/* //! This button deletes the selcted item */}
+							<ConfirmDialog
+								header={'Delete item'}
+								setIsOpen={setDialogOpen}
+								callback={async (b) => {
+									if (b) {
+										await deleteTenderItem(editingItem);
+										// console.log('Deleting item:', item); // Good for debugging
+									}
+
+									setDialogOpen(false);
+								}}
+								isOpen={dialogOpen}
+							>
+								<Button
+									aria-label={'Delete item'}
+									colorScheme={'red'}
+									isLoading={isDeleteLoading}
+									leftIcon={<TrashIcon color={'white'} size={20} />}
+									onClick={() => setDialogOpen(true)}
+								>
+									Delete
+								</Button>
+							</ConfirmDialog>
+						</HStack>
 					) : (
 						<Button onClick={handleAdd}>
 							{isMutateLoading ? <LoadingSpinner /> : 'Add item'}

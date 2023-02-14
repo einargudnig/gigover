@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text } from '@chakra-ui/react';
+import { Text, Spacer } from '@chakra-ui/react';
 import { ProcurementHeader } from './ProcurementHeader';
-// import { ProcurementOffer } from './ProcurementOffer';
+import { ProcurementOffer } from './ProcurementOffer';
 import { NewTable } from './NewTable';
 
 export const Tender = (): JSX.Element => {
@@ -13,10 +13,9 @@ export const Tender = (): JSX.Element => {
 				table and edit them.
 			</Text>
 			{/* <Spacer /> */}
-			{/* <TenderTable /> */}
 			<NewTable />
-			{/* <Spacer /> */}
-			{/* <ProcurementOffer /> */}
+			<Spacer />
+			<ProcurementOffer />
 		</div>
 	);
 };

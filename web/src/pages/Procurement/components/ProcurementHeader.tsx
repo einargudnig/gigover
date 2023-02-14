@@ -1,17 +1,25 @@
-import React, { useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { useTenderById } from '../../../mutations/getTenderById';
+import React, { useContext, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useTenderById } from '../../../queries/useGetTenderById';
+import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
 import { Tender } from '../../../models/Tender';
 import { Box, Button, Center, Flex, Heading, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
 
 export const ProcurementHeader = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { tenderId } = useParams();
+	const navigate = useNavigate();
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const { data, isLoading, isError, error } = useTenderById(Number(tenderId));
-	const tender: Tender | undefined = data && data.tender;
+	const tender: Tender | undefined = data?.tender;
+
+	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
+		useDeleteProcurement();
 
 	// TODO
 	//? Should I add the projectName like I do on the /procurement page?
@@ -96,18 +104,43 @@ export const ProcurementHeader = (): JSX.Element => {
 										</HStack>
 									</VStack>
 								</HStack>
-								<Button
-									pos={'absolute'}
-									bottom={'0'}
-									right={'0'}
-									onClick={() =>
-										setModalContext({
-											modifyTender: { modifyTender: tender }
-										})
-									}
-								>
-									Edit
-								</Button>
+								<HStack pos={'absolute'} bottom={'0'} right={'0'}>
+									<Button
+										onClick={() =>
+											setModalContext({
+												modifyTender: { modifyTender: tender }
+											})
+										}
+									>
+										Edit
+									</Button>
+									{tender === undefined ? null : (
+										<ConfirmDialog
+											header={'Delete procurement'}
+											setIsOpen={setDialogOpen}
+											callback={async (b) => {
+												if (b) {
+													await deleteProcurementAsync(tender);
+													navigate('/procurement');
+												}
+												setDialogOpen(false);
+											}}
+											isOpen={dialogOpen}
+										>
+											<Button
+												aria-label={'Delete'}
+												colorScheme={'red'}
+												isLoading={isLoadingDelete}
+												leftIcon={<TrashIcon color={'white'} size={20} />}
+												onClick={() => {
+													setDialogOpen(true);
+												}}
+											>
+												Delete
+											</Button>
+										</ConfirmDialog>
+									)}
+								</HStack>
 							</VStack>
 						</Box>
 					</Flex>

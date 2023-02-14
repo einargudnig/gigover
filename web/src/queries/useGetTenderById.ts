@@ -8,18 +8,19 @@ export interface TenderByIdResponse {
 }
 
 export const useTenderById = (tenderId: number) => {
-	const { data, isLoading, isError, error } = useQuery<TenderByIdResponse, ErrorResponse>(
-		ApiService.getTenderById(tenderId),
-		{
-			refetchOnWindowFocus: true
-			// withCredentials: true
-		}
-	);
+	const { data, isLoading, isSuccess, isError, error } = useQuery<
+		TenderByIdResponse,
+		ErrorResponse
+	>(ApiService.getTenderById(tenderId), {
+		refetchOnWindowFocus: true
+		// withCredentials: true
+	});
 
 	return {
 		data,
 		isLoading,
 		isError,
+		isSuccess,
 		error
 	};
 };

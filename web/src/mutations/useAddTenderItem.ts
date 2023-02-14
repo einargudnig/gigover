@@ -14,7 +14,6 @@ export interface TenderItems {
 	unit: string;
 }
 
-// can I use the onSuccess to trigger a refetch of the tender?
 export const useAddTenderItem = () => {
 	const queryClient = useQueryClient();
 
@@ -28,7 +27,6 @@ export const useAddTenderItem = () => {
 			// I need to refetch the getTenderById query, since that is the one that fetches the tenderItems
 			const tenderId = variables?.tenderId || 0;
 			if (response.status === 200) {
-				console.log('I need to refetch the tenderItems, since I added a new one');
 				await queryClient.refetchQueries(ApiService.getTenderById(tenderId));
 			}
 
