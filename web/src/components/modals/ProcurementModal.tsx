@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
-import { Box, Heading, Text, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import {
+	Checkbox,
+	Box,
+	Heading,
+	Text,
+	VStack,
+	FormControl,
+	FormLabel,
+	Input
+} from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { TrackerSelect } from '../TrackerSelect';
@@ -12,6 +21,7 @@ import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { devError } from '../../utils/ConsoleUtils';
+import { Task } from '../../models/Task';
 
 interface TenderModalProps {
 	tender?: Tender;
@@ -36,16 +46,27 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		mode: 'onBlur'
 	});
 
-	// We want to finde the tasks from the selected project so the user can select a task.
+	// For the checkbox
+	const [isChecked, setIsChecked] = useState<number>(0);
+	const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const newValue = event.target.checked ? 1 : 0;
+		setIsChecked(newValue);
+	};
+
+	// We want to find the tasks from the selected project so the user can select a task.
 	// selectedProject as a parameter
 	const findTasks = (projectId: number) => {
 		const taskFromProject = data?.find((project) => project.projectId === projectId);
 		return taskFromProject?.tasks;
 	};
+	//! I need to filer away the tasks that are not open.
 	const tasksFromSelectedProject = findTasks(selectedProject ?? 0);
-	// const taskNumbers = () => {
-	// 	return tasksFromSelectedProject!.length;
-	// };
+
+	const activeTasks = (tasks) => {
+		return tasks?.filter(
+			(task: Task) => task.status === 0 || task.status === 1 || task.status === 2
+		);
+	};
 
 	const onSubmit = handleSubmit(
 		async ({
@@ -56,6 +77,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			description,
 			terms,
 			finishDate,
+			// eslint-disable-next-line
 			delivery,
 			address,
 			phoneNumber
@@ -67,7 +89,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					description,
 					terms,
 					finishDate,
-					delivery,
+					delivery: isChecked,
 					address,
 					phoneNumber
 				});
@@ -128,8 +150,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 							<TrackerSelect
 								title={'Select a task'}
 								value={selectedTask}
-								options={tasksFromSelectedProject!.map((task) => ({
-									label: task.text,
+								options={activeTasks(tasksFromSelectedProject)!.map((task) => ({
+									label: task.subject,
 									value: task.taskId
 								}))}
 								valueChanged={(newValue) => {
@@ -163,7 +185,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'finishDate'}>
-						<FormLabel>Finish Date</FormLabel>
+						<FormLabel>Close Date</FormLabel>
 						<Controller
 							name="finishDate"
 							control={control}
@@ -186,20 +208,17 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 						/>
 					</FormControl>
 					<Box mb={6} />
-					{/* // TODO Need to validate this!, it should be a number?
-							// Maybe I amke it a checkbox? that returns 1 or 0?
-					*/}
 					<FormControl id={'delivery'}>
 						<FormLabel>Delivery</FormLabel>
-						<Input
+						<Checkbox
 							name="delivery"
-							required={true}
-							ref={register({ required: 'delivery is required' })}
+							isChecked={isChecked === 1}
+							onChange={handleChangeCheckbox}
 						/>
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'address'}>
-						<FormLabel>Address</FormLabel>
+						<FormLabel>Address - contact person on site</FormLabel>
 						<Input
 							name="address"
 							required={true}

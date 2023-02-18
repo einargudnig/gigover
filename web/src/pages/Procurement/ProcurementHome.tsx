@@ -8,6 +8,7 @@ import { Center } from '@chakra-ui/react';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { formatDateWithoutTime } from '../../utils/StringUtils';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -35,7 +36,7 @@ const ProcurementCardTitle = styled.div`
 
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
-	const { data: projects } = useProjectList(); // Just to get the projectName :/
+	const { data: projects } = useProjectList();
 	// console.log('DATA', { data });
 
 	// Get the projectNames from projects and add them to the tenders
@@ -43,12 +44,6 @@ export const ProcurementHome = (): JSX.Element => {
 		const projectName = projects.find((p) => p.projectId === t.projectId);
 		return { ...t, projectName };
 	});
-	// console.log('HERE', projectsWithTenders);
-
-	// I'm going to change the structure of this a little bit!
-	// instead of showing one folder for each prroject i'm going to show a list of the tenders.
-	// By clicking an item I will go and see the tenderItems.
-	// I will keep the other structure commented out so i nthe future i could re-use it.
 
 	return (
 		<>
@@ -63,16 +58,17 @@ export const ProcurementHome = (): JSX.Element => {
 							<ProcurementCardTitle>
 								<div>
 									<h3>
-										<b>Description:</b> {t.description}
+										<b>Project:</b> {t.projectName?.name}
 									</h3>
 									<div style={{ marginTop: -16 }}>
-										<b>Project:</b> {t.projectName?.name}
+										<b>Description:</b> {t.description}
 									</div>
 								</div>
 							</ProcurementCardTitle>
 							<div>
 								<p style={{ marginBottom: -16, fontSize: 14 }}>
-									<b>terms:</b> {t.terms}
+									<b>Close date:</b>{' '}
+									{formatDateWithoutTime(new Date(t.finishDate))}
 								</p>
 							</div>
 						</ProcurementCardStyled>

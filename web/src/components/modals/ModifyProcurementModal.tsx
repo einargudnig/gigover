@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
-import { Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import { Checkbox, Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
-// import { useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
-// import { ApiService } from '../../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../LoadingSpinner';
 
@@ -17,7 +17,7 @@ interface TenderModalProps {
 
 export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
 	const { mutate: modify, isLoading, isError, error } = useModifyTender();
 	const { register, handleSubmit, control } = useForm<ProjectFormData>({
@@ -25,21 +25,28 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 		mode: 'onBlur'
 	});
 
+	// For the checkbox
+	const [isChecked, setIsChecked] = useState(tender!.delivery);
+	const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const newValue = event.target.checked ? 1 : 0;
+		setIsChecked(newValue);
+	};
+
 	const onSubmit = handleSubmit(
-		async ({ description, terms, finishDate, delivery, address, phoneNumber }) => {
+		async ({ description, terms, finishDate, address, phoneNumber }) => {
 			try {
 				await modify({
 					tenderId: tender!.tenderId,
 					description,
 					terms,
 					finishDate,
-					delivery,
+					delivery: isChecked,
 					address,
 					phoneNumber
 				});
 				console.log('success');
 
-				// queryClient.refetchQueries(ApiService.addTender); //! should we refetch the useTenders/id query?
+				queryClient.refetchQueries(ApiService.userTenders);
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
@@ -47,7 +54,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 		}
 	);
 
-	//! I htink I should not be able as a user, to update the task and the project.
+	//! I think I should not be able as a user, to update the task and the project.
 	// So for the time being I'll leave it out of the modified modal.
 	return (
 		<div>
@@ -61,58 +68,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
 					<Heading size={'md'}>Project</Heading>
-					{/* {openProjects ? (
-						<>
-							<FormControl id={'project'}>
-								<Heading size={'md'}>Select a project for your procurement</Heading>
-								<TrackerSelect
-									title={'Select a project'}
-									value={selectedProject}
-									options={openProjects.map((project) => ({
-										label: project.name,
-										value: project.projectId
-									}))}
-									valueChanged={(newValue) => {
-										if (newValue === '') {
-											setSelectedProject(undefined);
-										} else {
-											setSelectedProject((newValue as number) ?? undefined);
-										}
-									}}
-								/>
-							</FormControl>
-						</>
-					) : (
-						<>
-							<Heading>No projects</Heading>
-							<Text>
-								You do not have any projects, you have to create a project before
-								you can make a procurement
-							</Text>
-						</>
-					)} */}
-					{/* {selectedProject && (
-						<>
-							<FormControl id={'task'}>
-								<Heading size={'md'}>Select a task for your procurement</Heading>
-								<TrackerSelect
-									title={'Select a task'}
-									value={selectedTask}
-									options={tasksFromSelectedProject!.map((task) => ({
-										label: task.text,
-										value: task.taskId
-									}))}
-									valueChanged={(newValue) => {
-										if (newValue === '') {
-											setSelectedTask(undefined);
-										} else {
-											setSelectedTask((newValue as number) ?? undefined);
-										}
-									}}
-								/>
-							</FormControl>
-						</>
-					)} */}
+					{/* I intentionally lef the project and task out of the modify phase */}
 					<FormControl id={'description'}>
 						<FormLabel>Procurement Description</FormLabel>
 						<Input
@@ -134,7 +90,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'finishDate'}>
-						<FormLabel>Finish Date</FormLabel>
+						<FormLabel>Close Date</FormLabel>
 						<Controller
 							name="finishDate"
 							control={control}
@@ -159,15 +115,16 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					<Box mb={6} />
 					<FormControl id={'delivery'}>
 						<FormLabel>Delivery</FormLabel>
-						<Input
+						<Checkbox
 							name="delivery"
-							required={true}
-							ref={register({ required: 'delivery is required' })}
+							isChecked={isChecked === 1}
+							onChange={handleChangeCheckbox}
+							value={isChecked}
 						/>
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'address'}>
-						<FormLabel>Address</FormLabel>
+						<FormLabel>Address - contact person on site</FormLabel>
 						<Input
 							name="address"
 							required={true}

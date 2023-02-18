@@ -125,4 +125,5 @@ export class ApiService {
 	static editOffer = API_BASE + 'tender/editOffer';
 	static addOfferItem = API_BASE + 'tender/addOfferItem';
 	static editOfferItem = API_BASE + 'tender/editOfferItem';
+	static addBidder = API_BASE + 'tender/addBidder'; //add user to contractor
 }

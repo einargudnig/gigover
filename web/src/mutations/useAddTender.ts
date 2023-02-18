@@ -26,7 +26,7 @@ export const useAddTender = () => {
 			const response = await axios.post(ApiService.addTender, variables, {
 				withCredentials: true
 			});
-			await client.refetchQueries(ApiService.addTender);
+			await client.refetchQueries(ApiService.userTenders);
 
 			return response.data;
 		} catch (e) {

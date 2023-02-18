@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTenderById } from '../../../queries/useGetTenderById';
 import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
 import { Tender } from '../../../models/Tender';
-import { Box, Button, Center, Flex, Heading, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
@@ -21,6 +21,9 @@ export const ProcurementHeader = (): JSX.Element => {
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
+	// Let's leave this as it is for now.
+	// Instead of overdoing things and render a checkbox that will never be checked.
+	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 	// TODO
 	//? Should I add the projectName like I do on the /procurement page?
 
@@ -38,11 +41,6 @@ export const ProcurementHeader = (): JSX.Element => {
 				</Text>
 			) : (
 				<div style={{ width: '100%' }}>
-					<Center>
-						<Heading as={'h4'} size={'md'}>
-							Procurement
-						</Heading>
-					</Center>
 					<Flex direction={'column'}>
 						<Box
 							mb={2}
@@ -82,15 +80,14 @@ export const ProcurementHeader = (): JSX.Element => {
 											<Text fontWeight={'bold'} fontSize={'xl'}>
 												Delivery:
 											</Text>
-											<Text fontSize={'lg'}>{tender?.delivery}</Text>
+											<Text fontSize={'lg'}>{handleDelivery}</Text>
 										</HStack>
 									</VStack>
 									<Spacer />
-									{/* Finish date and phone */}
 									<VStack ml={'3'}>
 										<HStack>
 											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Finish Date:
+												Close Date:
 											</Text>
 											<Text fontSize={'lg'}>
 												{formatDateWithoutTime(date)}

@@ -5,6 +5,7 @@ import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
 import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
 import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
 import { useTenderById } from '../../../queries/useGetTenderById';
+import { usePublishTender } from '../../../mutations/usePublishTender';
 import {
 	Box,
 	Button,
@@ -29,7 +30,7 @@ import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
 import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
 
-export const NewTable: React.FC = () => {
+export const TenderItemTable: React.FC = () => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
 	// GET user tenders from database
 	const {
@@ -46,6 +47,7 @@ export const NewTable: React.FC = () => {
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
+
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
 	const [formData, setFormData] = useState<TenderItem>({
@@ -53,7 +55,7 @@ export const NewTable: React.FC = () => {
 		description: 'Description',
 		nr: 0,
 		volume: 0,
-		unit: 'Unit of measuerment'
+		unit: 'Unit'
 	});
 
 	// POST / Update / DELETE
@@ -66,9 +68,10 @@ export const NewTable: React.FC = () => {
 	// eslint-disable-next-line
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
 	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
+	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 
 	//! We need to make a validation for the unit form field
-	const isInvalidUnit = formData.unit.length > 4;
+	const isInvalidUnit = formData.unit.length > 5;
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -117,6 +120,15 @@ export const NewTable: React.FC = () => {
 		});
 	};
 
+	const handlePublish = () => {
+		if (tender !== undefined) {
+			publishTender(tender);
+			alert('Tender published!');
+		} else {
+			alert('Something went wrong');
+		}
+	};
+
 	return (
 		<>
 			{isTenderLoading ? (
@@ -133,18 +145,19 @@ export const NewTable: React.FC = () => {
 					*/}
 					<Thead>
 						<Tr>
-							<Tooltip label="Description of a item">
-								<Th>
-									<HStack>
-										<p>Description</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
 							<Tooltip label="Does this item have a special number?">
 								<Th>
 									<HStack>
 										<p>Number</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Tooltip label="Description of a item">
+								<Th>
+									<HStack>
+										<p>Description</p>
 										<ImportantIcon size={20} />
 									</HStack>
 								</Th>
@@ -174,16 +187,10 @@ export const NewTable: React.FC = () => {
 						</Tr>
 					</Thead>
 					<Tbody>
-						{tenderItems?.length === 0 ? (
-							<Text fontSize="xl">
-								The table is empty! To add items into the table you need to write it
-								into the form below, and press the Add item button.
-							</Text>
-						) : null}
 						{tenderItems?.map((item) => (
 							<Tr key={item.tenderItemId}>
-								<Td>{item.description}</Td>
 								<Td>{item.nr}</Td>
+								<Td>{item.description}</Td>
 								<Td>{item.volume}</Td>
 								<Td>{item.unit}</Td>
 								<Td>
@@ -193,6 +200,12 @@ export const NewTable: React.FC = () => {
 								</Td>
 							</Tr>
 						))}
+						{tenderItems?.length === 0 ? (
+							<Text fontSize="xl">
+								The table is empty! To add items into the table you need to write it
+								into the form below, and press the Add item button.
+							</Text>
+						) : null}
 						{isMutateError ? (
 							<Text>Something went wrong - {mutateError?.code}</Text>
 						) : null}
@@ -243,7 +256,6 @@ export const NewTable: React.FC = () => {
 					/>
 				</FormControl>
 				<br />
-				{/* //! I should put some validation here! */}
 				<FormControl id={'unit'} isInvalid={isInvalidUnit}>
 					<FormLabel htmlFor="unit">Unit</FormLabel>
 					<Input
@@ -255,7 +267,7 @@ export const NewTable: React.FC = () => {
 					/>
 					{isInvalidUnit ? (
 						<FormHelperText>
-							The measurement unit should be in a short format: kg, m, m2
+							The measurement of unit should be in a short format: kg, m, m2
 						</FormHelperText>
 					) : null}
 				</FormControl>
@@ -268,7 +280,7 @@ export const NewTable: React.FC = () => {
 							<Button onClick={handleUpdate}>
 								{isUpdateLoading ? <LoadingSpinner /> : 'Update item'}
 							</Button>
-							{/* //! This button deletes the selcted item */}
+							{/* //! This button deletes the selected item */}
 							<ConfirmDialog
 								header={'Delete item'}
 								setIsOpen={setDialogOpen}
@@ -279,6 +291,13 @@ export const NewTable: React.FC = () => {
 									}
 
 									setDialogOpen(false);
+									setFormData({
+										tenderId: Number(tenderId),
+										description: '',
+										nr: 0,
+										volume: 0,
+										unit: ''
+									});
 								}}
 								isOpen={dialogOpen}
 							>
@@ -300,6 +319,13 @@ export const NewTable: React.FC = () => {
 					)}
 				</HStack>
 			</Flex>
+			<Text>When the tender is ready you can publish it.</Text>
+			{/* onClick handler that publishes the tender
+				// it also open a dialog where I can add email that I want to send an invitation to
+			*/}
+			<Button mt={'2'} onClick={handlePublish}>
+				Publish Tender
+			</Button>
 		</>
 	);
 };
