@@ -121,9 +121,14 @@ export class ApiService {
 	static publishTender = API_BASE + 'tender/publishTender';
 	static userTenders = API_BASE + 'tender/tenders';
 	static projectTenders = (projectId: number) => API_BASE + 'tender/tenders/' + projectId;
+	// Offers + bidder
 	static addOffer = API_BASE + 'tender/addOffer';
 	static editOffer = API_BASE + 'tender/editOffer';
-	static addOfferItem = API_BASE + 'tender/addOfferItem';
-	static editOfferItem = API_BASE + 'tender/editOfferItem';
-	static addBidder = API_BASE + 'tender/addBidder'; //add user to contractor
+	static addOfferItem = API_BASE + 'tender/offerItem';
+	//
+	static publishOffer = API_BASE + 'tender/publishOffer';
+	static userOffers = API_BASE + 'tender/offers';
+	static tenderOffers = (tenderId: number) => API_BASE + 'tender/offers/' + tenderId;
+	static addBidder = API_BASE + 'tender/addBidder'; //authenticate bidder to a tender
+	static bidderTenders = API_BASE + 'tender/bidderTenders'; // All tenders for a bidder
 }

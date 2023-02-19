@@ -16,14 +16,25 @@ export interface Tender {
 
 export interface TenderItem {
 	tenderId: number;
-	tenderItemId?: number; // This should not return errors, since it's optional
-	nr: number;
+	tenderItemId?: number;
+	nr: number; //! I should make this optional, since the tenderOwner might want to leave it empty.
 	description: string;
 	volume: number;
 	unit: string;
 }
 
-//{ "tender": {"tenderId": 4,"projectId": 977,"taskId": 2,"description": "testing2","terms": "flutt að dúfnahólum 11","finishDate": 1671880000,"delivery": 0,"phoneNumber": null,"address": null,"status": 1,"statusText": "statusText","items": [{"tenderItemId": 3,"tenderId": 0,"nr": 1,"description": "5x4 gipsplötur","volume": 35.5,"unit": "m2"}]}}
+export interface TenderItemOffers {
+	tenderId: number;
+	tenderItemId?: number;
+	offerId: number; // This comes from the Offer made by the tenderOwner?
+	nr: number;
+	description: string; //! This will not be needed? The user will not be able to change this. So can I omit it ??
+	volume: number; //! This will not be needed? The user will not be able to change this. So can I omit it ??
+	unit: string; //! This will not be needed? The user will not be able to change this. So can I omit it ??
+	cost: number;
+	notes: string;
+}
+
 // To get the tender By Id, the 'definition' and the items
 export interface GetTenderById {
 	tender: Tender;

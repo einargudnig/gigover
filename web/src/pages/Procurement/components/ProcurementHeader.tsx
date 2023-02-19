@@ -9,6 +9,7 @@ import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { InviteButton } from './InviteButton';
 
 export const ProcurementHeader = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -102,6 +103,7 @@ export const ProcurementHeader = (): JSX.Element => {
 									</VStack>
 								</HStack>
 								<HStack pos={'absolute'} bottom={'0'} right={'0'}>
+									<InviteButton />
 									<Button
 										onClick={() =>
 											setModalContext({

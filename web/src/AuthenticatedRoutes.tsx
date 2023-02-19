@@ -16,6 +16,7 @@ import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
 // import { Tenders } from './pages/Procurement/components/Tenders';
 import { Tender } from './pages/Procurement/components/Tender';
+import { TenderOffer } from './pages/Procurement/Offers/TenderOffer';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -45,10 +46,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		{/* This procurement route should be protected. */}
 		<Route path={'procurement'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
-			<Route path={':tenderId'} element={<Tender />} />{' '}
-			{/* I updated the flow of this for now. I may re-do it later and use the rotues below */}
-			{/* <Route path={':projectId'} element={<Tenders />} /> */}
-			{/* <Route path={':projectId/:tenderId'} element={<Tender />} /> */}
+			<Route path={':tenderId'} element={<Tender />} />
+			{/* <Route path={'offers'} element={<OffersHome />} /> */}
+			<Route path={'offers/:tenderId'} element={<TenderOffer />} />
 		</Route>
 
 		<Route path={'settings'} element={<Settings />} />

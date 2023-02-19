@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Tender, TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
 import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
@@ -22,7 +22,8 @@ import {
 	Thead,
 	Th,
 	Tr,
-	Tooltip
+	Tooltip,
+	Spacer
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
@@ -273,7 +274,7 @@ export const TenderItemTable: React.FC = () => {
 				</FormControl>
 			</Box>
 			<br />
-			<Flex justifyContent={'end'}>
+			<Flex justifyContent={'end'} mb={'6'}>
 				<HStack>
 					{tender === undefined ? null : editingItem ? (
 						<HStack>
@@ -319,13 +320,21 @@ export const TenderItemTable: React.FC = () => {
 					)}
 				</HStack>
 			</Flex>
+
 			<Text>When the tender is ready you can publish it.</Text>
 			{/* onClick handler that publishes the tender
 				// it also open a dialog where I can add email that I want to send an invitation to
 			*/}
-			<Button mt={'2'} onClick={handlePublish}>
-				Publish Tender
-			</Button>
+			<Flex>
+				<Button mt={'2'} onClick={handlePublish}>
+					{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
+				</Button>
+				<Spacer />
+				{/* This button is for the tenderOwner to go to the offerPage */}
+				<Button>
+					<Link to={`../offers/${Number(tenderId)}`}>Offer page</Link>
+				</Button>
+			</Flex>
 		</>
 	);
 };

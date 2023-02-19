@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { devError } from '../utils/ConsoleUtils';
 import { ErrorResponse } from '../models/ErrorResponse';
 
+// This is for to add the "whole" offer.
 export const useAddOffers = () => {
 	const client = useQueryClient();
 
@@ -12,7 +13,6 @@ export const useAddOffers = () => {
 			const response = await axios.post(ApiService.addOffer, offer, {
 				withCredentials: true
 			});
-			await client.refetchQueries(ApiService.addOffer);
 
 			return response.data;
 		} catch (e) {
