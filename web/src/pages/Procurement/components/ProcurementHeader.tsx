@@ -18,7 +18,7 @@ export const ProcurementHeader = (): JSX.Element => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const { data, isLoading, isError, error } = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-
+	const tenderDescForEmail = tender?.description;
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
@@ -103,7 +103,7 @@ export const ProcurementHeader = (): JSX.Element => {
 									</VStack>
 								</HStack>
 								<HStack pos={'absolute'} bottom={'0'} right={'0'}>
-									<InviteButton />
+									<InviteButton tenderDesc={tenderDescForEmail} />
 									<Button
 										onClick={() =>
 											setModalContext({

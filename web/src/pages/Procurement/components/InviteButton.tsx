@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import emailjs from '@emailjs/browser';
 import {
 	Button,
@@ -24,11 +24,11 @@ type InviteEmail = {
 	email: string;
 };
 
-export const InviteButton = (): JSX.Element => {
+export const InviteButton = (tenderDesc): JSX.Element => {
 	//! EMAIL STUFF
-	const emailServiceId = process.env.EMAIL_SERVICE_ID;
-	const emailTemplateId = process.env.EMAIL_TEMPLATE_ID;
-	const emailUserId = process.env.EMAIL_USER_ID;
+	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
+	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public keu, so no reason to have it in .env
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const {
@@ -39,6 +39,7 @@ export const InviteButton = (): JSX.Element => {
 
 	const onSubmit: SubmitHandler<InviteEmail> = async (data: InviteEmail) => {
 		const templateParams = {
+			tenderDesc: tenderDesc,
 			to_email: data.email
 		};
 		console.log('Sending email to: ', data.email);
