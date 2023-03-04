@@ -9,7 +9,6 @@ import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
-import { InviteButton } from './InviteButton';
 
 export const ProcurementHeader = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -18,18 +17,16 @@ export const ProcurementHeader = (): JSX.Element => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const { data, isLoading, isError, error } = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	const tenderDescForEmail = tender?.description;
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
 	// Let's leave this as it is for now.
 	// Instead of overdoing things and render a checkbox that will never be checked.
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
-	// TODO
-	//? Should I add the projectName like I do on the /procurement page?
 
 	// Handling the date from the backend, it's fine for now
 	const time = tender?.finishDate;
+	console.log('time', time);
 	const date = new Date(time!);
 
 	return (
@@ -103,7 +100,6 @@ export const ProcurementHeader = (): JSX.Element => {
 									</VStack>
 								</HStack>
 								<HStack pos={'absolute'} bottom={'0'} right={'0'}>
-									<InviteButton tenderDesc={tenderDescForEmail} />
 									<Button
 										onClick={() =>
 											setModalContext({

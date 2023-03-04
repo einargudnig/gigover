@@ -30,6 +30,7 @@ import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
 import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
+import { InviteButton } from './InviteButton';
 
 export const TenderItemTable: React.FC = () => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
@@ -44,6 +45,8 @@ export const TenderItemTable: React.FC = () => {
 	// Fx, when I want to modify or delete items they can be undefined, which is no bueno.
 	// There is a way around this, but it's not pretty.
 	const tender: Tender | undefined = data?.tender;
+	const tenderDescForEmail = tender?.description;
+	const tenderStatus = tender?.status;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
@@ -124,7 +127,7 @@ export const TenderItemTable: React.FC = () => {
 	const handlePublish = () => {
 		if (tender !== undefined) {
 			publishTender(tender);
-			alert('Tender published!');
+			alert('Tender published, Now you can send emails to invite people to send offers!');
 		} else {
 			alert('Something went wrong');
 		}
@@ -281,7 +284,6 @@ export const TenderItemTable: React.FC = () => {
 							<Button onClick={handleUpdate}>
 								{isUpdateLoading ? <LoadingSpinner /> : 'Update item'}
 							</Button>
-							{/* //! This button deletes the selected item */}
 							<ConfirmDialog
 								header={'Delete item'}
 								setIsOpen={setDialogOpen}
@@ -326,9 +328,12 @@ export const TenderItemTable: React.FC = () => {
 				// it also open a dialog where I can add email that I want to send an invitation to
 			*/}
 			<Flex>
-				<Button mt={'2'} onClick={handlePublish}>
-					{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
-				</Button>
+				<Flex alignItems={'center'}>
+					<Button mt={'2'} mr={'1'} onClick={handlePublish}>
+						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
+					</Button>
+					{tenderStatus === 1 ? <InviteButton tenderDesc={tenderDescForEmail} /> : null}
+				</Flex>
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
 				<Button>

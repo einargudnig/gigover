@@ -61,7 +61,9 @@ export const InviteButton = (tenderDesc): JSX.Element => {
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
 	return (
 		<>
-			<Button onClick={handleOpenDialog}>Invite User</Button>
+			<Button ml={'1'} onClick={handleOpenDialog}>
+				Invite User
+			</Button>
 
 			<AlertDialog
 				isOpen={isOpen}

@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
-import { Checkbox, Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import {
+	Checkbox,
+	Box,
+	Divider,
+	Heading,
+	VStack,
+	FormControl,
+	FormLabel,
+	Input
+} from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { useQueryClient } from 'react-query';
@@ -10,6 +19,7 @@ import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTende
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { InviteBidder } from '../InviteUser/InviteBidder';
 
 interface TenderModalProps {
 	tender?: Tender;
@@ -148,6 +158,13 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					/>
 				</VStack>
 			</form>
+			<div>
+				<Divider mt={'8'} mb={4} />
+				<Heading size={'md'} mb={4}>
+					Invite users to {tender!.description}
+				</Heading>
+				<InviteBidder tenderId={tender!.tenderId} />
+			</div>
 		</div>
 	);
 };

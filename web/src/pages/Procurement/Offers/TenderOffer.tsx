@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { OfferTable } from './OfferTable';
 import { useTenderById } from '../../../queries/useGetTenderById';
-import { Tender } from '../../../models/Tender';
+import { Tender, TenderItem } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export const TenderOffer = (): JSX.Element => {
@@ -17,7 +17,7 @@ export const TenderOffer = (): JSX.Element => {
 		error: tenderError
 	} = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	// const tenderItems: TenderItem[] | undefined = tender?.items; //! I get annoying error by trying to pass this into the offer table.
+	const tenderItems: TenderItem[] | undefined = tender?.items; //! I get annoying error by trying to pass this into the offer table.
 	// I'll look into it, but I really don't want to spend too much time on it.
 	return (
 		<>
@@ -37,7 +37,7 @@ export const TenderOffer = (): JSX.Element => {
 						finishDate={tender?.finishDate}
 						phoneNumber={tender?.phoneNumber}
 					/>
-					<OfferTable />
+					<OfferTable tenderItems={tenderItems} />
 				</>
 			)}
 		</>

@@ -5,10 +5,11 @@ import { AxiosError } from 'axios';
 import axios from 'axios';
 import { useQueryClient } from 'react-query';
 
-export interface TenderItems {
+export interface TenderItemsOffer {
 	tenderId: number;
 	tenderItemId?: number;
 	nr?: number;
+	offerId: number;
 	// description: string;
 	// volume: number;
 	// unit: string;
@@ -16,17 +17,18 @@ export interface TenderItems {
 	notes: string;
 }
 
+//! what I need to pass to the server here:
+// offerId: number; -> comes from the 'Open Offer'
+
 export const useAddOfferItems = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ErrorResponse, AxiosError, TenderItems>(async (variables) => {
+	return useMutation<ErrorResponse, AxiosError, TenderItemsOffer>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.addOfferItem, variables, {
 				withCredentials: true
 			});
-			// If I successfully added a tender item, I need to refetch the tenderItems
-			// So that the new tender item is displayed in the list.
-			// I need to refetch the getTenderById query, since that is the one that fetches the tenderItems
+			// Do I need to refetch any queries after I add a new offer to an item??
 			const tenderId = variables?.tenderId || 0;
 			if (response.status === 200) {
 				await queryClient.refetchQueries(ApiService.getTenderById(tenderId));
