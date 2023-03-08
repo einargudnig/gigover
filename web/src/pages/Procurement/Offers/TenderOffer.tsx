@@ -37,7 +37,7 @@ export const TenderOffer = (): JSX.Element => {
 						finishDate={tender?.finishDate}
 						phoneNumber={tender?.phoneNumber}
 					/>
-					<OfferTable tenderItems={tenderItems} />
+					<OfferTable />
 				</>
 			)}
 		</>

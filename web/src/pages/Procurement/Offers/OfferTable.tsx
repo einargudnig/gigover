@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { Tender, TenderItem } from '../../../models/Tender';
+import { useTenderById } from '../../../queries/useGetTenderById';
+import { useParams } from 'react-router-dom';
 import { useAddOfferItems } from '../../../mutations/useAddOfferItems';
 import {
 	Button,
@@ -16,31 +19,34 @@ import {
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 
 interface TenderItemsOffer {
-	tenderId: number;
+	tenderId?: number;
 	tenderItemId?: number;
-	nr?: number;
-	offerId: number;
+	offerId?: number; // This comes from the Offer made by the tenderOwner?
+	nr?: number; //! I should make this optional, since the tenderOwner might want to leave it empty.
 	description?: string;
 	volume?: number;
 	unit?: string;
-	cost: number;
-	notes: string;
+	cost?: number;
+	notes?: string;
 }
 
-export const OfferTable = ({ tenderItems }): JSX.Element => {
-	// const { tenderId } = useParams(); //! CAST to number
-	// Get the tender from the database
-	// const {
-	// 	data,
-	// 	isLoading: isTenderLoading,
-	// 	isError: isTenderError,
-	// 	error: tenderError
-	// } = useTenderById(Number(tenderId));
-	// const tender: Tender | undefined = data?.tender;
-	// const tenderItems: TenderItem[] | undefined = data?.tender?.items;
+export const OfferTable = (): JSX.Element => {
+	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
+	// GET user tenders from database
+	const {
+		data,
+		isLoading: isTenderLoading,
+		isError: isTenderError,
+		error: tenderError
+	} = useTenderById(Number(tenderId));
+	//! This will cause me annoying trouble that I have to deal with
+	// Fx, when I want to modify or delete items they can be undefined, which is no bueno.
+	// There is a way around this, but it's not pretty.
+	const tender: Tender | undefined = data?.tender;
+	const tenderItems: TenderItem[] | undefined = tender?.items;
 
-	const [cost, setCost] = useState(0);
-	const [notes, setNotes] = useState('');
+	const [cost, setCost] = useState<number | undefined>(0);
+	const [notes, setNotes] = useState<string | undefined>('');
 	const [buttonText, setButtonText] = useState('Add to Table');
 	const [selectedRow, setSelectedRow] = useState(-1);
 
@@ -54,9 +60,10 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 		// ! Just for testing, I *need* to get this from the database
 		const offerId = 5;
 
-		const newData = [...tenderItems];
-		console.log('NEWDATA', newData);
-		const rowToUpdate = newData[selectedRow];
+		// const newData: TenderItemsOffer = [...tenderItems];
+		// console.log('NEWDATA', newData);
+		// const rowToUpdate = newData[selectedRow];
+		const rowToUpdate = tenderItems![selectedRow];
 		console.log('ROWTOUPDATE', rowToUpdate);
 		rowToUpdate.cost = cost;
 		rowToUpdate.notes = notes;
@@ -66,7 +73,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 		setCost(0);
 		setNotes('');
 		console.log('This should mutate the offerItems');
-		addOfferItems(newData);
+		addOfferItems(rowToUpdate);
 	};
 
 	const handleCostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,8 +89,8 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 	const handleAddToTable = (index: number) => {
 		setSelectedRow(index);
 		setButtonText('Save');
-		setCost(tenderItems[index].cost);
-		setNotes(tenderItems[index].notes);
+		setCost(tenderItems![index].cost);
+		setNotes(tenderItems![index].notes);
 	};
 
 	return (
