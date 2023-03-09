@@ -101,9 +101,6 @@ export const OfferInformation = ({
 							</HStack>
 							{/* This button allow the user to open an offer for this Tender.
 								// It's needed so he can add offer to the items in the offer table.
-								// I should make the table disabled? if there is no openOffer?
-								// Means, if there is no offerId, the table should be disabled.
-								// ! useAddOffer
 							*/}
 							<HStack pos={'absolute'} bottom={'0'} right={'0'}>
 								<Button onClick={openOffer}>

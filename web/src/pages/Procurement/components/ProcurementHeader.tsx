@@ -26,7 +26,6 @@ export const ProcurementHeader = (): JSX.Element => {
 
 	// Handling the date from the backend, it's fine for now
 	const time = tender?.finishDate;
-	console.log('time', time);
 	const date = new Date(time!);
 
 	return (
