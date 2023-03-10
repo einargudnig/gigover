@@ -1,9 +1,7 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Divider, Button, Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
+import { Divider, Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { useAddOffers } from '../../../mutations/useAddOffers';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { OpenOffer } from './OpenOffer';
 
 export const OfferInformation = ({
 	description,
@@ -13,20 +11,9 @@ export const OfferInformation = ({
 	finishDate,
 	phoneNumber
 }): JSX.Element => {
-	const { tenderId } = useParams();
 	const date = new Date(finishDate);
-	const { mutateAsync: addOffer, isLoading: isAddOfferLoading } = useAddOffers();
 	const handleDelivery = delivery ? 'Yes' : 'No';
 
-	//! I need to add the option to add a note to the offer
-	// should I add a text input or a popup?
-	const openOffer = () => {
-		addOffer({
-			tenderId: Number(tenderId),
-			notes: 'This is a note'
-		});
-		console.log('Opened offer for tenderId: ', tenderId);
-	};
 	return (
 		<>
 			<div style={{ width: '100%' }}>
@@ -89,23 +76,23 @@ export const OfferInformation = ({
 								</VStack>
 							</HStack>
 							<Divider />
-							{/* //! This should come from */}
-							<HStack>
+							{/* //! This should come from the openOffer!
+									// Let's start by hiding this in the UI.
+							*/}
+							{/* <HStack>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Notes regarding the offer:
 								</Text>
-								{/* <Text fontSize={'lg'}>{notes}</Text> */}
-								<Text fontSize={'lg'}>
-									Notes for the offer, this is a good note!
-								</Text>
-							</HStack>
+								{noNote ? <Text fontSize={'lg'}>{offerNote}</Text> : 'No notes'}
+							</HStack> */}
 							{/* This button allow the user to open an offer for this Tender.
 								// It's needed so he can add offer to the items in the offer table.
 							*/}
 							<HStack pos={'absolute'} bottom={'0'} right={'0'}>
-								<Button onClick={openOffer}>
+								{/* <Button onClick={openOffer}>
 									{isAddOfferLoading ? <LoadingSpinner /> : 'Open Offer'}
-								</Button>
+								</Button> */}
+								<OpenOffer />
 							</HStack>
 						</VStack>
 					</Box>

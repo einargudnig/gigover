@@ -22,7 +22,6 @@ export const InviteBidder = ({ tenderId }: InviteUserProps): JSX.Element => {
 
 			if (response.uId) {
 				devInfo('Found user with uId:', response.uId);
-				console.log('RES', response.uId);
 				// Add to tender
 				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
 					if (res.errorCode === 'OK') {

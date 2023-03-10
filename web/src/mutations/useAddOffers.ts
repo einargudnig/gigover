@@ -6,7 +6,7 @@ import { ErrorResponse } from '../models/ErrorResponse';
 
 export interface TenderOffer {
 	tenderId: number;
-	notes: string;
+	note: string;
 }
 
 // This is for to add the "whole" offer.

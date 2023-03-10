@@ -64,7 +64,6 @@ export const OfferTable = (): JSX.Element => {
 		// console.log('NEWDATA', newData);
 		// const rowToUpdate = newData[selectedRow];
 		const rowToUpdate = tenderItems![selectedRow];
-		// console.log('ROWTOUPDATE', rowToUpdate);
 		rowToUpdate.cost = cost;
 		rowToUpdate.notes = notes;
 		rowToUpdate.offerId = offerId;
