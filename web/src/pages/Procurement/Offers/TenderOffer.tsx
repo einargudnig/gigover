@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { OfferTable } from './OfferTable';
 import { useTenderById } from '../../../queries/useGetTenderById';
-import { Tender, TenderItem } from '../../../models/Tender';
+import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export const TenderOffer = (): JSX.Element => {

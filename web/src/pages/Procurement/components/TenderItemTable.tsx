@@ -50,6 +50,7 @@ export const TenderItemTable: React.FC = () => {
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
+	//eslint-disable-next-line
 	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
 
 	const [dialogOpen, setDialogOpen] = useState(false);

@@ -3,7 +3,7 @@ import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import { AxiosError } from 'axios';
 import axios from 'axios';
-import { useQueryClient } from 'react-query';
+// import { useQueryClient } from 'react-query';
 import { TenderItem } from '../models/Tender';
 
 export interface TenderItemsOffer {
