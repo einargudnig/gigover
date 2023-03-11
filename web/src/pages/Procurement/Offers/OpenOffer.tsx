@@ -33,7 +33,7 @@ export const OpenOffer = (): JSX.Element => {
 		handleSubmit,
 		formState: { errors }
 	} = useForm<OfferNote>();
-	const { mutateAsync: addOffer, isLoading: isAddOfferLoading } = useAddOffers();
+	const { mutateAsync: addOffer } = useAddOffers();
 
 	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
 		try {

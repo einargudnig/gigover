@@ -17,7 +17,7 @@ export const TenderOffer = (): JSX.Element => {
 		error: tenderError
 	} = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	const tenderItems: TenderItem[] | undefined = tender?.items; //! I get annoying error by trying to pass this into the offer table.
+	// const tenderItems: TenderItem[] | undefined = tender?.items; //! I get annoying error by trying to pass this into the offer table.
 	// I'll look into it, but I really don't want to spend too much time on it.
 	return (
 		<>

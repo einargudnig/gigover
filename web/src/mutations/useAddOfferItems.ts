@@ -22,7 +22,7 @@ export interface TenderItemsOffer {
 // offerId: number; -> comes from the 'Open Offer'
 
 export const useAddOfferItems = () => {
-	const queryClient = useQueryClient();
+	// const queryClient = useQueryClient();
 
 	return useMutation<ErrorResponse, AxiosError, TenderItem>(async (variables) => {
 		try {

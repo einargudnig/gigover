@@ -18,26 +18,26 @@ import {
 } from '@chakra-ui/react';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 
-interface TenderItemsOffer {
-	tenderId?: number;
-	tenderItemId?: number;
-	offerId?: number; // This comes from the Offer made by the tenderOwner?
-	nr?: number; //! I should make this optional, since the tenderOwner might want to leave it empty.
-	description?: string;
-	volume?: number;
-	unit?: string;
-	cost?: number;
-	notes?: string;
-}
+// interface TenderItemsOffer {
+// 	tenderId?: number;
+// 	tenderItemId?: number;
+// 	offerId?: number; // This comes from the Offer made by the tenderOwner?
+// 	nr?: number; //! I should make this optional, since the tenderOwner might want to leave it empty.
+// 	description?: string;
+// 	volume?: number;
+// 	unit?: string;
+// 	cost?: number;
+// 	notes?: string;
+// }
 
 export const OfferTable = (): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
 	// GET user tenders from database
 	const {
-		data,
-		isLoading: isTenderLoading,
-		isError: isTenderError,
-		error: tenderError
+		data
+		// isLoading: isTenderLoading,
+		// isError: isTenderError,
+		// error: tenderError
 	} = useTenderById(Number(tenderId));
 	//! This will cause me annoying trouble that I have to deal with
 	// Fx, when I want to modify or delete items they can be undefined, which is no bueno.
@@ -51,7 +51,7 @@ export const OfferTable = (): JSX.Element => {
 	const [selectedRow, setSelectedRow] = useState(-1);
 
 	// Add offers to items
-	const { mutate: addOfferItems, isLoading: isLoadingAddingOfferItems } = useAddOfferItems();
+	const { mutate: addOfferItems } = useAddOfferItems();
 
 	// I would have to add the offerId and the itemId to this function?
 	// I def have the itemId as a part of the tenderItems array.

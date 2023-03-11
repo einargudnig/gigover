@@ -12,7 +12,7 @@ export interface TenderOffer {
 // This is for to add the "whole" offer.
 // There needs to be an offer so that we can add the offer items.
 export const useAddOffers = () => {
-	const client = useQueryClient();
+	// const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, TenderOffer>(async (offer) => {
 		try {
