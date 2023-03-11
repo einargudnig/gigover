@@ -324,16 +324,22 @@ export const TenderItemTable: React.FC = () => {
 				</HStack>
 			</Flex>
 
-			<Text>When the tender is ready you can publish it.</Text>
+			<Text mb={'2'}>When the tender is ready you can publish it.</Text>
 			{/* onClick handler that publishes the tender
 				// it also open a dialog where I can add email that I want to send an invitation to
 			*/}
-			<Flex>
-				<Flex alignItems={'center'}>
-					<Button mt={'2'} mr={'1'} onClick={handlePublish}>
+			<Flex alignItems={'center'} justifyContent={'center'}>
+				<Flex alignItems={'center'} justifyContent={'center'}>
+					<Button onClick={handlePublish}>
 						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
 					</Button>
-					{tenderStatus === 1 ? <InviteButton tenderDesc={tenderDescForEmail} /> : null}
+					{tenderStatus === 1 ? (
+						<InviteButton tenderDesc={tenderDescForEmail} />
+					) : (
+						<Text fontSize={'xs'}>
+							You need to publish the tender before you can invite people
+						</Text>
+					)}
 				</Flex>
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
