@@ -41,9 +41,9 @@ export const OfferForTender = (): JSX.Element => {
 							) : (
 								<>
 									<Text fontSize={'lg'} mb={'4'}>
-										This is the page where all offers opened for this
-										procurement are visible. Note that the offers has to be
-										published so it will be visible here.
+										This is the page where all offers for this procurement are
+										visible. Note that the offer has to be published so it can
+										be visible here.
 									</Text>
 									<Box>
 										{offer.length === 0 ? (

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button, HStack, VStack, Text, Box } from '@chakra-ui/react';
+import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
 import { Offer } from '../../../models/Tender';
@@ -14,6 +15,25 @@ const Container = styled.div`
 	height: 100%;
 	padding: ${(props) => props.theme.padding(3)};
 	overflow-y: auto;
+`;
+
+const OfferCardStyled = styled(CardBaseLink)`
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+	margin-bottom: 8px;
+
+	h3 {
+		margin-bottom: 16px;
+		color: #000;
+	}
+
+	@media screen and (max-width: 768px) {
+		width: 100%;
+	}
 `;
 
 export const UserOffers = (): JSX.Element => {
@@ -51,12 +71,17 @@ export const UserOffers = (): JSX.Element => {
 									<Box my={'2'}>
 										{offers?.map((i) => (
 											<>
-												<Box
+												{/* <Box
 													my={'2'}
 													p={'4'}
 													borderRadius={6}
 													borderColor={'#EFEFEE'}
 													bg={'#EFEFEE'}
+													to={`../procurement/offers${i.tenderId}`}
+												> */}
+												<OfferCardStyled
+													to={`../procurement/offers/${i.tenderId}`}
+													key={i.offerId}
 												>
 													{
 														//eslint-disable-next-line
@@ -82,7 +107,8 @@ export const UserOffers = (): JSX.Element => {
 														<Text as={'b'}>Status text:</Text>
 														<Text>{i.statusText}</Text>
 													</HStack>
-												</Box>
+												</OfferCardStyled>
+												{/* </Box> */}
 											</>
 										))}
 									</Box>
