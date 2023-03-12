@@ -1,5 +1,4 @@
 import React from 'react';
-// import { IconProps } from '../IconProps'
 import { Theme } from '../../Theme';
 
 export const ProcurementIcon = ({ size = 24, color = Theme.colors.white }): JSX.Element => {

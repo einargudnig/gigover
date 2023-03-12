@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Tender, TenderItem } from '../../../models/Tender';
-import { useTenderById } from '../../../queries/useGetTenderById';
+import { Tender, TenderItem } from '../../../../models/Tender';
+import { useTenderById } from '../../../../queries/useGetTenderById';
 import { useParams } from 'react-router-dom';
-import { useAddOfferItems } from '../../../mutations/useAddOfferItems';
+import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import {
 	Button,
+	Box,
+	Flex,
 	HStack,
 	Input,
 	Table,
@@ -16,19 +18,8 @@ import {
 	Tr,
 	Tooltip
 } from '@chakra-ui/react';
-import { ImportantIcon } from '../../../components/icons/ImportantIcon';
-
-// interface TenderItemsOffer {
-// 	tenderId?: number;
-// 	tenderItemId?: number;
-// 	offerId?: number; // This comes from the Offer made by the tenderOwner?
-// 	nr?: number; //! I should make this optional, since the tenderOwner might want to leave it empty.
-// 	description?: string;
-// 	volume?: number;
-// 	unit?: string;
-// 	cost?: number;
-// 	notes?: string;
-// }
+import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
+import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 
 export const OfferTable = (): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
@@ -52,6 +43,7 @@ export const OfferTable = (): JSX.Element => {
 
 	// Add offers to items
 	const { mutate: addOfferItems } = useAddOfferItems();
+	const { mutateAsync: publishOffer } = usePublishOffer();
 
 	// I would have to add the offerId and the itemId to this function?
 	// I def have the itemId as a part of the tenderItems array.
@@ -90,6 +82,21 @@ export const OfferTable = (): JSX.Element => {
 		setButtonText('Save');
 		setCost(tenderItems![index].cost);
 		setNotes(tenderItems![index].notes);
+	};
+
+	const handlePublishOffer = () => {
+		//! I want to be able to get the offer to use.
+		//! I think it would be easiest to get it based on the tenderId
+		const offer = {
+			offerId: 10,
+			tenderId: 26,
+			status: 0,
+			statusText: 'statustext',
+			notes: 'Testing'
+		};
+
+		publishOffer(offer); //! I need to get the offerId here also
+		alert('Offer published');
 	};
 
 	return (
@@ -187,6 +194,12 @@ export const OfferTable = (): JSX.Element => {
 					) : null}
 				</Tbody>
 			</Table>
+			<Box mt={'4'} flexDirection={'column'}>
+				<Text my={'2'}>
+					When you have added offers to the items you can publish the offer you have made
+				</Text>
+				<Button onClick={handlePublishOffer}>Publish offer</Button>
+			</Box>
 		</>
 	);
 };

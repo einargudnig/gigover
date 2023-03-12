@@ -14,12 +14,12 @@ export interface TenderOffer {
 export const useAddOffers = () => {
 	// const client = useQueryClient();
 
+	// Should I try to get the offerId from the response?
 	return useMutation<AxiosError, ErrorResponse, TenderOffer>(async (offer) => {
 		try {
 			const response = await axios.post(ApiService.addOffer, offer, {
 				withCredentials: true
 			});
-
 			return response.data;
 		} catch (e) {
 			devError(e);

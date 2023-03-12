@@ -1,6 +1,6 @@
 import React from 'react';
 import { Divider, Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { OpenOffer } from './OpenOffer';
 
 export const OfferInformation = ({
@@ -89,9 +89,6 @@ export const OfferInformation = ({
 								// It's needed so he can add offer to the items in the offer table.
 							*/}
 							<HStack pos={'absolute'} bottom={'0'} right={'0'}>
-								{/* <Button onClick={openOffer}>
-									{isAddOfferLoading ? <LoadingSpinner /> : 'Open Offer'}
-								</Button> */}
 								<OpenOffer />
 							</HStack>
 						</VStack>

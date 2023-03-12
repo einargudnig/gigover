@@ -5,7 +5,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
-// import { ProcurementIcon } from './icons/ProcurementIcon';
+import { ProcurementIcon } from './icons/ProcurementIcon';
+import { OfferIcon } from './icons/OfferIcon';
 
 import {
 	Avatar,
@@ -256,12 +257,24 @@ export const Page = ({
 						</div>
 						<span>Time reports</span>
 					</IconLink>
-					{/* <IconLink onClick={onLinkClick} to={'/procurement'}>
+					<IconLink onClick={onLinkClick} to={'/procurement'}>
 						<div>
 							<ProcurementIcon />
 						</div>
 						<span>Procurement</span>
-					</IconLink> */}
+					</IconLink>
+					<IconLink onClick={onLinkClick} to={'/user-offers'}>
+						<div>
+							<OfferIcon />
+						</div>
+						<span>User Offers</span>
+					</IconLink>
+					<IconLink onClick={onLinkClick} to={'/tender-offers'}>
+						<div>
+							<ProcurementIcon />
+						</div>
+						<span>Offers for Tender</span>
+					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
 							<SettingsIcon />
@@ -335,7 +348,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
-			{/* <DevMenu /> */}
+			<DevMenu />
 		</PageStyled>
 	);
 };

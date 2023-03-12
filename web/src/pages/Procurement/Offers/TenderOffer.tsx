@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { OfferInformation } from './OfferInformation';
-import { OfferTable } from './OfferTable';
+import { OfferInformation } from './components/OfferInformation';
+import { OfferTable } from './components/OfferTable';
 import { useTenderById } from '../../../queries/useGetTenderById';
 import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';

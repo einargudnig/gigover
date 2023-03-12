@@ -18,7 +18,7 @@ import {
 	Text,
 	Spacer
 } from '@chakra-ui/react';
-import { useAddOffers } from '../../../mutations/useAddOffers';
+import { useAddOffers } from '../../../../mutations/useAddOffers';
 import { useParams } from 'react-router-dom';
 
 type OfferNote = {

@@ -32,14 +32,16 @@ export interface TenderItem {
 	notes?: string;
 }
 
-//! What should I do in regards with the tenderItemsOffer??
-// I used to have a interface here below that had the tenderItems and
-// I added the offers values to it: cost and notes.
-// ! I do not really need to do that. I just need send the cost and notes to the server.
-// It feels like it's an overkill to send everything else with it.
-
 // To get the tender By Id, the 'definition' and the items
 export interface GetTenderById {
 	tender: Tender;
 	// tenderItems: TenderItem[]; //! This one is not needed anymore, since the response has an items array on the tender object.
+}
+
+export interface Offer {
+	offerId: number;
+	tenderId: number;
+	status: number;
+	statusText: string;
+	notes?: string;
 }

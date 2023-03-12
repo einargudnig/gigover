@@ -12,11 +12,15 @@ import { Resources } from './pages/Resources/Resources';
 import { FolderFolder } from './pages/Files/new/FolderFolder';
 import { FilesHome } from './pages/Files/new/FilesHome';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
+// Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
 // import { Tenders } from './pages/Procurement/components/Tenders';
 import { Tender } from './pages/Procurement/components/Tender';
 import { TenderOffer } from './pages/Procurement/Offers/TenderOffer';
+import { UserOffers } from './pages/Procurement/Offers/UserOffers';
+import { OfferForTenders } from './pages/Procurement/Offers/OfferForTenders';
+import { OfferForTender } from './pages/Procurement/Offers/OfferForTender';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -47,8 +51,18 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'procurement'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<Tender />} />
-			{/* <Route path={'offers'} element={<OffersHome />} /> */}
 			<Route path={'offers/:tenderId'} element={<TenderOffer />} />
+		</Route>
+
+		{/* This route will be for the user that makes offers */}
+		<Route path={'user-offers'} element={<UserOffers />} />
+
+		{/* This route will be for offers for certain tenderId */}
+		{/* //! I might just send it straight to the :tenderId rote
+						but howe would the user now which tenderId to use?
+		*/}
+		<Route path={'tender-offers'} element={<OfferForTenders />}>
+			<Route path={':tenderId'} element={<OfferForTender />} />
 		</Route>
 
 		<Route path={'settings'} element={<Settings />} />

@@ -324,7 +324,14 @@ export const TenderItemTable: React.FC = () => {
 				</HStack>
 			</Flex>
 
-			<Text mb={'2'}>When the tender is ready you can publish it.</Text>
+			<Flex mb={'2'}>
+				<Text>When the tender is ready you can publish it.</Text>
+				<Spacer />
+				<Text>
+					If you want to view offers that have come for this tender press the 'Offer for
+					this tender' button
+				</Text>
+			</Flex>
 			{/* onClick handler that publishes the tender
 				// it also open a dialog where I can add email that I want to send an invitation to
 			*/}
@@ -343,8 +350,13 @@ export const TenderItemTable: React.FC = () => {
 				</Flex>
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
-				<Button>
+				<Button mr={'1'}>
 					<Link to={`../offers/${Number(tenderId)}`}>Offer page</Link>
+				</Button>
+				<Button ml={'1'}>
+					<Link to={`../../tender-offers/${Number(tenderId)}`}>
+						Offer for this tender
+					</Link>
 				</Button>
 			</Flex>
 		</>
