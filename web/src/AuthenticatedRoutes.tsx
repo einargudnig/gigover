@@ -61,9 +61,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		{/* For the time being this will be an outlet.
 		   I might make a list there with all tenders and logic to navigate to the offer page for that tender
 		*/}
-		<Route path={'tender-offers'} element={<OfferForTenders />}>
-			<Route path={':tenderId'} element={<OfferForTender />} />
-		</Route>
+		<Route path={'tender-offers'} element={<OfferForTenders />} />
+		<Route path={'tender-offers/:tenderId'} element={<OfferForTender />} />
 
 		<Route path={'settings'} element={<Settings />} />
 		<Route path={'resources'} element={<Resources />} />

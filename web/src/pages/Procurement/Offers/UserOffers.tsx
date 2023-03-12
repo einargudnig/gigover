@@ -19,6 +19,14 @@ const Container = styled.div`
 export const UserOffers = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
+	// console.log('HERE', offers);
+
+	// const offerPublished = () => {
+	// 	const i = offers?.[0];
+	// 	return i.status === 1 ? 'Published' : 'Not Published';
+	// };
+	let offerPublished = 'Not Published';
+
 	return (
 		<>
 			<Page
@@ -40,14 +48,41 @@ export const UserOffers = (): JSX.Element => {
 									<Text>
 										This is the page where the user will see all of his Offers
 									</Text>
-									<Box>
+									<Box my={'2'}>
 										{offers?.map((i) => (
 											<>
-												<Text>Notes: {i.notes}</Text>
-												<Text>Offer Id: {i.offerId}</Text>
-												<Text>Tender Id: {i.tenderId}</Text>
-												<Text>Status: {i.status}</Text>
-												<Text>Status Text: {i.statusText}</Text>
+												<Box
+													my={'2'}
+													p={'4'}
+													borderRadius={6}
+													borderColor={'#EFEFEE'}
+													bg={'#EFEFEE'}
+												>
+													{
+														//eslint-disable-next-line
+														(offerPublished =
+															i.status === 1
+																? 'Published'
+																: 'Not Published')
+													}
+													<HStack>
+														<Text as={'b'}>Notes</Text>
+														<Text>{i.notes}</Text>
+													</HStack>
+													<HStack>
+														<Text as={'b'}>Offer Id:</Text>
+														<Text>{i.offerId}</Text>
+													</HStack>
+													<HStack>
+														<Text as={'b'}>Tender Id:</Text>
+														<Text>{i.tenderId}</Text>
+													</HStack>
+													{/* <Text>New Status: {offerPublished}</Text> */}
+													<HStack>
+														<Text as={'b'}>Status text:</Text>
+														<Text>{i.statusText}</Text>
+													</HStack>
+												</Box>
 											</>
 										))}
 									</Box>
