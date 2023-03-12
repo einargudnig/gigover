@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
-// import { Project } from '../../models/Project';
 import { Outlet } from 'react-router-dom';
-// import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ModalContext } from '../../context/ModalContext';
 

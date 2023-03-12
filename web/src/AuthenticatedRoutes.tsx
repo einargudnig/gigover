@@ -58,8 +58,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'user-offers'} element={<UserOffers />} />
 
 		{/* This route will be for offers for certain tenderId */}
-		{/* //! I might just send it straight to the :tenderId rote
-						but howe would the user now which tenderId to use?
+		{/* For the time being this will be an outlet.
+		   I might make a list there with all tenders and logic to navigate to the offer page for that tender
 		*/}
 		<Route path={'tender-offers'} element={<OfferForTenders />}>
 			<Route path={':tenderId'} element={<OfferForTender />} />

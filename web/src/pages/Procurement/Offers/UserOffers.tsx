@@ -4,6 +4,7 @@ import { Button, HStack, VStack, Text, Box } from '@chakra-ui/react';
 import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
 import { Offer } from '../../../models/Tender';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 // List of all the offers that I've made as a user!
 // /tender/offers
@@ -33,7 +34,7 @@ export const UserOffers = (): JSX.Element => {
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Container>
 							{isLoading ? (
-								<Text>Loading...</Text>
+								<LoadingSpinner />
 							) : (
 								<>
 									<Text>
