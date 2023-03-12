@@ -88,7 +88,7 @@ export const OfferTable = (): JSX.Element => {
 		//! I want to be able to get the offer to use.
 		//! I think it would be easiest to get it based on the tenderId
 		const offer = {
-			offerId: 10,
+			offerId: 10, // This shold be the offerId -> coming from the upcoming getOffer function,
 			tenderId: 26,
 			status: 0,
 			statusText: 'statustext',

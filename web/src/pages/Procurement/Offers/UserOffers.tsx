@@ -66,21 +66,14 @@ export const UserOffers = (): JSX.Element => {
 							) : (
 								<>
 									<Text>
-										This is the page where the user will see all of his Offers
+										This is the page where the user will see all offers that he
+										has created
 									</Text>
 									<Box my={'2'}>
 										{offers?.map((i) => (
 											<>
-												{/* <Box
-													my={'2'}
-													p={'4'}
-													borderRadius={6}
-													borderColor={'#EFEFEE'}
-													bg={'#EFEFEE'}
-													to={`../procurement/offers${i.tenderId}`}
-												> */}
 												<OfferCardStyled
-													to={`../procurement/offers/${i.tenderId}`}
+													to={`../procurement/${i.tenderId}`}
 													key={i.offerId}
 												>
 													{
@@ -108,7 +101,6 @@ export const UserOffers = (): JSX.Element => {
 														<Text>{i.statusText}</Text>
 													</HStack>
 												</OfferCardStyled>
-												{/* </Box> */}
 											</>
 										))}
 									</Box>

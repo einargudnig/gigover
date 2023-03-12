@@ -1,10 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { colorGenerator } from '../../hooks/colorGenerator';
 import { CardBaseLink } from '../../components/CardBase';
-// import { SimpleGrid } from '../../components/SimpleGrid';
 import { Center } from '@chakra-ui/react';
-// import { ProcurementFolder } from './components/ProcurementFolder';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';

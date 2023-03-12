@@ -3,8 +3,14 @@ import { useParams } from 'react-router-dom';
 import { OfferInformation } from './components/OfferInformation';
 import { OfferTable } from './components/OfferTable';
 import { useTenderById } from '../../../queries/useGetTenderById';
-import { Tender } from '../../../models/Tender';
+import { Tender, TenderItem } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+
+import { NewOfferTable } from './components/NewOfferTable';
+
+interface Props {
+	onUpdateRow: (updatedRow: TenderItem) => void;
+}
 
 export const TenderOffer = (): JSX.Element => {
 	const { tenderId } = useParams(); //! CAST to number
@@ -37,7 +43,8 @@ export const TenderOffer = (): JSX.Element => {
 						finishDate={tender?.finishDate}
 						phoneNumber={tender?.phoneNumber}
 					/>
-					<OfferTable />
+					{/* <OfferTable /> */}
+					<NewOfferTable />
 				</>
 			)}
 		</>

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Page } from '../../../components/Page';
-import { useParams } from 'react-router-dom';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Center } from '@chakra-ui/react';
 import { useUserTenders } from '../../../queries/useUserTenders';
