@@ -7,6 +7,7 @@ import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ProcurementIcon } from './icons/ProcurementIcon';
 import { OfferIcon } from './icons/OfferIcon';
+import { UserOfferIcon } from './icons/UserOfferIcon';
 
 import {
 	Avatar,
@@ -271,7 +272,7 @@ export const Page = ({
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/tender-offers'}>
 						<div>
-							<ProcurementIcon />
+							<UserOfferIcon />
 						</div>
 						<span>Offers for Tender</span>
 					</IconLink>
@@ -348,7 +349,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
-			{/* <DevMenu /> */}
+			<DevMenu />
 		</PageStyled>
 	);
 };
