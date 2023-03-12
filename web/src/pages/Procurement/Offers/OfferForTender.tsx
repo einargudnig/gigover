@@ -40,12 +40,14 @@ export const OfferForTender = (): JSX.Element => {
 								<LoadingSpinner />
 							) : (
 								<>
-									<Heading fontSize={'xl'} mb={'4'}>
-										This is the page where all Offers for this tenderId
-									</Heading>
+									<Text fontSize={'lg'} mb={'4'}>
+										This is the page where all offers opened for this
+										procurement are visible. Note that the offers has to be
+										published so it will be visible here.
+									</Text>
 									<Box>
 										{offer.length === 0 ? (
-											<Text>There are no offers for this tender</Text>
+											<Text>No offers have been published!</Text>
 										) : (
 											offer?.map((i) => (
 												<>
