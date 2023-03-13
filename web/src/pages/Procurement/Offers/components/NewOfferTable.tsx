@@ -14,9 +14,10 @@ import {
 	Tr,
 	Tooltip,
 	useEditableControls,
-	useColorModeValue
+	useColorModeValue,
+	HStack
 } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { useTenderById } from '../../../../queries/useGetTenderById';
 import { useParams } from 'react-router-dom';
@@ -26,12 +27,20 @@ interface Props {
 }
 
 function EditableControls() {
-	const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } =
-		useEditableControls();
+	const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
 
+	//! I hsould trigger the mutation in the onClick handler for the submit button!
+	// That allows me to even trigger two mutations, the number and the notes/cost.
 	return isEditing ? (
 		<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
-			<IconButton aria-label="save" icon={<CheckIcon />} {...getSubmitButtonProps()} />
+			<IconButton
+				aria-label="save"
+				icon={<CheckIcon />}
+				{...getSubmitButtonProps()}
+				onClick={() => {
+					console.log('This should trigger a mutation');
+				}}
+			/>
 			<IconButton
 				aria-label="cancel"
 				icon={<CloseIcon boxSize={3} />}
@@ -51,10 +60,10 @@ export function NewOfferTable() {
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
-	const handleUpdateRow = (updatedRow: TenderItem) => {
-		// onUpdateRow(updatedRow);
-		console.log(updatedRow);
-	};
+	// const handleUpdateRow = (updatedRow: TenderItem) => {
+	// 	// onUpdateRow(updatedRow);
+	// 	console.log(updatedRow);
+	// };
 
 	return (
 		<Table>
@@ -80,8 +89,10 @@ export function NewOfferTable() {
 								<Tooltip label="Click to edit the number">
 									<EditablePreview py={2} px={4} />
 								</Tooltip>
-								<Input py={2} px={4} as={EditableInput} />
-								<EditableControls />
+								<HStack>
+									<Input py={2} px={4} as={EditableInput} />
+									<EditableControls />
+								</HStack>
 							</Editable>
 						</Td>
 						<Td>{row.description}</Td>
