@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Page } from '../../../components/Page';
 import { CardBaseLink } from '../../../components/CardBase';
-import { Center } from '@chakra-ui/react';
+import { Center, Text } from '@chakra-ui/react';
 import { useUserTenders } from '../../../queries/useUserTenders';
 import { useProjectList } from '../../../queries/useProjectList';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -46,6 +46,11 @@ export const OfferForTenders = (): JSX.Element => {
 	return (
 		<>
 			<Page title={'Offers for Procurement'} contentPadding={false}>
+				<Center>
+					<Text my={'2'} fontSize={'xl'}>
+						Press the tender to see the offers that have been published
+					</Text>
+				</Center>
 				{isLoading ? (
 					<Center>
 						<LoadingSpinner />

@@ -18,7 +18,7 @@ import {
 	Text,
 	Spacer
 } from '@chakra-ui/react';
-import { useAddOffers } from '../../../../mutations/useAddOffers';
+import { useAddOffer } from '../../../../mutations/useAddOffer';
 import { useParams } from 'react-router-dom';
 
 type OfferNote = {
@@ -33,22 +33,24 @@ export const OpenOffer = (): JSX.Element => {
 		handleSubmit,
 		formState: { errors }
 	} = useForm<OfferNote>();
-	const { mutateAsync: addOffer } = useAddOffers();
+	const { mutateAsync: addOffer } = useAddOffer();
 
 	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
 		try {
-			//send tenderId, note and open offer
 			const body = {
 				tenderId: Number(tenderId),
 				note: data.note
 			};
 
-			addOffer(body); // here we create the offerId
+			const response = await addOffer(body);
+			// const offerId = response.data?.data?.offerId;
+			console.log(response);
+
 			onClose();
+			console.log('Offer opened!');
 		} catch (e) {
 			console.log(e);
 		}
-		console.log('Offer opened!');
 	};
 
 	const handleOpenDialog: ButtonProps['onClick'] = (event) => {

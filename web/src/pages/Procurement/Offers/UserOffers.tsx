@@ -49,15 +49,7 @@ export const UserOffers = (): JSX.Element => {
 
 	return (
 		<>
-			<Page
-				title={'User Offers'}
-				contentPadding={false}
-				actions={
-					<>
-						<Button>Button</Button>
-					</>
-				}
-			>
+			<Page title={'User Offers'} contentPadding={false}>
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Container>
@@ -65,7 +57,7 @@ export const UserOffers = (): JSX.Element => {
 								<LoadingSpinner />
 							) : (
 								<>
-									<Text>
+									<Text fontSize={'lg'}>
 										This is the page where the user will see all offers that he
 										has created
 									</Text>
@@ -73,7 +65,7 @@ export const UserOffers = (): JSX.Element => {
 										{offers?.map((i) => (
 											<>
 												<OfferCardStyled
-													to={`../procurement/${i.tenderId}`}
+													to={`../procurement/offers/${i.tenderId}`}
 													key={i.offerId}
 												>
 													{

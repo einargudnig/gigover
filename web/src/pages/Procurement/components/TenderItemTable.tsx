@@ -343,7 +343,7 @@ export const TenderItemTable: React.FC = () => {
 					{tenderStatus === 1 ? (
 						<InviteButton tenderDesc={tenderDescForEmail} />
 					) : (
-						<Text fontSize={'xs'}>
+						<Text fontSize={'xs'} ml={'1'}>
 							You need to publish the tender before you can invite people
 						</Text>
 					)}
