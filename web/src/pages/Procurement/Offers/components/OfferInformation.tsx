@@ -43,9 +43,10 @@ export const OfferInformation = ({
 			};
 
 			const response = await addOffer(body);
-			console.log(response);
-			// const offerId = response.id; //! This does ALWAYS return undefined
-			// console.log(offerId);
+			console.log('r', { response });
+			// { id: 33 }
+			const offerId = { response };
+			console.log('OfferId', offerId);
 			console.log('Offer opened!');
 		} catch (e) {
 			console.log(e);

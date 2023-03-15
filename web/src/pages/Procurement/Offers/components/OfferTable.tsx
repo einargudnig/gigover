@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import {
 	Button,
 	ButtonGroup,
@@ -21,6 +21,7 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { useTenderById } from '../../../../queries/useGetTenderById';
 import { useParams } from 'react-router-dom';
+import { OfferIdContext } from '../../../../context/OfferIdContext';
 
 interface Props {
 	onUpdateRow: (updatedRow: TenderItem) => void;
@@ -28,6 +29,7 @@ interface Props {
 
 function EditableControls() {
 	const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
+	const offerId = useContext(OfferIdContext);
 
 	//! I should trigger the mutation in the onClick handler for the submit button!
 	// That allows me to even trigger two mutations, the number and the notes/cost.
@@ -38,7 +40,9 @@ function EditableControls() {
 				icon={<CheckIcon />}
 				{...getSubmitButtonProps()}
 				onClick={() => {
-					console.log('This should trigger a mutation');
+					console.log(
+						`This should trigger a mutation, with the offerId ${offerId} from the context`
+					);
 				}}
 			/>
 			<IconButton

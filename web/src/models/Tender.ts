@@ -45,3 +45,7 @@ export interface Offer {
 	statusText: string;
 	notes?: string;
 }
+
+export interface OfferId {
+	offerId: number;
+}

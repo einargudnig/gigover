@@ -177,7 +177,7 @@ export const TenderItemTable: React.FC = () => {
 								</Th>
 							</Tooltip>
 
-							<Tooltip label="Unit of meaurement. For example: m2, kg, t">
+							<Tooltip label="Unit of measurement. For example: m2, kg, t">
 								<Th>
 									<HStack>
 										<p>Unit</p>
@@ -328,8 +328,8 @@ export const TenderItemTable: React.FC = () => {
 				<Text>When the tender is ready you can publish it.</Text>
 				<Spacer />
 				<Text>
-					If you want to view offers that have come for this tender press the 'Offer for
-					this tender' button
+					If you want to view offers that have come for this tender press the &quot;Offer
+					for this tender&quot; button
 				</Text>
 			</Flex>
 			{/* onClick handler that publishes the tender
