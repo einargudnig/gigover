@@ -22,37 +22,41 @@ import { Tender, TenderItem } from '../../../../models/Tender';
 import { useTenderById } from '../../../../queries/useGetTenderById';
 import { useParams } from 'react-router-dom';
 import { OfferIdContext } from '../../../../context/OfferIdContext';
+import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 
 interface Props {
 	onUpdateRow: (updatedRow: TenderItem) => void;
 }
 
-function EditableControls() {
-	const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
-	const offerId = useContext(OfferIdContext);
+// function EditableControls() {
+// 	const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
+// 	const { offerId } = useContext(OfferIdContext);
+// 	// const { mutate: addOfferItems } = useAddOfferItems();
 
-	//! I should trigger the mutation in the onClick handler for the submit button!
-	// That allows me to even trigger two mutations, the number and the notes/cost.
-	return isEditing ? (
-		<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
-			<IconButton
-				aria-label="save"
-				icon={<CheckIcon />}
-				{...getSubmitButtonProps()}
-				onClick={() => {
-					console.log(
-						`This should trigger a mutation, with the offerId ${offerId} from the context`
-					);
-				}}
-			/>
-			<IconButton
-				aria-label="cancel"
-				icon={<CloseIcon boxSize={3} />}
-				{...getCancelButtonProps()}
-			/>
-		</ButtonGroup>
-	) : null;
-}
+// 	//! I should trigger the mutation in the onClick handler for the submit button!
+// 	// That allows me to even trigger two mutations, the number and the notes/cost.
+// 	return isEditing ? (
+// 		<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
+// 			<IconButton
+// 				aria-label="save"
+// 				icon={<CheckIcon />}
+// 				{...getSubmitButtonProps()}
+// 				onClick={() => {
+// 					console.log(
+// 						`This should trigger a mutation, with the offerId ${offerId} from the context`
+// 					);
+
+// 					// addOfferItems({ offerId, items: [] })
+// 				}}
+// 			/>
+// 			<IconButton
+// 				aria-label="cancel"
+// 				icon={<CloseIcon boxSize={3} />}
+// 				{...getCancelButtonProps()}
+// 			/>
+// 		</ButtonGroup>
+// 	) : null;
+// }
 
 export function OfferTable() {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
@@ -63,11 +67,44 @@ export function OfferTable() {
 	// There is a way around this, but it's not pretty.
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
+	const [costValue, setCostValue] = React.useState(0);
+	const [notesValue, setNotesValue] = React.useState('');
 
-	// const handleUpdateRow = (updatedRow: TenderItem) => {
-	// 	// onUpdateRow(updatedRow);
-	// 	console.log(updatedRow);
-	// };
+	const EditableControls = () => {
+		const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
+		const { offerId } = useContext(OfferIdContext);
+		const { mutateAsync: addOfferItems } = useAddOfferItems();
+
+		//! I should trigger the mutation in the onClick handler for the submit button!
+		// That allows me to even trigger two mutations, the number and the notes/cost.
+		return isEditing ? (
+			<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
+				<IconButton
+					aria-label="save"
+					icon={<CheckIcon />}
+					{...getSubmitButtonProps()}
+					onClick={() => {
+						console.log(
+							`This should trigger a mutation, with the offerId ${offerId} from the context`
+						);
+						console.log('COST', costValue);
+						console.log('COST', notesValue);
+						addOfferItems({
+							tenderItemId: 4,
+							offerId: offerId,
+							cost: costValue,
+							notes: notesValue
+						});
+					}}
+				/>
+				<IconButton
+					aria-label="cancel"
+					icon={<CloseIcon boxSize={3} />}
+					{...getCancelButtonProps()}
+				/>
+			</ButtonGroup>
+		) : null;
+	};
 
 	return (
 		<>
@@ -109,6 +146,13 @@ export function OfferTable() {
 									defaultValue={'no price'}
 									isPreviewFocusable={true}
 									selectAllOnFocus={false}
+									onSubmit={() => {
+										console.log('submit');
+										console.log(costValue);
+									}}
+									onChange={(value) => {
+										setCostValue(Number(value));
+									}}
 								>
 									<Tooltip label="Click to edit the price">
 										<EditablePreview py={2} px={4} />
@@ -124,17 +168,19 @@ export function OfferTable() {
 									defaultValue={row.notes}
 									isPreviewFocusable={true}
 									selectAllOnFocus={false}
+									onSubmit={() => {
+										console.log('submit');
+										console.log(notesValue);
+									}}
+									onChange={(value) => {
+										setNotesValue(value);
+									}}
 								>
 									<Tooltip label="Click to edit notes">
 										<EditablePreview py={2} px={4} />
 									</Tooltip>
 									<HStack>
-										<Input
-											py={2}
-											px={4}
-											as={EditableInput}
-											variant={'filled'}
-										/>
+										<Input py={2} px={4} as={EditableInput} />
 										<EditableControls />
 									</HStack>
 								</Editable>

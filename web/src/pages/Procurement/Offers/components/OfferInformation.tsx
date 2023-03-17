@@ -16,6 +16,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
+import { OfferIdContext } from '../../../../context/OfferIdContext';
 
 type OfferNote = {
 	note: string;
@@ -33,6 +34,7 @@ export const OfferInformation = ({
 	const { handleSubmit, register } = useForm<OfferNote>();
 	const date = new Date(finishDate);
 	const handleDelivery = delivery ? 'Yes' : 'No';
+	const { setOfferId } = React.useContext(OfferIdContext);
 	const { mutateAsync: addOffer } = useAddOffer();
 
 	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
@@ -42,11 +44,13 @@ export const OfferInformation = ({
 				note: data.note
 			};
 
-			const response = await addOffer(body);
-			console.log('r', { response });
-			// { id: 33 }
-			const offerId = { response };
-			console.log('OfferId', offerId);
+			// we can chain a .then() function to the end to receive the result of the mutation. In this case, we expect the result to be a number, which we can capture as the id parameter of the .then() function.
+			const response = await addOffer(body).then((res) => res.data.id);
+
+			// Before this was { id: 33 } because the AxiosResponse was of type AxiosResponse<{ id: number }>
+			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
+			const offerId = response;
+			setOfferId(offerId);
 			console.log('Offer opened!');
 		} catch (e) {
 			console.log(e);

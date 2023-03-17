@@ -18,8 +18,8 @@ export const TenderOffer = (): JSX.Element => {
 		error: tenderError
 	} = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	// const [offerId, setOfferId] = useState<number>(0); // This will help us update the offerId value for all the components that need it.
-	const offerId = 33;
+	const [offerId, setOfferId] = useState<number>(0); // This will help us update the offerId value for all the components that need it.
+	// const offerId = 33;
 	return (
 		<>
 			{isTenderLoading ? (
@@ -30,7 +30,7 @@ export const TenderOffer = (): JSX.Element => {
 				</div>
 			) : (
 				<>
-					<OfferIdContext.Provider value={offerId}>
+					<OfferIdContext.Provider value={{ offerId, setOfferId }}>
 						<OfferInformation
 							description={tender?.description}
 							terms={tender?.terms}

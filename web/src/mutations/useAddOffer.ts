@@ -20,7 +20,7 @@ export const useAddOffer = () => {
 			const response = await axios.post(ApiService.addOffer, offer, {
 				withCredentials: true
 			});
-			return response.data;
+			return response;
 		} catch (e) {
 			devError(e);
 			throw new Error('Could not add offers');
