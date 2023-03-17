@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
 	Button,
 	ButtonGroup,
@@ -67,10 +67,11 @@ export function OfferTable() {
 	// There is a way around this, but it's not pretty.
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
+
 	const [costValue, setCostValue] = React.useState(0);
 	const [notesValue, setNotesValue] = React.useState('');
 
-	const EditableControls = () => {
+	const EditableControls = ({ tenderItemId }) => {
 		const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
 		const { offerId } = useContext(OfferIdContext);
 		const { mutateAsync: addOfferItems } = useAddOfferItems();
@@ -87,11 +88,10 @@ export function OfferTable() {
 						console.log(
 							`This should trigger a mutation, with the offerId ${offerId} from the context`
 						);
-						console.log('COST', costValue);
-						console.log('COST', notesValue);
+
 						addOfferItems({
-							tenderItemId: 4,
-							offerId: offerId,
+							tenderItemId,
+							offerId,
 							cost: costValue,
 							notes: notesValue
 						});
@@ -133,7 +133,7 @@ export function OfferTable() {
 									</Tooltip>
 									<HStack>
 										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls />
+										<EditableControls tenderItemId={row.tenderItemId} />
 									</HStack>
 								</Editable>
 							</Td>
@@ -159,7 +159,7 @@ export function OfferTable() {
 									</Tooltip>
 									<HStack>
 										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls />
+										<EditableControls tenderItemId={row.tenderItemId} />
 									</HStack>
 								</Editable>
 							</Td>
@@ -181,7 +181,7 @@ export function OfferTable() {
 									</Tooltip>
 									<HStack>
 										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls />
+										<EditableControls tenderItemId={row.tenderItemId} />
 									</HStack>
 								</Editable>
 							</Td>

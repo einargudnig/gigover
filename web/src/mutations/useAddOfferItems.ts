@@ -7,7 +7,6 @@ import axios from 'axios';
 
 export interface TenderItemsOffer {
 	tenderItemId: number;
-	nr: number;
 	offerId: number;
 	cost: number;
 	notes: string;
