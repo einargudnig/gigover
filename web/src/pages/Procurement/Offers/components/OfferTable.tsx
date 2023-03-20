@@ -85,10 +85,6 @@ export function OfferTable() {
 					icon={<CheckIcon />}
 					{...getSubmitButtonProps()}
 					onClick={() => {
-						console.log(
-							`This should trigger a mutation, with the offerId ${offerId} from the context`
-						);
-
 						addOfferItems({
 							tenderItemId,
 							offerId,

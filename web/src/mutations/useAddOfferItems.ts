@@ -8,8 +8,8 @@ import axios from 'axios';
 export interface TenderItemsOffer {
 	tenderItemId: number;
 	offerId: number;
-	cost: number;
-	notes: string;
+	cost?: number;
+	notes?: string;
 }
 
 //! what I need to pass to the server here:
