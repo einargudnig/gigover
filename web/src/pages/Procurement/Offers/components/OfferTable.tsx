@@ -25,6 +25,8 @@ import { OfferIdContext } from '../../../../context/OfferIdContext';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 // This is for the number!
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem';
+import { usePublishOffer } from '../../../../mutations/usePublishOffer';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 export function OfferTable() {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
@@ -38,6 +40,8 @@ export function OfferTable() {
 	const [notesValue, setNotesValue] = React.useState('');
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
+	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
+	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -47,7 +51,7 @@ export function OfferTable() {
 	) => {
 		const offerItemData = {
 			tenderItemId,
-			offerId,
+			offerId: offerIdFromCtxt,
 			...(cost && { cost }),
 			...(notes && { notes })
 		};
@@ -80,7 +84,6 @@ export function OfferTable() {
 
 	const EditableControls = ({ tenderItemId }) => {
 		const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
-		const { offerId } = useContext(OfferIdContext);
 
 		return isEditing ? (
 			<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
@@ -91,7 +94,7 @@ export function OfferTable() {
 					onClick={() => {
 						handleOfferItems(
 							tenderItemId,
-							offerId,
+							offerIdFromCtxt,
 							costValue || undefined,
 							notesValue || undefined
 						);
@@ -105,6 +108,10 @@ export function OfferTable() {
 				/>
 			</ButtonGroup>
 		) : null;
+	};
+
+	const handlePublish = () => {
+		publishOffer(offerIdFromCtxt);
 	};
 
 	return (
@@ -197,7 +204,9 @@ export function OfferTable() {
 				</Tbody>
 			</Table>
 
-			<Button>Publish Offer</Button>
+			<Button onClick={handlePublish}>
+				{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+			</Button>
 		</>
 	);
 }
