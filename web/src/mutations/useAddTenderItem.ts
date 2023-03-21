@@ -8,10 +8,10 @@ import { useQueryClient } from 'react-query';
 export interface TenderItems {
 	tenderId: number;
 	tenderItemId?: number;
-	nr: number;
-	description: string;
-	volume: number;
-	unit: string;
+	nr?: number;
+	description?: string;
+	volume?: number;
+	unit?: string;
 }
 
 export const useAddTenderItem = () => {

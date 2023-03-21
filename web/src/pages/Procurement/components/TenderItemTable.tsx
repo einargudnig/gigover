@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Tender, TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
@@ -41,9 +41,7 @@ export const TenderItemTable: React.FC = () => {
 		isError: isTenderError,
 		error: tenderError
 	} = useTenderById(Number(tenderId));
-	//! This will cause me annoying trouble that I have to deal with
-	// Fx, when I want to modify or delete items they can be undefined, which is no bueno.
-	// There is a way around this, but it's not pretty.
+
 	const tender: Tender | undefined = data?.tender;
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
@@ -76,7 +74,7 @@ export const TenderItemTable: React.FC = () => {
 	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 
 	//! We need to make a validation for the unit form field
-	const isInvalidUnit = formData.unit.length > 5;
+	const isInvalidUnit = formData?.unit!.length > 5;
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
