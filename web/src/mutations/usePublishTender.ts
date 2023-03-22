@@ -16,7 +16,7 @@ export const usePublishTender = () => {
 			await axios.post(ApiService.publishTender, tender, { withCredentials: true }),
 		{
 			onSuccess: async () => {
-				await client.invalidateQueries(ApiService.userTenders);
+				await client.refetchQueries(ApiService.userTenders);
 			}
 		}
 	);

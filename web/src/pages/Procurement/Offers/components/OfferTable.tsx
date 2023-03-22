@@ -42,6 +42,7 @@ export function OfferTable() {
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
+	console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persisent is this value?
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -92,6 +93,11 @@ export function OfferTable() {
 					icon={<CheckIcon />}
 					{...getSubmitButtonProps()}
 					onClick={() => {
+						if (offerIdFromCtxt === 0) {
+							alert(
+								'Are your sure you have opened the offer? YOu have to open the offer before you can publish it.'
+							);
+						}
 						handleOfferItems(
 							tenderItemId,
 							offerIdFromCtxt,
@@ -111,7 +117,15 @@ export function OfferTable() {
 	};
 
 	const handlePublish = () => {
-		publishOffer(offerIdFromCtxt);
+		if (offerIdFromCtxt === 0) {
+			alert(
+				'Are your sure you have opened the offer? YOu have to open the offer before you can publish it.'
+			);
+		}
+		const offerIdBody = {
+			offerId: offerIdFromCtxt
+		};
+		publishOffer(offerIdBody);
 	};
 
 	return (
