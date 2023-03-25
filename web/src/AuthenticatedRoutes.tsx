@@ -59,9 +59,10 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'bidder-tenders'} element={<UserTenders />} />
 		<Route path={'bidder-offers'} element={<UserOffers />} />
 
-		{/* This route will be for offers for certain tenderId */}
-		{/* For the time being this will be an outlet.
-		   I might make a list there with all tenders and logic to navigate to the offer page for that tender
+		{/* For the time being I will not have this visible!
+		   This is accessible from the procurement/id route.
+			 It sounds nice to have these routes, but I think it's better to start with it simple.
+			 Also, the bidders will not see anything there. It's not the best to have a lot of empty pages.
 		*/}
 		<Route path={'tender-offers'} element={<OfferForTenders />} />
 		<Route path={'tender-offers/:tenderId'} element={<OfferForTender />} />

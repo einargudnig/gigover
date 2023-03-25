@@ -27,6 +27,7 @@ import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+// import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 
 export function OfferTable() {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
@@ -42,7 +43,10 @@ export function OfferTable() {
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
-	console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persisent is this value?
+	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persisent is this value?
+
+	// const { data: bidderTenders } = useGetBidderTenders();
+	// console.log(bidderTenders);
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -95,7 +99,7 @@ export function OfferTable() {
 					onClick={() => {
 						if (offerIdFromCtxt === 0) {
 							alert(
-								'Are your sure you have opened the offer? YOu have to open the offer before you can publish it.'
+								'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
 							);
 						}
 						handleOfferItems(

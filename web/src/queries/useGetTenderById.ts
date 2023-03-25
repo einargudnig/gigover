@@ -13,7 +13,6 @@ export const useTenderById = (tenderId: number) => {
 		ErrorResponse
 	>(ApiService.getTenderById(tenderId), {
 		refetchOnWindowFocus: true
-		// withCredentials: true
 	});
 
 	return {

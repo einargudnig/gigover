@@ -41,7 +41,6 @@ export const OfferInformation = (): JSX.Element => {
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
 
 	const tender = findTenderById(tenderId, bidderTenders);
-	console.log('tender: ', tender);
 	const { handleSubmit, register } = useForm<OfferNote>();
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
