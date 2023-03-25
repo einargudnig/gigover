@@ -29,11 +29,6 @@ const OfferCardStyled = styled(CardBase)`
 	}
 `;
 
-const OfferCardTitle = styled.div`
-	display: flex;
-	justify-content: space-between;
-`;
-
 const Container = styled.div`
 	flex: 1 0;
 	height: 100%;
@@ -76,7 +71,6 @@ export const OfferForTender = (): JSX.Element => {
 										) : (
 											offer?.map((o) => (
 												<OfferCardStyled key={o.tenderId}>
-													<OfferCardTitle>Test</OfferCardTitle>
 													<Text>Notes: {o.notes}</Text>
 													<Text>Offer Id: {o.offerId}</Text>
 													<Text>Tender Id: {o.tenderId}</Text>

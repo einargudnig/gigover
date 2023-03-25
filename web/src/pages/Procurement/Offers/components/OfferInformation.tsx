@@ -19,6 +19,7 @@ import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
 import { OfferIdContext } from '../../../../context/OfferIdContext';
 import { Tender } from '../../../../models/Tender';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 type OfferNote = {
 	note: string;
@@ -39,13 +40,22 @@ function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
 export const OfferInformation = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-
-	const tender = findTenderById(tenderId, bidderTenders);
-	const { handleSubmit, register } = useForm<OfferNote>();
-	const date = new Date(tender.finishDate);
-	const handleDelivery = tender.delivery ? 'Yes' : 'No';
 	const { setOfferId } = React.useContext(OfferIdContext);
 	const { mutateAsync: addOffer } = useAddOffer();
+	const { handleSubmit, register } = useForm<OfferNote>();
+
+	if (isLoading) {
+		return <LoadingSpinner />;
+	}
+
+	const tender = findTenderById(tenderId, bidderTenders);
+
+	if (!tender) {
+		return <div>Tender with id {tenderId} not found</div>;
+	}
+
+	const date = new Date(tender.finishDate);
+	const handleDelivery = tender.delivery ? 'Yes' : 'No';
 
 	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
 		try {
@@ -80,7 +90,7 @@ export const OfferInformation = (): JSX.Element => {
 						w="100%"
 					>
 						{isLoading ? (
-							<Text>Loading...</Text>
+							<LoadingSpinner />
 						) : (
 							<VStack pos={'relative'}>
 								<VStack mb={'4'}>
