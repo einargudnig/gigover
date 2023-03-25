@@ -25,10 +25,11 @@ type InviteEmail = {
 };
 
 export const InviteButton = (tenderDesc): JSX.Element => {
-	//! EMAIL STUFF
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
 	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public keu, so no reason to have it in .env
+
+	// console.log('tenderDesc in Button: ', tenderDesc);
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const {
@@ -39,12 +40,13 @@ export const InviteButton = (tenderDesc): JSX.Element => {
 
 	const onSubmit: SubmitHandler<InviteEmail> = async (data: InviteEmail) => {
 		const templateParams = {
-			tenderDesc: tenderDesc,
+			tenderDesc,
 			to_email: data.email
 		};
 		console.log('Sending email to: ', data.email);
+		// console.log('tenderDesc: ', templateParams.tenderDesc);
 		try {
-			await emailjs.send(emailServiceId!, emailTemplateId!, templateParams, emailUserId);
+			await emailjs.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!);
 			console.log('Email sent!');
 
 			onClose();

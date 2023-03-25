@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, HStack, VStack, Text, Box } from '@chakra-ui/react';
+import { HStack, VStack, Text, Box } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
@@ -39,7 +39,6 @@ const OfferCardStyled = styled(CardBaseLink)`
 export const UserOffers = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
-	// console.log('HERE', offers);
 
 	// const offerPublished = () => {
 	// 	const i = offers?.[0];
@@ -63,10 +62,9 @@ export const UserOffers = (): JSX.Element => {
 									</Text>
 									<Box my={'2'}>
 										{offers?.map((i) => (
-											<>
+											<React.Fragment key={i.offerId}>
 												<OfferCardStyled
 													to={`../procurement/offers/${i.tenderId}`}
-													key={i.offerId}
 												>
 													{
 														//eslint-disable-next-line
@@ -93,7 +91,7 @@ export const UserOffers = (): JSX.Element => {
 														<Text>{i.statusText}</Text>
 													</HStack>
 												</OfferCardStyled>
-											</>
+											</React.Fragment>
 										))}
 									</Box>
 								</>

@@ -21,6 +21,7 @@ import { TenderOffer } from './pages/Procurement/Offers/TenderOffer';
 import { UserOffers } from './pages/Procurement/Offers/UserOffers';
 import { OfferForTenders } from './pages/Procurement/Offers/OfferForTenders';
 import { OfferForTender } from './pages/Procurement/Offers/OfferForTender';
+import { UserTenders } from './pages/Procurement/Offers/UserTenders';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -55,7 +56,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 
 		{/* This route will be for the user that makes offers */}
-		<Route path={'user-offers'} element={<UserOffers />} />
+		<Route path={'bidder-tenders'} element={<UserTenders />} />
+		<Route path={'bidder-offers'} element={<UserOffers />} />
 
 		{/* This route will be for offers for certain tenderId */}
 		{/* For the time being this will be an outlet.

@@ -143,7 +143,7 @@ export const TenderItemTable: React.FC = () => {
 			) : (
 				<Table variant={'striped'}>
 					{/* <Thead position="sticky" top={0} zIndex="docked">
-						// This migh come in handy, it makes the table header sticky. It does not look suuper good, but the funcitonality is there.
+						// This might come in handy, it makes the table header sticky. It does not look suuper good, but the funcitonality is there.
 						// Let's keep it commented out and see where it goes.
 					*/}
 					<Thead>
@@ -325,36 +325,30 @@ export const TenderItemTable: React.FC = () => {
 			<Flex mb={'2'}>
 				<Text>When the tender is ready you can publish it.</Text>
 				<Spacer />
-				<Text>
-					If you want to view offers that have come for this tender press the &quot;Offer
-					for this tender&quot; button
-				</Text>
 			</Flex>
 			{/* onClick handler that publishes the tender
 				// it also open a dialog where I can add email that I want to send an invitation to
 			*/}
 			<Flex alignItems={'center'} justifyContent={'center'}>
 				<Flex alignItems={'center'} justifyContent={'center'}>
-					<Button onClick={handlePublish}>
+					<Button onClick={handlePublish} mr={'2'}>
 						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
 					</Button>
 					{tenderStatus === 1 ? (
 						<InviteButton tenderDesc={tenderDescForEmail} />
 					) : (
-						<Text fontSize={'xs'} ml={'1'}>
+						<Text fontSize={'xs'}>
 							You need to publish the tender before you can invite people
 						</Text>
 					)}
 				</Flex>
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
-				<Button mr={'1'}>
+				{/* <Button mr={'1'}>
 					<Link to={`../offers/${Number(tenderId)}`}>Offer page</Link>
-				</Button>
+				</Button> */}
 				<Button ml={'1'}>
-					<Link to={`../../tender-offers/${Number(tenderId)}`}>
-						Offer for this tender
-					</Link>
+					<Link to={`../../tender-offers/${Number(tenderId)}`}>Published offers</Link>
 				</Button>
 			</Flex>
 		</>

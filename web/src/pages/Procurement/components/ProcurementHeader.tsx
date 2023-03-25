@@ -62,6 +62,14 @@ export const ProcurementHeader = (): JSX.Element => {
 										</Text>
 										<Text fontSize={'lg'}>{tender?.terms}</Text>
 									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Status:
+										</Text>
+										<Text fontSize={'lg'}>
+											{tender?.status === 1 ? 'Published' : 'Not published'}
+										</Text>
+									</HStack>
 								</VStack>
 								{/* Second stack of address, delivery, finish date and phone */}
 								<HStack mb={'4'}>

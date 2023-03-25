@@ -264,11 +264,17 @@ export const Page = ({
 						</div>
 						<span>Procurement</span>
 					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/user-offers'}>
+					<IconLink onClick={onLinkClick} to={'/bidder-tenders'}>
 						<div>
 							<OfferIcon />
 						</div>
-						<span>User Offers</span>
+						<span>Bidder Tenders</span>
+					</IconLink>
+					<IconLink onClick={onLinkClick} to={'/bidder-offers'}>
+						<div>
+							<OfferIcon />
+						</div>
+						<span>Bidder Offers</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/tender-offers'}>
 						<div>
