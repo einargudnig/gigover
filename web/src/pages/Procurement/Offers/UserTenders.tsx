@@ -1,15 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Center, Text } from '@chakra-ui/react';
+import { Center, Text, VStack, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { useProjectList } from '../../../queries/useProjectList';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
-
-// List of all the offers that I've made as a user!
-// /tender/offers
 
 const Container = styled.div`
 	flex: 1 0;
@@ -26,6 +23,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 	justify-content: space-between;
 	flex-direction: column;
 	margin-bottom: 8px;
+	margin-top: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -45,13 +43,14 @@ const OfferCardTitle = styled.div`
 export const UserTenders = (): JSX.Element => {
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
 	const { data: projects } = useProjectList();
-	// console.log('data', bidderTenders);
 
 	// Get the projectNames from projects and add them to the tenders
 	const projectsWithTenders = bidderTenders?.map((t) => {
 		const projectName = projects.find((p) => p.projectId === t.projectId);
 		return { ...t, projectName };
 	});
+
+	const noTender = projectsWithTenders?.length === 0;
 
 	// const offerPublished = () => {
 	// 	const i = offers?.[0];
@@ -61,49 +60,51 @@ export const UserTenders = (): JSX.Element => {
 	return (
 		<>
 			<Page title={'Bidder tenders'} contentPadding={false}>
-				{/* <VStack style={{ height: '100%' }}>
+				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Container>
-							<Text>Bidder Tenders</Text>
+							{noTender ? (
+								<Center>
+									<Text my={'2'} fontSize={'xl'}>
+										You do not have any tenders yet. The Tender owner needs to
+										add you to the tender.
+									</Text>
+								</Center>
+							) : null}
+							{isLoading ? (
+								<Center>
+									<LoadingSpinner />
+								</Center>
+							) : (
+								<>
+									{projectsWithTenders.map((t) => (
+										<OfferCardStyled
+											to={`/procurement/offers/${t.tenderId}`}
+											key={t.tenderId}
+										>
+											<OfferCardTitle>
+												<div>
+													<h3>
+														<b>Project:</b> {t.projectName?.name}
+													</h3>
+													<div style={{ marginTop: -16 }}>
+														<b>Description:</b> {t.description}
+													</div>
+												</div>
+											</OfferCardTitle>
+											<div>
+												<p style={{ marginBottom: -16, fontSize: 14 }}>
+													<b>Close date:</b>{' '}
+													{formatDateWithoutTime(new Date(t.finishDate))}
+												</p>
+											</div>
+										</OfferCardStyled>
+									))}
+								</>
+							)}
 						</Container>
 					</HStack>
-				</VStack> */}
-				<Center>
-					<Text my={'2'} fontSize={'xl'}>
-						Press the tender to make an offer for the tender.
-					</Text>
-				</Center>
-				{isLoading ? (
-					<Center>
-						<LoadingSpinner />
-					</Center>
-				) : (
-					<>
-						{projectsWithTenders.map((t) => (
-							<OfferCardStyled
-								to={`/procurement/offers/${t.tenderId}`}
-								key={t.tenderId}
-							>
-								<OfferCardTitle>
-									<div>
-										<h3>
-											<b>Project:</b> {t.projectName?.name}
-										</h3>
-										<div style={{ marginTop: -16 }}>
-											<b>Description:</b> {t.description}
-										</div>
-									</div>
-								</OfferCardTitle>
-								<div>
-									<p style={{ marginBottom: -16, fontSize: 14 }}>
-										<b>Close date:</b>{' '}
-										{formatDateWithoutTime(new Date(t.finishDate))}
-									</p>
-								</div>
-							</OfferCardStyled>
-						))}
-					</>
-				)}
+				</VStack>
 			</Page>
 		</>
 	);

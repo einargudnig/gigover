@@ -116,13 +116,14 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	const handlePublish = () => {
 		if (offerIdFromCtxt === 0) {
 			alert(
-				'Are your sure you have opened the offer? YOu have to open the offer before you can publish it.'
+				'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
 			);
 		}
 		const offerIdBody = {
 			offerId: offerIdFromCtxt
 		};
 		publishOffer(offerIdBody);
+		alert('You have published the offer!');
 	};
 
 	return (

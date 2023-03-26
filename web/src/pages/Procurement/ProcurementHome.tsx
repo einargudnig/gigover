@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Center } from '@chakra-ui/react';
+import { Center, Text } from '@chakra-ui/react';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -42,6 +42,8 @@ export const ProcurementHome = (): JSX.Element => {
 		return { ...t, projectName };
 	});
 
+	const noTenders = projectsWithTenders?.length === 0;
+
 	return (
 		<>
 			{isLoading ? (
@@ -50,6 +52,13 @@ export const ProcurementHome = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
+					{noTenders ? (
+						<Center>
+							<Text my={'2'} fontSize={'xl'}>
+								You can create a new tender by pressing the button above.
+							</Text>
+						</Center>
+					) : null}
 					{projectsWithTenders.map((t) => (
 						<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
 							<ProcurementCardTitle>

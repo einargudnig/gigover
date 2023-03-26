@@ -46,20 +46,24 @@ export const UserOffers = (): JSX.Element => {
 	// };
 	let offerPublished = 'Not Published';
 
+	const noOffers = offers?.length === 0;
+
 	return (
 		<>
 			<Page title={'User Offers'} contentPadding={false}>
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Container>
+							{noOffers ? (
+								<Text>
+									You have not made any offers. Make sure you open a offer before
+									you add to it.
+								</Text>
+							) : null}
 							{isLoading ? (
 								<LoadingSpinner />
 							) : (
 								<>
-									<Text fontSize={'lg'}>
-										This is the page where the user will see all offers that he
-										has created
-									</Text>
 									<Box my={'2'}>
 										{offers?.map((i) => (
 											<React.Fragment key={i.offerId}>
@@ -86,10 +90,7 @@ export const UserOffers = (): JSX.Element => {
 														<Text>{i.tenderId}</Text>
 													</HStack>
 													{/* <Text>New Status: {offerPublished}</Text> */}
-													<HStack>
-														<Text as={'b'}>Status text:</Text>
-														<Text>{i.statusText}</Text>
-													</HStack>
+													<HStack></HStack>
 												</OfferCardStyled>
 											</React.Fragment>
 										))}

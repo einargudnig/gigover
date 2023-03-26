@@ -26,7 +26,9 @@ export const OfferInformation = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
 	const { setOfferId } = React.useContext(OfferIdContext);
 	const { mutateAsync: addOffer } = useAddOffer();
-	const { handleSubmit, register } = useForm<OfferNote>();
+	const { handleSubmit, register } = useForm<OfferNote>({
+		mode: 'onBlur'
+	});
 
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
@@ -45,7 +47,8 @@ export const OfferInformation = ({ tender }): JSX.Element => {
 			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
 			const offerId = response;
 			setOfferId(offerId);
-			console.log('Offer opened!');
+			console.log('Offer opened! With id: ', offerId);
+			alert('You have opened an offer! Start to add numbers, cost and notes to the items.');
 		} catch (e) {
 			console.log(e);
 		}
@@ -137,7 +140,7 @@ export const OfferInformation = ({ tender }): JSX.Element => {
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}
-											// ref={register('notes')} //! Make sure this works!
+											ref={register()} //! Make sure this works!
 											variant={'outline'}
 											mb={'4'}
 										/>

@@ -22,7 +22,7 @@ function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
 export const TenderOffer = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-	console.log('Should see the items, if any:', bidderTenders);
+	// console.log('Should see the items, if any:', bidderTenders);
 	const [offerId, setOfferId] = useState<number>(0); // This will help us update the offerId value for all the components that need it.
 
 	// I should get the bidder tender here and pass the down
