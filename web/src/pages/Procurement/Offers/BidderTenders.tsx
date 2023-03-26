@@ -40,7 +40,7 @@ const OfferCardTitle = styled.div`
 	justify-content: space-between;
 `;
 
-export const UserTenders = (): JSX.Element => {
+export const BidderTenders = (): JSX.Element => {
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
 	const { data: projects } = useProjectList();
 

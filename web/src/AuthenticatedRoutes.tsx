@@ -17,11 +17,13 @@ import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
 // import { Tenders } from './pages/Procurement/components/Tenders';
 import { Tender } from './pages/Procurement/components/Tender';
-import { TenderOffer } from './pages/Procurement/Offers/TenderOffer';
-import { UserOffers } from './pages/Procurement/Offers/UserOffers';
-import { OfferForTenders } from './pages/Procurement/Offers/OfferForTenders';
-import { OfferForTender } from './pages/Procurement/Offers/OfferForTender';
-import { UserTenders } from './pages/Procurement/Offers/UserTenders';
+import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
+import { BidderOffers } from './pages/Procurement/Offers/BidderOffers';
+import { Offers } from './pages/Procurement/Offers/Offers';
+import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForTenders';
+import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTender';
+import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
+import { PublishedTender } from './pages/Procurement/Offers/components/PublishedTender';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -56,16 +58,19 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 
 		{/* This route will be for the user that makes offers */}
-		<Route path={'bidder-tenders'} element={<UserTenders />} />
-		<Route path={'bidder-offers'} element={<UserOffers />} />
+		<Route path={'bidder-tenders'} element={<BidderTenders />} />
+		<Route path={'bidder-offers'} element={<BidderOffers />} />
 
-		{/* For the time being I will not have this visible!
-		   This is accessible from the procurement/id route.
-			 It sounds nice to have these routes, but I think it's better to start with it simple.
-			 Also, the bidders will not see anything there. It's not the best to have a lot of empty pages.
+		{/*
+			 The first route is accessible from the ProcurementHome page.
+			 The second one from the Procurement/id page
 		*/}
-		<Route path={'tender-offers'} element={<OfferForTenders />} />
-		<Route path={'tender-offers/:tenderId'} element={<OfferForTender />} />
+		<Route path={'tender-offers'} element={<Offers />}>
+			<Route index element={<OfferForTenders />} />
+			<Route path={':tenderId'} element={<OfferForTender />} />
+			{/* This route should show us a table with items that have had a published offer. */}
+			<Route path={':tenderId/:offerId'} element={<PublishedTender />} />
+		</Route>
 
 		<Route path={'settings'} element={<Settings />} />
 		<Route path={'resources'} element={<Resources />} />

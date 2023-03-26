@@ -24,7 +24,7 @@ type InviteEmail = {
 	email: string;
 };
 
-export const InviteButton = (tenderDesc): JSX.Element => {
+export const InviteButton = ({ tenderDesc }): JSX.Element => {
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
 	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public keu, so no reason to have it in .env
@@ -46,8 +46,16 @@ export const InviteButton = (tenderDesc): JSX.Element => {
 		console.log('Sending email to: ', data.email);
 		// console.log('tenderDesc: ', templateParams.tenderDesc);
 		try {
-			await emailjs.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!);
-			console.log('Email sent!');
+			await emailjs
+				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
 
 			onClose();
 		} catch (e) {

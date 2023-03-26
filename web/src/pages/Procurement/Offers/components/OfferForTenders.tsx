@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CardBaseLink } from '../../components/CardBase';
-import { Button, Center, Text } from '@chakra-ui/react';
-import { useUserTenders } from '../../queries/useUserTenders';
-import { useProjectList } from '../../queries/useProjectList';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { formatDateWithoutTime } from '../../utils/StringUtils';
-import { Link } from 'react-router-dom';
+import { CardBaseLink } from '../../../../components/CardBase';
+import { Center, Text } from '@chakra-ui/react';
+import { useUserTenders } from '../../../../queries/useUserTenders';
+import { useProjectList } from '../../../../queries/useProjectList';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -32,34 +31,30 @@ const ProcurementCardTitle = styled.div`
 	justify-content: space-between;
 `;
 
-export const ProcurementHome = (): JSX.Element => {
-	const { data, isLoading } = useUserTenders();
+export const OfferForTenders = (): JSX.Element => {
+	const { data: userTenders, isLoading } = useUserTenders();
 	const { data: projects } = useProjectList();
 	// console.log('DATA', { data });
 
 	// Get the projectNames from projects and add them to the tenders
-	const projectsWithTenders = data?.map((t) => {
+	const projectsWithTenders = userTenders?.map((t) => {
 		const projectName = projects.find((p) => p.projectId === t.projectId);
 		return { ...t, projectName };
 	});
 
-	const noTenders = projectsWithTenders?.length === 0;
-
 	return (
 		<>
+			<Center>
+				<Text mb={'2'} fontSize={'xl'}>
+					Press the tender to see the offers that have been published
+				</Text>
+			</Center>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
 				<>
-					{noTenders ? (
-						<Center>
-							<Text my={'2'} fontSize={'xl'}>
-								You can create a new tender by pressing the button above.
-							</Text>
-						</Center>
-					) : null}
 					{projectsWithTenders.map((t) => (
 						<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
 							<ProcurementCardTitle>
@@ -80,11 +75,6 @@ export const ProcurementHome = (): JSX.Element => {
 							</div>
 						</ProcurementCardStyled>
 					))}
-					{noTenders ? null : (
-						<Button mt={'4'} to>
-							<Link to={'/tender-offers'}>Offers</Link>
-						</Button>
-					)}
 				</>
 			)}
 		</>

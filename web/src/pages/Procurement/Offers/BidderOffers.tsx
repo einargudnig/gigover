@@ -7,9 +7,6 @@ import { useGetUserOffers } from '../../../queries/useGetUserOffers';
 import { Offer } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
-// List of all the offers that I've made as a user!
-// /tender/offers
-
 const Container = styled.div`
 	flex: 1 0;
 	height: 100%;
@@ -36,7 +33,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const UserOffers = (): JSX.Element => {
+export const BidderOffers = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
 
@@ -64,37 +61,35 @@ export const UserOffers = (): JSX.Element => {
 								<LoadingSpinner />
 							) : (
 								<>
-									<Box my={'2'}>
-										{offers?.map((i) => (
-											<React.Fragment key={i.offerId}>
-												<OfferCardStyled
-													to={`../procurement/offers/${i.tenderId}`}
-												>
-													{
-														//eslint-disable-next-line
-														(offerPublished =
-															i.status === 1
-																? 'Published'
-																: 'Not Published')
-													}
-													<HStack>
-														<Text as={'b'}>Notes</Text>
-														<Text>{i.notes}</Text>
-													</HStack>
-													<HStack>
-														<Text as={'b'}>Offer Id:</Text>
-														<Text>{i.offerId}</Text>
-													</HStack>
-													<HStack>
-														<Text as={'b'}>Tender Id:</Text>
-														<Text>{i.tenderId}</Text>
-													</HStack>
-													{/* <Text>New Status: {offerPublished}</Text> */}
-													<HStack></HStack>
-												</OfferCardStyled>
-											</React.Fragment>
-										))}
-									</Box>
+									{offers?.map((i) => (
+										<React.Fragment key={i.offerId}>
+											<OfferCardStyled
+												to={`../procurement/offers/${i.tenderId}`}
+											>
+												{
+													//eslint-disable-next-line
+													(offerPublished =
+														i.status === 1
+															? 'Published'
+															: 'Not Published')
+												}
+												<HStack>
+													<Text as={'b'}>Notes</Text>
+													<Text>{i.notes}</Text>
+												</HStack>
+												<HStack>
+													<Text as={'b'}>Offer Id:</Text>
+													<Text>{i.offerId}</Text>
+												</HStack>
+												<HStack>
+													<Text as={'b'}>Tender Id:</Text>
+													<Text>{i.tenderId}</Text>
+												</HStack>
+												{/* <Text>New Status: {offerPublished}</Text> */}
+												<HStack></HStack>
+											</OfferCardStyled>
+										</React.Fragment>
+									))}
 								</>
 							)}
 						</Container>

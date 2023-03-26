@@ -348,7 +348,7 @@ export const TenderItemTable: React.FC = () => {
 					<Link to={`../offers/${Number(tenderId)}`}>Offer page</Link>
 				</Button> */}
 				<Button ml={'1'}>
-					<Link to={`../../tender-offers/${Number(tenderId)}`}>Published offers</Link>
+					<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
 				</Button>
 			</Flex>
 		</>
