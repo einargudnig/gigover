@@ -14,45 +14,19 @@ import {
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
 import { OfferIdContext } from '../../../../context/OfferIdContext';
-import { Tender } from '../../../../models/Tender';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 type OfferNote = {
 	note: string;
 };
 
-type TenderIdParams = {
-	tenderId: string;
-};
-
-function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
-	const tender = bidderTenders.find((t) => t.tenderId === Number(tenderId));
-	if (!tender) {
-		throw new Error(`Tender with id ${tenderId} not found`);
-	}
-	return tender;
-}
-
-export const OfferInformation = (): JSX.Element => {
-	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
-	const { data: bidderTenders, isLoading } = useGetBidderTenders();
+export const OfferInformation = ({ tender }): JSX.Element => {
+	const { tenderId } = useParams();
 	const { setOfferId } = React.useContext(OfferIdContext);
 	const { mutateAsync: addOffer } = useAddOffer();
 	const { handleSubmit, register } = useForm<OfferNote>();
-
-	if (isLoading) {
-		return <LoadingSpinner />;
-	}
-
-	const tender = findTenderById(tenderId, bidderTenders);
-
-	if (!tender) {
-		return <div>Tender with id {tenderId} not found</div>;
-	}
 
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
@@ -89,96 +63,90 @@ export const OfferInformation = (): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						{isLoading ? (
-							<LoadingSpinner />
-						) : (
-							<VStack pos={'relative'}>
-								<VStack mb={'4'}>
+						<VStack pos={'relative'}>
+							<VStack mb={'4'}>
+								<HStack>
+									<Text fontWeight={'bold'} fontSize={'xl'}>
+										Description:
+									</Text>
+									<Text fontSize={'lg'}>{tender.description}</Text>
+								</HStack>
+								<HStack>
+									<Text fontWeight={'bold'} fontSize={'xl'}>
+										Terms:
+									</Text>
+									<Text fontSize={'lg'}>{tender.terms}</Text>
+								</HStack>
+							</VStack>
+
+							<HStack mb={'4'}>
+								<VStack mr={'3'}>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Description:
+											Address:
 										</Text>
-										<Text fontSize={'lg'}>{tender.description}</Text>
+										<Text fontSize={'lg'}>{tender.address}</Text>
 									</HStack>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Terms:
+											Delivery:
 										</Text>
-										<Text fontSize={'lg'}>{tender.terms}</Text>
+										<Text fontSize={'lg'}>{handleDelivery}</Text>
 									</HStack>
 								</VStack>
-
-								<HStack mb={'4'}>
-									<VStack mr={'3'}>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Address:
-											</Text>
-											<Text fontSize={'lg'}>{tender.address}</Text>
-										</HStack>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Delivery:
-											</Text>
-											<Text fontSize={'lg'}>{handleDelivery}</Text>
-										</HStack>
-									</VStack>
-									<Spacer />
-									<VStack ml={'3'}>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Close Date:
-											</Text>
-											<Text fontSize={'lg'}>
-												{formatDateWithoutTime(date)}
-											</Text>
-										</HStack>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Phone:
-											</Text>
-											<Text fontSize={'lg'}>{tender.phoneNumber}</Text>
-										</HStack>
-									</VStack>
-								</HStack>
-								<Divider />
-								{/* //! This should come from the openOffer!
+								<Spacer />
+								<VStack ml={'3'}>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Close Date:
+										</Text>
+										<Text fontSize={'lg'}>{formatDateWithoutTime(date)}</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Phone:
+										</Text>
+										<Text fontSize={'lg'}>{tender.phoneNumber}</Text>
+									</HStack>
+								</VStack>
+							</HStack>
+							<Divider />
+							{/* //! This should come from the openOffer!
 									// Let's start by hiding this in the UI.
 							*/}
-								{/* <HStack>
+							{/* <HStack>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Notes regarding the offer:
 								</Text>
 								{noNote ? <Text fontSize={'lg'}>{offerNote}</Text> : 'No notes'}
 							</HStack> */}
-								{/* This button allow the user to open an offer for this Tender.
+							{/* This button allow the user to open an offer for this Tender.
 								// It's needed so he can add offer to the items in the offer table.
 							*/}
 
-								<form onSubmit={handleSubmit(onSubmit)}>
-									<VStack spacing={4}>
-										<Text>
-											You can add notes to the offer. You need to open the
-											offer so you can start making offers to items.
-										</Text>
-										<FormControl id={'email'}>
-											<FormLabel>Note</FormLabel>
-											<Input
-												name="notes"
-												placeholder={
-													"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
-												}
-												// ref={register('notes')} //! Make sure this works!
-												variant={'outline'}
-												mb={'4'}
-											/>
-										</FormControl>
-									</VStack>
+							<form onSubmit={handleSubmit(onSubmit)}>
+								<VStack spacing={4}>
+									<Text>
+										You can add notes to the offer. You need to open the offer
+										so you can start making offers to items.
+									</Text>
+									<FormControl id={'email'}>
+										<FormLabel>Note</FormLabel>
+										<Input
+											name="notes"
+											placeholder={
+												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
+											}
+											// ref={register('notes')} //! Make sure this works!
+											variant={'outline'}
+											mb={'4'}
+										/>
+									</FormControl>
+								</VStack>
 
-									<Button type="submit">Open offer</Button>
-								</form>
-							</VStack>
-						)}
+								<Button type="submit">Open offer</Button>
+							</form>
+						</VStack>
 					</Box>
 				</Flex>
 			</div>

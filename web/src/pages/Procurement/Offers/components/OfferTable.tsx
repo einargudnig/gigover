@@ -18,8 +18,7 @@ import {
 	HStack
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
-import { Tender, TenderItem } from '../../../../models/Tender';
-import { useTenderById } from '../../../../queries/useGetTenderById';
+import { TenderItem } from '../../../../models/Tender';
 import { useParams } from 'react-router-dom';
 import { OfferIdContext } from '../../../../context/OfferIdContext';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
@@ -27,14 +26,11 @@ import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-// import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 
-export function OfferTable() {
+export const OfferTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
 	// GET user tenders from database
-	const { data: tenderData } = useTenderById(Number(tenderId));
 
-	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 	const [nrValue, setNrValue] = React.useState(0);
 	const [costValue, setCostValue] = React.useState(0);
@@ -44,9 +40,6 @@ export function OfferTable() {
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
 	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persisent is this value?
-
-	// const { data: bidderTenders } = useGetBidderTenders();
-	// console.log(bidderTenders);
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -167,7 +160,8 @@ export function OfferTable() {
 						<Tr key={row.tenderItemId}>
 							<Td>
 								<Editable
-									defaultValue={row?.nr?.toString() || 'no number'}
+									// defaultValue={row?.nr?.toString() || 'no number'}
+									defaultValue="no number"
 									isPreviewFocusable={true}
 									selectAllOnFocus={false}
 									onSubmit={() => {
@@ -244,4 +238,4 @@ export function OfferTable() {
 			</Button>
 		</>
 	);
-}
+};
