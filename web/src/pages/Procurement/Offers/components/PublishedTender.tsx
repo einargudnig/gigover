@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Tbody, Thead, Tr, Th, Tooltip } from '@chakra-ui/react';
+import { Table, Thead, Tr, Th, Tooltip } from '@chakra-ui/react';
 
 export const PublishedTender = (): JSX.Element => {
 	return (

@@ -7,6 +7,7 @@ import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../utils/StringUtils';
 import { Link } from 'react-router-dom';
+import { NoProcurementFound } from '../../components/empty/NoProcurementFound';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -43,8 +44,6 @@ export const ProcurementHome = (): JSX.Element => {
 		return { ...t, projectName };
 	});
 
-	const noTenders = projectsWithTenders?.length === 0;
-
 	return (
 		<>
 			{isLoading ? (
@@ -53,34 +52,31 @@ export const ProcurementHome = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					{noTenders ? (
-						<Center>
-							<Text my={'2'} fontSize={'xl'}>
-								You can create a new tender by pressing the button above.
-							</Text>
-						</Center>
-					) : null}
-					{projectsWithTenders.map((t) => (
-						<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
-							<ProcurementCardTitle>
-								<div>
-									<h3>
-										<b>Project:</b> {t.projectName?.name}
-									</h3>
-									<div style={{ marginTop: -16 }}>
-										<b>Description:</b> {t.description}
+					{!projectsWithTenders || projectsWithTenders.length <= 0 ? (
+						<NoProcurementFound />
+					) : (
+						projectsWithTenders.map((t) => (
+							<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
+								<ProcurementCardTitle>
+									<div>
+										<h3>
+											<b>Project:</b> {t.projectName?.name}
+										</h3>
+										<div style={{ marginTop: -16 }}>
+											<b>Description:</b> {t.description}
+										</div>
 									</div>
+								</ProcurementCardTitle>
+								<div>
+									<p style={{ marginBottom: -16, fontSize: 14 }}>
+										<b>Close date:</b>{' '}
+										{formatDateWithoutTime(new Date(t.finishDate))}
+									</p>
 								</div>
-							</ProcurementCardTitle>
-							<div>
-								<p style={{ marginBottom: -16, fontSize: 14 }}>
-									<b>Close date:</b>{' '}
-									{formatDateWithoutTime(new Date(t.finishDate))}
-								</p>
-							</div>
-						</ProcurementCardStyled>
-					))}
-					{noTenders ? null : (
+							</ProcurementCardStyled>
+						))
+					)}
+					{projectsWithTenders.length <= 0 ? null : (
 						<Button mt={'4'} to>
 							<Link to={'/tender-offers'}>Offers</Link>
 						</Button>
