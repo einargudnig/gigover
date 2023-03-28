@@ -22,10 +22,10 @@ import { TenderItem } from '../../../../models/Tender';
 import { useParams } from 'react-router-dom';
 import { OfferIdContext } from '../../../../context/OfferIdContext';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
-// This is for the number!
-import { useAddTenderItem } from '../../../../mutations/useAddTenderItem';
+import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const OfferTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
@@ -41,6 +41,12 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
 	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persisent is this value?
 
+	const offerIdTemp = 51;
+	const { data } = useGetOfferByOfferId(offerIdTemp);
+	const offer = data?.offer;
+	const offerItems = data?.offer?.items;
+	console.log('Offer', offer);
+	// console.log(offerItems);
 	const handleOfferItems = async (
 		tenderItemId: number,
 		offerId: number,

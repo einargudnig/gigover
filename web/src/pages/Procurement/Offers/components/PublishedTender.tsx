@@ -1,14 +1,80 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Table, Thead, Tr, Th, Tooltip } from '@chakra-ui/react';
+import {
+	Table,
+	Thead,
+	Td,
+	Tr,
+	Th,
+	Tooltip,
+	Divider,
+	Box,
+	Flex,
+	HStack,
+	VStack,
+	Text,
+	Tbody
+} from '@chakra-ui/react';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const PublishedTender = (): JSX.Element => {
 	const { offerId } = useParams();
 	const { data } = useGetOfferByOfferId(Number(offerId));
-	console.log(data);
+	const offer = data?.offer;
+	const offerItems = data?.offer?.items;
+	console.log(offer);
+
+	const handleStatus = offer?.status ? 'Published' : 'Unpublished';
 	return (
 		<>
+			<div style={{ width: '100%' }}>
+				<Flex direction={'column'}>
+					<Box
+						mb={2}
+						p={4}
+						borderRadius={8}
+						borderColor={'#EFEFEE'}
+						bg={'#EFEFEE'}
+						w="100%"
+					>
+						<VStack pos={'relative'}>
+							<VStack mb={'4'}>
+								<HStack>
+									<Text fontWeight={'bold'} fontSize={'xl'}>
+										Bidder Email:
+									</Text>
+									<Text fontSize={'lg'}>{offer?.email}</Text>
+								</HStack>
+								<HStack>
+									<Text fontWeight={'bold'} fontSize={'xl'}>
+										Tender Name:
+									</Text>
+									<Text fontSize={'lg'}>{offer?.name}</Text>
+								</HStack>
+							</VStack>
+
+							<HStack mb={'4'}>
+								<VStack mr={'3'}>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Status:
+										</Text>
+										<Text fontSize={'lg'}>{handleStatus}</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Notes:
+										</Text>
+										<Text fontSize={'lg'}>{offer?.notes}</Text>
+									</HStack>
+								</VStack>
+							</HStack>
+							<Divider />
+						</VStack>
+					</Box>
+				</Flex>
+			</div>
+
 			<Table>
 				<Thead>
 					<Tr>
@@ -37,6 +103,18 @@ export const PublishedTender = (): JSX.Element => {
 						</Tooltip>
 					</Tr>
 				</Thead>
+				<Tbody>
+					{offerItems?.map((item) => (
+						<Tr key={item.tenderItemId}>
+							<Td>{item.nr}</Td>
+							<Td>{item.description}</Td>
+							<Td>{item.volume}</Td>
+							<Td>{item.unit}</Td>
+							<Td>{item.cost}</Td>
+							{/* <Td>{item.}</Td> */}
+						</Tr>
+					))}
+				</Tbody>
 			</Table>
 		</>
 	);

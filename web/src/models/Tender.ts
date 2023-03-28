@@ -1,3 +1,4 @@
+import { Stringifiable } from 'query-string';
 import { Project } from './Project';
 
 export interface Tender {
@@ -38,6 +39,27 @@ export interface Offer {
 	status: number;
 	statusText: string;
 	notes?: string;
+}
+
+export interface GetOffer {
+	email: string;
+	items: GetOfferItem[];
+	name: string;
+	notes: string;
+	offerId: number;
+	status: number;
+	statusText: string;
+	tenderId: number;
+	userName: string;
+}
+
+export interface GetOfferItem {
+	cost: number;
+	description: string;
+	nr: 4;
+	tenderItemId: number;
+	unit: string;
+	volume: number;
 }
 
 export interface OfferId {

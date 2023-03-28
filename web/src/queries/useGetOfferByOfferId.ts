@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../services/ApiService';
-import { Offer } from '../models/Tender';
+import { GetOffer } from '../models/Tender';
 import { ErrorResponse } from '../models/ErrorResponse';
 
 export interface OfferResponse {
-	list: Offer;
+	offer: GetOffer;
 }
 
 export const useGetOfferByOfferId = (offerId: number) => {
