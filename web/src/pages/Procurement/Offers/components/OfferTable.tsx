@@ -44,7 +44,7 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	const offerIdTemp = 51;
 	const { data } = useGetOfferByOfferId(offerIdTemp);
 	const offer = data?.offer;
-	const offerItems = data?.offer?.items;
+	// const offerItems = data?.offer?.items;
 	console.log('Offer', offer);
 	// console.log(offerItems);
 	const handleOfferItems = async (

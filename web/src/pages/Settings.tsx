@@ -3,7 +3,7 @@ import { Page } from '../components/Page';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { InputWrapper } from '../components/forms/Input';
 import { CardBase } from '../components/CardBase';
-import { Button, Text } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 
 export const Settings = (): JSX.Element => {
 	const firebase = useContext(FirebaseContext);
