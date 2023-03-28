@@ -1,7 +1,12 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Table, Thead, Tr, Th, Tooltip } from '@chakra-ui/react';
+import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const PublishedTender = (): JSX.Element => {
+	const { offerId } = useParams();
+	const { data } = useGetOfferByOfferId(Number(offerId));
+	console.log(data);
 	return (
 		<>
 			<Table>

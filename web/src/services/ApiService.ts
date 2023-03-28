@@ -131,6 +131,7 @@ export class ApiService {
 	static publishOffer = API_BASE + 'tender/publishOffer';
 	static userOffers = API_BASE + 'tender/offers';
 	static tenderOffers = (tenderId: number) => API_BASE + 'tender/offers/' + tenderId;
-	static addBidder = API_BASE + 'tender/addBidder'; //authenticate bidder to a tender
+	static addBidder = API_BASE + 'tender/addBidder';
 	static bidderTenders = API_BASE + 'tender/bidderTenders'; // All tenders for a bidder
+	static offer = (offerId: number) => API_BASE + 'tender/offer/' + offerId;
 }
