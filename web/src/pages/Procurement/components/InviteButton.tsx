@@ -24,15 +24,12 @@ import {
 	Spacer
 } from '@chakra-ui/react';
 
-type InviteEmail = {
-	email: string;
-};
-
 export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const inviteMutation = useInviteBidder();
 	const searchMutation = useGetUserByEmail();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const search = useCallback(async () => {
 		try {
 			const response = await searchMutation.mutateAsync({
@@ -46,10 +43,17 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 					if (res.errorCode === 'OK') {
 						setSearchMail('');
 						setInviteSuccess(true);
+						onClose();
 					} else {
 						throw new Error('Could not invite user.');
 					}
 				});
+			} else {
+				alert(
+					'The user you tried to invite does not have an GigOver account. We will send an email asking him to create one. Note that you still have to invite him after he has created the account.'
+				);
+				sendEmail();
+				onClose();
 			}
 		} catch (e) {
 			//
@@ -72,19 +76,12 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 
 	// console.log('tenderDesc in Button: ', tenderDesc);
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const {
-		register,
-		handleSubmit,
-		formState: { errors }
-	} = useForm<InviteEmail>();
-
-	const onSubmit: SubmitHandler<InviteEmail> = async (data: InviteEmail) => {
+	const sendEmail = async () => {
 		const templateParams = {
 			tenderDesc,
-			to_email: data.email
+			to_email: searchMail
 		};
-		console.log('Sending email to: ', data.email);
+		// console.log('Sending email to: ', searchMail);
 		// console.log('tenderDesc: ', templateParams.tenderDesc);
 		try {
 			await emailjs
@@ -122,98 +119,70 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 				leastDestructiveRef={cancelRef}
 				portalProps={{ appendToParentPortal: true }}
 			>
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<AlertDialogOverlay>
-						<AlertDialogContent>
-							<AlertDialogHeader>Invite user with email</AlertDialogHeader>
+				<AlertDialogOverlay>
+					<AlertDialogContent>
+						<AlertDialogHeader>Invite user with email</AlertDialogHeader>
 
-							<AlertDialogBody>
-								<VStack spacing={4}>
-									<Text>
-										Invite a user to this tender. If the user does not have a
-										GigOver account, he will receive an email asking him to
-										create one. Note that you will need to invite him again
-										after he has created the account.
-									</Text>
-									<FormControl
-										isRequired={true}
-										isInvalid={searchMutation.isError || inviteMutation.isError}
-										mb={4}
-									>
-										<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
-										<Input
-											placeholder={'Enter e-mail address of a Gigover user'}
-											name={'inviteEmail'}
-											value={searchMail}
-											onChange={(e) => setSearchMail(e.target.value)}
-										/>
-										{!inviteSuccess && (
-											<>
-												{searchMutation.isError && (
-													<FormErrorMessage>
-														The user with email {searchMail} could not
-														be found. We will send him an invite to
-														create an account on GigOver. Note that you
-														still have to invite him after he has
-														registered.
-													</FormErrorMessage>
-												)}
-												{searchMutation.isError &&
-													console.log('sending email!!')}
-												)
-												{inviteMutation.isError && (
-													<FormErrorMessage>
-														The invitation returned an error!
-													</FormErrorMessage>
-												)}
-											</>
-										)}
-										{inviteSuccess && (
-											<>
-												<Text mt={4} color={Theme.colors.green}>
-													User has been invited to the project
-												</Text>
-											</>
-										)}
-									</FormControl>
-									{/* <FormControl id={'email'} isInvalid={!errors.email}>
-										<FormLabel>Email address</FormLabel>
-										<Input
-											name="email"
-											required={true}
-											ref={register({
-												required: 'Email is required'
-											})}
-											// {...register('email')} 🖕
-											placeholder={'email@gigover.com'}
-										/>
-
-										<FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-									</FormControl> */}
-								</VStack>
-							</AlertDialogBody>
-							<AlertDialogFooter>
-								<Button
-									variant={'outline'}
-									colorScheme={'black'}
-									ref={cancelRef}
-									onClick={onClose}
+						<AlertDialogBody>
+							<VStack spacing={4}>
+								<Text>
+									Invite a user to this tender. If the user does not have a
+									GigOver account, he will receive an email asking him to create
+									one. Note that you will need to invite him again after he has
+									created the account.
+								</Text>
+								<FormControl
+									isRequired={true}
+									isInvalid={searchMutation.isError || inviteMutation.isError}
+									mb={4}
 								>
-									Cancel
-								</Button>
-								<Spacer />
-								<Button
-									loadingText={'Inviting'}
-									isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-									disabled={searchMutation.isLoading || inviteMutation.isLoading}
-									onClick={search}
-								>
-									Invite
-								</Button>
-							</AlertDialogFooter>
-						</AlertDialogContent>
-					</AlertDialogOverlay>
-				</form>
+									<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
+									<Input
+										placeholder={'Enter e-mail address of a Gigover user'}
+										name={'inviteEmail'}
+										value={searchMail}
+										onChange={(e) => setSearchMail(e.target.value)}
+									/>
+									{inviteSuccess ? (
+										<>
+											<Text mt={4} color={Theme.colors.green}>
+												User has been invited to the project
+											</Text>
+										</>
+									) : (
+										(searchMutation.isError || inviteMutation.isError) && (
+											<>
+												<FormErrorMessage>
+													The user with email {searchMail} could not be
+													found.
+												</FormErrorMessage>
+											</>
+										)
+									)}
+								</FormControl>
+							</VStack>
+						</AlertDialogBody>
+						<AlertDialogFooter>
+							<Button
+								variant={'outline'}
+								colorScheme={'black'}
+								ref={cancelRef}
+								onClick={onClose}
+							>
+								Cancel
+							</Button>
+							<Spacer />
+							<Button
+								loadingText={'Inviting'}
+								isLoading={searchMutation.isLoading || inviteMutation.isLoading}
+								disabled={searchMutation.isLoading || inviteMutation.isLoading}
+								onClick={search}
+							>
+								Invite
+							</Button>
+						</AlertDialogFooter>
+					</AlertDialogContent>
+				</AlertDialogOverlay>
 			</AlertDialog>
 		</>
 	);
