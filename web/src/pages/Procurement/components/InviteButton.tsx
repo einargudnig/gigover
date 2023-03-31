@@ -72,9 +72,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	// For the email we send if the user does not have a gigOver account.
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
 	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
-	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public keu, so no reason to have it in .env
-
-	// console.log('tenderDesc in Button: ', tenderDesc);
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	const sendEmail = async () => {
 		const templateParams = {
