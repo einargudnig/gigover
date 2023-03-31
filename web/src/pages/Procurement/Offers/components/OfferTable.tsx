@@ -26,7 +26,7 @@ import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+// import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const OfferTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)

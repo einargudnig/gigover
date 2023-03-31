@@ -2,7 +2,6 @@ import React, { useRef, useCallback, useEffect, useState } from 'react';
 import { useInviteBidder } from '../../../mutations/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../../utils/ConsoleUtils';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { Theme } from '../../../Theme';
 import emailjs from '@emailjs/browser';
 import {
