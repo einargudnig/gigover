@@ -8,7 +8,7 @@ export interface OfferResponse {
 }
 
 export const useGetOfferByOfferId = (offerId: number) => {
-	const { data, isLoading, isSuccess, isError, error } = useQuery<OfferResponse, ErrorResponse>(
+	const { data, isLoading, isError, error } = useQuery<OfferResponse, ErrorResponse>(
 		ApiService.offer(offerId),
 		{
 			refetchOnWindowFocus: true
@@ -19,7 +19,6 @@ export const useGetOfferByOfferId = (offerId: number) => {
 		data,
 		isLoading,
 		isError,
-		isSuccess,
 		error
 	};
 };

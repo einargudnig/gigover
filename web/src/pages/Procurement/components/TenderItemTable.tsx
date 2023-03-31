@@ -335,7 +335,7 @@ export const TenderItemTable: React.FC = () => {
 						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
 					</Button>
 					{tenderStatus === 1 ? (
-						<InviteButton tenderDesc={tenderDescForEmail} />
+						<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
 					) : (
 						<Text fontSize={'xs'}>
 							You need to publish the tender before you can invite people

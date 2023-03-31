@@ -1,5 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useCallback, useEffect, useState } from 'react';
+import { useInviteBidder } from '../../../mutations/useInviteBidder';
+import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
+import { devError, devInfo } from '../../../utils/ConsoleUtils';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { Theme } from '../../../Theme';
 import emailjs from '@emailjs/browser';
 import {
 	Button,
@@ -24,7 +28,44 @@ type InviteEmail = {
 	email: string;
 };
 
-export const InviteButton = ({ tenderDesc }): JSX.Element => {
+export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
+	const [searchMail, setSearchMail] = useState('');
+	const [inviteSuccess, setInviteSuccess] = useState(false);
+	const inviteMutation = useInviteBidder();
+	const searchMutation = useGetUserByEmail();
+	const search = useCallback(async () => {
+		try {
+			const response = await searchMutation.mutateAsync({
+				email: searchMail
+			});
+
+			if (response.uId) {
+				devInfo('Found user with uId:', response.uId);
+				// Add to tender
+				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
+					if (res.errorCode === 'OK') {
+						setSearchMail('');
+						setInviteSuccess(true);
+					} else {
+						throw new Error('Could not invite user.');
+					}
+				});
+			}
+		} catch (e) {
+			//
+			devError(e);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchMutation, searchMail]);
+
+	useEffect(() => {
+		if (inviteSuccess) {
+			setTimeout(() => {
+				setInviteSuccess(false);
+			}, 3500);
+		}
+	}, [inviteSuccess]);
+	// For the email we send if the user does not have a gigOver account.
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
 	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public keu, so no reason to have it in .env
@@ -89,10 +130,53 @@ export const InviteButton = ({ tenderDesc }): JSX.Element => {
 							<AlertDialogBody>
 								<VStack spacing={4}>
 									<Text>
-										Send invite with email to let people add offers to the
-										Procurement
+										Invite a user to this tender. If the user does not have a
+										GigOver account, he will receive an email asking him to
+										create one. Note that you will need to invite him again
+										after he has created the account.
 									</Text>
-									<FormControl id={'email'} isInvalid={!errors.email}>
+									<FormControl
+										isRequired={true}
+										isInvalid={searchMutation.isError || inviteMutation.isError}
+										mb={4}
+									>
+										<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
+										<Input
+											placeholder={'Enter e-mail address of a Gigover user'}
+											name={'inviteEmail'}
+											value={searchMail}
+											onChange={(e) => setSearchMail(e.target.value)}
+										/>
+										{!inviteSuccess && (
+											<>
+												{searchMutation.isError && (
+													<FormErrorMessage>
+														The user with email {searchMail} could not
+														be found. We will send him an invite to
+														create an account on GigOver. Note that you
+														still have to invite him after he has
+														registered.
+													</FormErrorMessage>
+												)}
+												{searchMutation.isError &&
+													console.log('sending email!!')}
+												)
+												{inviteMutation.isError && (
+													<FormErrorMessage>
+														The invitation returned an error!
+													</FormErrorMessage>
+												)}
+											</>
+										)}
+										{inviteSuccess && (
+											<>
+												<Text mt={4} color={Theme.colors.green}>
+													User has been invited to the project
+												</Text>
+											</>
+										)}
+									</FormControl>
+									{/* <FormControl id={'email'} isInvalid={!errors.email}>
 										<FormLabel>Email address</FormLabel>
 										<Input
 											name="email"
@@ -105,7 +189,7 @@ export const InviteButton = ({ tenderDesc }): JSX.Element => {
 										/>
 
 										<FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-									</FormControl>
+									</FormControl> */}
 								</VStack>
 							</AlertDialogBody>
 							<AlertDialogFooter>
@@ -118,7 +202,14 @@ export const InviteButton = ({ tenderDesc }): JSX.Element => {
 									Cancel
 								</Button>
 								<Spacer />
-								<Button type="submit">Send email</Button>
+								<Button
+									loadingText={'Inviting'}
+									isLoading={searchMutation.isLoading || inviteMutation.isLoading}
+									disabled={searchMutation.isLoading || inviteMutation.isLoading}
+									onClick={search}
+								>
+									Invite
+								</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialogOverlay>

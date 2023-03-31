@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Button, Center } from '@chakra-ui/react';
+import { Button, Center, Heading, Text } from '@chakra-ui/react';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';

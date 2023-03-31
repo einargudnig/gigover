@@ -18,6 +18,7 @@ import {
 	HStack
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+
 import { TenderItem } from '../../../../models/Tender';
 import { useParams } from 'react-router-dom';
 import { OfferIdContext } from '../../../../context/OfferIdContext';
@@ -39,14 +40,13 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
-	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persisent is this value?
+	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persistent is this value?
 
-	const offerIdTemp = 51;
-	const { data } = useGetOfferByOfferId(offerIdTemp);
-	const offer = data?.offer;
-	// const offerItems = data?.offer?.items;
-	console.log('Offer', offer);
-	// console.log(offerItems);
+	// const { data } = useGetOfferByOfferId(51);
+	// console.log('Data', { data });
+	// const offer = data?.offer;
+	// console.log('Offer', { offer });
+
 	const handleOfferItems = async (
 		tenderItemId: number,
 		offerId: number,
@@ -208,7 +208,12 @@ export const OfferTable = ({ tender }): JSX.Element => {
 										<EditablePreview py={2} px={4} />
 									</Tooltip>
 									<HStack>
-										<Input py={2} px={4} as={EditableInput} />
+										<Input
+											py={2}
+											px={4}
+											as={EditableInput}
+											placeholder="enter price"
+										/>
 										<EditableControls tenderItemId={row.tenderItemId} />
 									</HStack>
 								</Editable>

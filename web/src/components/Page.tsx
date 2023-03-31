@@ -262,19 +262,19 @@ export const Page = ({
 						<div>
 							<ProcurementIcon />
 						</div>
-						<span>Procurement</span>
+						<span>Tender</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/bidder-tenders'}>
 						<div>
 							<UserOfferIcon />
 						</div>
-						<span>Bidder Tenders</span>
+						<span>Bid invitations</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/bidder-offers'}>
 						<div>
 							<OfferIcon />
 						</div>
-						<span>Bidder Offers</span>
+						<span>Submitted bids</span>
 					</IconLink>
 					{/* This will not be needed for the time being! This is accessible through the procurement page */}
 					{/* <IconLink onClick={onLinkClick} to={'/tender-offers'}>
