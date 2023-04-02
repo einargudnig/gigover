@@ -5,9 +5,10 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
-import { ProcurementIcon } from './icons/ProcurementIcon';
 import { OfferIcon } from './icons/OfferIcon';
-import { UserOfferIcon } from './icons/UserOfferIcon';
+import { TenderIcon } from './icons/TenderIcon';
+import { BidInvitationIcon } from './icons/BidInvitationIcon';
+import { SubmittedBidsIcon } from './icons/SubmittedBidsIcon';
 
 import {
 	Avatar,
@@ -260,19 +261,19 @@ export const Page = ({
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/procurement'}>
 						<div>
-							<ProcurementIcon />
+							<TenderIcon />
 						</div>
 						<span>Tender</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/bidder-tenders'}>
 						<div>
-							<UserOfferIcon />
+							<BidInvitationIcon />
 						</div>
 						<span>Bid invitations</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/bidder-offers'}>
 						<div>
-							<OfferIcon />
+							<SubmittedBidsIcon />
 						</div>
 						<span>Submitted bids</span>
 					</IconLink>
