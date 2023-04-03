@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Button, Center } from '@chakra-ui/react';
+import { Button, Center, Text } from '@chakra-ui/react';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -52,6 +52,9 @@ export const ProcurementHome = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
+					<Text mb={'2'}>
+						This tab should be used for creating, managing, and reviewing tenders.
+					</Text>
 					{!projectsWithTenders || projectsWithTenders.length <= 0 ? (
 						<NoProcurementFound />
 					) : (

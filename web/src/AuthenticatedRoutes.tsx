@@ -55,6 +55,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<Tender />} />
 			<Route path={'offers/:tenderId'} element={<TenderOffer />} />
+			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 
 		{/* This route will be for the user that makes offers */}

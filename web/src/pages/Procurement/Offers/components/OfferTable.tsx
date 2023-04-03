@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
 	Button,
 	ButtonGroup,
@@ -21,16 +21,14 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
 import { TenderItem } from '../../../../models/Tender';
 import { useParams } from 'react-router-dom';
-import { OfferIdContext } from '../../../../context/OfferIdContext';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-// import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const OfferTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
-	// GET user tenders from database
+	const offerIdFromCtxt = 51;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 	const [nrValue, setNrValue] = React.useState(0);
@@ -39,13 +37,7 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
-	const { offerId: offerIdFromCtxt } = useContext(OfferIdContext);
 	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persistent is this value?
-
-	// const { data } = useGetOfferByOfferId(51);
-	// console.log('Data', { data });
-	// const offer = data?.offer;
-	// console.log('Offer', { offer });
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -68,6 +60,7 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	// That means that I need to add these optional dynamic parameters to the mutation.
 	// Maybe I'll come back alter and do this better 🤷‍♂️, but I think will be fine for the time being.
 	const tenderIdNr = Number(tenderId);
+
 	const handleTenderItemNumber = async (
 		tenderItemId: number,
 		nr?: number,

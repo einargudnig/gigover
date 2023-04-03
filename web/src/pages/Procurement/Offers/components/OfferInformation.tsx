@@ -13,10 +13,9 @@ import {
 	Spacer
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
-import { OfferIdContext } from '../../../../context/OfferIdContext';
 
 type OfferNote = {
 	note: string;
@@ -24,11 +23,11 @@ type OfferNote = {
 
 export const OfferInformation = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
-	const { setOfferId } = React.useContext(OfferIdContext);
 	const { mutateAsync: addOffer } = useAddOffer();
 	const { handleSubmit, register } = useForm<OfferNote>({
 		mode: 'onBlur'
 	});
+	const navigate = useNavigate();
 
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
@@ -46,7 +45,8 @@ export const OfferInformation = ({ tender }): JSX.Element => {
 			// Before this was { id: 33 } because the AxiosResponse was of type AxiosResponse<{ id: number }>
 			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
 			const offerId = response;
-			setOfferId(offerId);
+			// redirectin to the offer page with the /:offerId
+			navigate(`/procurement/offers/${Number(tenderId)}/${offerId}`);
 			console.log('Offer opened! With id: ', offerId);
 			alert('You have opened an offer! Start to add numbers, cost and notes to the items.');
 		} catch (e) {

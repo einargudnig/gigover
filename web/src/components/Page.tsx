@@ -5,7 +5,6 @@ import { Link, NavLink } from 'react-router-dom';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
-import { OfferIcon } from './icons/OfferIcon';
 import { TenderIcon } from './icons/TenderIcon';
 import { BidInvitationIcon } from './icons/BidInvitationIcon';
 import { SubmittedBidsIcon } from './icons/SubmittedBidsIcon';
