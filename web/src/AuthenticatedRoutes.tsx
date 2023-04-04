@@ -18,6 +18,7 @@ import { Procurement } from './pages/Procurement/Procurement';
 // import { Tenders } from './pages/Procurement/components/Tenders';
 import { Tender } from './pages/Procurement/components/Tender';
 import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
+import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
 import { BidderOffers } from './pages/Procurement/Offers/BidderOffers';
 import { Offers } from './pages/Procurement/Offers/Offers';
 import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForTenders';
@@ -54,7 +55,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'procurement'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<Tender />} />
-			<Route path={'offers/:tenderId'} element={<TenderOffer />} />
+			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 

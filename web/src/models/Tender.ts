@@ -1,4 +1,3 @@
-import { Stringifiable } from 'query-string';
 import { Project } from './Project';
 
 export interface Tender {

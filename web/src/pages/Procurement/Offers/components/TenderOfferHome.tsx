@@ -1,9 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { OfferInformation } from './OfferInformation';
-import { OfferTable } from './OfferTable';
+import { OfferInformationHome } from './OfferInformationHome';
+import { OfferTableHome } from './OfferTableHome';
 import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { useTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -20,25 +19,13 @@ function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
 	return tender;
 }
 
-export const TenderOffer = (): JSX.Element => {
+export const TenderOfferHome = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
-	const { offerId } = useParams();
-	console.log('offerId', offerId);
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-	const { data: offersById } = useGetOfferByOfferId(Number(offerId));
-	console.log('offersById', offersById);
-	// const offerItems = offersById?.items;
+
 	const { data } = useTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-
-	const bigRealObject = {
-		tenderId: Number(tenderId),
-		items: tenderItems
-		// cost: offerItems?.cost,
-		// notes: offerItems?.notes
-	};
-	console.log('bigRealObject', bigRealObject);
 
 	if (isLoading) {
 		return <LoadingSpinner />;
@@ -52,8 +39,8 @@ export const TenderOffer = (): JSX.Element => {
 
 	return (
 		<>
-			<OfferInformation tender={tender} />
-			<OfferTable tender={tender} />
+			<OfferInformationHome tender={tender} />
+			{/* <OfferTableHome tender={tender} /> */}
 		</>
 	);
 };

@@ -26,7 +26,7 @@ import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // Th
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
-export const OfferTable = ({ tender }): JSX.Element => {
+export const OfferTableHome = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
 	const { offerId: offerIdFromCtxt } = useParams();
 
