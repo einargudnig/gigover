@@ -10,7 +10,8 @@ import {
 	HStack,
 	VStack,
 	Text,
-	Spacer
+	Spacer,
+	useToast
 } from '@chakra-ui/react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -32,6 +33,8 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
 
+	const toast = useToast();
+
 	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
 		try {
 			const body = {
@@ -48,7 +51,14 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 			// redirecting to the offer page with the /:offerId
 			navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
 			console.log('Offer opened! With id: ', offerId);
-			alert('You have opened an offer! Start to add numbers, cost and notes to the items.');
+			toast({
+				title: 'Offer opened!',
+				description:
+					'You have opened an offer! Start to add numbers, cost and notes to the items.',
+				status: 'success',
+				duration: 5000,
+				isClosable: true
+			});
 		} catch (e) {
 			console.log(e);
 		}

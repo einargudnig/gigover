@@ -5,6 +5,7 @@ import { OfferTableHome } from './OfferTableHome';
 import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { useToast } from '@chakra-ui/react';
 
 type TenderIdParams = {
 	tenderId: string;
@@ -23,6 +24,8 @@ export const TenderOfferHome = (): JSX.Element => {
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
 	// console.log('bidderTenders', bidderTenders);
 
+	const toast = useToast();
+
 	if (isLoading) {
 		return <LoadingSpinner />;
 	}
@@ -30,14 +33,27 @@ export const TenderOfferHome = (): JSX.Element => {
 	const tender = findTenderById(tenderId, bidderTenders);
 
 	//! Add back when I've made the general popup!
-	// if (!tender) {
-	// 	alert('Tender with id {tenderId} not found');
-	// }
+	if (!tender) {
+		alert('Tender with id {tenderId} not found');
+		toast({
+			title: 'Tender not found',
+			description: `Tender with id ${tenderId} not found`,
+			status: 'error',
+			duration: 5000,
+			isClosable: true
+		});
+	}
 
 	return (
 		<>
-			<OfferInformationHome tender={tender} />
-			<OfferTableHome tender={tender} />
+			{isLoading ? (
+				<LoadingSpinner />
+			) : (
+				<>
+					<OfferInformationHome tender={tender} />
+					<OfferTableHome tender={tender} />
+				</>
+			)}
 		</>
 	);
 };

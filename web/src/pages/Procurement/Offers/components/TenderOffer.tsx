@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@chakra-ui/button';
+import { Button, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { OfferTable } from './OfferTable';
@@ -17,9 +17,17 @@ export const TenderOffer = (): JSX.Element => {
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
+	const toast = useToast();
+
 	const handlePublish = () => {
 		publishOffer(Number(offerId));
-		alert('You have published the offer!');
+		toast({
+			title: 'Offer published',
+			description: 'Your offer has been published!',
+			status: 'success',
+			duration: 5000,
+			isClosable: true
+		});
 	};
 
 	return (

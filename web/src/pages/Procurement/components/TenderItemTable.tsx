@@ -23,7 +23,8 @@ import {
 	Th,
 	Tr,
 	Tooltip,
-	Spacer
+	Spacer,
+	useToast
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
@@ -72,6 +73,8 @@ export const TenderItemTable: React.FC = () => {
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
 	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
 	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
+
+	const toast = useToast();
 
 	//! We need to make a validation for the unit form field
 	const isInvalidUnit = formData?.unit!.length > 5;
@@ -126,9 +129,21 @@ export const TenderItemTable: React.FC = () => {
 	const handlePublish = () => {
 		if (tender !== undefined) {
 			publishTender(tender);
-			alert('Tender published, Now you can send emails to invite people to send offers!');
+			toast({
+				title: 'Tender published',
+				description: 'Now you can invite people to send offers to your tender!',
+				status: 'success',
+				duration: 5000,
+				isClosable: true
+			});
 		} else {
-			alert('Something went wrong');
+			toast({
+				title: 'Error',
+				description: 'Something went wrong when we tried to publish your tender.',
+				status: 'error',
+				duration: 5000,
+				isClosable: true
+			});
 		}
 	};
 

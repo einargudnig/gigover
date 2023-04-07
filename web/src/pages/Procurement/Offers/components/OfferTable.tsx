@@ -14,7 +14,8 @@ import {
 	Tr,
 	Tooltip,
 	useEditableControls,
-	HStack
+	HStack,
+	useToast
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
@@ -31,6 +32,8 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 	const [notesValue, setNotesValue] = React.useState('');
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
+
+	const toast = useToast();
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -84,9 +87,13 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 					{...getSubmitButtonProps()}
 					onClick={() => {
 						if (Number(offerId) === 0) {
-							alert(
-								'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
-							);
+							toast({
+								title: 'Error',
+								description: 'There is no offer. This is an error.',
+								status: 'error',
+								duration: 5000,
+								isClosable: true
+							});
 						}
 						handleOfferItems(
 							tenderItemId,
