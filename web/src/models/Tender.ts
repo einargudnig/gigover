@@ -60,3 +60,7 @@ export interface GetOfferItem {
 	unit: string;
 	volume: number;
 }
+
+export interface OfferId {
+	offerId: number;
+}

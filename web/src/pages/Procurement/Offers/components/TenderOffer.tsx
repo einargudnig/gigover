@@ -7,6 +7,7 @@ import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
+import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
@@ -14,13 +15,21 @@ export const TenderOffer = (): JSX.Element => {
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 
+	//! I could fetch the data from the useGetOfferById query.
+	// and conditionally render the table before publishing offer and after
+	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
+
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	const toast = useToast();
 
 	const handlePublish = () => {
-		publishOffer(Number(offerId));
+		const offerIdBody = {
+			offerId: Number(offerId)
+		};
+
+		publishOffer(offerIdBody);
 		toast({
 			title: 'Offer published',
 			description: 'Your offer has been published!',
@@ -41,7 +50,7 @@ export const TenderOffer = (): JSX.Element => {
 					<OfferInformation tender={tender} />
 					<OfferTable tenderItems={tenderItems} />
 
-					<Button onClick={handlePublish}>
+					<Button onClick={handlePublish} mt={'4'}>
 						{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
 					</Button>
 				</>
