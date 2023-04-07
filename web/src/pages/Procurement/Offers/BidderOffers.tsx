@@ -64,7 +64,7 @@ export const BidderOffers = (): JSX.Element => {
 									{offers?.map((i) => (
 										<React.Fragment key={i.offerId}>
 											<OfferCardStyled
-												to={`../procurement/offers/${i.tenderId}/${i.offerId}`}
+												to={`../tender/offers/${i.tenderId}/${i.offerId}`}
 											>
 												{
 													//eslint-disable-next-line

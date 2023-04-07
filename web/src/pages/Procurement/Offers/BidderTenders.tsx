@@ -79,7 +79,7 @@ export const BidderTenders = (): JSX.Element => {
 								<>
 									{projectsWithTenders.map((t) => (
 										<OfferCardStyled
-											to={`/procurement/offers/${t.tenderId}`}
+											to={`/tender/offers/${t.tenderId}`}
 											key={t.tenderId}
 										>
 											<OfferCardTitle>

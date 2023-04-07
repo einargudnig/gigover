@@ -28,7 +28,8 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 export const OfferTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
-	const { offerId: offerIdFromCtxt } = useParams();
+	// const { offerId: offerIdFromCtxt } = useParams();
+	const offerIdFromCtxt = 53;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 	const [nrValue, setNrValue] = React.useState(0);

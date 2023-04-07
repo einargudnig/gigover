@@ -22,7 +22,6 @@ type OfferNote = {
 };
 
 export const OfferInformationHome = ({ tender }): JSX.Element => {
-	console.log('Tender: ', tender);
 	const { tenderId } = useParams();
 	const { mutateAsync: addOffer } = useAddOffer();
 	const { handleSubmit, register } = useForm<OfferNote>({
@@ -46,8 +45,8 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 			// Before this was { id: 33 } because the AxiosResponse was of type AxiosResponse<{ id: number }>
 			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
 			const offerId = response;
-			// redirectin to the offer page with the /:offerId
-			navigate(`/procurement/offers/${Number(tenderId)}/${offerId}`);
+			// redirecting to the offer page with the /:offerId
+			navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
 			console.log('Offer opened! With id: ', offerId);
 			alert('You have opened an offer! Start to add numbers, cost and notes to the items.');
 		} catch (e) {
@@ -150,7 +149,6 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 
 								<Button type="submit">Open offer</Button>
 							</form>
-							<Button>Go to my Offers</Button>
 						</VStack>
 					</Box>
 				</Flex>

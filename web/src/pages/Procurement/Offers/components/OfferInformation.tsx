@@ -46,7 +46,7 @@ export const OfferInformation = ({ tender }): JSX.Element => {
 			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
 			const offerId = response;
 			// redirectin to the offer page with the /:offerId
-			navigate(`/procurement/offers/${Number(tenderId)}/${offerId}`);
+			navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
 			console.log('Offer opened! With id: ', offerId);
 			alert('You have opened an offer! Start to add numbers, cost and notes to the items.');
 		} catch (e) {

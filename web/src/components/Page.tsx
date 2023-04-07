@@ -258,7 +258,7 @@ export const Page = ({
 						</div>
 						<span>Time reports</span>
 					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/procurement'}>
+					<IconLink onClick={onLinkClick} to={'/tender'}>
 						<div>
 							<TenderIcon />
 						</div>
@@ -356,7 +356,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
-			<DevMenu />
+			{/* <DevMenu /> */}
 		</PageStyled>
 	);
 };

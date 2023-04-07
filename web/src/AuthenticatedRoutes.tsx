@@ -52,10 +52,11 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':userId'} element={<Users />} />
 		</Route>
 		{/* This procurement route should be protected. */}
-		<Route path={'procurement'} element={<Procurement />}>
+		<Route path={'tender'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<Tender />} />
 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
+			{/* //! This route should be scoped to a single offer, so no reason to open an offer, no reason to ? */}
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 

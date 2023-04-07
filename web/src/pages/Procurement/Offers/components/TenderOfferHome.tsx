@@ -22,25 +22,23 @@ function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
 export const TenderOfferHome = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-
-	const { data } = useTenderById(Number(tenderId));
-	const tender: Tender | undefined = data?.tender;
-	const tenderItems: TenderItem[] | undefined = tender?.items;
+	// console.log('bidderTenders', bidderTenders);
 
 	if (isLoading) {
 		return <LoadingSpinner />;
 	}
 
-	// const tender = findTenderById(tenderId, bidderTenders);
+	const tender = findTenderById(tenderId, bidderTenders);
 
-	if (!tender) {
-		alert('Tender with id {tenderId} not found');
-	}
+	//! Add back when I've made the general popup!
+	// if (!tender) {
+	// 	alert('Tender with id {tenderId} not found');
+	// }
 
 	return (
 		<>
 			<OfferInformationHome tender={tender} />
-			{/* <OfferTableHome tender={tender} /> */}
+			<OfferTableHome tender={tender} />
 		</>
 	);
 };

@@ -25,7 +25,7 @@ export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
 	console.log('offerId', offerId);
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-	const { data: offersById } = useGetOfferByOfferId(Number(offerId));
+	const { data: offersById } = useGetOfferByOfferId(53);
 	console.log('offersById', offersById);
 	// const offerItems = offersById?.items;
 	const { data } = useTenderById(Number(tenderId));
@@ -38,7 +38,7 @@ export const TenderOffer = (): JSX.Element => {
 		// cost: offerItems?.cost,
 		// notes: offerItems?.notes
 	};
-	console.log('bigRealObject', bigRealObject);
+	// console.log('bigRealObject', bigRealObject);
 
 	if (isLoading) {
 		return <LoadingSpinner />;
@@ -46,9 +46,9 @@ export const TenderOffer = (): JSX.Element => {
 
 	// const tender = findTenderById(tenderId, bidderTenders);
 
-	if (!tender) {
-		alert('Tender with id {tenderId} not found');
-	}
+	// if (!tender) {
+	// 	alert('Tender with id {tenderId} not found');
+	// }
 
 	return (
 		<>

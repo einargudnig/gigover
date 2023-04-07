@@ -10,6 +10,7 @@ import {
 	Tbody,
 	Td,
 	Input,
+	Text,
 	Th,
 	Thead,
 	Tr,
@@ -18,13 +19,11 @@ import {
 	HStack
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
-
+import { Link } from 'react-router-dom';
 import { TenderItem } from '../../../../models/Tender';
 import { useParams } from 'react-router-dom';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
-import { usePublishOffer } from '../../../../mutations/usePublishOffer';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 export const OfferTableHome = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
@@ -36,7 +35,6 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 	const [notesValue, setNotesValue] = React.useState('');
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
-	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persistent is this value?
 
 	const handleOfferItems = async (
@@ -112,21 +110,12 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 		) : null;
 	};
 
-	const handlePublish = () => {
-		if (Number(offerIdFromCtxt) === 0) {
-			alert(
-				'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
-			);
-		}
-		const offerIdBody = {
-			offerId: Number(offerIdFromCtxt)
-		};
-		publishOffer(offerIdBody);
-		alert('You have published the offer!');
-	};
-
 	return (
 		<>
+			<Text my={'2'}>
+				This is the tender you have been invited to make an offer to. You have to open an
+				offer to be able to add you product numbers, costs and notes.
+			</Text>
 			<Table>
 				<Thead>
 					<Tr>
@@ -158,88 +147,23 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 				<Tbody>
 					{tenderItems?.map((row) => (
 						<Tr key={row.tenderItemId}>
-							<Td>
-								<Editable
-									// defaultValue={row?.nr?.toString() || 'no number'}
-									defaultValue="no number"
-									isPreviewFocusable={true}
-									selectAllOnFocus={false}
-									onSubmit={() => {
-										console.log('submit');
-										console.log(nrValue);
-									}}
-									onChange={(value) => {
-										setNrValue(Number(value));
-									}}
-								>
-									<Tooltip label="Click to edit the number">
-										<EditablePreview py={2} px={4} />
-									</Tooltip>
-									<HStack>
-										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls tenderItemId={row.tenderItemId} />
-									</HStack>
-								</Editable>
-							</Td>
+							<Td>no number</Td>
 							<Td>{row.description}</Td>
 							<Td>{row.volume}</Td>
 							<Td>{row.unit}</Td>
-							<Td>
-								<Editable
-									defaultValue={row?.cost?.toString() || 'no cost'}
-									isPreviewFocusable={true}
-									selectAllOnFocus={false}
-									onSubmit={() => {
-										console.log('submit');
-										console.log(costValue);
-									}}
-									onChange={(value) => {
-										setCostValue(Number(value));
-									}}
-								>
-									<Tooltip label="Click to edit the price">
-										<EditablePreview py={2} px={4} />
-									</Tooltip>
-									<HStack>
-										<Input
-											py={2}
-											px={4}
-											as={EditableInput}
-											placeholder="enter price"
-										/>
-										<EditableControls tenderItemId={row.tenderItemId} />
-									</HStack>
-								</Editable>
-							</Td>
-							<Td>
-								<Editable
-									defaultValue={row.notes || 'no notes'}
-									isPreviewFocusable={true}
-									selectAllOnFocus={false}
-									onSubmit={() => {
-										console.log('submit');
-										console.log(notesValue);
-									}}
-									onChange={(value) => {
-										setNotesValue(value);
-									}}
-								>
-									<Tooltip label="Click to edit notes">
-										<EditablePreview py={2} px={4} />
-									</Tooltip>
-									<HStack>
-										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls tenderItemId={row.tenderItemId} />
-									</HStack>
-								</Editable>
-							</Td>
+							<Td>no cost</Td>
+							<Td>no notes</Td>
 						</Tr>
 					))}
 				</Tbody>
 			</Table>
 
-			<Button onClick={handlePublish}>
-				{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+			<Text mt={'2'}>
+				If you have already made an offer for this tender and you want to update it, you can
+				see your offers by pressing this button.
+			</Text>
+			<Button mt={'2'}>
+				<Link to={'/bidder-offers'}>Go to my Offers</Link>
 			</Button>
 		</>
 	);
