@@ -1,114 +1,15 @@
 import React from 'react';
-import {
-	Button,
-	ButtonGroup,
-	Editable,
-	EditableInput,
-	EditablePreview,
-	IconButton,
-	Table,
-	Tbody,
-	Td,
-	Input,
-	Text,
-	Th,
-	Thead,
-	Tr,
-	Tooltip,
-	useEditableControls,
-	HStack
-} from '@chakra-ui/react';
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
+import { Button, Table, Tbody, Td, Text, Th, Thead, Tr, Tooltip } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { TenderItem } from '../../../../models/Tender';
-import { useParams } from 'react-router-dom';
-import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
-import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
 
 export const OfferTableHome = ({ tender }): JSX.Element => {
-	const { tenderId } = useParams();
-	const { offerId: offerIdFromCtxt } = useParams();
-
+	// This is a component that is somewhat like a 'landing page' for the person making an offer.
+	// The bidder will see this page, but he cannot interact with it. He has to open an offer to be able to interact with it.
+	// or the bidder can go to his offers and update his offer.
+	//! the reason for this is the offerIdContext was not working like I wanted it to. By doing it like this I can 'add' the offerId to the url and then use it in the OfferTable component.
+	// hopefully this will also make it more stable.
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-	const [nrValue, setNrValue] = React.useState(0);
-	const [costValue, setCostValue] = React.useState(0);
-	const [notesValue, setNotesValue] = React.useState('');
-	const { mutateAsync: addOfferItems } = useAddOfferItems();
-	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
-	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persistent is this value?
-
-	const handleOfferItems = async (
-		tenderItemId: number,
-		offerId: number,
-		cost?: number,
-		notes?: string
-	) => {
-		const offerItemData = {
-			tenderItemId,
-			offerId: Number(offerIdFromCtxt),
-			...(cost && { cost }),
-			...(notes && { notes })
-		};
-		await addOfferItems(offerItemData);
-	};
-
-	// This is somewhat hacky..
-	// I want to let the offerer add the number of the tender item.
-	// he/she might want to add a product number or something like that.
-	// That means that I need to add these optional dynamic parameters to the mutation.
-	// Maybe I'll come back alter and do this better 🤷‍♂️, but I think will be fine for the time being.
-	const tenderIdNr = Number(tenderId);
-
-	const handleTenderItemNumber = async (
-		tenderItemId: number,
-		nr?: number,
-		description?: string,
-		volume?: number,
-		unit?: string
-	) => {
-		const tenderItemData = {
-			tenderId: tenderIdNr,
-			tenderItemId,
-			...(nr && { nr }),
-			...(description && { description }),
-			...(volume && { volume }),
-			...(unit && { unit })
-		};
-		await addTenderItemNumber(tenderItemData);
-	};
-
-	const EditableControls = ({ tenderItemId }) => {
-		const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
-
-		return isEditing ? (
-			<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
-				<IconButton
-					aria-label="save"
-					icon={<CheckIcon />}
-					{...getSubmitButtonProps()}
-					onClick={() => {
-						if (Number(offerIdFromCtxt) === 0) {
-							alert(
-								'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
-							);
-						}
-						handleOfferItems(
-							tenderItemId,
-							Number(offerIdFromCtxt),
-							costValue || undefined,
-							notesValue || undefined
-						);
-						handleTenderItemNumber(tenderItemId, nrValue || undefined);
-					}}
-				/>
-				<IconButton
-					aria-label="cancel"
-					icon={<CloseIcon boxSize={3} />}
-					{...getCancelButtonProps()}
-				/>
-			</ButtonGroup>
-		) : null;
-	};
 
 	return (
 		<>

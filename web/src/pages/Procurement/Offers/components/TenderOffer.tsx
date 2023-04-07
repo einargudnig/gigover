@@ -2,47 +2,23 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { OfferTable } from './OfferTable';
-import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
-import { useTenderById } from '../../../../queries/useGetTenderById';
-import { Tender, TenderItem } from '../../../../models/Tender';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-
-type TenderIdParams = {
-	tenderId: string;
-};
-
-function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
-	const tender = bidderTenders.find((t) => t.tenderId === Number(tenderId));
-	if (!tender) {
-		throw new Error(`Tender with id ${tenderId} not found`);
-	}
-	return tender;
-}
+import { GetOffer, GetOfferItem } from '../../../../models/Tender';
+// import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 export const TenderOffer = (): JSX.Element => {
-	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 	const { offerId } = useParams();
-	console.log('offerId', offerId);
-	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-	const { data: offersById } = useGetOfferByOfferId(53);
+	const { data: offersById } = useGetOfferByOfferId(Number(offerId));
 	console.log('offersById', offersById);
-	// const offerItems = offersById?.items;
-	const { data } = useTenderById(Number(tenderId));
-	const tender: Tender | undefined = data?.tender;
-	const tenderItems: TenderItem[] | undefined = tender?.items;
 
-	const bigRealObject = {
-		tenderId: Number(tenderId),
-		items: tenderItems
-		// cost: offerItems?.cost,
-		// notes: offerItems?.notes
-	};
-	// console.log('bigRealObject', bigRealObject);
+	const offer: GetOffer | undefined = offersById?.offer;
+	const offerItems: GetOfferItem[] | undefined = offer?.items;
+	console.log('offer', offer);
+	console.log('offerItems', offerItems);
 
-	if (isLoading) {
-		return <LoadingSpinner />;
-	}
+	// if (isLoading) {
+	// 	return <LoadingSpinner />;
+	// }
 
 	// const tender = findTenderById(tenderId, bidderTenders);
 
@@ -52,8 +28,8 @@ export const TenderOffer = (): JSX.Element => {
 
 	return (
 		<>
-			<OfferInformation tender={tender} />
-			<OfferTable tender={tender} />
+			<OfferInformation offer={offer} />
+			<OfferTable offerItems={offerItems} />
 		</>
 	);
 };

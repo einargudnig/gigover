@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
 import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
-import { useTenderById } from '../../../../queries/useGetTenderById';
-import { Tender, TenderItem } from '../../../../models/Tender';
+import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 type TenderIdParams = {

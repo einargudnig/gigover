@@ -26,12 +26,12 @@ import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // Th
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
-export const OfferTable = ({ tender }): JSX.Element => {
+export const OfferTable = ({ offerItems }): JSX.Element => {
 	const { tenderId } = useParams();
+	const { offerId } = useParams();
 	// const { offerId: offerIdFromCtxt } = useParams();
-	const offerIdFromCtxt = 53;
+	// const offerIdFromCtxt = 53;
 
-	const tenderItems: TenderItem[] | undefined = tender?.items;
 	const [nrValue, setNrValue] = React.useState(0);
 	const [costValue, setCostValue] = React.useState(0);
 	const [notesValue, setNotesValue] = React.useState('');
@@ -42,13 +42,14 @@ export const OfferTable = ({ tender }): JSX.Element => {
 
 	const handleOfferItems = async (
 		tenderItemId: number,
+		// eslint-disable-next-line no-shadow
 		offerId: number,
 		cost?: number,
 		notes?: string
-	) => {
+	): Promise<void> => {
 		const offerItemData = {
 			tenderItemId,
-			offerId: Number(offerIdFromCtxt),
+			offerId: Number(offerId),
 			...(cost && { cost }),
 			...(notes && { notes })
 		};
@@ -90,14 +91,14 @@ export const OfferTable = ({ tender }): JSX.Element => {
 					icon={<CheckIcon />}
 					{...getSubmitButtonProps()}
 					onClick={() => {
-						if (Number(offerIdFromCtxt) === 0) {
+						if (Number(offerId) === 0) {
 							alert(
 								'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
 							);
 						}
 						handleOfferItems(
 							tenderItemId,
-							Number(offerIdFromCtxt),
+							Number(offerId),
 							costValue || undefined,
 							notesValue || undefined
 						);
@@ -114,13 +115,13 @@ export const OfferTable = ({ tender }): JSX.Element => {
 	};
 
 	const handlePublish = () => {
-		if (Number(offerIdFromCtxt) === 0) {
+		if (Number(offerId) === 0) {
 			alert(
 				'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
 			);
 		}
 		const offerIdBody = {
-			offerId: Number(offerIdFromCtxt)
+			offerId: Number(offerId)
 		};
 		publishOffer(offerIdBody);
 		alert('You have published the offer!');
@@ -157,7 +158,7 @@ export const OfferTable = ({ tender }): JSX.Element => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{tenderItems?.map((row) => (
+					{offerItems?.map((row) => (
 						<Tr key={row.tenderItemId}>
 							<Td>
 								<Editable
