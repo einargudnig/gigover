@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useTenderById } from '../../../queries/useGetTenderById';
+import { useGetTenderById } from '../../../queries/useGetTenderById';
 import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
 import { Tender } from '../../../models/Tender';
 import { Box, Button, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
@@ -15,7 +15,7 @@ export const ProcurementHeader = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const { data, isLoading, isError, error } = useTenderById(Number(tenderId));
+	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();

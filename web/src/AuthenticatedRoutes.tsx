@@ -15,7 +15,6 @@ import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 // Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
-// import { Tenders } from './pages/Procurement/components/Tenders';
 import { Tender } from './pages/Procurement/components/Tender';
 import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
 import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
@@ -56,7 +55,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<Tender />} />
 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
-			{/* //! This route should be scoped to a single offer, so no reason to open an offer, no reason to ? */}
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 

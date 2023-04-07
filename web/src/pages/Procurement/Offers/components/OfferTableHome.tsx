@@ -20,29 +20,12 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 			<Table>
 				<Thead>
 					<Tr>
-						<Tooltip label="Click to edit the number, this could be a product number">
-							<Th>Number</Th>
-						</Tooltip>
-
-						<Tooltip label="Description of the items">
-							<Th>Description</Th>
-						</Tooltip>
-
-						<Tooltip label="Volume, how many items">
-							<Th>Volume</Th>
-						</Tooltip>
-
-						<Tooltip label="The measurement of unit for items">
-							<Th>Unit</Th>
-						</Tooltip>
-
-						<Tooltip label="Click to edit the cost for items">
-							<Th>Cost</Th>
-						</Tooltip>
-
-						<Tooltip label="Click to add any notes/certifications for the items.">
-							<Th>Notes/Certifications</Th>
-						</Tooltip>
+						<Th>Number</Th>
+						<Th>Description</Th>
+						<Th>Volume</Th>
+						<Th>Unit</Th>
+						<Th>Cost</Th>
+						<Th>Notes/Certifications</Th>
 					</Tr>
 				</Thead>
 				<Tbody>

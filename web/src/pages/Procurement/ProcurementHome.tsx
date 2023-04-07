@@ -36,7 +36,6 @@ const ProcurementCardTitle = styled.div`
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
 	const { data: projects } = useProjectList();
-	// console.log('DATA', { data });
 
 	// Get the projectNames from projects and add them to the tenders
 	const projectsWithTenders = data?.map((t) => {
@@ -80,9 +79,14 @@ export const ProcurementHome = (): JSX.Element => {
 						))
 					)}
 					{projectsWithTenders.length <= 0 ? null : (
-						<Button mt={'4'} to>
-							<Link to={'/tender-offers'}>Offers</Link>
-						</Button>
+						<>
+							<Text mt={'4'}>
+								You can see the offers that have been submitted here
+							</Text>
+							<Button mt={'2'} to>
+								<Link to={'/tender-offers'}>Offers</Link>
+							</Button>
+						</>
 					)}
 				</>
 			)}

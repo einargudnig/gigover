@@ -7,7 +7,7 @@ export interface TenderByIdResponse {
 	tender: Tender;
 }
 
-export const useTenderById = (tenderId: number) => {
+export const useGetTenderById = (tenderId: number) => {
 	const { data, isLoading, isError, error } = useQuery<TenderByIdResponse, ErrorResponse>(
 		ApiService.getTenderById(tenderId),
 		{

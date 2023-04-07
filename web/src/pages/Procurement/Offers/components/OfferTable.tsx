@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	Button,
 	ButtonGroup,
 	Editable,
 	EditableInput,
@@ -19,26 +18,19 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
-import { TenderItem } from '../../../../models/Tender';
 import { useParams } from 'react-router-dom';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
-import { usePublishOffer } from '../../../../mutations/usePublishOffer';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
-export const OfferTable = ({ offerItems }): JSX.Element => {
+export const OfferTable = ({ tenderItems }): JSX.Element => {
 	const { tenderId } = useParams();
 	const { offerId } = useParams();
-	// const { offerId: offerIdFromCtxt } = useParams();
-	// const offerIdFromCtxt = 53;
 
 	const [nrValue, setNrValue] = React.useState(0);
 	const [costValue, setCostValue] = React.useState(0);
 	const [notesValue, setNotesValue] = React.useState('');
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
-	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
-	// console.log(offerIdFromCtxt); // This is of course 0 when I 'start' the server. But how persistent is this value?
 
 	const handleOfferItems = async (
 		tenderItemId: number,
@@ -114,19 +106,6 @@ export const OfferTable = ({ offerItems }): JSX.Element => {
 		) : null;
 	};
 
-	const handlePublish = () => {
-		if (Number(offerId) === 0) {
-			alert(
-				'Are your sure you have opened the offer? You have to open the offer before you can publish it.'
-			);
-		}
-		const offerIdBody = {
-			offerId: Number(offerId)
-		};
-		publishOffer(offerIdBody);
-		alert('You have published the offer!');
-	};
-
 	return (
 		<>
 			<Table>
@@ -158,12 +137,11 @@ export const OfferTable = ({ offerItems }): JSX.Element => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{offerItems?.map((row) => (
+					{tenderItems?.map((row) => (
 						<Tr key={row.tenderItemId}>
 							<Td>
 								<Editable
-									// defaultValue={row?.nr?.toString() || 'no number'}
-									defaultValue="no number"
+									defaultValue={row?.nr?.toString() || 'no number'}
 									isPreviewFocusable={true}
 									selectAllOnFocus={false}
 									onSubmit={() => {
@@ -239,10 +217,6 @@ export const OfferTable = ({ offerItems }): JSX.Element => {
 					))}
 				</Tbody>
 			</Table>
-
-			<Button onClick={handlePublish}>
-				{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-			</Button>
 		</>
 	);
 };

@@ -1,35 +1,43 @@
 import React from 'react';
+import { Button } from '@chakra-ui/button';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { OfferTable } from './OfferTable';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
-import { GetOffer, GetOfferItem } from '../../../../models/Tender';
-// import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { useGetTenderById } from '../../../../queries/useGetTenderById';
+import { Tender, TenderItem } from '../../../../models/Tender';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
-	const { data: offersById } = useGetOfferByOfferId(Number(offerId));
-	console.log('offersById', offersById);
+	const { tenderId } = useParams();
+	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
+	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 
-	const offer: GetOffer | undefined = offersById?.offer;
-	const offerItems: GetOfferItem[] | undefined = offer?.items;
-	console.log('offer', offer);
-	console.log('offerItems', offerItems);
+	const tender: Tender | undefined = tenderData?.tender;
+	const tenderItems: TenderItem[] | undefined = tender?.items;
 
-	// if (isLoading) {
-	// 	return <LoadingSpinner />;
-	// }
-
-	// const tender = findTenderById(tenderId, bidderTenders);
-
-	// if (!tender) {
-	// 	alert('Tender with id {tenderId} not found');
-	// }
+	const handlePublish = () => {
+		publishOffer(Number(offerId));
+		alert('You have published the offer!');
+	};
 
 	return (
 		<>
-			<OfferInformation offer={offer} />
-			<OfferTable offerItems={offerItems} />
+			{isTenderLoading ? (
+				<div>
+					<LoadingSpinner />
+				</div>
+			) : (
+				<>
+					<OfferInformation tender={tender} />
+					<OfferTable tenderItems={tenderItems} />
+
+					<Button onClick={handlePublish}>
+						{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+					</Button>
+				</>
+			)}
 		</>
 	);
 };

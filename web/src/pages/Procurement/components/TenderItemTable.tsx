@@ -4,7 +4,7 @@ import { Tender, TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
 import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
 import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
-import { useTenderById } from '../../../queries/useGetTenderById';
+import { useGetTenderById } from '../../../queries/useGetTenderById';
 import { usePublishTender } from '../../../mutations/usePublishTender';
 import {
 	Box,
@@ -40,7 +40,7 @@ export const TenderItemTable: React.FC = () => {
 		isLoading: isTenderLoading,
 		isError: isTenderError,
 		error: tenderError
-	} = useTenderById(Number(tenderId));
+	} = useGetTenderById(Number(tenderId));
 
 	const tender: Tender | undefined = data?.tender;
 	const tenderDescForEmail = tender?.description;
