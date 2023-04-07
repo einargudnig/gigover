@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table, Tbody, Td, Text, Th, Thead, Tr, Tooltip } from '@chakra-ui/react';
+import { Button, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { TenderItem } from '../../../../models/Tender';
 
