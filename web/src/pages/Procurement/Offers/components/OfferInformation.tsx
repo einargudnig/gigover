@@ -1,10 +1,13 @@
 import React from 'react';
 import { Divider, Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const OfferInformation = ({ tender }): JSX.Element => {
-	// const { tenderId } = useParams();
+	const { offerId } = useParams();
+
+	// const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
 
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
@@ -67,6 +70,7 @@ export const OfferInformation = ({ tender }): JSX.Element => {
 										<Text fontSize={'lg'}>{tender.phoneNumber}</Text>
 									</HStack>
 								</VStack>
+								<VStack>Notes</VStack>
 							</HStack>
 							<Divider />
 						</VStack>
