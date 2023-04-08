@@ -48,17 +48,28 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 			// Before this was { id: 33 } because the AxiosResponse was of type AxiosResponse<{ id: number }>
 			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
 			const offerId = response;
-			// redirecting to the offer page with the /:offerId
-			navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
-			console.log('Offer opened! With id: ', offerId);
-			toast({
-				title: 'Offer opened!',
-				description:
-					'You have opened an offer! Start to add numbers, cost and notes to the items.',
-				status: 'success',
-				duration: 5000,
-				isClosable: true
-			});
+
+			if (offerId !== 0) {
+				navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
+				console.log('Offer opened! With id: ', offerId);
+				toast({
+					title: 'Offer opened!',
+					description:
+						'You have opened an offer! Start to add numbers, cost and notes to the items.',
+					status: 'success',
+					duration: 5000,
+					isClosable: true
+				});
+			} else {
+				console.log('Cannot open offer with offerId: ', offerId);
+				toast({
+					title: 'Offer opened!',
+					description: `You cannot open an offer with offerId as ${offerId}. Are you sure that you have been invited to make an offer for this tender?`,
+					status: 'error',
+					duration: 5000,
+					isClosable: true
+				});
+			}
 		} catch (e) {
 			console.log(e);
 		}

@@ -8,18 +8,17 @@ export interface TenderOffer {
 	note: string;
 }
 
-// This is for to add the "whole" offer.
-// There needs to be an offer so that we can add the offer items.
 export const useAddOffer = () => {
-	// const client = useQueryClient();
-
-	// Should I try to get the offerId from the response?
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	return useMutation<AxiosResponse<{ id: number }>, AxiosError, TenderOffer>(async (offer) => {
 		try {
 			const response = await axios.post(ApiService.addOffer, offer, {
 				withCredentials: true
 			});
+			if (response.data.id === 0) {
+				throw new Error('unable to add offer, received id 0');
+			}
+
 			return response;
 		} catch (e) {
 			devError(e);

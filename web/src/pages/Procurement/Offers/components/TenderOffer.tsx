@@ -7,7 +7,7 @@ import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+// import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
@@ -17,7 +17,8 @@ export const TenderOffer = (): JSX.Element => {
 
 	//! I could fetch the data from the useGetOfferById query.
 	// and conditionally render the table before publishing offer and after
-	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
+	// const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
+	// const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
@@ -39,6 +40,8 @@ export const TenderOffer = (): JSX.Element => {
 		});
 	};
 
+	// Conditionally render the table before publishing offer and after
+	// use the status of the offer to determine if the offer has been published or not
 	return (
 		<>
 			{isTenderLoading ? (
@@ -57,4 +60,23 @@ export const TenderOffer = (): JSX.Element => {
 			)}
 		</>
 	);
+
+	// return (
+	// 	<>
+	// 		{isOfferLoading ? (
+	// 			<div>
+	// 				<LoadingSpinner />
+	// 			</div>
+	// 		) : (
+	// 			<>
+	// 				<OfferInformation tender={tender} />
+	// 				<OfferTable tenderItems={tenderItems} />
+
+	// 				<Button onClick={handlePublish} mt={'4'}>
+	// 					{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+	// 				</Button>
+	// 			</>
+	// 		)}
+	// 	</>
+	// );
 };
