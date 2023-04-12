@@ -7,7 +7,8 @@ import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
-// import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { PublishedOffer } from './PublishedOffer';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
@@ -15,13 +16,12 @@ export const TenderOffer = (): JSX.Element => {
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 
-	//! I could fetch the data from the useGetOfferById query.
-	// and conditionally render the table before publishing offer and after
-	// const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
-	// const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
+	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
+	// console.log('offerData', offerData);
 
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
+	// console.log('tender', tender);
 
 	const toast = useToast();
 
@@ -40,43 +40,46 @@ export const TenderOffer = (): JSX.Element => {
 		});
 	};
 
-	// Conditionally render the table before publishing offer and after
-	// use the status of the offer to determine if the offer has been published or not
-	return (
-		<>
-			{isTenderLoading ? (
-				<div>
-					<LoadingSpinner />
-				</div>
-			) : (
-				<>
-					<OfferInformation tender={tender} />
-					<OfferTable tenderItems={tenderItems} />
+	const isOfferPublished = offerData?.offer?.status === 1;
 
-					<Button onClick={handlePublish} mt={'4'}>
-						{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-					</Button>
-				</>
-			)}
-		</>
-	);
+	const UnPublished = () => {
+		return (
+			<>
+				{isTenderLoading ? (
+					<div>
+						<LoadingSpinner />
+					</div>
+				) : (
+					<>
+						<OfferInformation tender={tender} />
+						<OfferTable tenderItems={tenderItems} />
 
-	// return (
-	// 	<>
-	// 		{isOfferLoading ? (
-	// 			<div>
-	// 				<LoadingSpinner />
-	// 			</div>
-	// 		) : (
-	// 			<>
-	// 				<OfferInformation tender={tender} />
-	// 				<OfferTable tenderItems={tenderItems} />
+						<Button onClick={handlePublish} mt={'4'}>
+							{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+						</Button>
+					</>
+				)}
+			</>
+		);
+	};
 
-	// 				<Button onClick={handlePublish} mt={'4'}>
-	// 					{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-	// 				</Button>
-	// 			</>
-	// 		)}
-	// 	</>
+	const offerComponent = {
+		unpublished: <UnPublished />,
+		published: (
+			<PublishedOffer
+				offerId={offerId}
+				offerData={offerData}
+				isOfferLoading={isOfferLoading}
+			/>
+		)
+	};
+
+	const component = offerComponent[isOfferPublished ? 'published' : 'unpublished'];
+
+	return component;
+	// return isOfferPublished ? (
+	// 	<PublishedOffer offerId={offerId} offerData={offerData} isOfferLoading={isOfferLoading} />
+	// ) : (
+	// 	<UnPublished />
 	// );
 };
