@@ -217,7 +217,6 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 										<Editable
 											defaultValue={row?.nr?.toString() || 'no number'}
 											isPreviewFocusable={true}
-											selectAllOnFocus={false}
 											onSubmit={() => {
 												console.log('submit');
 												console.log(nrValue);
@@ -242,7 +241,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 										<Editable
 											defaultValue={row?.cost?.toString() || 'no cost'}
 											isPreviewFocusable={true}
-											selectAllOnFocus={false}
+											selectAllOnFocus={true}
 											onSubmit={() => {
 												console.log('submit');
 												console.log(costValue);
@@ -265,9 +264,9 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 											</HStack>
 										</Editable>
 									</Td>
-									{/* <Td>
+									<Td>
 										<Editable
-											defaultValue={row.notes || 'no notes'}
+											defaultValue={row?.notes || 'no notes'}
 											isPreviewFocusable={true}
 											selectAllOnFocus={false}
 											onSubmit={() => {
@@ -286,7 +285,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 												<EditableControls tenderItemId={row.tenderItemId} />
 											</HStack>
 										</Editable>
-									</Td> */}
+									</Td>
 								</Tr>
 							))}
 						</Tbody>

@@ -150,7 +150,6 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 								<Editable
 									defaultValue={row?.nr?.toString() || 'no number'}
 									isPreviewFocusable={true}
-									selectAllOnFocus={false}
 									onSubmit={() => {
 										console.log('submit');
 										console.log(nrValue);
@@ -175,7 +174,6 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 								<Editable
 									defaultValue={row?.cost?.toString() || 'no cost'}
 									isPreviewFocusable={true}
-									selectAllOnFocus={false}
 									onSubmit={() => {
 										console.log('submit');
 										console.log(costValue);
@@ -202,7 +200,6 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 								<Editable
 									defaultValue={row.notes || 'no notes'}
 									isPreviewFocusable={true}
-									selectAllOnFocus={false}
 									onSubmit={() => {
 										console.log('submit');
 										console.log(notesValue);

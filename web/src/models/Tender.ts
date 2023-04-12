@@ -54,6 +54,7 @@ export interface GetOffer {
 
 export interface GetOfferItem {
 	cost: number;
+	notes: string;
 	description: string;
 	nr: 4;
 	tenderItemId: number;
