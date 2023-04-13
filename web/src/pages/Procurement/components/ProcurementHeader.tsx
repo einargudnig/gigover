@@ -123,7 +123,7 @@ export const ProcurementHeader = (): JSX.Element => {
 											callback={async (b) => {
 												if (b) {
 													await deleteProcurementAsync(tender);
-													navigate('/procurement');
+													navigate('/tender');
 												}
 												setDialogOpen(false);
 											}}

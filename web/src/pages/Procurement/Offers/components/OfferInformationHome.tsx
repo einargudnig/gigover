@@ -63,8 +63,8 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 			} else {
 				console.log('Cannot open offer with offerId: ', offerId);
 				toast({
-					title: 'Offer opened!',
-					description: `You cannot open an offer with offerId as ${offerId}. Are you sure that you have been invited to make an offer for this tender?`,
+					title: 'Invalid tender!',
+					description: `You cannot open an offer with offerId as ${offerId}. The tender is not valid.`,
 					status: 'error',
 					duration: 5000,
 					isClosable: true
@@ -135,18 +135,6 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 								</VStack>
 							</HStack>
 							<Divider />
-							{/* //! This should come from the openOffer!
-									// Let's start by hiding this in the UI.
-							*/}
-							{/* <HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Notes regarding the offer:
-								</Text>
-								{noNote ? <Text fontSize={'lg'}>{offerNote}</Text> : 'No notes'}
-							</HStack> */}
-							{/* This button allow the user to open an offer for this Tender.
-								// It's needed so he can add offer to the items in the offer table.
-							*/}
 
 							<form onSubmit={handleSubmit(onSubmit)}>
 								<VStack spacing={4}>

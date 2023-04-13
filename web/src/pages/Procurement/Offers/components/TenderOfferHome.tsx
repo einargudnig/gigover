@@ -32,7 +32,6 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const tender = findTenderById(tenderId, bidderTenders);
 
-	//! Add back when I've made the general popup!
 	if (!tender) {
 		alert('Tender with id {tenderId} not found');
 		toast({
