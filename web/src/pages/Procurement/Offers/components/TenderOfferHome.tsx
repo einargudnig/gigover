@@ -33,12 +33,11 @@ export const TenderOfferHome = (): JSX.Element => {
 	const tender = findTenderById(tenderId, bidderTenders);
 
 	if (!tender) {
-		alert('Tender with id {tenderId} not found');
 		toast({
 			title: 'Tender not found',
 			description: `Tender with id ${tenderId} not found`,
 			status: 'error',
-			duration: 5000,
+			duration: 3000,
 			isClosable: true
 		});
 	}

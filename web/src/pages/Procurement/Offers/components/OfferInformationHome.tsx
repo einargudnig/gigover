@@ -57,7 +57,7 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 					description:
 						'You have opened an offer! Start to add numbers, cost and notes to the items.',
 					status: 'success',
-					duration: 5000,
+					duration: 2000,
 					isClosable: true
 				});
 			} else {
@@ -66,7 +66,7 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 					title: 'Invalid tender!',
 					description: `You cannot open an offer with offerId as ${offerId}. The tender is not valid.`,
 					status: 'error',
-					duration: 5000,
+					duration: 3000,
 					isClosable: true
 				});
 			}

@@ -95,7 +95,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 								title: 'Error',
 								description: 'There is no offer. This is an error.',
 								status: 'error',
-								duration: 5000,
+								duration: 2000,
 								isClosable: true
 							});
 						}
@@ -127,7 +127,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 			title: 'Offer published',
 			description: 'Your offer has been published!',
 			status: 'success',
-			duration: 5000,
+			duration: 2000,
 			isClosable: true
 		});
 	};

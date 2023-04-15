@@ -35,7 +35,7 @@ export const TenderOffer = (): JSX.Element => {
 			title: 'Offer published',
 			description: 'Your offer has been published!',
 			status: 'success',
-			duration: 5000,
+			duration: 2000,
 			isClosable: true
 		});
 	};

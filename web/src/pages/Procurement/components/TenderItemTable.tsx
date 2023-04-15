@@ -133,7 +133,7 @@ export const TenderItemTable: React.FC = () => {
 				title: 'Tender published',
 				description: 'Now you can invite people to send offers to your tender!',
 				status: 'success',
-				duration: 5000,
+				duration: 2000,
 				isClosable: true
 			});
 		} else {
@@ -141,7 +141,7 @@ export const TenderItemTable: React.FC = () => {
 				title: 'Error',
 				description: 'Something went wrong when we tried to publish your tender.',
 				status: 'error',
-				duration: 5000,
+				duration: 3000,
 				isClosable: true
 			});
 		}
@@ -157,10 +157,6 @@ export const TenderItemTable: React.FC = () => {
 				</Text>
 			) : (
 				<Table variant={'striped'}>
-					{/* <Thead position="sticky" top={0} zIndex="docked">
-						// This might come in handy, it makes the table header sticky. It does not look suuper good, but the funcitonality is there.
-						// Let's keep it commented out and see where it goes.
-					*/}
 					<Thead>
 						<Tr>
 							<Tooltip label="Does this item have a special number?">

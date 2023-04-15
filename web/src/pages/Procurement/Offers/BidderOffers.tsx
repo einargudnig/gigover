@@ -61,6 +61,10 @@ export const BidderOffers = (): JSX.Element => {
 								<LoadingSpinner />
 							) : (
 								<>
+									<Text mb={'2'}>
+										This tab should be used for tracking and managing bids that
+										the user has submitted for various projects.
+									</Text>
 									{offers?.map((i) => (
 										<React.Fragment key={i.offerId}>
 											<OfferCardStyled
