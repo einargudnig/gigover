@@ -218,7 +218,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 											defaultValue={row?.nr?.toString() || 'no number'}
 											isPreviewFocusable={true}
 											onSubmit={() => {
-												console.log('submit');
+												console.log('submit number');
 												console.log(nrValue);
 											}}
 											onChange={(value) => {
@@ -239,11 +239,11 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 									<Td>{row.unit}</Td>
 									<Td>
 										<Editable
-											defaultValue={row?.cost?.toString() || 'no cost'}
+											defaultValue={row?.cost.toString()}
 											isPreviewFocusable={true}
 											selectAllOnFocus={true}
 											onSubmit={() => {
-												console.log('submit');
+												console.log('submit cost');
 												console.log(costValue);
 											}}
 											onChange={(value) => {
@@ -270,7 +270,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 											isPreviewFocusable={true}
 											selectAllOnFocus={false}
 											onSubmit={() => {
-												console.log('submit');
+												console.log('submit notes');
 												console.log(notesValue);
 											}}
 											onChange={(value) => {
@@ -291,8 +291,11 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 						</Tbody>
 					</Table>
 
-					<Button onClick={handlePublish} mt={'4'}>
-						{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+					<Text mt={'2'}>
+						You can publish the offer again if you have made any updates to it.
+					</Text>
+					<Button onClick={handlePublish} mt={'2'}>
+						{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer Again'}
 					</Button>
 				</>
 			)}

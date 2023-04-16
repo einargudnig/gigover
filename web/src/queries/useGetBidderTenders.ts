@@ -13,7 +13,6 @@ export const useGetBidderTenders = () => {
 		ErrorResponse
 	>(ApiService.bidderTenders, {
 		refetchOnWindowFocus: true
-		// withCredentials: true
 	});
 	const tenders: Tender[] = data?.list || [];
 

@@ -83,7 +83,7 @@ export const ProcurementHome = (): JSX.Element => {
 							<Text mt={'4'}>
 								You can see the offers that have been submitted here
 							</Text>
-							<Button mt={'2'} to>
+							<Button mt={'2'}>
 								<Link to={'/tender-offers'}>Offers</Link>
 							</Button>
 						</>

@@ -10,7 +10,6 @@ interface InviteBidderInput {
 }
 
 export const useInviteBidder = () => {
-	// const queryClient = useQueryClient();
 	const mutationKey = ApiService.addBidder;
 
 	return useMutation<ErrorResponse, AxiosError, InviteBidderInput>(
@@ -24,8 +23,6 @@ export const useInviteBidder = () => {
 				if (response.data.errorCode !== 'OK') {
 					throw new Error(response.data?.errorCode);
 				}
-
-				// queryClient.refetchQueries(ApiService.projectDetails(variables.projectId));
 
 				return response.data;
 			} catch (e) {

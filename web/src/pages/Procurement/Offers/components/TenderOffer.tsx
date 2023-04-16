@@ -77,9 +77,4 @@ export const TenderOffer = (): JSX.Element => {
 	const component = offerComponent[isOfferPublished ? 'published' : 'unpublished'];
 
 	return component;
-	// return isOfferPublished ? (
-	// 	<PublishedOffer offerId={offerId} offerData={offerData} isOfferLoading={isOfferLoading} />
-	// ) : (
-	// 	<UnPublished />
-	// );
 };

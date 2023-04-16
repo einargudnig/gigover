@@ -16,9 +16,6 @@ export const useUserTenders = () => {
 		}
 	);
 
-	// Why is it list??
-	// I think it is because of the name of the response?
-	// I name the TenderResponse list and type it with the Tender interface
 	const tenders: Tender[] = data?.list || [];
 
 	return {

@@ -29,7 +29,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 
 	const [nrValue, setNrValue] = React.useState(0);
 	const [costValue, setCostValue] = React.useState(0);
-	const [notesValue, setNotesValue] = React.useState('');
+	const [notesValue, setNotesValue] = React.useState('no notes');
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
 
@@ -91,7 +91,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 								title: 'Error',
 								description: 'There is no offer. This is an error.',
 								status: 'error',
-								duration: 5000,
+								duration: 3000,
 								isClosable: true
 							});
 						}
@@ -172,7 +172,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 							<Td>{row.unit}</Td>
 							<Td>
 								<Editable
-									defaultValue={row?.cost?.toString() || 'no cost'}
+									defaultValue={costValue.toString()}
 									isPreviewFocusable={true}
 									onSubmit={() => {
 										console.log('submit');
@@ -198,7 +198,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 							</Td>
 							<Td>
 								<Editable
-									defaultValue={row.notes || 'no notes'}
+									defaultValue={notesValue || 'no notes'}
 									isPreviewFocusable={true}
 									onSubmit={() => {
 										console.log('submit');

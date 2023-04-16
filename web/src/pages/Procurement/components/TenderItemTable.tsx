@@ -126,16 +126,30 @@ export const TenderItemTable: React.FC = () => {
 		});
 	};
 
-	const handlePublish = () => {
+	const handlePublish = async () => {
+		const publishTenderBody = {
+			tenderId: Number(tenderId)
+		};
 		if (tender !== undefined) {
-			publishTender(tender);
-			toast({
-				title: 'Tender published',
-				description: 'Now you can invite people to send offers to your tender!',
-				status: 'success',
-				duration: 2000,
-				isClosable: true
-			});
+			try {
+				await publishTender(publishTenderBody);
+				toast({
+					title: 'Tender published',
+					description: 'Now you can invite people to send offers to your tender!',
+					status: 'success',
+					duration: 2000,
+					isClosable: true
+				});
+			} catch (error) {
+				// console.log('ERROR', { error });
+				toast({
+					title: 'Error',
+					description: 'Something went wrong when we tried to publish your tender.',
+					status: 'error',
+					duration: 3000,
+					isClosable: true
+				});
+			}
 		} else {
 			toast({
 				title: 'Error',

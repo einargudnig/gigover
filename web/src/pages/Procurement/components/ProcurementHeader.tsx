@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGetTenderById } from '../../../queries/useGetTenderById';
 import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
 import { Tender } from '../../../models/Tender';
-import { Box, Button, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, VStack, Text, Spacer, useToast } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
@@ -20,14 +20,13 @@ export const ProcurementHeader = (): JSX.Element => {
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
-	// Let's leave this as it is for now.
-	// Instead of overdoing things and render a checkbox that will never be checked.
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	// Handling the date from the backend, it's fine for now
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 
+	const toast = useToast();
 	return (
 		<>
 			{isLoading ? (
@@ -120,8 +119,17 @@ export const ProcurementHeader = (): JSX.Element => {
 										<ConfirmDialog
 											header={'Delete procurement'}
 											setIsOpen={setDialogOpen}
-											callback={async (b) => {
-												if (b) {
+											callback={async () => {
+												if (tender.status === 1) {
+													toast({
+														title: 'Cannot delete published tender',
+														description:
+															'This tender has been published and cannot be deleted',
+														status: 'error',
+														duration: 2000,
+														isClosable: true
+													});
+												} else {
 													await deleteProcurementAsync(tender);
 													navigate('/tender');
 												}
