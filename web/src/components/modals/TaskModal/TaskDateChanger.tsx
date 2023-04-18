@@ -19,7 +19,11 @@ interface TaskDateChangerProps {
 
 export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => {
 	const { mutateAsync: updateTask, isLoading } = useUpdateTask(task.project.projectId);
-	const { getValues, control, errors } = useForm<Pick<ProjectTask, 'startDate' | 'endDate'>>({
+	const {
+		getValues,
+		control,
+		formState: { errors }
+	} = useForm<Pick<ProjectTask, 'startDate' | 'endDate'>>({
 		defaultValues: {
 			startDate: task.startDate,
 			endDate: task.endDate
@@ -50,9 +54,9 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 						name="startDate"
 						control={control}
 						defaultValue={task?.startDate ? new Date(task.startDate) : null}
-						render={({ onChange, value, onBlur }) => (
+						render={({ field: { onChange, value, onBlur } }) => (
 							<DatePicker
-								selected={value}
+								selected={value as any}
 								onChange={(date) => {
 									if (date) {
 										onChange((date as Date).getTime());
@@ -72,9 +76,9 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 						name="endDate"
 						control={control}
 						defaultValue={task?.endDate ? new Date(task.endDate) : null}
-						render={({ onChange, value, onBlur }) => (
+						render={({ field: { onChange, value, onBlur } }) => (
 							<DatePicker
-								selected={value}
+								selected={value as any}
 								onChange={(date) => {
 									if (date) {
 										onChange((date as Date).getTime());

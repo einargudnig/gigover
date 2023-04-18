@@ -82,9 +82,8 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					<FormControl id={'description'}>
 						<FormLabel>Procurement Description</FormLabel>
 						<Input
-							name="description"
 							required={true}
-							ref={register({
+							{...register('description', {
 								required: 'Procurement description is required'
 							})}
 						/>
@@ -93,9 +92,8 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					<FormControl id={'terms'}>
 						<FormLabel>Terms</FormLabel>
 						<Input
-							name="terms"
 							required={true}
-							ref={register({ required: 'terms are required' })}
+							{...register('terms', { required: 'terms are required' })}
 						/>
 					</FormControl>
 					<Box mb={6} />
@@ -107,9 +105,9 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 							// defaultValue={
 							// 	project?.endDate ? new Date(project.endDate) : null
 							// }
-							render={({ onChange, value, onBlur }) => (
+							render={({ field: { onChange, value, onBlur } }) => (
 								<DatePicker
-									selected={value}
+									selected={value as any}
 									onChange={(date) => {
 										if (date) {
 											onChange((date as Date).getTime());
@@ -136,18 +134,16 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					<FormControl id={'address'}>
 						<FormLabel>Address - contact person on site</FormLabel>
 						<Input
-							name="address"
 							required={true}
-							ref={register({ required: 'address is required' })}
+							{...register('address', { required: 'address is required' })}
 						/>
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'phoneNumber'}>
 						<FormLabel>Phone Number</FormLabel>
 						<Input
-							name="phoneNumber"
 							required={true}
-							ref={register({ required: 'phone number is required' })}
+							{...register('phoneNumber', { required: 'phone number is required' })}
 						/>
 					</FormControl>
 					<FormActions

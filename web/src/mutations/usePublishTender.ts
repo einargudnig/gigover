@@ -15,14 +15,29 @@ export const usePublishTender = () => {
 	const client = useQueryClient();
 
 	return useMutation<PublishTenderResponse, ErrorResponse, PublishTenderRequest>(
-		async (tenderId) =>
-			await axios.post(ApiService.publishTender, tenderId, { withCredentials: true }),
-		{
-			onSuccess: async (data) => {
-				const { tenderId } = data;
-				await client.refetchQueries(ApiService.getTenderById(tenderId));
-				await client.refetchQueries(ApiService.userTenders);
+		async (tenderId) => {
+			try {
+				const response = await axios.post(ApiService.publishTender, tenderId, {
+					withCredentials: true
+				});
+
+				if (response.status === 200) {
+					await client.refetchQueries(ApiService.getTenderById(tenderId.tenderId));
+					await client.refetchQueries(ApiService.userTenders);
+				}
+				return response.data;
+			} catch (e) {
+				throw new Error('Could not publish tender');
 			}
+
+			// 	await axios.post(ApiService.publishTender, tenderId, { withCredentials: true }),
+			// {
+			// 	onSuccess: async (data) => {
+			// 		const { tenderId } = data;
+			// 		await client.refetchQueries(ApiService.getTenderById(tenderId));
+			// 		await client.refetchQueries(ApiService.userTenders);
+			// 	}
+			// }
 		}
 	);
 };

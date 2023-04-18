@@ -45,7 +45,12 @@ export const ResourceModal = (): JSX.Element => {
 	const [{ resources }] = useContext(ModalContext);
 	const { data: resourceTypes, isLoading: isLoadingResourceTypes } = useResourceTypes();
 	const { mutateAsync, isLoading, isError, error } = useModifyResource();
-	const { register, handleSubmit, errors, control } = useForm<Resource>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control
+	} = useForm<Resource>({
 		defaultValues: resources?.resource,
 		mode: 'onBlur'
 	});
@@ -89,9 +94,10 @@ export const ResourceModal = (): JSX.Element => {
 								>
 									<FormLabel>Resource name</FormLabel>
 									<Input
-										name="name"
 										required={true}
-										ref={register({ required: 'The resource name is missing' })}
+										{...register('name', {
+											required: 'The resource name is missing'
+										})}
 									/>
 									{errors.name ? (
 										<FormErrorMessage>{errors.name.message}</FormErrorMessage>
@@ -109,9 +115,10 @@ export const ResourceModal = (): JSX.Element => {
 										<span style={{ color: '#F9AE78' }}>must be unique</span>
 									</FormLabel>
 									<Input
-										name="serialNr"
 										required={true}
-										ref={register({ required: 'The resource ID is missing' })}
+										{...register('serialNr', {
+											required: 'The resource ID is missing'
+										})}
 									/>
 									{errors.serialNr ? (
 										<FormErrorMessage>
@@ -132,7 +139,7 @@ export const ResourceModal = (): JSX.Element => {
 							<Controller
 								name={'type'}
 								control={control}
-								render={({ onChange, value }) => (
+								render={({ field: { onChange, value } }) => (
 									<TrackerSelect
 										title={'Select type'}
 										value={value}
@@ -155,7 +162,7 @@ export const ResourceModal = (): JSX.Element => {
 									<Controller
 										name={'status'}
 										control={control}
-										render={({ onChange, value }) => (
+										render={({ field: { onChange, value } }) => (
 											<TrackerSelect
 												title={'Select status'}
 												value={value}
@@ -211,7 +218,7 @@ export const ResourceModal = (): JSX.Element => {
 												mb={6}
 											>
 												<FormLabel>Resource make</FormLabel>
-												<Input bg={'white'} name={'make'} ref={register} />
+												<Input bg={'white'} name={'make'} {...register} />
 												{errors.make && (
 													<FormErrorMessage>
 														{errors.make.message}
@@ -224,7 +231,7 @@ export const ResourceModal = (): JSX.Element => {
 												mb={6}
 											>
 												<FormLabel>Resource model</FormLabel>
-												<Input bg={'white'} name={'model'} ref={register} />
+												<Input bg={'white'} name={'model'} {...register} />
 												{errors.model && (
 													<FormErrorMessage>
 														{errors.model.message}
@@ -239,7 +246,7 @@ export const ResourceModal = (): JSX.Element => {
 												<Input
 													bg={'white'}
 													name="year"
-													ref={register}
+													{...register}
 													type="number"
 												/>
 												{errors.year && (
@@ -258,7 +265,7 @@ export const ResourceModal = (): JSX.Element => {
 												<FormLabel>Resource cost</FormLabel>
 												<Input
 													name="cost"
-													ref={register}
+													{...register}
 													type="number"
 													min={0}
 													bg={'white'}
@@ -283,7 +290,7 @@ export const ResourceModal = (): JSX.Element => {
 												<Input
 													bg={'white'}
 													name="description"
-													ref={register}
+													{...register}
 												/>
 												{errors.description ? (
 													<FormErrorMessage>

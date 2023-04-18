@@ -46,7 +46,12 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			: undefined
 	);
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
-	const { register, handleSubmit, errors, control } = useForm<ProjectFormData>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control
+	} = useForm<ProjectFormData>({
 		defaultValues: project,
 		mode: 'onBlur'
 	});
@@ -101,9 +106,8 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				<FormControl id={'name'} isRequired isInvalid={Boolean(errors.name)}>
 					<FormLabel>Project name</FormLabel>
 					<Input
-						name="name"
 						required={true}
-						ref={register({ required: 'The project name is missing' })}
+						{...register('name', { required: 'The project name is missing' })}
 					/>
 					{errors.name ? (
 						<FormErrorMessage>{errors.name.message}</FormErrorMessage>
@@ -114,7 +118,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				<Box mb={6} />
 				<FormControl id={'description'} isRequired isInvalid={Boolean(errors.description)}>
 					<FormLabel>Project description</FormLabel>
-					<Input name="description" required={true} ref={register} />
+					<Input name="description" required={true} {...register} />
 					{errors.description ? (
 						<FormErrorMessage>{errors.description.message}</FormErrorMessage>
 					) : (
@@ -168,9 +172,9 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 							name="startDate"
 							control={control}
 							defaultValue={project?.startDate ? new Date(project.startDate) : null}
-							render={({ onChange, value, onBlur }) => (
+							render={({ field: { onChange, value, onBlur } }) => (
 								<DatePicker
-									selected={value}
+									selected={value as any}
 									onChange={(date) => {
 										if (date) {
 											onChange((date as Date).getTime());
@@ -186,9 +190,9 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 							name="endDate"
 							control={control}
 							defaultValue={project?.endDate ? new Date(project.endDate) : null}
-							render={({ onChange, value, onBlur }) => (
+							render={({ field: { onChange, value, onBlur } }) => (
 								<DatePicker
-									selected={value}
+									selected={value as any}
 									onChange={(date) => {
 										if (date) {
 											onChange((date as Date).getTime());

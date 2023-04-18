@@ -32,7 +32,13 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 	const { projectId, milestone, callback } = context;
 	const { data, isLoading: isLoadingProject } = useProjectDetails(projectId);
 	const closeModal = useCloseModal(callback);
-	const { register, handleSubmit, errors, control, reset } = useForm<MilestoneForm>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control,
+		reset
+	} = useForm<MilestoneForm>({
 		defaultValues: milestone ? milestone.milestoneJson : undefined,
 		mode: 'onChange',
 		reValidateMode: 'onBlur'
@@ -93,8 +99,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 							<FormLabel>Title</FormLabel>
 							<Input
 								type={'text'}
-								name={'title'}
-								ref={register({
+								{...register('title', {
 									required: 'You have to set a title for the project deliverable'
 								})}
 							/>
@@ -108,7 +113,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						</FormControl>
 						<FormControl id={'description'} mb={6}>
 							<FormLabel>Description</FormLabel>
-							<Textarea name={'description'} ref={register} />
+							<Textarea name={'description'} {...register} />
 						</FormControl>
 						<FormControl isRequired isInvalid={true} mb={6}>
 							<FormLabel htmlFor="startDate">Start and end date</FormLabel>
@@ -122,9 +127,9 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									rules={{
 										required: 'You have to set a start date'
 									}}
-									render={({ onChange, value, onBlur }) => (
+									render={({ field: { onChange, value, onBlur } }) => (
 										<DatePicker
-											selected={value}
+											selected={value as any}
 											onChange={(date) => {
 												if (date) {
 													onChange((date as Date).getTime());
@@ -145,9 +150,9 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									rules={{
 										required: 'You have to set an end date'
 									}}
-									render={({ onChange, value, onBlur }) => (
+									render={({ field: { onChange, value, onBlur } }) => (
 										<DatePicker
-											selected={value}
+											selected={value as any}
 											onChange={(date) => {
 												if (date) {
 													onChange((date as Date).getTime());
@@ -176,7 +181,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 							<Controller
 								name={'projectTasks'}
 								control={control}
-								render={({ onChange, value, onBlur }) => (
+								render={({ field: { onChange, value, onBlur } }) => (
 									<Options
 										isMulti={true}
 										onBlur={onBlur}
