@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 interface PublishTenderResponse {
 	errorText: 'OK';
-	tenderId: number;
 }
 
 interface PublishTenderRequest {
@@ -16,6 +15,7 @@ export const usePublishTender = () => {
 
 	return useMutation<PublishTenderResponse, ErrorResponse, PublishTenderRequest>(
 		async (tenderId) => {
+			console.log('tenderId in usePublishTender:', tenderId);
 			try {
 				const response = await axios.post(ApiService.publishTender, tenderId, {
 					withCredentials: true
@@ -29,15 +29,6 @@ export const usePublishTender = () => {
 			} catch (e) {
 				throw new Error('Could not publish tender');
 			}
-
-			// 	await axios.post(ApiService.publishTender, tenderId, { withCredentials: true }),
-			// {
-			// 	onSuccess: async (data) => {
-			// 		const { tenderId } = data;
-			// 		await client.refetchQueries(ApiService.getTenderById(tenderId));
-			// 		await client.refetchQueries(ApiService.userTenders);
-			// 	}
-			// }
 		}
 	);
 };

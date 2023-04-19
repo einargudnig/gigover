@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Tender, TenderItem } from '../../../models/Tender';
+import { TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
 import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
 import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
-import { useGetTenderById } from '../../../queries/useGetTenderById';
 import { usePublishTender } from '../../../mutations/usePublishTender';
 import {
 	Box,
@@ -214,12 +213,18 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 						</Tr>
 					))}
 					{tenderItems?.length === 0 ? (
-						<Text fontSize="xl">
-							The table is empty! To add items into the table you need to write it
-							into the form below, and press the Add item button.
-						</Text>
+						<Td>
+							<Text fontSize="xl">
+								The table is empty! To add items into the table you need to write it
+								into the form below, and press the Add item button.
+							</Text>
+						</Td>
 					) : null}
-					{isMutateError ? <Text>Something went wrong - {mutateError?.code}</Text> : null}
+					{isMutateError ? (
+						<Td>
+							<Text>Something went wrong - {mutateError?.code}</Text>
+						</Td>
+					) : null}
 				</Tbody>
 			</Table>
 			<br />

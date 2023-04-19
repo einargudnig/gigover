@@ -12,8 +12,6 @@ export interface ProjectFormData
 		'tenderId' | 'description' | 'terms' | 'finishDate' | 'delivery' | 'address' | 'phoneNumber'
 	> {}
 
-//! I know that I'm going through the try block, and returnin.
-// I think I will have the same issues in Postman?
 export const useModifyTender = () => {
 	const queryClient = useQueryClient();
 

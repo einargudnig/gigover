@@ -18,7 +18,7 @@ export const useDeleteTenderItem = () => {
 				withCredentials: true
 			});
 
-			// reftech tenderItems after delete
+			// refetch tenderItems after delete
 			// console.log('TenderId in delete mutation:', tenderId); // good for debugging
 			if (response.status === 200) {
 				// for some reason the tender.tenderId is a 0. So we use the useParams hook to get the tenderId
