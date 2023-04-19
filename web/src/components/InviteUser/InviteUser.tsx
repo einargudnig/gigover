@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useInviteUserToProject } from '../../mutations/useInviteUserToProject';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
-import { devError, devInfo } from '../../utils/ConsoleUtils';
+import { devError } from '../../utils/ConsoleUtils';
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
 import { Theme } from '../../Theme';
 
@@ -21,7 +21,8 @@ export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
 			});
 
 			if (response.uId) {
-				devInfo('Found user with uId:', response.uId);
+				// devInfo('Found user with uId:', response.uId);
+				console.log('Found user with uId:', response.uId);
 				// Add to project
 				inviteMutation.mutateAsync({ uId: response.uId, projectId }).then((res) => {
 					if (res.errorCode === 'OK') {

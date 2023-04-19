@@ -174,7 +174,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 							defaultValue={project?.startDate ? new Date(project.startDate) : null}
 							render={({ field: { onChange, value, onBlur } }) => (
 								<DatePicker
-									selected={value as any}
+									selected={value}
 									onChange={(date) => {
 										if (date) {
 											onChange((date as Date).getTime());
@@ -192,7 +192,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 							defaultValue={project?.endDate ? new Date(project.endDate) : null}
 							render={({ field: { onChange, value, onBlur } }) => (
 								<DatePicker
-									selected={value as any}
+									selected={value}
 									onChange={(date) => {
 										if (date) {
 											onChange((date as Date).getTime());

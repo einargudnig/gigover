@@ -28,7 +28,7 @@ import {
 } from '../../mutations/useImageDot';
 import { ProjectImage } from '../../models/ProjectImage';
 import { GigoverFileIconForType } from '../../pages/Files/components/File';
-import { devInfo } from '../../utils/ConsoleUtils';
+// import { devInfo } from '../../utils/ConsoleUtils';
 import { ConfirmDialog } from '../ConfirmDialog';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDeleteDocument } from '../../mutations/useDeleteDocument';
@@ -80,7 +80,8 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 	const { data: projectData } = useProjectList();
 	const projects = useOpenProjects(projectData);
 	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
-		devInfo('onChangeFileName', event.target! as Element);
+		// devInfo('onChangeFileName', event.target! as Element);
+		console.log('onChangeFileName', event.target! as Element);
 	};
 	const [, setModalContext] = useContext(ModalContext);
 

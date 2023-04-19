@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react';
 import { useInviteBidder } from '../../../mutations/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
-import { devError, devInfo } from '../../../utils/ConsoleUtils';
+import { devError } from '../../../utils/ConsoleUtils';
 import { Theme } from '../../../Theme';
 import emailjs from '@emailjs/browser';
 import {
@@ -20,7 +20,8 @@ import {
 	AlertDialogHeader,
 	AlertDialogBody,
 	Text,
-	Spacer
+	Spacer,
+	useToast
 } from '@chakra-ui/react';
 
 export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
@@ -29,28 +30,40 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	const inviteMutation = useInviteBidder();
 	const searchMutation = useGetUserByEmail();
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const toast = useToast();
 	const search = useCallback(async () => {
 		try {
 			const response = await searchMutation.mutateAsync({
 				email: searchMail
 			});
-
 			if (response.uId) {
-				devInfo('Found user with uId:', response.uId);
+				// devInfo('Found user with uId:', response.uId);
 				// Add to tender
 				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
 					if (res.errorCode === 'OK') {
 						setSearchMail('');
-						setInviteSuccess(true);
+						// setInviteSuccess(true); //! Fix this
+						toast({
+							title: 'User invited',
+							description: 'The user has been invited to the tender.',
+							status: 'success',
+							duration: 3000,
+							isClosable: true
+						});
 						onClose();
 					} else {
 						throw new Error('Could not invite user.');
 					}
 				});
 			} else {
-				alert(
-					'The user you tried to invite does not have an GigOver account. We will send an email asking him to create one. Note that you still have to invite him after he has created the account.'
-				);
+				toast({
+					title: 'User not found',
+					description:
+						'The user you tried to invite does not have an GigOver account. We will send an email asking him to create one. Note that you still have to invite him after he has created the account.',
+					status: 'info',
+					duration: 3000,
+					isClosable: true
+				});
 				sendEmail();
 				onClose();
 			}

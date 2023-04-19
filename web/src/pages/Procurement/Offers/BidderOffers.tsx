@@ -41,6 +41,7 @@ export const BidderOffers = (): JSX.Element => {
 	// 	const i = offers?.[0];
 	// 	return i.status === 1 ? 'Published' : 'Not Published';
 	// };
+	// eslint-disable-next-line
 	let offerPublished = 'Not Published';
 
 	const noOffers = offers?.length === 0;

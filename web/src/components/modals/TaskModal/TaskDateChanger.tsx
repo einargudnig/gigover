@@ -56,7 +56,7 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 						defaultValue={task?.startDate ? new Date(task.startDate) : null}
 						render={({ field: { onChange, value, onBlur } }) => (
 							<DatePicker
-								selected={value as any}
+								selected={value}
 								onChange={(date) => {
 									if (date) {
 										onChange((date as Date).getTime());
@@ -78,7 +78,7 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 						defaultValue={task?.endDate ? new Date(task.endDate) : null}
 						render={({ field: { onChange, value, onBlur } }) => (
 							<DatePicker
-								selected={value as any}
+								selected={value}
 								onChange={(date) => {
 									if (date) {
 										onChange((date as Date).getTime());

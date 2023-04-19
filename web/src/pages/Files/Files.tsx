@@ -9,7 +9,7 @@ import { Project } from '../../models/Project';
 import { Outlet, useParams } from 'react-router-dom';
 import { UploadModal } from './UploadModal';
 import { SearchBar } from './components/SearchBar';
-import { devInfo } from '../../utils/ConsoleUtils';
+// import { devInfo } from '../../utils/ConsoleUtils';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 
@@ -52,7 +52,8 @@ export const Files = (): JSX.Element => {
 						setUpload(false);
 					}}
 					onComplete={(status) => {
-						devInfo('status', status);
+						// devInfo('status', status);
+						console.log('status', status);
 					}}
 				/>
 			)}

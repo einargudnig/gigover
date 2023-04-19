@@ -129,7 +129,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									}}
 									render={({ field: { onChange, value, onBlur } }) => (
 										<DatePicker
-											selected={value as any}
+											selected={value}
 											onChange={(date) => {
 												if (date) {
 													onChange((date as Date).getTime());
@@ -152,7 +152,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									}}
 									render={({ field: { onChange, value, onBlur } }) => (
 										<DatePicker
-											selected={value as any}
+											selected={value}
 											onChange={(date) => {
 												if (date) {
 													onChange((date as Date).getTime());

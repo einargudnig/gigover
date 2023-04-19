@@ -38,6 +38,7 @@ export const OfferForTender = (): JSX.Element => {
 	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
 
+	// eslint-disable-next-line
 	let offerPublished = 'Not Published';
 
 	const noOffers = offer?.length === 0;

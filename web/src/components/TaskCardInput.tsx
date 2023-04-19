@@ -117,7 +117,7 @@ export const TaskCardInput = ({
 					<Controller
 						name={'typeId'}
 						control={control}
-						render={({ onChange: ptChange, value: ptValue, onBlur }) => (
+						render={({ field: { onChange: ptChange, value: ptValue, onBlur } }) => (
 							<Options
 								isMulti={false}
 								onBlur={onBlur}

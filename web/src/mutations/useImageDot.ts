@@ -2,11 +2,12 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import { ApiService } from '../services/ApiService';
 import { ICommentChord } from '../components/modals/EditPhotoModal';
-import { devInfo } from '../utils/ConsoleUtils';
+// import { devInfo } from '../utils/ConsoleUtils';
 
 export const useAddImageDotComment = () => {
 	return useMutation('useAddImageDotComment', async (dotComment: DotComment) => {
-		devInfo(dotComment, 'dot');
+		// devInfo(dotComment, 'dot');
+		console.log(dotComment, 'dot');
 		return await axios.post(
 			ApiService.addDotComment,
 			{ ...dotComment },

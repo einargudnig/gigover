@@ -41,10 +41,9 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 					<FormControl isInvalid={!!errors.email}>
 						<InputGroup size="md">
 							<Input
-								name={'email'}
 								pr="4.5rem"
 								placeholder="Add people via email"
-								ref={register({
+								{...register('email', {
 									required: 'Required',
 									pattern: {
 										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,

@@ -34,14 +34,14 @@ export const LoginForm = ({
 					type={'email'}
 					name={'email'}
 					placeholder={'Your e-mail address'}
-					ref={register}
+					{...register}
 				/>
 				<div style={{ height: 8 }} />
 				<Input
 					type={'password'}
 					name={'password'}
 					placeholder={'Enter your password'}
-					ref={register}
+					{...register}
 				/>
 				<div style={{ height: 8 }} />
 				<Button
