@@ -77,10 +77,6 @@ export const BidderTenders = (): JSX.Element => {
 								</Center>
 							) : (
 								<>
-									<Text mb={'2'}>
-										This tab should be used for viewing and responding to
-										tenders that the user has been invited to bid on.
-									</Text>
 									{projectsWithTenders.map((t) => (
 										<OfferCardStyled
 											to={`/tender/offers/${t.tenderId}`}

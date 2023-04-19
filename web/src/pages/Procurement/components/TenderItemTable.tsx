@@ -146,7 +146,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 				title: 'Error',
 				description: 'Something went wrong when we tried to publish your tender.',
 				status: 'error',
-				duration: 3000,
+				duration: 5000,
 				isClosable: true
 			});
 		}
