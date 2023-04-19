@@ -196,7 +196,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 											onChange(null);
 										}
 									}}
-									selected={value}
+									selected={value ? new Date(value) : null}
 									onBlur={onBlur}
 								/>
 							)}

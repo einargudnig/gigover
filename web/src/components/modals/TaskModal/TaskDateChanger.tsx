@@ -31,7 +31,7 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 	});
 
 	const updateDates = useCallback(() => {
-		const { startDate, endDate } = getValues(['startDate', 'endDate']);
+		const [startDate, endDate] = getValues(['startDate', 'endDate']);
 
 		updateTask({
 			...task,
@@ -53,10 +53,12 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 					<Controller
 						name="startDate"
 						control={control}
-						defaultValue={task?.startDate ? new Date(task.startDate) : null}
+						defaultValue={
+							task?.startDate ? (task.startDate.valueOf() as number) : undefined
+						}
 						render={({ field: { onChange, value, onBlur } }) => (
 							<DatePicker
-								selected={value}
+								selected={value ? new Date(value) : null}
 								onChange={(date) => {
 									if (date) {
 										onChange((date as Date).getTime());
@@ -75,10 +77,12 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 					<Controller
 						name="endDate"
 						control={control}
-						defaultValue={task?.endDate ? new Date(task.endDate) : null}
+						defaultValue={
+							task?.endDate ? (task.endDate.valueOf() as number) : undefined
+						}
 						render={({ field: { onChange, value, onBlur } }) => (
 							<DatePicker
-								selected={value}
+								selected={value ? new Date(value) : null}
 								onChange={(date) => {
 									if (date) {
 										onChange((date as Date).getTime());

@@ -63,7 +63,7 @@ export const ResourceHistoryLog = ({ resource }: ResourceHistoryLogProps): JSX.E
 	}
 
 	if (isError) {
-		return <div>{error}</div>;
+		return <div>{error.errorText}</div>;
 	}
 
 	return (

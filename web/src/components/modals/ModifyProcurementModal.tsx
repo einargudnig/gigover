@@ -107,7 +107,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 							// }
 							render={({ field: { onChange, value, onBlur } }) => (
 								<DatePicker
-									selected={value}
+									selected={value ? new Date(value) : null}
 									onChange={(date) => {
 										if (date) {
 											onChange((date as Date).getTime());

@@ -122,14 +122,16 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									name="startDate"
 									control={control}
 									defaultValue={
-										milestone?.startDate ? new Date(milestone.startDate) : null
+										milestone?.startDate
+											? (milestone.startDate.valueOf() as number)
+											: undefined
 									}
 									rules={{
 										required: 'You have to set a start date'
 									}}
 									render={({ field: { onChange, value, onBlur } }) => (
 										<DatePicker
-											selected={value}
+											selected={value ? new Date(value) : null}
 											onChange={(date) => {
 												if (date) {
 													onChange((date as Date).getTime());
@@ -145,14 +147,16 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 									name="endDate"
 									control={control}
 									defaultValue={
-										milestone?.endDate ? new Date(milestone.endDate) : null
+										milestone?.endDate
+											? (milestone.endDate.valueOf() as number)
+											: undefined
 									}
 									rules={{
 										required: 'You have to set an end date'
 									}}
 									render={({ field: { onChange, value, onBlur } }) => (
 										<DatePicker
-											selected={value}
+											selected={value ? new Date(value) : null}
 											onChange={(date) => {
 												if (date) {
 													onChange((date as Date).getTime());
