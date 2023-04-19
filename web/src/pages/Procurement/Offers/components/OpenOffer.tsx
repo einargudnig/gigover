@@ -84,9 +84,7 @@ export const OpenOffer = (): JSX.Element => {
 										<FormLabel>Note</FormLabel>
 										<Input
 											name="notes"
-											ref={register({
-												// required: 'Email is required'
-											})}
+											{...register}
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}

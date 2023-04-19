@@ -67,7 +67,7 @@ export const CreateNewFolderButton = ({
 					<FormControl id={'name'} isRequired isInvalid={isError}>
 						<FormLabel>Folder name</FormLabel>
 						<Input name="name" required={true} ref={inputRef} />
-						{error && <FormErrorMessage>{error}</FormErrorMessage>}
+						{error && <FormErrorMessage>{error.message}</FormErrorMessage>}
 					</FormControl>
 					<FormActions
 						submitText={'Create'}

@@ -14,7 +14,12 @@ interface FormData {
 }
 
 export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element => {
-	const { register, handleSubmit, errors, reset } = useForm<FormData>();
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		reset
+	} = useForm<FormData>();
 	const { mutateAsync: getUserIdByPhoneNumber, isLoading: loading } = useGetUserByPhoneNumber();
 	const { mutateAsync: addWorker, isLoading, isError, error } = useAddWorker();
 
@@ -44,7 +49,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 			)}
 			{errors && (
 				<>
-					<ul>{errors.phoneNumber && <li>{errors.phoneNumber}</li>}</ul>
+					<ul>{errors.phoneNumber && <li>{errors.phoneNumber.message}</li>}</ul>
 				</>
 			)}
 			<form onSubmit={onSubmit}>
@@ -54,7 +59,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 						placeholder={'Enter phone number'}
 						name={'phoneNumber'}
 						maxLength={7}
-						ref={register}
+						{...register}
 						required={true}
 					/>
 				</Box>

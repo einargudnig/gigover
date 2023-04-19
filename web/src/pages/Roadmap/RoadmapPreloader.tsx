@@ -13,7 +13,7 @@ export const RoadmapPreloader = (): JSX.Element => {
 
 	if (!isLoading && isError) {
 		// TODO Replace with ErrorBoundary
-		return <p>{error}</p>;
+		return <p>{error?.errorText}</p>;
 	}
 
 	return !isLoading && data && data.length > 0 ? (

@@ -149,7 +149,7 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}
-											ref={register()} //! Make sure this works!
+											{...register}
 											variant={'outline'}
 											mb={'4'}
 										/>
