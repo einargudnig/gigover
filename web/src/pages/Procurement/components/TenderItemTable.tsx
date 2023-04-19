@@ -33,17 +33,9 @@ import { TrashIcon } from '../../../components/icons/TrashIcon';
 import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
 import { InviteButton } from './InviteButton';
 
-export const TenderItemTable: React.FC = () => {
+export const TenderItemTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
-	// GET user tenders from database
-	const {
-		data,
-		isLoading: isTenderLoading,
-		isError: isTenderError,
-		error: tenderError
-	} = useGetTenderById(Number(tenderId));
 
-	const tender: Tender | undefined = data?.tender;
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
@@ -163,83 +155,73 @@ export const TenderItemTable: React.FC = () => {
 
 	return (
 		<>
-			{isTenderLoading ? (
-				<LoadingSpinner />
-			) : isTenderError ? (
-				<Text>
-					Something went wrong - {tenderError?.errorText} - {tenderError?.errorCode}
-				</Text>
-			) : (
-				<Table variant={'striped'}>
-					<Thead>
-						<Tr>
-							<Tooltip label="Does this item have a special number?">
-								<Th>
-									<HStack>
-										<p>Number</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
-							<Tooltip label="Description of a item">
-								<Th>
-									<HStack>
-										<p>Description</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
-							<Tooltip label="Volume">
-								<Th>
-									<HStack>
-										<p color={'black'}>Volume</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
-							<Tooltip label="Unit of measurement. For example: m2, kg, t">
-								<Th>
-									<HStack>
-										<p>Unit</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
+			<Table variant={'striped'}>
+				<Thead>
+					<Tr>
+						<Tooltip label="Does this item have a special number?">
 							<Th>
-								<p>Actions</p>
+								<HStack>
+									<p>Number</p>
+									<ImportantIcon size={20} />
+								</HStack>
 							</Th>
+						</Tooltip>
+
+						<Tooltip label="Description of a item">
+							<Th>
+								<HStack>
+									<p>Description</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Tooltip label="Volume">
+							<Th>
+								<HStack>
+									<p color={'black'}>Volume</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Th>
+								<HStack>
+									<p>Unit</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Th>
+							<p>Actions</p>
+						</Th>
+					</Tr>
+				</Thead>
+				<Tbody>
+					{tenderItems?.map((item) => (
+						<Tr key={item.tenderItemId}>
+							<Td>{item.nr}</Td>
+							<Td>{item.description}</Td>
+							<Td>{item.volume}</Td>
+							<Td>{item.unit}</Td>
+							<Td>
+								<ScrollIntoView selector="#editItem">
+									<Button onClick={() => handleEdit(item)}>Edit</Button>
+								</ScrollIntoView>
+							</Td>
 						</Tr>
-					</Thead>
-					<Tbody>
-						{tenderItems?.map((item) => (
-							<Tr key={item.tenderItemId}>
-								<Td>{item.nr}</Td>
-								<Td>{item.description}</Td>
-								<Td>{item.volume}</Td>
-								<Td>{item.unit}</Td>
-								<Td>
-									<ScrollIntoView selector="#editItem">
-										<Button onClick={() => handleEdit(item)}>Edit</Button>
-									</ScrollIntoView>
-								</Td>
-							</Tr>
-						))}
-						{tenderItems?.length === 0 ? (
-							<Text fontSize="xl">
-								The table is empty! To add items into the table you need to write it
-								into the form below, and press the Add item button.
-							</Text>
-						) : null}
-						{isMutateError ? (
-							<Text>Something went wrong - {mutateError?.code}</Text>
-						) : null}
-					</Tbody>
-				</Table>
-			)}
+					))}
+					{tenderItems?.length === 0 ? (
+						<Text fontSize="xl">
+							The table is empty! To add items into the table you need to write it
+							into the form below, and press the Add item button.
+						</Text>
+					) : null}
+					{isMutateError ? <Text>Something went wrong - {mutateError?.code}</Text> : null}
+				</Tbody>
+			</Table>
 			<br />
 
 			{tenderItems?.length !== 0 ? (
