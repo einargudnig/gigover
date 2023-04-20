@@ -13,8 +13,8 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 	return (
 		<Marker
 			position={{
-				lng: resource.startLng || 0,
-				lat: resource.startLat || 0
+				lat: resource.startLat || 0,
+				lng: resource.startLng || 0
 			}}
 			onClick={() => setIsOpen(!isOpen)}
 			icon={{
