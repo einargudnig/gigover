@@ -2,7 +2,6 @@ import {
 	Box,
 	Flex,
 	Heading,
-	Button,
 	IconButton,
 	Popover,
 	PopoverContent,
@@ -29,7 +28,7 @@ export const Notifications = (): JSX.Element => {
 	return (
 		<Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnBlur={true}>
 			<PopoverTrigger>
-				{/* <IconButton
+				<IconButton
 					colorScheme={'yellow'}
 					aria-label={'Notifications'}
 					icon={
@@ -54,10 +53,7 @@ export const Notifications = (): JSX.Element => {
 							<BellIcon />
 						</>
 					}
-				></IconButton> */}
-				<div>
-					<Button>Notifications</Button>
-				</div>
+				></IconButton>
 			</PopoverTrigger>
 			<PopoverContent width={'400px'}>
 				<Box p={6}>

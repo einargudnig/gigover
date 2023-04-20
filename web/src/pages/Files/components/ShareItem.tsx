@@ -78,7 +78,7 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 								<Text>{s.userName}</Text>
 							</Box>
 						</Flex>
-						<Text a={'i'}>{s.type === 0 ? 'Owner' : 'Worker'}</Text>
+						<Text as={'i'}>{s.type === 0 ? 'Owner' : 'Worker'}</Text>
 					</Flex>
 				))}
 			</Flex>

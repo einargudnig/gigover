@@ -153,7 +153,7 @@ export const Login = (): JSX.Element => {
 						) : (
 							<>
 								<LoginButton onClick={() => setLoginForm(!loginForm)}>
-									<EmailIcon size={24} color={'#fff'} />
+									<EmailIcon boxSize={24} color={'#fff'} />
 									{loading ? 'Loading' : 'Sign in with your email'}
 								</LoginButton>
 								<div style={{ height: 8 }} />

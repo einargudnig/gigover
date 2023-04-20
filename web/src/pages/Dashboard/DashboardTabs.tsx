@@ -18,14 +18,14 @@ export const DashboardTabs = ({
 		<TabList>
 			<Tab
 				onClick={() => onChange(ProjectStatus.ALL)}
-				active={activeTab === ProjectStatus.ALL}
+				isSelected={activeTab === ProjectStatus.ALL}
 				style={{ textTransform: 'capitalize' }}
 			>
 				{ProjectStatus.ALL.toLowerCase()}
 			</Tab>
 			<Tab
 				onClick={() => onChange(ProjectStatus.OPEN)}
-				active={activeTab === ProjectStatus.OPEN}
+				isSelected={activeTab === ProjectStatus.OPEN}
 				style={{ textTransform: 'capitalize' }}
 			>
 				{ProjectStatus.OPEN.toLowerCase()}
@@ -34,14 +34,14 @@ export const DashboardTabs = ({
 				<Tab
 					key={sIdx}
 					onClick={() => onChange(s)}
-					active={(activeTab as ProgressStatus)?.id === s.id}
+					isSelected={(activeTab as ProgressStatus)?.id === s.id}
 				>
 					{s.name}
 				</Tab>
 			))}
 			<Tab
 				onClick={() => onChange(ProjectStatus.CLOSED)}
-				active={activeTab === ProjectStatus.CLOSED}
+				isSelected={activeTab === ProjectStatus.CLOSED}
 				style={{ textTransform: 'capitalize' }}
 			>
 				{ProjectStatus.CLOSED.toLowerCase()}

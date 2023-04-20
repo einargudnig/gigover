@@ -75,7 +75,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 			onClose={() => closeModal()}
 		>
 			{isLoadingProject ? (
-				<Center spacing={8}>
+				<Center m={'4'}>
 					<LoadingSpinner />
 				</Center>
 			) : (

@@ -19,14 +19,19 @@ const TabButton = styled.button<{ selected: boolean }>`
 
 export type TabType = { value: string | number; label: string };
 
-export interface TabProps<T> {
+export interface TabProps<T extends Record<K, React.ReactNode>, K extends keyof T> {
 	tab: T;
-	labelKey: keyof T;
+	labelKey: K;
 	onClick: (tab: T) => void;
 	selected?: boolean;
 }
 
-export function Tab<T>({ tab, labelKey, onClick, selected }: TabProps<T>) {
+export function Tab<T extends Record<K, React.ReactNode>, K extends keyof T>({
+	tab,
+	labelKey,
+	onClick,
+	selected
+}: TabProps<T, K>) {
 	return (
 		<TabButton type={'button'} selected={selected ?? false} onClick={() => onClick(tab)}>
 			{tab[labelKey]}

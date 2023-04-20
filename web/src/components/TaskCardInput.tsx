@@ -139,7 +139,7 @@ export const TaskCardInput = ({
 					type={'submit'}
 					colorScheme={'yellow'}
 					loadingText={'Saving'}
-					loading={loading}
+					isLoading={loading}
 					disabled={loading}
 				>
 					Save

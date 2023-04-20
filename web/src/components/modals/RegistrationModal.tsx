@@ -117,7 +117,7 @@ export const RegistrationModal = (): JSX.Element => {
 				</InputWrapper>
 				<Button
 					disabled={isLoading}
-					loading={isLoading}
+					isLoading={isLoading}
 					loadingText={'Submitting'}
 					type="submit"
 				>

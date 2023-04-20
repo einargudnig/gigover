@@ -28,9 +28,11 @@ export const useRegister = () => {
 			onSuccess: async (res) => {
 				// Refresh Firebase Credentials
 				if (res.data.errorCode === ErrorTypes.OK) {
+					// @ts-ignore
 					const cloneCurrentUser = Object.assign(firebase.auth.currentUser, {});
 
 					await firebase.auth.signOut();
+					// @ts-ignore
 					await firebase.auth.updateCurrentUser(cloneCurrentUser);
 				} else {
 					throw new Error(

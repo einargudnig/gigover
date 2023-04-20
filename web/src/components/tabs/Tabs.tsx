@@ -16,18 +16,18 @@ const TabActionsContainer = styled.div`
 	align-self: center;
 `;
 
-export interface TabsProps<T> {
-	labelKey: keyof T;
-	valueKey?: keyof T;
+export interface TabsProps<T extends Record<K, React.ReactNode>, K extends keyof T> {
+	labelKey: K;
+	valueKey?: K;
 	tabs: T[];
 	defaultTab?: T;
 	onChange?: (tab?: T | undefined) => void;
-	children?: React.FunctionComponent<{ tab: T }> | React.ReactNode;
+	children?: (props: { tab: T }) => React.ReactNode;
 	valueCompare?: boolean;
 	tabActions?: React.ReactNode;
 }
 
-export function Tabs<T>({
+export function Tabs<T extends Record<K, React.ReactNode>, K extends keyof T>({
 	tabs,
 	children,
 	onChange,
@@ -36,7 +36,7 @@ export function Tabs<T>({
 	defaultTab,
 	valueCompare,
 	tabActions
-}: TabsProps<T>) {
+}: TabsProps<T, K>) {
 	const comparator = (a: T, b?: T) =>
 		valueCompare && valueKey
 			? b && a[valueKey] === b[valueKey]
@@ -57,7 +57,7 @@ export function Tabs<T>({
 						<Tab
 							key={tabIndex}
 							tab={t}
-							onClick={(selected) => setSelectedTab(selected)}
+							onClick={(selected) => setSelectedTab(selected as T)}
 							labelKey={labelKey}
 							selected={comparator(t, selectedTab)}
 						/>
@@ -71,11 +71,12 @@ export function Tabs<T>({
 			</TabContainer>
 			{children && (
 				<div>
-					{typeof children === 'function' && selectedTab
-						? children({
+					{selectedTab && children && children({ tab: selectedTab })}
+					{/* {typeof children === 'function' && selectedTab
+						? React.createElement(children as React.ReactNode, {
 								tab: selectedTab
 						  })
-						: children}
+						: children} */}
 				</div>
 			)}
 		</>
