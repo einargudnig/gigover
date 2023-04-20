@@ -157,6 +157,7 @@ export const Resources = (): JSX.Element => {
 			</CardBase>
 			<CardBase mt={4}>
 				<GigoverMaps
+					// @ts-ignore
 					resources={data ?? []}
 					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8"
 					loadingElement={

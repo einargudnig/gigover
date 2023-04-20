@@ -15,6 +15,7 @@ const GigoverMaps = withScriptjs(
 		);
 
 		return (
+			// @ts-ignore
 			<GoogleMap defaultZoom={8} defaultCenter={defaultCenter}>
 				{resourcesWithGpsCoord.map((r, rIdx) => (
 					<GigoverPin resource={r} key={rIdx} />

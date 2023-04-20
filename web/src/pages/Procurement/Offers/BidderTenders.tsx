@@ -93,7 +93,12 @@ export const BidderTenders = (): JSX.Element => {
 												</div>
 											</OfferCardTitle>
 											<div>
-												<p style={{ marginBottom: -16, fontSize: 14 }}>
+												<p
+													style={{
+														marginBottom: -16,
+														fontSize: 14
+													}}
+												>
 													<b>Close date:</b>{' '}
 													{formatDateWithoutTime(new Date(t.finishDate))}
 												</p>
