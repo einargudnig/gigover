@@ -30,18 +30,12 @@ export const LoginForm = ({
 					onSubmit(values.email, values.password);
 				})}
 			>
-				<Input
-					type={'email'}
-					name={'email'}
-					placeholder={'Your e-mail address'}
-					{...register}
-				/>
+				<Input type={'email'} placeholder={'Your e-mail address'} {...register('email')} />
 				<div style={{ height: 8 }} />
 				<Input
 					type={'password'}
-					name={'password'}
 					placeholder={'Enter your password'}
-					{...register}
+					{...register('password')}
 				/>
 				<div style={{ height: 8 }} />
 				<Button

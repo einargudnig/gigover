@@ -87,6 +87,7 @@ export const Login = (): JSX.Element => {
 	};
 
 	const loginWithCredentials = async (email: string, password: string) => {
+		// console.log('Email', email, 'Password', password);
 		try {
 			setLoginError(null);
 			setLoading(true);
@@ -153,7 +154,7 @@ export const Login = (): JSX.Element => {
 						) : (
 							<>
 								<LoginButton onClick={() => setLoginForm(!loginForm)}>
-									<EmailIcon boxSize={24} color={'#fff'} />
+									<EmailIcon boxSize={6} color={'#fff'} />
 									{loading ? 'Loading' : 'Sign in with your email'}
 								</LoginButton>
 								<div style={{ height: 8 }} />

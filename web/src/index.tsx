@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
 import './styles/index.css';
 import { AppPreloader } from './App';
 import { Firebase } from './firebase/firebase';
@@ -74,7 +74,10 @@ const ChakraTheme = extendTheme({
 	}
 });
 
-ReactDOM.render(
+const container = document.getElementById('gigover-root');
+const root = ReactDOMClient.createRoot(container);
+
+root.render(
 	<React.StrictMode>
 		<ErrorBoundary>
 			<ThemeProvider theme={Theme}>
@@ -87,6 +90,5 @@ ReactDOM.render(
 				</ChakraProvider>
 			</ThemeProvider>
 		</ErrorBoundary>
-	</React.StrictMode>,
-	document.getElementById('gigover-root')
+	</React.StrictMode>
 );

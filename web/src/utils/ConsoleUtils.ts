@@ -1,12 +1,12 @@
 /* eslint-disable */
-export const devError = (arg1: any, arg2?: any, arg3?: any): void => {
+export const devError = (...args: any[]): void => {
 	// @ts-ignore
-	console.error.apply(this, arguments);
+	console.error(...args);
 };
 
-export const devInfo = (arg1: any, arg2?: any, arg3?: any): void => {
+export const devInfo = (...args: any[]): void => {
 	if (process.env.ENVIRONMENT !== 'production') {
 		// @ts-ignore
-		console.info.apply(this, arguments);
+		console.info(...args);
 	}
 };
