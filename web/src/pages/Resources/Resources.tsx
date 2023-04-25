@@ -15,7 +15,6 @@ import { useResourceDelete } from '../../mutations/useResourceDelete';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;

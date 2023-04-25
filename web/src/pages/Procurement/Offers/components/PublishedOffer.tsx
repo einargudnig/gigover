@@ -172,7 +172,7 @@ export const PublishedOffer = ({ offerId, offerData, isOfferLoading }): JSX.Elem
 												<Text fontWeight={'bold'} fontSize={'xl'}>
 													Notes:
 												</Text>
-												<Text fontSize={'lg'}>{offer?.notes}</Text>
+												<Text fontSize={'lg'}>{offer?.note}</Text>
 											</HStack>
 										</VStack>
 									</HStack>

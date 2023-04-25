@@ -101,19 +101,19 @@ export const RegistrationModal = (): JSX.Element => {
 			<form onSubmit={onSubmit}>
 				<InputWrapper>
 					<Label>Name</Label>
-					<Input name="name" required={true} {...register} />
+					<Input required={true} {...register('name')} />
 				</InputWrapper>
 				<InputWrapper>
 					<Label>Phone number</Label>
-					<Input name="phoneNumber" maxLength={7} required={true} {...register} />
+					<Input maxLength={7} required={true} {...register('phoneNumber')} />
 				</InputWrapper>
 				<InputWrapper>
 					<Label>Address</Label>
-					<Input name="address" required={true} {...register} />
+					<Input required={true} {...register('address')} />
 				</InputWrapper>
 				<InputWrapper>
 					<Label>Zip code</Label>
-					<Input name="zipCode" maxLength={3} required={true} {...register} />
+					<Input maxLength={3} required={true} {...register('zipCode')} />
 				</InputWrapper>
 				<Button
 					disabled={isLoading}

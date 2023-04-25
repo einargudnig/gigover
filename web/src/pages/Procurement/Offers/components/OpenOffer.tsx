@@ -83,8 +83,7 @@ export const OpenOffer = (): JSX.Element => {
 									<FormControl id={'email'} isInvalid={!errors.note}>
 										<FormLabel>Note</FormLabel>
 										<Input
-											name="notes"
-											{...register}
+											{...register('note')}
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}

@@ -113,7 +113,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						</FormControl>
 						<FormControl id={'description'} mb={6}>
 							<FormLabel>Description</FormLabel>
-							<Textarea name={'description'} {...register} />
+							<Textarea {...register('description')} />
 						</FormControl>
 						<FormControl isRequired isInvalid={true} mb={6}>
 							<FormLabel htmlFor="startDate">Start and end date</FormLabel>

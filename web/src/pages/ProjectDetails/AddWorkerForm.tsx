@@ -57,9 +57,8 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 					<FormLabel htmlFor={'phoneNumber'}>Phone number</FormLabel>
 					<Input
 						placeholder={'Enter phone number'}
-						name={'phoneNumber'}
 						maxLength={7}
-						{...register}
+						{...register('phoneNumber')}
 						required={true}
 					/>
 				</Box>

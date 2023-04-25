@@ -118,7 +118,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				<Box mb={6} />
 				<FormControl id={'description'} isRequired isInvalid={Boolean(errors.description)}>
 					<FormLabel>Project description</FormLabel>
-					<Input name="description" required={true} {...register} />
+					<Input required={true} {...register('description')} />
 					{errors.description ? (
 						<FormErrorMessage>{errors.description.message}</FormErrorMessage>
 					) : (

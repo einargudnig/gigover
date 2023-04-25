@@ -218,7 +218,7 @@ export const ResourceModal = (): JSX.Element => {
 												mb={6}
 											>
 												<FormLabel>Resource make</FormLabel>
-												<Input bg={'white'} name={'make'} {...register} />
+												<Input bg={'white'} {...register('make')} />
 												{errors.make && (
 													<FormErrorMessage>
 														{errors.make.message}
@@ -231,7 +231,7 @@ export const ResourceModal = (): JSX.Element => {
 												mb={6}
 											>
 												<FormLabel>Resource model</FormLabel>
-												<Input bg={'white'} name={'model'} {...register} />
+												<Input bg={'white'} {...register('model')} />
 												{errors.model && (
 													<FormErrorMessage>
 														{errors.model.message}
@@ -245,8 +245,7 @@ export const ResourceModal = (): JSX.Element => {
 												<FormLabel>Resource year</FormLabel>
 												<Input
 													bg={'white'}
-													name="year"
-													{...register}
+													{...register('year')}
 													type="number"
 												/>
 												{errors.year && (
@@ -264,8 +263,7 @@ export const ResourceModal = (): JSX.Element => {
 											>
 												<FormLabel>Resource cost</FormLabel>
 												<Input
-													name="cost"
-													{...register}
+													{...register('cost')}
 													type="number"
 													min={0}
 													bg={'white'}
@@ -287,11 +285,7 @@ export const ResourceModal = (): JSX.Element => {
 												isInvalid={Boolean(errors.description)}
 											>
 												<FormLabel>Resource description</FormLabel>
-												<Input
-													bg={'white'}
-													name="description"
-													{...register}
-												/>
+												<Input bg={'white'} {...register('description')} />
 												{errors.description ? (
 													<FormErrorMessage>
 														{errors.description.message}

@@ -145,11 +145,10 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 									<FormControl id={'email'}>
 										<FormLabel>Note</FormLabel>
 										<Input
-											name="notes"
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}
-											{...register}
+											{...register('note')}
 											variant={'outline'}
 											mb={'4'}
 										/>

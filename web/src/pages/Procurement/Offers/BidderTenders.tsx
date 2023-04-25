@@ -7,6 +7,7 @@ import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { useProjectList } from '../../../queries/useProjectList';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { Tender } from '../../../models/Tender';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -40,12 +41,27 @@ const OfferCardTitle = styled.div`
 	justify-content: space-between;
 `;
 
+const getUniqueTenders = (tenders: Tender[]) => {
+	const uniqueTenders: Tender[] = [];
+
+	tenders.forEach((tender) => {
+		const existingTender = uniqueTenders.find((t) => t.tenderId === tender.tenderId);
+		if (!existingTender) {
+			uniqueTenders.push(tender);
+		}
+	});
+
+	return uniqueTenders;
+};
+
 export const BidderTenders = (): JSX.Element => {
-	const { data: bidderTenders, isLoading } = useGetBidderTenders();
+	const { data: tenders, isLoading } = useGetBidderTenders();
 	const { data: projects } = useProjectList();
 
+	const uniqueTenders = getUniqueTenders(tenders);
+
 	// Get the projectNames from projects and add them to the tenders
-	const projectsWithTenders = bidderTenders?.map((t) => {
+	const projectsWithTenders = uniqueTenders?.map((t) => {
 		const projectName = projects.find((p) => p.projectId === t.projectId);
 		return { ...t, projectName };
 	});

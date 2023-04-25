@@ -27,7 +27,7 @@ const GigoverMaps = ({ resources }: GigoverMapsWithResources) => {
 	);
 
 	const { isLoaded, loadError } = useLoadScript({
-		googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || '',
+		googleMapsApiKey: 'AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8',
 		libraries
 	});
 
