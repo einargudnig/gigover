@@ -156,7 +156,7 @@ export const Resources = (): JSX.Element => {
 				</Heading>
 			</CardBase>
 			<CardBase mt={4}>
-				<GigoverMaps
+				{/* <GigoverMaps
 					resources={data ?? []}
 					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8"
 					loadingElement={
@@ -166,7 +166,8 @@ export const Resources = (): JSX.Element => {
 					}
 					containerElement={<div style={{ height: '400px' }} />}
 					mapElement={<div style={{ height: '100%' }} />}
-				/>
+				/> */}
+				<GigoverMaps resources={data ?? []} />
 			</CardBase>
 		</Page>
 	);
