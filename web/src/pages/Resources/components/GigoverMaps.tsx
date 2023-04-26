@@ -2,7 +2,7 @@
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import React, { useState, useEffect } from 'react';
 import { Resource } from '../../../models/Resource';
-import { GigoverPin } from './GigoverPin';
+// import { GigoverPin } from './GigoverPin';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Center, Box } from '@chakra-ui/react';
 

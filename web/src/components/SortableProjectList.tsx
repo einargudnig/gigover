@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { ListManager } from 'react-beautiful-dnd-grid';
 import { Project } from '../models/Project';
 import { ProjectCard } from './ProjectCard';
 import { LexoRank } from 'lexorank';
@@ -11,6 +10,11 @@ import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautif
 interface SortableGridProps {
 	list: Project[];
 }
+
+const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
+	minHeight: 140,
+	background: !isDraggingOver ? 'transparent' : '#e7fff3'
+});
 
 export const SortableProjectList = ({ list }: SortableGridProps) => {
 	const mutateProject = useModifyProject();
@@ -104,31 +108,32 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 	return (
 		<DragDropContext onDragEnd={updateState}>
 			<Droppable droppableId="project-list">
-				{(provided) => (
-					<div {...provided.droppableProps} ref={provided.innerRef}>
-						{projects.map((project, index) => {
+				{(droppable, snapshot) => (
+					<div
+						{...droppable.droppableProps}
+						ref={droppable.innerRef}
+						style={getListStyle(snapshot.isDraggingOver)}
+					>
+						{projects.map((project, projectIndex) => {
 							return (
 								<Draggable
-									key={project.projectId}
+									key={project.projectId.toString()}
 									draggableId={project.projectId.toString()}
-									index={index}
+									index={projectIndex}
 								>
-									{
-										// eslint-disable-next-line
-										(provided) => (
-											<div
-												ref={provided.innerRef}
-												{...provided.draggableProps}
-												{...provided.dragHandleProps}
-											>
-												<ProjectCard project={project} />
-											</div>
-										)
-									}
+									{(provided): JSX.Element => (
+										<div
+											ref={provided.innerRef}
+											{...provided.draggableProps}
+											{...provided.dragHandleProps}
+										>
+											<ProjectCard project={project} />
+										</div>
+									)}
 								</Draggable>
 							);
 						})}
-						{provided.placeholder}
+						{droppable.placeholder}
 					</div>
 				)}
 			</Droppable>
