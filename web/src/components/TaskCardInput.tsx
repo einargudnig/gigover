@@ -71,8 +71,10 @@ export const TaskCardInput = ({
 	});
 
 	useEffect(() => {
-		setParentHeight(`${textInputRef.current!.scrollHeight}px`);
-		setTextAreaHeight(`${textInputRef.current!.scrollHeight}px`);
+		if (textInputRef.current) {
+			setParentHeight(`${textInputRef.current!.scrollHeight}px`);
+			setTextAreaHeight(`${textInputRef.current!.scrollHeight}px`);
+		}
 	}, [text]);
 
 	useEffect(() => {
@@ -97,19 +99,11 @@ export const TaskCardInput = ({
 			<div style={{ minHeight: parentHeight }}>
 				<ErrorMessage errors={errors} name="subject" />
 				<TaskInput
-					name={'subject'}
 					maxLength={599}
 					required={true}
 					placeholder={'Write the task name'}
-					onChange={onChangeHandler}
 					style={{ height: textAreaHeight }}
-					ref={(e) => {
-						register('subject', { required: true });
-
-						if (e) {
-							textInputRef.current = e;
-						}
-					}}
+					{...register('subject', { required: true, onChange: onChangeHandler })}
 				/>
 			</div>
 			<HStack>
