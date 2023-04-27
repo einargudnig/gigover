@@ -78,17 +78,15 @@ const container = document.getElementById('gigover-root');
 const root = ReactDOMClient.createRoot(container);
 
 root.render(
-	<React.StrictMode>
-		<ErrorBoundary>
-			<ThemeProvider theme={Theme}>
-				<ChakraProvider theme={ChakraTheme}>
-					<FirebaseContext.Provider value={firebaseApp}>
-						<QueryClientProvider client={queryClient}>
-							<AppPreloader />
-						</QueryClientProvider>
-					</FirebaseContext.Provider>
-				</ChakraProvider>
-			</ThemeProvider>
-		</ErrorBoundary>
-	</React.StrictMode>
+	<ErrorBoundary>
+		<ThemeProvider theme={Theme}>
+			<ChakraProvider theme={ChakraTheme}>
+				<FirebaseContext.Provider value={firebaseApp}>
+					<QueryClientProvider client={queryClient}>
+						<AppPreloader />
+					</QueryClientProvider>
+				</FirebaseContext.Provider>
+			</ChakraProvider>
+		</ThemeProvider>
+	</ErrorBoundary>
 );

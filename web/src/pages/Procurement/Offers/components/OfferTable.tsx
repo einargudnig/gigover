@@ -36,14 +36,14 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 	const toast = useToast();
 
 	const handleOfferItems = async (
-		tenderItemId: number,
+		itemId: number,
 		// eslint-disable-next-line no-shadow
 		offerId: number,
 		cost?: number,
 		notes?: string
 	): Promise<void> => {
 		const offerItemData = {
-			tenderItemId,
+			itemId,
 			offerId: Number(offerId),
 			...(cost && { cost }),
 			...(notes && { notes })

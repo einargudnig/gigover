@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Project } from '../models/Project';
 import { ProjectCard } from './ProjectCard';
-import { LexoRank } from 'lexorank';
+// import { LexoRank } from 'lexorank';
 import { projectSorter } from '../queries/useProjectList';
 import { useModifyProject } from '../mutations/useModifyProject';
 import { GetNextLexoRank } from '../utils/GetNextLexoRank';

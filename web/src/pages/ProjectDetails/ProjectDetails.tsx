@@ -118,7 +118,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 		// USE LEXO RANK INSTEAD
 		const priority = result.destination ? result.destination.index : result.source.index;
 
-		await updateTask({
+		updateTask({
 			...task,
 			priority,
 			lexoRank: nextRank.toString(),
