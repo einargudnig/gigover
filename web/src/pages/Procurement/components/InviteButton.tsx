@@ -45,7 +45,8 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 						// setInviteSuccess(true); //! Fix this
 						toast({
 							title: 'User invited',
-							description: 'The user has been invited to the tender.',
+							description:
+								'The user has been invited to make an offer to the tender.',
 							status: 'success',
 							duration: 3000,
 							isClosable: true

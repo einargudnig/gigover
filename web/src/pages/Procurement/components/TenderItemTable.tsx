@@ -88,6 +88,13 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 			unit: formData.unit
 		});
 		mutate(formData);
+		setFormData({
+			tenderId: Number(tenderId),
+			description: 'Description',
+			nr: 0,
+			volume: 0,
+			unit: 'Unit'
+		});
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
@@ -239,23 +246,23 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 			<br />
 			<Box mb={2} mt={2} p={2} borderRadius={6} borderColor={'#EFEFEE'} id="editItem">
 				<FormControl>
-					<FormLabel htmlFor="description">Description</FormLabel>
-					<Input
-						id="description"
-						name="description"
-						type="text"
-						value={formData.description}
-						onChange={handleChange}
-					/>
-				</FormControl>
-				<br />
-				<FormControl>
 					<FormLabel htmlFor="number">Number</FormLabel>
 					<Input
 						id="nr"
 						name="nr"
 						type="number"
 						value={formData.nr}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="description">Description</FormLabel>
+					<Input
+						id="description"
+						name="description"
+						type="text"
+						value={formData.description}
 						onChange={handleChange}
 					/>
 				</FormControl>
@@ -315,6 +322,20 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 								}}
 								isOpen={dialogOpen}
 							>
+								<Button
+									onClick={() => {
+										setFormData({
+											tenderId: Number(tenderId),
+											description: '',
+											nr: 0,
+											volume: 0,
+											unit: ''
+										});
+										setEditingItem(null);
+									}}
+								>
+									Cancel edit
+								</Button>
 								<Button
 									aria-label={'Delete item'}
 									colorScheme={'red'}

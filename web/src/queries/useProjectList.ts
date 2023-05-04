@@ -27,7 +27,6 @@ export const useProjectList = () => {
 		refetchOnWindowFocus: true
 	});
 
-	// This is defining the type as an array, so it can be mapped??
 	const projects: Project[] = data?.projects || [];
 
 	return {
