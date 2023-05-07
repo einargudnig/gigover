@@ -42,7 +42,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
 					if (res.errorCode === 'OK') {
 						setSearchMail('');
-						// setInviteSuccess(true); //! Fix this
+						setInviteSuccess(true); //! Fix this
 						toast({
 							title: 'User invited',
 							description:
