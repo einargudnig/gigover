@@ -7,8 +7,6 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 	// This is a component that is somewhat like a 'landing page' for the person making an offer.
 	// The bidder will see this page, but he cannot interact with it. He has to open an offer to be able to interact with it.
 	// or the bidder can go to his offers and update his offer.
-	//! the reason for this is the offerIdContext was not working like I wanted it to. By doing it like this I can 'add' the offerId to the url and then use it in the OfferTable component.
-	// hopefully this will also make it more stable.
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	return (

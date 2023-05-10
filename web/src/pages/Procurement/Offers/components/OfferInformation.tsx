@@ -4,9 +4,6 @@ import { Divider, Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/rea
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export const OfferInformation = ({ tender }): JSX.Element => {
-	// const { offerId } = useParams();
-
-	console.log('tender', tender);
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
 

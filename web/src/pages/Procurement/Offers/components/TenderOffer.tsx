@@ -14,6 +14,7 @@ export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
 	const { tenderId } = useParams();
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
+	// console.log('tenderData', tenderData);
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 
 	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
@@ -35,12 +36,13 @@ export const TenderOffer = (): JSX.Element => {
 			title: 'Offer published',
 			description: 'Your offer has been published!',
 			status: 'success',
-			duration: 5000,
+			duration: 4000,
 			isClosable: true
 		});
 	};
 
 	const isOfferPublished = offerData?.offer?.status === 1;
+	// console.log('isOfferPublished', isOfferPublished);
 
 	const UnPublished = () => {
 		return (

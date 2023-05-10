@@ -49,6 +49,13 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 			...(notes && { notes })
 		};
 		await addOfferItems(offerItemData);
+		toast({
+			title: 'Success',
+			description: 'Item added to offer.',
+			status: 'success',
+			duration: 2000,
+			isClosable: true
+		});
 	};
 
 	// This is somewhat hacky..
@@ -151,7 +158,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 									defaultValue={row?.nr?.toString() || 'no number'}
 									isPreviewFocusable={true}
 									onSubmit={() => {
-										console.log('submit');
+										console.log('submit nr');
 										console.log(nrValue);
 									}}
 									onChange={(value) => {
@@ -175,7 +182,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 									defaultValue={costValue.toString()}
 									isPreviewFocusable={true}
 									onSubmit={() => {
-										console.log('submit');
+										console.log('submit cost');
 										console.log(costValue);
 									}}
 									onChange={(value) => {
@@ -201,7 +208,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 									defaultValue={notesValue || 'no notes'}
 									isPreviewFocusable={true}
 									onSubmit={() => {
-										console.log('submit');
+										console.log('submit notes');
 										console.log(notesValue);
 									}}
 									onChange={(value) => {
