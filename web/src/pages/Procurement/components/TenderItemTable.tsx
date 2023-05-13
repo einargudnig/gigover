@@ -34,6 +34,7 @@ import { InviteButton } from './InviteButton';
 
 export const TenderItemTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
+	// console.log('tenderId', tenderId);
 
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
@@ -87,6 +88,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 			volume: formData.volume,
 			unit: formData.unit
 		});
+
 		mutate(formData);
 		setFormData({
 			tenderId: Number(tenderId),
