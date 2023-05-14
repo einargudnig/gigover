@@ -31,7 +31,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 			cost: costValues[index],
 			notes: notesValues[index]
 		};
-		console.log('offerItemData', { offerItemData });
+		// console.log('offerItemData', { offerItemData });
 		await addOfferItems(offerItemData);
 		toast({
 			title: 'Success',

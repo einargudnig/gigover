@@ -12,7 +12,8 @@ import {
 	HStack,
 	VStack,
 	Text,
-	Tbody
+	Tbody,
+	Center
 } from '@chakra-ui/react';
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -74,7 +75,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 					<Table>
 						<Thead>
 							<Tr>
-								<Tooltip label="Click to edit the number, this could be a product number">
+								<Tooltip label="Item number">
 									<Th>Number</Th>
 								</Tooltip>
 
@@ -90,11 +91,11 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 									<Th>Unit</Th>
 								</Tooltip>
 
-								<Tooltip label="Click to edit the cost for items">
+								<Tooltip label="The cost of the items">
 									<Th>Cost</Th>
 								</Tooltip>
 
-								<Tooltip label="Click to add any notes/certifications for the items.">
+								<Tooltip label="Notes/certifications for the items.">
 									<Th>Notes/Certifications</Th>
 								</Tooltip>
 							</Tr>
@@ -112,6 +113,11 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 							))}
 						</Tbody>
 					</Table>
+					<Center>
+						<Text mt={'4'} textColor={'black'} fontSize={'large'}>
+							This is the published offer!
+						</Text>
+					</Center>
 				</>
 			)}
 		</>
