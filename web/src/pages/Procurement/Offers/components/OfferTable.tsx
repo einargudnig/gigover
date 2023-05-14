@@ -21,6 +21,7 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
 import { useParams } from 'react-router-dom';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
+// this is probably not needed anymore here, we will add the productNumber here instead.
 import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
 
 export const OfferTable = ({ tenderItems }): JSX.Element => {

@@ -65,6 +65,9 @@ export const TenderOffer = (): JSX.Element => {
 		);
 	};
 
+	// The definition has changed a bit, but this will still be the same.
+	// The bidder cannot re-publish. So after he publishes the offer, he will see the published offer.
+	// but he will not be able to edit it.
 	const offerComponent = {
 		unpublished: <UnPublished />,
 		published: (

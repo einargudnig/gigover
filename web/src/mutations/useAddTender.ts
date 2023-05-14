@@ -7,6 +7,7 @@ import { ErrorResponse } from '../models/ErrorResponse';
 
 export interface TenderFormData {
 	projectId?: number;
+	projectName?: string;
 	taskId?: number;
 	description: string;
 	terms: string;

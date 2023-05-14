@@ -22,6 +22,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { devError } from '../../utils/ConsoleUtils';
 import { Task } from '../../models/Task';
+// import { useProjectDetails } from '../../queries/useProjectDetails';
 
 interface TenderModalProps {
 	tender?: Tender;
@@ -37,7 +38,12 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	// This is so the user can select a project and then the tasks from the selected project.
 	// we want the procurement to be linked to a task and a project.
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
+	const [selectedProjectName, setSelectedProjectName] = useState<string | undefined>(
+		tender?.projectName
+	);
 	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
+
+	// const { data: projectData } = useProjectDetails(selectedProject ?? 0);
 
 	// mustateAsync: modify
 	const { mutate: modify, isError, error } = useAddTender();
@@ -69,22 +75,11 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	};
 
 	const onSubmit = handleSubmit(
-		async ({
-			// eslint-disable-next-line
-			projectId, //TODO Why is this underlined?
-			// eslint-disable-next-line
-			taskId, //TODO Why is this underlined?
-			description,
-			terms,
-			finishDate,
-			// eslint-disable-next-line
-			delivery,
-			address,
-			phoneNumber
-		}) => {
+		async ({ description, terms, finishDate, address, phoneNumber }) => {
 			try {
-				await modify({
+				modify({
 					projectId: selectedProject,
+					projectName: selectedProjectName,
 					taskId: selectedTask,
 					description,
 					terms,

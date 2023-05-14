@@ -1,8 +1,7 @@
-import { Project } from './Project';
-
 export interface Tender {
 	tenderId: number;
 	projectId: number;
+	projectName: string;
 	taskId: number;
 	description: string;
 	terms: string;
@@ -12,7 +11,6 @@ export interface Tender {
 	status?: number;
 	phoneNumber: string;
 	offerNote?: string;
-	projectName: Project[]; // I'm not sure if I should do this? I want to have the projectName on the tender object. This does work but it's kinda sloppy.
 	items: TenderItem[];
 }
 
@@ -56,7 +54,7 @@ export interface GetOfferItem {
 	cost: number;
 	notes: string;
 	description: string;
-	nr: 4;
+	nr: number;
 	tenderItemId: number;
 	unit: string;
 	volume: number;

@@ -54,7 +54,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'tender'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<TenderPage />} />
+			{/* This is the page that the bidder sees, where he can open the offer */}
 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
+			{/* The page where the user is sent after he opens the offer */}
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 
