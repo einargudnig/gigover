@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
-import { OfferTable } from './OfferTable';
+// import { OfferTable } from './OfferTable';
+import { NewOfferTable } from './NewOfferTable';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -54,7 +55,8 @@ export const TenderOffer = (): JSX.Element => {
 				) : (
 					<>
 						<OfferInformation tender={tender} />
-						<OfferTable tenderItems={tenderItems} />
+						{/* <OfferTable tenderItems={tenderItems} /> */}
+						<NewOfferTable tenderItems={tenderItems} />
 
 						<Button onClick={handlePublish} mt={'4'}>
 							{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
@@ -70,13 +72,7 @@ export const TenderOffer = (): JSX.Element => {
 	// but he will not be able to edit it.
 	const offerComponent = {
 		unpublished: <UnPublished />,
-		published: (
-			<PublishedOffer
-				offerId={offerId}
-				offerData={offerData}
-				isOfferLoading={isOfferLoading}
-			/>
-		)
+		published: <PublishedOffer offerData={offerData} isOfferLoading={isOfferLoading} />
 	};
 
 	const component = offerComponent[isOfferPublished ? 'published' : 'unpublished'];

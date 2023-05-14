@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useQueryClient } from 'react-query';
 
 export interface TenderItemsOffer {
-	itemId: number;
+	tenderItemId: number;
 	offerId: number;
 	cost?: number;
 	notes?: string;
