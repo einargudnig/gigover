@@ -1,5 +1,17 @@
-import React from 'react';
-import { Button, useToast } from '@chakra-ui/react';
+import React, { useRef } from 'react';
+import {
+	Button,
+	ButtonProps,
+	useToast,
+	AlertDialog,
+	AlertDialogOverlay,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogBody,
+	useDisclosure,
+	Text
+} from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 // import { OfferTable } from './OfferTable';
@@ -20,6 +32,7 @@ export const TenderOffer = (): JSX.Element => {
 
 	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
 	// console.log('offerData', offerData);
+	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
 
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
@@ -46,6 +59,12 @@ export const TenderOffer = (): JSX.Element => {
 	// console.log('isOfferPublished', isOfferPublished);
 
 	const UnPublished = () => {
+		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
+			event.preventDefault();
+			onOpen();
+		};
+
+		const cancelRef = useRef<HTMLButtonElement | null>(null);
 		return (
 			<>
 				{isTenderLoading ? (
@@ -58,9 +77,44 @@ export const TenderOffer = (): JSX.Element => {
 						{/* <OfferTable tenderItems={tenderItems} /> */}
 						<NewOfferTable tenderItems={tenderItems} />
 
-						<Button onClick={handlePublish} mt={'4'}>
+						<Button onClick={handleOpenDialog} mt={'4'}>
 							{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
 						</Button>
+
+						<AlertDialog
+							isOpen={isOpen}
+							onClose={onClose}
+							leastDestructiveRef={cancelRef}
+							portalProps={{ appendToParentPortal: true }}
+						>
+							<AlertDialogOverlay>
+								<AlertDialogContent>
+									<AlertDialogHeader>Publish offer</AlertDialogHeader>
+									<AlertDialogBody>
+										<Text>Are you sure you want to publish this offer?</Text>
+									</AlertDialogBody>
+									<AlertDialogFooter>
+										<Button
+											ref={cancelRef}
+											onClick={onClose}
+											variant={'outline'}
+											colorScheme={'gray'}
+										>
+											Cancel
+										</Button>
+										<Button
+											onClick={() => {
+												handlePublish();
+												onClose();
+											}}
+											ml={3}
+										>
+											Publish
+										</Button>
+									</AlertDialogFooter>
+								</AlertDialogContent>
+							</AlertDialogOverlay>
+						</AlertDialog>
 					</>
 				)}
 			</>

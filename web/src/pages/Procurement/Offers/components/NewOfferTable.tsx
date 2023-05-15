@@ -29,7 +29,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 			tenderItemId,
 			offerId: Number(offerId),
 			cost: costValues[index],
-			notes: notesValues[index]
+			note: notesValues[index]
 		};
 		// console.log('offerItemData', { offerItemData });
 		await addOfferItems(offerItemData);

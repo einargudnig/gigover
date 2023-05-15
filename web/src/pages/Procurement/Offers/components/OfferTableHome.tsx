@@ -40,10 +40,7 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 				</Tbody>
 			</Table>
 
-			<Text mt={'2'}>
-				If you have already made an offer for this tender and you want to update it, you can
-				see your offers by pressing this button.
-			</Text>
+			<Text mt={'2'}>You can see the offers you have already made</Text>
 			<Button mt={'2'}>
 				<Link to={'/bidder-offers'}>Go to my Offers</Link>
 			</Button>
