@@ -18,6 +18,7 @@ import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 	const { offerId } = useParams();
 
+	const [productNrValues, setProductNrValues] = useState(tenderItems.map(() => 'number'));
 	const [costValues, setCostValues] = useState(tenderItems.map(() => 0));
 	const [notesValues, setNotesValues] = useState(tenderItems.map(() => 'no notes'));
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
@@ -28,6 +29,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 		const offerItemData = {
 			tenderItemId,
 			offerId: Number(offerId),
+			productNr: productNrValues[index],
 			cost: costValues[index],
 			note: notesValues[index]
 		};
@@ -40,6 +42,12 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 			duration: 2000,
 			isClosable: true
 		});
+	};
+
+	const handleProductNrChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+		const newProductNrValues = [...productNrValues];
+		newProductNrValues[index] = Number(event.target.value);
+		setProductNrValues(newProductNrValues);
 	};
 
 	const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -59,7 +67,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 			<Table>
 				<Thead>
 					<Tr>
-						<Tooltip label="Click to edit the number, this could be a product number">
+						<Tooltip label="Number">
 							<Th>Number</Th>
 						</Tooltip>
 
@@ -76,7 +84,11 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 						</Tooltip>
 
 						<Tooltip label="Click to edit the cost for items">
-							<Th>Cost</Th>
+							<Th>Product number</Th>
+						</Tooltip>
+
+						<Tooltip label="Click to edit the cost for items">
+							<Th>Cost pr. item</Th>
 						</Tooltip>
 
 						<Tooltip label="Click to add any notes/certifications for the items.">
@@ -97,14 +109,27 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 							<Td>{row.unit}</Td>
 							<Td>
 								<Input
-									width={'45'}
+									rounded={'md'}
+									size={'sm'}
+									width={'35'}
+									value={productNrValues[index]}
+									onChange={(event) => handleProductNrChange(event, index)}
+								/>
+							</Td>
+							<Td>
+								<Input
+									rounded={'md'}
+									size={'sm'}
+									width={'35'}
 									value={costValues[index]}
 									onChange={(event) => handleCostChange(event, index)}
 								/>
 							</Td>
 							<Td>
 								<Input
-									width={'45'}
+									rounded={'md'}
+									size={'sm'}
+									width={'35'}
 									value={notesValues[index]}
 									onChange={(event) => handleNotesChange(event, index)}
 								/>
