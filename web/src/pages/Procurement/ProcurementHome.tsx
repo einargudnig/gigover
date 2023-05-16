@@ -35,13 +35,8 @@ const ProcurementCardTitle = styled.div`
 
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
-	const { data: projects } = useProjectList();
 
-	// Get the projectNames from projects and add them to the tenders
-	const projectsWithTenders = data?.map((t) => {
-		const projectName = projects.find((p) => p.projectId === t.projectId);
-		return { ...t, projectName };
-	});
+	// console.log('data', data);
 
 	return (
 		<>
@@ -54,15 +49,15 @@ export const ProcurementHome = (): JSX.Element => {
 					<Text mb={'2'}>
 						This tab should be used for creating, managing, and reviewing tenders.
 					</Text>
-					{!projectsWithTenders || projectsWithTenders.length <= 0 ? (
+					{!data || data.length <= 0 ? (
 						<NoProcurementFound />
 					) : (
-						projectsWithTenders.map((t) => (
+						data.map((t) => (
 							<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
 								<ProcurementCardTitle>
 									<div>
 										<h3>
-											<b>Project:</b> {t.projectName?.name}
+											<b>Project:</b> {t.projectName}
 										</h3>
 										<div style={{ marginTop: -16 }}>
 											<b>Description:</b> {t.description}
@@ -78,7 +73,7 @@ export const ProcurementHome = (): JSX.Element => {
 							</ProcurementCardStyled>
 						))
 					)}
-					{projectsWithTenders.length <= 0 ? null : (
+					{data.length <= 0 ? null : (
 						<>
 							<Text mt={'4'}>
 								You can see the offers that have been submitted here

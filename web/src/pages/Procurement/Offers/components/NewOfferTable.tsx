@@ -46,7 +46,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 
 	const handleProductNrChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
 		const newProductNrValues = [...productNrValues];
-		newProductNrValues[index] = Number(event.target.value);
+		newProductNrValues[index] = event.target.value;
 		setProductNrValues(newProductNrValues);
 	};
 
@@ -111,7 +111,8 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 								<Input
 									rounded={'md'}
 									size={'sm'}
-									width={'35'}
+									htmlSize={6}
+									width={'auto'}
 									value={productNrValues[index]}
 									onChange={(event) => handleProductNrChange(event, index)}
 								/>
@@ -120,7 +121,8 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 								<Input
 									rounded={'md'}
 									size={'sm'}
-									width={'35'}
+									htmlSize={5}
+									width={'auto'}
 									value={costValues[index]}
 									onChange={(event) => handleCostChange(event, index)}
 								/>
@@ -129,7 +131,8 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 								<Input
 									rounded={'md'}
 									size={'sm'}
-									width={'35'}
+									htmlSize={10}
+									width={'auto'}
 									value={notesValues[index]}
 									onChange={(event) => handleNotesChange(event, index)}
 								/>

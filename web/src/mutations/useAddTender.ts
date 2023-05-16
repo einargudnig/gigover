@@ -17,8 +17,6 @@ export interface TenderFormData {
 	phoneNumber: string;
 }
 
-// Sometime we might want to close the tender?
-// if so we might need to add a status field to the TenderFormData interface
 export const useAddTender = () => {
 	const client = useQueryClient();
 

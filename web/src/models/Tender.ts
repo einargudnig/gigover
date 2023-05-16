@@ -1,7 +1,7 @@
 export interface Tender {
 	tenderId: number;
 	projectId: number;
-	projectName: string;
+	projectName: string; // we have it here!
 	taskId: number;
 	description: string;
 	terms: string;

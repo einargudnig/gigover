@@ -79,7 +79,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 			try {
 				modify({
 					projectId: selectedProject,
-					projectName: selectedProjectName,
+					projectName: selectedProjectName, // this should set the projectName to the mutation!
 					taskId: selectedTask,
 					description,
 					terms,
@@ -125,6 +125,12 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 											setSelectedProject(undefined);
 										} else {
 											setSelectedProject((newValue as number) ?? undefined);
+											setSelectedProjectName(
+												openProjects.find(
+													(project) =>
+														project.projectId === (newValue as number)
+												)?.name
+											);
 										}
 									}}
 								/>
