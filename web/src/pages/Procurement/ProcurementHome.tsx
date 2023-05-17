@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
 import { Button, Center, Text } from '@chakra-ui/react';
 import { useUserTenders } from '../../queries/useUserTenders';
-import { useProjectList } from '../../queries/useProjectList';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../utils/StringUtils';
 import { Link } from 'react-router-dom';
