@@ -14,11 +14,11 @@ interface TenderItem {
 	note?: string;
 }
 
-interface TenderTableProps {
-	tenderItems: TenderItem[];
-}
+// interface TenderTableProps {
+// 	tenderItems: TenderItem[];
+// }
 
-export const TenderTable: React.FC<TenderTableProps> = ({ tenderItems }) => {
+export const TenderTable = ({ tenderItems }): JSX.Element => {
 	const { offerId } = useParams();
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);
 
@@ -55,12 +55,11 @@ export const TenderTable: React.FC<TenderTableProps> = ({ tenderItems }) => {
 
 	return (
 		<Box w="100%" p={4}>
-			<Table variant="striped" colorScheme="teal">
+			<Table>
 				<Thead>
 					<Tr>
-						<Th>Description</Th>
 						<Th>Nr</Th>
-						<Th>Tender Item Id</Th>
+						<Th>Description</Th>
 						<Th>Unit</Th>
 						<Th>Volume</Th>
 						<Th>Product Number</Th>
@@ -72,9 +71,8 @@ export const TenderTable: React.FC<TenderTableProps> = ({ tenderItems }) => {
 				<Tbody>
 					{items.map((item, index) => (
 						<Tr key={item.tenderItemId}>
-							<Td>{item.description}</Td>
 							<Td>{item.nr}</Td>
-							<Td>{item.tenderItemId}</Td>
+							<Td>{item.description}</Td>
 							<Td>{item.unit}</Td>
 							<Td>{item.volume}</Td>
 							<Td>
@@ -101,9 +99,7 @@ export const TenderTable: React.FC<TenderTableProps> = ({ tenderItems }) => {
 								/>
 							</Td>
 							<Td>
-								<Button colorScheme="blue" onClick={() => handleUpdateClick(index)}>
-									Update
-								</Button>
+								<Button onClick={() => handleUpdateClick(index)}>Update</Button>
 							</Td>
 						</Tr>
 					))}

@@ -72,8 +72,6 @@ export const TenderOffer = (): JSX.Element => {
 				) : (
 					<>
 						<OfferInformation tender={tender} />
-						{/* <OfferTable tenderItems={tenderItems} /> */}
-						{/* <NewOfferTable tenderItems={tenderItems} /> */}
 						<TenderTable tenderItems={tenderItems} />
 
 						<Button onClick={handleOpenDialog} mt={'4'}>
