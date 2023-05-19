@@ -14,8 +14,8 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
-// import { OfferTable } from './OfferTable';
-import { NewOfferTable } from './NewOfferTable';
+import { OfferTable } from './OfferTable';
+// import { NewOfferTable } from './NewOfferTable';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -27,11 +27,8 @@ export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
 	const { tenderId } = useParams();
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
-	// console.log('tenderData', tenderData);
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
-
 	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
-	// console.log('offerData', offerData);
 	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
 
 	const tender: Tender | undefined = tenderData?.tender;
@@ -74,8 +71,8 @@ export const TenderOffer = (): JSX.Element => {
 				) : (
 					<>
 						<OfferInformation tender={tender} />
-						{/* <OfferTable tenderItems={tenderItems} /> */}
-						<NewOfferTable tenderItems={tenderItems} />
+						<OfferTable tenderItems={tenderItems} />
+						{/* <NewOfferTable tenderItems={tenderItems} /> */}
 
 						<Button onClick={handleOpenDialog} mt={'4'}>
 							{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}

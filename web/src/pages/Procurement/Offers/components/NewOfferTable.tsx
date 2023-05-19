@@ -21,6 +21,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 	const [productNrValues, setProductNrValues] = useState(tenderItems.map(() => 'number'));
 	const [costValues, setCostValues] = useState(tenderItems.map(() => 0));
 	const [notesValues, setNotesValues] = useState(tenderItems.map(() => 'no notes'));
+
 	const { mutateAsync: addOfferItems } = useAddOfferItems();
 
 	const toast = useToast();
@@ -53,6 +54,7 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 	const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
 		const newCostValues = [...costValues];
 		newCostValues[index] = Number(event.target.value);
+		console.log('newCostValues', newCostValues);
 		setCostValues(newCostValues);
 	};
 

@@ -1,234 +1,310 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-	ButtonGroup,
-	Editable,
-	EditableInput,
-	EditablePreview,
-	IconButton,
+	Box,
+	Button,
+	Flex,
+	FormControl,
+	FormLabel,
+	FormHelperText,
+	HStack,
+	Input,
 	Table,
+	Text,
 	Tbody,
 	Td,
-	Input,
-	Th,
 	Thead,
+	Th,
 	Tr,
 	Tooltip,
-	useEditableControls,
-	HStack,
-	useToast
+	Spacer
+	// useToast
 } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
-
+import { TenderItem } from '../../../../models/Tender';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useParams } from 'react-router-dom';
+import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
+import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
-// this is probably not needed anymore here, we will add the productNumber here instead.
-import { useAddTenderItem } from '../../../../mutations/useAddTenderItem'; // This is for the number attribute!
 
 export const OfferTable = ({ tenderItems }): JSX.Element => {
 	const { tenderId } = useParams();
-	const { offerId } = useParams();
+	const {
+		mutateAsync: addOfferItems,
+		isLoading: addOfferItemsLoading,
+		isError: isMutateError,
+		error: mutateError
+	} = useAddOfferItems();
 
-	const [nrValue, setNrValue] = React.useState(0);
-	const [costValue, setCostValue] = React.useState(0);
-	const [notesValue, setNotesValue] = React.useState('no notes');
-	const { mutateAsync: addOfferItems } = useAddOfferItems();
-	const { mutateAsync: addTenderItemNumber } = useAddTenderItem();
+	//eslint-disable-next-line
+	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
+	const [productNumber, setProductNumber] = useState('');
+	const [cost, setCost] = useState(0);
+	const [notes, setNotes] = useState('');
 
-	const toast = useToast();
+	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
+	const [formData, setFormData] = useState<TenderItem>({
+		tenderId: Number(tenderId),
+		description: 'Description',
+		nr: 0,
+		volume: 0,
+		unit: 'Unit'
+	});
 
-	const handleOfferItems = async (
-		tenderItemId: number,
-		// eslint-disable-next-line no-shadow
-		offerId: number,
-		cost?: number,
-		notes?: string
-	): Promise<void> => {
-		const offerItemData = {
-			tenderItemId,
-			offerId: Number(offerId),
-			...(cost && { cost }),
-			...(notes && { notes })
-		};
-		await addOfferItems(offerItemData);
-		toast({
-			title: 'Success',
-			description: 'Item added to offer.',
-			status: 'success',
-			duration: 2000,
-			isClosable: true
+	// const toast = useToast();
+
+	//! We need to make a validation for the unit form field
+	const isInvalidUnit = formData?.unit!.length > 5;
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setFormData({
+			...formData,
+			[name]: value
 		});
 	};
 
-	// This is somewhat hacky..
-	// I want to let the offerer add the number of the tender item.
-	// he/she might want to add a product number or something like that.
-	// That means that I need to add these optional dynamic parameters to the mutation.
-	// Maybe I'll come back alter and do this better 🤷‍♂️, but I think will be fine for the time being.
-	const tenderIdNr = Number(tenderId);
+	const handleAdd = () => {
+		// setItems([...[items], formData]); //! I think this is not needed
+		addOfferItems({
+			...formData,
+			productNumber,
+			cost,
+			notes
+		});
 
-	const handleTenderItemNumber = async (
-		tenderItemId: number,
-		nr?: number,
-		description?: string,
-		volume?: number,
-		unit?: string
-	) => {
-		const tenderItemData = {
-			tenderId: tenderIdNr,
-			tenderItemId,
-			...(nr && { nr }),
-			...(description && { description }),
-			...(volume && { volume }),
-			...(unit && { unit })
-		};
-		await addTenderItemNumber(tenderItemData);
+		// Reset the form fields
+		setFormData({
+			tenderId: Number(tenderId),
+			description: 'Description',
+			nr: 0,
+			volume: 0,
+			unit: 'Unit'
+		});
+		setProductNumber('');
+		setCost(0);
+		setNotes('');
+		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
-	const EditableControls = ({ tenderItemId }) => {
-		const { isEditing, getSubmitButtonProps, getCancelButtonProps } = useEditableControls();
-
-		return isEditing ? (
-			<ButtonGroup justifyContent="end" size="sm" w="full" spacing={2} mt={2}>
-				<IconButton
-					aria-label="save"
-					icon={<CheckIcon />}
-					{...getSubmitButtonProps()}
-					onClick={() => {
-						if (Number(offerId) === 0) {
-							toast({
-								title: 'Error',
-								description: 'There is no offer. This is an error.',
-								status: 'error',
-								duration: 3000,
-								isClosable: true
-							});
-						}
-						handleOfferItems(
-							tenderItemId,
-							Number(offerId),
-							costValue || undefined,
-							notesValue || undefined
-						);
-						handleTenderItemNumber(tenderItemId, nrValue || undefined);
-					}}
-				/>
-				<IconButton
-					aria-label="cancel"
-					icon={<CloseIcon boxSize={3} />}
-					{...getCancelButtonProps()}
-				/>
-			</ButtonGroup>
-		) : null;
+	// This works, It 'sends' the selected row to the edit form
+	const handleEdit = (item: TenderItem) => {
+		setEditingItem(item);
+		setFormData({ ...item });
+		setProductNumber('');
+		setCost(0);
+		setNotes('');
 	};
 
 	return (
 		<>
-			<Table>
+			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
-						<Tooltip label="Click to edit the number, this could be a product number">
-							<Th>Number</Th>
+						<Tooltip label="Does this item have a special number?">
+							<Th>
+								<HStack>
+									<p>Number</p>
+								</HStack>
+							</Th>
 						</Tooltip>
 
-						<Tooltip label="Description of the items">
-							<Th>Description</Th>
+						<Tooltip label="Description of a item">
+							<Th>
+								<HStack>
+									<p>Description</p>
+								</HStack>
+							</Th>
 						</Tooltip>
 
-						<Tooltip label="Volume, how many items">
-							<Th>Volume</Th>
+						<Tooltip label="Volume">
+							<Th>
+								<HStack>
+									<p color={'black'}>Volume</p>
+								</HStack>
+							</Th>
 						</Tooltip>
 
-						<Tooltip label="The measurement of unit for items">
-							<Th>Unit</Th>
+						<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Th>
+								<HStack>
+									<p>Unit</p>
+								</HStack>
+							</Th>
 						</Tooltip>
 
-						<Tooltip label="Click to edit the cost for items">
-							<Th>Cost</Th>
+						<Tooltip label="This is your product number">
+							<Th>
+								<HStack>
+									<p>Product number</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
 						</Tooltip>
 
-						<Tooltip label="Click to add any notes/certifications for the items.">
-							<Th>Notes/Certifications</Th>
+						<Tooltip label="Cost for this item, per one unit of it">
+							<Th>
+								<HStack>
+									<p>Cost pr. item</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
 						</Tooltip>
+
+						<Tooltip label="Anything you would want add for this item?">
+							<Th>
+								<HStack>
+									<p>Notes/certifications</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Th>
+							<p>Actions</p>
+						</Th>
 					</Tr>
 				</Thead>
 				<Tbody>
-					{tenderItems?.map((row) => (
-						<Tr key={row.tenderItemId}>
+					{tenderItems?.map((item) => (
+						<Tr key={item.tenderItemId}>
+							<Td>{item.nr}</Td>
+							<Td>{item.description}</Td>
+							<Td>{item.volume}</Td>
+							<Td>{item.unit}</Td>
+							<Td>{productNumber}</Td>
+							<Td>{cost}</Td>
+							<Td>{notes}</Td>
 							<Td>
-								<Editable
-									defaultValue={row?.nr?.toString() || 'no number'}
-									isPreviewFocusable={true}
-									onSubmit={() => {
-										console.log('submit nr');
-										console.log(nrValue);
-									}}
-									onChange={(value) => {
-										setNrValue(Number(value));
-									}}
-								>
-									<Tooltip label="Click to edit the number">
-										<EditablePreview py={2} px={4} />
-									</Tooltip>
-									<HStack>
-										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls tenderItemId={row.tenderItemId} />
-									</HStack>
-								</Editable>
-							</Td>
-							<Td>{row.description}</Td>
-							<Td>{row.volume}</Td>
-							<Td>{row.unit}</Td>
-							<Td>
-								<Editable
-									defaultValue={costValue.toString()}
-									isPreviewFocusable={true}
-									onSubmit={() => {
-										console.log('submit cost');
-										console.log(costValue);
-									}}
-									onChange={(value) => {
-										setCostValue(Number(value));
-									}}
-								>
-									<Tooltip label="Click to edit the price">
-										<EditablePreview py={2} px={4} />
-									</Tooltip>
-									<HStack>
-										<Input
-											py={2}
-											px={4}
-											as={EditableInput}
-											placeholder="enter price"
-										/>
-										<EditableControls tenderItemId={row.tenderItemId} />
-									</HStack>
-								</Editable>
-							</Td>
-							<Td>
-								<Editable
-									defaultValue={notesValue || 'no notes'}
-									isPreviewFocusable={true}
-									onSubmit={() => {
-										console.log('submit notes');
-										console.log(notesValue);
-									}}
-									onChange={(value) => {
-										setNotesValue(value);
-									}}
-								>
-									<Tooltip label="Click to edit notes">
-										<EditablePreview py={2} px={4} />
-									</Tooltip>
-									<HStack>
-										<Input py={2} px={4} as={EditableInput} />
-										<EditableControls tenderItemId={row.tenderItemId} />
-									</HStack>
-								</Editable>
+								<ScrollIntoView selector="#editItem">
+									<Button onClick={() => handleEdit(item)}>Edit</Button>
+								</ScrollIntoView>
 							</Td>
 						</Tr>
 					))}
+					{tenderItems?.length === 0 ? (
+						<Td>
+							<Text fontSize="xl">
+								The table is empty! To add items into the table you need to write it
+								into the form below, and press the Add item button.
+							</Text>
+						</Td>
+					) : null}
+					{isMutateError ? (
+						<Td>
+							<Text>Something went wrong - {mutateError?.code}</Text>
+						</Td>
+					) : null}
 				</Tbody>
 			</Table>
+			<br />
+
+			{tenderItems?.length !== 0 ? (
+				<Text fontSize="md">
+					To edit or delete items in the table you must press the Edit button in the
+					Action column. You will then be able to edit the item in the form below. When
+					you are done editing the item, press the Update item button.
+				</Text>
+			) : null}
+			<br />
+			<Box mb={2} mt={2} p={2} borderRadius={6} borderColor={'#EFEFEE'} id="editItem">
+				<FormControl>
+					<FormLabel htmlFor="number">Number</FormLabel>
+					<Input
+						id="nr"
+						name="nr"
+						type="number"
+						value={formData.nr}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="description">Description</FormLabel>
+					<Input
+						id="description"
+						name="description"
+						type="text"
+						value={formData.description}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="volume">Volume</FormLabel>
+					<Input
+						id="volume"
+						name="volume"
+						type="number"
+						value={formData.volume}
+						onChange={handleChange}
+					/>
+				</FormControl>
+				<br />
+				<FormControl id={'unit'} isInvalid={isInvalidUnit}>
+					<FormLabel htmlFor="unit">Unit</FormLabel>
+					<Input
+						id="unit"
+						name="unit"
+						type="text"
+						value={formData.unit}
+						onChange={handleChange}
+					/>
+					{isInvalidUnit ? (
+						<FormHelperText>
+							The measurement of unit should be in a short format: kg, m, m2
+						</FormHelperText>
+					) : null}
+				</FormControl>
+				<FormControl>
+					<FormLabel htmlFor="productNumber">Product number</FormLabel>
+					<Input
+						id="productNumber"
+						name="productNumber"
+						type="text"
+						value={productNumber}
+						onChange={(event) => setProductNumber(event.target.value)}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="cost">Cost pr. item</FormLabel>
+					<Input
+						id="cost"
+						name="cost"
+						type="number"
+						value={cost}
+						onChange={(event) => setCost(Number(event.target.value))}
+					/>
+				</FormControl>
+				<br />
+				<FormControl>
+					<FormLabel htmlFor="notes">Notes/certifications</FormLabel>
+					<Input
+						id="notes"
+						name="notes"
+						type="text"
+						value={notes}
+						onChange={(event) => setNotes(event.target.value)}
+					/>
+				</FormControl>
+			</Box>
+			<br />
+			<Flex justifyContent={'end'} mb={'6'}>
+				<HStack>
+					{tenderItems === undefined ? null : editingItem ? (
+						<HStack>
+							<Button onClick={handleAdd}>
+								{addOfferItemsLoading ? <LoadingSpinner /> : 'Add item'}
+							</Button>
+						</HStack>
+					) : null}
+				</HStack>
+			</Flex>
+
+			<Flex mb={'2'}>
+				<Text>When the offer is ready you can publish it.</Text>
+				<Spacer />
+			</Flex>
 		</>
 	);
 };
