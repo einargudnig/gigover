@@ -52,9 +52,6 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 
 	// const toast = useToast();
 
-	//! We need to make a validation for the unit form field
-	const isInvalidUnit = formData?.unit!.length > 5;
-
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
 		setFormData({
@@ -215,6 +212,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 						type="number"
 						value={formData.nr}
 						onChange={handleChange}
+						disabled={true}
 					/>
 				</FormControl>
 				<br />
@@ -226,6 +224,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 						type="text"
 						value={formData.description}
 						onChange={handleChange}
+						disabled={true}
 					/>
 				</FormControl>
 				<br />
@@ -237,10 +236,11 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 						type="number"
 						value={formData.volume}
 						onChange={handleChange}
+						disabled={true}
 					/>
 				</FormControl>
 				<br />
-				<FormControl id={'unit'} isInvalid={isInvalidUnit}>
+				<FormControl id={'unit'}>
 					<FormLabel htmlFor="unit">Unit</FormLabel>
 					<Input
 						id="unit"
@@ -248,12 +248,8 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 						type="text"
 						value={formData.unit}
 						onChange={handleChange}
+						disabled={true}
 					/>
-					{isInvalidUnit ? (
-						<FormHelperText>
-							The measurement of unit should be in a short format: kg, m, m2
-						</FormHelperText>
-					) : null}
 				</FormControl>
 				<FormControl>
 					<FormLabel htmlFor="productNumber">Product number</FormLabel>
@@ -291,7 +287,7 @@ export const OfferTable = ({ tenderItems }): JSX.Element => {
 			<br />
 			<Flex justifyContent={'end'} mb={'6'}>
 				<HStack>
-					{tenderItems === undefined ? null : editingItem ? (
+					{editingItem ? (
 						<HStack>
 							<Button onClick={handleAdd}>
 								{addOfferItemsLoading ? <LoadingSpinner /> : 'Add item'}

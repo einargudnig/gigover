@@ -14,8 +14,9 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
-import { OfferTable } from './OfferTable';
+// import { OfferTable } from './OfferTable';
 // import { NewOfferTable } from './NewOfferTable';
+import { TenderTable } from './NewNewOfferTable';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -71,8 +72,9 @@ export const TenderOffer = (): JSX.Element => {
 				) : (
 					<>
 						<OfferInformation tender={tender} />
-						<OfferTable tenderItems={tenderItems} />
+						{/* <OfferTable tenderItems={tenderItems} /> */}
 						{/* <NewOfferTable tenderItems={tenderItems} /> */}
+						<TenderTable tenderItems={tenderItems} />
 
 						<Button onClick={handleOpenDialog} mt={'4'}>
 							{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
