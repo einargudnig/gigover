@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center, Text } from '@chakra-ui/react';
 import { useUserTenders } from '../../../../queries/useUserTenders';
-import { useProjectList } from '../../../../queries/useProjectList';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
@@ -33,14 +32,6 @@ const ProcurementCardTitle = styled.div`
 
 export const OfferForTenders = (): JSX.Element => {
 	const { data: userTenders, isLoading } = useUserTenders();
-	const { data: projects } = useProjectList();
-	// console.log('DATA', { data });
-
-	// Get the projectNames from projects and add them to the tenders
-	const projectsWithTenders = userTenders?.map((t) => {
-		const projectName = projects.find((p) => p.projectId === t.projectId);
-		return { ...t, projectName };
-	});
 
 	return (
 		<>
@@ -55,12 +46,12 @@ export const OfferForTenders = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					{projectsWithTenders.map((t) => (
+					{userTenders.map((t) => (
 						<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
 							<ProcurementCardTitle>
 								<div>
 									<h3>
-										<b>Project:</b> {t.projectName?.name}
+										<b>Project:</b> {t.projectName}
 									</h3>
 									<div style={{ marginTop: -16 }}>
 										<b>Description:</b> {t.description}

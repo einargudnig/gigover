@@ -5,7 +5,6 @@ import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { useProjectList } from '../../../queries/useProjectList';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { Tender } from '../../../models/Tender';
 
@@ -56,17 +55,11 @@ const getUniqueTenders = (tenders: Tender[]) => {
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
-	const { data: projects } = useProjectList();
+	console.log('tenders', tenders);
 
 	const uniqueTenders = getUniqueTenders(tenders);
 
-	// Get the projectNames from projects and add them to the tenders
-	const projectsWithTenders = uniqueTenders?.map((t) => {
-		const projectName = projects.find((p) => p.projectId === t.projectId);
-		return { ...t, projectName };
-	});
-
-	const noTender = projectsWithTenders?.length === 0;
+	const noTender = uniqueTenders?.length === 0;
 
 	// const offerPublished = () => {
 	// 	const i = offers?.[0];
@@ -93,7 +86,7 @@ export const BidderTenders = (): JSX.Element => {
 								</Center>
 							) : (
 								<>
-									{projectsWithTenders.map((t) => (
+									{uniqueTenders.map((t) => (
 										<OfferCardStyled
 											to={`/tender/offers/${t.tenderId}`}
 											key={t.tenderId}
@@ -101,7 +94,7 @@ export const BidderTenders = (): JSX.Element => {
 											<OfferCardTitle>
 												<div>
 													<h3>
-														<b>Project:</b> {t.projectName?.name}
+														<b>Project:</b> {t.projectName}
 													</h3>
 													<div style={{ marginTop: -16 }}>
 														<b>Description:</b> {t.description}
