@@ -14,9 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
-// import { OfferTable } from './OfferTable';
-// import { NewOfferTable } from './NewOfferTable';
-import { TenderTable } from './NewNewOfferTable';
+import { TenderTable } from './OfferTable';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';

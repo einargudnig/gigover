@@ -6,11 +6,11 @@ import axios from 'axios';
 // import { useQueryClient } from 'react-query';
 
 export interface TenderItemsOffer {
-	tenderItemId: number;
+	itemId: number;
 	offerId: number;
 	productNumber?: string;
 	cost?: number;
-	notes?: string;
+	note?: string;
 }
 
 //! what I need to pass to the server here:
