@@ -26,9 +26,9 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 
 	const toast = useToast();
 
-	const handleOfferItems = async (tenderItemId: number, index: number) => {
+	const handleOfferItems = async (itemId: number, index: number) => {
 		const offerItemData = {
-			tenderItemId,
+			itemId,
 			offerId: Number(offerId),
 			productNr: productNrValues[index],
 			cost: costValues[index],
