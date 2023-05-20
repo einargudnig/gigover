@@ -65,6 +65,14 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 		});
 	};
 
+	const formatNumber = (num: number) => {
+		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	};
+
+	const removeFormat = (str: string) => {
+		return Number(str.replace(/\./g, ''));
+	};
+
 	return (
 		<Box w="100%" p={4}>
 			<Table>
@@ -89,6 +97,8 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 							<Td>{item.volume}</Td>
 							<Td>
 								<Input
+									htmlSize={6}
+									width={'auto'}
 									value={item.productNumber || ''}
 									onChange={(e) =>
 										updateItem(index, 'productNumber', e.target.value)
@@ -96,16 +106,29 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 								/>
 							</Td>
 							<Td>
-								<Input
+								{/* <Input
+									htmlSize={4}
+									width={'auto'}
 									type="number"
 									value={item.cost || 0}
 									onChange={(e) =>
 										updateItem(index, 'cost', Number(e.target.value))
 									}
+								/> */}
+								<Input
+									htmlSize={6}
+									width={'auto'}
+									type="text"
+									value={item.cost ? formatNumber(item.cost) : ''}
+									onChange={(e) =>
+										updateItem(index, 'cost', removeFormat(e.target.value))
+									}
 								/>
 							</Td>
 							<Td>
 								<Input
+									htmlSize={10}
+									width={'auto'}
 									value={item.note || ''}
 									onChange={(e) => updateItem(index, 'note', e.target.value)}
 								/>

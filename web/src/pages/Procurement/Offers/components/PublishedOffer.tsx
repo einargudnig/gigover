@@ -23,6 +23,10 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	console.log('offer', offer);
 
+	const formatNumber = (num: number) => {
+		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	};
+
 	return (
 		<>
 			{isOfferLoading ? (
@@ -108,7 +112,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 									<Td>{row.description}</Td>
 									<Td>{row.volume}</Td>
 									<Td>{row.unit}</Td>
-									<Td>{row.cost}</Td>
+									<Td>{formatNumber(row.cost)}</Td>
 									<Td>{row.notes}</Td>
 								</Tr>
 							))}

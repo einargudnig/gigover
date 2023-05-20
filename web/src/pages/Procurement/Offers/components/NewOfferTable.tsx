@@ -85,19 +85,19 @@ export const NewOfferTable = ({ tenderItems }): JSX.Element => {
 							<Th>Unit</Th>
 						</Tooltip>
 
-						<Tooltip label="Click to edit the cost for items">
+						<Tooltip label="Add product number">
 							<Th>Product number</Th>
 						</Tooltip>
 
-						<Tooltip label="Click to edit the cost for items">
+						<Tooltip label="Add cost per item">
 							<Th>Cost pr. item</Th>
 						</Tooltip>
 
-						<Tooltip label="Click to add any notes/certifications for the items.">
+						<Tooltip label="Add notes or certification">
 							<Th>Notes/Certifications</Th>
 						</Tooltip>
 
-						<Tooltip label="Click to add any notes/certifications for the items.">
+						<Tooltip label="Click to update item">
 							<Th>Action</Th>
 						</Tooltip>
 					</Tr>
