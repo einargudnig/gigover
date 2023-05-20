@@ -21,6 +21,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
+	console.log('offer', offer);
 
 	return (
 		<>

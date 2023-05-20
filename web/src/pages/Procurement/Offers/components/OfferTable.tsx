@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Input, Button } from '@chakra-ui/react';
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Input, Button, useToast } from '@chakra-ui/react';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 interface TenderItem {
 	description: string;
@@ -23,11 +24,13 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);
 
 	const {
-		mutateAsync: addOfferItems
-		// isLoading: addOfferItemsLoading,
+		mutateAsync: addOfferItems,
+		isLoading: addOfferItemsLoading
 		// isError: isMutateError,
 		// error: mutateError
 	} = useAddOfferItems();
+
+	const toast = useToast();
 
 	const updateItem = (
 		index: number,
@@ -53,6 +56,13 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 		// Here, you can add a call to your database API to persist the changes
 		// For example:
 		addOfferItems(offerItemBody).then(() => console.log('Item updated!'));
+		toast({
+			title: 'Success',
+			description: 'Item added to offer.',
+			status: 'success',
+			duration: 2000,
+			isClosable: true
+		});
 	};
 
 	return (
@@ -66,7 +76,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						<Th>Volume</Th>
 						<Th>Product Number</Th>
 						<Th>Cost</Th>
-						<Th>Notes</Th>
+						<Th>Notes/Certification</Th>
 						<Th>Action</Th>
 					</Tr>
 				</Thead>
@@ -101,7 +111,9 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 								/>
 							</Td>
 							<Td>
-								<Button onClick={() => handleUpdateClick(index)}>Update</Button>
+								<Button onClick={() => handleUpdateClick(index)}>
+									{addOfferItemsLoading ? <LoadingSpinner /> : 'Update'}
+								</Button>
 							</Td>
 						</Tr>
 					))}

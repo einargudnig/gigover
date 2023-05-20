@@ -87,6 +87,7 @@ export const TenderOffer = (): JSX.Element => {
 									<AlertDialogHeader>Publish offer</AlertDialogHeader>
 									<AlertDialogBody>
 										<Text>Are you sure you want to publish this offer?</Text>
+										<Text>You cannot update the offer after publishing.</Text>
 									</AlertDialogBody>
 									<AlertDialogFooter>
 										<Button
