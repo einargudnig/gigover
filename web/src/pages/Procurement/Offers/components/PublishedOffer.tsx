@@ -21,7 +21,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
-	console.log('offer', offer);
+	// console.log('offer', offer);
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -55,7 +55,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 										</HStack>
 										<HStack>
 											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Tender Name:
+												Bidder Name:
 											</Text>
 											<Text fontSize={'lg'}>{offer?.name}</Text>
 										</HStack>

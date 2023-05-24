@@ -22,7 +22,7 @@ import { useAddOffer } from '../../../../mutations/useAddOffer';
 import { useParams } from 'react-router-dom';
 
 type OfferNote = {
-	note: string;
+	notes: string;
 };
 
 export const OpenOffer = (): JSX.Element => {
@@ -39,7 +39,7 @@ export const OpenOffer = (): JSX.Element => {
 		try {
 			const body = {
 				tenderId: Number(tenderId),
-				note: data.note
+				notes: data.notes
 			};
 
 			const response = await addOffer(body);
@@ -80,16 +80,16 @@ export const OpenOffer = (): JSX.Element => {
 										You can add notes to the offer. You need to open the offer
 										so you can start making offers to items.
 									</Text>
-									<FormControl id={'email'} isInvalid={!errors.note}>
+									<FormControl id={'email'} isInvalid={!errors.notes}>
 										<FormLabel>Note</FormLabel>
 										<Input
-											{...register('note')}
+											{...register('notes')}
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}
 										/>
 
-										<FormErrorMessage>{errors.note?.message}</FormErrorMessage>
+										<FormErrorMessage>{errors.notes?.message}</FormErrorMessage>
 									</FormControl>
 								</VStack>
 							</AlertDialogBody>

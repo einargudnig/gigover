@@ -37,7 +37,6 @@ export const OfferForTender = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
-
 	// eslint-disable-next-line
 	let offerPublished = 'Not Published';
 

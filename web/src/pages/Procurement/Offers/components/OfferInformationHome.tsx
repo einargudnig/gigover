@@ -19,7 +19,7 @@ import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
 
 type OfferNote = {
-	note: string;
+	notes: string;
 };
 
 export const OfferInformationHome = ({ tender }): JSX.Element => {
@@ -39,7 +39,7 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 		try {
 			const body = {
 				tenderId: Number(tenderId),
-				note: data.note
+				notes: data.notes
 			};
 
 			// we can chain a .then() function to the end to receive the result of the mutation. In this case, we expect the result to be a number, which we can capture as the id parameter of the .then() function.
@@ -155,7 +155,7 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 											placeholder={
 												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
 											}
-											{...register('note')}
+											{...register('notes')}
 											variant={'outline'}
 											mb={'4'}
 										/>

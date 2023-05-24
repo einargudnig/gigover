@@ -24,6 +24,10 @@ export const PublishedTender = (): JSX.Element => {
 	const offerItems = data?.offer?.items;
 	console.log(offer);
 
+	const formatNumber = (num: number) => {
+		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	};
+
 	const handleStatus = offer?.status ? 'Published' : 'Unpublished';
 	return (
 		<>
@@ -47,7 +51,7 @@ export const PublishedTender = (): JSX.Element => {
 								</HStack>
 								<HStack>
 									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Tender Name:
+										Bidder Name:
 									</Text>
 									<Text fontSize={'lg'}>{offer?.name}</Text>
 								</HStack>
@@ -110,8 +114,7 @@ export const PublishedTender = (): JSX.Element => {
 							<Td>{item.description}</Td>
 							<Td>{item.volume}</Td>
 							<Td>{item.unit}</Td>
-							<Td>{item.cost}</Td>
-							{/* <Td>{item.}</Td> */}
+							<Td>{formatNumber(item.cost)}</Td>
 						</Tr>
 					))}
 				</Tbody>

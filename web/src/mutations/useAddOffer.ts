@@ -5,7 +5,7 @@ import { devError } from '../utils/ConsoleUtils';
 
 export interface TenderOffer {
 	tenderId: number;
-	note: string;
+	notes: string;
 }
 
 export const useAddOffer = () => {
