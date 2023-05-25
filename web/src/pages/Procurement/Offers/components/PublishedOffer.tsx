@@ -96,8 +96,12 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 									<Th>Unit</Th>
 								</Tooltip>
 
-								<Tooltip label="The cost of the items">
-									<Th>Cost</Th>
+								<Tooltip label="The cost of one items">
+									<Th>Cost pr item</Th>
+								</Tooltip>
+
+								<Tooltip label="Total cost of the item. Volume, multiplied with cost per item">
+									<Th>Total cost</Th>
 								</Tooltip>
 
 								<Tooltip label="Notes/certifications for the items.">
@@ -113,13 +117,14 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 									<Td>{row.volume}</Td>
 									<Td>{row.unit}</Td>
 									<Td>{formatNumber(row.cost)}</Td>
+									<Td>{formatNumber(row.totalCost)}</Td>
 									<Td>{row.note}</Td>
 								</Tr>
 							))}
 						</Tbody>
 					</Table>
 					<Center>
-						<Text mt={'4'} textColor={'black'} fontSize={'large'}>
+						<Text mt={'4'} textColor={'gray-500'} fontSize={'large'}>
 							This is the published offer!
 						</Text>
 					</Center>
