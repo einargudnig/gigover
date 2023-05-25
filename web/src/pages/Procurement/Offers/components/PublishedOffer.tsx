@@ -13,7 +13,7 @@ import {
 	VStack,
 	Text,
 	Tbody,
-	Center
+	Spacer
 } from '@chakra-ui/react';
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -25,6 +25,16 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	};
+
+	// function that adds the total cost of all items in the offer
+	const totalCost = () => {
+		let total = 0;
+		offerItems?.forEach((item) => {
+			// eslint-disable-next-line
+			total += item.cost * item.volume;
+		});
+		return total;
 	};
 
 	return (
@@ -121,13 +131,28 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 									<Td>{row.note}</Td>
 								</Tr>
 							))}
+							<Td></Td>
+							<Td></Td>
+							<Td></Td>
+							<Td></Td>
+							<Td>Total cost</Td>
+							<Td>{formatNumber(totalCost())}</Td>
+							<Td></Td>
 						</Tbody>
 					</Table>
-					<Center>
-						<Text mt={'4'} textColor={'gray-500'} fontSize={'large'}>
-							This is the published offer!
-						</Text>
-					</Center>
+					<Flex mx={'5'}>
+						<Box>
+							<Text mt={'4'} textColor={'gray-500'} fontSize={'large'}>
+								This is the published offer!
+							</Text>
+						</Box>
+						<Spacer />
+						<Box>
+							{/* <Text mt={'4'} textColor={'black'} fontSize={'large'}>
+								The total cost for this tender is: {formatNumber(totalCost())}
+							</Text> */}
+						</Box>
+					</Flex>
 				</>
 			)}
 		</>
