@@ -22,7 +22,7 @@ export const PublishedTender = (): JSX.Element => {
 	const { data } = useGetOfferByOfferId(Number(offerId));
 	const offer = data?.offer;
 	const offerItems = data?.offer?.items;
-	console.log(offer);
+	// console.log(offer);
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -98,8 +98,12 @@ export const PublishedTender = (): JSX.Element => {
 							<Th>Unit</Th>
 						</Tooltip>
 
-						<Tooltip label="Cost for items">
-							<Th>Cost</Th>
+						<Tooltip label="Cost for one item">
+							<Th>Cost pr item</Th>
+						</Tooltip>
+
+						<Tooltip label="Total cost for items">
+							<Th>Total Cost</Th>
 						</Tooltip>
 
 						<Tooltip label="Notes or certifications for the items.">
@@ -115,6 +119,8 @@ export const PublishedTender = (): JSX.Element => {
 							<Td>{item.volume}</Td>
 							<Td>{item.unit}</Td>
 							<Td>{formatNumber(item.cost)}</Td>
+							<Td>{formatNumber(item.totalCost)}</Td>
+							<Td>{item.note}</Td>
 						</Tr>
 					))}
 				</Tbody>

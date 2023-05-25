@@ -113,7 +113,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 									<Td>{row.volume}</Td>
 									<Td>{row.unit}</Td>
 									<Td>{formatNumber(row.cost)}</Td>
-									<Td>{row.notes}</Td>
+									<Td>{row.note}</Td>
 								</Tr>
 							))}
 						</Tbody>

@@ -52,7 +52,9 @@ export interface GetOffer {
 
 export interface GetOfferItem {
 	cost: number;
-	notes: string;
+	totalCost: number;
+	productNumber: string;
+	note: string;
 	description: string;
 	nr: number;
 	tenderItemId: number;
