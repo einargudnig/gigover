@@ -29,7 +29,14 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 				{isLoading ? (
 					<LoadingSpinner />
 				) : (
-					<Textarea value={value} onChange={handleChange} />
+					<Textarea
+						value={value}
+						onChange={handleChange}
+						placeholder="Write a description for this task"
+						colorScheme={'gray'}
+						size={'md'}
+						variant={'filled'}
+					/>
 				)}{' '}
 				{showButton ? (
 					<Button
