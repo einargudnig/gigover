@@ -166,7 +166,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 										ref.current && {
 											orientation: 'landscape',
 											unit: 'px',
-											hotfixes: ['px-scale'],
+											hotfixes: ['px-scaling'],
 											format: [
 												ref.current?.clientWidth ?? 1920,
 												ref.current?.clientHeight ?? 1080
