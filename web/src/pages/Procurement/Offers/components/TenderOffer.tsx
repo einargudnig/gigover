@@ -28,7 +28,6 @@ export const TenderOffer = (): JSX.Element => {
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
-	console.log('offerData', offerData);
 	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
 
 	const tender: Tender | undefined = tenderData?.tender;

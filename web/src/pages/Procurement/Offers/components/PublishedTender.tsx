@@ -5,8 +5,7 @@ import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 
 export const PublishedTender = (): JSX.Element => {
 	const { offerId } = useParams();
-	const { data, isLoading } = useGetOfferByOfferId(Number(offerId));
-	const offer = data?.offer;
+	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
 
-	return <PublishedOffer offerData={offer} isOfferLoading={isLoading} />;
+	return <PublishedOffer offerData={offerData} isOfferLoading={isLoading} />;
 };
