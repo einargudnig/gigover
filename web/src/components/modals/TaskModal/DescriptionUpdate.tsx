@@ -36,12 +36,16 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 						colorScheme={'gray'}
 						size={'md'}
 						variant={'filled'}
+						isInvalid={value.length > 800}
 					/>
 				)}{' '}
 				{showButton ? (
 					<Button
 						onClick={() => {
+							// const isToLong = value.length > 600;
+
 							updateTask({ ...task, text: value });
+
 							// setEditing(false);
 						}}
 						mt={2}

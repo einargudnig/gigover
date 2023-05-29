@@ -11,9 +11,10 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 
 	return (
 		<>
-			<Text my={'2'}>
+			<Text my={'2'} fontSize={'lg'}>
 				This is the tender you have been invited to make an offer to. You have to open an
-				offer to be able to add you product numbers, costs and notes.
+				offer to be able to add <strong>product numbers</strong>, <strong>costs</strong> and{' '}
+				<strong>notes</strong>.
 			</Text>
 			<Table>
 				<Thead>
@@ -22,19 +23,19 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 						<Th>Description</Th>
 						<Th>Volume</Th>
 						<Th>Unit</Th>
-						<Th>Cost</Th>
-						<Th>Notes/Certifications</Th>
+						{/* <Th>Cost</Th>
+						<Th>Notes/Certifications</Th> */}
 					</Tr>
 				</Thead>
 				<Tbody>
 					{tenderItems?.map((row) => (
 						<Tr key={row.tenderItemId}>
-							<Td>no number</Td>
+							<Td>{row.nr}</Td>
 							<Td>{row.description}</Td>
 							<Td>{row.volume}</Td>
 							<Td>{row.unit}</Td>
-							<Td>no cost</Td>
-							<Td>no notes</Td>
+							{/* <Td>no cost</Td>
+							<Td>no notes</Td> */}
 						</Tr>
 					))}
 				</Tbody>
