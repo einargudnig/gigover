@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Task } from '../../../models/Task';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Button, Tag, Textarea, VStack } from '@chakra-ui/react';
+import { Button, Tag, Textarea, VStack, useToast } from '@chakra-ui/react';
 
 interface StatusUpdateProps {
 	projectId: number;
@@ -14,11 +14,15 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 
 	const [value, setValue] = useState(task.text);
 	// const [editing, setEditing] = useState(false);
+	const [isToLong, setIsToLong] = useState(false);
 	const [showButton, setShowButton] = useState(false);
+
+	const toast = useToast();
 
 	// We want a function that shows the button when the user has typed something into the text area
 	const handleChange = (event) => {
 		setValue(event.target.value);
+		setIsToLong(event.target.value.length > 600);
 		setShowButton(true);
 	};
 
@@ -32,19 +36,28 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 					<Textarea
 						value={value}
 						onChange={handleChange}
-						placeholder="Write a description for this task"
+						placeholder="Write a description for this taskAAAA"
 						colorScheme={'gray'}
 						size={'md'}
-						variant={'filled'}
-						isInvalid={value.length > 800}
+						variant={'outline'}
+						isInvalid={isToLong}
+						errorBorderColor={'red.300'}
 					/>
 				)}{' '}
 				{showButton ? (
 					<Button
 						onClick={() => {
-							// const isToLong = value.length > 600;
-
-							updateTask({ ...task, text: value });
+							if (isToLong) {
+								toast({
+									title: 'Description is too long',
+									description: 'Please keep it under 600 characters',
+									status: 'error',
+									duration: 5000,
+									isClosable: true
+								});
+							} else {
+								updateTask({ ...task, text: value });
+							}
 
 							// setEditing(false);
 						}}
