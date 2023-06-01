@@ -36,7 +36,7 @@ export const DescriptionUpdate = ({ task, projectId }: StatusUpdateProps): JSX.E
 					<Textarea
 						value={value}
 						onChange={handleChange}
-						placeholder="Write a description for this taskAAAA"
+						placeholder="Write a description for this task"
 						colorScheme={'gray'}
 						size={'md'}
 						variant={'outline'}

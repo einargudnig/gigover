@@ -15,10 +15,6 @@ interface TenderItem {
 	note?: string;
 }
 
-// interface TenderTableProps {
-// 	tenderItems: TenderItem[];
-// }
-
 export const TenderTable = ({ tenderItems }): JSX.Element => {
 	const { offerId } = useParams();
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);

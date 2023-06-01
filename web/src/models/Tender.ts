@@ -1,7 +1,7 @@
 export interface Tender {
 	tenderId: number;
 	projectId: number;
-	projectName: string; // we have it here!
+	projectName: string;
 	taskId: number;
 	description: string;
 	terms: string;
@@ -12,6 +12,7 @@ export interface Tender {
 	phoneNumber: string;
 	offerNote?: string;
 	items: TenderItem[];
+	bidders: Bidder[];
 }
 
 export interface TenderItem {
@@ -64,4 +65,11 @@ export interface GetOfferItem {
 
 export interface OfferId {
 	offerId: number;
+}
+
+export interface Bidder {
+	bidderId: number;
+	userName: string;
+	name: string;
+	email: string;
 }
