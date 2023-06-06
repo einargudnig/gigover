@@ -108,6 +108,8 @@ export class ApiService {
 
 	// Progress status
 	static getProgressStatusList = API_BASE + 'contractor/progressStatus';
+	// add an option to remove progress status takes in the id!
+	static removeProgressStatus = (id: number) => API_BASE + 'contractor/removeProgressStatus' + id;
 
 	// Settings //! not needed??
 	static getUserInfo = API_BASE + 'user/info';
