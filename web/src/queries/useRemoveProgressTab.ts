@@ -7,7 +7,7 @@ interface RemoveProgressTabInput {
 	progressId: number;
 }
 
-export const useRemoveUser = (progressId: number) => {
+export const useRemoveProgressTab = (progressId: number) => {
 	const queryClient = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, RemoveProgressTabInput>(
