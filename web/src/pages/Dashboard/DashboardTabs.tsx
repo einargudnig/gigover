@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
-// import { useRemoveProgressTab } from '../../queries/useRemoveProgressTab';
+import { useRemoveProgressTab } from '../../mutations/useRemoveProgressTab';
 
 interface DashboardTabsProps {
 	activeTab: string | ProgressStatus;
@@ -18,7 +18,7 @@ export const DashboardTabs = ({
 	onChange
 }: DashboardTabsProps): JSX.Element => {
 	const [dialogOpen, setDialogOpen] = useState(false);
-	// const { mutate: deleteProgressStatus } = useRemoveProgressTab();
+	const { mutate: deleteProgressStatus } = useRemoveProgressTab();
 	const toast = useToast();
 	return (
 		<Tabs defaultIndex={1} variant="soft-rounded" colorScheme="green" size={'sm'}>
@@ -37,30 +37,29 @@ export const DashboardTabs = ({
 				>
 					{ProjectStatus.OPEN.toLowerCase()}
 				</Tab>
-				{statuses.map((s, sIdx) => (
+				{statuses.map((status, sIdx) => (
 					<Tab
 						key={sIdx}
-						onClick={() => onChange(s)}
-						isSelected={(activeTab as ProgressStatus)?.id === s.id}
+						onClick={() => onChange(status)}
+						isSelected={(activeTab as ProgressStatus)?.id === status.id}
 					>
-						{s.name}
-						{activeTab === s && (
+						{status.name}
+						{activeTab === status && (
 							<ConfirmDialog
 								header={'Delete progress status, project will be moved to Closed'}
 								setIsOpen={setDialogOpen}
-								callback={(confirmed) => {
+								callback={async (confirmed) => {
 									if (confirmed) {
-										console.log('confirmed');
-										// await deleteProgressStatus({ id: s.id });
+										await deleteProgressStatus(status);
+										toast({
+											title: 'Progress status deleted',
+											description: 'Project moved to Closed',
+											status: 'success',
+											duration: 5000,
+											isClosable: true
+										});
 									}
 									setDialogOpen(false);
-									toast({
-										title: 'Progress status deleted',
-										description: 'Project moved to Closed',
-										status: 'success',
-										duration: 5000,
-										isClosable: true
-									});
 								}}
 								isOpen={dialogOpen}
 							>
@@ -74,7 +73,7 @@ export const DashboardTabs = ({
 									ml={'2'}
 									onClick={() => {
 										setDialogOpen(true);
-										console.log(`removed this one with id: ${s.id} !`);
+										console.log(`removed this one with id: ${status.id} !`);
 									}}
 								/>
 							</ConfirmDialog>
