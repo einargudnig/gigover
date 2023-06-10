@@ -1,4 +1,4 @@
-import { Tab, TabList, Tabs, IconButton, useToast } from '@chakra-ui/react';
+import { Tab, TabList, Tabs, Tooltip, IconButton, useToast } from '@chakra-ui/react';
 import { MinusIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
 import { ProgressStatus } from '../../models/ProgressStatus';
@@ -46,7 +46,7 @@ export const DashboardTabs = ({
 						{status.name}
 						{activeTab === status && (
 							<ConfirmDialog
-								header={'Delete progress status, project will be moved to Closed'}
+								header={`Delete progress status named: ${status.name}. Projects will be moved to previous status, You can see it in All tab`}
 								setIsOpen={setDialogOpen}
 								callback={async (confirmed) => {
 									if (confirmed) {
@@ -63,19 +63,21 @@ export const DashboardTabs = ({
 								}}
 								isOpen={dialogOpen}
 							>
-								<IconButton
-									aria-label={'Remove'}
-									icon={<MinusIcon />}
-									variant={'outline'}
-									colorScheme={'gray'}
-									borderRadius={'24px'}
-									size={'xs'}
-									ml={'2'}
-									onClick={() => {
-										setDialogOpen(true);
-										console.log(`removed this one with id: ${status.id} !`);
-									}}
-								/>
+								<Tooltip label="Remove stream" aria-label="Remove">
+									<IconButton
+										aria-label={'Remove'}
+										icon={<MinusIcon />}
+										variant={'outline'}
+										colorScheme={'gray'}
+										borderRadius={'24px'}
+										size={'xs'}
+										ml={'2'}
+										onClick={() => {
+											setDialogOpen(true);
+											console.log(`removed this one with id: ${status.id} !`);
+										}}
+									/>
+								</Tooltip>
 							</ConfirmDialog>
 						)}
 					</Tab>
