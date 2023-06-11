@@ -19,7 +19,7 @@ export const useRemoveProgressTab = () => {
 		//! I should refetch the project details here
 		{
 			onSuccess: async () => {
-				await queryClient.refetchQueries(ApiService.projectList);
+				await queryClient.refetchQueries(ApiService.getProgressStatusList);
 			}
 		}
 	);
