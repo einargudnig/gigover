@@ -111,11 +111,10 @@ export class ApiService {
 	static removeProgressTab = (progressId: number) =>
 		API_BASE + 'contractor/removeProgressTab/' + progressId; //! New
 
-	// Settings //! not needed??
+	// Setting
 	static getUserInfo = API_BASE + 'user/info';
 
 	// Tender
-	//! TODO: add parameters where needed.
 	static addTender = API_BASE + 'tender/addTender';
 	static editTender = API_BASE + 'tender/editTender';
 	static deleteTender = API_BASE + 'tender/deleteTender';

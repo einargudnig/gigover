@@ -122,7 +122,13 @@ export const TenderOffer = (): JSX.Element => {
 	// but he will not be able to edit it.
 	const offerComponent = {
 		unpublished: <UnPublished />,
-		published: <PublishedOffer offerData={offerData} isOfferLoading={isOfferLoading} />
+		published: (
+			<PublishedOffer
+				offerData={offerData}
+				isOfferLoading={isOfferLoading}
+				showResultsButtons="false"
+			/>
+		)
 	};
 
 	const component = offerComponent[isOfferPublished ? 'published' : 'unpublished'];

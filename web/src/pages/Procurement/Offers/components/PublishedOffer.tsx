@@ -21,12 +21,14 @@ import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import ReactToPdf from 'react-to-pdf';
 
-export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
+export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // for the pdf name
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
+	// AcceptOffer
+	// RejectOffer
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -156,11 +158,19 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 					</div>
 
 					<Flex mx={'5'}>
-						<Box>
-							<Text mt={'4'} textColor={'gray-500'} fontSize={'large'}>
-								This is the published offer!
-							</Text>
-						</Box>
+						<Flex>
+							{showResultsButtons ? (
+								<>
+									<Box mr={'1'}>
+										<Button>Accept Offer</Button>
+									</Box>
+									<Spacer />
+									<Box ml={'1'}>
+										<Button>Reject Offer</Button>
+									</Box>
+								</>
+							) : null}
+						</Flex>
 						<Spacer />
 						<Box>
 							<Flex>
