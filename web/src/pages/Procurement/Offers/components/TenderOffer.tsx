@@ -126,7 +126,7 @@ export const TenderOffer = (): JSX.Element => {
 			<PublishedOffer
 				offerData={offerData}
 				isOfferLoading={isOfferLoading}
-				showResultsButtons="false"
+				showResultsButtons={false}
 			/>
 		)
 	};

@@ -14,7 +14,7 @@ export const PublishedTender = (): JSX.Element => {
 		<PublishedOffer
 			offerData={offerData}
 			isOfferLoading={isLoading}
-			showResultsButtons="true"
+			showResultsButtons={true}
 		/>
 	);
 };

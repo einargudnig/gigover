@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import {
 	Button,
@@ -15,20 +15,61 @@ import {
 	VStack,
 	Text,
 	Tbody,
-	Spacer
+	Spacer,
+	useToast
 } from '@chakra-ui/react';
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import ReactToPdf from 'react-to-pdf';
+import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { useAcceptOffer } from '../../../../mutations/useAcceptOffer';
+import { useRejectOffer } from '../../../../mutations/useRejectOffer';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { offerId } = useParams();
-	const offerIdNumber = Number(offerId); // for the pdf name
+	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
-	// AcceptOffer
-	// RejectOffer
+	const { mutateAsync: acceptOffer } = useAcceptOffer();
+	const { mutateAsync: rejectOffer } = useRejectOffer();
+
+	const toast = useToast();
+
+	const handleAccept = () => {
+		const offerIdBody = {
+			offerId: offerIdNumber
+		};
+		console.log('Accept offer with this body:', offerIdBody);
+		// acceptOffer(offerIdBody);
+		toast({
+			title: 'Offer accepted',
+			description: 'Your have accepted this offer!',
+			status: 'success',
+			duration: 4000,
+			isClosable: true
+		});
+	};
+
+	const handleReject = () => {
+		const offerIdBody = {
+			offerId: offerIdNumber
+		};
+		console.log('Reject offer with this body:', offerIdBody);
+		// rejectOffer(offerIdBody);
+		toast({
+			title: 'Offer rejected',
+			description: 'Your have rejected this offer!',
+			status: 'success',
+			duration: 4000,
+			isClosable: true
+		});
+	};
+
+	const offerIdBody = {
+		offerId: offerIdNumber
+	};
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -158,19 +199,20 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 					</div>
 
 					<Flex mx={'5'}>
-						<Flex>
+						<Box>
+							<Text mb={'2'}>This is the Published Offer</Text>
 							{showResultsButtons ? (
-								<>
+								<Flex>
 									<Box mr={'1'}>
-										<Button>Accept Offer</Button>
+										<Button onClick={() => handleAccept()}>Accept Offer</Button>
 									</Box>
 									<Spacer />
 									<Box ml={'1'}>
-										<Button>Reject Offer</Button>
+										<Button onClick={() => handleReject()}>Reject Offer</Button>
 									</Box>
-								</>
+								</Flex>
 							) : null}
-						</Flex>
+						</Box>
 						<Spacer />
 						<Box>
 							<Flex>
