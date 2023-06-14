@@ -21,7 +21,7 @@ import {
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import ReactToPdf from 'react-to-pdf';
-import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 import { useAcceptOffer } from '../../../../mutations/useAcceptOffer';
 import { useRejectOffer } from '../../../../mutations/useRejectOffer';
 
@@ -29,7 +29,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
-	const [dialogOpen, setDialogOpen] = useState(false);
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	const { mutateAsync: acceptOffer } = useAcceptOffer();
@@ -65,10 +64,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			duration: 4000,
 			isClosable: true
 		});
-	};
-
-	const offerIdBody = {
-		offerId: offerIdNumber
 	};
 
 	const formatNumber = (num: number) => {
@@ -204,11 +199,25 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 							{showResultsButtons ? (
 								<Flex>
 									<Box mr={'1'}>
-										<Button onClick={() => handleAccept()}>Accept Offer</Button>
+										{/* <Button onClick={() => handleAccept()}>Accept Offer</Button> */}
+										<HandlingOfferConfirmation
+											mutationLoading={false}
+											mutation={() => handleAccept()}
+											statusText={'Accept Offer'}
+											status={'accept'}
+											buttonText={'Accept'}
+										/>
 									</Box>
 									<Spacer />
 									<Box ml={'1'}>
-										<Button onClick={() => handleReject()}>Reject Offer</Button>
+										{/* <Button onClick={() => handleReject()}>Reject Offer</Button> */}
+										<HandlingOfferConfirmation
+											mutationLoading={false}
+											mutation={() => handleReject()}
+											statusText={'Reject Offer'}
+											status={'reject'}
+											buttonText={'Reject'}
+										/>
 									</Box>
 								</Flex>
 							) : null}

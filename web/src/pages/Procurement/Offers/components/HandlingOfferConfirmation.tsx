@@ -13,7 +13,21 @@ import {
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
-export const ConfirmDialog = ({ mutationLoading, mutation, buttonText }: { mut }): JSX.Element => {
+export type ConfirmDialogProps = {
+	mutationLoading: boolean;
+	mutation: () => void;
+	buttonText: string;
+	status: string;
+	statusText?: string;
+};
+
+export const HandlingOfferConfirmation = ({
+	mutationLoading,
+	mutation,
+	buttonText,
+	status,
+	statusText
+}: ConfirmDialogProps): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
 
@@ -25,7 +39,7 @@ export const ConfirmDialog = ({ mutationLoading, mutation, buttonText }: { mut }
 	return (
 		<>
 			<Button onClick={handleOpenDialog} mt={'4'}>
-				{mutationLoading ? <LoadingSpinner /> : { buttonText }}
+				{mutationLoading ? <LoadingSpinner /> : statusText}
 			</Button>
 
 			<AlertDialog
@@ -36,10 +50,9 @@ export const ConfirmDialog = ({ mutationLoading, mutation, buttonText }: { mut }
 			>
 				<AlertDialogOverlay>
 					<AlertDialogContent>
-						<AlertDialogHeader>Publish offer</AlertDialogHeader>
+						<AlertDialogHeader>{`${statusText}`}</AlertDialogHeader>
 						<AlertDialogBody>
-							<Text>Are you sure you want to publish this offer?</Text>
-							<Text>You cannot update the offer after publishing.</Text>
+							<Text>{`Are you sure you want to ${status} this offer? You can't undo this action afterwards.`}</Text>
 						</AlertDialogBody>
 						<AlertDialogFooter>
 							<Button
@@ -53,12 +66,13 @@ export const ConfirmDialog = ({ mutationLoading, mutation, buttonText }: { mut }
 							<Button
 								onClick={() => {
 									// ! mutation
-									mutation;
+									mutation();
+									// Add toast, dynamically?
 									onClose();
 								}}
 								ml={3}
 							>
-								Publish
+								{`${buttonText}`}
 							</Button>
 						</AlertDialogFooter>
 					</AlertDialogContent>
