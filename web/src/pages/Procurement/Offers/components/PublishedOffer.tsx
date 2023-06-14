@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import {
 	Button,
@@ -31,8 +31,8 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
-	const { mutateAsync: acceptOffer } = useAcceptOffer();
-	const { mutateAsync: rejectOffer } = useRejectOffer();
+	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
+	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
 
 	const toast = useToast();
 
@@ -41,11 +41,11 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			offerId: offerIdNumber
 		};
 		console.log('Accept offer with this body:', offerIdBody);
-		// acceptOffer(offerIdBody);
+		acceptOffer(offerIdBody);
 		toast({
 			title: 'Offer accepted',
 			description: 'Your have accepted this offer!',
-			status: 'success',
+			status: 'info',
 			duration: 4000,
 			isClosable: true
 		});
@@ -56,11 +56,11 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			offerId: offerIdNumber
 		};
 		console.log('Reject offer with this body:', offerIdBody);
-		// rejectOffer(offerIdBody);
+		rejectOffer(offerIdBody);
 		toast({
 			title: 'Offer rejected',
 			description: 'Your have rejected this offer!',
-			status: 'success',
+			status: 'info',
 			duration: 4000,
 			isClosable: true
 		});
@@ -78,6 +78,17 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			total += item.cost * item.volume;
 		});
 		return total;
+	};
+
+	// function that takes the status and returns published if the status is 1, accepted if status is 2 and rejected if status is 3
+	const status = () => {
+		if (offer?.status === 1) {
+			return 'Published';
+		} else if (offer?.status === 2) {
+			return 'Accepted';
+		} else if (offer?.status === 3) {
+			return 'Rejected';
+		}
 	};
 
 	return (
@@ -112,6 +123,12 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 													Bidder Name:
 												</Text>
 												<Text fontSize={'lg'}>{offer?.name}</Text>
+											</HStack>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Status:
+												</Text>
+												<Text fontSize={'lg'}>{status()}</Text>
 											</HStack>
 										</VStack>
 
@@ -185,7 +202,9 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 									<Td></Td>
 									<Td></Td>
 									<Td></Td>
-									<Td>Total cost</Td>
+									<Td>
+										<strong>Total cost</strong>
+									</Td>
 									<Td>{formatNumber(totalCost())}</Td>
 									<Td></Td>
 								</Tr>
@@ -196,62 +215,60 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 					<Flex mx={'5'}>
 						<Box>
 							<Text mb={'2'}>This is the Published Offer</Text>
-							{showResultsButtons ? (
+							<Box>
 								<Flex>
-									<Box mr={'1'}>
-										{/* <Button onClick={() => handleAccept()}>Accept Offer</Button> */}
-										<HandlingOfferConfirmation
-											mutationLoading={false}
-											mutation={() => handleAccept()}
-											statusText={'Accept Offer'}
-											status={'accept'}
-											buttonText={'Accept'}
-										/>
-									</Box>
-									<Spacer />
-									<Box ml={'1'}>
-										{/* <Button onClick={() => handleReject()}>Reject Offer</Button> */}
-										<HandlingOfferConfirmation
-											mutationLoading={false}
-											mutation={() => handleReject()}
-											statusText={'Reject Offer'}
-											status={'reject'}
-											buttonText={'Reject'}
-										/>
-									</Box>
-								</Flex>
-							) : null}
-						</Box>
-						<Spacer />
-						<Box>
-							<Flex>
-								<ReactToPdf
-									targetRef={ref}
-									filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
-									options={
-										ref.current && {
-											orientation: 'landscape',
-											unit: 'px',
-											hotfixes: ['px-scaling'],
-											format: [
-												ref.current?.clientWidth ?? 1920,
-												ref.current?.clientHeight ?? 1080
-											]
+									<ReactToPdf
+										targetRef={ref}
+										filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
+										options={
+											ref.current && {
+												orientation: 'landscape',
+												unit: 'px',
+												hotfixes: ['px-scaling'],
+												format: [
+													ref.current?.clientWidth ?? 1920,
+													ref.current?.clientHeight ?? 1080
+												]
+											}
 										}
-									}
-								>
-									{({ toPdf }) => (
-										<Button mr={'1'} onClick={toPdf}>
-											Download as PDF
-										</Button>
-									)}
-								</ReactToPdf>
-								{/* <Spacer />
+									>
+										{({ toPdf }) => (
+											<Button mr={'1'} onClick={toPdf}>
+												Download as PDF
+											</Button>
+										)}
+									</ReactToPdf>
+									{/* <Spacer />
 								<Button ml={'1'}>
 									<Text textColor={'black'}>Download as CSV</Text>
 								</Button> */}
-							</Flex>
+								</Flex>
+							</Box>
 						</Box>
+						<Spacer />
+						{showResultsButtons ? (
+							<Flex>
+								<Box mr={'1'}>
+									<HandlingOfferConfirmation
+										mutationLoading={isAcceptLoading}
+										mutation={() => handleAccept()}
+										statusText={'Accept Offer'}
+										status={'accept'}
+										buttonText={'Accept'}
+									/>
+								</Box>
+								<Spacer />
+								<Box ml={'1'}>
+									<HandlingOfferConfirmation
+										mutationLoading={isRejectLoading}
+										mutation={() => handleReject()}
+										statusText={'Reject Offer'}
+										status={'reject'}
+										buttonText={'Reject'}
+									/>
+								</Box>
+							</Flex>
+						) : null}
 					</Flex>
 				</>
 			)}

@@ -65,9 +65,9 @@ export const HandlingOfferConfirmation = ({
 							</Button>
 							<Button
 								onClick={() => {
-									// ! mutation
+									// the mutations are defined in PublishOffers, but invoked here.
+									// This makes it so we can re-use this component for both accept and reject.
 									mutation();
-									// Add toast, dynamically?
 									onClose();
 								}}
 								ml={3}

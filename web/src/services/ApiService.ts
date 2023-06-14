@@ -109,7 +109,7 @@ export class ApiService {
 	// Progress status
 	static getProgressStatusList = API_BASE + 'contractor/progressStatus';
 	static removeProgressTab = (progressId: number) =>
-		API_BASE + 'contractor/removeProgressTab/' + progressId; //! New
+		API_BASE + 'contractor/removeProgressTab/' + progressId;
 
 	// Setting
 	static getUserInfo = API_BASE + 'user/info';
