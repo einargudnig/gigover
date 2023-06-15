@@ -53,7 +53,7 @@ export const TenderOffer = (): JSX.Element => {
 		});
 	};
 
-	// we need to map offerStatus to true false, so we can render the correct component
+	// we need to map offerStatus to true/false, so we can render the correct component
 	// 0: 'Closed' -> false
 	// 1: 'Published' -> true
 	// 2: 'Accepted' -> true
@@ -66,7 +66,6 @@ export const TenderOffer = (): JSX.Element => {
 		3: true
 	};
 	const isOfferPublished = offerStatus[offerData?.offer?.status || 0];
-	console.log('isOfferPublished', isOfferPublished);
 
 	const UnPublished = () => {
 		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
