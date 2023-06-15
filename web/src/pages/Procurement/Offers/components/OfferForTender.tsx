@@ -40,6 +40,19 @@ export const OfferForTender = (): JSX.Element => {
 	// eslint-disable-next-line
 	let offerPublished = 'Not Published';
 
+	// const status = () => {
+	// 	if (offer?.status === 0) {
+	// 		return 'Closed';
+	// 	} else if (offer?.status === 1) {
+	// 		return 'Published';
+	// 	} else if (offer?.status === 2) {
+	// 		return 'Accepted';
+	// 	} else if (offer?.status === 3) {
+	// 		return 'Rejected';
+	// 	}
+	// 	return 'Unknown';
+	// };
+
 	const noOffers = offer?.length === 0;
 
 	return (
@@ -57,8 +70,9 @@ export const OfferForTender = (): JSX.Element => {
 							>
 								{
 									//eslint-disable-next-line
-									(offerPublished =
-										o.status === 1 ? 'Published' : 'Not Published')
+									// (offerPublished =
+									// 	o.status === 1 ? 'Published' : 'Not Published')
+									// (status = () =)
 								}
 								<Text>Notes: {o.notes}</Text>
 								<Text>Offer Id: {o.offerId}</Text>
