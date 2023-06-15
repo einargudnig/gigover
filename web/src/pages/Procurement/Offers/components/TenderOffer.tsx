@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import {
 	Button,
 	ButtonProps,
+	Box,
+	Flex,
 	useToast,
 	AlertDialog,
 	AlertDialogOverlay,
@@ -51,8 +53,20 @@ export const TenderOffer = (): JSX.Element => {
 		});
 	};
 
-	const isOfferPublished = offerData?.offer?.status === 1;
-	// console.log('isOfferPublished', isOfferPublished);
+	// we need to map offerStatus to true false, so we can render the correct component
+	// 0: 'Closed' -> false
+	// 1: 'Published' -> true
+	// 2: 'Accepted' -> true
+	// 3: 'Rejected' -> true
+
+	const offerStatus = {
+		0: false,
+		1: true,
+		2: true,
+		3: true
+	};
+	const isOfferPublished = offerStatus[offerData?.offer?.status || 0];
+	console.log('isOfferPublished', isOfferPublished);
 
 	const UnPublished = () => {
 		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
@@ -69,12 +83,17 @@ export const TenderOffer = (): JSX.Element => {
 					</div>
 				) : (
 					<>
-						<OfferInformation tender={tender} />
-						<TenderTable tenderItems={tenderItems} />
-
-						<Button onClick={handleOpenDialog} mt={'4'}>
-							{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-						</Button>
+						<Flex flexDirection={'column'}>
+							<Box>
+								<OfferInformation tender={tender} />
+								<TenderTable tenderItems={tenderItems} />
+							</Box>
+							<Box>
+								<Button onClick={handleOpenDialog} mt={'4'}>
+									{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+								</Button>
+							</Box>
+						</Flex>
 
 						<AlertDialog
 							isOpen={isOpen}
