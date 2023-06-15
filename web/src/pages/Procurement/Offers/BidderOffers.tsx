@@ -36,14 +36,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 export const BidderOffers = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
-
-	// const offerPublished = () => {
-	// 	const i = offers?.[0];
-	// 	return i.status === 1 ? 'Published' : 'Not Published';
-	// };
-	// eslint-disable-next-line
-	let offerPublished = 'Not Published';
-
+	console.log(offers);
 	const noOffers = offers?.length === 0;
 
 	return (
@@ -62,35 +55,45 @@ export const BidderOffers = (): JSX.Element => {
 								<LoadingSpinner />
 							) : (
 								<>
-									{offers?.map((i) => (
-										<React.Fragment key={i.offerId}>
-											<OfferCardStyled
-												to={`../tender/offers/${i.tenderId}/${i.offerId}`}
-											>
-												{
-													//eslint-disable-next-line
-													(offerPublished =
-														i.status === 1
-															? 'Published'
-															: 'Not Published')
-												}
-												<HStack>
-													<Text as={'b'}>Notes</Text>
-													<Text>{i.notes}</Text>
-												</HStack>
-												<HStack>
-													<Text as={'b'}>Offer Id:</Text>
-													<Text>{i.offerId}</Text>
-												</HStack>
-												<HStack>
-													<Text as={'b'}>Tender Id:</Text>
-													<Text>{i.tenderId}</Text>
-												</HStack>
-												{/* <Text>New Status: {offerPublished}</Text> */}
-												<HStack></HStack>
-											</OfferCardStyled>
-										</React.Fragment>
-									))}
+									{offers?.map((o) => {
+										let offerStatus;
+										if (o.status === 0) {
+											offerStatus = 'Closed';
+										} else if (o.status === 1) {
+											offerStatus = 'Published';
+										} else if (o.status === 2) {
+											offerStatus = 'Accepted';
+										} else if (o.status === 3) {
+											offerStatus = 'Rejected';
+										} else {
+											offerStatus = 'Unknown';
+										}
+
+										return (
+											<React.Fragment key={o.offerId}>
+												<OfferCardStyled
+													to={`../tender/offers/${o.tenderId}/${o.offerId}`}
+												>
+													<HStack>
+														<Text as={'b'}>Notes:</Text>
+														<Text>{o.notes}</Text>
+													</HStack>
+													<HStack>
+														<Text as={'b'}>Offer Id:</Text>
+														<Text>{o.offerId}</Text>
+													</HStack>
+													<HStack>
+														<Text as={'b'}>Tender Id:</Text>
+														<Text>{o.tenderId}</Text>
+													</HStack>
+													<Text as={'b'} size={'lg'}>
+														Status: {offerStatus}
+													</Text>
+													<HStack></HStack>
+												</OfferCardStyled>
+											</React.Fragment>
+										);
+									})}
 								</>
 							)}
 						</Container>

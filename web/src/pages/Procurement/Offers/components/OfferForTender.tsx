@@ -63,23 +63,34 @@ export const OfferForTender = (): JSX.Element => {
 					<LoadingSpinner />
 				) : (
 					<>
-						{offer?.map((o) => (
-							<OfferCardStyled
-								key={o.tenderId}
-								to={`/tender-offers/${o.tenderId}/${o.offerId}`}
-							>
-								{
-									//eslint-disable-next-line
-									// (offerPublished =
-									// 	o.status === 1 ? 'Published' : 'Not Published')
-									// (status = () =)
-								}
-								<Text>Notes: {o.notes}</Text>
-								<Text>Offer Id: {o.offerId}</Text>
-								<Text>Tender Id: {o.tenderId}</Text>
-								{/* <Text>Status Text: {o.statusText}</Text> */}
-							</OfferCardStyled>
-						))}
+						{offer?.map((o) => {
+							let offerStatus;
+							if (o.status === 0) {
+								offerStatus = 'Closed';
+							} else if (o.status === 1) {
+								offerStatus = 'Published';
+							} else if (o.status === 2) {
+								offerStatus = 'Accepted';
+							} else if (o.status === 3) {
+								offerStatus = 'Rejected';
+							} else {
+								offerStatus = 'Unknown';
+							}
+
+							return (
+								<OfferCardStyled
+									key={o.tenderId}
+									to={`/tender-offers/${o.tenderId}/${o.offerId}`}
+								>
+									<Text color={'black'} size={'lg'}>
+										Status: {offerStatus}
+									</Text>
+									<Text>Notes: {o.notes}</Text>
+									<Text>Offer Id: {o.offerId}</Text>
+									<Text>Tender Id: {o.tenderId}</Text>
+								</OfferCardStyled>
+							);
+						})}
 					</>
 				)}
 			</Container>
