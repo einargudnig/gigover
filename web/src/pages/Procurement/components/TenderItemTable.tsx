@@ -25,6 +25,7 @@ import {
 	Spacer,
 	useToast
 } from '@chakra-ui/react';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
@@ -160,6 +161,8 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 			});
 		}
 	};
+
+	const finishDateStatus = handleFinishDate(tender?.finishDate);
 
 	return (
 		<>
@@ -366,14 +369,22 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 			*/}
 			<Flex alignItems={'center'} justifyContent={'center'}>
 				<Flex alignItems={'center'} justifyContent={'center'}>
-					<Button onClick={handlePublish} mr={'2'}>
-						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
-					</Button>
-					{tenderStatus === 1 ? (
-						<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
+					{!finishDateStatus ? (
+						<>
+							<Button onClick={handlePublish} mr={'2'}>
+								{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
+							</Button>
+							{tenderStatus === 1 ? (
+								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
+							) : (
+								<Text>
+									You need to publish the tender before you can invite people
+								</Text>
+							)}
+						</>
 					) : (
 						<Text fontSize={'xs'}>
-							You need to publish the tender before you can invite people
+							The finish date has passed, you can not publish the tender.
 						</Text>
 					)}
 				</Flex>

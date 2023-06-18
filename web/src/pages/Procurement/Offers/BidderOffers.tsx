@@ -58,7 +58,7 @@ export const BidderOffers = (): JSX.Element => {
 									{offers?.map((o) => {
 										let offerStatus;
 										if (o.status === 0) {
-											offerStatus = 'Closed';
+											offerStatus = 'Unpublished';
 										} else if (o.status === 1) {
 											offerStatus = 'Published';
 										} else if (o.status === 2) {

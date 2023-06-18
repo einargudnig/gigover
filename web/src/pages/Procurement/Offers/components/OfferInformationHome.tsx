@@ -17,6 +17,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 type OfferNote = {
 	notes: string;
@@ -81,6 +82,8 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 			});
 		}
 	};
+
+	const finishDateStatus = handleFinishDate(tender.finishDate);
 
 	return (
 		<>
@@ -161,8 +164,14 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 										/>
 									</FormControl>
 								</VStack>
-
-								<Button type="submit">Open offer</Button>
+								{/* This button should be conditionally rendered with regard of the finishDate */}
+								{!finishDateStatus ? (
+									<Button type="submit">Open offer</Button>
+								) : (
+									<Text>
+										The tender has closed. You can&apos;t open an offer.
+									</Text>
+								)}
 							</form>
 						</VStack>
 					</Box>

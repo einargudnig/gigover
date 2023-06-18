@@ -23,6 +23,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { PublishedOffer } from './PublishedOffer';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
@@ -54,7 +55,7 @@ export const TenderOffer = (): JSX.Element => {
 	};
 
 	// we need to map offerStatus to true/false, so we can render the correct component
-	// 0: 'Closed' -> false
+	// 0: 'Unpublished' -> false
 	// 1: 'Published' -> true
 	// 2: 'Accepted' -> true
 	// 3: 'Rejected' -> true
@@ -66,6 +67,8 @@ export const TenderOffer = (): JSX.Element => {
 		3: true
 	};
 	const isOfferPublished = offerStatus[offerData?.offer?.status || 0];
+
+	const finishDateStatus = handleFinishDate(tender!.finishDate);
 
 	const UnPublished = () => {
 		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
@@ -88,9 +91,15 @@ export const TenderOffer = (): JSX.Element => {
 								<TenderTable tenderItems={tenderItems} />
 							</Box>
 							<Box>
-								<Button onClick={handleOpenDialog} mt={'4'}>
-									{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-								</Button>
+								{!finishDateStatus ? (
+									<Button onClick={handleOpenDialog} mt={'4'}>
+										{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+									</Button>
+								) : (
+									<Text>
+										The tender has expired, you cannot publish the offer
+									</Text>
+								)}
 							</Box>
 						</Flex>
 

@@ -37,21 +37,6 @@ export const OfferForTender = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
-	// eslint-disable-next-line
-	let offerPublished = 'Not Published';
-
-	// const status = () => {
-	// 	if (offer?.status === 0) {
-	// 		return 'Closed';
-	// 	} else if (offer?.status === 1) {
-	// 		return 'Published';
-	// 	} else if (offer?.status === 2) {
-	// 		return 'Accepted';
-	// 	} else if (offer?.status === 3) {
-	// 		return 'Rejected';
-	// 	}
-	// 	return 'Unknown';
-	// };
 
 	const noOffers = offer?.length === 0;
 
@@ -66,7 +51,7 @@ export const OfferForTender = (): JSX.Element => {
 						{offer?.map((o) => {
 							let offerStatus;
 							if (o.status === 0) {
-								offerStatus = 'Closed';
+								offerStatus = 'Unpublished';
 							} else if (o.status === 1) {
 								offerStatus = 'Published';
 							} else if (o.status === 2) {

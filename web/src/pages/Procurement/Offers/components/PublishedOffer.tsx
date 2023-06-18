@@ -83,7 +83,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	// function that takes the status and returns published if the status is 1, accepted if status is 2 and rejected if status is 3
 	const status = () => {
 		if (offer?.status === 0) {
-			return 'Closed';
+			return 'Unpublished';
 		} else if (offer?.status === 1) {
 			return 'Published';
 		} else if (offer?.status === 2) {
