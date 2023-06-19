@@ -68,7 +68,9 @@ export const TenderOffer = (): JSX.Element => {
 	};
 	const isOfferPublished = offerStatus[offerData?.offer?.status || 0];
 
-	const finishDateStatus = handleFinishDate(tender!.finishDate);
+	// const finishDateStatus = handleFinishDate(tender!.finishDate); //! why undefined?
+	// console.log('finishDateStatus', finishDateStatus);
+	// console.log('HERE', tender!.finishDate);
 
 	const UnPublished = () => {
 		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
@@ -91,7 +93,7 @@ export const TenderOffer = (): JSX.Element => {
 								<TenderTable tenderItems={tenderItems} />
 							</Box>
 							<Box>
-								{!finishDateStatus ? (
+								{/* {!finishDateStatus ? (
 									<Button onClick={handleOpenDialog} mt={'4'}>
 										{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
 									</Button>
@@ -99,7 +101,10 @@ export const TenderOffer = (): JSX.Element => {
 									<Text>
 										The tender has expired, you cannot publish the offer
 									</Text>
-								)}
+								)} */}
+								<Button onClick={handleOpenDialog} mt={'4'}>
+									{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+								</Button>
 							</Box>
 						</Flex>
 
