@@ -1,7 +1,7 @@
-export const handleFinishDate = (date: number): boolean => {
+export const handleFinishDate = (date: number | undefined): boolean => {
 	const currentDate = new Date();
-	const finishDate = new Date(date);
-	// returns true if the current date is greater than the finish date
-	// should invert to use with better understanding
-	return currentDate > finishDate;
+	const finishDate = date ? new Date(date) : undefined;
+
+	// returns true if the finish date is defined and the current date is greater than the finish date
+	return finishDate !== undefined && currentDate > finishDate;
 };

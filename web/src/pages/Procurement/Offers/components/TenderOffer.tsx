@@ -35,7 +35,6 @@ export const TenderOffer = (): JSX.Element => {
 
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-	// console.log('tender', tender);
 
 	const toast = useToast();
 
@@ -68,10 +67,6 @@ export const TenderOffer = (): JSX.Element => {
 	};
 	const isOfferPublished = offerStatus[offerData?.offer?.status || 0];
 
-	// const finishDateStatus = handleFinishDate(tender!.finishDate); //! why undefined?
-	// console.log('finishDateStatus', finishDateStatus);
-	// console.log('HERE', tender!.finishDate);
-
 	const UnPublished = () => {
 		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
 			event.preventDefault();
@@ -79,6 +74,8 @@ export const TenderOffer = (): JSX.Element => {
 		};
 
 		const cancelRef = useRef<HTMLButtonElement | null>(null);
+		const finishDateStatus = handleFinishDate(tender?.finishDate); // Can't do this check sooner? I still need to check if the order is published or not
+
 		return (
 			<>
 				{isTenderLoading ? (
@@ -93,7 +90,7 @@ export const TenderOffer = (): JSX.Element => {
 								<TenderTable tenderItems={tenderItems} />
 							</Box>
 							<Box>
-								{/* {!finishDateStatus ? (
+								{!finishDateStatus ? (
 									<Button onClick={handleOpenDialog} mt={'4'}>
 										{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
 									</Button>
@@ -101,10 +98,7 @@ export const TenderOffer = (): JSX.Element => {
 									<Text>
 										The tender has expired, you cannot publish the offer
 									</Text>
-								)} */}
-								<Button onClick={handleOpenDialog} mt={'4'}>
-									{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-								</Button>
+								)}
 							</Box>
 						</Flex>
 
