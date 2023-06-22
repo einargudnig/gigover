@@ -1,8 +1,29 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Input, Button, useToast } from '@chakra-ui/react';
+import {
+	Box,
+	Text,
+	Table,
+	Thead,
+	Tbody,
+	Tr,
+	Th,
+	Td,
+	Input,
+	Button,
+	useToast,
+	Menu,
+	MenuButton,
+	MenuGroup,
+	MenuItem,
+	MenuList,
+	Center
+} from '@chakra-ui/react';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { VerticalDots } from '../../../../components/icons/VerticalDots';
+import { UploadIcon } from '../../../../components/icons/UploadIcon';
+import { FolderIcon } from '../../../../components/icons/FolderIcon';
 
 interface TenderItem {
 	description: string;
@@ -80,7 +101,8 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						<Th>Volume</Th>
 						<Th>Product Number</Th>
 						<Th>Cost</Th>
-						<Th>Notes/Certification</Th>
+						<Th>Notes</Th>
+						<Th>Certification</Th>
 						<Th>Action</Th>
 					</Tr>
 				</Thead>
@@ -102,15 +124,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 								/>
 							</Td>
 							<Td>
-								{/* <Input
-									htmlSize={4}
-									width={'auto'}
-									type="number"
-									value={item.cost || 0}
-									onChange={(e) =>
-										updateItem(index, 'cost', Number(e.target.value))
-									}
-								/> */}
 								<Input
 									htmlSize={6}
 									width={'auto'}
@@ -128,6 +141,36 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 									value={item.note || ''}
 									onChange={(e) => updateItem(index, 'note', e.target.value)}
 								/>
+							</Td>
+							<Td>
+								<Center>
+									<Menu>
+										<MenuButton
+											as={Button}
+											aria-label="More Actions"
+											size="sm"
+											color={'black'}
+										>
+											<VerticalDots />
+										</MenuButton>
+										<MenuList>
+											<MenuGroup title="Actions">
+												<MenuItem marginBottom={'1'}>
+													<Text color={'black'} mr={'2'}>
+														Upload certification
+													</Text>
+													<UploadIcon />
+												</MenuItem>
+												<MenuItem>
+													<Text color={'black'} mr={'2'}>
+														View certifications
+													</Text>
+													<FolderIcon type={'medium'} />
+												</MenuItem>
+											</MenuGroup>
+										</MenuList>
+									</Menu>
+								</Center>
 							</Td>
 							<Td>
 								<Button onClick={() => handleUpdateClick(index)}>

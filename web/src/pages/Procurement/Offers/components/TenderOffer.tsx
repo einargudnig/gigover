@@ -58,7 +58,6 @@ export const TenderOffer = (): JSX.Element => {
 	// 1: 'Published' -> true
 	// 2: 'Accepted' -> true
 	// 3: 'Rejected' -> true
-
 	const offerStatus = {
 		0: false,
 		1: true,
