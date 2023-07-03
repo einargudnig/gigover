@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
 import { DropZone } from '../../../../components/DropZone';
-import { is } from 'date-fns/locale';
 
 interface UploadModalProps {
 	onClose: () => void;
@@ -19,6 +18,9 @@ const UploadModalStyled = styled.div`
 	}
 `;
 
+// What am doing with this?
+// I need the projectId and folderId to be able to upload the file?
+// maybe I will need to prop drill that to the DropZone component
 const selectedProject = 1;
 const selectedFolder = 1;
 
