@@ -12,6 +12,7 @@ import { Resources } from './pages/Resources/Resources';
 import { FolderFolder } from './pages/Files/new/FolderFolder';
 import { FilesHome } from './pages/Files/new/FilesHome';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
+import { TenderFolder } from './pages/Files/new/TenderFolder';
 // Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
@@ -40,6 +41,10 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':projectId/folder/:folderId/:fileId'} element={<FolderFolder />} />
 			<Route path={':projectId/folder/:folderId'} element={<FolderFolder />} />
 			<Route path={':projectId/:fileId'} element={<ProjectFolder />} />
+			{/* This folder holds documents for all tenders
+					Might end with more then one subfolders, should have tenderId? and offerId?
+			*/}
+			<Route path={'tender'} element={<TenderFolder />} />
 		</Route>
 		<Route path={'organize'} element={<Organize />}>
 			<Route path={':projectId'} element={<Organize />} />

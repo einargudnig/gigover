@@ -5,6 +5,8 @@ import { Folder } from '../components/Folder';
 import { SimpleGrid } from '../../../components/SimpleGrid';
 import { VStack } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+// import { TenderFolder } from './TenderFolder';
+import { TenderFolder } from '../components/TenderFolder';
 
 export const FilesHome = () => {
 	const { data, isLoading } = useProjectList();
@@ -21,6 +23,7 @@ export const FilesHome = () => {
 					{projects.map((p) => (
 						<Folder key={p.projectId} project={p} />
 					))}
+					<TenderFolder />
 				</SimpleGrid>
 			</VStack>
 		</div>
