@@ -2,7 +2,6 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
-import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 

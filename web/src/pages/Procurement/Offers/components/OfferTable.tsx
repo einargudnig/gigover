@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
 	Box,
 	Text,
@@ -17,7 +17,8 @@ import {
 	MenuGroup,
 	MenuItem,
 	MenuList,
-	Center
+	Center,
+	HStack
 } from '@chakra-ui/react';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -182,10 +183,15 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 														<UploadIcon />
 													</MenuItem>
 													<MenuItem>
-														<Text color={'black'} mr={'2'}>
-															View certifications
-														</Text>
-														<FolderIcon type={'medium'} />
+														{/* <Link to={`/files/tender/${offerId}`}> */}
+														<Link to={'/files/tender'}>
+															<HStack>
+																<Text color={'black'} mr={'2'}>
+																	View certifications
+																</Text>
+																<FolderIcon type={'medium'} />
+															</HStack>
+														</Link>
 													</MenuItem>
 												</MenuGroup>
 											</MenuList>
