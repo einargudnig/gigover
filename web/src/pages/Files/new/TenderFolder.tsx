@@ -1,59 +1,56 @@
 import React from 'react';
-import { devError } from '../../../utils/ConsoleUtils';
+import styled, { css } from 'styled-components';
+import { CardBaseLink } from '../../../components/CardBase';
+import { FolderIcon } from '../../../components/icons/FolderIcon';
+import { colorGenerator } from '../../../hooks/colorGenerator';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { useProjectFoldersQuery } from '../../../queries/useProjectFoldersQuery';
-import { useParams } from 'react-router-dom';
-import { CreateNewFolder } from '../components/CreateNewFolder';
-import { ProjectFolderComponent } from '../components/Folder';
-import { FilesUi } from './components/FilesUi';
-import { Spacer, VStack } from '@chakra-ui/react';
-import { SimpleGrid } from '../../../components/SimpleGrid';
-import { useProjectDocuments } from '../../../queries/useProjectDocuments';
+
+const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
+	${(props) =>
+		props.selected &&
+		css`
+			background: #000;
+			color: #fff !important;
+			box-shadow: none;
+		`};
+`;
 
 export const TenderFolder = (): JSX.Element => {
-	const params = useParams();
-	const projectId = params.projectId ? parseInt(params.projectId) : -1;
-
-	// const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
-	// const projectDocuments = useProjectDocuments(projectId);
-
-	// console.log(data, 'projectFolders');
-	// if (isLoading) {
-	// 	return <LoadingSpinner />;
-	// }
-
-	// if (isError && error) {
-	// 	devError(error);
-	// 	throw new Error('Error loading project folders, Reason: ' + error);
-	// }
-
-	if (!projectId) {
-		return <div>Missing Project Id</div>;
-	}
-
+	const isUploading = false;
 	return (
 		<>
-			{/* {!data?.length ? (
-				<CreateNewFolder projectId={projectId} />
-			) : (
-				<>
-					<VStack mb={4} alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
-						<SimpleGrid itemWidth={320}>
-							{data?.map((folder) => (
-								<ProjectFolderComponent
-									key={folder.folderId}
-									folder={folder}
-									projectId={projectId}
-								/>
-							))}
-						</SimpleGrid>
-					</VStack>
-					<CreateNewFolder projectId={projectId} />
-				</>
-			)} */}
-			HALLO
-			<Spacer height={4} />
-			{/* <FilesUi title={''} files={projectDocuments?.data ?? []} projectId={projectId} /> */}
+			<FolderCard to={'/tender/tenders'}>
+				<VStack align={'stretch'} spacing={4}>
+					<HStack justify={'space-between'} align={'center'}>
+						<FolderIcon size={38} color={'blue'} />
+						{isUploading && <LoadingSpinner color={'white'} />}
+					</HStack>
+					<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+						Tenders
+					</Heading>
+					<HStack justify={'space-between'}>
+						{/* {isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>} */}
+						<Text>0 Files</Text>
+					</HStack>
+				</VStack>
+			</FolderCard>
+
+			<FolderCard to={'/tender/offers'}>
+				<VStack align={'stretch'} spacing={4}>
+					<HStack justify={'space-between'} align={'center'}>
+						<FolderIcon size={38} color={'green'} />
+						{isUploading && <LoadingSpinner color={'white'} />}
+					</HStack>
+					<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+						Offers
+					</Heading>
+					<HStack justify={'space-between'}>
+						{/* {isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>} */}
+						<Text>0 Files</Text>
+					</HStack>
+				</VStack>
+			</FolderCard>
 		</>
 	);
 };

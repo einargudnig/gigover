@@ -3,12 +3,15 @@ import { useProjectList } from '../../../queries/useProjectList';
 import { useOpenProjects } from '../../../hooks/useAvailableProjects';
 import { Folder } from '../components/Folder';
 import { SimpleGrid } from '../../../components/SimpleGrid';
-import { VStack } from '@chakra-ui/react';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-// import { TenderFolder } from './TenderFolder';
-import { TenderFolder } from '../components/TenderFolder';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 
-export const FilesHome = () => {
+// For the Tender Folder
+import styled, { css } from 'styled-components';
+import { CardBaseLink } from '../../../components/CardBase';
+import { FolderIcon } from '../../../components/icons/FolderIcon';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+
+export const FilesHome = (): JSX.Element => {
 	const { data, isLoading } = useProjectList();
 	const projects = useOpenProjects(data);
 
@@ -30,4 +33,37 @@ export const FilesHome = () => {
 	);
 };
 
-//Project folders NO FILES
+// I only need one folder to send the user to the Tenders and offers.
+// Let's just build it here and not worry about it.
+
+const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`};
+	${(props) =>
+		props.selected &&
+		css`
+			background: #000;
+			color: #fff !important;
+			box-shadow: none;
+		`};
+`;
+
+export const TenderFolder = (): JSX.Element => {
+	return (
+		<FolderCard to={'/files/tender'}>
+			<VStack align={'stretch'} spacing={4}>
+				<HStack justify={'space-between'} align={'center'}>
+					<FolderIcon size={38} color={'gray'} />
+					{/* {isUploading && <LoadingSpinner color={'black'} />} */}
+				</HStack>
+				<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+					Tender & Offers
+				</Heading>
+				<HStack justify={'space-between'}>
+					{/* <Text>{project.fileCount || 0} files</Text> */}
+					<Text>0 files</Text>
+					{/* <Text>{humanFileSize(project.totalBytes || 0)}</Text> */}
+					<Text>0 kb</Text>
+				</HStack>
+			</VStack>
+		</FolderCard>
+	);
+};
