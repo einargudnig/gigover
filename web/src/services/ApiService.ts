@@ -138,7 +138,7 @@ export class ApiService {
 	static acceptOffer = API_BASE + 'tender/acceptOffer';
 	static rejectOffer = API_BASE + 'tender/rejectOffer';
 	// Tender documents
-	static addDocument = API_BASE + 'tender/addDocument';
+	static addTenderDocument = API_BASE + 'tender/addDocument';
 	static getOfferDocuments = (offerId: number) => API_BASE + 'tender/offer' + offerId; //! GET this one is for the offer documents
 	static getTenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; //! GET this one is for the tender documents
 }
