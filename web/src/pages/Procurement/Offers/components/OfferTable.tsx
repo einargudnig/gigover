@@ -106,7 +106,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						console.log('status', status);
 					}}
 					offerId={Number(offerId)}
-					tenderId={Number(tenderId)}
 				/>
 			)}
 			<Box w="100%" p={4}>
