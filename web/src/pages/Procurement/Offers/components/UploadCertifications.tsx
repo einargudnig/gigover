@@ -10,6 +10,7 @@ import { FileUploadType } from '../../../../models/FileUploadType';
 import { FilterIcon } from '../../../../components/icons/FilterIcon';
 import { useDropzone } from 'react-dropzone';
 import { useFileService } from '../../../../hooks/useFileService';
+import { DocumentInput } from '../../../../mutations/useAddDocument';
 
 interface UploadModalProps {
 	onClose: () => void;
@@ -91,7 +92,6 @@ const DropZone = ({
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
-	// const mutate = useAddTenderDocument();
 	const { mutateAsync } = useAddTenderDocument();
 
 	const onDrop = useCallback(
@@ -109,7 +109,7 @@ const DropZone = ({
 				acceptedFiles.forEach(async (file) => {
 					try {
 						setIsUploading(true);
-						const response = await fileService.uploadFile(
+						const response: DocumentInput = await fileService.uploadFile(
 							file,
 							offerId,
 							createdFolder ?? 0,
@@ -123,6 +123,7 @@ const DropZone = ({
 						let uploadedFile: { tenderDocument: TenderDocument } | undefined;
 
 						try {
+							// @ts-ignore
 							uploadedFile = await mutateAsync(response);
 						} catch (e) {
 							devError('FileUpload', e);

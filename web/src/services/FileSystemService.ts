@@ -17,6 +17,7 @@ export interface FileDocument {
 	fileId: string;
 	projectId: number;
 	externalId?: number;
+	// offerId?: number;
 }
 
 export interface FolderResult {
@@ -36,6 +37,7 @@ export class FileSystemService {
 	}
 
 	assertProjectAccess(projects: Project[], projectId: number) {
+		// How does this tie in to the uploading of files for tender and offers?
 		const foundProject = projects.find((p) => p.projectId === projectId);
 
 		if (!foundProject) {
@@ -167,6 +169,7 @@ export class FileSystemService {
 						bytes: file.size,
 						taskId: externalId ?? undefined
 					};
+					console.log('image', image);
 
 					// devInfo('File uploaded');
 					console.log('File uploaded');

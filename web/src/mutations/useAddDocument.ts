@@ -7,7 +7,7 @@ import { ProjectImage } from '../models/ProjectImage';
 export interface DocumentInput
 	extends Pick<
 		ProjectImage,
-		'projectId' | 'folderId' | 'name' | 'type' | 'url' | 'bytes' | 'taskId'
+		'projectId' | 'folderId' | 'offerId' | 'name' | 'type' | 'url' | 'bytes' | 'taskId'
 	> {}
 
 export const useAddDocument = () => {

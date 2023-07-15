@@ -13,6 +13,8 @@ import { FolderFolder } from './pages/Files/new/FolderFolder';
 import { FilesHome } from './pages/Files/new/FilesHome';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 import { TenderFolder } from './pages/Files/new/TenderFolder';
+import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
+import { OfferFolder } from './pages/Files/new/components/OfferFolder';
 // Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
@@ -44,7 +46,12 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			{/* This folder holds documents for all tenders
 					Might end with more then one subfolders, should have tenderId? and offerId?
 			*/}
-			<Route path={'tender'} element={<TenderFolder />} />
+			{/* First route is just an outlet. I could add more UI. */}
+			<Route path={'tender'} element={<TenderFolder />}>
+				<Route index element={<TenderFolderHome />} />
+				<Route path={'tenders'} element={<div>Files for your Tenders</div>} />
+				<Route path={'offers'} element={<OfferFolder />} />
+			</Route>
 		</Route>
 		<Route path={'organize'} element={<Organize />}>
 			<Route path={':projectId'} element={<Organize />} />
