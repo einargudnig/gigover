@@ -88,7 +88,7 @@ interface DropZoneProps {
 const DropZone = ({
 	uploadType = FileUploadType.Project,
 	offerId,
-	projectId,
+	projectId = 0,
 	externalId,
 	callback,
 	children
@@ -114,7 +114,7 @@ const DropZone = ({
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
 							offerId,
-							projectId ?? 0,
+							projectId,
 							createdFolder ?? 0,
 							uploadType!,
 							(status: number) => {

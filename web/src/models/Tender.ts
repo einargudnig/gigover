@@ -13,6 +13,7 @@ export interface Tender {
 	offerNote?: string;
 	items: TenderItem[];
 	bidders: Bidder[];
+	documents: TenderDocument[];
 }
 
 export interface TenderItem {
@@ -24,6 +25,17 @@ export interface TenderItem {
 	unit?: string;
 	cost?: number;
 	notes?: string;
+}
+
+export interface TenderDocument {
+	id: number;
+	offerId: number;
+	//projectId:
+	name: string;
+	documentType: number;
+	url: string;
+	bytes: number;
+	created: number; // Timestamp
 }
 
 // To get the tender By Id, the 'definition' and the items

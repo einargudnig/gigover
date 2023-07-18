@@ -15,6 +15,7 @@ import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 import { TenderFolder } from './pages/Files/new/TenderFolder';
 import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
 import { OfferFolder } from './pages/Files/new/components/OfferFolder';
+import { TenderFiles } from './pages/Files/new/components/TenderFiles';
 // Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
@@ -49,7 +50,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			{/* First route is just an outlet. I could add more UI. */}
 			<Route path={'tender'} element={<TenderFolder />}>
 				<Route index element={<TenderFolderHome />} />
-				<Route path={'tenders'} element={<div>Files for your Tenders</div>} />
+				<Route path={'tenders'} element={<TenderFiles />} />
 				<Route path={'offers'} element={<OfferFolder />} />
 			</Route>
 		</Route>
