@@ -32,6 +32,7 @@ const ProcurementCardTitle = styled.div`
 `;
 
 export const TenderFiles = (): JSX.Element => {
+	console.log('TenderFiles at the /files/tender/tenders');
 	const { data, isLoading } = useUserTenders();
 
 	console.log('data', data);

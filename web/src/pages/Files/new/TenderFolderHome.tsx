@@ -16,6 +16,7 @@ const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
 `;
 
 export const TenderFolderHome = (): JSX.Element => {
+	console.log('TenderFolderHome at the /files/tender index');
 	const isUploading = false;
 	return (
 		<>
@@ -30,7 +31,7 @@ export const TenderFolderHome = (): JSX.Element => {
 					</Heading>
 					<HStack justify={'space-between'}>
 						{/* {isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>} */}
-						<Text>0 Files</Text>
+						<Text>Files for your tender</Text>
 					</HStack>
 				</VStack>
 			</FolderCard>
@@ -46,7 +47,7 @@ export const TenderFolderHome = (): JSX.Element => {
 					</Heading>
 					<HStack justify={'space-between'}>
 						{/* {isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>} */}
-						<Text>0 Files</Text>
+						<Text>Files from your offers</Text>
 					</HStack>
 				</VStack>
 			</FolderCard>

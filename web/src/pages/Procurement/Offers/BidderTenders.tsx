@@ -55,7 +55,6 @@ const getUniqueTenders = (tenders: Tender[]) => {
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
-	console.log('tenders', tenders);
 
 	const uniqueTenders = getUniqueTenders(tenders);
 

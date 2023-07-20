@@ -45,10 +45,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':projectId/folder/:folderId/:fileId'} element={<FolderFolder />} />
 			<Route path={':projectId/folder/:folderId'} element={<FolderFolder />} />
 			<Route path={':projectId/:fileId'} element={<ProjectFolder />} />
-			{/* This folder holds documents for all tenders
-					Might end with more then one subfolders, should have tenderId? and offerId?
-			*/}
-			{/* First route is just an outlet. I could add more UI. */}
+			{/* This route is for documents for all tenders and offers */}
 			<Route path={'tender'} element={<TenderFolder />}>
 				<Route index element={<TenderFolderHome />} />
 				<Route path={'tenders'} element={<TenderFiles />} />

@@ -3,7 +3,7 @@ import { useProjectList } from '../../../queries/useProjectList';
 import { useOpenProjects } from '../../../hooks/useAvailableProjects';
 import { Folder } from '../components/Folder';
 import { SimpleGrid } from '../../../components/SimpleGrid';
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, VStack } from '@chakra-ui/react';
 
 // For the Tender Folder
 import styled, { css } from 'styled-components';
@@ -33,9 +33,6 @@ export const FilesHome = (): JSX.Element => {
 	);
 };
 
-// I only need one folder to send the user to the Tenders and offers.
-// Let's just build it here and not worry about it.
-
 const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`};
 	${(props) =>
 		props.selected &&
@@ -52,17 +49,11 @@ export const TenderFolder = (): JSX.Element => {
 			<VStack align={'stretch'} spacing={4}>
 				<HStack justify={'space-between'} align={'center'}>
 					<FolderIcon size={38} color={'gray'} />
-					{/* {isUploading && <LoadingSpinner color={'black'} />} */}
 				</HStack>
 				<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
 					Tender & Offers
 				</Heading>
-				<HStack justify={'space-between'}>
-					{/* <Text>{project.fileCount || 0} files</Text> */}
-					<Text>0 files</Text>
-					{/* <Text>{humanFileSize(project.totalBytes || 0)}</Text> */}
-					<Text>0 kb</Text>
-				</HStack>
+				<HStack justify={'space-between'}></HStack>
 			</VStack>
 		</FolderCard>
 	);

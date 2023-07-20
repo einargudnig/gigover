@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HStack, VStack, Text } from '@chakra-ui/react';
+import { Box, HStack, VStack, Text } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useOfferDocuments } from '../../../../queries/useGetOfferDocuments';
 import { useGetUserOffers } from '../../../../queries/useGetUserOffers';
 import { Offer } from '../../../../models/Tender';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -34,9 +34,11 @@ const OfferCardStyled = styled(CardBaseLink)`
 `;
 
 export const OffersFolder = (): JSX.Element => {
+	console.log('TenderFiles at the /files/tender/offers');
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
-	const noOffers = offers?.length === 0;
+	// const noOffers = offers?.length === 0;
+	const noOffers = true;
 
 	return (
 		<VStack style={{ height: '100%' }}>
@@ -44,8 +46,12 @@ export const OffersFolder = (): JSX.Element => {
 				<Container>
 					{noOffers ? (
 						<Text>
-							You have not made any offers. Make sure you open a offer before you add
-							to it.
+							There are no files here because you have note opened an offer. You can
+							open offer on the{' '}
+							<Link to={'/bidder-tenders'}>
+								<Text textColor={'black'}>bid invitations page</Text>
+							</Link>
+							.
 						</Text>
 					) : null}
 					{isLoading ? (
@@ -70,7 +76,9 @@ export const OffersFolder = (): JSX.Element => {
 									<>
 										<Text>Need to update this one</Text>
 										<React.Fragment key={o.offerId}>
-											<OfferCardStyled to={`/files/offers/${o.offerId}`}>
+											<OfferCardStyled
+												to={`/files/tender/offers/${o.offerId}`}
+											>
 												<HStack>
 													<Text as={'b'}>Notes:</Text>
 													<Text>{o.notes}</Text>
