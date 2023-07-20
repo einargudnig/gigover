@@ -14,7 +14,8 @@ import { FilesHome } from './pages/Files/new/FilesHome';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 import { TenderFolder } from './pages/Files/new/TenderFolder';
 import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
-import { OfferFolder } from './pages/Files/new/components/OfferFolder';
+import { OffersFolder } from './pages/Files/new/components/OffersFolder';
+import { OfferFile } from './pages/Files/new/components/OfferFile';
 import { TenderFiles } from './pages/Files/new/components/TenderFiles';
 // Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
@@ -51,7 +52,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'tender'} element={<TenderFolder />}>
 				<Route index element={<TenderFolderHome />} />
 				<Route path={'tenders'} element={<TenderFiles />} />
-				<Route path={'offers'} element={<OfferFolder />} />
+				<Route path={'tenders/:tenderId'} element={<TenderFiles />} />
+				<Route path={'offers'} element={<OffersFolder />} />
+				<Route path={'offers/:offerId'} element={<OfferFile />} />
 			</Route>
 		</Route>
 		<Route path={'organize'} element={<Organize />}>

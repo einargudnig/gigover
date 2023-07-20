@@ -33,13 +33,11 @@ const OfferCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const OfferFolder = (): JSX.Element => {
-	// const offerId = 185;
-	// const { data } = useOfferDocuments(offerId);
+export const OffersFolder = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
 	const noOffers = offers?.length === 0;
-	// console.log(data, 'DATA');
+
 	return (
 		<VStack style={{ height: '100%' }}>
 			<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
