@@ -44,6 +44,9 @@ export interface GetTenderById {
 }
 
 export interface Offer {
+	email: string;
+	name: string;
+	tender: Tender;
 	offerId: number;
 	tenderId: number;
 	status: number;
@@ -61,6 +64,7 @@ export interface GetOffer {
 	statusText: string;
 	tenderId: number;
 	userName: string;
+	documents: OfferDocument[];
 }
 
 export interface GetOfferItem {
@@ -84,4 +88,15 @@ export interface Bidder {
 	userName: string;
 	name: string;
 	email: string;
+}
+
+export interface OfferDocument {
+	id: number;
+	offerId: number;
+	//projectId:
+	name: string;
+	documentType: number;
+	url: string;
+	bytes: number;
+	created: number; // Timestamp
 }

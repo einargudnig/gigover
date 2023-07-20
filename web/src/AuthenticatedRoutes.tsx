@@ -16,7 +16,8 @@ import { TenderFolder } from './pages/Files/new/TenderFolder';
 import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
 import { OffersFolder } from './pages/Files/new/components/OffersFolder';
 import { OfferFile } from './pages/Files/new/components/OfferFile';
-import { TenderFiles } from './pages/Files/new/components/TenderFiles';
+import { TendersFolder } from './pages/Files/new/components/TendersFolder';
+import { TenderFile } from './pages/Files/new/components/TenderFile';
 // Procurement/Tenders/Offers
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { Procurement } from './pages/Procurement/Procurement';
@@ -48,8 +49,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			{/* This route is for documents for all tenders and offers */}
 			<Route path={'tender'} element={<TenderFolder />}>
 				<Route index element={<TenderFolderHome />} />
-				<Route path={'tenders'} element={<TenderFiles />} />
-				<Route path={'tenders/:tenderId'} element={<TenderFiles />} />
+				<Route path={'tenders'} element={<TendersFolder />} />
+				<Route path={'tenders/:tenderId'} element={<TenderFile />} />
 				<Route path={'offers'} element={<OffersFolder />} />
 				<Route path={'offers/:offerId'} element={<OfferFile />} />
 			</Route>
