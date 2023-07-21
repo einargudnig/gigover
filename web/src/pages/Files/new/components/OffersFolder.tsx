@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Box, HStack, VStack, Text, Heading, Center } from '@chakra-ui/react';
+import { HStack, VStack, Text, Heading, Center } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useGetUserOffers } from '../../../../queries/useGetUserOffers';

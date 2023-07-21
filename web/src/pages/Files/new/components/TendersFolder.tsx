@@ -7,7 +7,6 @@ import { FolderIcon } from '../../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../../hooks/colorGenerator';
 import { useUserTenders } from '../../../../queries/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 const Container = styled.div`
 	flex: 1 0;
