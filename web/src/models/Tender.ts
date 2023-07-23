@@ -27,12 +27,19 @@ export interface TenderItem {
 	notes?: string;
 }
 
+// needed for the document type
+type DocumentTypeImage = 0 | 'IMAGE';
+type DocumentTypeVideo = 1 | 'VIDEO';
+type DocumentTypeDoc = 2 | 'DOCUMENT';
+
+export type DocumentTypes = DocumentTypeImage | DocumentTypeVideo | DocumentTypeDoc;
+
 export interface TenderDocument {
 	id: number;
 	offerId: number;
 	//projectId:
 	name: string;
-	documentType: number;
+	type: DocumentTypes;
 	url: string;
 	bytes: number;
 	created: number; // Timestamp

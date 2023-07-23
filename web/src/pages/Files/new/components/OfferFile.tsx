@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { VStack, Text } from '@chakra-ui/react';
-import { GigoverFile } from '../../components/File';
+import { OtherGigoverFile } from './OtherFile';
 
 export const OfferFile = (): JSX.Element => {
 	const params = useParams();
@@ -32,7 +32,7 @@ export const OfferFile = (): JSX.Element => {
 					{offerDocuments!
 						.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 						.map((p, pIndex) => (
-							<GigoverFile key={pIndex} file={p} />
+							<OtherGigoverFile key={pIndex} file={p} />
 						))}
 				</VStack>
 			) : (
