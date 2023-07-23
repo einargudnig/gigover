@@ -40,7 +40,6 @@ interface TenderItem {
 
 export const TenderTable = ({ tenderItems }): JSX.Element => {
 	const { offerId } = useParams();
-	const { tenderId } = useParams();
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);
 	const [upload, setUpload] = useState(false);
 
@@ -182,8 +181,10 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 														<UploadIcon />
 													</MenuItem>
 													<MenuItem>
-														{/* <Link to={`/files/tender/${offerId}`}> */}
-														<Link to={'/files/tender'}>
+														<Link
+															to={`/files/tender/offers/${offerId}`}
+														>
+															{/* <Link to={'/files/tender'}> */}
 															<HStack>
 																<Text color={'black'} mr={'2'}>
 																	View certifications

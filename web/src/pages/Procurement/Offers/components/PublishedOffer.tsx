@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
 	Button,
 	Table,
@@ -217,7 +217,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 					<Flex mx={'5'}>
 						<Box>
-							<Text mb={'2'}>This is the Published Offer</Text>
+							<Text mb={'2'}>This is a Published Offer</Text>
 							<Box>
 								<Flex>
 									<ReactToPdf
@@ -241,10 +241,12 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 											</Button>
 										)}
 									</ReactToPdf>
-									{/* <Spacer />
-								<Button ml={'1'}>
-									<Text textColor={'black'}>Download as CSV</Text>
-								</Button> */}
+									<Spacer />
+									<Link to={`/files/tender/offers/${offerId}`}>
+										<Button ml={'1'}>
+											<Text textColor={'black'}>Uploaded files</Text>
+										</Button>
+									</Link>
 								</Flex>
 							</Box>
 						</Box>

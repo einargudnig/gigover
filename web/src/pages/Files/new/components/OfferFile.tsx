@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { VStack } from '@chakra-ui/react';
+import { VStack, Text } from '@chakra-ui/react';
 import { GigoverFile } from '../../components/File';
 
 export const OfferFile = (): JSX.Element => {
@@ -36,7 +36,9 @@ export const OfferFile = (): JSX.Element => {
 						))}
 				</VStack>
 			) : (
-				<div> No files</div>
+				<div>
+					<Text>There are no files here. You need to add files to this offer.</Text>
+				</div>
 			)}
 		</>
 	);
