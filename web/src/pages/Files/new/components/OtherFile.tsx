@@ -37,6 +37,9 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 const FileStyled = styled(CardBaseLink)``;
 
 // I need to figure out how I differentiate between tenders and offers
+// I could check if the URL contains 'tenders' or 'offers' and then use that to determine which routing to do.
+// I could also just pass in the URL as a prop and then use that to determine which routing to do.
+
 export const GetFileLink = (file: TenderDocument) => {
 	const href = `/files/${file.projectId}/${file.imageId}`;
 
