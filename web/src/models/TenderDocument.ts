@@ -5,9 +5,11 @@ type DocumentTypeDoc = 2 | 'DOCUMENT';
 export type DocumentTypes = DocumentTypeImage | DocumentTypeVideo | DocumentTypeDoc;
 
 export interface TenderDocument {
+	id: number;
 	offerId: number;
 	name: string;
 	type: DocumentTypes;
 	url: string;
 	bytes: number;
+	created: number; // Timestamp
 }

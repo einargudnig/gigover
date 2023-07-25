@@ -99,6 +99,7 @@ export const DropZone = ({
 							file,
 							projectId,
 							createdFolder ?? folderId ?? 0,
+							//@ts-ignore
 							uploadType!,
 							(status: number) => {
 								setFileUploadProgress(status);
