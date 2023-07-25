@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { FileVideoIcon } from '../../../../components/icons/FileTypes/FileVideoIcon';
@@ -14,7 +15,7 @@ import { GANT_CHART_FORMAT } from '../../../Roadmap/GantChartDates';
 
 // OtherFile means files for Tenders and Offers.
 // I think I should just make a duplicate of the File.tsx so that I can more easily use it in two different places.
-
+// Ultimately I want to make the file component more generic so that I can use it in more places.
 interface OtherFileProps {
 	file: TenderDocument;
 }
@@ -36,12 +37,30 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 
 const FileStyled = styled(CardBaseLink)``;
 
-// I need to figure out how I differentiate between tenders and offers
-// I could check if the URL contains 'tenders' or 'offers' and then use that to determine which routing to do.
-// I could also just pass in the URL as a prop and then use that to determine which routing to do.
-
 export const GetFileLink = (file: TenderDocument) => {
-	const href = `/files/${file.projectId}/${file.imageId}`;
+	const { offerId, tenderId } = useParams();
+	const location = useLocation();
+
+	// Extract the pathname and search from the location object
+	const { pathname } = location;
+
+	// Check if the current URL contains either 'offers' or 'tenders'
+	const isOffersUrl = pathname.includes('offers');
+	const isTendersUrl = pathname.includes('tenders');
+
+	let href = '';
+
+	if (isOffersUrl) {
+		// If it's an offers, append the fileId
+		return (href = `/files/tender/offers/${offerId}/${file.id}`);
+	} else if (isTendersUrl) {
+		// If it's a tender, append the fileId
+		return (href = `/files/tender/offers/${tenderId}/${file.id}`);
+	} else {
+		// If the URL doesn't contain 'offers' or 'tenders', handle it accordingly
+		// For example, you might want to show an error message or redirect to a default page.
+		console.error('Invalid URL format');
+	}
 
 	return href;
 };
