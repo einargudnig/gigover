@@ -8,7 +8,7 @@ import { FileHouseIcon } from '../../../../components/icons/FileTypes/FileHouseI
 import { FilePdfIcon } from '../../../../components/icons/FileTypes/FilePdfIcon';
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { humanFileSize } from '../../../../utils/FileSizeUtils';
-import { DocumentTypes } from '../../../../models/ProjectImage';
+import { DocumentTypes } from '../../../../models/Tender';
 import { TenderDocument } from '../../../../models/Tender';
 import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../../Roadmap/GantChartDates';

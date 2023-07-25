@@ -37,7 +37,6 @@ export type DocumentTypes = DocumentTypeImage | DocumentTypeVideo | DocumentType
 export interface TenderDocument {
 	id: number;
 	offerId: number;
-	//projectId:
 	name: string;
 	type: DocumentTypes;
 	url: string;
@@ -100,9 +99,8 @@ export interface Bidder {
 export interface OfferDocument {
 	id: number;
 	offerId: number;
-	//projectId:
 	name: string;
-	documentType: number;
+	type: DocumentTypes;
 	url: string;
 	bytes: number;
 	created: number; // Timestamp

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { VStack, Text } from '@chakra-ui/react';
-import { GigoverFile } from '../../components/File';
+import { OtherGigoverFile } from './OtherFile';
 
 export const TenderFile = (): JSX.Element => {
 	const params = useParams();
@@ -32,7 +32,7 @@ export const TenderFile = (): JSX.Element => {
 					{tenderDocuments!
 						.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 						.map((p, pIndex) => (
-							<GigoverFile key={pIndex} file={p} />
+							<OtherGigoverFile key={pIndex} file={p} />
 						))}
 				</VStack>
 			) : (
