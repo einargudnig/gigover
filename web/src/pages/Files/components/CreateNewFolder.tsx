@@ -98,7 +98,7 @@ export const CreateNewFolder = ({
 	folderId?: number;
 }) => {
 	return (
-		<DropZone projectId={projectId} folderId={folderId}>
+		<DropZone offerId={0} projectId={projectId} folderId={folderId}>
 			{({ isDragActive, isUploading }) => (
 				<NewFolderCard
 					style={{

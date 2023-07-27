@@ -85,6 +85,7 @@ export const CommentInput = ({ projectId, taskId, workers }: CommentInputProps):
 		<div style={{ position: 'relative', display: 'flex' }}>
 			<div style={{ flex: 1 }}>
 				<DropZone
+					offerId={0}
 					projectId={projectId}
 					uploadType={FileUploadType.Comment}
 					externalId={taskId}

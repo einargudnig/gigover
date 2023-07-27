@@ -92,7 +92,11 @@ export const UploadModal = ({ projectId, folderId, onClose }: UploadModalProps):
 						}}
 					/>
 					{selectedProject && (
-						<DropZone projectId={selectedProject} folderId={selectedFolder} />
+						<DropZone
+							offerId={0}
+							projectId={selectedProject}
+							folderId={selectedFolder}
+						/>
 					)}
 					<FormActions
 						hideSubmitButton={true}

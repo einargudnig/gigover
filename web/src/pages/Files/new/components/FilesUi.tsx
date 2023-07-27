@@ -89,6 +89,7 @@ export const FilesUi = ({ files, title, projectId }) => {
 					</VStack>
 				) : (
 					<DropZone
+						offerId={0}
 						projectId={projectId}
 						folderId={folderId ? parseInt(folderId) : undefined}
 					>

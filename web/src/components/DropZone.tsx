@@ -31,6 +31,7 @@ const DropZoneContainer = styled.div<{
 `;
 
 interface DropZoneProps {
+	offerId?: number;
 	projectId: number;
 	uploadType?: FileUploadType;
 	folderId?: number;
@@ -46,6 +47,8 @@ interface DropZoneProps {
 
 export const DropZone = ({
 	uploadType = FileUploadType.Project,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	offerId = 0,
 	projectId,
 	folderId,
 	externalId,
@@ -97,9 +100,9 @@ export const DropZone = ({
 						setIsUploading(true);
 						const response = await fileService.uploadFile(
 							file,
+							(offerId = 0),
 							projectId,
 							createdFolder ?? folderId ?? 0,
-							//@ts-ignore
 							uploadType!,
 							(status: number) => {
 								setFileUploadProgress(status);

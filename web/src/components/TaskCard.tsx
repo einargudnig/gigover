@@ -104,7 +104,12 @@ export const TaskCard = ({
 	}
 
 	return (
-		<DropZone projectId={projectId} uploadType={FileUploadType.Task} externalId={task?.taskId}>
+		<DropZone
+			offerId={0}
+			projectId={projectId}
+			uploadType={FileUploadType.Task}
+			externalId={task?.taskId}
+		>
 			{({ isDragActive }) => (
 				<TaskCardStyled
 					isDragActive={isDragActive}
