@@ -1,17 +1,18 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { CardBaseLink, CardBase } from '../../../../components/CardBase';
+import { CardBase } from '../../../../components/CardBase';
 import { FileVideoIcon } from '../../../../components/icons/FileTypes/FileVideoIcon';
 import { FileImgIcon } from '../../../../components/icons/FileTypes/FileImgIcon';
 import { FileHouseIcon } from '../../../../components/icons/FileTypes/FileHouseIcon';
 import { FilePdfIcon } from '../../../../components/icons/FileTypes/FilePdfIcon';
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Text, VStack, IconButton } from '@chakra-ui/react';
 import { humanFileSize } from '../../../../utils/FileSizeUtils';
 import { DocumentTypes } from '../../../../models/Tender';
 import { TenderDocument } from '../../../../models/Tender';
 import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../../Roadmap/GantChartDates';
+import { DownloadIcon } from '../../../../components/icons/DownloadIcon';
 
 // OtherFile means files for Tenders and Offers.
 // I think I should just make a duplicate of the File.tsx so that I can more easily use it in two different places.
@@ -83,6 +84,18 @@ export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+				<VStack justify={'center'} align={'center'}>
+					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
+						<IconButton
+							aria-label={'Download'}
+							colorScheme={'black'}
+							icon={<DownloadIcon color={'white'} />}
+						/>
+					</a>
+					<Text color={'black'} fontSize={'l'}>
+						Download
+					</Text>
+				</VStack>
 			</HStack>
 		</FileStyledNoLink>
 	);
