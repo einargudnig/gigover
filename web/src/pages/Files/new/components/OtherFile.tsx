@@ -35,7 +35,7 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 	}
 };
 
-const FileStyled = styled(CardBaseLink)``;
+// const FileStyled = styled(CardBaseLink)``;
 const FileStyledNoLink = styled(CardBase)``;
 
 export const GetFileLink = (file: TenderDocument) => {
@@ -68,7 +68,7 @@ export const GetFileLink = (file: TenderDocument) => {
 
 export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 	const Icon = OtherFileIconForType(file.type);
-	const href = GetFileLink(file);
+	// const href = GetFileLink(file);
 
 	return (
 		<FileStyledNoLink>
@@ -79,7 +79,7 @@ export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 					<Heading m={0} mb={0} as={'h4'} size={'sm'}>
 						{file.name}
 					</Heading>
-					<Text m={0}>Project file</Text>
+					<Text m={0}>Offer file</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>

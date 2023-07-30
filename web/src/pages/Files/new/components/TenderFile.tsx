@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { VStack, Text } from '@chakra-ui/react';
+import { VStack, Heading, Text } from '@chakra-ui/react';
 import { OtherGigoverFile } from './OtherFile';
 
 export const TenderFile = (): JSX.Element => {
@@ -29,6 +29,7 @@ export const TenderFile = (): JSX.Element => {
 		<>
 			{tenderDocuments!.length > 0 ? (
 				<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
+					<Heading size={'md'}>Files for your offer</Heading>
 					{tenderDocuments!
 						.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 						.map((p, pIndex) => (

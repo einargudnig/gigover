@@ -52,6 +52,7 @@ export const OffersFolder = (): JSX.Element => {
 						</Center>
 					) : (
 						<>
+							<Heading size={'md'}>Offers</Heading>
 							{offers?.map((o) => {
 								return (
 									<>

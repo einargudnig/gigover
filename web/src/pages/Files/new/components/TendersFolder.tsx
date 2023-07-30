@@ -51,45 +51,55 @@ export const TendersFolder = (): JSX.Element => {
 									.
 								</Text>
 							) : (
-								data.map((t) => (
-									<FolderCard
-										to={`/files/tender/tenders/${t.tenderId}`}
-										key={t.tenderId}
-									>
-										<VStack align={'stretch'} spacing={4}>
-											<HStack justify={'space-between'} align={'center'}>
-												<FolderIcon
-													color={
-														colorGenerator(`${t.description}`, 150, 50)
-															.backgroundColor
-													}
-													size={32}
-												/>
-												{/* <Text>{o.tender.description}</Text> */}
-											</HStack>
-											<HStack>
-												<Heading as={'h4'} size={'sm'} fontWeight={'bold'}>
-													Tender Description:
-												</Heading>
-												<Heading
-													as={'h4'}
-													size={'sm'}
-													fontWeight={'normal'}
-												>
-													{t.description}
-												</Heading>
-											</HStack>
-											<HStack>
-												<Text as={'b'}>Tender Id:</Text>
-												<Text>{t.tenderId}</Text>
-											</HStack>
-											{/* <HStack>
+								<>
+									<Heading size={'md'}>Tenders</Heading>
+									{data.map((t) => (
+										<FolderCard
+											to={`/files/tender/tenders/${t.tenderId}`}
+											key={t.tenderId}
+										>
+											<VStack align={'stretch'} spacing={4}>
+												<HStack justify={'space-between'} align={'center'}>
+													<FolderIcon
+														color={
+															colorGenerator(
+																`${t.description}`,
+																150,
+																50
+															).backgroundColor
+														}
+														size={32}
+													/>
+													{/* <Text>{o.tender.description}</Text> */}
+												</HStack>
+												<HStack>
+													<Heading
+														as={'h4'}
+														size={'sm'}
+														fontWeight={'bold'}
+													>
+														Tender Description:
+													</Heading>
+													<Heading
+														as={'h4'}
+														size={'sm'}
+														fontWeight={'normal'}
+													>
+														{t.description}
+													</Heading>
+												</HStack>
+												<HStack>
+													<Text as={'b'}>Tender Id:</Text>
+													<Text>{t.tenderId}</Text>
+												</HStack>
+												{/* <HStack>
 										<Text as={'b'}>Number of files:</Text>
 										<Text>{t.documents.length()}</Text>
 									</HStack> */}
-										</VStack>
-									</FolderCard>
-								))
+											</VStack>
+										</FolderCard>
+									))}
+								</>
 							)}
 						</>
 					)}
