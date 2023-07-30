@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { CardBaseLink } from '../../../../components/CardBase';
+import { CardBaseLink, CardBase } from '../../../../components/CardBase';
 import { FileVideoIcon } from '../../../../components/icons/FileTypes/FileVideoIcon';
 import { FileImgIcon } from '../../../../components/icons/FileTypes/FileImgIcon';
 import { FileHouseIcon } from '../../../../components/icons/FileTypes/FileHouseIcon';
@@ -36,6 +36,7 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 };
 
 const FileStyled = styled(CardBaseLink)``;
+const FileStyledNoLink = styled(CardBase)``;
 
 export const GetFileLink = (file: TenderDocument) => {
 	const { offerId, tenderId } = useParams();
@@ -70,7 +71,7 @@ export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 	const href = GetFileLink(file);
 
 	return (
-		<FileStyled to={href}>
+		<FileStyledNoLink>
 			<HStack spacing={8}>
 				<Icon />
 
@@ -83,6 +84,6 @@ export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
-		</FileStyled>
+		</FileStyledNoLink>
 	);
 };
