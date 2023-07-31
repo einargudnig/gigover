@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Center, Text, VStack, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
@@ -40,23 +40,38 @@ const OfferCardTitle = styled.div`
 	justify-content: space-between;
 `;
 
-const getUniqueTenders = (tenders: Tender[]) => {
-	const uniqueTenders: Tender[] = [];
+// const getUniqueTenders = (tenders: Tender[]) => {
+// 	const uniqueTenders: Tender[] = [];
 
-	tenders.forEach((tender) => {
-		const existingTender = uniqueTenders.find((t) => t.tenderId === tender.tenderId);
-		if (!existingTender) {
-			uniqueTenders.push(tender);
-		}
-	});
+// 	tenders.forEach((tender) => {
+// 		const existingTender = uniqueTenders.find((t) => t.tenderId === tender.tenderId);
+// 		if (!existingTender) {
+// 			uniqueTenders.push(tender);
+// 		}
+// 	});
 
-	return uniqueTenders;
-};
+// 	return uniqueTenders;
+// };
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
 
-	const uniqueTenders = getUniqueTenders(tenders);
+	const getUniqueTenders = useMemo(() => {
+		return () => {
+			const uniqueTenders: Tender[] = [];
+
+			tenders.forEach((tender) => {
+				const existingTender = uniqueTenders.find((t) => t.tenderId === tender.tenderId);
+				if (!existingTender) {
+					uniqueTenders.push(tender);
+				}
+			});
+
+			return uniqueTenders;
+		};
+	}, [tenders]);
+
+	const uniqueTenders = getUniqueTenders();
 
 	const noTender = uniqueTenders?.length === 0;
 
@@ -71,48 +86,53 @@ export const BidderTenders = (): JSX.Element => {
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Container>
-							{noTender ? (
-								<Center>
-									<Text my={'2'} fontSize={'xl'}>
-										You do not have any tenders yet. The Tender owner needs to
-										add you to the tender.
-									</Text>
-								</Center>
-							) : null}
 							{isLoading ? (
 								<Center>
 									<LoadingSpinner />
 								</Center>
 							) : (
 								<>
-									{uniqueTenders.map((t) => (
-										<OfferCardStyled
-											to={`/tender/offers/${t.tenderId}`}
-											key={t.tenderId}
-										>
-											<OfferCardTitle>
-												<div>
-													<h3>
-														<b>Project:</b> {t.projectName}
-													</h3>
-													<div style={{ marginTop: -16 }}>
-														<b>Description:</b> {t.description}
-													</div>
-												</div>
-											</OfferCardTitle>
-											<div>
-												<p
-													style={{
-														marginBottom: -16,
-														fontSize: 14
-													}}
+									{noTender ? (
+										<Center>
+											<Text my={'2'} fontSize={'xl'}>
+												You do not have any tenders yet. The Tender owner
+												needs to add you to the tender.
+											</Text>
+										</Center>
+									) : (
+										<>
+											{uniqueTenders.map((t) => (
+												<OfferCardStyled
+													to={`/tender/offers/${t.tenderId}`}
+													key={t.tenderId}
 												>
-													<b>Close date:</b>{' '}
-													{formatDateWithoutTime(new Date(t.finishDate))}
-												</p>
-											</div>
-										</OfferCardStyled>
-									))}
+													<OfferCardTitle>
+														<div>
+															<h3>
+																<b>Project:</b> {t.projectName}
+															</h3>
+															<div style={{ marginTop: -16 }}>
+																<b>Description:</b> {t.description}
+															</div>
+														</div>
+													</OfferCardTitle>
+													<div>
+														<p
+															style={{
+																marginBottom: -16,
+																fontSize: 14
+															}}
+														>
+															<b>Close date:</b>{' '}
+															{formatDateWithoutTime(
+																new Date(t.finishDate)
+															)}
+														</p>
+													</div>
+												</OfferCardStyled>
+											))}
+										</>
+									)}
 								</>
 							)}
 						</Container>

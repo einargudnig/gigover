@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Input, Button, useToast } from '@chakra-ui/react';
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
+// import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+// import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 interface TenderItem {
@@ -18,6 +20,7 @@ interface TenderItem {
 export const TenderTable = ({ tenderItems }): JSX.Element => {
 	const { offerId } = useParams();
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);
+	// const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
 
 	const {
 		mutateAsync: addOfferItems,
@@ -33,18 +36,19 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 		field: 'productNumber' | 'cost' | 'note',
 		value: string | number
 	) => {
-		const newItems = [...items];
-		newItems[index] = { ...newItems[index], [field]: value };
-		setItems(newItems);
+		setItems((prevItems) =>
+			prevItems.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+		);
 	};
 
 	const handleUpdateClick = (index: number) => {
+		const itemToUpdate = items[index];
 		const offerItemBody = {
 			offerId: Number(offerId),
-			itemId: items[index].tenderItemId,
-			productNumber: items[index].productNumber,
-			cost: items[index].cost,
-			note: items[index].note
+			itemId: itemToUpdate.tenderItemId,
+			productNumber: itemToUpdate.productNumber,
+			cost: itemToUpdate.cost,
+			note: itemToUpdate.note
 		};
 
 		console.log('offerItemBody', offerItemBody);

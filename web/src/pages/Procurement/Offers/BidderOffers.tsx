@@ -6,6 +6,7 @@ import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
 import { Offer } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { Center } from '../../../components/Center';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -44,55 +45,60 @@ export const BidderOffers = (): JSX.Element => {
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Container>
-							{noOffers ? (
-								<Text>
-									You have not made any offers. Make sure you open a offer before
-									you add to it.
-								</Text>
-							) : null}
 							{isLoading ? (
-								<LoadingSpinner />
+								<Center>
+									<LoadingSpinner />
+								</Center>
 							) : (
 								<>
-									{offers?.map((o) => {
-										let offerStatus;
-										if (o.status === 0) {
-											offerStatus = 'Unpublished';
-										} else if (o.status === 1) {
-											offerStatus = 'Published';
-										} else if (o.status === 2) {
-											offerStatus = 'Accepted';
-										} else if (o.status === 3) {
-											offerStatus = 'Rejected';
-										} else {
-											offerStatus = 'Unknown';
-										}
+									{noOffers ? (
+										<Text>
+											You have not made any offers. Make sure you open a offer
+											before you add to it.
+										</Text>
+									) : (
+										<>
+											{offers?.map((o) => {
+												let offerStatus;
+												if (o.status === 0) {
+													offerStatus = 'Unpublished';
+												} else if (o.status === 1) {
+													offerStatus = 'Published';
+												} else if (o.status === 2) {
+													offerStatus = 'Accepted';
+												} else if (o.status === 3) {
+													offerStatus = 'Rejected';
+												} else {
+													offerStatus = 'Unknown';
+												}
 
-										return (
-											<React.Fragment key={o.offerId}>
-												<OfferCardStyled
-													to={`../tender/offers/${o.tenderId}/${o.offerId}`}
-												>
-													<HStack>
-														<Text as={'b'}>Notes:</Text>
-														<Text>{o.notes}</Text>
-													</HStack>
-													<HStack>
-														<Text as={'b'}>Offer Id:</Text>
-														<Text>{o.offerId}</Text>
-													</HStack>
-													<HStack>
-														<Text as={'b'}>Tender Id:</Text>
-														<Text>{o.tenderId}</Text>
-													</HStack>
-													<Text as={'b'} size={'lg'}>
-														Status: {offerStatus}
-													</Text>
-													<HStack></HStack>
-												</OfferCardStyled>
-											</React.Fragment>
-										);
-									})}
+												return (
+													<React.Fragment key={o.offerId}>
+														<OfferCardStyled
+															to={`../tender/offers/${o.tenderId}/${o.offerId}`}
+														>
+															<HStack>
+																<Text as={'b'}>Notes:</Text>
+																<Text>{o.notes}</Text>
+															</HStack>
+															<HStack>
+																<Text as={'b'}>Offer Id:</Text>
+																<Text>{o.offerId}</Text>
+															</HStack>
+															<HStack>
+																<Text as={'b'}>Tender Id:</Text>
+																<Text>{o.tenderId}</Text>
+															</HStack>
+															<Text as={'b'} size={'lg'}>
+																Status: {offerStatus}
+															</Text>
+															<HStack></HStack>
+														</OfferCardStyled>
+													</React.Fragment>
+												);
+											})}
+										</>
+									)}
 								</>
 							)}
 						</Container>

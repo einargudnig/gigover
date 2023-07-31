@@ -28,7 +28,10 @@ export const UploadCertifications = ({ onClose, offerId }: UploadModalProps): JS
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for offer'}>
 			<UploadModalStyled>
-				<Text marginBottom={4}>This file will be linked to this offer.</Text>
+				<Text marginBottom={4}>
+					You can upload any file you file necessary, this file will be linked to this
+					offer.
+				</Text>
 				<VStack mb={-6} align={'stretch'}>
 					<DropZone offerId={offerId} projectId={0} />
 					<FormActions

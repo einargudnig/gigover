@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Text } from '@chakra-ui/react';
+import { Center } from '../../../components/Center';
 
 export const TenderPage = (): JSX.Element => {
 	const { tenderId } = useParams();
@@ -15,7 +16,9 @@ export const TenderPage = (): JSX.Element => {
 	return (
 		<>
 			{isLoading ? (
-				<LoadingSpinner />
+				<Center>
+					<LoadingSpinner />
+				</Center>
 			) : isError ? (
 				<Text>
 					{error?.errorCode} went wrong - {error?.errorCode}

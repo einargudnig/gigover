@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import {
-	Center,
 	Button,
 	ButtonProps,
 	Box,
@@ -18,15 +17,14 @@ import {
 	Tooltip,
 	Text
 } from '@chakra-ui/react';
-import { useParams, Link } from 'react-router-dom';
+import { Center } from '../../../../components/Center';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { TenderTable } from './OfferTable';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender, TenderItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
-import { PublishedOffer } from './PublishedOffer';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { UploadCertifications } from './UploadCertifications';
 
@@ -36,13 +34,13 @@ export const TenderOffer = (): JSX.Element => {
 	const [upload, setUpload] = useState(false);
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
-	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
 	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
 
 	const tender: Tender | undefined = tenderData?.tender;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	const toast = useToast();
+	const navigate = useNavigate();
 
 	const handlePublish = () => {
 		const offerIdBody = {
@@ -57,146 +55,111 @@ export const TenderOffer = (): JSX.Element => {
 			duration: 4000,
 			isClosable: true
 		});
+		// navigate to the new page
+		navigate(`/tender-offers/${tenderId}/${offerId}`);
 	};
 
-	// we need to map offerStatus to true/false, so we can render the correct component
-	// 0: 'Unpublished' -> false
-	// 1: 'Published' -> true
-	// 2: 'Accepted' -> true
-	// 3: 'Rejected' -> true
-	const offerStatus = {
-		0: false,
-		1: true,
-		2: true,
-		3: true
+	const handleOpenDialog: ButtonProps['onClick'] = (event) => {
+		event.preventDefault();
+		onOpen();
 	};
-	const isOfferPublished = offerStatus[offerData?.offer?.status || 0];
 
-	const UnPublished = () => {
-		const handleOpenDialog: ButtonProps['onClick'] = (event) => {
-			event.preventDefault();
-			onOpen();
-		};
+	const cancelRef = useRef<HTMLButtonElement | null>(null);
+	const finishDateStatus = handleFinishDate(tender?.finishDate); // Can't do this check sooner? I still need to check if the order is published or not
+	// const finishDateStatus = true;
 
-		const cancelRef = useRef<HTMLButtonElement | null>(null);
-		const finishDateStatus = handleFinishDate(tender?.finishDate); // Can't do this check sooner? I still need to check if the order is published or not
-		// const finishDateStatus = true;
-
-		return (
-			<>
-				{upload && (
-					<UploadCertifications
-						onClose={() => {
-							setUpload(false);
-						}}
-						onComplete={(status) => {
-							console.log('status', status);
-						}}
-						offerId={Number(offerId)}
-					/>
-				)}
-				{isTenderLoading ? (
-					<Center>
-						<LoadingSpinner />
-					</Center>
-				) : (
-					<>
-						<Flex flexDirection={'column'}>
+	return (
+		<>
+			{upload && (
+				<UploadCertifications
+					onClose={() => {
+						setUpload(false);
+					}}
+					onComplete={(status) => {
+						console.log('status', status);
+					}}
+					offerId={Number(offerId)}
+				/>
+			)}
+			{isTenderLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<>
+					<Flex flexDirection={'column'}>
+						<Box>
+							<OfferInformation tender={tender} />
+							<TenderTable tenderItems={tenderItems} />
+						</Box>
+						<Flex align={'center'}>
 							<Box>
-								<OfferInformation tender={tender} />
-								<TenderTable tenderItems={tenderItems} />
+								{!finishDateStatus ? (
+									<Button onClick={handleOpenDialog} mt={'4'}>
+										{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
+									</Button>
+								) : (
+									<Text>
+										The tender has expired, you cannot publish the offer
+									</Text>
+								)}
 							</Box>
-							<Flex align={'center'}>
-								<Box>
-									{!finishDateStatus ? (
-										<Button onClick={handleOpenDialog} mt={'4'}>
-											{isPublishLoading ? (
-												<LoadingSpinner />
-											) : (
-												'Publish Offer'
-											)}
+							<Spacer />
+							<Box>
+								<HStack>
+									<Tooltip label="We recommend you save your changes before uploading files.">
+										<Button onClick={() => setUpload(true)}>
+											Upload files
 										</Button>
-									) : (
-										<Text>
-											The tender has expired, you cannot publish the offer
-										</Text>
-									)}
-								</Box>
-								<Spacer />
-								<Box>
-									<HStack>
-										<Tooltip label="We recommend you save your changes before uploading files.">
-											<Button onClick={() => setUpload(true)}>
-												Upload files
-											</Button>
-										</Tooltip>
-										<Spacer />
-										<Button>
-											<Link to={`/files/tender/offers/${offerId}`}>
-												View files
-											</Link>
-										</Button>
-									</HStack>
-								</Box>
-							</Flex>
+									</Tooltip>
+									<Spacer />
+									<Button>
+										<Link to={`/files/tender/offers/${offerId}`}>
+											View files
+										</Link>
+									</Button>
+								</HStack>
+							</Box>
 						</Flex>
+					</Flex>
 
-						<AlertDialog
-							isOpen={isOpen}
-							onClose={onClose}
-							leastDestructiveRef={cancelRef}
-							portalProps={{ appendToParentPortal: true }}
-						>
-							<AlertDialogOverlay>
-								<AlertDialogContent>
-									<AlertDialogHeader>Publish offer</AlertDialogHeader>
-									<AlertDialogBody>
-										<Text>Are you sure you want to publish this offer?</Text>
-										<Text>You cannot update the offer after publishing.</Text>
-									</AlertDialogBody>
-									<AlertDialogFooter>
-										<Button
-											ref={cancelRef}
-											onClick={onClose}
-											variant={'outline'}
-											colorScheme={'gray'}
-										>
-											Cancel
-										</Button>
-										<Button
-											onClick={() => {
-												handlePublish();
-												onClose();
-											}}
-											ml={3}
-										>
-											Publish
-										</Button>
-									</AlertDialogFooter>
-								</AlertDialogContent>
-							</AlertDialogOverlay>
-						</AlertDialog>
-					</>
-				)}
-			</>
-		);
-	};
-
-	// The definition has changed a bit, but this will still be the same.
-	// The bidder cannot re-publish. So after he publishes the offer, he will see the published offer.
-	// but he will not be able to edit it.
-	const offerComponent = {
-		unpublished: <UnPublished />,
-		published: (
-			<PublishedOffer
-				offerData={offerData}
-				isOfferLoading={isOfferLoading}
-				showResultsButtons={false}
-			/>
-		)
-	};
-
-	const component = offerComponent[isOfferPublished ? 'published' : 'unpublished'];
-
-	return component;
+					<AlertDialog
+						isOpen={isOpen}
+						onClose={onClose}
+						leastDestructiveRef={cancelRef}
+						portalProps={{ appendToParentPortal: true }}
+					>
+						<AlertDialogOverlay>
+							<AlertDialogContent>
+								<AlertDialogHeader>Publish offer</AlertDialogHeader>
+								<AlertDialogBody>
+									<Text>Are you sure you want to publish this offer?</Text>
+									<Text>You cannot update the offer after publishing.</Text>
+								</AlertDialogBody>
+								<AlertDialogFooter>
+									<Button
+										ref={cancelRef}
+										onClick={onClose}
+										variant={'outline'}
+										colorScheme={'gray'}
+									>
+										Cancel
+									</Button>
+									<Button
+										onClick={() => {
+											handlePublish();
+											onClose();
+										}}
+										ml={3}
+									>
+										Publish
+									</Button>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialogOverlay>
+					</AlertDialog>
+				</>
+			)}
+		</>
+	);
 };
