@@ -290,7 +290,7 @@ export const Page = ({
 						<span>Settings</span>
 					</IconLink>
 				</SidebarNav>
-				<small>v1.4</small>
+				<small>v1.5</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>
@@ -356,7 +356,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
-			<DevMenu />
+			{/* <DevMenu /> */}
 		</PageStyled>
 	);
 };

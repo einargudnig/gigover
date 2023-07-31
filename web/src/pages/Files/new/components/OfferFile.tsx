@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { VStack, Heading } from '@chakra-ui/react';
+import { Center, VStack, Heading } from '@chakra-ui/react';
 import { OtherGigoverFile } from './OtherFile';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 // import { OfferDocument } from '../../../../models/Tender';
@@ -58,7 +58,9 @@ export const OfferFile = (): JSX.Element => {
 				/>
 			)} */}
 			{isLoading ? (
-				<LoadingSpinner />
+				<Center>
+					<LoadingSpinner />
+				</Center>
 			) : (
 				<>
 					{offerDocuments!.length > 0 ? (

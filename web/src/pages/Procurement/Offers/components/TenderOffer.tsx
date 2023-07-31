@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
+	Center,
 	Button,
 	ButtonProps,
 	Box,
@@ -12,9 +13,12 @@ import {
 	AlertDialogHeader,
 	AlertDialogBody,
 	useDisclosure,
+	HStack,
+	Spacer,
+	Tooltip,
 	Text
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { OfferInformation } from './OfferInformation';
 import { TenderTable } from './OfferTable';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
@@ -24,10 +28,12 @@ import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { PublishedOffer } from './PublishedOffer';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { UploadCertifications } from './UploadCertifications';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
 	const { tenderId } = useParams();
+	const [upload, setUpload] = useState(false);
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
@@ -74,13 +80,25 @@ export const TenderOffer = (): JSX.Element => {
 
 		const cancelRef = useRef<HTMLButtonElement | null>(null);
 		const finishDateStatus = handleFinishDate(tender?.finishDate); // Can't do this check sooner? I still need to check if the order is published or not
+		// const finishDateStatus = true;
 
 		return (
 			<>
+				{upload && (
+					<UploadCertifications
+						onClose={() => {
+							setUpload(false);
+						}}
+						onComplete={(status) => {
+							console.log('status', status);
+						}}
+						offerId={Number(offerId)}
+					/>
+				)}
 				{isTenderLoading ? (
-					<div>
+					<Center>
 						<LoadingSpinner />
-					</div>
+					</Center>
 				) : (
 					<>
 						<Flex flexDirection={'column'}>
@@ -88,17 +106,39 @@ export const TenderOffer = (): JSX.Element => {
 								<OfferInformation tender={tender} />
 								<TenderTable tenderItems={tenderItems} />
 							</Box>
-							<Box>
-								{!finishDateStatus ? (
-									<Button onClick={handleOpenDialog} mt={'4'}>
-										{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
-									</Button>
-								) : (
-									<Text>
-										The tender has expired, you cannot publish the offer
-									</Text>
-								)}
-							</Box>
+							<Flex align={'center'}>
+								<Box>
+									{!finishDateStatus ? (
+										<Button onClick={handleOpenDialog} mt={'4'}>
+											{isPublishLoading ? (
+												<LoadingSpinner />
+											) : (
+												'Publish Offer'
+											)}
+										</Button>
+									) : (
+										<Text>
+											The tender has expired, you cannot publish the offer
+										</Text>
+									)}
+								</Box>
+								<Spacer />
+								<Box>
+									<HStack>
+										<Tooltip label="We recommend you save your changes before uploading files.">
+											<Button onClick={() => setUpload(true)}>
+												Upload files
+											</Button>
+										</Tooltip>
+										<Spacer />
+										<Button>
+											<Link to={`/files/tender/offers/${offerId}`}>
+												View files
+											</Link>
+										</Button>
+									</HStack>
+								</Box>
+							</Flex>
 						</Flex>
 
 						<AlertDialog

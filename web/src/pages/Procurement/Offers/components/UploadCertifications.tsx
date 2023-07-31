@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Text, VStack, Progress } from '@chakra-ui/react';
+import { Text, VStack, Progress, useToast } from '@chakra-ui/react';
 import styled, { css } from 'styled-components';
 import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
@@ -24,14 +24,11 @@ const UploadModalStyled = styled.div`
 	}
 `;
 
-// What am doing with this?
-// I need the projectId and folderId to be able to upload the file?
-// maybe I will need to prop drill that to the DropZone component
-
 export const UploadCertifications = ({ onClose, offerId }: UploadModalProps): JSX.Element => {
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for offer'}>
 			<UploadModalStyled>
+				<Text marginBottom={4}>This file will be linked to this offer.</Text>
 				<VStack mb={-6} align={'stretch'}>
 					<DropZone offerId={offerId} projectId={0} />
 					<FormActions
@@ -96,6 +93,8 @@ const DropZone = ({
 	const { fileService } = useFileService();
 	const { mutateAsync } = useAddTenderDocument();
 
+	const toast = useToast();
+
 	const onDrop = useCallback(
 		async (acceptedFiles: (File & { path: string })[]) => {
 			// Do something with the files
@@ -128,8 +127,22 @@ const DropZone = ({
 						try {
 							// @ts-ignore
 							uploadedFile = await mutateAsync(response);
+							toast({
+								title: 'You have uplodaded a file!',
+								description: 'View it in your file system',
+								status: 'success',
+								duration: 3000,
+								isClosable: true
+							});
 						} catch (e) {
 							devError('FileUpload', e);
+							toast({
+								title: 'Uploading failed',
+								description: 'Uploading your file failed',
+								status: 'error',
+								duration: 3000,
+								isClosable: true
+							});
 						} finally {
 							if (callback) {
 								callback(uploadedFile?.tenderDocument, file);

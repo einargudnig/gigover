@@ -89,6 +89,7 @@ export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 						<IconButton
 							aria-label={'Download'}
 							colorScheme={'black'}
+							size={'sm'} // does this work?
 							icon={<DownloadIcon color={'white'} />}
 						/>
 					</a>
