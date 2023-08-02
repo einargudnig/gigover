@@ -18,6 +18,7 @@ import {
 	Spacer,
 	useToast
 } from '@chakra-ui/react';
+import { Center } from '../../../../components/Center';
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import ReactToPdf from 'react-to-pdf';
@@ -97,9 +98,9 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	return (
 		<>
 			{isOfferLoading ? (
-				<div>
+				<Center>
 					<LoadingSpinner />
-				</div>
+				</Center>
 			) : (
 				<>
 					<div ref={ref} id={'published-offer'}>
