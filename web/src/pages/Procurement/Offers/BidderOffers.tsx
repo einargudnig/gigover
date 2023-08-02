@@ -60,23 +60,26 @@ export const BidderOffers = (): JSX.Element => {
 										<>
 											{offers?.map((o) => {
 												let offerStatus;
+												let url;
 												if (o.status === 0) {
 													offerStatus = 'Unpublished';
+													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
 												} else if (o.status === 1) {
 													offerStatus = 'Published';
+													url = `/tender-offers/${o.tenderId}/${o.offerId}`;
 												} else if (o.status === 2) {
 													offerStatus = 'Accepted';
+													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
 												} else if (o.status === 3) {
 													offerStatus = 'Rejected';
+													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
 												} else {
 													offerStatus = 'Unknown';
 												}
 
 												return (
 													<React.Fragment key={o.offerId}>
-														<OfferCardStyled
-															to={`../tender/offers/${o.tenderId}/${o.offerId}`}
-														>
+														<OfferCardStyled to={url}>
 															<HStack>
 																<Text as={'b'}>Notes:</Text>
 																<Text>{o.notes}</Text>
