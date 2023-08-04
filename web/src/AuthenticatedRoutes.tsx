@@ -79,10 +79,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 		{/* This route will be for the user that makes offers */}
 		<Route path={'bidder-tenders'} element={<BidderTenders />} />
-		<Route path={'bidder-offers'} element={<BidderOffers />}>
-			{/* This is a different page, the bidder can see hus published bid*/}
-			<Route path={':tenderId/:offerId'} element={<OfferPublished />} />
-		</Route>
+		<Route path={'bidder-offers'} element={<BidderOffers />} />
+		{/* This is a different page, the bidder can see hus published bid*/}
+		<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 
 		{/*
 			 The first route is accessible from the ProcurementHome page.

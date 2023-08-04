@@ -41,6 +41,7 @@ export const HandlingOfferConfirmation = ({
 
 	const acceptOfferText = 'Your offer has been accepted!';
 	const rejectOfferText = 'Your offer has been rejected!';
+	// I want to send an email to the bidder when the offer is accepted or rejected
 	// send an email to the bidder
 	// const sendEmail = async () => {
 	// 	const templateParams = {
