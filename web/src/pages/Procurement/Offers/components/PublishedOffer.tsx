@@ -41,15 +41,26 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 		const offerIdBody = {
 			offerId: offerIdNumber
 		};
-		console.log('Accept offer with this body:', offerIdBody);
-		acceptOffer(offerIdBody);
-		toast({
-			title: 'Offer accepted',
-			description: 'Your have accepted this offer!',
-			status: 'info',
-			duration: 4000,
-			isClosable: true
-		});
+		try {
+			console.log('Accept offer with this body:', offerIdBody);
+			acceptOffer(offerIdBody);
+			toast({
+				title: 'Offer accepted',
+				description: 'Your have accepted this offer!',
+				status: 'info',
+				duration: 3000,
+				isClosable: true
+			});
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Error',
+				description: 'There was an error in accepting the offer.',
+				status: 'error',
+				duration: 2000,
+				isClosable: true
+			});
+		}
 	};
 
 	const handleReject = () => {
@@ -57,14 +68,25 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			offerId: offerIdNumber
 		};
 		console.log('Reject offer with this body:', offerIdBody);
-		rejectOffer(offerIdBody);
-		toast({
-			title: 'Offer rejected',
-			description: 'Your have rejected this offer!',
-			status: 'info',
-			duration: 4000,
-			isClosable: true
-		});
+		try {
+			rejectOffer(offerIdBody);
+			toast({
+				title: 'Offer rejected',
+				description: 'Your have rejected this offer!',
+				status: 'info',
+				duration: 3000,
+				isClosable: true
+			});
+		} catch (error) {
+			console.log(error);
+			toast({
+				title: 'Error',
+				description: 'There was an error in rejecting the offer.',
+				status: 'error',
+				duration: 2000,
+				isClosable: true
+			});
+		}
 	};
 
 	const formatNumber = (num: number) => {

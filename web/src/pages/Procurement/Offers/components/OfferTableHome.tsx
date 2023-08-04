@@ -23,8 +23,6 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 						<Th>Description</Th>
 						<Th>Volume</Th>
 						<Th>Unit</Th>
-						{/* <Th>Cost</Th>
-						<Th>Notes/Certifications</Th> */}
 					</Tr>
 				</Thead>
 				<Tbody>
@@ -34,8 +32,6 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 							<Td>{row.description}</Td>
 							<Td>{row.volume}</Td>
 							<Td>{row.unit}</Td>
-							{/* <Td>no cost</Td>
-							<Td>no notes</Td> */}
 						</Tr>
 					))}
 				</Tbody>
