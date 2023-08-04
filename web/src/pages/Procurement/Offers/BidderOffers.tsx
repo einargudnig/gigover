@@ -66,13 +66,13 @@ export const BidderOffers = (): JSX.Element => {
 													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
 												} else if (o.status === 1) {
 													offerStatus = 'Published';
-													url = `/tender-offers/${o.tenderId}/${o.offerId}`;
+													url = `/bidder-offers/${o.tenderId}/${o.offerId}`;
 												} else if (o.status === 2) {
 													offerStatus = 'Accepted';
-													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
+													url = `/bidder-offers/${o.tenderId}/${o.offerId}`;
 												} else if (o.status === 3) {
 													offerStatus = 'Rejected';
-													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
+													url = `/bidder-offers/${o.tenderId}/${o.offerId}`;
 												} else {
 													offerStatus = 'Unknown';
 												}

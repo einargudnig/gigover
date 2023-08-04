@@ -30,6 +30,7 @@ import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForT
 import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTender';
 import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
 import { PublishedTender } from './pages/Procurement/Offers/components/PublishedTender';
+import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -78,7 +79,10 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 		{/* This route will be for the user that makes offers */}
 		<Route path={'bidder-tenders'} element={<BidderTenders />} />
-		<Route path={'bidder-offers'} element={<BidderOffers />} />
+		<Route path={'bidder-offers'} element={<BidderOffers />}>
+			{/* This is a different page, the bidder can see hus published bid*/}
+			<Route path={':tenderId/:offerId'} element={<OfferPublished />} />
+		</Route>
 
 		{/*
 			 The first route is accessible from the ProcurementHome page.

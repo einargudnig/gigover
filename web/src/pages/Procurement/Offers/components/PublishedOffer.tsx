@@ -261,6 +261,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										statusText={'Accept Offer'}
 										status={'accept'}
 										buttonText={'Accept'}
+										offerId={offerIdNumber}
 									/>
 								</Box>
 								<Spacer />
@@ -271,6 +272,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										statusText={'Reject Offer'}
 										status={'reject'}
 										buttonText={'Reject'}
+										offerId={offerIdNumber}
 									/>
 								</Box>
 							</Flex>
