@@ -277,6 +277,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						{showResultsButtons ? (
 							<Flex>
 								<Box mr={'1'}>
+									{/* I send an email in this component */}
 									<HandlingOfferConfirmation
 										mutationLoading={isAcceptLoading}
 										mutation={() => handleAccept()}
@@ -284,10 +285,12 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										status={'accept'}
 										buttonText={'Accept'}
 										offerId={offerIdNumber}
+										email={offer?.email}
 									/>
 								</Box>
 								<Spacer />
 								<Box ml={'1'}>
+									{/* I send an email in this component */}
 									<HandlingOfferConfirmation
 										mutationLoading={isRejectLoading}
 										mutation={() => handleReject()}
@@ -295,6 +298,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										status={'reject'}
 										buttonText={'Reject'}
 										offerId={offerIdNumber}
+										email={offer?.email}
 									/>
 								</Box>
 							</Flex>

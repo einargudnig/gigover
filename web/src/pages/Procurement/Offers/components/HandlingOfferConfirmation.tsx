@@ -21,6 +21,7 @@ export type ConfirmDialogProps = {
 	status: string;
 	statusText?: string;
 	offerId: number;
+	email: string;
 };
 
 export const HandlingOfferConfirmation = ({
@@ -29,7 +30,8 @@ export const HandlingOfferConfirmation = ({
 	buttonText,
 	status,
 	statusText,
-	offerId
+	offerId,
+	email
 }: ConfirmDialogProps): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
@@ -39,16 +41,20 @@ export const HandlingOfferConfirmation = ({
 		onOpen();
 	};
 
+	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
+	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID; //TODO make a new template
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+
 	const acceptOfferText = 'Your offer has been accepted!';
 	const rejectOfferText = 'Your offer has been rejected!';
 	// I want to send an email to the bidder when the offer is accepted or rejected
 	// send an email to the bidder
-	// const sendEmail = async () => {
-	// 	const templateParams = {
-	// 		offerId: offerId,
-	// 		to_email:
-	// 	}
-	// }
+	const sendEmail = async () => {
+		const templateParams = {
+			offerId: offerId,
+			to_email: email
+		};
+	};
 
 	return (
 		<>
