@@ -28,6 +28,7 @@ import { useRejectOffer } from '../../../../mutations/useRejectOffer';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
+	console.log('Offer', { offerData });
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
@@ -153,7 +154,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 											</HStack>
 											<HStack>
 												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Status:
+													Offer status:
 												</Text>
 												<Text fontSize={'lg'}>{status()}</Text>
 											</HStack>
@@ -165,7 +166,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 													<Text fontWeight={'bold'} fontSize={'xl'}>
 														Notes:
 													</Text>
-													<Text fontSize={'lg'}>{offer?.note}</Text>
+													<Text fontSize={'lg'}>{offer?.notes}</Text>
 												</HStack>
 											</VStack>
 										</HStack>

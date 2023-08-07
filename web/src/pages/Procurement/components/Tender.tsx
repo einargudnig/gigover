@@ -12,7 +12,6 @@ export const TenderPage = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	// console.log('tender', tender);
 	return (
 		<>
 			{isLoading ? (

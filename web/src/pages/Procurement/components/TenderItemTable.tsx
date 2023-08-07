@@ -360,10 +360,6 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 				</HStack>
 			</Flex>
 
-			<Flex mb={'2'}>
-				<Text>When the tender is ready you can publish it.</Text>
-				<Spacer />
-			</Flex>
 			{/* onClick handler that publishes the tender
 				// it also open a dialog where I can add email that I want to send an invitation to
 			*/}
@@ -371,9 +367,13 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 				<Flex alignItems={'center'} justifyContent={'center'}>
 					{!finishDateStatus ? (
 						<>
-							<Button onClick={handlePublish} mr={'2'}>
-								{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
-							</Button>
+							{tenderStatus === 0 ? (
+								<Button onClick={handlePublish} mr={'2'}>
+									{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
+								</Button>
+							) : (
+								<Text mr={'2'}>You have already published the Tender</Text>
+							)}
 							{tenderStatus === 1 ? (
 								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
 							) : (

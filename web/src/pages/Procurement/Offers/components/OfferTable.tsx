@@ -4,7 +4,7 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Input, Button, useToast } from '@
 import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
 // import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 // import { GetOfferItem } from '../../../../models/Tender';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+// import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 interface TenderItem {
 	description: string;
@@ -23,8 +23,8 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 	// const { data: offerData, isLoading: isOfferLoading } = useGetOfferByOfferId(Number(offerId));
 
 	const {
-		mutateAsync: addOfferItems,
-		isLoading: addOfferItemsLoading
+		mutateAsync: addOfferItems
+		// isLoading: addOfferItemsLoading
 		// isError: isMutateError,
 		// error: mutateError
 	} = useAddOfferItems();
