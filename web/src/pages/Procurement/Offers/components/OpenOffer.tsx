@@ -18,6 +18,7 @@ import {
 	Text,
 	Spacer
 } from '@chakra-ui/react';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
 import { useParams } from 'react-router-dom';
 
@@ -33,7 +34,7 @@ export const OpenOffer = (): JSX.Element => {
 		handleSubmit,
 		formState: { errors }
 	} = useForm<OfferNote>();
-	const { mutateAsync: addOffer } = useAddOffer();
+	const { mutateAsync: addOffer, isLoading } = useAddOffer();
 
 	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
 		try {
@@ -103,7 +104,9 @@ export const OpenOffer = (): JSX.Element => {
 									Cancel
 								</Button>
 								<Spacer />
-								<Button type="submit">Open offer</Button>
+								<Button type="submit">
+									{isLoading ? <LoadingSpinner /> : 'Open offer'}
+								</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialogOverlay>

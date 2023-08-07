@@ -22,7 +22,11 @@ export type ConfirmDialogProps = {
 	statusText?: string;
 	offerId: number;
 	email: string;
+	name: string;
 };
+
+// function to find the tender name and email from the tenderId
+// const tender = tenders.find((tender) => tender.id === tenderId);
 
 export const HandlingOfferConfirmation = ({
 	mutationLoading,
@@ -31,7 +35,8 @@ export const HandlingOfferConfirmation = ({
 	status,
 	statusText,
 	offerId,
-	email
+	email,
+	name
 }: ConfirmDialogProps): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
@@ -55,7 +60,8 @@ export const HandlingOfferConfirmation = ({
 		const templateParams = {
 			offerId: offerId,
 			to_email: email,
-			status: offerStatus
+			status: offerStatus,
+			name
 		};
 
 		try {
@@ -108,7 +114,7 @@ export const HandlingOfferConfirmation = ({
 									// the mutations are defined in PublishOffers, but invoked here.
 									// This makes it so we can re-use this component for both accept and reject.
 									mutation();
-									// sendEmail();
+									sendEmail();
 									onClose();
 								}}
 								ml={3}

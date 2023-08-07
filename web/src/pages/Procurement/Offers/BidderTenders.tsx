@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Center, Text, VStack, HStack } from '@chakra-ui/react';
+import { Text, VStack, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { Tender } from '../../../models/Tender';
+import { Center } from '../../../components/Center';
 
 const Container = styled.div`
 	flex: 1 0;

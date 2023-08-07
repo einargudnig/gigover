@@ -47,7 +47,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			acceptOffer(offerIdBody);
 			toast({
 				title: 'Offer accepted',
-				description: 'Your have accepted this offer!',
+				description: 'You have accepted this offer!',
 				status: 'info',
 				duration: 3000,
 				isClosable: true
@@ -73,7 +73,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 			rejectOffer(offerIdBody);
 			toast({
 				title: 'Offer rejected',
-				description: 'Your have rejected this offer!',
+				description: 'You have rejected this offer!',
 				status: 'info',
 				duration: 3000,
 				isClosable: true
@@ -286,6 +286,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										buttonText={'Accept'}
 										offerId={offerIdNumber}
 										email={offer?.email}
+										name={offer?.name}
 									/>
 								</Box>
 								<Spacer />
@@ -298,6 +299,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										buttonText={'Reject'}
 										offerId={offerIdNumber}
 										email={offer?.email}
+										name={offer?.name}
 									/>
 								</Box>
 							</Flex>

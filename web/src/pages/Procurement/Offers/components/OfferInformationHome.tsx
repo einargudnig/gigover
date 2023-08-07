@@ -18,6 +18,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { useAddOffer } from '../../../../mutations/useAddOffer';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 type OfferNote = {
 	notes: string;
@@ -25,7 +26,7 @@ type OfferNote = {
 
 export const OfferInformationHome = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
-	const { mutateAsync: addOffer } = useAddOffer();
+	const { mutateAsync: addOffer, isLoading } = useAddOffer();
 	const { handleSubmit, register } = useForm<OfferNote>({
 		mode: 'onBlur'
 	});
@@ -152,7 +153,7 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 										You can add notes to the offer. You need to open the offer
 										so you can start making offers to items.
 									</Text>
-									<FormControl id={'email'}>
+									<FormControl id={'note'}>
 										<FormLabel>Note</FormLabel>
 										<Input
 											placeholder={
@@ -166,7 +167,9 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 								</VStack>
 								{/* This button should be conditionally rendered with regard of the finishDate */}
 								{!finishDateStatus ? (
-									<Button type="submit">Open offer</Button>
+									<Button type="submit">
+										{isLoading ? <LoadingSpinner /> : 'Open offer'}
+									</Button>
 								) : (
 									<Text>
 										The tender has closed. You can&apos;t open an offer.

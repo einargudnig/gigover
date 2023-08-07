@@ -6,6 +6,7 @@ import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useToast } from '@chakra-ui/react';
+import { Center } from '../../../../components/Center';
 
 type TenderIdParams = {
 	tenderId: string;
@@ -26,10 +27,6 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const toast = useToast();
 
-	if (isLoading) {
-		return <LoadingSpinner />;
-	}
-
 	const tender = findTenderById(tenderId, bidderTenders);
 
 	if (!tender) {
@@ -45,7 +42,9 @@ export const TenderOfferHome = (): JSX.Element => {
 	return (
 		<>
 			{isLoading ? (
-				<LoadingSpinner />
+				<Center>
+					<LoadingSpinner />
+				</Center>
 			) : (
 				<>
 					<OfferInformationHome tender={tender} />
