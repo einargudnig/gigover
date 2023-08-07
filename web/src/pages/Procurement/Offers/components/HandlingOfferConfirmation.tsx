@@ -42,7 +42,7 @@ export const HandlingOfferConfirmation = ({
 	};
 
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateId = process.env.REACT_APP_EMAIL_OFFER_TEMPLATE_ID; //TODO make a new template
+	const emailTemplateId = process.env.REACT_APP_EMAIL_OFFER_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	const handling = {
@@ -51,7 +51,6 @@ export const HandlingOfferConfirmation = ({
 	};
 	const offerStatus = handling[status];
 	// I want to send an email to the bidder when the offer is accepted or rejected
-	// send an email to the bidder
 	const sendEmail = async () => {
 		const templateParams = {
 			offerId: offerId,

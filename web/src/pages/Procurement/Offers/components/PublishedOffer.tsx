@@ -31,6 +31,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
+	console.log('Offer', { offer });
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
 	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
@@ -277,7 +278,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						{showResultsButtons ? (
 							<Flex>
 								<Box mr={'1'}>
-									{/* I send an email in this component */}
 									<HandlingOfferConfirmation
 										mutationLoading={isAcceptLoading}
 										mutation={() => handleAccept()}
@@ -290,7 +290,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 								</Box>
 								<Spacer />
 								<Box ml={'1'}>
-									{/* I send an email in this component */}
 									<HandlingOfferConfirmation
 										mutationLoading={isRejectLoading}
 										mutation={() => handleReject()}
