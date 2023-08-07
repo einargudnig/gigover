@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Button, Center, Text } from '@chakra-ui/react';
+import { Button, Text } from '@chakra-ui/react';
+import { Center } from '../../components/Center';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../utils/StringUtils';
@@ -34,8 +35,6 @@ const ProcurementCardTitle = styled.div`
 
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
-
-	// console.log('data', data);
 
 	return (
 		<>

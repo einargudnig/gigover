@@ -34,10 +34,6 @@ export const OfferFile = (): JSX.Element => {
 	// 	// setSelectedIndex(-1);
 	// }, [offerDocuments, params.fileId]);
 
-	if (isLoading) {
-		return <LoadingSpinner />;
-	}
-
 	if (isError && error) {
 		console.log(error);
 		return <div>Error</div>;

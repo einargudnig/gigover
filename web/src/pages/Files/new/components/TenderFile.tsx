@@ -4,6 +4,7 @@ import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { VStack, Heading, Text } from '@chakra-ui/react';
 import { OtherGigoverFile } from './OtherFile';
+import { Center } from '../../../../components/Center';
 
 export const TenderFile = (): JSX.Element => {
 	const params = useParams();
@@ -11,10 +12,6 @@ export const TenderFile = (): JSX.Element => {
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	// console.log(data, 'DATA');
 	const tenderDocuments = data?.tender.documents;
-
-	if (isLoading) {
-		return <LoadingSpinner />;
-	}
 
 	if (isError && error) {
 		console.log(error);
@@ -27,22 +24,32 @@ export const TenderFile = (): JSX.Element => {
 
 	return (
 		<>
-			{tenderDocuments!.length > 0 ? (
-				<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
-					<Heading size={'md'}>Files for your offer</Heading>
-					{tenderDocuments!
-						.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
-						.map((p, pIndex) => (
-							<OtherGigoverFile key={pIndex} file={p} />
-						))}
-				</VStack>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
 			) : (
-				<div>
-					<Text>
-						There are no files here. The bidders have not added files to any of the
-						offers.
-					</Text>
-				</div>
+				<>
+					{tenderDocuments!.length > 0 ? (
+						<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
+							<Heading size={'md'}>Files for your offer</Heading>
+							{tenderDocuments!
+								.sort((a, b) =>
+									b.created && a.created ? b.created - a.created : -1
+								)
+								.map((p, pIndex) => (
+									<OtherGigoverFile key={pIndex} file={p} />
+								))}
+						</VStack>
+					) : (
+						<div>
+							<Text>
+								There are no files here. The bidders have not added files to any of
+								the offers.
+							</Text>
+						</div>
+					)}
+				</>
 			)}
 		</>
 	);

@@ -55,8 +55,8 @@ export const TenderOffer = (): JSX.Element => {
 			duration: 4000,
 			isClosable: true
 		});
-		// navigate to the new page
-		navigate(`/tender-offers/${tenderId}/${offerId}`);
+		// navigate to the new page -> this should be the bidder view of the published offer, *not* with the handling buttons
+		navigate(`/published-offer/${tenderId}/${offerId}`);
 	};
 
 	const handleOpenDialog: ButtonProps['onClick'] = (event) => {

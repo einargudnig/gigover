@@ -36,75 +36,81 @@ export const OffersFolder = (): JSX.Element => {
 		<VStack style={{ height: '100%' }}>
 			<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 				<Container>
-					{noOffers ? (
-						<Text>
-							There are no files here because you have not opened an offer. You can
-							open offer on the{' '}
-							<Link to={'/bidder-tenders'}>
-								<Text textColor={'black'}>bid invitations page</Text>
-							</Link>
-							.
-						</Text>
-					) : null}
 					{isLoading ? (
 						<Center>
 							<LoadingSpinner />
 						</Center>
 					) : (
 						<>
-							<Heading size={'md'} marginBottom={2}>
-								Offers
-							</Heading>
-							{offers?.map((o) => {
-								return (
-									<>
-										<FolderCard
-											to={`/files/tender/offers/${o.offerId}`}
-											key={o.offerId}
-										>
-											<VStack align={'stretch'} spacing={4}>
-												<HStack justify={'space-between'} align={'center'}>
-													<FolderIcon
-														color={
-															colorGenerator(
-																`${o.tender.description}`,
-																150,
-																50
-															).backgroundColor
-														}
-														size={32}
-													/>
-													{/* <Text>{o.tender.description}</Text> */}
-												</HStack>
-												<HStack>
-													<Heading
-														as={'h4'}
-														size={'sm'}
-														fontWeight={'bold'}
-													>
-														Tender Description:
-													</Heading>
-													<Heading
-														as={'h4'}
-														size={'sm'}
-														fontWeight={'normal'}
-													>
-														{o.tender.description}
-													</Heading>
-												</HStack>
-												<HStack>
-													<Text as={'b'}>Offer Id:</Text>
-													<Text>{o.offerId}</Text>
-												</HStack>
-												<HStack>
-													<Text as={'b'}>Offer notes:</Text>
-													<Text>{o.notes}</Text>
-												</HStack>
-											</VStack>
-										</FolderCard>
-									</>
-								);
-							})}
+							{noOffers ? (
+								<Text>
+									There are no files here because you have not opened an offer.
+									You can open offer on the{' '}
+									<Link to={'/bidder-tenders'}>
+										<Text textColor={'black'}>bid invitations page</Text>
+									</Link>
+									.
+								</Text>
+							) : (
+								<>
+									<Heading size={'md'} marginBottom={2}>
+										Offers
+									</Heading>
+									{offers?.map((o) => {
+										return (
+											<>
+												<FolderCard
+													to={`/files/tender/offers/${o.offerId}`}
+													key={o.offerId}
+												>
+													<VStack align={'stretch'} spacing={4}>
+														<HStack
+															justify={'space-between'}
+															align={'center'}
+														>
+															<FolderIcon
+																color={
+																	colorGenerator(
+																		`${o.tender.description}`,
+																		150,
+																		50
+																	).backgroundColor
+																}
+																size={32}
+															/>
+															{/* <Text>{o.tender.description}</Text> */}
+														</HStack>
+														<HStack>
+															<Heading
+																as={'h4'}
+																size={'sm'}
+																fontWeight={'bold'}
+															>
+																Tender Description:
+															</Heading>
+															<Heading
+																as={'h4'}
+																size={'sm'}
+																fontWeight={'normal'}
+															>
+																{o.tender.description}
+															</Heading>
+														</HStack>
+														<HStack>
+															<Text as={'b'}>Offer Id:</Text>
+															<Text>{o.offerId}</Text>
+														</HStack>
+														<HStack>
+															<Text as={'b'}>Offer notes:</Text>
+															<Text>{o.notes}</Text>
+														</HStack>
+													</VStack>
+												</FolderCard>
+											</>
+										);
+									})}
+								</>
+							)}
 						</>
 					)}
 				</Container>

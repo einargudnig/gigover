@@ -16,7 +16,6 @@ const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
 `;
 
 export const TenderFolderHome = (): JSX.Element => {
-	console.log('TenderFolderHome at the /files/tender index');
 	const isUploading = false;
 	return (
 		<>
