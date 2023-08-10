@@ -275,33 +275,35 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						<Spacer />
 						<Box>
 							{showResultsButtons ? (
-								<Flex>
-									<Box mr={'1'}>
-										<HandlingOfferConfirmation
-											mutationLoading={isAcceptLoading}
-											mutation={() => handleAccept()}
-											statusText={'Accept Offer'}
-											status={'accept'}
-											buttonText={'Accept'}
-											offerId={offerIdNumber}
-											email={offer?.email}
-											name={offer?.name}
-										/>
-									</Box>
-									<Spacer />
-									<Box ml={'1'}>
-										<HandlingOfferConfirmation
-											mutationLoading={isRejectLoading}
-											mutation={() => handleReject()}
-											statusText={'Reject Offer'}
-											status={'reject'}
-											buttonText={'Reject'}
-											offerId={offerIdNumber}
-											email={offer?.email}
-											name={offer?.name}
-										/>
-									</Box>
-								</Flex>
+								<>
+									<Flex>
+										<Box mr={'1'}>
+											<HandlingOfferConfirmation
+												mutationLoading={isAcceptLoading}
+												mutation={() => handleAccept()}
+												statusText={'Accept Offer'}
+												status={'accept'}
+												buttonText={'Accept'}
+												offerId={offerIdNumber}
+												email={offer?.email}
+												name={offer?.name}
+											/>
+										</Box>
+										<Spacer />
+										<Box ml={'1'}>
+											<HandlingOfferConfirmation
+												mutationLoading={isRejectLoading}
+												mutation={() => handleReject()}
+												statusText={'Reject Offer'}
+												status={'reject'}
+												buttonText={'Reject'}
+												offerId={offerIdNumber}
+												email={offer?.email}
+												name={offer?.name}
+											/>
+										</Box>
+									</Flex>
+								</>
 							) : null}
 						</Box>
 					</Flex>
