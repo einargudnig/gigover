@@ -32,7 +32,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
-	console.log('Offer', { offer });
+
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
 	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
@@ -240,71 +240,71 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						</Table>
 					</div>
 
-					<Flex mx={'5'}>
+					<Flex mx={'5'} alignItems={'center'} justifyContent={'center'}>
 						<Box>
-							<Text mb={'2'}>This is a Published Offer</Text>
-							<Box>
-								<Flex>
-									<ReactToPdf
-										targetRef={ref}
-										filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
-										options={
-											ref.current && {
-												orientation: 'landscape',
-												unit: 'px',
-												hotfixes: ['px-scaling'],
-												format: [
-													ref.current?.clientWidth ?? 1920,
-													ref.current?.clientHeight ?? 1080
-												]
-											}
-										}
-									>
-										{({ toPdf }) => (
-											<Button mr={'1'} onClick={toPdf}>
-												Download as PDF
-											</Button>
-										)}
-									</ReactToPdf>
-									<Spacer />
-									<Link to={`/files/tender/offers/${offerId}`}>
-										<Button ml={'1'}>
-											<Text textColor={'black'}>Uploaded files</Text>
-										</Button>
-									</Link>
-								</Flex>
-							</Box>
-						</Box>
-						<Spacer />
-						{showResultsButtons ? (
 							<Flex>
-								<Box mr={'1'}>
-									<HandlingOfferConfirmation
-										mutationLoading={isAcceptLoading}
-										mutation={() => handleAccept()}
-										statusText={'Accept Offer'}
-										status={'accept'}
-										buttonText={'Accept'}
-										offerId={offerIdNumber}
-										email={offer?.email}
-										name={offer?.name}
-									/>
-								</Box>
+								<ReactToPdf
+									targetRef={ref}
+									filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
+									options={
+										ref.current && {
+											orientation: 'landscape',
+											unit: 'px',
+											hotfixes: ['px-scaling'],
+											format: [
+												ref.current?.clientWidth ?? 1920,
+												ref.current?.clientHeight ?? 1080
+											]
+										}
+									}
+								>
+									{({ toPdf }) => (
+										<Button mr={'1'} onClick={toPdf}>
+											Download as PDF
+										</Button>
+									)}
+								</ReactToPdf>
 								<Spacer />
-								<Box ml={'1'}>
-									<HandlingOfferConfirmation
-										mutationLoading={isRejectLoading}
-										mutation={() => handleReject()}
-										statusText={'Reject Offer'}
-										status={'reject'}
-										buttonText={'Reject'}
-										offerId={offerIdNumber}
-										email={offer?.email}
-										name={offer?.name}
-									/>
-								</Box>
+								<Link to={`/files/tender/offers/${offerId}`}>
+									<Button ml={'1'}>
+										<Text textColor={'black'}>Uploaded files</Text>
+									</Button>
+								</Link>
 							</Flex>
-						) : null}
+						</Box>
+
+						<Spacer />
+						<Box>
+							{showResultsButtons ? (
+								<Flex>
+									<Box mr={'1'}>
+										<HandlingOfferConfirmation
+											mutationLoading={isAcceptLoading}
+											mutation={() => handleAccept()}
+											statusText={'Accept Offer'}
+											status={'accept'}
+											buttonText={'Accept'}
+											offerId={offerIdNumber}
+											email={offer?.email}
+											name={offer?.name}
+										/>
+									</Box>
+									<Spacer />
+									<Box ml={'1'}>
+										<HandlingOfferConfirmation
+											mutationLoading={isRejectLoading}
+											mutation={() => handleReject()}
+											statusText={'Reject Offer'}
+											status={'reject'}
+											buttonText={'Reject'}
+											offerId={offerIdNumber}
+											email={offer?.email}
+											name={offer?.name}
+										/>
+									</Box>
+								</Flex>
+							) : null}
+						</Box>
 					</Flex>
 				</>
 			)}
