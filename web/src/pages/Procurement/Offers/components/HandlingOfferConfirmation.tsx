@@ -51,8 +51,8 @@ export const HandlingOfferConfirmation = ({
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	const handling = {
-		accept: 'accept',
-		reject: 'reject'
+		accept: 'accepted',
+		reject: 'rejected'
 	};
 	const offerStatus = handling[status];
 	// I want to send an email to the bidder when the offer is accepted or rejected
@@ -61,6 +61,7 @@ export const HandlingOfferConfirmation = ({
 			offerId: offerId,
 			to_email: email,
 			status: offerStatus,
+			// from_email: ,
 			name
 		};
 

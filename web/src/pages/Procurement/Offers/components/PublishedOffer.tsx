@@ -32,7 +32,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
-
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
 	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
