@@ -28,7 +28,7 @@ import { useRejectOffer } from '../../../../mutations/useRejectOffer';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-	console.log('Offer', { offerData });
+	// console.log('Offer', { offerData });
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
