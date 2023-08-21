@@ -35,6 +35,7 @@ const ProcurementCardTitle = styled.div`
 
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
+	console.log(data);
 
 	return (
 		<>

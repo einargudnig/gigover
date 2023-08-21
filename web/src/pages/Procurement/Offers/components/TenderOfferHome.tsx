@@ -23,7 +23,7 @@ function findTenderById(tenderId: string, bidderTenders: Tender[]): Tender {
 export const TenderOfferHome = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 	const { data: bidderTenders, isLoading } = useGetBidderTenders();
-	// console.log('bidderTenders', bidderTenders);
+	console.log('bidderTenders', bidderTenders);
 
 	const toast = useToast();
 

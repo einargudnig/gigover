@@ -194,9 +194,9 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										<Th>Unit</Th>
 									</Tooltip>
 
-									<Tooltip label="The cost of one item">
+									{/* <Tooltip label="The cost of one item">
 										<Th>Product number</Th>
-									</Tooltip>
+									</Tooltip> */}
 
 									<Tooltip label="The cost of one item">
 										<Th>Cost pr item</Th>
@@ -218,7 +218,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 										<Td>{row.description}</Td>
 										<Td>{row.volume}</Td>
 										<Td>{row.unit}</Td>
-										<Td>{row.productNumber}</Td>
+										{/* <Td>{row.productNumber}</Td> */}
 										<Td>{formatNumber(row.cost)}</Td>
 										<Td>{formatNumber(row.totalCost)}</Td>
 										<Td>{row.note}</Td>

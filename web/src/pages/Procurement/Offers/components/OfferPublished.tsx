@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { VStack } from '@chakra-ui/react';
+import { VStack, HStack } from '@chakra-ui/react';
 import { Page } from '../../../../components/Page';
 import { PublishedOffer } from './PublishedOffer';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
@@ -22,15 +22,17 @@ export const OfferPublished = (): JSX.Element => {
 
 	return (
 		<>
-			<Page title={'Published offer'} contentPadding={false}>
+			<Page title={'Published offer'} contentPadding={true}>
 				<VStack style={{ height: '100%' }}>
-					<Container>
-						<PublishedOffer
-							offerData={offerData}
-							isOfferLoading={isLoading}
-							showResultsButtons={false}
-						/>
-					</Container>
+					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+						<Container>
+							<PublishedOffer
+								offerData={offerData}
+								isOfferLoading={isLoading}
+								showResultsButtons={false}
+							/>
+						</Container>
+					</HStack>
 				</VStack>
 			</Page>
 		</>

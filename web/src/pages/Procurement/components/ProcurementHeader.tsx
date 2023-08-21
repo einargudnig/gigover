@@ -1,16 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
-import { Box, Button, Flex, HStack, VStack, Text, Spacer, useToast } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	HStack,
+	VStack,
+	Text,
+	Spacer,
+	useToast,
+	Table,
+	Tr,
+	Td,
+	Thead
+} from '@chakra-ui/react';
 import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 
 export const ProcurementHeader = ({ tender }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
+	const [searchResult, setSerchResault] = useState<string | null>(null);
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
@@ -19,6 +34,22 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 	// Handling the date from the backend, it's fine for now
 	const time = tender?.finishDate;
 	const date = new Date(time!);
+	const bidders = tender?.bidders;
+
+	const searchMutation = useGetUserByEmail();
+	const search = useCallback(
+		async (email: string) => {
+			const response = await searchMutation.mutateAsync({ email });
+			if (response.uId) {
+				// return 'Yes';
+				setSerchResault('Yes');
+			} else {
+				// return 'No';
+				setSerchResault('No');
+			}
+		},
+		[searchMutation]
+	);
 
 	const toast = useToast();
 	return (
@@ -34,62 +65,110 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 						w="100%"
 					>
 						<VStack pos={'relative'}>
-							{/* First stack of desc and terms */}
-							<VStack mb={'4'}>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Description:
-									</Text>
-									<Text fontSize={'lg'}>{tender?.description}</Text>
-								</HStack>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Terms:
-									</Text>
-									<Text fontSize={'lg'}>{tender?.terms}</Text>
-								</HStack>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Status:
-									</Text>
-									<Text fontSize={'lg'}>
-										{tender?.status === 1 ? 'Published' : 'Not published'}
-									</Text>
-								</HStack>
-							</VStack>
-							{/* Second stack of address, delivery, finish date and phone */}
-							<HStack mb={'4'}>
-								{/* Address and delivery */}
-								<VStack mr={'3'}>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Address:
-										</Text>
-										<Text fontSize={'lg'}>{tender?.address}</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Delivery:
-										</Text>
-										<Text fontSize={'lg'}>{handleDelivery}</Text>
-									</HStack>
-								</VStack>
+							<Flex justifyContent={'space-between'}>
+								<Box>
+									<VStack>
+										{/* First stack of description, terms and status */}
+										<VStack mb={'4'}>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Description:
+												</Text>
+												<Text fontSize={'lg'}>{tender?.description}</Text>
+											</HStack>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Terms:
+												</Text>
+												<Text fontSize={'lg'}>{tender?.terms}</Text>
+											</HStack>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Status:
+												</Text>
+												<Text fontSize={'lg'}>
+													{tender?.status === 1
+														? 'Published'
+														: 'Not published'}
+												</Text>
+											</HStack>
+										</VStack>
+
+										{/* Second stack of address, delivery, finish date and phone */}
+										<HStack mb={'4'}>
+											{/* Address and delivery */}
+											<VStack mr={'3'}>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Address:
+													</Text>
+													<Text fontSize={'lg'}>{tender?.address}</Text>
+												</HStack>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Delivery:
+													</Text>
+													<Text fontSize={'lg'}>{handleDelivery}</Text>
+												</HStack>
+											</VStack>
+											<Spacer />
+											<VStack ml={'3'}>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Close Date:
+													</Text>
+													<Text fontSize={'lg'}>
+														{formatDateWithoutTime(date)}
+													</Text>
+												</HStack>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Phone:
+													</Text>
+													<Text fontSize={'lg'}>
+														{tender?.phoneNumber}
+													</Text>
+												</HStack>
+											</VStack>
+										</HStack>
+									</VStack>
+								</Box>
+								{/* Bidders */}
 								<Spacer />
-								<VStack ml={'3'}>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Close Date:
-										</Text>
-										<Text fontSize={'lg'}>{formatDateWithoutTime(date)}</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Phone:
-										</Text>
-										<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
-									</HStack>
-								</VStack>
-							</HStack>
+								<Box>
+									<VStack ml={'3'}>
+										<VStack>
+											<Text fontWeight={'bold'} fontSize={'xl'}>
+												Bidders
+											</Text>
+										</VStack>
+										<VStack>
+											<Table variant="simple" size="sm" colorScheme="black">
+												<Thead>
+													<Tr>
+														<Td>Name</Td>
+														<Td>Email</Td>
+														<Td>Gigover account</Td>
+													</Tr>
+												</Thead>
+												{bidders?.map((bidder) => (
+													<Tr key={bidder.email}>
+														<Td>
+															<Text>{bidder.name}</Text>
+														</Td>
+														<Td>
+															<Text>{bidder.email}</Text>
+														</Td>
+														<Td>{searchResult}</Td>
+													</Tr>
+												))}
+											</Table>
+										</VStack>
+									</VStack>
+								</Box>
+							</Flex>
+
+							{/* button to edit or delete tender */}
 							<HStack pos={'absolute'} bottom={'0'} right={'0'}>
 								<Button
 									onClick={() =>
