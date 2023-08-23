@@ -5,8 +5,11 @@ import { OfferTableHome } from './OfferTableHome';
 import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useToast } from '@chakra-ui/react';
+import { useToast, Box, Flex, Spacer, Button, Text } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+
+import { OpenOffer } from './OpenOffer';
 
 type TenderIdParams = {
 	tenderId: string;
@@ -29,6 +32,8 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const tender = findTenderById(tenderId, bidderTenders);
 
+	const finishDateStatus = handleFinishDate(tender.finishDate);
+
 	if (!tender) {
 		toast({
 			title: 'Tender not found',
@@ -49,6 +54,21 @@ export const TenderOfferHome = (): JSX.Element => {
 				<>
 					<OfferInformationHome tender={tender} />
 					<OfferTableHome tender={tender} />
+					{!finishDateStatus ? (
+						<Flex marginTop={'6'}>
+							<Box>
+								<OpenOffer />
+							</Box>
+							<Spacer />
+							<Box>
+								<Button>Will not place an offer</Button>
+							</Box>
+						</Flex>
+					) : (
+						<Text marginTop={'6'}>
+							The tender has closed. You can&apos;t open an offer.
+						</Text>
+					)}
 				</>
 			)}
 		</>

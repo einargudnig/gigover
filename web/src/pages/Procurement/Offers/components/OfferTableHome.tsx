@@ -37,10 +37,10 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 				</Tbody>
 			</Table>
 
-			<Text mt={'2'}>You can see the offers you have already made</Text>
+			{/* <Text mt={'2'}>You can see the offers you have already made</Text>
 			<Button mt={'2'}>
 				<Link to={'/bidder-offers'}>Go to my Offers</Link>
-			</Button>
+			</Button> */}
 		</>
 	);
 };

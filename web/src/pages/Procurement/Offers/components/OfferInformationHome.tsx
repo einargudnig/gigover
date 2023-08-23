@@ -1,90 +1,11 @@
 import React from 'react';
-import {
-	Divider,
-	Box,
-	Button,
-	FormControl,
-	FormLabel,
-	Input,
-	Flex,
-	HStack,
-	VStack,
-	Text,
-	Spacer,
-	useToast
-} from '@chakra-ui/react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useParams, useNavigate } from 'react-router-dom';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { useAddOffer } from '../../../../mutations/useAddOffer';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
 
-type OfferNote = {
-	notes: string;
-};
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export const OfferInformationHome = ({ tender }): JSX.Element => {
-	const { tenderId } = useParams();
-	const { mutateAsync: addOffer, isLoading } = useAddOffer();
-	const { handleSubmit, register } = useForm<OfferNote>({
-		mode: 'onBlur'
-	});
-	const navigate = useNavigate();
-
 	const date = new Date(tender.finishDate);
 	const handleDelivery = tender.delivery ? 'Yes' : 'No';
-
-	const toast = useToast();
-
-	const onSubmit: SubmitHandler<OfferNote> = async (data: OfferNote) => {
-		try {
-			const body = {
-				tenderId: Number(tenderId),
-				notes: data.notes
-			};
-
-			// we can chain a .then() function to the end to receive the result of the mutation. In this case, we expect the result to be a number, which we can capture as the id parameter of the .then() function.
-			const response = await addOffer(body).then((res) => res.data.id);
-
-			// Before this was { id: 33 } because the AxiosResponse was of type AxiosResponse<{ id: number }>
-			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
-			const offerId = response;
-
-			if (offerId !== 0) {
-				navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
-				console.log('Offer opened! With id: ', offerId);
-				toast({
-					title: 'Offer opened!',
-					description:
-						'You have opened an offer! Start to add numbers, cost and notes to the items.',
-					status: 'success',
-					duration: 3000,
-					isClosable: true
-				});
-			} else {
-				console.log('Cannot open offer with offerId: ', offerId);
-				toast({
-					title: 'Invalid tender!',
-					description: `You cannot open an offer with offerId as ${offerId}. The tender is not valid.`,
-					status: 'error',
-					duration: 3000,
-					isClosable: true
-				});
-			}
-		} catch (e) {
-			console.log(e);
-			toast({
-				title: 'Invalid tender!',
-				description: 'You cannot open an offer. There is an error.',
-				status: 'error',
-				duration: 3000,
-				isClosable: true
-			});
-		}
-	};
-
-	const finishDateStatus = handleFinishDate(tender.finishDate);
 
 	return (
 		<>
@@ -145,37 +66,6 @@ export const OfferInformationHome = ({ tender }): JSX.Element => {
 									</HStack>
 								</VStack>
 							</HStack>
-							<Divider />
-
-							<form onSubmit={handleSubmit(onSubmit)}>
-								<VStack spacing={4}>
-									<Text>
-										You can add notes to the offer. You need to open the offer
-										so you can start making offers to items.
-									</Text>
-									<FormControl id={'note'}>
-										<FormLabel>Note</FormLabel>
-										<Input
-											placeholder={
-												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
-											}
-											{...register('notes')}
-											variant={'outline'}
-											mb={'4'}
-										/>
-									</FormControl>
-								</VStack>
-								{/* This button should be conditionally rendered with regard of the finishDate */}
-								{!finishDateStatus ? (
-									<Button type="submit">
-										{isLoading ? <LoadingSpinner /> : 'Open offer'}
-									</Button>
-								) : (
-									<Text>
-										The tender has closed. You can&apos;t open an offer.
-									</Text>
-								)}
-							</form>
 						</VStack>
 					</Box>
 				</Flex>
