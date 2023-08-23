@@ -21,6 +21,7 @@ import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 
 export const ProcurementHeader = ({ tender }): JSX.Element => {
@@ -35,6 +36,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 
 	const time = tender?.finishDate;
 	const date = new Date(time!);
+	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 	const bidders = tender?.bidders;
 
 	const searchMutation = useGetUserByEmail();
@@ -69,7 +71,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<VStack pos={'relative'}>
+						<VStack>
 							<Flex>
 								<Box>
 									<VStack>
@@ -183,57 +185,67 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 									</Box>
 								)}
 							</Flex>
-
-							{/* button to edit or delete tender */}
-							<HStack pos={'absolute'} bottom={'0'} right={'0'}>
-								<Button
-									onClick={() =>
-										setModalContext({
-											modifyTender: { modifyTender: tender }
-										})
-									}
-								>
-									Edit
-								</Button>
-								{tender === undefined ? null : (
-									<ConfirmDialog
-										header={'Delete procurement'}
-										setIsOpen={setDialogOpen}
-										callback={async () => {
-											if (tender.status === 1) {
-												toast({
-													title: 'Cannot delete published tender',
-													description:
-														'This tender has been published and cannot be deleted',
-													status: 'error',
-													duration: 2000,
-													isClosable: true
-												});
-											} else {
-												await deleteProcurementAsync(tender);
-												navigate('/tender');
-											}
-											setDialogOpen(false);
-										}}
-										isOpen={dialogOpen}
-									>
-										<Button
-											aria-label={'Delete'}
-											colorScheme={'red'}
-											isLoading={isLoadingDelete}
-											leftIcon={<TrashIcon color={'white'} size={20} />}
-											onClick={() => {
-												setDialogOpen(true);
-											}}
-										>
-											Delete
-										</Button>
-									</ConfirmDialog>
-								)}
-							</HStack>
 						</VStack>
 					</Box>
 				</Flex>
+
+				{/* button to edit or delete tender */}
+				{finishDateStatus ? (
+					<Flex justifyContent={'flex-end'} marginTop={'2'} marginBottom={'2'}>
+						<Text as={'b'}>
+							The finish date has passed, you cannot edit or delete the tender
+						</Text>
+					</Flex>
+				) : (
+					<Flex justifyContent={'flex-end'} marginTop={'2'} marginBottom={'2'}>
+						<HStack>
+							<Button
+								onClick={() =>
+									setModalContext({
+										modifyTender: { modifyTender: tender }
+									})
+								}
+							>
+								Edit tender
+							</Button>
+							{tender === undefined ? null : (
+								<ConfirmDialog
+									header={'Delete procurement'}
+									setIsOpen={setDialogOpen}
+									callback={async () => {
+										if (tender.status === 1) {
+											toast({
+												title: 'Cannot delete published tender',
+												description:
+													'This tender has been published and cannot be deleted',
+												status: 'error',
+												duration: 2000,
+												isClosable: true
+											});
+										} else {
+											await deleteProcurementAsync(tender);
+											navigate('/tender');
+										}
+										setDialogOpen(false);
+									}}
+									isOpen={dialogOpen}
+								>
+									<Button
+										aria-label={'Delete'}
+										colorScheme={'red'}
+										isLoading={isLoadingDelete}
+										leftIcon={<TrashIcon color={'white'} size={20} />}
+										onClick={() => {
+											setDialogOpen(true);
+										}}
+									>
+										Delete tender
+									</Button>
+								</ConfirmDialog>
+							)}
+						</HStack>
+					</Flex>
+				)}
 			</div>
 		</>
 	);
