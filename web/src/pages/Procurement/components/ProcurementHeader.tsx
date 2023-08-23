@@ -71,121 +71,113 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<VStack>
-							<Flex>
-								<Box>
-									<VStack>
-										{/* First stack of description, terms and status */}
-										<VStack mb={'4'}>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Description:
-												</Text>
-												<Text fontSize={'lg'}>{tender?.description}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Terms:
-												</Text>
-												<Text fontSize={'lg'}>{tender?.terms}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Status:
-												</Text>
-												<Text fontSize={'lg'}>
-													{tender?.status === 1
-														? 'Published'
-														: 'Not published'}
-												</Text>
-											</HStack>
-										</VStack>
-
-										{/* Second stack of address, delivery, finish date and phone */}
-										<HStack mb={'4'}>
-											{/* Address and delivery */}
-											<VStack mr={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Address:
-													</Text>
-													<Text fontSize={'lg'}>{tender?.address}</Text>
-												</HStack>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Delivery:
-													</Text>
-													<Text fontSize={'lg'}>{handleDelivery}</Text>
-												</HStack>
-											</VStack>
-											<Spacer />
-											<VStack ml={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Close Date:
-													</Text>
-													<Text fontSize={'lg'}>
-														{formatDateWithoutTime(date)}
-													</Text>
-												</HStack>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Phone:
-													</Text>
-													<Text fontSize={'lg'}>
-														{tender?.phoneNumber}
-													</Text>
-												</HStack>
-											</VStack>
+						<Flex>
+							<Box marginLeft={'6'}>
+								<VStack>
+									{/* First stack of description, terms and status */}
+									<VStack mb={'4'}>
+										<HStack>
+											<Text fontWeight={'bold'} fontSize={'xl'}>
+												Description:
+											</Text>
+											<Text fontSize={'lg'}>{tender?.description}</Text>
+										</HStack>
+										<HStack>
+											<Text fontWeight={'bold'} fontSize={'xl'}>
+												Terms:
+											</Text>
+											<Text fontSize={'lg'}>{tender?.terms}</Text>
+										</HStack>
+										<HStack>
+											<Text fontWeight={'bold'} fontSize={'xl'}>
+												Status:
+											</Text>
+											<Text fontSize={'lg'}>
+												{tender?.status === 1
+													? 'Published'
+													: 'Not published'}
+											</Text>
 										</HStack>
 									</VStack>
-								</Box>
-								{/* Bidders */}
-								<Spacer />
-								{bidders.length > 0 && (
-									<Box>
-										<VStack ml={'3'}>
-											<VStack>
-												<Tooltip label="Here you can see the bidders that already have Gigover account">
-													<HStack>
-														<Text fontWeight={'bold'} fontSize={'xl'}>
-															Bidders
-														</Text>
-														<ImportantIcon size={16} />
-													</HStack>
-												</Tooltip>
-											</VStack>
-											<VStack>
-												<Table
-													variant="simple"
-													size="sm"
-													colorScheme="black"
-												>
-													<Thead>
-														<Tr>
-															<Td>Name</Td>
-															<Td>Email</Td>
-															{/* <Td>Gigover account</Td> */}
-														</Tr>
-													</Thead>
-													{bidders?.map((bidder) => (
-														<Tr key={bidder.email}>
-															<Td>
-																<Text>{bidder.name}</Text>
-															</Td>
-															<Td>
-																<Text>{bidder.email}</Text>
-															</Td>
-															{/* <Td>{searchResult}</Td> */}
-														</Tr>
-													))}
-												</Table>
-											</VStack>
+
+									{/* Second stack of address, delivery, finish date and phone */}
+									<HStack mb={'4'}>
+										{/* Address and delivery */}
+										<VStack mr={'3'}>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Address:
+												</Text>
+												<Text fontSize={'lg'}>{tender?.address}</Text>
+											</HStack>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Delivery:
+												</Text>
+												<Text fontSize={'lg'}>{handleDelivery}</Text>
+											</HStack>
 										</VStack>
-									</Box>
-								)}
-							</Flex>
-						</VStack>
+										<Spacer />
+										<VStack ml={'3'}>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Close Date:
+												</Text>
+												<Text fontSize={'lg'}>
+													{formatDateWithoutTime(date)}
+												</Text>
+											</HStack>
+											<HStack>
+												<Text fontWeight={'bold'} fontSize={'xl'}>
+													Phone:
+												</Text>
+												<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
+											</HStack>
+										</VStack>
+									</HStack>
+								</VStack>
+							</Box>
+							{/* Bidders */}
+							<Spacer />
+							{bidders.length > 0 && (
+								<Box marginRight={'6'}>
+									<VStack ml={'3'}>
+										<VStack>
+											<Tooltip label="Here you can see the bidders that already have Gigover account">
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Bidders
+													</Text>
+													<ImportantIcon size={16} />
+												</HStack>
+											</Tooltip>
+										</VStack>
+										<VStack>
+											<Table variant="simple" size="sm" colorScheme="black">
+												<Thead>
+													<Tr>
+														<Td>Name</Td>
+														<Td>Email</Td>
+														{/* <Td>Gigover account</Td> */}
+													</Tr>
+												</Thead>
+												{bidders?.map((bidder) => (
+													<Tr key={bidder.email}>
+														<Td>
+															<Text>{bidder.name}</Text>
+														</Td>
+														<Td>
+															<Text>{bidder.email}</Text>
+														</Td>
+														{/* <Td>{searchResult}</Td> */}
+													</Tr>
+												))}
+											</Table>
+										</VStack>
+									</VStack>
+								</Box>
+							)}
+						</Flex>
 					</Box>
 				</Flex>
 

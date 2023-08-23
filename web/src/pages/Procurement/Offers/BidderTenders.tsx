@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Text, VStack, HStack } from '@chakra-ui/react';
+import { Text, VStack, HStack, Flex, Grid, GridItem } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
@@ -20,9 +20,6 @@ const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
 	margin-bottom: 8px;
 	margin-top: 8px;
 
@@ -36,26 +33,9 @@ const OfferCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-const OfferCardTitle = styled.div`
-	display: flex;
-	justify-content: space-between;
-`;
-
-// const getUniqueTenders = (tenders: Tender[]) => {
-// 	const uniqueTenders: Tender[] = [];
-
-// 	tenders.forEach((tender) => {
-// 		const existingTender = uniqueTenders.find((t) => t.tenderId === tender.tenderId);
-// 		if (!existingTender) {
-// 			uniqueTenders.push(tender);
-// 		}
-// 	});
-
-// 	return uniqueTenders;
-// };
-
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
+	console.log(tenders);
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -73,8 +53,19 @@ export const BidderTenders = (): JSX.Element => {
 	}, [tenders]);
 
 	const uniqueTenders = getUniqueTenders();
-
 	const noTender = uniqueTenders?.length === 0;
+
+	const shouldDeliver = (tender: Tender) => {
+		if (tender.status === 1) {
+			return (
+				<HStack>
+					<Text as={'b'}>Deliver to:</Text>
+					<Text color={'black'}>{tender.address}</Text>
+				</HStack>
+			);
+		}
+		return 'Not Delivered';
+	};
 
 	// const offerPublished = () => {
 	// 	const i = offers?.[0];
@@ -102,36 +93,93 @@ export const BidderTenders = (): JSX.Element => {
 										</Center>
 									) : (
 										<>
-											{uniqueTenders.map((t) => (
-												<OfferCardStyled
-													to={`/tender/offers/${t.tenderId}`}
-													key={t.tenderId}
-												>
-													<OfferCardTitle>
-														<div>
-															<h3>
-																<b>Project:</b> {t.projectName}
-															</h3>
-															<div style={{ marginTop: -16 }}>
-																<b>Description:</b> {t.description}
+											{uniqueTenders.map((t) => {
+												let offerStatus;
+												if (t.status === 0) {
+													offerStatus = 'Unpublished';
+												} else if (t.status === 1) {
+													offerStatus = 'Published';
+												} else {
+													offerStatus = 'Unknown';
+												}
+
+												return (
+													<OfferCardStyled
+														to={`/tender/offers/${t.tenderId}`}
+														key={t.tenderId}
+													>
+														<Flex direction={'column'}>
+															<Grid
+																templateColumns="repeat(4, 1fr)"
+																gap={1}
+															>
+																<GridItem colSpan={2}>
+																	<HStack>
+																		<Text as={'b'}>
+																			Project:
+																		</Text>
+																		<Text color={'black'}>
+																			{t.projectName}
+																		</Text>
+																	</HStack>
+																	<HStack>
+																		<Text as={'b'}>
+																			Tender description:
+																		</Text>
+																		<Text color={'black'}>
+																			{t.description}
+																		</Text>
+																	</HStack>
+																</GridItem>
+																<GridItem colSpan={1}>
+																	<HStack>
+																		<Text as={'b'}>
+																			Phone number:
+																		</Text>
+																		<Text color={'black'}>
+																			{t.phoneNumber}
+																		</Text>
+																	</HStack>
+																	<HStack>
+																		<Text as={'b'}>
+																			Tender status:
+																		</Text>
+																		<Text color={'black'}>
+																			{offerStatus}
+																		</Text>
+																	</HStack>
+																</GridItem>
+																<GridItem colSpan={1}>
+																	<HStack>
+																		<Text as={'b'}>
+																			Number of items:
+																		</Text>
+																		<Text color={'black'}>
+																			{t.items.length}
+																		</Text>
+																	</HStack>
+																	<HStack>
+																		{shouldDeliver(t)}
+																	</HStack>
+																</GridItem>
+															</Grid>
+															<div>
+																<p
+																	style={{
+																		marginBottom: -16,
+																		fontSize: 14
+																	}}
+																>
+																	<b>Close date:</b>{' '}
+																	{formatDateWithoutTime(
+																		new Date(t.finishDate)
+																	)}
+																</p>
 															</div>
-														</div>
-													</OfferCardTitle>
-													<div>
-														<p
-															style={{
-																marginBottom: -16,
-																fontSize: 14
-															}}
-														>
-															<b>Close date:</b>{' '}
-															{formatDateWithoutTime(
-																new Date(t.finishDate)
-															)}
-														</p>
-													</div>
-												</OfferCardStyled>
-											))}
+														</Flex>
+													</OfferCardStyled>
+												);
+											})}
 										</>
 									)}
 								</>
