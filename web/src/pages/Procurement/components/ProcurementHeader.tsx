@@ -1,9 +1,11 @@
-import React, { useContext, useState, useCallback } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
 import {
 	Box,
 	Button,
+	Grid,
+	GridItem,
 	Flex,
 	HStack,
 	VStack,
@@ -22,13 +24,11 @@ import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 
 export const ProcurementHeader = ({ tender }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [searchResult, setSearchResult] = useState<string | null>(null);
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
@@ -38,25 +38,6 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 	const bidders = tender?.bidders;
-
-	const searchMutation = useGetUserByEmail();
-	const search = useCallback(
-		async (email: string) => {
-			const response = await searchMutation.mutateAsync({ email });
-			if (response.uId) {
-				console.log('Yes');
-				setSearchResult('Yes');
-			} else {
-				console.log('No');
-				setSearchResult('No');
-			}
-		},
-		[searchMutation]
-	);
-
-	// useEffect(() => {
-	// 	search(bidders.email);
-	// }, [search, bidders.email]);
 
 	const toast = useToast();
 	return (
@@ -71,75 +52,74 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<Flex>
-							<Box marginLeft={'6'}>
-								<VStack>
-									{/* First stack of description, terms and status */}
-									<VStack mb={'4'}>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Description:
-											</Text>
-											<Text fontSize={'lg'}>{tender?.description}</Text>
-										</HStack>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Terms:
-											</Text>
-											<Text fontSize={'lg'}>{tender?.terms}</Text>
-										</HStack>
-										<HStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Status:
-											</Text>
-											<Text fontSize={'lg'}>
-												{tender?.status === 1
-													? 'Published'
-													: 'Not published'}
-											</Text>
-										</HStack>
-									</VStack>
-
-									{/* Second stack of address, delivery, finish date and phone */}
-									<HStack mb={'4'}>
-										{/* Address and delivery */}
-										<VStack mr={'3'}>
+						<Grid templateColumns="repeat(2, 1fr)" gap={4}>
+							<GridItem colSpan={1}>
+								<Box>
+									<VStack>
+										<VStack mb={'4'}>
 											<HStack>
 												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Address:
+													Description:
 												</Text>
-												<Text fontSize={'lg'}>{tender?.address}</Text>
+												<Text fontSize={'lg'}>{tender?.description}</Text>
 											</HStack>
 											<HStack>
 												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Delivery:
+													Terms:
 												</Text>
-												<Text fontSize={'lg'}>{handleDelivery}</Text>
+												<Text fontSize={'lg'}>{tender?.terms}</Text>
 											</HStack>
-										</VStack>
-										<Spacer />
-										<VStack ml={'3'}>
 											<HStack>
 												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Close Date:
+													Status:
 												</Text>
 												<Text fontSize={'lg'}>
-													{formatDateWithoutTime(date)}
+													{tender?.status === 1
+														? 'Published'
+														: 'Not published'}
 												</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Phone:
-												</Text>
-												<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
 											</HStack>
 										</VStack>
-									</HStack>
-								</VStack>
-							</Box>
-							{/* Bidders */}
-							<Spacer />
-							{bidders.length > 0 && (
+
+										<HStack mb={'4'}>
+											<VStack mr={'3'}>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Address:
+													</Text>
+													<Text fontSize={'lg'}>{tender?.address}</Text>
+												</HStack>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Delivery:
+													</Text>
+													<Text fontSize={'lg'}>{handleDelivery}</Text>
+												</HStack>
+											</VStack>
+											<Spacer />
+											<VStack ml={'3'}>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Close Date:
+													</Text>
+													<Text fontSize={'lg'}>
+														{formatDateWithoutTime(date)}
+													</Text>
+												</HStack>
+												<HStack>
+													<Text fontWeight={'bold'} fontSize={'xl'}>
+														Phone:
+													</Text>
+													<Text fontSize={'lg'}>
+														{tender?.phoneNumber}
+													</Text>
+												</HStack>
+											</VStack>
+										</HStack>
+									</VStack>
+								</Box>
+							</GridItem>
+							<GridItem colSpan={1}>
 								<Box marginRight={'6'}>
 									<VStack ml={'3'}>
 										<VStack>
@@ -158,7 +138,6 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 													<Tr>
 														<Td>Name</Td>
 														<Td>Email</Td>
-														{/* <Td>Gigover account</Td> */}
 													</Tr>
 												</Thead>
 												{bidders?.map((bidder) => (
@@ -169,15 +148,14 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 														<Td>
 															<Text>{bidder.email}</Text>
 														</Td>
-														{/* <Td>{searchResult}</Td> */}
 													</Tr>
 												))}
 											</Table>
 										</VStack>
 									</VStack>
 								</Box>
-							)}
-						</Flex>
+							</GridItem>
+						</Grid>
 					</Box>
 				</Flex>
 
