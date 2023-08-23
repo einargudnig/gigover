@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HStack, VStack, Text } from '@chakra-ui/react';
+import { HStack, VStack, Text, Flex, Box, Spacer } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
@@ -19,9 +19,6 @@ const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
 	margin-bottom: 8px;
 
 	h3 {
@@ -37,7 +34,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 export const BidderOffers = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
-	// console.log(offers);
+	console.log(offers);
 	const noOffers = offers?.length === 0;
 
 	return (
@@ -62,6 +59,7 @@ export const BidderOffers = (): JSX.Element => {
 											{offers?.map((o) => {
 												let offerStatus;
 												let url;
+												let statusColor;
 												if (o.status === 0) {
 													offerStatus = 'Unpublished';
 													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
@@ -71,9 +69,11 @@ export const BidderOffers = (): JSX.Element => {
 												} else if (o.status === 2) {
 													offerStatus = 'Accepted';
 													url = `/published-offer/${o.tenderId}/${o.offerId}`;
+													statusColor = 'green';
 												} else if (o.status === 3) {
 													offerStatus = 'Rejected';
 													url = `/published-offer/${o.tenderId}/${o.offerId}`;
+													statusColor = 'red';
 												} else {
 													offerStatus = 'Unknown';
 												}
@@ -81,22 +81,57 @@ export const BidderOffers = (): JSX.Element => {
 												return (
 													<React.Fragment key={o.offerId}>
 														<OfferCardStyled to={url}>
-															<HStack>
-																<Text as={'b'}>Notes:</Text>
-																<Text>{o.notes}</Text>
-															</HStack>
-															<HStack>
-																<Text as={'b'}>Offer Id:</Text>
-																<Text>{o.offerId}</Text>
-															</HStack>
-															<HStack>
-																<Text as={'b'}>Tender Id:</Text>
-																<Text>{o.tenderId}</Text>
-															</HStack>
-															<Text as={'b'} size={'lg'}>
-																Status: {offerStatus}
-															</Text>
-															<HStack></HStack>
+															<Flex>
+																<Box>
+																	<Flex direction={'column'}>
+																		<HStack>
+																			<Text as={'b'}>
+																				Offer notes:
+																			</Text>
+																			<Text>{o.notes}</Text>
+																		</HStack>
+																		<HStack>
+																			<Text as={'b'}>
+																				Tender description:
+																			</Text>
+																			<Text>
+																				{
+																					o.tender
+																						.description
+																				}
+																			</Text>
+																		</HStack>
+																		<HStack>
+																			<Text as={'b'}>
+																				Project name:
+																			</Text>
+																			<Text>
+																				{
+																					o.tender
+																						.projectName
+																				}
+																			</Text>
+																		</HStack>
+																	</Flex>
+																</Box>
+																<Spacer />
+																<Box alignItems={'center'}>
+																	<HStack>
+																		<Text
+																			as={'b'}
+																			fontSize={'lg'}
+																		>
+																			Offer status:
+																		</Text>
+																		<Text
+																			fontSize={'xl'}
+																			color={statusColor}
+																		>
+																			{offerStatus}
+																		</Text>
+																	</HStack>
+																</Box>
+															</Flex>
 														</OfferCardStyled>
 													</React.Fragment>
 												);

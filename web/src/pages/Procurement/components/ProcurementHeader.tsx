@@ -13,8 +13,10 @@ import {
 	Table,
 	Tr,
 	Td,
-	Thead
+	Thead,
+	Tooltip
 } from '@chakra-ui/react';
+import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
@@ -25,13 +27,12 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [searchResult, setSerchResault] = useState<string | null>(null);
+	const [searchResult, setSearchResult] = useState<string | null>(null);
 	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
 		useDeleteProcurement();
 
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
-	// Handling the date from the backend, it's fine for now
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const bidders = tender?.bidders;
@@ -41,15 +42,19 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 		async (email: string) => {
 			const response = await searchMutation.mutateAsync({ email });
 			if (response.uId) {
-				// return 'Yes';
-				setSerchResault('Yes');
+				console.log('Yes');
+				setSearchResult('Yes');
 			} else {
-				// return 'No';
-				setSerchResault('No');
+				console.log('No');
+				setSearchResult('No');
 			}
 		},
 		[searchMutation]
 	);
+
+	// useEffect(() => {
+	// 	search(bidders.email);
+	// }, [search, bidders.email]);
 
 	const toast = useToast();
 	return (
@@ -65,7 +70,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 						w="100%"
 					>
 						<VStack pos={'relative'}>
-							<Flex justifyContent={'space-between'}>
+							<Flex>
 								<Box>
 									<VStack>
 										{/* First stack of description, terms and status */}
@@ -135,37 +140,48 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 								</Box>
 								{/* Bidders */}
 								<Spacer />
-								<Box>
-									<VStack ml={'3'}>
-										<VStack>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Bidders
-											</Text>
+								{bidders.length > 0 && (
+									<Box>
+										<VStack ml={'3'}>
+											<VStack>
+												<Tooltip label="Here you can see the bidders that already have Gigover account">
+													<HStack>
+														<Text fontWeight={'bold'} fontSize={'xl'}>
+															Bidders
+														</Text>
+														<ImportantIcon size={16} />
+													</HStack>
+												</Tooltip>
+											</VStack>
+											<VStack>
+												<Table
+													variant="simple"
+													size="sm"
+													colorScheme="black"
+												>
+													<Thead>
+														<Tr>
+															<Td>Name</Td>
+															<Td>Email</Td>
+															{/* <Td>Gigover account</Td> */}
+														</Tr>
+													</Thead>
+													{bidders?.map((bidder) => (
+														<Tr key={bidder.email}>
+															<Td>
+																<Text>{bidder.name}</Text>
+															</Td>
+															<Td>
+																<Text>{bidder.email}</Text>
+															</Td>
+															{/* <Td>{searchResult}</Td> */}
+														</Tr>
+													))}
+												</Table>
+											</VStack>
 										</VStack>
-										<VStack>
-											<Table variant="simple" size="sm" colorScheme="black">
-												<Thead>
-													<Tr>
-														<Td>Name</Td>
-														<Td>Email</Td>
-														<Td>Gigover account</Td>
-													</Tr>
-												</Thead>
-												{bidders?.map((bidder) => (
-													<Tr key={bidder.email}>
-														<Td>
-															<Text>{bidder.name}</Text>
-														</Td>
-														<Td>
-															<Text>{bidder.email}</Text>
-														</Td>
-														<Td>{searchResult}</Td>
-													</Tr>
-												))}
-											</Table>
-										</VStack>
-									</VStack>
-								</Box>
+									</Box>
+								)}
 							</Flex>
 
 							{/* button to edit or delete tender */}
