@@ -118,6 +118,42 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 		return 'Unknown';
 	};
 
+	const removeButtonsIfHandled = () => {
+		if (offer?.status === 2 || offer?.status === 3) {
+			return <Text>You have already {status()} this offer</Text>;
+		} else {
+			return (
+				<Flex>
+					<Box mr={'1'}>
+						<HandlingOfferConfirmation
+							mutationLoading={isAcceptLoading}
+							mutation={() => handleAccept()}
+							statusText={'Accept Offer'}
+							status={'accept'}
+							buttonText={'Accept'}
+							offerId={offerIdNumber}
+							email={offer?.email}
+							name={offer?.name}
+						/>
+					</Box>
+					<Spacer />
+					<Box ml={'1'}>
+						<HandlingOfferConfirmation
+							mutationLoading={isRejectLoading}
+							mutation={() => handleReject()}
+							statusText={'Reject Offer'}
+							status={'reject'}
+							buttonText={'Reject'}
+							offerId={offerIdNumber}
+							email={offer?.email}
+							name={offer?.name}
+						/>
+					</Box>
+				</Flex>
+			);
+		}
+	};
+
 	return (
 		<>
 			{isOfferLoading ? (
@@ -276,7 +312,8 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						<Box>
 							{showResultsButtons ? (
 								<>
-									<Flex>
+									{removeButtonsIfHandled()}
+									{/* <Flex>
 										<Box mr={'1'}>
 											<HandlingOfferConfirmation
 												mutationLoading={isAcceptLoading}
@@ -302,7 +339,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 												name={offer?.name}
 											/>
 										</Box>
-									</Flex>
+									</Flex> */}
 								</>
 							) : null}
 						</Box>

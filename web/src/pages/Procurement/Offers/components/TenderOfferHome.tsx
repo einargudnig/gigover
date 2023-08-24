@@ -21,7 +21,7 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	console.log('tenderData', tender);
+	// console.log('tenderData', tender);
 
 	const toast = useToast();
 
