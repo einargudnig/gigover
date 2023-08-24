@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Button, Text } from '@chakra-ui/react';
+import { Button, Text, HStack, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Tender } from '../../models/Tender';
+import { handleFinishDate } from '../../utils/HandleFinishDate';
 import { Center } from '../../components/Center';
 import { useUserTenders } from '../../queries/useUserTenders';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -13,9 +15,6 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
-	display: flex;
-	justify-content: space-between;
-	flex-direction: column;
 	margin-bottom: 8px;
 
 	h3 {
@@ -28,14 +27,45 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-const ProcurementCardTitle = styled.div`
-	display: flex;
-	justify-content: space-between;
-`;
-
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
 	console.log(data);
+
+	const finishDateStatus = (finishDate: number) => {
+		const res = handleFinishDate(finishDate);
+
+		if (res === true) {
+			return (
+				<HStack>
+					<Text>Tender was closed on:</Text>
+					<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
+				</HStack>
+			);
+		}
+		return (
+			<HStack>
+				<Text as={'b'}>Close date:</Text>
+				<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
+			</HStack>
+		);
+	};
+
+	const shouldDeliver = (tender: Tender) => {
+		if (tender.status === 1) {
+			return (
+				<HStack>
+					<Text as={'b'}>Deliver to:</Text>
+					<Text color={'black'}>{tender.address}</Text>
+				</HStack>
+			);
+		}
+		return (
+			<HStack>
+				<Text as={'b'}>Address:</Text>
+				<Text color={'black'}>{tender.address}</Text>
+			</HStack>
+		);
+	};
 
 	return (
 		<>
@@ -51,26 +81,57 @@ export const ProcurementHome = (): JSX.Element => {
 					{!data || data.length <= 0 ? (
 						<NoProcurementFound />
 					) : (
-						data.map((t) => (
-							<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
-								<ProcurementCardTitle>
-									<div>
-										<h3>
-											<b>Project:</b> {t.projectName}
-										</h3>
-										<div style={{ marginTop: -16 }}>
-											<b>Description:</b> {t.description}
+						data.map((t) => {
+							let offerStatus;
+							if (t.status === 0) {
+								offerStatus = 'Unpublished';
+							} else if (t.status === 1) {
+								offerStatus = 'Published';
+							} else {
+								offerStatus = 'Unknown';
+							}
+							return (
+								<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
+									<Flex direction={'column'}>
+										<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+											<GridItem colSpan={2}>
+												<HStack>
+													<Text as={'b'}>Project:</Text>
+													<Text color={'black'}>{t.projectName}</Text>
+												</HStack>
+												<HStack>
+													<Text as={'b'}>Tender description:</Text>
+													<Text color={'black'}>{t.description}</Text>
+												</HStack>
+											</GridItem>
+											<GridItem colSpan={1}>
+												<HStack>
+													<Text as={'b'}>Phone number:</Text>
+													<Text color={'black'}>{t.phoneNumber}</Text>
+												</HStack>
+												<HStack>
+													<Text as={'b'}>Tender status:</Text>
+													<Text color={'black'}>{offerStatus}</Text>
+												</HStack>
+											</GridItem>
+											<GridItem colSpan={1}>
+												<HStack>{shouldDeliver(t)}</HStack>
+											</GridItem>
+										</Grid>
+										<div>
+											<p
+												style={{
+													marginBottom: -16,
+													fontSize: 14
+												}}
+											>
+												{finishDateStatus(t.finishDate)}
+											</p>
 										</div>
-									</div>
-								</ProcurementCardTitle>
-								<div>
-									<p style={{ marginBottom: -16, fontSize: 14 }}>
-										<b>Close date:</b>{' '}
-										{formatDateWithoutTime(new Date(t.finishDate))}
-									</p>
-								</div>
-							</ProcurementCardStyled>
-						))
+									</Flex>
+								</ProcurementCardStyled>
+							);
+						})
 					)}
 					{data.length <= 0 ? null : (
 						<>

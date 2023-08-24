@@ -195,10 +195,6 @@ export const BidderTenders = (): JSX.Element => {
 																		fontSize: 14
 																	}}
 																>
-																	{/* <b>Close date:</b>{' '}
-																	{formatDateWithoutTime(
-																		new Date(t.finishDate)
-																	)} */}
 																	{finishDateStatus(t.finishDate)}
 																</p>
 															</div>
