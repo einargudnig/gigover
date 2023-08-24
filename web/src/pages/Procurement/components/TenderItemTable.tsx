@@ -383,9 +383,18 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 							)}
 						</>
 					) : (
-						<Text fontSize={'xs'}>
-							The finish date has passed, you can not publish the tender.
-						</Text>
+						<Flex alignItems={'center'} justifyContent={'center'}>
+							<Text fontSize={'xs'} marginRight={'2'}>
+								The finish date has passed, you can not publish the tender.
+							</Text>
+							{tenderStatus === 1 ? (
+								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
+							) : (
+								<Text>
+									You need to publish the tender before you can invite people
+								</Text>
+							)}
+						</Flex>
 					)}
 				</Flex>
 				<Spacer />

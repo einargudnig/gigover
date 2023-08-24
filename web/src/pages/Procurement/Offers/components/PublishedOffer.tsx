@@ -119,8 +119,18 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	};
 
 	const removeButtonsIfHandled = () => {
-		if (offer?.status === 2 || offer?.status === 3) {
-			return <Text>You have already {status()} this offer</Text>;
+		if (offer?.status === 2) {
+			return (
+				<Text fontSize={'xl'} color={'green'}>
+					This offer has been <strong>accepted!</strong>
+				</Text>
+			);
+		} else if (offer?.status === 3) {
+			return (
+				<Text fontSize={'xl'} color={'red'}>
+					This offer has been <strong>rejected!</strong>
+				</Text>
+			);
 		} else {
 			return (
 				<Flex>
@@ -151,6 +161,24 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 					</Box>
 				</Flex>
 			);
+		}
+	};
+
+	const showHandledText = () => {
+		if (offer?.status === 2) {
+			return (
+				<Text fontSize={'xl'} color={'green'}>
+					This offer has been <strong>accepted!</strong>
+				</Text>
+			);
+		} else if (offer?.status === 3) {
+			return (
+				<Text fontSize={'xl'} color={'red'}>
+					This offer has been <strong>rejected!</strong>
+				</Text>
+			);
+		} else {
+			return <Text>The tender owner has not handled this offer</Text>;
 		}
 	};
 
@@ -311,37 +339,10 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						<Spacer />
 						<Box>
 							{showResultsButtons ? (
-								<>
-									{removeButtonsIfHandled()}
-									{/* <Flex>
-										<Box mr={'1'}>
-											<HandlingOfferConfirmation
-												mutationLoading={isAcceptLoading}
-												mutation={() => handleAccept()}
-												statusText={'Accept Offer'}
-												status={'accept'}
-												buttonText={'Accept'}
-												offerId={offerIdNumber}
-												email={offer?.email}
-												name={offer?.name}
-											/>
-										</Box>
-										<Spacer />
-										<Box ml={'1'}>
-											<HandlingOfferConfirmation
-												mutationLoading={isRejectLoading}
-												mutation={() => handleReject()}
-												statusText={'Reject Offer'}
-												status={'reject'}
-												buttonText={'Reject'}
-												offerId={offerIdNumber}
-												email={offer?.email}
-												name={offer?.name}
-											/>
-										</Box>
-									</Flex> */}
-								</>
-							) : null}
+								<>{removeButtonsIfHandled()}</>
+							) : (
+								<>{showHandledText()}</>
+							)}
 						</Box>
 					</Flex>
 				</>

@@ -123,7 +123,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 								<Box marginRight={'6'}>
 									<VStack ml={'3'}>
 										<VStack>
-											<Tooltip label="Here you can see the bidders that already have Gigover account">
+											<Tooltip label="Here you can see the bidders that have a Gigover account">
 												<HStack>
 													<Text fontWeight={'bold'} fontSize={'xl'}>
 														Bidders
@@ -138,6 +138,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 													<Tr>
 														<Td>Name</Td>
 														<Td>Email</Td>
+														{/* <Td>Will make an offer</Td> */}
 													</Tr>
 												</Thead>
 												{bidders?.map((bidder) => (
@@ -148,6 +149,9 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 														<Td>
 															<Text>{bidder.email}</Text>
 														</Td>
+														{/* <Td>
+															<Text>{bidder.action}</Text>
+														</Td> */}
 													</Tr>
 												))}
 											</Table>
