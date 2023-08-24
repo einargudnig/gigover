@@ -7,6 +7,7 @@ import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { Tender } from '../../../models/Tender';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { Center } from '../../../components/Center';
 
 const Container = styled.div`
@@ -35,7 +36,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
-	console.log(tenders);
+	// console.log(tenders);
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -55,6 +56,25 @@ export const BidderTenders = (): JSX.Element => {
 	const uniqueTenders = getUniqueTenders();
 	const noTender = uniqueTenders?.length === 0;
 
+	const finishDateStatus = (finishDate: number) => {
+		const res = handleFinishDate(finishDate);
+
+		if (res === true) {
+			return (
+				<HStack>
+					<Text>Tender was closed on:</Text>
+					<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
+				</HStack>
+			);
+		}
+		return (
+			<HStack>
+				<Text as={'b'}>Close date:</Text>
+				<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
+			</HStack>
+		);
+	};
+
 	const shouldDeliver = (tender: Tender) => {
 		if (tender.status === 1) {
 			return (
@@ -64,7 +84,12 @@ export const BidderTenders = (): JSX.Element => {
 				</HStack>
 			);
 		}
-		return 'Not Delivered';
+		return (
+			<HStack>
+				<Text as={'b'}>Address:</Text>
+				<Text color={'black'}>{tender.address}</Text>
+			</HStack>
+		);
 	};
 
 	// const offerPublished = () => {
@@ -170,10 +195,11 @@ export const BidderTenders = (): JSX.Element => {
 																		fontSize: 14
 																	}}
 																>
-																	<b>Close date:</b>{' '}
+																	{/* <b>Close date:</b>{' '}
 																	{formatDateWithoutTime(
 																		new Date(t.finishDate)
-																	)}
+																	)} */}
+																	{finishDateStatus(t.finishDate)}
 																</p>
 															</div>
 														</Flex>
