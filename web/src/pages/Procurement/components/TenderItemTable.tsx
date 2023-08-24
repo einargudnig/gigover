@@ -387,6 +387,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 							<Text fontSize={'xs'} marginRight={'2'}>
 								The finish date has passed, you can not publish the tender.
 							</Text>
+							{/* Maybe I end up removing this? Should the tender owner be able to invite users after the finishDate is passed? */}
 							{tenderStatus === 1 ? (
 								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
 							) : (
