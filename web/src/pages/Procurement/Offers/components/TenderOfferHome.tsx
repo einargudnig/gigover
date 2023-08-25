@@ -6,7 +6,7 @@ import { OfferTableHome } from './OfferTableHome';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useToast, Box, Flex, Spacer, Button, Text } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Button, Text } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
@@ -23,19 +23,19 @@ export const TenderOfferHome = (): JSX.Element => {
 	const tender: Tender | undefined = data?.tender;
 	// console.log('tenderData', tender);
 
-	const toast = useToast();
+	// const toast = useToast();
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 
-	if (!tender) {
-		toast({
-			title: 'Tender not found',
-			description: `Tender with id ${tenderId} not found`,
-			status: 'error',
-			duration: 5000,
-			isClosable: true
-		});
-	}
+	// if (!tender) {
+	// 	toast({
+	// 		title: 'Tender not found',
+	// 		description: `Tender with id ${tenderId} not found`,
+	// 		status: 'error',
+	// 		duration: 5000,
+	// 		isClosable: true
+	// 	});
+	// }
 
 	return (
 		<>

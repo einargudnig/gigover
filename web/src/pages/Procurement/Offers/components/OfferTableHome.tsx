@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { TenderItem } from '../../../../models/Tender';
 
 export const OfferTableHome = ({ tender }): JSX.Element => {
@@ -36,11 +35,6 @@ export const OfferTableHome = ({ tender }): JSX.Element => {
 					))}
 				</Tbody>
 			</Table>
-
-			{/* <Text mt={'2'}>You can see the offers you have already made</Text>
-			<Button mt={'2'}>
-				<Link to={'/bidder-offers'}>Go to my Offers</Link>
-			</Button> */}
 		</>
 	);
 };
