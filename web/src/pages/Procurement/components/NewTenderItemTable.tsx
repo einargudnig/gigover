@@ -29,6 +29,8 @@ import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
+import { CrossIcon } from '../../../components/icons/CrossIcon';
+import { CheckIcon } from '../../../components/icons/CheckIcon';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { InviteButton } from './InviteButton';
 
@@ -43,7 +45,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
 	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
-
+	const [editingRowId, setEditingRowId] = useState<TenderItem | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
 	const [formData, setFormData] = useState<TenderItem>({
@@ -102,6 +104,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	// This works, It 'sends' the selected row to the edit form
 	const handleEdit = (item: TenderItem) => {
+		setEditingRowId(item);
 		setEditingItem(item);
 		setFormData({ ...item });
 	};
@@ -212,98 +215,65 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 				<Tbody>
 					{tenderItems?.map((item) => (
 						<Tr key={item.tenderItemId}>
-							<Td>{item.nr}</Td>
-							<Td>{item.description}</Td>
-							<Td>{item.volume}</Td>
-							<Td>{item.unit}</Td>
 							<Td>
-								<Button onClick={() => handleEdit(item)}>Edit</Button>
+								{editingRowId === item ? (
+									<Input name="nr" value={item.nr} onChange={handleChange} />
+								) : (
+									item.nr
+								)}
 							</Td>
-						</Tr>
-					))}
-					<Center>
-						<Text>Add or edit items here below</Text>
-					</Center>
-					<Tr>
-						<Td>
-							<FormControl id={'nr'}>
-								<Input
-									id="nr"
-									name="nr"
-									type="number"
-									value={formData.nr}
-									onChange={handleChange}
-								/>
-							</FormControl>
-						</Td>
-						<Td>
-							<FormControl id={'description'}>
-								<Input
-									id="description"
-									name="description"
-									type="text"
-									value={formData.description}
-									onChange={handleChange}
-								/>
-							</FormControl>
-						</Td>
-						<Td>
-							<FormControl id={'volume'}>
-								<Input
-									id="volume"
-									name="volume"
-									type="number"
-									value={formData.volume}
-									onChange={handleChange}
-								/>
-							</FormControl>
-						</Td>
-						<Td>
-							<FormControl id={'unit'} isInvalid={isInvalidUnit}>
-								<Input
-									id="unit"
-									name="unit"
-									type="text"
-									value={formData.unit}
-									onChange={handleChange}
-								/>
-								{/* {isInvalidUnit ? (
-									<FormHelperText>
-										The measurement of unit should be in a short format: kg, m,
-										m2
-									</FormHelperText>
-								) : null} */}
-							</FormControl>
-						</Td>
-						<Td>
-							{/* <Button>Add item</Button> */}
-							{tender === undefined ? null : editingItem ? (
-								<HStack>
-									<Button onClick={handleUpdate}>
-										{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
-									</Button>
-									<ConfirmDialog
-										header={'Delete item'}
-										setIsOpen={setDialogOpen}
-										callback={async (b) => {
-											if (b) {
-												await deleteTenderItem(editingItem);
-												// console.log('Deleting item:', item); // Good for debugging
-											}
+							<Td>
+								{editingRowId === item ? (
+									<Input
+										name="description"
+										value={item.description}
+										onChange={handleChange}
+									/>
+								) : (
+									item.description
+								)}
+							</Td>
+							<Td>
+								{editingRowId === item ? (
+									<Input
+										name="volume"
+										value={item.volume}
+										onChange={handleChange}
+									/>
+								) : (
+									item.volume
+								)}
+							</Td>
+							<Td>
+								{editingRowId === item ? (
+									<Input name="unit" value={item.unit} onChange={handleChange} />
+								) : (
+									item.unit
+								)}
+							</Td>
+							<Td>
+								{editingRowId === item ? (
+									<HStack>
+										<Button onClick={handleUpdate}>
+											{isUpdateLoading ? (
+												<LoadingSpinner />
+											) : (
+												<Tooltip label="Update item">
+													{/* <CheckIcon color={'black'} size={20} /> */}
+													Save
+												</Tooltip>
+											)}
+										</Button>
+										<ConfirmDialog
+											header={'Delete item'}
+											setIsOpen={setDialogOpen}
+											callback={async (b) => {
+												if (b) {
+													await deleteTenderItem(editingItem);
+													// console.log('Deleting item:', item); // Good for debugging
+												}
 
-											setDialogOpen(false);
-											setFormData({
-												tenderId: Number(tenderId),
-												description: '',
-												nr: 0,
-												volume: 0,
-												unit: ''
-											});
-										}}
-										isOpen={dialogOpen}
-									>
-										<Button
-											onClick={() => {
+												setDialogOpen(false);
 												setFormData({
 													tenderId: Number(tenderId),
 													description: '',
@@ -311,29 +281,43 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 													volume: 0,
 													unit: ''
 												});
-												setEditingItem(null);
 											}}
+											isOpen={dialogOpen}
 										>
-											Cancel
-										</Button>
-										<Button
-											aria-label={'Delete item'}
-											colorScheme={'red'}
-											isLoading={isDeleteLoading}
-											leftIcon={<TrashIcon color={'white'} size={20} />}
-											onClick={() => setDialogOpen(true)}
-										>
-											Delete
-										</Button>
-									</ConfirmDialog>
-								</HStack>
-							) : (
-								<Button onClick={handleAdd}>
-									{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-								</Button>
-							)}
-						</Td>
-					</Tr>
+											<Button
+												onClick={() => {
+													setFormData({
+														tenderId: Number(tenderId),
+														description: '',
+														nr: 0,
+														volume: 0,
+														unit: ''
+													});
+													setEditingItem(null);
+												}}
+												aria-label={'Cancel edit'}
+											>
+												<CrossIcon color={'black'} size={20} />
+											</Button>
+											<Button
+												aria-label={'Delete item'}
+												colorScheme={'red'}
+												isLoading={isDeleteLoading}
+												onClick={() => setDialogOpen(true)}
+											>
+												<Tooltip label="Delete item">
+													<TrashIcon color={'white'} size={20} />
+												</Tooltip>
+											</Button>
+										</ConfirmDialog>
+									</HStack>
+								) : (
+									<Button onClick={() => handleEdit(item)}>Edit</Button>
+								)}
+							</Td>
+						</Tr>
+					))}
+
 					{tenderItems?.length === 0 ? (
 						<Td>
 							<Text fontSize="xl">
