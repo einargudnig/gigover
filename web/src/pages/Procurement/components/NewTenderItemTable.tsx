@@ -317,6 +317,23 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 							</Td>
 						</Tr>
 					))}
+					<Tr>
+						<Td>
+							<Input name="nr" />
+						</Td>
+						<Td>
+							<Input name="description" />
+						</Td>
+						<Td>
+							<Input name="volume" />
+						</Td>
+						<Td>
+							<Input name="unit" />
+						</Td>
+						<Td>
+							<Button>Add item</Button>
+						</Td>
+					</Tr>
 
 					{tenderItems?.length === 0 ? (
 						<Td>
