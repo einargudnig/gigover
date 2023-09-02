@@ -32,7 +32,7 @@ export const TenderFile = (): JSX.Element => {
 				<>
 					{tenderDocuments!.length > 0 ? (
 						<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
-							<Heading size={'md'}>Files for your offer</Heading>
+							<Heading size={'md'}>Files for your tender</Heading>
 							{tenderDocuments!
 								.sort((a, b) =>
 									b.created && a.created ? b.created - a.created : -1

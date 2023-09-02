@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
-import { VStack, HStack } from '@chakra-ui/react';
+import { useParams, Link } from 'react-router-dom';
+import { Box, Button, Text, VStack, HStack } from '@chakra-ui/react';
 import { Page } from '../../../../components/Page';
 import { PublishedOffer } from './PublishedOffer';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { OfferFile } from '../../../Files/new/components/OfferFile';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -29,6 +30,16 @@ export const OfferPublished = (): JSX.Element => {
 								isOfferLoading={isLoading}
 								showResultsButtons={false}
 							/>
+							<Box marginTop={'2'}>
+								<OfferFile />
+							</Box>
+							<Box marginTop={'3'}>
+								<Link to={`/files/tender/offers/${offerId}`}>
+									<Button ml={'1'}>
+										<Text textColor={'black'}>View files</Text>
+									</Button>
+								</Link>
+							</Box>
 						</Container>
 					</HStack>
 				</VStack>
