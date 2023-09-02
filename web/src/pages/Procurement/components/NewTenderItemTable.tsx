@@ -321,7 +321,11 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 							</Td>
 						</Tr>
 					))}
-					<Text>Enter details below to add items to tender</Text>
+
+					<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+						Enter details below to add items to tender
+					</Text>
+
 					<Tr>
 						<Td>
 							<FormControl id="nr">

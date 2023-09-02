@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../services/ApiService';
 import axios, { AxiosError } from 'axios';
 import { devError } from '../utils/ConsoleUtils';
@@ -10,6 +10,7 @@ interface InviteBidderInput {
 }
 
 export const useInviteBidder = () => {
+	const queryClient = useQueryClient();
 	const mutationKey = ApiService.addBidder;
 
 	return useMutation<ErrorResponse, AxiosError, InviteBidderInput>(
@@ -23,6 +24,9 @@ export const useInviteBidder = () => {
 				if (response.data.errorCode !== 'OK') {
 					throw new Error(response.data?.errorCode);
 				}
+
+				// we want to refetch this query so the bidder table updates after we invite a bidder.
+				queryClient.refetchQueries(ApiService.getTenderById(variables.tenderId));
 
 				return response.data;
 			} catch (e) {

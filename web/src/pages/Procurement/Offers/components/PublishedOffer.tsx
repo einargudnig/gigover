@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
 	Button,
 	Table,
@@ -303,37 +303,29 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						</Table>
 					</div>
 
-					<Flex mx={'5'} alignItems={'center'} justifyContent={'center'}>
+					<Flex alignItems={'center'} justifyContent={'center'}>
 						<Box>
-							<Flex>
-								<ReactToPdf
-									targetRef={ref}
-									filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
-									options={
-										ref.current && {
-											orientation: 'landscape',
-											unit: 'px',
-											hotfixes: ['px-scaling'],
-											format: [
-												ref.current?.clientWidth ?? 1920,
-												ref.current?.clientHeight ?? 1080
-											]
-										}
+							<ReactToPdf
+								targetRef={ref}
+								filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
+								options={
+									ref.current && {
+										orientation: 'landscape',
+										unit: 'px',
+										hotfixes: ['px-scaling'],
+										format: [
+											ref.current?.clientWidth ?? 1920,
+											ref.current?.clientHeight ?? 1080
+										]
 									}
-								>
-									{({ toPdf }) => (
-										<Button mr={'1'} onClick={toPdf}>
-											Download as PDF
-										</Button>
-									)}
-								</ReactToPdf>
-								<Spacer />
-								<Link to={`/files/tender/offers/${offerId}`}>
-									<Button ml={'1'}>
-										<Text textColor={'black'}>Uploaded files</Text>
+								}
+							>
+								{({ toPdf }) => (
+									<Button mr={'1'} onClick={toPdf}>
+										Download as PDF
 									</Button>
-								</Link>
-							</Flex>
+								)}
+							</ReactToPdf>
 						</Box>
 
 						<Spacer />

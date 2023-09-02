@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProcurementHeader } from './ProcurementHeader';
-// import { TenderItemTable } from './TenderItemTable';
-import { NewTenderItemTable } from './NewTenderItemTable';
+import { TenderItemTable } from './TenderItemTable';
+// import { NewTenderItemTable } from './NewTenderItemTable';
 import { useGetTenderById } from '../../../queries/useGetTenderById';
 import { useParams } from 'react-router-dom';
 import { Tender } from '../../../models/Tender';
@@ -26,7 +26,8 @@ export const TenderPage = (): JSX.Element => {
 			) : (
 				<div>
 					<ProcurementHeader tender={tender} />
-					<NewTenderItemTable tender={tender} />
+					{/* <NewTenderItemTable tender={tender} /> */}
+					<TenderItemTable tender={tender} />
 				</div>
 			)}
 		</>
