@@ -317,21 +317,62 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 							</Td>
 						</Tr>
 					))}
+					<Text>Enter details below to add items to tender</Text>
 					<Tr>
 						<Td>
-							<Input name="nr" />
+							<FormControl id="nr">
+								<Input
+									id="nr"
+									name="nr"
+									type="number"
+									value={formData.nr}
+									onChange={handleChange}
+								/>
+							</FormControl>
 						</Td>
 						<Td>
-							<Input name="description" />
+							<FormControl id="description">
+								<Input
+									id="description"
+									name="description"
+									type="text"
+									value={formData.description}
+									onChange={handleChange}
+								/>
+							</FormControl>
 						</Td>
 						<Td>
-							<Input name="volume" />
+							<FormControl id="volume">
+								<Input
+									id="volume"
+									name="volume"
+									type="text"
+									value={formData.volume}
+									onChange={handleChange}
+								/>
+							</FormControl>
 						</Td>
 						<Td>
-							<Input name="unit" />
+							<FormControl id="unit" isInvalid={isInvalidUnit}>
+								<Input
+									id="unit"
+									name="unit"
+									type="text"
+									value={formData.unit}
+									onChange={handleChange}
+								/>
+								{isInvalidUnit ? (
+									<FormHelperText>
+										The measurement of unit should be in a short format: kg, m,
+										m2
+									</FormHelperText>
+								) : null}
+							</FormControl>
 						</Td>
 						<Td>
-							<Button>Add item</Button>
+							<Button onClick={handleAdd}>
+								{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+							</Button>
 						</Td>
 					</Tr>
 
