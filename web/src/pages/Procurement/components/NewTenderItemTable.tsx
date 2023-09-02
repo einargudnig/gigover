@@ -6,11 +6,9 @@ import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
 import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
 import { usePublishTender } from '../../../mutations/usePublishTender';
 import {
-	Center,
 	Button,
 	Flex,
 	FormControl,
-	FormLabel,
 	FormHelperText,
 	HStack,
 	Input,
@@ -29,14 +27,13 @@ import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
-import { CrossIcon } from '../../../components/icons/CrossIcon';
-import { CheckIcon } from '../../../components/icons/CheckIcon';
+import { Edit } from '../../../components/icons/Edit';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { CrossIcon } from '../../../components/icons/CrossIcon';
 import { InviteButton } from './InviteButton';
 
 export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
-	// console.log('tenderId', tenderId);
 
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
@@ -45,9 +42,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
 	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
-	const [editingRowId, setEditingRowId] = useState<TenderItem | null>(null);
-	const [dialogOpen, setDialogOpen] = useState(false);
 	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const [formData, setFormData] = useState<TenderItem>({
 		tenderId: Number(tenderId),
 		description: 'Description',
@@ -56,21 +52,18 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		unit: 'Unit'
 	});
 
-	// POST / Update / DELETE
 	const {
 		mutate,
 		isLoading: isMutateLoading,
 		isError: isMutateError,
 		error: mutateError
 	} = useAddTenderItem();
-	// eslint-disable-next-line
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
 	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
 	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 
 	const toast = useToast();
 
-	//! We need to make a validation for the unit form field
 	const isInvalidUnit = formData?.unit!.length > 5;
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,6 +74,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		});
 	};
 
+	// ! This guy is good to go! -> He works the way we want him to.
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
@@ -102,17 +96,17 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
-	// This works, It 'sends' the selected row to the edit form
 	const handleEdit = (item: TenderItem) => {
-		setEditingRowId(item);
 		setEditingItem(item);
-		setFormData({ ...item });
+		// setFormData({ ...item });
 	};
 
-	const handleUpdate = () => {
+	const handleUpdate = (item: TenderItem) => {
+		setEditingItem(item);
+		console.log('Editing row:', editingItem);
 		setItems(
-			tenderItems?.map((item) =>
-				item.tenderItemId === editingItem?.tenderItemId ? { ...formData } : item
+			tenderItems?.map((i) =>
+				i.tenderItemId === editingItem?.tenderItemId ? { ...formData } : i
 			)
 		);
 
@@ -120,13 +114,13 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		// console.log('Mutating tenderItem with this formData:', formData); // Good for debugging
 
 		setEditingItem(null);
-		setFormData({
-			tenderId: Number(tenderId),
-			description: '',
-			nr: 0,
-			volume: 0,
-			unit: ''
-		});
+		// setFormData({
+		// 	tenderId: Number(tenderId),
+		// 	description: '',
+		// 	nr: 0,
+		// 	volume: 0,
+		// 	unit: ''
+		// });
 	};
 
 	const handlePublish = async () => {
@@ -216,14 +210,14 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					{tenderItems?.map((item) => (
 						<Tr key={item.tenderItemId}>
 							<Td>
-								{editingRowId === item ? (
+								{editingItem === item ? (
 									<Input name="nr" value={item.nr} onChange={handleChange} />
 								) : (
 									item.nr
 								)}
 							</Td>
 							<Td>
-								{editingRowId === item ? (
+								{editingItem === item ? (
 									<Input
 										name="description"
 										value={item.description}
@@ -234,7 +228,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								)}
 							</Td>
 							<Td>
-								{editingRowId === item ? (
+								{editingItem === item ? (
 									<Input
 										name="volume"
 										value={item.volume}
@@ -245,31 +239,51 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								)}
 							</Td>
 							<Td>
-								{editingRowId === item ? (
+								{editingItem === item ? (
 									<Input name="unit" value={item.unit} onChange={handleChange} />
 								) : (
 									item.unit
 								)}
 							</Td>
+							{/* Action buttons */}
 							<Td>
-								{editingRowId === item ? (
+								{editingItem === item ? (
 									<HStack>
-										<Button onClick={handleUpdate}>
-											{isUpdateLoading ? (
-												<LoadingSpinner />
-											) : (
-												<Tooltip label="Update item">
-													{/* <CheckIcon color={'black'} size={20} /> */}
-													Save
-												</Tooltip>
-											)}
+										<Button
+											aria-label={'Update item'}
+											onClick={() => handleUpdate(item)}
+										>
+											{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
+										</Button>
+										<Button
+											onClick={() => {
+												setFormData({
+													tenderId: Number(tenderId),
+													description: '',
+													nr: 0,
+													volume: 0,
+													unit: ''
+												});
+												setEditingItem(null);
+											}}
+										>
+											<CrossIcon size={24} />
+										</Button>
+									</HStack>
+								) : (
+									<HStack>
+										<Button
+											aria-label={'Edit item'}
+											onClick={() => handleEdit(item)}
+										>
+											<Edit size={20} />
 										</Button>
 										<ConfirmDialog
 											header={'Delete item'}
 											setIsOpen={setDialogOpen}
 											callback={async (b) => {
 												if (b) {
-													await deleteTenderItem(editingItem);
+													await deleteTenderItem(item);
 													// console.log('Deleting item:', item); // Good for debugging
 												}
 
@@ -285,34 +299,15 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 											isOpen={dialogOpen}
 										>
 											<Button
-												onClick={() => {
-													setFormData({
-														tenderId: Number(tenderId),
-														description: '',
-														nr: 0,
-														volume: 0,
-														unit: ''
-													});
-													setEditingItem(null);
-												}}
-												aria-label={'Cancel edit'}
-											>
-												<CrossIcon color={'black'} size={20} />
-											</Button>
-											<Button
 												aria-label={'Delete item'}
 												colorScheme={'red'}
 												isLoading={isDeleteLoading}
 												onClick={() => setDialogOpen(true)}
 											>
-												<Tooltip label="Delete item">
-													<TrashIcon color={'white'} size={20} />
-												</Tooltip>
+												<TrashIcon color={'white'} size={20} />
 											</Button>
 										</ConfirmDialog>
 									</HStack>
-								) : (
-									<Button onClick={() => handleEdit(item)}>Edit</Button>
 								)}
 							</Td>
 						</Tr>
@@ -393,18 +388,6 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 			</Table>
 			<br />
 
-			{tenderItems?.length !== 0 ? (
-				<Text fontSize="md">
-					To edit or delete items in the table you must press the Edit button in the
-					Action column. You will then be able to edit the item in the form below. When
-					you are done editing the item, press the Update item button.
-				</Text>
-			) : null}
-			<br />
-
-			{/* onClick handler that publishes the tender
-				// it also open a dialog where I can add email that I want to send an invitation to
-			*/}
 			<Flex alignItems={'center'} justifyContent={'center'}>
 				<Flex alignItems={'center'} justifyContent={'center'}>
 					{!finishDateStatus ? (
