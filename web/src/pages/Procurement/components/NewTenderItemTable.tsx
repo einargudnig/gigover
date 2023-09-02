@@ -51,6 +51,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		volume: 0,
 		unit: 'Unit'
 	});
+	const [updateFormData, setUpdateFormData] = useState<TenderItem | null>(null);
 
 	const {
 		mutate,
@@ -74,6 +75,14 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		});
 	};
 
+	// const handleUpdateChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 	const { name, value } = event.target;
+	// 	setUpdateFormData({
+	// 		...updateFormData,
+	// 		[name]: value
+	// 	});
+	// }
+
 	// ! This guy is good to go! -> He works the way we want him to.
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
@@ -84,7 +93,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 			volume: formData.volume,
 			unit: formData.unit
 		});
-
+		console.log('Items', items);
 		mutate(formData);
 		setFormData({
 			tenderId: Number(tenderId),
@@ -102,8 +111,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	};
 
 	const handleUpdate = (item: TenderItem) => {
+		console.log('Editing item:', item);
 		setEditingItem(item);
-		console.log('Editing row:', editingItem);
 		setItems(
 			tenderItems?.map((i) =>
 				i.tenderItemId === editingItem?.tenderItemId ? { ...formData } : i

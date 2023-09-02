@@ -3,7 +3,7 @@ import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 import { AxiosError } from 'axios';
 import axios from 'axios';
-// import { useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 
 export interface TenderItemsOffer {
 	itemId: number;
@@ -17,16 +17,15 @@ export interface TenderItemsOffer {
 // offerId: number; -> comes from the 'Open Offer'
 
 export const useAddOfferItems = () => {
-	// const queryClient = useQueryClient();
+	const queryClient = useQueryClient();
 
 	return useMutation<ErrorResponse, AxiosError, TenderItemsOffer>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.addOfferItem, variables, {
 				withCredentials: true
 			});
-			// Do I need to refetch any queries after I add a new offer to an item??
-			// ! I don't want to refetch anything here, it's making the table re-render 🫡
-			// await queryClient.refetchQueries(ApiService.offer(variables.offerId));
+			// Do I need to refetch any queries after I add a new offer to an item?
+			await queryClient.refetchQueries(ApiService.offer(variables.offerId));
 
 			return response.data;
 		} catch (e) {
