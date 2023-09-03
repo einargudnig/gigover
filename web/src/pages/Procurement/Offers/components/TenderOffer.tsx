@@ -27,6 +27,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/usePublishOffer';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { UploadCertifications } from './UploadCertifications';
+import { OfferFile } from '../../../Files/new/components/OfferFile';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();
@@ -122,6 +123,8 @@ export const TenderOffer = (): JSX.Element => {
 							</Box>
 						</Flex>
 					</Flex>
+
+					<OfferFile />
 
 					<AlertDialog
 						isOpen={isOpen}

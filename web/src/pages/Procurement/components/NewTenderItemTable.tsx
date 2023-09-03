@@ -51,7 +51,14 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		volume: 0,
 		unit: 'Unit'
 	});
-	const [updateFormData, setUpdateFormData] = useState<TenderItem | null>(null);
+	// eslint-disable-next-line
+	const [updateFormData, setUpdateFormData] = useState<TenderItem | null>({
+		tenderId: Number(tenderId),
+		description: 'Description',
+		nr: 0,
+		volume: 0,
+		unit: 'Unit'
+	});
 
 	const {
 		mutate,
@@ -422,25 +429,12 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						</>
 					) : (
 						<Flex alignItems={'center'} justifyContent={'center'}>
-							<Text fontSize={'xs'} marginRight={'2'}>
-								The finish date has passed, you can not publish the tender.
-							</Text>
-							{/* Maybe I end up removing this? Should the tender owner be able to invite users after the finishDate is passed? */}
-							{tenderStatus === 1 ? (
-								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
-							) : (
-								<Text>
-									You need to publish the tender before you can invite people
-								</Text>
-							)}
+							<Text>The finish date has passed, you can not publish the tender.</Text>
 						</Flex>
 					)}
 				</Flex>
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
-				<Button mr={'1'}>
-					<Link to={`/files/tender/tenders/${Number(tenderId)}`}>Tender files</Link>
-				</Button>
 				<Button ml={'1'}>
 					<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
 				</Button>
