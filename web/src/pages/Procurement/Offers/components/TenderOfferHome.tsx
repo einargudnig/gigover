@@ -6,9 +6,10 @@ import { OfferTableHome } from './OfferTableHome';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Box, Flex, Spacer, Button, Text } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Button, Text, useToast } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { useBidderReject } from '../../../../mutations/useBidderReject';
 
 import { OpenOffer } from './OpenOffer';
 
@@ -21,9 +22,9 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	// console.log('tenderData', tender);
+	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 
-	// const toast = useToast();
+	const toast = useToast();
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 
@@ -36,6 +37,22 @@ export const TenderOfferHome = (): JSX.Element => {
 	// 		isClosable: true
 	// 	});
 	// }
+
+	const bidderRejectBody = {
+		tenderId: Number(tenderId)
+	};
+
+	const handleReject = async () => {
+		bidderRejectAsync(bidderRejectBody);
+		toast({
+			title: 'Rejected!',
+			description:
+				'You have decided to not place an offer for this tender. The tender owner has been notified.',
+			status: 'info',
+			duration: 2000,
+			isClosable: true
+		});
+	};
 
 	return (
 		<>
@@ -54,7 +71,13 @@ export const TenderOfferHome = (): JSX.Element => {
 							</Box>
 							<Spacer />
 							<Box>
-								<Button>Will not place an offer</Button>
+								<Button onClick={handleReject}>
+									{isBidderRejectLoading ? (
+										<LoadingSpinner />
+									) : (
+										'Will not place an offer'
+									)}
+								</Button>
 							</Box>
 						</Flex>
 					) : (

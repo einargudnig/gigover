@@ -11,7 +11,7 @@ interface BidderRejectRequest {
 	tenderId: number;
 }
 
-export const useAcceptOffer = () => {
+export const useBidderReject = () => {
 	const client = useQueryClient();
 
 	return useMutation<BidderRejectResponse, ErrorResponse, BidderRejectRequest>(
