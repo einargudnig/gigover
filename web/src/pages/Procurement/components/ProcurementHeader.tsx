@@ -45,7 +45,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 			<div style={{ width: '100%' }}>
 				<Flex direction={'column'}>
 					<Box
-						mb={2}
+						mb={1}
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
@@ -138,22 +138,35 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 													<Tr>
 														<Td>Name</Td>
 														<Td>Email</Td>
-														{/* <Td>Will make an offer</Td> */}
+														<Td>Will make an offer</Td>
 													</Tr>
 												</Thead>
-												{bidders?.map((bidder) => (
-													<Tr key={bidder.email}>
-														<Td>
-															<Text>{bidder.name}</Text>
-														</Td>
-														<Td>
-															<Text>{bidder.email}</Text>
-														</Td>
-														{/* <Td>
-															<Text>{bidder.action}</Text>
-														</Td> */}
-													</Tr>
-												))}
+												{bidders?.map((bidder) => {
+													let offerStatus;
+													let statusColor;
+													if (bidder.status === 0) {
+														offerStatus = 'No';
+													}
+													if (bidder.status === 1) {
+														offerStatus = 'Yes';
+														statusColor = 'green';
+													}
+													return (
+														<Tr key={bidder.email}>
+															<Td>
+																<Text>{bidder.name}</Text>
+															</Td>
+															<Td>
+																<Text>{bidder.email}</Text>
+															</Td>
+															<Td>
+																<Text color={statusColor}>
+																	{offerStatus}
+																</Text>
+															</Td>
+														</Tr>
+													);
+												})}
 											</Table>
 										</VStack>
 									</VStack>
@@ -165,13 +178,13 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 
 				{/* button to edit or delete tender */}
 				{finishDateStatus ? (
-					<Flex justifyContent={'flex-end'} marginTop={'2'} marginBottom={'2'}>
+					<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
 						<Text as={'b'}>
 							The finish date has passed, you cannot edit or delete the tender
 						</Text>
 					</Flex>
 				) : (
-					<Flex justifyContent={'flex-end'} marginTop={'2'} marginBottom={'2'}>
+					<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
 						<HStack>
 							<Button
 								onClick={() =>

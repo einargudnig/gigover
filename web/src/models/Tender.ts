@@ -94,6 +94,8 @@ export interface Bidder {
 	userName: string;
 	name: string;
 	email: string;
+	status: number;
+	offerCount: number;
 }
 
 export interface OfferDocument {
