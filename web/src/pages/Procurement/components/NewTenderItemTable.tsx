@@ -82,13 +82,13 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		});
 	};
 
-	// const handleUpdateChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-	// 	const { name, value } = event.target;
-	// 	setUpdateFormData({
-	// 		...updateFormData,
-	// 		[name]: value
-	// 	});
-	// }
+	const handleUpdateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		// setUpdateFormData({
+		// 	...updateFormData,
+		// 	[name]: value
+		// });
+	};
 
 	// ! This guy is good to go! -> He works the way we want him to.
 	const handleAdd = () => {

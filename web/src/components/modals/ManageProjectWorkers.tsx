@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Spacer, Box, Flex, Button, Heading } from '@chakra-ui/react';
+import { Spacer, Box, Flex, Button, Heading, Text } from '@chakra-ui/react';
 import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { Project, WorkerItem } from '../../models/Project';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
@@ -76,6 +76,9 @@ export const ManageProjectWorkers = ({
 	return (
 		<Modal title={'Add team members'} open={true} onClose={onClose}>
 			<ManageWorkersModalStyled>
+				<Text marginBottom={'4'} as={'h4'}>
+					To add team members, they must have signed up for GigOver.
+				</Text>
 				<Flex justifyContent={'stretch'} alignItems={'start'}>
 					<Box flexGrow={1}>
 						<InviteUser projectId={project.projectId} />
