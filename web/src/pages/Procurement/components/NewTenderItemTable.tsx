@@ -52,7 +52,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		unit: 'Unit'
 	});
 	// eslint-disable-next-line
-	const [updateFormData, setUpdateFormData] = useState<TenderItem | null>({
+	const [updateFormData, setUpdateFormData] = useState<TenderItem>({
 		tenderId: Number(tenderId),
 		description: 'Description',
 		nr: 0,
@@ -84,10 +84,10 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	const handleUpdateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		// setUpdateFormData({
-		// 	...updateFormData,
-		// 	[name]: value
-		// });
+		setUpdateFormData({
+			...updateFormData,
+			[name]: value
+		});
 	};
 
 	// ! This guy is good to go! -> He works the way we want him to.
@@ -126,7 +126,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 			)
 		);
 
-		mutateUpdate(formData);
+		mutateUpdate(updateFormData);
 		// console.log('Mutating tenderItem with this formData:', formData); // Good for debugging
 
 		setEditingItem(null);
@@ -227,7 +227,11 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						<Tr key={item.tenderItemId}>
 							<Td>
 								{editingItem === item ? (
-									<Input name="nr" value={item.nr} onChange={handleChange} />
+									<Input
+										name="nr"
+										value={item.nr}
+										onChange={handleUpdateChange}
+									/>
 								) : (
 									item.nr
 								)}
@@ -237,7 +241,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									<Input
 										name="description"
 										value={item.description}
-										onChange={handleChange}
+										onChange={handleUpdateChange}
 									/>
 								) : (
 									item.description
@@ -248,7 +252,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									<Input
 										name="volume"
 										value={item.volume}
-										onChange={handleChange}
+										onChange={handleUpdateChange}
 									/>
 								) : (
 									item.volume
@@ -256,7 +260,11 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 							</Td>
 							<Td>
 								{editingItem === item ? (
-									<Input name="unit" value={item.unit} onChange={handleChange} />
+									<Input
+										name="unit"
+										value={item.unit}
+										onChange={handleUpdateChange}
+									/>
 								) : (
 									item.unit
 								)}
