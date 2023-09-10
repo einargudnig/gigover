@@ -25,6 +25,7 @@ import ReactToPdf from 'react-to-pdf';
 import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 import { useAcceptOffer } from '../../../../mutations/useAcceptOffer';
 import { useRejectOffer } from '../../../../mutations/useRejectOffer';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
@@ -37,6 +38,9 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
 
 	const toast = useToast();
+
+	const time = offer?.finishDate;
+	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 
 	const handleAccept = () => {
 		const offerIdBody = {
@@ -303,7 +307,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						</Table>
 					</div>
 
-					<Flex alignItems={'center'} justifyContent={'center'}>
+					<Flex alignItems={'center'} justifyContent={'center'} marginTop={'3'}>
 						<Box>
 							<ReactToPdf
 								targetRef={ref}
@@ -330,10 +334,18 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 						<Spacer />
 						<Box>
-							{showResultsButtons ? (
-								<>{removeButtonsIfHandled()}</>
+							{!finishDateStatus ? (
+								<Text>
+									You cannot answer offers until the finish date has passed.
+								</Text>
 							) : (
-								<>{showHandledText()}</>
+								<>
+									{showResultsButtons ? (
+										<>{removeButtonsIfHandled()}</>
+									) : (
+										<>{showHandledText()}</>
+									)}
+								</>
 							)}
 						</Box>
 					</Flex>
