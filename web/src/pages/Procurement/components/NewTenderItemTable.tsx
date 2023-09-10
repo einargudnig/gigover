@@ -114,29 +114,25 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	const handleEdit = (item: TenderItem) => {
 		setEditingItem(item);
-		// setFormData({ ...item });
+		setUpdateFormData(item);
 	};
 
 	const handleUpdate = (item: TenderItem) => {
 		console.log('Editing item:', item);
-		setEditingItem(item);
+		console.log('Editing item:', item);
+
+		// Update the local items state
 		setItems(
 			tenderItems?.map((i) =>
-				i.tenderItemId === editingItem?.tenderItemId ? { ...formData } : i
+				i.tenderItemId === editingItem?.tenderItemId ? updateFormData : i
 			)
 		);
 
+		// Send the updated item to the server
 		mutateUpdate(updateFormData);
-		// console.log('Mutating tenderItem with this formData:', formData); // Good for debugging
 
+		// Reset the editing state
 		setEditingItem(null);
-		// setFormData({
-		// 	tenderId: Number(tenderId),
-		// 	description: '',
-		// 	nr: 0,
-		// 	volume: 0,
-		// 	unit: ''
-		// });
 	};
 
 	const handlePublish = async () => {
@@ -229,7 +225,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								{editingItem === item ? (
 									<Input
 										name="nr"
-										value={item.nr}
+										value={updateFormData.nr}
 										onChange={handleUpdateChange}
 									/>
 								) : (
@@ -240,7 +236,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								{editingItem === item ? (
 									<Input
 										name="description"
-										value={item.description}
+										value={updateFormData.description}
 										onChange={handleUpdateChange}
 									/>
 								) : (
@@ -251,7 +247,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								{editingItem === item ? (
 									<Input
 										name="volume"
-										value={item.volume}
+										value={updateFormData.volume}
 										onChange={handleUpdateChange}
 									/>
 								) : (
@@ -262,7 +258,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								{editingItem === item ? (
 									<Input
 										name="unit"
-										value={item.unit}
+										value={updateFormData.unit}
 										onChange={handleUpdateChange}
 									/>
 								) : (
