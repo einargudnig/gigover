@@ -17,7 +17,7 @@ export const useBidderReject = () => {
 	return useMutation<BidderRejectResponse, ErrorResponse, BidderRejectRequest>(
 		async (tenderId) => {
 			try {
-				const response = await axios.post(ApiService.acceptOffer, tenderId, {
+				const response = await axios.post(ApiService.rejectOffer, tenderId, {
 					withCredentials: true
 				});
 				if (response.status === 200) {
@@ -26,7 +26,7 @@ export const useBidderReject = () => {
 				}
 				return response.data;
 			} catch (e) {
-				throw new Error('Could not accept offer');
+				throw new Error('Could not reject offer');
 			}
 		}
 	);

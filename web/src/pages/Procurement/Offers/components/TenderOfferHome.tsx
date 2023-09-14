@@ -54,7 +54,7 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const handleReject = async () => {
 		bidderRejectAsync(bidderRejectBody);
-		setShowText(true);
+		// setShowText(true);
 		toast({
 			title: 'Rejected!',
 			description:

@@ -3,8 +3,8 @@ export const IS_LOCAL = process.env.NODE_ENV !== 'production';
 export const API_BASE =
 	process.env.NODE_ENV === 'production'
 		? 'https://rest.gigover.com/rest/'
-		: 'http://localhost:3000/rest/';
-//'http://localhost:8080/gigover-sdk-2.5.0-SNAPSHOT/rest/';
+		: // 'http://localhost:3000/rest/';
+		  'http://localhost:8080/gigover-sdk-2.5.0-SNAPSHOT/rest/';
 // If using proxy.
 // If hosting backend locally use :8080 instead of :3000
 
@@ -137,7 +137,7 @@ export class ApiService {
 	static bidderTenders = API_BASE + 'tender/bidderTenders'; // All tenders for a bidder
 	static offer = (offerId: number) => API_BASE + 'tender/offer/' + offerId;
 	static acceptOffer = API_BASE + 'tender/acceptOffer';
-	static rejectOffer = API_BASE + 'tender/rejectOffer';
+	static rejectOffer = API_BASE + 'tender/bidderReject';
 	// Tender documents
 	static addTenderDocument = API_BASE + 'tender/addDocument';
 	static offerDocuments = (offerId: number) => API_BASE + 'tender/offer' + offerId; //! GET this one is for the offer documents

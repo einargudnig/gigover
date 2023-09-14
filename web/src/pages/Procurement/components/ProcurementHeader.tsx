@@ -38,6 +38,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 	const bidders = tender?.bidders;
+	console.log('bidders', bidders);
 
 	const toast = useToast();
 	return (
