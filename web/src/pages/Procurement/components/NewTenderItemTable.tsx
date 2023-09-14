@@ -13,6 +13,7 @@ import {
 	HStack,
 	Input,
 	Table,
+	TableContainer,
 	Text,
 	Tbody,
 	Td,
@@ -174,242 +175,244 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	return (
 		<>
-			<Table variant={'striped'}>
-				<Thead>
-					<Tr>
-						<Tooltip label="Does this item have a special number?">
-							<Th>
-								<HStack>
-									<p>Number</p>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Th>
-						</Tooltip>
-
-						<Tooltip label="Description of a item">
-							<Th>
-								<HStack>
-									<p>Description</p>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Th>
-						</Tooltip>
-
-						<Tooltip label="Volume">
-							<Th>
-								<HStack>
-									<p color={'black'}>Volume</p>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Th>
-						</Tooltip>
-
-						<Tooltip label="Unit of measurement. For example: m2, kg, t">
-							<Th>
-								<HStack>
-									<p>Unit</p>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Th>
-						</Tooltip>
-
-						<Th>
-							<p>Actions</p>
-						</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-					{tenderItems?.map((item) => (
-						<Tr key={item.tenderItemId}>
-							<Td>
-								{editingItem === item ? (
-									<Input
-										name="nr"
-										value={updateFormData.nr}
-										onChange={handleUpdateChange}
-									/>
-								) : (
-									item.nr
-								)}
-							</Td>
-							<Td>
-								{editingItem === item ? (
-									<Input
-										name="description"
-										value={updateFormData.description}
-										onChange={handleUpdateChange}
-									/>
-								) : (
-									item.description
-								)}
-							</Td>
-							<Td>
-								{editingItem === item ? (
-									<Input
-										name="volume"
-										value={updateFormData.volume}
-										onChange={handleUpdateChange}
-									/>
-								) : (
-									item.volume
-								)}
-							</Td>
-							<Td>
-								{editingItem === item ? (
-									<Input
-										name="unit"
-										value={updateFormData.unit}
-										onChange={handleUpdateChange}
-									/>
-								) : (
-									item.unit
-								)}
-							</Td>
-							{/* Action buttons */}
-							<Td>
-								{editingItem === item ? (
+			<TableContainer>
+				<Table variant={'striped'}>
+					<Thead>
+						<Tr>
+							<Tooltip label="Does this item have a special number?">
+								<Th>
 									<HStack>
-										<Button
-											aria-label={'Update item'}
-											onClick={() => handleUpdate(item)}
-										>
-											{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
-										</Button>
-										<Button
-											onClick={() => {
-												setFormData({
-													tenderId: Number(tenderId),
-													description: '',
-													nr: 0,
-													volume: 0,
-													unit: ''
-												});
-												setEditingItem(null);
-											}}
-										>
-											<CrossIcon size={24} />
-										</Button>
+										<p>Number</p>
+										<ImportantIcon size={20} />
 									</HStack>
-								) : (
-									<HStack>
-										<Button
-											aria-label={'Edit item'}
-											onClick={() => handleEdit(item)}
-										>
-											<Edit size={20} />
-										</Button>
-										<ConfirmDialog
-											header={'Delete item'}
-											setIsOpen={setDialogOpen}
-											callback={async (b) => {
-												if (b) {
-													await deleteTenderItem(item);
-													// console.log('Deleting item:', item); // Good for debugging
-												}
+								</Th>
+							</Tooltip>
 
-												setDialogOpen(false);
-												setFormData({
-													tenderId: Number(tenderId),
-													description: '',
-													nr: 0,
-													volume: 0,
-													unit: ''
-												});
-											}}
-											isOpen={dialogOpen}
-										>
+							<Tooltip label="Description of a item">
+								<Th>
+									<HStack>
+										<p>Description</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Tooltip label="Volume">
+								<Th>
+									<HStack>
+										<p color={'black'}>Volume</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Tooltip label="Unit of measurement. For example: m2, kg, t">
+								<Th>
+									<HStack>
+										<p>Unit</p>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Th>
+							</Tooltip>
+
+							<Th>
+								<p>Actions</p>
+							</Th>
+						</Tr>
+					</Thead>
+					<Tbody>
+						{tenderItems?.map((item) => (
+							<Tr key={item.tenderItemId}>
+								<Td>
+									{editingItem === item ? (
+										<Input
+											name="nr"
+											value={updateFormData.nr}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.nr
+									)}
+								</Td>
+								<Td>
+									{editingItem === item ? (
+										<Input
+											name="description"
+											value={updateFormData.description}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.description
+									)}
+								</Td>
+								<Td>
+									{editingItem === item ? (
+										<Input
+											name="volume"
+											value={updateFormData.volume}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.volume
+									)}
+								</Td>
+								<Td>
+									{editingItem === item ? (
+										<Input
+											name="unit"
+											value={updateFormData.unit}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.unit
+									)}
+								</Td>
+								{/* Action buttons */}
+								<Td>
+									{editingItem === item ? (
+										<HStack>
 											<Button
-												aria-label={'Delete item'}
-												colorScheme={'red'}
-												isLoading={isDeleteLoading}
-												onClick={() => setDialogOpen(true)}
+												aria-label={'Update item'}
+												onClick={() => handleUpdate(item)}
 											>
-												<TrashIcon color={'white'} size={20} />
+												{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
 											</Button>
-										</ConfirmDialog>
-									</HStack>
-								)}
+											<Button
+												onClick={() => {
+													setFormData({
+														tenderId: Number(tenderId),
+														description: '',
+														nr: 0,
+														volume: 0,
+														unit: ''
+													});
+													setEditingItem(null);
+												}}
+											>
+												<CrossIcon size={24} />
+											</Button>
+										</HStack>
+									) : (
+										<HStack>
+											<Button
+												aria-label={'Edit item'}
+												onClick={() => handleEdit(item)}
+											>
+												<Edit size={20} />
+											</Button>
+											<ConfirmDialog
+												header={'Delete item'}
+												setIsOpen={setDialogOpen}
+												callback={async (b) => {
+													if (b) {
+														await deleteTenderItem(item);
+														// console.log('Deleting item:', item); // Good for debugging
+													}
+
+													setDialogOpen(false);
+													setFormData({
+														tenderId: Number(tenderId),
+														description: '',
+														nr: 0,
+														volume: 0,
+														unit: ''
+													});
+												}}
+												isOpen={dialogOpen}
+											>
+												<Button
+													aria-label={'Delete item'}
+													colorScheme={'red'}
+													isLoading={isDeleteLoading}
+													onClick={() => setDialogOpen(true)}
+												>
+													<TrashIcon color={'white'} size={20} />
+												</Button>
+											</ConfirmDialog>
+										</HStack>
+									)}
+								</Td>
+							</Tr>
+						))}
+
+						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+							Enter details below to add items to tender
+						</Text>
+
+						<Tr>
+							<Td>
+								<FormControl id="nr">
+									<Input
+										id="nr"
+										name="nr"
+										type="number"
+										value={formData.nr}
+										onChange={handleChange}
+									/>
+								</FormControl>
+							</Td>
+							<Td>
+								<FormControl id="description">
+									<Input
+										id="description"
+										name="description"
+										type="text"
+										value={formData.description}
+										onChange={handleChange}
+									/>
+								</FormControl>
+							</Td>
+							<Td>
+								<FormControl id="volume">
+									<Input
+										id="volume"
+										name="volume"
+										type="text"
+										value={formData.volume}
+										onChange={handleChange}
+									/>
+								</FormControl>
+							</Td>
+							<Td>
+								<FormControl id="unit" isInvalid={isInvalidUnit}>
+									<Input
+										id="unit"
+										name="unit"
+										type="text"
+										value={formData.unit}
+										onChange={handleChange}
+									/>
+									{isInvalidUnit ? (
+										<FormHelperText>
+											The measurement of unit should be in a short format: kg,
+											m, m2
+										</FormHelperText>
+									) : null}
+								</FormControl>
+							</Td>
+							<Td>
+								<Button onClick={handleAdd}>
+									{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+								</Button>
 							</Td>
 						</Tr>
-					))}
 
-					<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-						Enter details below to add items to tender
-					</Text>
-
-					<Tr>
-						<Td>
-							<FormControl id="nr">
-								<Input
-									id="nr"
-									name="nr"
-									type="number"
-									value={formData.nr}
-									onChange={handleChange}
-								/>
-							</FormControl>
-						</Td>
-						<Td>
-							<FormControl id="description">
-								<Input
-									id="description"
-									name="description"
-									type="text"
-									value={formData.description}
-									onChange={handleChange}
-								/>
-							</FormControl>
-						</Td>
-						<Td>
-							<FormControl id="volume">
-								<Input
-									id="volume"
-									name="volume"
-									type="text"
-									value={formData.volume}
-									onChange={handleChange}
-								/>
-							</FormControl>
-						</Td>
-						<Td>
-							<FormControl id="unit" isInvalid={isInvalidUnit}>
-								<Input
-									id="unit"
-									name="unit"
-									type="text"
-									value={formData.unit}
-									onChange={handleChange}
-								/>
-								{isInvalidUnit ? (
-									<FormHelperText>
-										The measurement of unit should be in a short format: kg, m,
-										m2
-									</FormHelperText>
-								) : null}
-							</FormControl>
-						</Td>
-						<Td>
-							<Button onClick={handleAdd}>
-								{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-							</Button>
-						</Td>
-					</Tr>
-
-					{tenderItems?.length === 0 ? (
-						<Td>
-							<Text fontSize="xl">
-								The table is empty! To add items into the table you need to write it
-								into the form below, and press the Add item button.
-							</Text>
-						</Td>
-					) : null}
-					{isMutateError ? (
-						<Td>
-							<Text>Something went wrong - {mutateError?.code}</Text>
-						</Td>
-					) : null}
-				</Tbody>
-			</Table>
+						{tenderItems?.length === 0 ? (
+							<Td>
+								<Text fontSize="xl">
+									The table is empty! To add items into the table you need to
+									write it into the form below, and press the Add item button.
+								</Text>
+							</Td>
+						) : null}
+						{isMutateError ? (
+							<Td>
+								<Text>Something went wrong - {mutateError?.code}</Text>
+							</Td>
+						) : null}
+					</Tbody>
+				</Table>
+			</TableContainer>
 			<br />
 
 			<Flex alignItems={'center'} justifyContent={'center'}>

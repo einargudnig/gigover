@@ -8,7 +8,6 @@ import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Text, Box, Button } from '@chakra-ui/react';
 import { Center } from '../../../components/Center';
-import { TenderFile } from '../../Files/new/components/TenderFile';
 
 export const TenderPage = (): JSX.Element => {
 	const { tenderId } = useParams();
@@ -35,9 +34,6 @@ export const TenderPage = (): JSX.Element => {
 					{/* Files for this tender */}
 					{isTenderPublished ? (
 						<>
-							<Box marginTop={'2'}>
-								<TenderFile />
-							</Box>
 							<Box marginTop={'3'}>
 								<Link to={`/files/tender/tenders/${tenderId}`}>
 									<Button ml={'1'}>

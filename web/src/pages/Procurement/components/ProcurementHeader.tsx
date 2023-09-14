@@ -146,6 +146,7 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 													let statusColor;
 													if (bidder.status === 0) {
 														offerStatus = 'No';
+														statusColor = 'red';
 													}
 													if (bidder.status === 1) {
 														offerStatus = 'Yes';
