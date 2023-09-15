@@ -23,7 +23,7 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-
+	console.log('tender', tender);
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 	const [showText, setShowText] = useState(false);
 
@@ -38,13 +38,31 @@ export const TenderOfferHome = (): JSX.Element => {
 		if (!bidders) {
 			return undefined;
 		}
-		const bidder = bidders.find((b: Bidder) => b?.email === userEmail); //! Maybe I will need to update this to userName??
+		const bidder = bidders.find((b: Bidder) => b?.email === userEmail);
 		console.log('bidder', bidder);
+
 		return bidder?.status;
 	};
 
 	const bidderStatus = checkIfUserIsBidder(biddersFromTender);
 	console.log('bidderStatus', bidderStatus);
+
+	const showCorrectBidderStatusText = (status?: string | number) => {
+		if (status === 1) {
+			return (
+				<Text fontSize={'xl'} color={'green'}>
+					This offer has been <strong>accepted!</strong>
+				</Text>
+			);
+		} else if (status === 0) {
+			return (
+				<Text fontSize={'xl'} color={'red'}>
+					This offer has been <strong>rejected!</strong>
+				</Text>
+			);
+		}
+		return <Text>This offer has not been answered yet.</Text>;
+	};
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 
@@ -54,7 +72,7 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const handleReject = async () => {
 		bidderRejectAsync(bidderRejectBody);
-		// setShowText(true);
+		setShowText(true);
 		toast({
 			title: 'Rejected!',
 			description:
@@ -79,12 +97,10 @@ export const TenderOfferHome = (): JSX.Element => {
 						{!finishDateStatus ? (
 							<>
 								{showText ? (
-									<Text marginTop={'6'} color={'black'}>
-										You have already answered this offer.
-									</Text>
+									<>{showCorrectBidderStatusText(bidderStatus)}</>
 								) : (
 									<Flex marginTop={'6'}>
-										<Box>
+										<Box onClick={() => setShowText(true)}>
 											<OpenOffer />
 										</Box>
 										<Spacer />
