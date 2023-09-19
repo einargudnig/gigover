@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
@@ -34,7 +34,15 @@ import { CrossIcon } from '../../../components/icons/CrossIcon';
 import { InviteButton } from './InviteButton';
 
 export const NewTenderItemTable = ({ tender }): JSX.Element => {
-	const { tenderId } = useParams(); //! Cast to NUMBER(tenderId)
+	const { tenderId } = useParams();
+
+	const defaultData: TenderItem = {
+		tenderId: Number(tenderId),
+		description: 'Description',
+		nr: 0,
+		volume: 0,
+		unit: 'Unit'
+	};
 
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
@@ -61,6 +69,10 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		unit: 'Unit'
 	});
 
+	useEffect(() => {
+		setItems(tenderItems);
+	}, [tenderItems]);
+
 	const {
 		mutate,
 		isLoading: isMutateLoading,
@@ -73,7 +85,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	const toast = useToast();
 
-	const isInvalidUnit = formData?.unit!.length > 5;
+	// We only want the unit to be max 4 characters kg, m2, l, etc
+	const isInvalidUnit = formData.unit!.length > 5;
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -91,7 +104,6 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		});
 	};
 
-	// ! This guy is good to go! -> He works the way we want him to.
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
@@ -103,13 +115,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		});
 		console.log('Items', items);
 		mutate(formData);
-		setFormData({
-			tenderId: Number(tenderId),
-			description: 'Description',
-			nr: 0,
-			volume: 0,
-			unit: 'Unit'
-		});
+		setFormData({ ...defaultData });
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
@@ -175,55 +181,64 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	return (
 		<>
-			<TableContainer>
-				<Table variant={'striped'}>
-					<Thead>
-						<Tr>
-							<Tooltip label="Does this item have a special number?">
-								<Th>
-									<HStack>
-										<p>Number</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
+			<Table variant={'striped'}>
+				<Thead>
+					<Tr>
+						<Th width={'20%'}>
+							<HStack>
+								<p>Number</p>
+								<ImportantIcon size={20} />
+							</HStack>
+						</Th>
 
-							<Tooltip label="Description of a item">
-								<Th>
-									<HStack>
-										<p>Description</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
-							<Tooltip label="Volume">
-								<Th>
-									<HStack>
-										<p color={'black'}>Volume</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
-							<Tooltip label="Unit of measurement. For example: m2, kg, t">
-								<Th>
-									<HStack>
-										<p>Unit</p>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Th>
-							</Tooltip>
-
-							<Th>
-								<p>Actions</p>
+						<Tooltip label="Description of a item">
+							<Th width={'20%'}>
+								<HStack>
+									<p>Description</p>
+									<ImportantIcon size={20} />
+								</HStack>
 							</Th>
+						</Tooltip>
+
+						<Tooltip label="Volume">
+							<Th width={'20%'}>
+								<HStack>
+									<p color={'black'}>Volume</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Th width={'20%'}>
+								<HStack>
+									<p>Unit</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Th width={'20%'}>
+							<p>Actions</p>
+						</Th>
+					</Tr>
+				</Thead>
+				<Tbody>
+					{tenderItems?.length === 0 ? (
+						<Tr>
+							<Td></Td>
+							<Td></Td>
+							<Td>
+								<Text fontSize="xl">The table is empty!</Text>
+							</Td>
+							<Td></Td>
+							<Td></Td>
 						</Tr>
-					</Thead>
-					<Tbody>
+					) : null}
+					<>
 						{tenderItems?.map((item) => (
 							<Tr key={item.tenderItemId}>
-								<Td>
+								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
 											name="nr"
@@ -234,7 +249,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 										item.nr
 									)}
 								</Td>
-								<Td>
+								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
 											name="description"
@@ -245,7 +260,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 										item.description
 									)}
 								</Td>
-								<Td>
+								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
 											name="volume"
@@ -256,7 +271,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 										item.volume
 									)}
 								</Td>
-								<Td>
+								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
 											name="unit"
@@ -268,7 +283,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									)}
 								</Td>
 								{/* Action buttons */}
-								<Td>
+								<Td width={'20%'}>
 									{editingItem === item ? (
 										<HStack>
 											<Button
@@ -334,85 +349,92 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								</Td>
 							</Tr>
 						))}
+					</>
 
+					{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
+					{finishDateStatus ? (
 						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-							Enter details below to add items to tender
+							The finish date has passed, you cannot add more items to the Tender
 						</Text>
+					) : (
+						<>
+							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+								Enter details below to add items to tender
+							</Text>
 
-						<Tr>
-							<Td>
-								<FormControl id="nr">
-									<Input
-										id="nr"
-										name="nr"
-										type="number"
-										value={formData.nr}
-										onChange={handleChange}
-									/>
-								</FormControl>
-							</Td>
-							<Td>
-								<FormControl id="description">
-									<Input
-										id="description"
-										name="description"
-										type="text"
-										value={formData.description}
-										onChange={handleChange}
-									/>
-								</FormControl>
-							</Td>
-							<Td>
-								<FormControl id="volume">
-									<Input
-										id="volume"
-										name="volume"
-										type="text"
-										value={formData.volume}
-										onChange={handleChange}
-									/>
-								</FormControl>
-							</Td>
-							<Td>
-								<FormControl id="unit" isInvalid={isInvalidUnit}>
-									<Input
-										id="unit"
-										name="unit"
-										type="text"
-										value={formData.unit}
-										onChange={handleChange}
-									/>
-									{isInvalidUnit ? (
-										<FormHelperText>
-											The measurement of unit should be in a short format: kg,
-											m, m2
-										</FormHelperText>
-									) : null}
-								</FormControl>
-							</Td>
-							<Td>
-								<Button onClick={handleAdd}>
-									{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-								</Button>
-							</Td>
-						</Tr>
+							<Tr>
+								<Td width={'20%'}>
+									<FormControl id="nr">
+										<Input
+											width={'200px'}
+											id="nr"
+											name="nr"
+											type="number"
+											value={formData.nr}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td width={'20%'}>
+									<FormControl id="description">
+										<Input
+											htmlSize={4}
+											id="description"
+											name="description"
+											type="text"
+											value={formData.description}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td width={'20%'}>
+									<FormControl id="volume">
+										<Input
+											htmlSize={4}
+											id="volume"
+											name="volume"
+											type="text"
+											value={formData.volume}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td>
+									{/* We only want the unit to be max 4 characters kg, m2, l, etc */}
+									<FormControl id="unit" isInvalid={isInvalidUnit}>
+										<Input
+											htmlSize={4}
+											id="unit"
+											name="unit"
+											type="text"
+											value={formData.unit}
+											onChange={handleChange}
+										/>
+										{isInvalidUnit ? (
+											<FormHelperText>
+												The measurement of unit should be in a short format:
+												kg, m, m2
+											</FormHelperText>
+										) : null}
+									</FormControl>
+								</Td>
+								<Td width={'20%'}>
+									<Button onClick={handleAdd}>
+										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+									</Button>
+								</Td>
+							</Tr>
+						</>
+					)}
 
-						{tenderItems?.length === 0 ? (
-							<Td>
-								<Text fontSize="xl">
-									The table is empty! To add items into the table you need to
-									write it into the form below, and press the Add item button.
-								</Text>
-							</Td>
-						) : null}
-						{isMutateError ? (
-							<Td>
-								<Text>Something went wrong - {mutateError?.code}</Text>
-							</Td>
-						) : null}
-					</Tbody>
-				</Table>
-			</TableContainer>
+					{isMutateError ? (
+						<Td>
+							<Text>Something went wrong - {mutateError?.code}</Text>
+						</Td>
+					) : null}
+				</Tbody>
+			</Table>
+
 			<br />
 
 			<Flex alignItems={'center'} justifyContent={'center'}>

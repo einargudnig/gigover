@@ -80,7 +80,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		{/* This route will be for the user that makes offers */}
 		<Route path={'bidder-tenders'} element={<BidderTenders />} />
 		<Route path={'bidder-offers'} element={<BidderOffers />} />
-		{/* This is a different page, the bidder can see hus published bid*/}
+		{/* This is a different page, the bidder can see his published bid*/}
 		<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 
 		{/*
