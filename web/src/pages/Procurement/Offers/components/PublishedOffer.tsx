@@ -334,7 +334,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 						<Spacer />
 						<Box>
-							{!finishDateStatus ? (
+							{finishDateStatus ? (
 								<Text>
 									You cannot answer offers until the finish date has passed.
 								</Text>
