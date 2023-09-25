@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
 // import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
-import { Tender, Bidder } from '../../../../models/Tender';
+import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Box, Flex, Spacer, Button, Text, useToast } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { useBidderReject } from '../../../../mutations/useBidderReject';
-import { UserContext } from '../../../../context/UserContext';
+// import { useBidderReject } from '../../../../mutations/useBidderReject';
 
 import { OpenOffer } from './OpenOffer';
 
@@ -25,46 +24,22 @@ export const TenderOfferHome = (): JSX.Element => {
 	const tender: Tender | undefined = data?.tender;
 	console.log('tender', tender);
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
-	const [showText, setShowText] = useState(false);
+	// we will store the bidder status in the localStorage.
+	const [hasAnswered, setHasAnswered] = useState(false);
+
+	useEffect(() => {
+		// check localStorage
+		const bidderStatus = localStorage.getItem(`bidderStatus_${tenderId}`);
+		if (bidderStatus === 'true') {
+			setHasAnswered(true);
+		}
+	}, [tenderId]);
 
 	const toast = useToast();
-	const user = useContext(UserContext);
-	const userEmail = user?.userName;
-	const biddersFromTender = tender?.bidders;
-	console.log('HERE BIDERS', userEmail, biddersFromTender);
-
-	// function that checks if the userEmail is in the bidders array
-	const checkIfUserIsBidder = (bidders?: Bidder[]): string | number | undefined => {
-		if (!bidders) {
-			return undefined;
-		}
-		const bidder = bidders.find((b: Bidder) => b?.email === userEmail);
-		console.log('bidder', bidder);
-
-		return bidder?.status;
-	};
-
-	const bidderStatus = checkIfUserIsBidder(biddersFromTender);
-	console.log('bidderStatus', bidderStatus);
-
-	const showCorrectBidderStatusText = (status?: string | number) => {
-		if (status === 1) {
-			return (
-				<Text fontSize={'xl'} color={'green'}>
-					This offer has been <strong>accepted!</strong>
-				</Text>
-			);
-		} else if (status === 0) {
-			return (
-				<Text fontSize={'xl'} color={'red'}>
-					This offer has been <strong>rejected!</strong>
-				</Text>
-			);
-		}
-		return <Text>This offer has not been answered yet.</Text>;
-	};
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
+	// const finishDateStatus = false;
+	console.log('finishDateStatus', finishDateStatus);
 
 	const bidderRejectBody = {
 		tenderId: Number(tenderId)
@@ -72,7 +47,8 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const handleReject = async () => {
 		bidderRejectAsync(bidderRejectBody);
-		setShowText(true);
+		setHasAnswered(true);
+		localStorage.setItem(`bidderStatus_${tenderId}`, 'true');
 		toast({
 			title: 'Rejected!',
 			description:
@@ -81,6 +57,11 @@ export const TenderOfferHome = (): JSX.Element => {
 			duration: 2000,
 			isClosable: true
 		});
+	};
+
+	const handleAccept = async () => {
+		setHasAnswered(true);
+		localStorage.setItem(`bidderStatus_${tenderId}`, 'true');
 	};
 
 	return (
@@ -96,11 +77,11 @@ export const TenderOfferHome = (): JSX.Element => {
 					<>
 						{!finishDateStatus ? (
 							<>
-								{showText ? (
-									<>{showCorrectBidderStatusText(bidderStatus)}</>
+								{hasAnswered ? (
+									<Text>This offer has been answered</Text>
 								) : (
 									<Flex marginTop={'6'}>
-										<Box onClick={() => setShowText(true)}>
+										<Box onClick={handleAccept}>
 											<OpenOffer />
 										</Box>
 										<Spacer />
