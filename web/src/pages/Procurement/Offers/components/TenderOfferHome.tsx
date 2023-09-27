@@ -9,7 +9,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Box, Flex, Spacer, Button, Text, useToast } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-// import { useBidderReject } from '../../../../mutations/useBidderReject';
+import { useBidderReject } from '../../../../mutations/useBidderReject';
 
 import { OpenOffer } from './OpenOffer';
 
@@ -81,9 +81,8 @@ export const TenderOfferHome = (): JSX.Element => {
 									<Text>This offer has been answered</Text>
 								) : (
 									<Flex marginTop={'6'}>
-										<Box onClick={handleAccept}>
-											<OpenOffer />
-										</Box>
+										<OpenOffer />
+
 										<Spacer />
 										<Box>
 											<Button onClick={handleReject}>

@@ -117,7 +117,7 @@ export const OpenOffer = (): JSX.Element => {
 										<Input
 											{...register('notes')}
 											placeholder={
-												"Do you want to add any notes? e.g. 'You can reach me at this hours..'"
+												"Do you want to add any notes? e.g. 'You can reach me at this hours.'"
 											}
 										/>
 									</FormControl>
