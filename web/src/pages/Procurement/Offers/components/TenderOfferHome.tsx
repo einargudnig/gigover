@@ -59,10 +59,10 @@ export const TenderOfferHome = (): JSX.Element => {
 		});
 	};
 
-	const handleAccept = async () => {
-		setHasAnswered(true);
-		localStorage.setItem(`bidderStatus_${tenderId}`, 'true');
-	};
+	// const handleAccept = async () => {
+	// 	setHasAnswered(true);
+	// 	localStorage.setItem(`bidderStatus_${tenderId}`, 'true');
+	// };
 
 	return (
 		<>
