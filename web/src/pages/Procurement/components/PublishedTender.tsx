@@ -29,65 +29,65 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
-	// const bidders = tender?.bidders;
-	const bidders = [
-		{
-			bidderId: 1,
-			email: 'bidder1@mail.com',
-			name: 'Bidder 1',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 1'
-		},
-		{
-			bidderId: 2,
-			email: 'bidder2@mail.com',
-			name: 'Bidder 2',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 2'
-		},
-		{
-			bidderId: 3,
-			email: 'bidder3@mail.com',
-			name: 'Bidder 3',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 3'
-		},
-		{
-			bidderId: 4,
-			email: 'bidder4@mail.com',
-			name: 'Bidder 4',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 4'
-		},
-		{
-			bidderId: 5,
-			email: 'bidder5@mail.com',
-			name: 'Bidder 5',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 5'
-		},
-		{
-			bidderId: 6,
-			email: 'bidder6@mail.com',
-			name: 'Bidder 6',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 6'
-		},
-		{
-			bidderId: 7,
-			email: 'bidder7@mail.com',
-			name: 'Bidder 7',
-			offerCount: 0,
-			status: 1,
-			userName: 'Bidder 7'
-		}
-	];
+	const bidders = tender?.bidders;
+	// const bidders = [
+	// 	{
+	// 		bidderId: 1,
+	// 		email: 'bidder1@mail.com',
+	// 		name: 'Bidder 1',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 1'
+	// 	},
+	// 	{
+	// 		bidderId: 2,
+	// 		email: 'bidder2@mail.com',
+	// 		name: 'Bidder 2',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 2'
+	// 	},
+	// 	{
+	// 		bidderId: 3,
+	// 		email: 'bidder3@mail.com',
+	// 		name: 'Bidder 3',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 3'
+	// 	},
+	// 	{
+	// 		bidderId: 4,
+	// 		email: 'bidder4@mail.com',
+	// 		name: 'Bidder 4',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 4'
+	// 	},
+	// 	{
+	// 		bidderId: 5,
+	// 		email: 'bidder5@mail.com',
+	// 		name: 'Bidder 5',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 5'
+	// 	},
+	// 	{
+	// 		bidderId: 6,
+	// 		email: 'bidder6@mail.com',
+	// 		name: 'Bidder 6',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 6'
+	// 	},
+	// 	{
+	// 		bidderId: 7,
+	// 		email: 'bidder7@mail.com',
+	// 		name: 'Bidder 7',
+	// 		offerCount: 0,
+	// 		status: 1,
+	// 		userName: 'Bidder 7'
+	// 	}
+	// ];
 
 	const tenderDescForEmail = tender?.description;
 
