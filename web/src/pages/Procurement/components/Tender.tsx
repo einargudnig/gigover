@@ -1,13 +1,13 @@
 import React from 'react';
 import { ProcurementHeader } from './ProcurementHeader';
-// import { TenderItemTable } from './TenderItemTable';
 import { NewTenderItemTable } from './NewTenderItemTable';
 import { useGetTenderById } from '../../../queries/useGetTenderById';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { Text, Box, Button } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { Center } from '../../../components/Center';
+import { PublishedTender } from './PublishedTender';
 
 export const TenderPage = (): JSX.Element => {
 	const { tenderId } = useParams();
@@ -28,21 +28,16 @@ export const TenderPage = (): JSX.Element => {
 				</Text>
 			) : (
 				<div>
-					<ProcurementHeader tender={tender} />
-					<NewTenderItemTable tender={tender} />
-					{/* <TenderItemTable tender={tender} /> */}
-					{/* Files for this tender */}
 					{isTenderPublished ? (
 						<>
-							<Box marginTop={'3'}>
-								<Link to={`/files/tender/tenders/${tenderId}`}>
-									<Button ml={'1'}>
-										<Text textColor={'black'}>View files</Text>
-									</Button>
-								</Link>
-							</Box>
+							<PublishedTender tender={tender} />
 						</>
-					) : null}
+					) : (
+						<>
+							<ProcurementHeader tender={tender} />
+							<NewTenderItemTable tender={tender} />
+						</>
+					)}
 				</div>
 			)}
 		</>

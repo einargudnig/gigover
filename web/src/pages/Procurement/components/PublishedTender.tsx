@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
+import React from 'react';
+import { TenderItem } from '../../../models/Tender';
+import { useParams } from 'react-router-dom';
 import {
 	Box,
-	Button,
 	Grid,
 	GridItem,
 	Flex,
@@ -11,35 +10,90 @@ import {
 	VStack,
 	Text,
 	Spacer,
-	useToast,
 	Table,
 	Tr,
 	Td,
 	Thead,
+	Tbody,
+	Th,
 	Tooltip
 } from '@chakra-ui/react';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
-import { ModalContext } from '../../../context/ModalContext';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { ConfirmDialog } from '../../../components/ConfirmDialog';
-import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { InviteButton } from './InviteButton';
 
-export const ProcurementHeader = ({ tender }): JSX.Element => {
-	const [, setModalContext] = useContext(ModalContext);
-	const navigate = useNavigate();
-	const [dialogOpen, setDialogOpen] = useState(false);
-	const { mutateAsync: deleteProcurementAsync, isLoading: isLoadingDelete } =
-		useDeleteProcurement();
-
+export const PublishedTender = ({ tender }): JSX.Element => {
+	const { tenderId } = useParams();
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
-
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
-	const bidders = tender?.bidders;
+	// const bidders = tender?.bidders;
+	const bidders = [
+		{
+			bidderId: 1,
+			email: 'bidder1@mail.com',
+			name: 'Bidder 1',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 1'
+		},
+		{
+			bidderId: 2,
+			email: 'bidder2@mail.com',
+			name: 'Bidder 2',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 2'
+		},
+		{
+			bidderId: 3,
+			email: 'bidder3@mail.com',
+			name: 'Bidder 3',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 3'
+		},
+		{
+			bidderId: 4,
+			email: 'bidder4@mail.com',
+			name: 'Bidder 4',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 4'
+		},
+		{
+			bidderId: 5,
+			email: 'bidder5@mail.com',
+			name: 'Bidder 5',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 5'
+		},
+		{
+			bidderId: 6,
+			email: 'bidder6@mail.com',
+			name: 'Bidder 6',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 6'
+		},
+		{
+			bidderId: 7,
+			email: 'bidder7@mail.com',
+			name: 'Bidder 7',
+			offerCount: 0,
+			status: 1,
+			userName: 'Bidder 7'
+		}
+	];
 
-	const toast = useToast();
+	const tenderDescForEmail = tender?.description;
+
+	const tenderItems: TenderItem[] | undefined = tender?.items;
+	console.log('bidders', bidders);
+
 	return (
 		<>
 			<div style={{ width: '100%' }}>
@@ -186,55 +240,72 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 					</Flex>
 				) : (
 					<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
-						<HStack>
-							<Button
-								onClick={() =>
-									setModalContext({
-										modifyTender: { modifyTender: tender }
-									})
-								}
-							>
-								Edit tender
-							</Button>
-							{tender === undefined ? null : (
-								<ConfirmDialog
-									header={'Delete procurement'}
-									setIsOpen={setDialogOpen}
-									callback={async () => {
-										if (tender.status === 1) {
-											toast({
-												title: 'Cannot delete published tender',
-												description:
-													'This tender has been published and cannot be deleted',
-												status: 'error',
-												duration: 2000,
-												isClosable: true
-											});
-										} else {
-											await deleteProcurementAsync(tender);
-											navigate('/tender');
-										}
-										setDialogOpen(false);
-									}}
-									isOpen={dialogOpen}
-								>
-									<Button
-										aria-label={'Delete'}
-										colorScheme={'red'}
-										isLoading={isLoadingDelete}
-										leftIcon={<TrashIcon color={'white'} size={20} />}
-										onClick={() => {
-											setDialogOpen(true);
-										}}
-									>
-										Delete tender
-									</Button>
-								</ConfirmDialog>
-							)}
-						</HStack>
+						<Text as={'b'}>Published Tender</Text>
 					</Flex>
 				)}
 			</div>
+
+			<Table variant={'striped'}>
+				<Thead>
+					<Tr>
+						<Th width={'20%'}>
+							<HStack>
+								<p>Number</p>
+								<ImportantIcon size={20} />
+							</HStack>
+						</Th>
+
+						<Tooltip label="Description of a item">
+							<Th width={'20%'}>
+								<HStack>
+									<p>Description</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Tooltip label="Volume">
+							<Th width={'20%'}>
+								<HStack>
+									<p color={'black'}>Volume</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+
+						<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Th width={'20%'}>
+								<HStack>
+									<p>Unit</p>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Th>
+						</Tooltip>
+					</Tr>
+				</Thead>
+				<Tbody>
+					<>
+						{tenderItems?.map((item) => (
+							<Tr key={item.tenderItemId}>
+								<Td width={'20%'}>{item.nr}</Td>
+								<Td width={'20%'}>{item.description}</Td>
+								<Td width={'20%'}>{item.volume}</Td>
+								<Td width={'20%'}>{item.unit}</Td>
+							</Tr>
+						))}
+					</>
+				</Tbody>
+			</Table>
+			{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
+			<Box mt={'2'}>
+				{finishDateStatus ? (
+					<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+						The finish date has passed, you cannot add more items to the Tender
+					</Text>
+				) : (
+					<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
+				)}
+			</Box>
 		</>
 	);
 };
