@@ -31,6 +31,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 	const bidders = tender?.bidders;
+	// Testing purposes
 	// const bidders = [
 	// 	{
 	// 		bidderId: 1,
@@ -289,8 +290,8 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					</>
 				</Tbody>
 			</Table>
-			{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
-			<Flex>
+
+			<Flex alignItems={'center'}>
 				<Box mt={'2'}>
 					{finishDateStatus ? (
 						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
