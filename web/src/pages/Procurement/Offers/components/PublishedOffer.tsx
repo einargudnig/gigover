@@ -40,7 +40,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const toast = useToast();
 
 	const time = offer?.finishDate;
-	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
+	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date;
 
 	const handleAccept = () => {
 		const offerIdBody = {
@@ -165,24 +165,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 					</Box>
 				</Flex>
 			);
-		}
-	};
-
-	const showHandledText = () => {
-		if (offer?.status === 2) {
-			return (
-				<Text fontSize={'xl'} color={'green'}>
-					This offer has been <strong>accepted!</strong>
-				</Text>
-			);
-		} else if (offer?.status === 3) {
-			return (
-				<Text fontSize={'xl'} color={'red'}>
-					This offer has been <strong>rejected!</strong>
-				</Text>
-			);
-		} else {
-			return <Text>The tender owner has not handled this offer</Text>;
 		}
 	};
 
@@ -334,19 +316,18 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 						<Spacer />
 						<Box>
-							{!finishDateStatus ? (
-								<Text>
-									You cannot answer offers until the finish date has passed.
-								</Text>
-							) : (
+							{showResultsButtons ? (
 								<>
-									{showResultsButtons ? (
-										<>{removeButtonsIfHandled()}</>
+									{!finishDateStatus ? (
+										<Text>
+											You cannot answer offers until the finish date has
+											passed.
+										</Text>
 									) : (
-										<>{showHandledText()}</>
+										<>{removeButtonsIfHandled()}</>
 									)}
 								</>
-							)}
+							) : null}
 						</Box>
 					</Flex>
 				</>

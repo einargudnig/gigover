@@ -1,6 +1,6 @@
 import React from 'react';
 import { TenderItem } from '../../../models/Tender';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
 	Box,
 	Grid,
@@ -16,7 +16,8 @@ import {
 	Thead,
 	Tbody,
 	Th,
-	Tooltip
+	Tooltip,
+	Button
 } from '@chakra-ui/react';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
@@ -231,18 +232,10 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					</Box>
 				</Flex>
 
-				{/* button to edit or delete tender */}
-				{finishDateStatus ? (
-					<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
-						<Text as={'b'}>
-							The finish date has passed, you cannot edit or delete the tender
-						</Text>
-					</Flex>
-				) : (
-					<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
-						<Text as={'b'}>Published Tender</Text>
-					</Flex>
-				)}
+				{/* text to say its published */}
+				<Flex justifyContent={'flex-end'} marginTop={'3'} marginBottom={'3'}>
+					<Text as={'b'}>Published Tender</Text>
+				</Flex>
 			</div>
 
 			<Table variant={'striped'}>
@@ -297,15 +290,23 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				</Tbody>
 			</Table>
 			{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
-			<Box mt={'2'}>
-				{finishDateStatus ? (
-					<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-						The finish date has passed, you cannot add more items to the Tender
-					</Text>
-				) : (
-					<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
-				)}
-			</Box>
+			<Flex>
+				<Box mt={'2'}>
+					{finishDateStatus ? (
+						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+							The finish date has passed, you can&apos;t invite more bidders
+						</Text>
+					) : (
+						<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
+					)}
+				</Box>
+				<Spacer />
+				<Box>
+					<Button ml={'1'}>
+						<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+					</Button>
+				</Box>
+			</Flex>
 		</>
 	);
 };
