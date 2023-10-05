@@ -302,11 +302,21 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					)}
 				</Box>
 				<Spacer />
-				<Box>
-					<Button ml={'1'}>
-						<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
-					</Button>
-				</Box>
+				<Flex>
+					<Box>
+						<Button ml={'1'}>
+							<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+						</Button>
+					</Box>
+					<Spacer />
+					<Box>
+						<Button ml={'1'}>
+							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
+								View files
+							</Link>
+						</Button>
+					</Box>
+				</Flex>
 			</Flex>
 		</>
 	);

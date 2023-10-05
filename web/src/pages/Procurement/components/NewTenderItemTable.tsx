@@ -7,6 +7,7 @@ import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
 import { usePublishTender } from '../../../mutations/usePublishTender';
 import {
 	Button,
+	Box,
 	Flex,
 	FormControl,
 	FormHelperText,
@@ -177,6 +178,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	};
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
+	// const finishDateStatus = false;
 
 	return (
 		<>
@@ -463,9 +465,28 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 				</Flex>
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
-				<Button ml={'1'}>
-					<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
-				</Button>
+				<Flex>
+					<Box>
+						<Button ml={'1'}>
+							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
+								View files
+							</Link>
+						</Button>
+					</Box>
+					<Spacer />
+					{/* // ! I need to figure out if this is possible here. Can the Tender owner add files?  */}
+					{/* <Box>
+						<Button ml={'1'}>
+							<Link to={`/tender-offers/${Number(tenderId)}`}>Upload files</Link>
+						</Button>
+					</Box> */}
+					<Spacer />
+					<Box>
+						<Button ml={'1'}>
+							<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+						</Button>
+					</Box>
+				</Flex>
 			</Flex>
 		</>
 	);
