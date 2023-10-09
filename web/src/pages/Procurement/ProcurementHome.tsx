@@ -69,79 +69,81 @@ export const ProcurementHome = (): JSX.Element => {
 
 	return (
 		<>
+			<Text mb={'2'}>
+				This tab should be used for creating, managing, and reviewing tenders.
+			</Text>
+
+			{data.length <= 0 ? null : (
+				<Flex>
+					<Button my={'2'} mr={'2'}>
+						<Link to={'/tender-offers'}>Tender offers</Link>
+					</Button>
+					<Text mt={'4'}>You can see the offers that have been submitted here</Text>
+				</Flex>
+			)}
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
 				<>
-					<Text mb={'2'}>
-						This tab should be used for creating, managing, and reviewing tenders.
-					</Text>
 					{!data || data.length <= 0 ? (
 						<NoProcurementFound />
 					) : (
-						data.map((t) => {
-							let offerStatus;
-							if (t.status === 0) {
-								offerStatus = 'Unpublished';
-							} else if (t.status === 1) {
-								offerStatus = 'Published';
-							} else {
-								offerStatus = 'Unknown';
-							}
-							return (
-								<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
-									<Flex direction={'column'}>
-										<Grid templateColumns="repeat(4, 1fr)" gap={1}>
-											<GridItem colSpan={2}>
-												<HStack>
-													<Text as={'b'}>Project:</Text>
-													<Text color={'black'}>{t.projectName}</Text>
-												</HStack>
-												<HStack>
-													<Text as={'b'}>Tender description:</Text>
-													<Text color={'black'}>{t.description}</Text>
-												</HStack>
-											</GridItem>
-											<GridItem colSpan={1}>
-												<HStack>
-													<Text as={'b'}>Phone number:</Text>
-													<Text color={'black'}>{t.phoneNumber}</Text>
-												</HStack>
-												<HStack>
-													<Text as={'b'}>Tender status:</Text>
-													<Text color={'black'}>{offerStatus}</Text>
-												</HStack>
-											</GridItem>
-											<GridItem colSpan={1}>
-												<HStack>{shouldDeliver(t)}</HStack>
-											</GridItem>
-										</Grid>
-										<div>
-											<p
-												style={{
-													marginBottom: -16,
-													fontSize: 14
-												}}
-											>
-												{finishDateStatus(t.finishDate)}
-											</p>
-										</div>
-									</Flex>
-								</ProcurementCardStyled>
-							);
-						})
-					)}
-					{data.length <= 0 ? null : (
-						<>
-							<Text mt={'4'}>
-								You can see the offers that have been submitted here
-							</Text>
-							<Button mt={'2'}>
-								<Link to={'/tender-offers'}>Offers</Link>
-							</Button>
-						</>
+						data
+							.slice()
+							.reverse()
+							.map((t) => {
+								let offerStatus;
+								if (t.status === 0) {
+									offerStatus = 'Unpublished';
+								} else if (t.status === 1) {
+									offerStatus = 'Published';
+								} else {
+									offerStatus = 'Unknown';
+								}
+								return (
+									<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
+										<Flex direction={'column'}>
+											<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+												<GridItem colSpan={2}>
+													<HStack>
+														<Text as={'b'}>Project:</Text>
+														<Text color={'black'}>{t.projectName}</Text>
+													</HStack>
+													<HStack>
+														<Text as={'b'}>Tender description:</Text>
+														<Text color={'black'}>{t.description}</Text>
+													</HStack>
+												</GridItem>
+												<GridItem colSpan={1}>
+													<HStack>
+														<Text as={'b'}>Phone number:</Text>
+														<Text color={'black'}>{t.phoneNumber}</Text>
+													</HStack>
+													<HStack>
+														<Text as={'b'}>Tender status:</Text>
+														<Text color={'black'}>{offerStatus}</Text>
+													</HStack>
+												</GridItem>
+												<GridItem colSpan={1}>
+													<HStack>{shouldDeliver(t)}</HStack>
+												</GridItem>
+											</Grid>
+											<div>
+												<p
+													style={{
+														marginBottom: -16,
+														fontSize: 14
+													}}
+												>
+													{finishDateStatus(t.finishDate)}
+												</p>
+											</div>
+										</Flex>
+									</ProcurementCardStyled>
+								);
+							})
 					)}
 				</>
 			)}

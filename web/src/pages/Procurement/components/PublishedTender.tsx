@@ -208,6 +208,10 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 														offerStatus = 'Yes';
 														statusColor = 'green';
 													}
+													if (bidder.status === 2) {
+														offerStatus = 'Waiting for response';
+														statusColor = 'gray';
+													}
 													return (
 														<Tr key={bidder.email}>
 															<Td>
