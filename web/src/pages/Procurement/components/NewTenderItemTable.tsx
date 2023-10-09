@@ -24,7 +24,7 @@ import {
 	Spacer,
 	useToast
 } from '@chakra-ui/react';
-import { handleFinishDate } from '../../../utils/HandleFinishDate';
+// import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
@@ -177,8 +177,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		}
 	};
 
-	const finishDateStatus = handleFinishDate(tender?.finishDate);
-	// const finishDateStatus = false;
+	// const finishDateStatus = handleFinishDate(tender?.finishDate);
+	const finishDateStatus = false;
 
 	return (
 		<>
@@ -475,11 +475,9 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					</Box>
 					<Spacer />
 					{/* // ! I need to figure out if this is possible here. Can the Tender owner add files?  */}
-					{/* <Box>
-						<Button ml={'1'}>
-							<Link to={`/tender-offers/${Number(tenderId)}`}>Upload files</Link>
-						</Button>
-					</Box> */}
+					<Box>
+						<Button ml={'1'}>Upload files</Button>
+					</Box>
 					<Spacer />
 					<Box>
 						<Button ml={'1'}>
