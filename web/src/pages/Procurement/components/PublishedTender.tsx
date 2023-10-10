@@ -209,7 +209,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 														statusColor = 'green';
 													}
 													if (bidder.status === 2) {
-														offerStatus = 'Waiting for response';
+														offerStatus = 'Not anwered';
 														statusColor = 'gray';
 													}
 													return (
@@ -295,8 +295,8 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				</Tbody>
 			</Table>
 
-			<Flex alignItems={'center'}>
-				<Box mt={'2'}>
+			<Flex alignItems={'center'} mt={'2'}>
+				<Box>
 					{finishDateStatus ? (
 						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
 							The finish date has passed, you can&apos;t invite more bidders

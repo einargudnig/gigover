@@ -36,8 +36,8 @@ export const TenderOffer = (): JSX.Element => {
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
-
 	const tender: Tender | undefined = tenderData?.tender;
+	console.log('Tender in Offer', tender);
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	const toast = useToast();
@@ -66,7 +66,7 @@ export const TenderOffer = (): JSX.Element => {
 	};
 
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
-	const finishDateStatus = handleFinishDate(tender?.finishDate); // Can't do this check sooner? I still need to check if the order is published or not
+	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	// const finishDateStatus = true;
 
 	return (

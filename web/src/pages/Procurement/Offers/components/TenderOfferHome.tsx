@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
-// import { useGetBidderTenders } from '../../../../queries/useGetBidderTenders';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -10,6 +9,7 @@ import { Box, Flex, Spacer, Button, Text, useToast } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { useBidderReject } from '../../../../mutations/useBidderReject';
+import { UserContext } from '../../../../context/UserContext';
 
 import { OpenOffer } from './OpenOffer';
 
@@ -26,6 +26,8 @@ export const TenderOfferHome = (): JSX.Element => {
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 	// we will store the bidder status in the localStorage.
 	const [hasAnswered, setHasAnswered] = useState(false);
+	const user = useContext(UserContext);
+	console.log('user', user);
 
 	useEffect(() => {
 		// check localStorage
@@ -39,7 +41,7 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	// const finishDateStatus = false;
-	console.log('finishDateStatus', finishDateStatus);
+	// console.log('finishDateStatus', finishDateStatus);
 
 	const bidderRejectBody = {
 		tenderId: Number(tenderId)
