@@ -36,7 +36,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
-	// console.log(tenders);
+	console.log(tenders);
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -96,6 +96,34 @@ export const BidderTenders = (): JSX.Element => {
 	// 	const i = offers?.[0];
 	// 	return i.status === 1 ? 'Published' : 'Not Published';
 	// };
+	const bidStatus = 0;
+	const renderBidStatus = () => {
+		// if (tender.bidStatus === 1) {
+		if (bidStatus === 0) {
+			return (
+				<HStack>
+					<Text as={'b'}>Bid status:</Text>
+					<Text color={'red'}>No</Text>
+				</HStack>
+			);
+		} else if (bidStatus === 1) {
+			return (
+				<HStack>
+					<Text as={'b'}>Bid status:</Text>
+					<Text color={'green'}>Yes</Text>
+				</HStack>
+			);
+		} else if (bidStatus === 2) {
+			return (
+				<HStack>
+					<Text as={'b'}>Bid status:</Text>
+					<Text color={'gray'}>Not answered</Text>
+				</HStack>
+			);
+		} else {
+			return null;
+		}
+	};
 
 	return (
 		<>
