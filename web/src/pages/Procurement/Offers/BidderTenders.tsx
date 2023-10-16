@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Text, VStack, HStack, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Text, VStack, HStack, Flex, Grid, GridItem, Spacer } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
@@ -100,26 +100,11 @@ export const BidderTenders = (): JSX.Element => {
 	const renderBidStatus = () => {
 		// if (tender.bidStatus === 1) {
 		if (bidStatus === 0) {
-			return (
-				<HStack>
-					<Text as={'b'}>Bid status:</Text>
-					<Text color={'red'}>No</Text>
-				</HStack>
-			);
+			return <Text color={'red'}>Will not make an offer</Text>;
 		} else if (bidStatus === 1) {
-			return (
-				<HStack>
-					<Text as={'b'}>Bid status:</Text>
-					<Text color={'green'}>Yes</Text>
-				</HStack>
-			);
+			return <Text color={'green'}>Offer opened</Text>;
 		} else if (bidStatus === 2) {
-			return (
-				<HStack>
-					<Text as={'b'}>Bid status:</Text>
-					<Text color={'gray'}>Not answered</Text>
-				</HStack>
-			);
+			return <Text color={'gray'}>Not answered</Text>;
 		} else {
 			return null;
 		}
@@ -215,17 +200,30 @@ export const BidderTenders = (): JSX.Element => {
 																		{shouldDeliver(t)}
 																	</HStack>
 																</GridItem>
+																<GridItem colSpan={2}>
+																	<p
+																		style={{
+																			marginBottom: -16,
+																			fontSize: 14
+																		}}
+																	>
+																		{finishDateStatus(
+																			t.finishDate
+																		)}
+																	</p>
+																</GridItem>
+																<GridItem colSpan={1} />
+																<GridItem colSpan={1}>
+																	<HStack>
+																		<Text as={'b'}>
+																			Bid status:
+																		</Text>
+																		<Text>
+																			{renderBidStatus()}
+																		</Text>
+																	</HStack>
+																</GridItem>
 															</Grid>
-															<div>
-																<p
-																	style={{
-																		marginBottom: -16,
-																		fontSize: 14
-																	}}
-																>
-																	{finishDateStatus(t.finishDate)}
-																</p>
-															</div>
 														</Flex>
 													</OfferCardStyled>
 												);
