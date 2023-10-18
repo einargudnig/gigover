@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Box, Text, VStack, HStack, Flex, Grid, GridItem, Spacer } from '@chakra-ui/react';
+import { Text, VStack, HStack, Flex, Grid, GridItem } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
@@ -92,19 +92,30 @@ export const BidderTenders = (): JSX.Element => {
 		);
 	};
 
-	// const offerPublished = () => {
-	// 	const i = offers?.[0];
-	// 	return i.status === 1 ? 'Published' : 'Not Published';
-	// };
-	const bidStatus = 0;
-	const renderBidStatus = () => {
-		// if (tender.bidStatus === 1) {
-		if (bidStatus === 0) {
+	const renderBidStatus = (tender: Tender) => {
+		if (tender.bidStatus === 0) {
 			return <Text color={'red'}>Will not make an offer</Text>;
-		} else if (bidStatus === 1) {
+		} else if (tender.bidStatus === 1) {
 			return <Text color={'green'}>Offer opened</Text>;
-		} else if (bidStatus === 2) {
+		} else if (tender.bidStatus === 2) {
 			return <Text color={'gray'}>Not answered</Text>;
+		} else {
+			return null;
+		}
+	};
+
+	// This is to make sure the flow of the bidder-tenders page is correct.
+	// If the bidder opens an offer, he should be redirected to the offer page.
+	// and if he goes back to this page he can click the tender and be redirected to the bidder-offers page.
+	// If the bidder decides to not make an offer, he should be redirected this page and he cannot go anywhere else.
+	// If the bidder hasn't decided he can go to the offers page and answer offer.
+	const handleLinkFromStatus = (tender: Tender) => {
+		if (tender.bidStatus === 0) {
+			return '#';
+		} else if (tender.bidStatus === 1) {
+			return '/bidder-offers';
+		} else if (tender.bidStatus === 2) {
+			return `/tender/offers/${tender.tenderId}`;
 		} else {
 			return null;
 		}
@@ -143,7 +154,7 @@ export const BidderTenders = (): JSX.Element => {
 
 												return (
 													<OfferCardStyled
-														to={`/tender/offers/${t.tenderId}`}
+														to={handleLinkFromStatus(t) || '#'}
 														key={t.tenderId}
 													>
 														<Flex direction={'column'}>
@@ -219,7 +230,7 @@ export const BidderTenders = (): JSX.Element => {
 																			Bid status:
 																		</Text>
 																		<Text>
-																			{renderBidStatus()}
+																			{renderBidStatus(t)}
 																		</Text>
 																	</HStack>
 																</GridItem>
