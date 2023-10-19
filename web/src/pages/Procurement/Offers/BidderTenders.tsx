@@ -36,7 +36,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
-	console.log(tenders);
+	// console.log(tenders);
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -142,103 +142,106 @@ export const BidderTenders = (): JSX.Element => {
 										</Center>
 									) : (
 										<>
-											{uniqueTenders.map((t) => {
-												let offerStatus;
-												if (t.status === 0) {
-													offerStatus = 'Unpublished';
-												} else if (t.status === 1) {
-													offerStatus = 'Published';
-												} else {
-													offerStatus = 'Unknown';
-												}
+											{uniqueTenders
+												.slice()
+												.reverse()
+												.map((t) => {
+													let offerStatus;
+													if (t.status === 0) {
+														offerStatus = 'Unpublished';
+													} else if (t.status === 1) {
+														offerStatus = 'Published';
+													} else {
+														offerStatus = 'Unknown';
+													}
 
-												return (
-													<OfferCardStyled
-														to={handleLinkFromStatus(t) || '#'}
-														key={t.tenderId}
-													>
-														<Flex direction={'column'}>
-															<Grid
-																templateColumns="repeat(4, 1fr)"
-																gap={1}
-															>
-																<GridItem colSpan={2}>
-																	<HStack>
-																		<Text as={'b'}>
-																			Project:
-																		</Text>
-																		<Text color={'black'}>
-																			{t.projectName}
-																		</Text>
-																	</HStack>
-																	<HStack>
-																		<Text as={'b'}>
-																			Tender description:
-																		</Text>
-																		<Text color={'black'}>
-																			{t.description}
-																		</Text>
-																	</HStack>
-																</GridItem>
-																<GridItem colSpan={1}>
-																	<HStack>
-																		<Text as={'b'}>
-																			Phone number:
-																		</Text>
-																		<Text color={'black'}>
-																			{t.phoneNumber}
-																		</Text>
-																	</HStack>
-																	<HStack>
-																		<Text as={'b'}>
-																			Tender status:
-																		</Text>
-																		<Text color={'black'}>
-																			{offerStatus}
-																		</Text>
-																	</HStack>
-																</GridItem>
-																<GridItem colSpan={1}>
-																	<HStack>
-																		<Text as={'b'}>
-																			Number of items:
-																		</Text>
-																		<Text color={'black'}>
-																			{t.items.length}
-																		</Text>
-																	</HStack>
-																	<HStack>
-																		{shouldDeliver(t)}
-																	</HStack>
-																</GridItem>
-																<GridItem colSpan={2}>
-																	<p
-																		style={{
-																			marginBottom: -16,
-																			fontSize: 14
-																		}}
-																	>
-																		{finishDateStatus(
-																			t.finishDate
-																		)}
-																	</p>
-																</GridItem>
-																<GridItem colSpan={1} />
-																<GridItem colSpan={1}>
-																	<HStack>
-																		<Text as={'b'}>
-																			Bid status:
-																		</Text>
-																		<Text>
-																			{renderBidStatus(t)}
-																		</Text>
-																	</HStack>
-																</GridItem>
-															</Grid>
-														</Flex>
-													</OfferCardStyled>
-												);
-											})}
+													return (
+														<OfferCardStyled
+															to={handleLinkFromStatus(t) || '#'}
+															key={t.tenderId}
+														>
+															<Flex direction={'column'}>
+																<Grid
+																	templateColumns="repeat(4, 1fr)"
+																	gap={1}
+																>
+																	<GridItem colSpan={2}>
+																		<HStack>
+																			<Text as={'b'}>
+																				Project:
+																			</Text>
+																			<Text color={'black'}>
+																				{t.projectName}
+																			</Text>
+																		</HStack>
+																		<HStack>
+																			<Text as={'b'}>
+																				Tender description:
+																			</Text>
+																			<Text color={'black'}>
+																				{t.description}
+																			</Text>
+																		</HStack>
+																	</GridItem>
+																	<GridItem colSpan={1}>
+																		<HStack>
+																			<Text as={'b'}>
+																				Phone number:
+																			</Text>
+																			<Text color={'black'}>
+																				{t.phoneNumber}
+																			</Text>
+																		</HStack>
+																		<HStack>
+																			<Text as={'b'}>
+																				Tender status:
+																			</Text>
+																			<Text color={'black'}>
+																				{offerStatus}
+																			</Text>
+																		</HStack>
+																	</GridItem>
+																	<GridItem colSpan={1}>
+																		<HStack>
+																			<Text as={'b'}>
+																				Number of items:
+																			</Text>
+																			<Text color={'black'}>
+																				{t.items.length}
+																			</Text>
+																		</HStack>
+																		<HStack>
+																			{shouldDeliver(t)}
+																		</HStack>
+																	</GridItem>
+																	<GridItem colSpan={2}>
+																		<p
+																			style={{
+																				marginBottom: -16,
+																				fontSize: 14
+																			}}
+																		>
+																			{finishDateStatus(
+																				t.finishDate
+																			)}
+																		</p>
+																	</GridItem>
+																	<GridItem colSpan={1} />
+																	<GridItem colSpan={1}>
+																		<HStack>
+																			<Text as={'b'}>
+																				Bid status:
+																			</Text>
+																			<Text>
+																				{renderBidStatus(t)}
+																			</Text>
+																		</HStack>
+																	</GridItem>
+																</Grid>
+															</Flex>
+														</OfferCardStyled>
+													);
+												})}
 										</>
 									)}
 								</>

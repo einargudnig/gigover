@@ -54,56 +54,62 @@ export const OfferForTender = (): JSX.Element => {
 							</Center>
 						) : (
 							<>
-								{offer?.map((o) => {
-									let offerStatus;
-									let statusColor;
-									if (o.status === 0) {
-										offerStatus = 'Unpublished';
-									} else if (o.status === 1) {
-										offerStatus = 'Published';
-									} else if (o.status === 2) {
-										offerStatus = 'Accepted';
-										statusColor = 'green';
-									} else if (o.status === 3) {
-										offerStatus = 'Rejected';
-										statusColor = 'red';
-									} else {
-										offerStatus = 'Unknown';
-									}
+								{offer
+									?.slice()
+									.reverse()
+									.map((o) => {
+										let offerStatus;
+										let statusColor;
+										if (o.status === 0) {
+											offerStatus = 'Unpublished';
+										} else if (o.status === 1) {
+											offerStatus = 'Published';
+										} else if (o.status === 2) {
+											offerStatus = 'Accepted';
+											statusColor = 'green';
+										} else if (o.status === 3) {
+											offerStatus = 'Rejected';
+											statusColor = 'red';
+										} else {
+											offerStatus = 'Unknown';
+										}
 
-									return (
-										<OfferCardStyled
-											key={o.tenderId}
-											to={`/tender-offers/${o.tenderId}/${o.offerId}`}
-										>
-											<Flex>
-												<Box>
-													<Flex direction={'column'}>
+										return (
+											<OfferCardStyled
+												key={o.offerId}
+												to={`/tender-offers/${o.tenderId}/${o.offerId}`}
+											>
+												<Flex>
+													<Box>
+														<Flex direction={'column'}>
+															<HStack>
+																<Text as={'b'}>Offer notes:</Text>
+																<Text>{o.notes}</Text>
+															</HStack>
+															<HStack>
+																<Text as={'b'}>Offer Id:</Text>
+																<Text>{o.offerId}</Text>
+															</HStack>
+														</Flex>
+													</Box>
+													<Spacer />
+													<Box>
 														<HStack>
-															<Text as={'b'}>Offer notes:</Text>
-															<Text>{o.notes}</Text>
+															<Text as={'b'} fontSize={'lg'}>
+																Offer status:
+															</Text>
+															<Text
+																fontSize={'xl'}
+																color={statusColor}
+															>
+																{offerStatus}
+															</Text>
 														</HStack>
-														<HStack>
-															<Text as={'b'}>Offer Id:</Text>
-															<Text>{o.offerId}</Text>
-														</HStack>
-													</Flex>
-												</Box>
-												<Spacer />
-												<Box>
-													<HStack>
-														<Text as={'b'} fontSize={'lg'}>
-															Offer status:
-														</Text>
-														<Text fontSize={'xl'} color={statusColor}>
-															{offerStatus}
-														</Text>
-													</HStack>
-												</Box>
-											</Flex>
-										</OfferCardStyled>
-									);
-								})}
+													</Box>
+												</Flex>
+											</OfferCardStyled>
+										);
+									})}
 							</>
 						)}
 					</>

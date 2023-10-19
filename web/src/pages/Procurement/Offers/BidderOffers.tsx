@@ -34,7 +34,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 export const BidderOffers = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
-	// console.log(offers);
+	console.log(offers);
 	const noOffers = offers?.length === 0;
 
 	return (
@@ -56,78 +56,90 @@ export const BidderOffers = (): JSX.Element => {
 										</Text>
 									) : (
 										<>
-											{offers?.map((o) => {
-												let offerStatus;
-												let url;
-												let statusColor;
-												if (o.status === 0) {
-													offerStatus = 'Unpublished';
-													url = `/tender/offers/${o.tenderId}/${o.offerId}`;
-												} else if (o.status === 1) {
-													offerStatus = 'Published';
-													url = `/published-offer/${o.tenderId}/${o.offerId}`;
-												} else if (o.status === 2) {
-													offerStatus = 'Accepted';
-													url = `/published-offer/${o.tenderId}/${o.offerId}`;
-													statusColor = 'green';
-												} else if (o.status === 3) {
-													offerStatus = 'Rejected';
-													url = `/published-offer/${o.tenderId}/${o.offerId}`;
-													statusColor = 'red';
-												} else {
-													offerStatus = 'Unknown';
-												}
+											{offers
+												?.slice()
+												.reverse()
+												.map((o) => {
+													let offerStatus;
+													let url;
+													let statusColor;
+													if (o.status === 0) {
+														offerStatus = 'Unpublished';
+														url = `/tender/offers/${o.tenderId}/${o.offerId}`;
+													} else if (o.status === 1) {
+														offerStatus = 'Published';
+														url = `/published-offer/${o.tenderId}/${o.offerId}`;
+													} else if (o.status === 2) {
+														offerStatus = 'Accepted';
+														url = `/published-offer/${o.tenderId}/${o.offerId}`;
+														statusColor = 'green';
+													} else if (o.status === 3) {
+														offerStatus = 'Rejected';
+														url = `/published-offer/${o.tenderId}/${o.offerId}`;
+														statusColor = 'red';
+													} else {
+														offerStatus = 'Unknown';
+													}
 
-												return (
-													<OfferCardStyled to={url} key={o.offerId}>
-														<Flex>
-															<Box>
-																<Flex direction={'column'}>
+													return (
+														<OfferCardStyled to={url} key={o.offerId}>
+															<Flex>
+																<Box>
+																	<Flex direction={'column'}>
+																		<HStack>
+																			<Text as={'b'}>
+																				Offer notes:
+																			</Text>
+																			<Text>{o.notes}</Text>
+																		</HStack>
+																		<HStack>
+																			<Text as={'b'}>
+																				Tender description:
+																			</Text>
+																			<Text>
+																				{
+																					o.tender
+																						.description
+																				}
+																			</Text>
+																		</HStack>
+																		<HStack>
+																			<Text as={'b'}>
+																				Project name:
+																			</Text>
+																			<Text>
+																				{
+																					o.tender
+																						.projectName
+																				}
+																			</Text>
+																		</HStack>
+																	</Flex>
+																</Box>
+																<Spacer />
+																<Box
+																	justifyContent={'center'}
+																	alignContent={'center'}
+																>
 																	<HStack>
-																		<Text as={'b'}>
-																			Offer notes:
+																		<Text
+																			as={'b'}
+																			fontSize={'lg'}
+																		>
+																			Offer status:
 																		</Text>
-																		<Text>{o.notes}</Text>
-																	</HStack>
-																	<HStack>
-																		<Text as={'b'}>
-																			Tender description:
-																		</Text>
-																		<Text>
-																			{o.tender.description}
-																		</Text>
-																	</HStack>
-																	<HStack>
-																		<Text as={'b'}>
-																			Project name:
-																		</Text>
-																		<Text>
-																			{o.tender.projectName}
+																		<Text
+																			fontSize={'xl'}
+																			color={statusColor}
+																		>
+																			{offerStatus}
 																		</Text>
 																	</HStack>
-																</Flex>
-															</Box>
-															<Spacer />
-															<Box
-																justifyContent={'center'}
-																alignContent={'center'}
-															>
-																<HStack>
-																	<Text as={'b'} fontSize={'lg'}>
-																		Offer status:
-																	</Text>
-																	<Text
-																		fontSize={'xl'}
-																		color={statusColor}
-																	>
-																		{offerStatus}
-																	</Text>
-																</HStack>
-															</Box>
-														</Flex>
-													</OfferCardStyled>
-												);
-											})}
+																</Box>
+															</Flex>
+														</OfferCardStyled>
+													);
+												})}
 										</>
 									)}
 								</>

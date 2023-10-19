@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
@@ -37,6 +37,7 @@ export const TenderOfferHome = (): JSX.Element => {
 	}, [tenderId]);
 
 	const toast = useToast();
+	const navigate = useNavigate();
 
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	// const finishDateStatus = false;
@@ -57,6 +58,7 @@ export const TenderOfferHome = (): JSX.Element => {
 			duration: 2000,
 			isClosable: true
 		});
+		navigate('/bidder-tenders', { replace: true });
 	};
 
 	// const handleAccept = async () => {
