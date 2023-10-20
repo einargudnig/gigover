@@ -130,6 +130,9 @@ export const BidderOffers = (): JSX.Element => {
 																			<Text as={'b'}>
 																				Tender owner:
 																			</Text>
+																			<Text>
+																				{o.tender.email}
+																			</Text>
 																		</HStack>
 																	</GridItem>
 																</Grid>

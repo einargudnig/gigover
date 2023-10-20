@@ -12,6 +12,7 @@ export interface Tender {
 	phoneNumber: string;
 	offerNote?: string;
 	bidStatus?: number;
+	email: string;
 	items: TenderItem[];
 	bidders: Bidder[];
 	documents: TenderDocument[];
