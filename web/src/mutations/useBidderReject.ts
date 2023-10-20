@@ -23,6 +23,7 @@ export const useBidderReject = () => {
 				if (response.status === 200) {
 					await client.refetchQueries(ApiService.getTenderById(tenderId.tenderId));
 					await client.refetchQueries(ApiService.userTenders);
+					await client.refetchQueries(ApiService.bidderTenders);
 				}
 				return response.data;
 			} catch (e) {

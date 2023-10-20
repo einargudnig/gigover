@@ -15,6 +15,7 @@ export interface TenderFormData {
 	delivery: number;
 	address: string;
 	phoneNumber: string;
+	email?: string;
 }
 
 export const useAddTender = () => {

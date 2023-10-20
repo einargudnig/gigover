@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { HStack, VStack, Text, Flex, Box, Spacer } from '@chakra-ui/react';
+import { Grid, GridItem, HStack, VStack, Text, Flex, Box, Spacer } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
@@ -83,59 +83,56 @@ export const BidderOffers = (): JSX.Element => {
 
 													return (
 														<OfferCardStyled to={url} key={o.offerId}>
-															<Flex>
-																<Box>
-																	<Flex direction={'column'}>
+															<Flex direction={'column'}>
+																<Grid
+																	templateColumns="repeat(4, 1fr)"
+																	gap={1}
+																>
+																	<GridItem colSpan={2}>
 																		<HStack>
 																			<Text as={'b'}>
 																				Offer notes:
 																			</Text>
-																			<Text>{o.notes}</Text>
+																			<Text color={'black'}>
+																				{o.notes}
+																			</Text>
 																		</HStack>
 																		<HStack>
 																			<Text as={'b'}>
 																				Tender description:
 																			</Text>
-																			<Text>
+																			<Text color={'black'}>
 																				{
 																					o.tender
 																						.description
 																				}
 																			</Text>
 																		</HStack>
+																	</GridItem>
+																	<GridItem colSpan={1} />
+
+																	<GridItem colSpan={1}>
 																		<HStack>
-																			<Text as={'b'}>
-																				Project name:
+																			<Text
+																				as={'b'}
+																				fontSize={'lg'}
+																			>
+																				Offer status:
 																			</Text>
-																			<Text>
-																				{
-																					o.tender
-																						.projectName
-																				}
+																			<Text
+																				color={statusColor}
+																				fontSize={'xl'}
+																			>
+																				{offerStatus}
 																			</Text>
 																		</HStack>
-																	</Flex>
-																</Box>
-																<Spacer />
-																<Box
-																	justifyContent={'center'}
-																	alignContent={'center'}
-																>
-																	<HStack>
-																		<Text
-																			as={'b'}
-																			fontSize={'lg'}
-																		>
-																			Offer status:
-																		</Text>
-																		<Text
-																			fontSize={'xl'}
-																			color={statusColor}
-																		>
-																			{offerStatus}
-																		</Text>
-																	</HStack>
-																</Box>
+																		<HStack>
+																			<Text as={'b'}>
+																				Tender owner:
+																			</Text>
+																		</HStack>
+																	</GridItem>
+																</Grid>
 															</Flex>
 														</OfferCardStyled>
 													);

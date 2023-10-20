@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Tender } from '../../models/Tender';
 import {
 	Checkbox,
@@ -22,8 +22,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
 import { devError } from '../../utils/ConsoleUtils';
 import { Task } from '../../models/Task';
-// import { useProjectDetails } from '../../queries/useProjectDetails';
-
+import { UserContext } from '../../context/UserContext';
 interface TenderModalProps {
 	tender?: Tender;
 }
@@ -34,6 +33,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const { data } = useProjectList();
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
+	// We use this to send the email of the Tender owner to the backend.
+	const user = useContext(UserContext);
 
 	// This is so the user can select a project and then the tasks from the selected project.
 	// we want the procurement to be linked to a task and a project.
@@ -86,7 +87,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					finishDate,
 					delivery: isChecked,
 					address,
-					phoneNumber
+					phoneNumber,
+					email: user.userName
 				});
 				console.log('success');
 

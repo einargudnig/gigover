@@ -67,7 +67,7 @@ export const TenderOffer = (): JSX.Element => {
 
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
-	// const finishDateStatus = true;
+	// const finishDateStatus = false;
 
 	return (
 		<>
