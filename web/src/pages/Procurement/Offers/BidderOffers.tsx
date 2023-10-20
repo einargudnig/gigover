@@ -128,8 +128,12 @@ export const BidderOffers = (): JSX.Element => {
 																		</HStack>
 																		<HStack>
 																			<Text as={'b'}>
-																				Tender owner:
+																				Tender
 																			</Text>
+																			<Text as={'b'}>
+																				owner:
+																			</Text>
+
 																			<Text>
 																				{o.tender.email}
 																			</Text>
