@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Grid, GridItem, HStack, VStack, Text, Flex, Box, Spacer } from '@chakra-ui/react';
+import { Grid, GridItem, HStack, VStack, Text, Flex } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
