@@ -38,7 +38,6 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 			});
 			if (response.uId) {
 				// devInfo('Found user with uId:', response.uId);
-				console.log('Found user with uId:', response.uId);
 				// Add to tender
 				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
 					if (res.errorCode === 'OK') {
@@ -52,6 +51,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 							duration: 3000,
 							isClosable: true
 						});
+						// sendEmailAccount();
 						onClose();
 					} else {
 						throw new Error('Could not invite user.');
@@ -66,7 +66,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 					duration: 3000,
 					isClosable: true
 				});
-				sendEmail();
+				sendEmailNoAccount();
 				onClose();
 			}
 		} catch (e) {
@@ -85,10 +85,11 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	}, [inviteSuccess]);
 	// For the email we send if the user does not have a gigOver account.
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateId = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
+	const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
+	// const emailTemplateIdAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
-	const sendEmail = async () => {
+	const sendEmailNoAccount = async () => {
 		const templateParams = {
 			tenderDesc,
 			to_email: searchMail
@@ -97,7 +98,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 		console.log('tenderDesc: ', templateParams.tenderDesc);
 		try {
 			await emailjs
-				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)
+				.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
 				.then(
 					function (response) {
 						console.log('SUCCESS!', response.status, response.text);
@@ -112,6 +113,31 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 			console.log(e);
 		}
 	};
+
+	// const sendEmailAccount = async () => {
+	// 	const templateParams = {
+	// 		tenderDesc,
+	// 		to_email: searchMail
+	// 	};
+	// 	console.log('Sending email to: ', searchMail);
+	// 	console.log('tenderDesc: ', templateParams.tenderDesc);
+	// 	try {
+	// 		await emailjs
+	// 			.send(emailServiceId!, emailTemplateIdAccount!, templateParams!, emailUserId!)
+	// 			.then(
+	// 				function (response) {
+	// 					console.log('SUCCESS!', response.status, response.text);
+	// 				},
+	// 				function (error) {
+	// 					console.log('FAILED...', error);
+	// 				}
+	// 			);
+
+	// 		onClose();
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// };
 
 	const handleOpenDialog: ButtonProps['onClick'] = (event) => {
 		event.preventDefault();

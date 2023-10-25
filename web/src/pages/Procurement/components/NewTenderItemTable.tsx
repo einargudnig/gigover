@@ -24,7 +24,7 @@ import {
 	Spacer,
 	useToast
 } from '@chakra-ui/react';
-// import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
@@ -177,8 +177,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		}
 	};
 
-	// const finishDateStatus = handleFinishDate(tender?.finishDate);
-	const finishDateStatus = false;
+	const finishDateStatus = handleFinishDate(tender?.finishDate);
+	// const finishDateStatus = false;
 
 	return (
 		<>

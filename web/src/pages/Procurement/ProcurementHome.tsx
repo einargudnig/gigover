@@ -29,7 +29,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 
 export const ProcurementHome = (): JSX.Element => {
 	const { data, isLoading } = useUserTenders();
-	console.log(data);
+	// console.log(data);
 
 	const finishDateStatus = (finishDate: number) => {
 		const res = handleFinishDate(finishDate);

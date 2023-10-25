@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TenderItem, Bidder } from '../../../models/Tender';
+import { TenderItem, Bidder, Tender } from '../../../models/Tender';
 import { useParams, Link } from 'react-router-dom';
 import {
 	Box,
