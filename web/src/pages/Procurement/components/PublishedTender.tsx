@@ -1,5 +1,5 @@
-import React from 'react';
-import { TenderItem } from '../../../models/Tender';
+import React, { useMemo } from 'react';
+import { TenderItem, Bidder } from '../../../models/Tender';
 import { useParams, Link } from 'react-router-dom';
 import {
 	Box,
@@ -31,70 +31,26 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 	const bidders = tender?.bidders;
-	// Testing purposes
-	// const bidders = [
-	// 	{
-	// 		bidderId: 1,
-	// 		email: 'bidder1@mail.com',
-	// 		name: 'Bidder 1',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 1'
-	// 	},
-	// 	{
-	// 		bidderId: 2,
-	// 		email: 'bidder2@mail.com',
-	// 		name: 'Bidder 2',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 2'
-	// 	},
-	// 	{
-	// 		bidderId: 3,
-	// 		email: 'bidder3@mail.com',
-	// 		name: 'Bidder 3',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 3'
-	// 	},
-	// 	{
-	// 		bidderId: 4,
-	// 		email: 'bidder4@mail.com',
-	// 		name: 'Bidder 4',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 4'
-	// 	},
-	// 	{
-	// 		bidderId: 5,
-	// 		email: 'bidder5@mail.com',
-	// 		name: 'Bidder 5',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 5'
-	// 	},
-	// 	{
-	// 		bidderId: 6,
-	// 		email: 'bidder6@mail.com',
-	// 		name: 'Bidder 6',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 6'
-	// 	},
-	// 	{
-	// 		bidderId: 7,
-	// 		email: 'bidder7@mail.com',
-	// 		name: 'Bidder 7',
-	// 		offerCount: 0,
-	// 		status: 1,
-	// 		userName: 'Bidder 7'
-	// 	}
-	// ];
 
+	const getUniqueBidders = useMemo(() => {
+		return () => {
+			const uniqueBidders: Bidder[] = [];
+
+			bidders.forEach((bidder) => {
+				const existingBidder = uniqueBidders.find((b) => b.email === bidder.email);
+				if (!existingBidder) {
+					uniqueBidders.push(bidder);
+				}
+			});
+
+			return uniqueBidders;
+		};
+	}, [bidders]);
+
+	const uniqueBidders = getUniqueBidders();
 	const tenderDescForEmail = tender?.description;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-	console.log('bidders', bidders);
 
 	return (
 		<>
@@ -197,37 +153,39 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 														<Td>Will make an offer</Td>
 													</Tr>
 												</Thead>
-												{bidders?.map((bidder) => {
-													let offerStatus;
-													let statusColor;
-													if (bidder.status === 0) {
-														offerStatus = 'No';
-														statusColor = 'red';
-													}
-													if (bidder.status === 1) {
-														offerStatus = 'Yes';
-														statusColor = 'green';
-													}
-													if (bidder.status === 2) {
-														offerStatus = 'Not anwered';
-														statusColor = 'gray';
-													}
-													return (
-														<Tr key={bidder.email}>
-															<Td>
-																<Text>{bidder.name}</Text>
-															</Td>
-															<Td>
-																<Text>{bidder.email}</Text>
-															</Td>
-															<Td>
-																<Text color={statusColor}>
-																	{offerStatus}
-																</Text>
-															</Td>
-														</Tr>
-													);
-												})}
+												<Tbody>
+													{uniqueBidders?.map((bidder) => {
+														let offerStatus;
+														let statusColor;
+														if (bidder.status === 0) {
+															offerStatus = 'No';
+															statusColor = 'red';
+														}
+														if (bidder.status === 1) {
+															offerStatus = 'Yes';
+															statusColor = 'green';
+														}
+														if (bidder.status === 2) {
+															offerStatus = 'Not anwered';
+															statusColor = 'gray';
+														}
+														return (
+															<Tr key={bidder.email}>
+																<Td>
+																	<Text>{bidder.name}</Text>
+																</Td>
+																<Td>
+																	<Text>{bidder.email}</Text>
+																</Td>
+																<Td>
+																	<Text color={statusColor}>
+																		{offerStatus}
+																	</Text>
+																</Td>
+															</Tr>
+														);
+													})}
+												</Tbody>
 											</Table>
 										</VStack>
 									</VStack>

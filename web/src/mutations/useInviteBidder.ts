@@ -17,6 +17,7 @@ export const useInviteBidder = () => {
 		mutationKey,
 		async (variables) => {
 			try {
+				console.log(variables);
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
 				});
@@ -27,7 +28,7 @@ export const useInviteBidder = () => {
 
 				// we want to refetch this query so the bidder table updates after we invite a bidder.
 				queryClient.refetchQueries(ApiService.getTenderById(variables.tenderId));
-
+				console.log(response.data);
 				return response.data;
 			} catch (e) {
 				devError(e);

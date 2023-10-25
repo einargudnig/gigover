@@ -38,6 +38,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 			});
 			if (response.uId) {
 				// devInfo('Found user with uId:', response.uId);
+				console.log('Found user with uId:', response.uId);
 				// Add to tender
 				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
 					if (res.errorCode === 'OK') {
@@ -92,8 +93,8 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 			tenderDesc,
 			to_email: searchMail
 		};
-		// console.log('Sending email to: ', searchMail);
-		// console.log('tenderDesc: ', templateParams.tenderDesc);
+		console.log('Sending email to: ', searchMail);
+		console.log('tenderDesc: ', templateParams.tenderDesc);
 		try {
 			await emailjs
 				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)
