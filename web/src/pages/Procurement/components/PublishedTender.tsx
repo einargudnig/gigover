@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { TenderItem, Bidder, Tender } from '../../../models/Tender';
+import { TenderItem, Bidder } from '../../../models/Tender';
 import { useParams, Link } from 'react-router-dom';
 import {
 	Box,
@@ -30,6 +30,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
+	// const finishDateStatus = false;
 	const bidders = tender?.bidders;
 
 	const getUniqueBidders = useMemo(() => {
