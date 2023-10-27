@@ -46,12 +46,12 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 						toast({
 							title: 'User invited',
 							description:
-								'The user has been invited to make an offer to the tender.',
+								'The user has been invited to make an offer to the tender, we also sent him an email.',
 							status: 'success',
 							duration: 3000,
 							isClosable: true
 						});
-						// sendEmailAccount();
+						sendEmailAccount();
 						onClose();
 					} else {
 						throw new Error('Could not invite user.');
@@ -86,9 +86,10 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	// For the email we send if the user does not have a gigOver account.
 	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
 	const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
-	// const emailTemplateIdAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
+	const emailTemplateIdAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID_ACCOUNT;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
+	// We send an email to ask the user to create a gigOver account if he doesn't have one.
 	const sendEmailNoAccount = async () => {
 		const templateParams = {
 			tenderDesc,
@@ -114,30 +115,31 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 		}
 	};
 
-	// const sendEmailAccount = async () => {
-	// 	const templateParams = {
-	// 		tenderDesc,
-	// 		to_email: searchMail
-	// 	};
-	// 	console.log('Sending email to: ', searchMail);
-	// 	console.log('tenderDesc: ', templateParams.tenderDesc);
-	// 	try {
-	// 		await emailjs
-	// 			.send(emailServiceId!, emailTemplateIdAccount!, templateParams!, emailUserId!)
-	// 			.then(
-	// 				function (response) {
-	// 					console.log('SUCCESS!', response.status, response.text);
-	// 				},
-	// 				function (error) {
-	// 					console.log('FAILED...', error);
-	// 				}
-	// 			);
+	// We also want to send an email even though the user has an account.
+	const sendEmailAccount = async () => {
+		const templateParams = {
+			tenderDesc,
+			to_email: searchMail
+		};
+		console.log('Sending email to: ', searchMail);
+		console.log('tenderDesc: ', templateParams.tenderDesc);
+		try {
+			await emailjs
+				.send(emailServiceId!, emailTemplateIdAccount!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
 
-	// 		onClose();
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
-	// };
+			onClose();
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	const handleOpenDialog: ButtonProps['onClick'] = (event) => {
 		event.preventDefault();
