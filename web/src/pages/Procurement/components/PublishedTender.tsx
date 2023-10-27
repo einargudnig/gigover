@@ -29,8 +29,8 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 	const time = tender?.finishDate;
 	const date = new Date(time!);
-	// const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
-	const finishDateStatus = false;
+	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
+	// const finishDateStatus = false;
 	const bidders = tender?.bidders;
 
 	const getUniqueBidders = useMemo(() => {
