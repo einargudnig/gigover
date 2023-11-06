@@ -41,7 +41,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 	const time = offer?.finishDate;
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date;
-	console.log('finishDateStatus', finishDateStatus);
+
 	// const finishDateStatus = true;
 
 	const handleAccept = () => {
