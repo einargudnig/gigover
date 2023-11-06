@@ -11,8 +11,6 @@ export const PublishedTender = (): JSX.Element => {
 	const { offerId } = useParams();
 	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
 	console.log('offerData', offerData);
-	// I have the documents as an array here!
-	// TODO build a documents UI
 	const offerDocuments = offerData?.offer?.documents;
 
 	return (
