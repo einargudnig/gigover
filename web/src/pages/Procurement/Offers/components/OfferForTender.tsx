@@ -35,7 +35,6 @@ export const OfferForTender = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
-	console.log(offer);
 
 	const noOffers = offer?.length === 0;
 

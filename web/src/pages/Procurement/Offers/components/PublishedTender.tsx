@@ -11,7 +11,6 @@ export const PublishedTender = (): JSX.Element => {
 	// ! This is the page for the tender owner to see the published offers
 	const { offerId } = useParams();
 	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
-	console.log('offerData', offerData);
 	const offerDocuments = offerData?.offer?.documents;
 
 	return (

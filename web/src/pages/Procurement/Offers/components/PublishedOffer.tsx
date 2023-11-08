@@ -29,7 +29,7 @@ import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-	// console.log('Offer', { offerData });
+	console.log('Offer in publishedOffer component', { offerData });
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
@@ -113,13 +113,21 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	// function that takes the status and returns published if the status is 1, accepted if status is 2 and rejected if status is 3
 	const status = () => {
 		if (offer?.status === 0) {
-			return 'Unpublished';
+			return <Text color={'gray'}>Unpublished</Text>;
 		} else if (offer?.status === 1) {
-			return 'Published';
+			return <Text>Published</Text>;
 		} else if (offer?.status === 2) {
-			return 'Accepted';
+			return (
+				<Text fontSize={'lg'} color={'green'}>
+					Accepted
+				</Text>
+			);
 		} else if (offer?.status === 3) {
-			return 'Rejected';
+			return (
+				<Text fontSize={'lg'} color={'red'}>
+					Rejected
+				</Text>
+			);
 		}
 		return 'Unknown';
 	};

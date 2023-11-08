@@ -22,7 +22,6 @@ export const TenderOfferHome = (): JSX.Element => {
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
-	console.log('tender', tender);
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 	// we will store the bidder status in the localStorage.
 	const [hasAnswered, setHasAnswered] = useState(false);

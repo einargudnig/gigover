@@ -13,7 +13,6 @@ export const OfferFile = (): JSX.Element => {
 	const offerId = params.offerId ? params.offerId : -1;
 	// const [selectedFile, setSelectedFile] = useState<OfferDocument | null>(null);
 	const { data, isLoading, isError, error } = useGetOfferByOfferId(Number(offerId));
-	console.log(data, 'DATA');
 	const offerDocuments = data?.offer.documents;
 
 	if (isError && error) {

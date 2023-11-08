@@ -26,10 +26,7 @@ const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
 `;
 
 export const TendersFolder = (): JSX.Element => {
-	console.log('TenderFiles at the /files/tender/tenders');
 	const { data, isLoading } = useUserTenders();
-
-	console.log('data', data);
 
 	return (
 		<VStack style={{ height: '100%' }}>

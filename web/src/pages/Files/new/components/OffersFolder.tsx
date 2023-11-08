@@ -29,7 +29,6 @@ const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
 export const OffersFolder = (): JSX.Element => {
 	const { data, isLoading } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
-	console.log('data', data);
 	const noOffers = offers?.length === 0;
 
 	return (

@@ -10,7 +10,6 @@ export const TenderFile = (): JSX.Element => {
 	const params = useParams();
 	const tenderId = params.tenderId ? params.tenderId : -1;
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
-	// console.log(data, 'DATA');
 	const tenderDocuments = data?.tender.documents;
 
 	if (isError && error) {
