@@ -93,6 +93,7 @@ const DropZone = ({
 	callback,
 	children
 }: DropZoneProps): JSX.Element => {
+	console.log('offerId in Dropzone', offerId);
 	const { fileService } = useFileService();
 	const { mutateAsync } = useAddTenderDocument();
 

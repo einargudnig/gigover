@@ -13,26 +13,8 @@ export const OfferFile = (): JSX.Element => {
 	const offerId = params.offerId ? params.offerId : -1;
 	// const [selectedFile, setSelectedFile] = useState<OfferDocument | null>(null);
 	const { data, isLoading, isError, error } = useGetOfferByOfferId(Number(offerId));
-	// const navigate = useNavigate();
-	// console.log(data, 'DATA');
+	console.log(data, 'DATA');
 	const offerDocuments = data?.offer.documents;
-
-	// useEffect(() => {
-	// 	if (offerDocuments && offerDocuments.length > 0 && params.fileId) {
-	// 		const index = offerDocuments.findIndex(
-	// 			(d: OfferDocument) => d.id === parseInt(params.fileId || '-1')
-	// 		);
-	// 		const file = offerDocuments[index];
-
-	// 		if (file) {
-	// 			// setSelectedIndex(index);
-	// 			setSelectedFile(file);
-	// 			return;
-	// 		}
-	// 	}
-	// 	setSelectedFile(null);
-	// 	// setSelectedIndex(-1);
-	// }, [offerDocuments, params.fileId]);
 
 	if (isError && error) {
 		console.log(error);

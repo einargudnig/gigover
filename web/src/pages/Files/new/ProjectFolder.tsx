@@ -17,7 +17,6 @@ export const ProjectFolder = (): JSX.Element => {
 	const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
 	const projectDocuments = useProjectDocuments(projectId);
 
-	// console.log(data, 'projectFolders');
 	if (isLoading) {
 		return <LoadingSpinner />;
 	}
