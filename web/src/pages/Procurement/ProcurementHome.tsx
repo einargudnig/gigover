@@ -114,6 +114,11 @@ export const ProcurementHome = (): JSX.Element => {
 														<Text as={'b'}>Tender description:</Text>
 														<Text color={'black'}>{t.description}</Text>
 													</HStack>
+													<HStack>
+														<Text size={'xs'}>
+															{finishDateStatus(t.finishDate)}
+														</Text>
+													</HStack>
 												</GridItem>
 												<GridItem colSpan={1}>
 													<HStack>
@@ -129,16 +134,6 @@ export const ProcurementHome = (): JSX.Element => {
 													<HStack>{shouldDeliver(t)}</HStack>
 												</GridItem>
 											</Grid>
-											<div>
-												<p
-													style={{
-														marginBottom: -16,
-														fontSize: 14
-													}}
-												>
-													{finishDateStatus(t.finishDate)}
-												</p>
-											</div>
 										</Flex>
 									</ProcurementCardStyled>
 								);

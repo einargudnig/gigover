@@ -49,6 +49,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	}, [bidders]);
 
 	const uniqueBidders = getUniqueBidders();
+	console.log('uniqueBidders', uniqueBidders);
 	const tenderDescForEmail = tender?.description;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
@@ -159,15 +160,18 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 														let offerStatus;
 														let statusColor;
 														if (bidder.status === 0) {
+															// BidderReject
 															offerStatus = 'No';
 															statusColor = 'red';
 														}
 														if (bidder.status === 1) {
+															// BidderAccept
 															offerStatus = 'Yes';
 															statusColor = 'green';
 														}
 														if (bidder.status === 2) {
-															offerStatus = 'Not anwered';
+															// BidderNotAnswered
+															offerStatus = 'Not answered';
 															statusColor = 'gray';
 														}
 														return (
@@ -207,7 +211,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					<Tr>
 						<Th width={'20%'}>
 							<HStack>
-								<p>Number</p>
+								<Text>Number</Text>
 								<ImportantIcon size={20} />
 							</HStack>
 						</Th>
@@ -215,7 +219,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						<Tooltip label="Description of a item">
 							<Th width={'20%'}>
 								<HStack>
-									<p>Description</p>
+									<Text>Description</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
@@ -224,7 +228,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						<Tooltip label="Volume">
 							<Th width={'20%'}>
 								<HStack>
-									<p color={'black'}>Volume</p>
+									<Text color={'black'}>Volume</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
@@ -233,7 +237,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						<Tooltip label="Unit of measurement. For example: m2, kg, t">
 							<Th width={'20%'}>
 								<HStack>
-									<p>Unit</p>
+									<Text>Unit</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
@@ -254,7 +258,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				</Tbody>
 			</Table>
 
-			<Flex alignItems={'center'} mt={'2'}>
+			<Flex alignItems={'center'} mt={'6'}>
 				<Box>
 					{finishDateStatus ? (
 						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>

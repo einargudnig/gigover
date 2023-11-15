@@ -5,7 +5,7 @@ import { OfferTableHome } from './OfferTableHome';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Box, Flex, Spacer, Button, Text, useToast } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Button, Text, useToast, HStack } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { useBidderReject } from '../../../../mutations/useBidderReject';
@@ -60,11 +60,6 @@ export const TenderOfferHome = (): JSX.Element => {
 		navigate('/bidder-tenders', { replace: true });
 	};
 
-	// const handleAccept = async () => {
-	// 	setHasAnswered(true);
-	// 	localStorage.setItem(`bidderStatus_${tenderId}`, 'true');
-	// };
-
 	return (
 		<>
 			{isLoading ? (
@@ -79,7 +74,17 @@ export const TenderOfferHome = (): JSX.Element => {
 						{!finishDateStatus ? (
 							<>
 								{hasAnswered ? (
-									<Text>This offer has been answered</Text>
+									<Flex direction={'row'}>
+										<Text as={'b'} mr={'1'}>
+											You
+										</Text>
+										<Text as={'b'} color={'red'}>
+											declined
+										</Text>
+										<Text as={'b'} ml={'1'}>
+											to open an offer for this tender
+										</Text>
+									</Flex>
 								) : (
 									<Flex marginTop={'6'}>
 										<OpenOffer />

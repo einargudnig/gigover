@@ -60,6 +60,7 @@ export interface Offer {
 	status: number;
 	statusText: string;
 	notes?: string;
+	// tenderOwenerEmail: string; //! I should add this
 }
 
 export interface GetOffer {

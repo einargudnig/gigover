@@ -36,6 +36,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
+	console.log('tenders', tenders);
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
