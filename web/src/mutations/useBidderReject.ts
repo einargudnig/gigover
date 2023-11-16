@@ -17,7 +17,7 @@ export const useBidderReject = () => {
 	return useMutation<BidderRejectResponse, ErrorResponse, BidderRejectRequest>(
 		async (tenderId) => {
 			try {
-				const response = await axios.post(ApiService.rejectOffer, tenderId, {
+				const response = await axios.post(ApiService.bidderReject, tenderId, {
 					withCredentials: true
 				});
 				if (response.status === 200) {

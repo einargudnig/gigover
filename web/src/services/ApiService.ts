@@ -134,12 +134,12 @@ export class ApiService {
 	static tenderOffers = (tenderId: number) => API_BASE + 'tender/offers/' + tenderId;
 	static addBidder = API_BASE + 'tender/addBidder';
 	static bidderReject = API_BASE + 'tender/bidderReject';
-	static bidderTenders = API_BASE + 'tender/bidderTenders'; // All tenders for a bidder
+	static bidderTenders = API_BASE + 'tender/bidderTenders';
 	static offer = (offerId: number) => API_BASE + 'tender/offer/' + offerId;
 	static acceptOffer = API_BASE + 'tender/acceptOffer';
 	static rejectOffer = API_BASE + 'tender/rejectOffer';
 	// Tender documents
-	static addTenderDocument = API_BASE + 'tender/addDocument';
+	static addTenderDocument = API_BASE + 'tender/addDocument'; // This is used to send documents, but now we want the tender owner to be able to send documents wit the tender
 	static offerDocuments = (offerId: number) => API_BASE + 'tender/offer' + offerId; //! GET this one is for the offer documents
 	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; //! GET this one is for the tender documents
 }

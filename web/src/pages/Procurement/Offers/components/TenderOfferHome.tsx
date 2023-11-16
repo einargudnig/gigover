@@ -5,7 +5,7 @@ import { OfferTableHome } from './OfferTableHome';
 import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Box, Flex, Spacer, Button, Text, useToast, HStack } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Button, Text, useToast } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { useBidderReject } from '../../../../mutations/useBidderReject';
