@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
-import { Outlet } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ModalContext } from '../../context/ModalContext';
 
@@ -24,6 +24,18 @@ export const Procurement = (): JSX.Element => {
 				actions={
 					<>
 						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use. */}
+						<Button>Client Answer</Button>
+						<Button>Create Bid</Button>
+
+						<NavLink to={'tender-offers'}>
+							<Button>Offers Received</Button>
+						</NavLink>
+						<NavLink to={'bidder-offers'}>
+							<Button>Submitted Bids</Button>
+						</NavLink>
+						<NavLink to={'bidder-tenders'}>
+							<Button>Bid Invitations</Button>
+						</NavLink>
 						<Button
 							onClick={() => setModalContext({ addTender: { tender: undefined } })}
 							leftIcon={<PlusIcon />}
