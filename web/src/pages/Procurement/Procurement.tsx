@@ -28,32 +28,6 @@ export const Procurement = (): JSX.Element => {
 				actions={
 					<>
 						<HStack>
-							{/* <NavLink to={'client-answer'}>
-								<Button>
-									Client Answer
-									{notifications.unread > 0 && (
-										<Flex
-											align={'center'}
-											justify={'center'}
-											bg={'red.500'}
-											borderRadius={'200px'}
-											position={'absolute'}
-											bottom={'-4px'}
-											right={'-4px'}
-											height={'16px'}
-											width={'16px'}
-										>
-											<Box
-												color={'white'}
-												fontSize={'10px'}
-												fontWeight={'bold'}
-											>
-												{notifications.unread}
-											</Box>
-										</Flex>
-									)}
-								</Button>
-							</NavLink> */}
 							<NavLink to={'client-answer'}>
 								{({ isActive }) => (
 									<Button
@@ -61,6 +35,27 @@ export const Procurement = (): JSX.Element => {
 										variant={isActive ? 'outline' : 'solid'}
 									>
 										Client Answer
+										{notifications.unread > 0 && (
+											<Flex
+												align={'center'}
+												justify={'center'}
+												bg={'red.500'}
+												borderRadius={'200px'}
+												position={'absolute'}
+												bottom={'-4px'}
+												right={'-4px'}
+												height={'16px'}
+												width={'16px'}
+											>
+												<Box
+													color={'white'}
+													fontSize={'10px'}
+													fontWeight={'bold'}
+												>
+													{notifications.unread}
+												</Box>
+											</Flex>
+										)}
 									</Button>
 								)}
 							</NavLink>
