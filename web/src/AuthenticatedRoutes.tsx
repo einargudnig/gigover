@@ -30,6 +30,8 @@ import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTe
 import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
 import { PublishedTender } from './pages/Procurement/Offers/components/PublishedTender';
 import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
+import { CreateBid } from './pages/Procurement/ClientBids/CreateBid';
+import { ClientAnswer } from './pages/Procurement/ClientBids/ClientAnswer';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -74,20 +76,25 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'tender'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<TenderPage />} />
-			<Route path={'bidder-tenders'} element={<BidderTenders />} />
-			<Route path={'bidder-offers'} element={<BidderOffers />} />
-			{/* This is the page that the bidder sees, where he can open the offer */}
-			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
-			{/* The page where the user is sent after he opens the offer */}
-			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
+			<Route path={'client-answer'} element={<ClientAnswer />} />
+			<Route path={'create-bid'} element={<CreateBid />} />
 			<Route path={'tender-offers'} element={<OfferForTenders />}>
 				<Route path={':tenderId'} element={<OfferForTender />} />
 				{/* This route should show us a table with items that have had a published offer. */}
 				<Route path={':tenderId/:offerId'} element={<PublishedTender />} />
 			</Route>
+			<Route path={'bidder-offers'} element={<BidderOffers />} />
+			<Route path={'bidder-tenders'} element={<BidderTenders />} />
+			{/* This is the page that the bidder sees, where he can open the offer */}
+			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
+			{/* The page where the user is sent after he opens the offer */}
+			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 
 		{/* This is a different page, the bidder can see his published bid*/}
+		{/* Why should I **not** move this under the tender??
+				I'm moving all other tender connected routes, so why not this one?
+		*/}
 		<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 
 		<Route path={'settings'} element={<Settings />} />

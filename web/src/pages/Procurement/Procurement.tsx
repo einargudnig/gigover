@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import { Button, Box, Flex, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { Outlet, NavLink } from 'react-router-dom';
 import { PlusIcon } from '../../components/icons/PlusIcon';
@@ -16,6 +16,10 @@ const Container = styled.div`
 export const Procurement = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
+	const notifications = {
+		unread: 3
+	};
+
 	return (
 		<>
 			<Page
@@ -23,24 +27,133 @@ export const Procurement = (): JSX.Element => {
 				contentPadding={false}
 				actions={
 					<>
-						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use. */}
-						<Button>Client Answer</Button>
-						<Button>Create Bid</Button>
+						<HStack>
+							{/* <NavLink to={'client-answer'}>
+								<Button>
+									Client Answer
+									{notifications.unread > 0 && (
+										<Flex
+											align={'center'}
+											justify={'center'}
+											bg={'red.500'}
+											borderRadius={'200px'}
+											position={'absolute'}
+											bottom={'-4px'}
+											right={'-4px'}
+											height={'16px'}
+											width={'16px'}
+										>
+											<Box
+												color={'white'}
+												fontSize={'10px'}
+												fontWeight={'bold'}
+											>
+												{notifications.unread}
+											</Box>
+										</Flex>
+									)}
+								</Button>
+							</NavLink> */}
+							<NavLink to={'client-answer'}>
+								{({ isActive }) => (
+									<Button
+										colorScheme={isActive ? 'black' : 'yellow'}
+										variant={isActive ? 'outline' : 'solid'}
+									>
+										Client Answer
+									</Button>
+								)}
+							</NavLink>
+							<NavLink to={'create-bid'}>
+								{({ isActive }) => (
+									<Button
+										colorScheme={isActive ? 'black' : 'yellow'}
+										variant={isActive ? 'outline' : 'solid'}
+									>
+										Create Bid
+									</Button>
+								)}
+							</NavLink>
+							<NavLink to={'tender-offers'}>
+								{({ isActive }) => (
+									<Button
+										colorScheme={isActive ? 'black' : 'yellow'}
+										variant={isActive ? 'outline' : 'solid'}
+									>
+										Offers Received
+										{notifications.unread > 0 && (
+											<Flex
+												align={'center'}
+												justify={'center'}
+												bg={'red.500'}
+												borderRadius={'200px'}
+												position={'absolute'}
+												bottom={'-4px'}
+												right={'-4px'}
+												height={'16px'}
+												width={'16px'}
+											>
+												<Box
+													color={'white'}
+													fontSize={'10px'}
+													fontWeight={'bold'}
+												>
+													{notifications.unread}
+												</Box>
+											</Flex>
+										)}
+									</Button>
+								)}
+							</NavLink>
+							<NavLink to={'bidder-offers'}>
+								{({ isActive }) => (
+									<Button
+										colorScheme={isActive ? 'black' : 'yellow'}
+										variant={isActive ? 'outline' : 'solid'}
+									>
+										Submitted Bids
+									</Button>
+								)}
+							</NavLink>
+							<NavLink to={'bidder-tenders'}>
+								{({ isActive }) => (
+									<Button
+										colorScheme={isActive ? 'black' : 'yellow'}
+										variant={isActive ? 'outline' : 'solid'}
+									>
+										Bid Invitations
+										{notifications.unread > 0 && (
+											<Flex
+												align={'center'}
+												justify={'center'}
+												bg={'red.500'}
+												borderRadius={'200px'}
+												position={'absolute'}
+												bottom={'-4px'}
+												right={'-4px'}
+												height={'16px'}
+												width={'16px'}
+											>
+												<Box
+													color={'white'}
+													fontSize={'10px'}
+													fontWeight={'bold'}
+												>
+													{notifications.unread}
+												</Box>
+											</Flex>
+										)}
+									</Button>
+								)}
+							</NavLink>
+						</HStack>
 
-						<NavLink to={'tender-offers'}>
-							<Button>Offers Received</Button>
-						</NavLink>
-						<NavLink to={'bidder-offers'}>
-							<Button>Submitted Bids</Button>
-						</NavLink>
-						<NavLink to={'bidder-tenders'}>
-							<Button>Bid Invitations</Button>
-						</NavLink>
+						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use. */}
 						<Button
 							onClick={() => setModalContext({ addTender: { tender: undefined } })}
 							leftIcon={<PlusIcon />}
 						>
-							New Procurement
+							New Tender
 						</Button>
 					</>
 				}
