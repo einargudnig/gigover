@@ -55,14 +55,14 @@ export const BidderOffers = (): JSX.Element => {
 										url = `/tender/offers/${o.tenderId}/${o.offerId}`;
 									} else if (o.status === 1) {
 										offerStatus = 'Published';
-										url = `/published-offer/${o.tenderId}/${o.offerId}`;
+										url = `/tender/published-offer/${o.tenderId}/${o.offerId}`;
 									} else if (o.status === 2) {
 										offerStatus = 'Accepted';
-										url = `/published-offer/${o.tenderId}/${o.offerId}`;
+										url = `/tender/published-offer/${o.tenderId}/${o.offerId}`;
 										statusColor = 'green';
 									} else if (o.status === 3) {
 										offerStatus = 'Rejected';
-										url = `/published-offer/${o.tenderId}/${o.offerId}`;
+										url = `/tender/published-offer/${o.tenderId}/${o.offerId}`;
 										statusColor = 'red';
 									} else {
 										offerStatus = 'Unknown';

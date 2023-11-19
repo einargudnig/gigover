@@ -89,13 +89,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
 			{/* The page where the user is sent after he opens the offer */}
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
+			{/* This is a different page, the bidder can see his published bid*/}
+			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 		</Route>
-
-		{/* This is a different page, the bidder can see his published bid*/}
-		{/* Why should I **not** move this under the tender??
-				I'm moving all other tender connected routes, so why not this one?
-		*/}
-		<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 
 		<Route path={'settings'} element={<Settings />} />
 		<Route path={'resources'} element={<Resources />} />
