@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Button, Box, Flex, HStack, VStack } from '@chakra-ui/react';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { Outlet, NavLink } from 'react-router-dom';
 import { PlusIcon } from '../../components/icons/PlusIcon';
