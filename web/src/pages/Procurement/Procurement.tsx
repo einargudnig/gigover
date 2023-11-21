@@ -16,9 +16,9 @@ const Container = styled.div`
 export const Procurement = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
-	const notifications = {
-		unread: 3
-	};
+	// const notifications = {
+	// 	unread: 3
+	// };
 
 	return (
 		<>
@@ -28,7 +28,7 @@ export const Procurement = (): JSX.Element => {
 				actions={
 					<>
 						<HStack>
-							<NavLink to={'client-answer'}>
+							{/* <NavLink to={'client-answer'}>
 								{({ isActive }) => (
 									<Button
 										colorScheme={isActive ? 'black' : 'yellow'}
@@ -54,7 +54,7 @@ export const Procurement = (): JSX.Element => {
 												>
 													{notifications.unread}
 												</Box>
-											</Flex>
+											 </Flex>
 										)}
 									</Button>
 								)}
@@ -68,7 +68,7 @@ export const Procurement = (): JSX.Element => {
 										Create Bid
 									</Button>
 								)}
-							</NavLink>
+							</NavLink> */}
 							<NavLink to={'tender-offers'}>
 								{({ isActive }) => (
 									<Button
@@ -76,7 +76,7 @@ export const Procurement = (): JSX.Element => {
 										variant={isActive ? 'outline' : 'solid'}
 									>
 										Offers Received
-										{notifications.unread > 0 && (
+										{/* {notifications.unread > 0 && (
 											<Flex
 												align={'center'}
 												justify={'center'}
@@ -96,7 +96,7 @@ export const Procurement = (): JSX.Element => {
 													{notifications.unread}
 												</Box>
 											</Flex>
-										)}
+										)} */}
 									</Button>
 								)}
 							</NavLink>
@@ -117,7 +117,7 @@ export const Procurement = (): JSX.Element => {
 										variant={isActive ? 'outline' : 'solid'}
 									>
 										Bid Invitations
-										{notifications.unread > 0 && (
+										{/* {notifications.unread > 0 && (
 											<Flex
 												align={'center'}
 												justify={'center'}
@@ -137,7 +137,7 @@ export const Procurement = (): JSX.Element => {
 													{notifications.unread}
 												</Box>
 											</Flex>
-										)}
+										)} */}
 									</Button>
 								)}
 							</NavLink>
