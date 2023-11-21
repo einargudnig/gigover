@@ -87,13 +87,13 @@ interface DropZoneProps {
 
 const DropZone = ({
 	uploadType = FileUploadType.Project,
-	offerId,
+	offerId = 0,
 	projectId = 0,
+	// tenderId = 0,
 	externalId,
 	callback,
 	children
 }: DropZoneProps): JSX.Element => {
-	console.log('offerId in Dropzone', offerId);
 	const { fileService } = useFileService();
 	const { mutateAsync } = useAddTenderDocument();
 
@@ -118,6 +118,7 @@ const DropZone = ({
 							file,
 							offerId,
 							projectId,
+							// tenderId,
 							createdFolder ?? 0,
 							uploadType!,
 							(status: number) => {

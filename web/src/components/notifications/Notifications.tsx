@@ -24,6 +24,7 @@ import { Center } from '../Center';
 export const Notifications = (): JSX.Element => {
 	const { onOpen, onClose, isOpen } = useDisclosure();
 	const notifications = useNotifications();
+	// console.log('NOTIFICATIONS', notifications);
 
 	return (
 		<Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnBlur={true}>

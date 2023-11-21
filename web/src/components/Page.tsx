@@ -6,9 +6,6 @@ import { ProjectIcon } from './icons/ProjectIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { TenderIcon } from './icons/TenderIcon';
-import { BidInvitationIcon } from './icons/BidInvitationIcon';
-import { SubmittedBidsIcon } from './icons/SubmittedBidsIcon';
-
 import {
 	Avatar,
 	Box,
@@ -264,25 +261,6 @@ export const Page = ({
 						</div>
 						<span>Tender</span>
 					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/bidder-tenders'}>
-						<div>
-							<BidInvitationIcon />
-						</div>
-						<span>Bid invitations</span>
-					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/bidder-offers'}>
-						<div>
-							<SubmittedBidsIcon />
-						</div>
-						<span>Submitted bids</span>
-					</IconLink>
-					{/* This will not be needed for the time being! This is accessible through the procurement page */}
-					{/* <IconLink onClick={onLinkClick} to={'/tender-offers'}>
-						<div>
-							<UserOfferIcon />
-						</div>
-						<span>Offers for Tender</span>
-					</IconLink> */}
 					<IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
 							<SettingsIcon />

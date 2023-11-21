@@ -1,19 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Grid, GridItem, HStack, VStack, Text, Flex } from '@chakra-ui/react';
+import { Grid, GridItem, HStack, Text, Flex } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
-import { Page } from '../../../components/Page';
 import { useGetUserOffers } from '../../../queries/useGetUserOffers';
 import { Offer } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Center } from '../../../components/Center';
-
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	padding: ${(props) => props.theme.padding(3)};
-	overflow-y: auto;
-`;
 
 const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -38,119 +30,92 @@ export const BidderOffers = (): JSX.Element => {
 
 	return (
 		<>
-			<Page title={'User Offers'} contentPadding={false}>
-				<VStack style={{ height: '100%' }}>
-					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-						<Container>
-							{isLoading ? (
-								<Center>
-									<LoadingSpinner />
-								</Center>
-							) : (
-								<>
-									{noOffers ? (
-										<Text>
-											You have not made any offers. Make sure you open a offer
-											before you add to it.
-										</Text>
-									) : (
-										<>
-											{offers
-												?.slice()
-												.reverse()
-												.map((o) => {
-													let offerStatus;
-													let url;
-													let statusColor;
-													if (o.status === 0) {
-														offerStatus = 'Unpublished';
-														url = `/tender/offers/${o.tenderId}/${o.offerId}`;
-													} else if (o.status === 1) {
-														offerStatus = 'Published';
-														url = `/published-offer/${o.tenderId}/${o.offerId}`;
-													} else if (o.status === 2) {
-														offerStatus = 'Accepted';
-														url = `/published-offer/${o.tenderId}/${o.offerId}`;
-														statusColor = 'green';
-													} else if (o.status === 3) {
-														offerStatus = 'Rejected';
-														url = `/published-offer/${o.tenderId}/${o.offerId}`;
-														statusColor = 'red';
-													} else {
-														offerStatus = 'Unknown';
-													}
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<>
+					{noOffers ? (
+						<Text>
+							You have not made any offers. Make sure you open a offer before you add
+							to it.
+						</Text>
+					) : (
+						<>
+							{offers
+								?.slice()
+								.reverse()
+								.map((o) => {
+									let offerStatus;
+									let url;
+									let statusColor;
+									if (o.status === 0) {
+										offerStatus = 'Unpublished';
+										url = `/tender/offers/${o.tenderId}/${o.offerId}`;
+									} else if (o.status === 1) {
+										offerStatus = 'Published';
+										url = `/tender/published-offer/${o.tenderId}/${o.offerId}`;
+									} else if (o.status === 2) {
+										offerStatus = 'Accepted';
+										url = `/tender/published-offer/${o.tenderId}/${o.offerId}`;
+										statusColor = 'green';
+									} else if (o.status === 3) {
+										offerStatus = 'Rejected';
+										url = `/tender/published-offer/${o.tenderId}/${o.offerId}`;
+										statusColor = 'red';
+									} else {
+										offerStatus = 'Unknown';
+									}
 
-													return (
-														<OfferCardStyled to={url} key={o.offerId}>
-															<Flex direction={'column'}>
-																<Grid
-																	templateColumns="repeat(4, 1fr)"
-																	gap={1}
-																>
-																	<GridItem colSpan={2}>
-																		<HStack>
-																			<Text as={'b'}>
-																				Offer notes:
-																			</Text>
-																			<Text color={'black'}>
-																				{o.notes}
-																			</Text>
-																		</HStack>
-																		<HStack>
-																			<Text as={'b'}>
-																				Tender description:
-																			</Text>
-																			<Text color={'black'}>
-																				{
-																					o.tender
-																						.description
-																				}
-																			</Text>
-																		</HStack>
-																	</GridItem>
-																	<GridItem colSpan={1} />
+									return (
+										<OfferCardStyled to={url} key={o.offerId}>
+											<Flex direction={'column'}>
+												<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+													<GridItem colSpan={2}>
+														<HStack>
+															<Text as={'b'}>Offer notes:</Text>
+															<Text color={'black'}>{o.notes}</Text>
+														</HStack>
+														<HStack>
+															<Text as={'b'}>
+																Tender description:
+															</Text>
+															<Text color={'black'}>
+																{o.tender.description}
+															</Text>
+														</HStack>
+													</GridItem>
+													<GridItem colSpan={1} />
 
-																	<GridItem colSpan={1}>
-																		<HStack>
-																			<Text
-																				as={'b'}
-																				fontSize={'lg'}
-																			>
-																				Offer status:
-																			</Text>
-																			<Text
-																				color={statusColor}
-																				fontSize={'xl'}
-																			>
-																				{offerStatus}
-																			</Text>
-																		</HStack>
-																		<HStack>
-																			<Text as={'b'}>
-																				Tender
-																			</Text>
-																			<Text as={'b'}>
-																				owner:
-																			</Text>
+													<GridItem colSpan={1}>
+														<HStack>
+															<Text as={'b'} fontSize={'lg'}>
+																Offer status:
+															</Text>
+															<Text
+																color={statusColor}
+																fontSize={'xl'}
+															>
+																{offerStatus}
+															</Text>
+														</HStack>
+														<HStack>
+															<Text as={'b'}>Tender</Text>
+															<Text as={'b'}>owner:</Text>
 
-																			<Text>
-																				{o.tender.email}
-																			</Text>
-																		</HStack>
-																	</GridItem>
-																</Grid>
-															</Flex>
-														</OfferCardStyled>
-													);
-												})}
-										</>
-									)}
-								</>
-							)}
-						</Container>
-					</HStack>
-				</VStack>
-			</Page>
+															<Text>{o.tender.email}</Text>
+														</HStack>
+													</GridItem>
+												</Grid>
+											</Flex>
+										</OfferCardStyled>
+									);
+								})}
+						</>
+					)}
+				</>
+			)}
 		</>
 	);
 };

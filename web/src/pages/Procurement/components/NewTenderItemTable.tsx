@@ -32,6 +32,7 @@ import { Edit } from '../../../components/icons/Edit';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { CrossIcon } from '../../../components/icons/CrossIcon';
 import { InviteButton } from './InviteButton';
+// import { UploadCertifications } from '../Offers/components/UploadCertifications';
 
 export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
@@ -47,6 +48,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
+
+	// const [upload, setUpload] = useState(false); // for the uploadModal
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
@@ -182,6 +185,16 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 
 	return (
 		<>
+			{/* {upload && (
+				<UploadCertifications
+					// onClose={() => setUpload(false)}
+					onComplete={(status) => {
+						console.log('status', status);
+					}}
+					tenderId={Number(tenderId)}
+				/>
+			)} */}
+
 			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
@@ -476,6 +489,9 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					<Spacer />
 					{/* // ! I need to figure out if this is possible here. Can the Tender owner add files?  */}
 					<Box>
+						{/* <Button onClick={() => setUpload(true)} ml={'1'}>
+							Upload files
+						</Button> */}
 						<Button ml={'1'}>Upload files</Button>
 					</Box>
 					<Spacer />
