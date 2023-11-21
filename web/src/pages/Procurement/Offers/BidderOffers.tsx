@@ -43,6 +43,9 @@ export const BidderOffers = (): JSX.Element => {
 						</Text>
 					) : (
 						<>
+							<Text mb={'2'} fontSize={'xl'}>
+								Offers that you have received
+							</Text>
 							{offers
 								?.slice()
 								.reverse()

@@ -55,11 +55,10 @@ export const OfferForTenders = (): JSX.Element => {
 
 	return (
 		<>
-			<Center>
-				<Text mb={'2'} fontSize={'xl'}>
-					Press the tender to see the offers that have been published
-				</Text>
-			</Center>
+			<Text mb={'2'} fontSize={'xl'}>
+				Press the tender to see the offers that have been published
+			</Text>
+
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

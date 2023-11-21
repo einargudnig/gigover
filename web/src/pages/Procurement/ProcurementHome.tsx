@@ -72,14 +72,6 @@ export const ProcurementHome = (): JSX.Element => {
 				This tab should be used for creating, managing, and reviewing tenders.
 			</Text>
 
-			{data.length <= 0 ? null : (
-				<Flex>
-					<Button my={'2'} mr={'2'}>
-						<Link to={'/tender-offers'}>Tender offers</Link>
-					</Button>
-					<Text mt={'4'}>You can see the offers that have been submitted here</Text>
-				</Flex>
-			)}
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
