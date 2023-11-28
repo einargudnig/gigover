@@ -13,3 +13,13 @@ export interface TenderDocument {
 	bytes: number;
 	created: number; // Timestamp
 }
+
+export interface TenderDocumentByTenderOwner {
+	id: number;
+	tenderId: number;
+	name: string;
+	type: DocumentTypes;
+	url: string;
+	bytes: number;
+	created: number; // Timestamp
+}

@@ -18,7 +18,7 @@ export interface FileDocument {
 	projectId: number;
 	externalId?: number;
 	offerId: number;
-	// tenderId: number;
+	tenderId: number;
 }
 
 export interface FolderResult {
@@ -92,8 +92,8 @@ export class FileSystemService {
 		uploadType: FileUploadType,
 		bytes: number,
 		externalId: number | null,
-		offerId: number
-		// tenderId: number
+		offerId: number,
+		tenderId: number
 	) {
 		const fileType: FileType = this.getFileTypeForFile(file);
 
@@ -105,7 +105,7 @@ export class FileSystemService {
 			filePath,
 			externalId,
 			offerId,
-			// tenderId,
+			tenderId,
 			downloadUrl,
 			fileType: fileType,
 			size: bytes,
@@ -116,7 +116,7 @@ export class FileSystemService {
 	async uploadFile(
 		file: File,
 		offerId: number, // why null?
-		// tenderId: number,
+		tenderId: number,
 		projectId: number,
 		folderId: number,
 		uploadType = FileUploadType.Project,
@@ -160,8 +160,8 @@ export class FileSystemService {
 						uploadType,
 						file.size,
 						externalId || null,
-						offerId
-						// tenderId
+						offerId,
+						tenderId
 					);
 
 					const currentFileType = this.getFileTypeForFile(file);
@@ -177,8 +177,8 @@ export class FileSystemService {
 						url: downloadURL,
 						bytes: file.size,
 						taskId: externalId ?? undefined,
-						offerId: offerId
-						// tenderId: tenderId
+						offerId: offerId,
+						tenderId: tenderId
 					};
 					console.log('image', image);
 

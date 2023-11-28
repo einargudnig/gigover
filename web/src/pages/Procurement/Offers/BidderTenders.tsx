@@ -124,7 +124,6 @@ export const BidderTenders = (): JSX.Element => {
 					<Text mb={'2'} fontSize={'xl'}>
 						Tenders that you have been invited to bid on
 					</Text>
-
 					{noTender ? (
 						<Center>
 							<Text my={'2'} fontSize={'xl'}>

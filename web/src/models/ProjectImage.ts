@@ -9,6 +9,7 @@ export interface ProjectImage {
 	projectId: number;
 	folderId: number;
 	offerId?: number;
+	tenderId?: number;
 	taskId?: number;
 	name: string;
 	type: DocumentTypes;
