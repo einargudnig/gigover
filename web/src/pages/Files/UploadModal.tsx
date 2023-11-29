@@ -95,6 +95,7 @@ export const UploadModal = ({ projectId, folderId, onClose }: UploadModalProps):
 						<DropZone
 							offerId={0}
 							projectId={selectedProject}
+							tenderId={0}
 							folderId={selectedFolder}
 						/>
 					)}

@@ -190,6 +190,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							<DropZone
 								offerId={0}
 								projectId={projectId}
+								tenderId={0}
 								uploadType={FileUploadType.Task}
 								externalId={task.taskId}
 								callback={() => {

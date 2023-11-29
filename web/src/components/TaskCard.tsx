@@ -107,6 +107,7 @@ export const TaskCard = ({
 		<DropZone
 			offerId={0}
 			projectId={projectId}
+			tenderId={0}
 			uploadType={FileUploadType.Task}
 			externalId={task?.taskId}
 		>

@@ -87,6 +87,7 @@ export const CommentInput = ({ projectId, taskId, workers }: CommentInputProps):
 				<DropZone
 					offerId={0}
 					projectId={projectId}
+					tenderId={0}
 					uploadType={FileUploadType.Comment}
 					externalId={taskId}
 					callback={(uploadedFile, file) => {

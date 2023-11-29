@@ -3,7 +3,7 @@ import { Text, VStack, Progress, useToast } from '@chakra-ui/react';
 import styled, { css } from 'styled-components';
 import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
-import { TenderDocumentByTenderOwner } from '../../../../models/TenderDocument';
+import { TenderDocumentByTenderOwner, TenderDocument } from '../../../../models/TenderDocument';
 import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { FileUploadType } from '../../../../models/FileUploadType';
@@ -33,7 +33,7 @@ export const UploadTenderDocuments = ({ onClose, tenderId }: UploadModalProps): 
 					offer.
 				</Text>
 				<VStack mb={-6} align={'stretch'}>
-					<DropZone tenderId={tenderId} offerId={0} projectId={0} />
+					<DropZone offerId={0} projectId={0} tenderId={tenderId} />
 					<FormActions
 						hideSubmitButton={true}
 						submitText={'Upload'}
@@ -77,7 +77,7 @@ interface DropZoneProps {
 	tenderId: number;
 	uploadType?: FileUploadType;
 	externalId?: number;
-	callback?: (tenderDocument?: TenderDocumentByTenderOwner, file?: File) => void;
+	callback?: (tenderDocument?: TenderDocument, file?: File) => void;
 
 	children?(props: {
 		isDragActive: boolean;
@@ -117,7 +117,7 @@ const DropZone = ({
 						setIsUploading(true);
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
-
+							offerId,
 							projectId,
 							tenderId,
 							createdFolder ?? 0,
@@ -128,9 +128,7 @@ const DropZone = ({
 							externalId
 						);
 
-						let uploadedFile:
-							| { tenderDocument: TenderDocumentByTenderOwner }
-							| undefined;
+						let uploadedFile: { tenderDocument: TenderDocument } | undefined;
 
 						try {
 							// @ts-ignore

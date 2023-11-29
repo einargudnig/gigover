@@ -125,6 +125,8 @@ export class FileSystemService {
 	): Promise<DocumentInput> {
 		// devInfo('Gigover File Upload initiated');
 		console.log('Gigover File Upload initiated');
+		console.log('tenderId', tenderId);
+		console.log('projectId', projectId);
 
 		const fileName = uuid();
 		const originalFileName = file.name;

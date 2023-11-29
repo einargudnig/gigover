@@ -2,16 +2,17 @@ import axios, { AxiosError } from 'axios';
 import { ApiService } from '../services/ApiService';
 import { useMutation } from 'react-query';
 import { devError } from '../utils/ConsoleUtils';
-import { TenderDocumentByTenderOwner } from '../models/TenderDocument'; //? Maybe I need to update this?
+import { TenderDocumentByTenderOwner, TenderDocument } from '../models/TenderDocument'; //? Maybe I need to update this?
 
 export interface DocumentInput
-	extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
+	// extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
+	extends Pick<TenderDocument, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
 
 export const useAddTenderDocumentByTenderOwner = () => {
-	return useMutation<{ tenderDocument: TenderDocumentByTenderOwner }, AxiosError, DocumentInput>(
+	return useMutation<{ tenderDocument: TenderDocument }, AxiosError, DocumentInput>(
 		async (variables) => {
 			try {
-				const response = await axios.post<{ tenderDocument: TenderDocumentByTenderOwner }>(
+				const response = await axios.post<{ tenderDocument: TenderDocument }>(
 					ApiService.addTenderDocumentByTenderOwner,
 					variables,
 					{

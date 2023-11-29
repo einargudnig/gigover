@@ -49,7 +49,12 @@ const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: bool
 
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 	return (
-		<DropZone offerId={0} projectId={project.projectId} uploadType={FileUploadType.Project}>
+		<DropZone
+			offerId={0}
+			projectId={project.projectId}
+			tenderId={0}
+			uploadType={FileUploadType.Project}
+		>
 			{({ isDragActive, isUploading }) => (
 				<FolderCard
 					to={`/files/${project.projectId}/${url || ''}`}
