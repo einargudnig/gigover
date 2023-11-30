@@ -116,8 +116,8 @@ export class FileSystemService {
 	async uploadFile(
 		file: File,
 		offerId: number, // why null?
-		tenderId: number,
 		projectId: number,
+		tenderId: number,
 		folderId: number,
 		uploadType = FileUploadType.Project,
 		status: (progress: number, state: firebase.storage.TaskState) => void,
@@ -125,7 +125,7 @@ export class FileSystemService {
 	): Promise<DocumentInput> {
 		// devInfo('Gigover File Upload initiated');
 		console.log('Gigover File Upload initiated');
-		console.log('tenderId', tenderId);
+		console.log('tenderId', tenderId); //! here this becomes 0, which makes sense, since the default value is 0
 		console.log('projectId', projectId);
 
 		const fileName = uuid();

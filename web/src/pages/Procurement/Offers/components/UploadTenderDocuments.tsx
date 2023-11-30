@@ -90,7 +90,7 @@ const DropZone = ({
 	uploadType = FileUploadType.Project,
 	offerId = 0,
 	projectId = 0,
-	tenderId = 0,
+	tenderId,
 	externalId,
 	callback,
 	children
@@ -115,6 +115,7 @@ const DropZone = ({
 				acceptedFiles.forEach(async (file) => {
 					try {
 						setIsUploading(true);
+						console.log('tenderId, before uploadFile', tenderId);
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
 							offerId,
@@ -127,7 +128,7 @@ const DropZone = ({
 							},
 							externalId
 						);
-
+						console.log('response in DropZone', response);
 						let uploadedFile: { tenderDocument: TenderDocument } | undefined;
 
 						try {
