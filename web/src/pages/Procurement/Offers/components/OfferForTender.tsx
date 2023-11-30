@@ -27,7 +27,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 const Container = styled.div`
 	flex: 1 0;
 	height: 100%;
-	padding: ${(props) => props.theme.padding(3)};
+	padding: ${(props) => props.theme.padding(1)};
 	overflow-y: auto;
 `;
 
@@ -76,7 +76,7 @@ export const OfferForTender = (): JSX.Element => {
 										return (
 											<OfferCardStyled
 												key={o.offerId}
-												to={`/tender-offers/${o.tenderId}/${o.offerId}`}
+												to={`/tender/tender-offer/${o.tenderId}/${o.offerId}`}
 											>
 												<Flex>
 													<Box>
