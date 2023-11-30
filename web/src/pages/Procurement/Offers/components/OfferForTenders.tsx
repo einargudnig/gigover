@@ -6,6 +6,7 @@ import { useUserTenders } from '../../../../queries/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { Tender } from '../../../../models/Tender';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -48,6 +49,23 @@ export const OfferForTenders = (): JSX.Element => {
 		);
 	};
 
+	const shouldDeliver = (tender: Tender) => {
+		if (tender.delivery === 1) {
+			return (
+				<HStack>
+					<Text as={'b'}>Deliver to:</Text>
+					<Text color={'black'}>{tender.address}</Text>
+				</HStack>
+			);
+		}
+		return (
+			<HStack>
+				<Text as={'b'}>Address:</Text>
+				<Text color={'black'}>{tender.address}</Text>
+			</HStack>
+		);
+	};
+
 	return (
 		<>
 			<Text mb={'2'} fontSize={'xl'}>
@@ -69,7 +87,7 @@ export const OfferForTenders = (): JSX.Element => {
 								key={t.tenderId}
 							>
 								<Flex direction={'column'}>
-									<Grid templateColumns="repeat(2, 1fr)" gap={1}>
+									<Grid templateColumns="repeat(4, 1fr)" gap={1}>
 										<GridItem colSpan={2}>
 											<HStack>
 												<Text as={'b'}>Project:</Text>
@@ -79,6 +97,21 @@ export const OfferForTenders = (): JSX.Element => {
 												<Text as={'b'}>Description:</Text>
 												<Text color={'black'}>{t.description}</Text>
 											</HStack>
+										</GridItem>
+										<GridItem colSpan={1}>
+											<HStack>
+												<Text as={'b'}>Phone number:</Text>
+												<Text color={'black'}>{t.phoneNumber}</Text>
+											</HStack>
+											<HStack>
+												<Text as={'b'}>Tender status:</Text>
+												<Text color={'black'}>
+													{t.status === 1 ? 'Published' : 'Not published'}
+												</Text>
+											</HStack>
+										</GridItem>
+										<GridItem colSpan={1}>
+											<HStack>{shouldDeliver(t)}</HStack>
 										</GridItem>
 										<GridItem colSpan={1}>
 											{finishDateStatus(t.finishDate)}
