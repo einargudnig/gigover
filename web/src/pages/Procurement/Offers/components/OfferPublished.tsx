@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useParams, Link } from 'react-router-dom';
-import { Box, Button, Text, VStack, HStack } from '@chakra-ui/react';
-import { Page } from '../../../../components/Page';
+import { Box, Button, Text } from '@chakra-ui/react';
 import { PublishedOffer } from './PublishedOffer';
 import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
@@ -21,29 +20,23 @@ export const OfferPublished = (): JSX.Element => {
 
 	return (
 		<>
-			<Page title={'Published offer'} contentPadding={true}>
-				<VStack style={{ height: '100%' }}>
-					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-						<Container>
-							<PublishedOffer
-								offerData={offerData}
-								isOfferLoading={isLoading}
-								showResultsButtons={false}
-							/>
-							<Box marginTop={'2'}>
-								<OfferFile />
-							</Box>
-							<Box marginTop={'3'}>
-								<Link to={`/files/tender/offers/${offerId}`}>
-									<Button ml={'1'}>
-										<Text textColor={'black'}>View files</Text>
-									</Button>
-								</Link>
-							</Box>
-						</Container>
-					</HStack>
-				</VStack>
-			</Page>
+			<Container>
+				<PublishedOffer
+					offerData={offerData}
+					isOfferLoading={isLoading}
+					showResultsButtons={false}
+				/>
+				<Box marginTop={'2'}>
+					<OfferFile />
+				</Box>
+				<Box marginTop={'3'}>
+					<Link to={`/files/tender/offers/${offerId}`}>
+						<Button ml={'1'}>
+							<Text textColor={'black'}>View files</Text>
+						</Button>
+					</Link>
+				</Box>
+			</Container>
 		</>
 	);
 };

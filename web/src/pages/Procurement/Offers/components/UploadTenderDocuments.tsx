@@ -3,7 +3,7 @@ import { Text, VStack, Progress, useToast } from '@chakra-ui/react';
 import styled, { css } from 'styled-components';
 import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
-import { TenderDocumentByTenderOwner, TenderDocument } from '../../../../models/TenderDocument';
+import { TenderDocument } from '../../../../models/TenderDocument';
 import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { FileUploadType } from '../../../../models/FileUploadType';

@@ -71,7 +71,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 		{/* This is going to be 'bigger' and more complicated with the new changes
 				/tender is the parent route for the whole tender system.
-
 		*/}
 		<Route path={'tender'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
