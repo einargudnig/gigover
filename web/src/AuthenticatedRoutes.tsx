@@ -77,11 +77,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':tenderId'} element={<TenderPage />} />
 			<Route path={'client-answer'} element={<ClientAnswer />} />
 			<Route path={'create-bid'} element={<CreateBid />} />
-			<Route path={'tender-offers'} element={<OfferForTenders />}>
-				<Route path={':tenderId'} element={<OfferForTender />} />
-				{/* This route should show us a table with items that have had a published offer. */}
-				<Route path={':tenderId/:offerId'} element={<PublishedTender />} />
-			</Route>
+			<Route path={'tender-offers'} element={<OfferForTenders />} />
+			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
+			<Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} />
 			<Route path={'bidder-offers'} element={<BidderOffers />} />
 			<Route path={'bidder-tenders'} element={<BidderTenders />} />
 			{/* This is the page that the bidder sees, where he can open the offer */}

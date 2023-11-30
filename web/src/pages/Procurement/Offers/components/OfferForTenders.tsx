@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
-import { Center, Text, HStack } from '@chakra-ui/react';
+import { Center, Flex, Text, HStack, Grid, GridItem } from '@chakra-ui/react';
 import { useUserTenders } from '../../../../queries/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
@@ -14,7 +14,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;
-	margin-bottom: 8px;
+	margin-bottom: 4px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -26,14 +26,9 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-const ProcurementCardTitle = styled.div`
-	display: flex;
-	justify-content: space-between;
-`;
-
 export const OfferForTenders = (): JSX.Element => {
 	const { data: userTenders, isLoading } = useUserTenders();
-
+	console.log('userTenders', userTenders);
 	const finishDateStatus = (finishDate: number) => {
 		const res = handleFinishDate(finishDate);
 
@@ -69,22 +64,27 @@ export const OfferForTenders = (): JSX.Element => {
 						.slice()
 						.reverse()
 						.map((t) => (
-							<ProcurementCardStyled to={`${t.tenderId}`} key={t.tenderId}>
-								<ProcurementCardTitle>
-									<div>
-										<h3>
-											<b>Project:</b> {t.projectName}
-										</h3>
-										<div style={{ marginTop: -16 }}>
-											<b>Description:</b> {t.description}
-										</div>
-									</div>
-								</ProcurementCardTitle>
-								<div>
-									<p style={{ marginBottom: -16, fontSize: 14 }}>
-										{finishDateStatus(t.finishDate)}
-									</p>
-								</div>
+							<ProcurementCardStyled
+								to={`/tender/tender-offer/${t.tenderId}`}
+								key={t.tenderId}
+							>
+								<Flex direction={'column'}>
+									<Grid templateColumns="repeat(2, 1fr)" gap={1}>
+										<GridItem colSpan={2}>
+											<HStack>
+												<Text as={'b'}>Project:</Text>
+												<Text color={'black'}>{t.projectName}</Text>
+											</HStack>
+											<HStack>
+												<Text as={'b'}>Description:</Text>
+												<Text color={'black'}>{t.description}</Text>
+											</HStack>
+										</GridItem>
+										<GridItem colSpan={1}>
+											{finishDateStatus(t.finishDate)}
+										</GridItem>
+									</Grid>
+								</Flex>
 							</ProcurementCardStyled>
 						))}
 				</>
