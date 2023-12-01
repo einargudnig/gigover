@@ -107,10 +107,13 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 				{showDelete ? (
 					<VStack justify={'center'} align={'center'}>
 						<ConfirmDialog
-							header={'Delete file'}
+							header={`Delete file: ${file.name}`}
 							setIsOpen={setDialogOpen}
 							callback={async (b) => {
 								if (b) {
+									console.log(
+										'Did I press the delete? in teh CONfirmation dialog?'
+									);
 									await deleteTenderDocumentAsync(file);
 								}
 								setDialogOpen(false);
@@ -122,6 +125,9 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 								colorScheme={'red'}
 								size={'sm'} // does this work?
 								icon={<TrashIcon color={'white'} />}
+								onClick={() => {
+									setDialogOpen(true);
+								}}
 							/>
 
 							<Text color={'black'} fontSize={'l'}>

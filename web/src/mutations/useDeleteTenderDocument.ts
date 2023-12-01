@@ -16,6 +16,7 @@ export const useDeleteTenderDocument = () => {
 	return useMutation<TenderDocumentDeleteResponse, AxiosError, TenderDocumentByTenderOwner>(
 		async (variables) => {
 			try {
+				console.log('variable in mutation: ', variables);
 				const response = await axios.post(
 					ApiService.removeTenderDocumentByTenderOwner(variables.id),
 					variables,
@@ -29,7 +30,7 @@ export const useDeleteTenderDocument = () => {
 				return response.data;
 			} catch (e) {
 				devError(e);
-				throw new Error('Could not upload image');
+				throw new Error('Could not delete document`');
 			}
 		}
 	);
