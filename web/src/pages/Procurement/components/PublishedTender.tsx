@@ -321,7 +321,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				) : (
 					<EmptyState
 						title={'No files uploaded'}
-						text={'Upload files to this offer to share them with the client'}
+						text={'Upload files to this tender to share them with the bidders'}
 					/>
 				)}
 			</div>

@@ -75,7 +75,7 @@ export const TenderPage = (): JSX.Element => {
 									<EmptyState
 										title={'No files uploaded'}
 										text={
-											'Upload files to this offer to share them with the client'
+											'You have not added any files to this tender. You can add files by clicking the Upload files button'
 										}
 									/>
 								)}
