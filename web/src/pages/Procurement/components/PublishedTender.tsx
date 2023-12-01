@@ -39,8 +39,6 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const bidders = tender?.bidders;
 	const tenderDocuments = tender?.documents;
 
-	console.log('tender', tender);
-
 	const getUniqueBidders = useMemo(() => {
 		return () => {
 			const uniqueBidders: Bidder[] = [];

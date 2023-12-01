@@ -4,24 +4,27 @@ import { devError } from '../utils/ConsoleUtils';
 import { ApiService } from '../services/ApiService';
 import { TenderDocumentByTenderOwner } from '../models/TenderDocument';
 
-export interface DocumentInput
-	extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
+// export interface DocumentInput extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> { }
+
+interface TenderDocumentDeleteResponse {
+	errorText: 'OK';
+}
 
 export const useDeleteTenderDocument = () => {
 	const client = useQueryClient();
 
-	return useMutation<TenderDocumentByTenderOwner, AxiosError, DocumentInput>(
+	return useMutation<TenderDocumentDeleteResponse, AxiosError, TenderDocumentByTenderOwner>(
 		async (variables) => {
 			try {
-				const response = await axios.post<TenderDocumentByTenderOwner>(
-					ApiService.removeTenderDocumentByTenderOwner,
+				const response = await axios.post(
+					ApiService.removeTenderDocumentByTenderOwner(variables.id),
 					variables,
 					{
 						withCredentials: true
 					}
 				);
 
-				await client.invalidateQueries(ApiService.getTenderById(variables.tenderId));
+				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
 
 				return response.data;
 			} catch (e) {

@@ -5,7 +5,6 @@ import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 import { Heading, VStack } from '@chakra-ui/react';
-// import { }
 
 export const PublishedTender = (): JSX.Element => {
 	// ! This is the page for the tender owner to see the published offers

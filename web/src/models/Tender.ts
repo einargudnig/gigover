@@ -39,7 +39,7 @@ export type DocumentTypes = DocumentTypeImage | DocumentTypeVideo | DocumentType
 export interface TenderDocument {
 	id: number;
 	offerId: number;
-	tenderId?: number;
+	tenderId: number;
 	name: string;
 	type: DocumentTypes;
 	url: string;
@@ -74,7 +74,7 @@ export interface GetOffer {
 	statusText: string;
 	tenderId: number;
 	userName: string;
-	documents: OfferDocument[];
+	documents: TenderDocument[];
 }
 
 export interface GetOfferItem {
@@ -100,14 +100,4 @@ export interface Bidder {
 	email: string;
 	status: number;
 	offerCount: number;
-}
-
-export interface OfferDocument {
-	id: number;
-	offerId: number;
-	name: string;
-	type: DocumentTypes;
-	url: string;
-	bytes: number;
-	created: number; // Timestamp
 }

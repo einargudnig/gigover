@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { CardBase } from '../../../../components/CardBase';
@@ -14,6 +14,9 @@ import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../../Roadmap/GantChartDates';
 import { DownloadIcon } from '../../../../components/icons/DownloadIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
+
+import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { useDeleteTenderDocument } from '../../../../mutations/useDeleteTenderDocument';
 
 // OtherFile means files for Tenders and Offers.
 // I think I should just make a duplicate of the File.tsx so that I can more easily use it in two different places.
@@ -71,9 +74,10 @@ export const GetFileLink = (file: TenderDocument) => {
 
 export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): JSX.Element => {
 	const Icon = OtherFileIconForType(file.type);
+	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
+	const { mutateAsync: deleteTenderDocumentAsync } = useDeleteTenderDocument(); // for delete file on Tender
 	// const href = GetFileLink(file);
 
-	// const showDelete = ;
 	return (
 		<FileStyledNoLink>
 			<HStack spacing={8}>
@@ -83,7 +87,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					<Heading m={0} mb={0} as={'h4'} size={'sm'}>
 						{file.name}
 					</Heading>
-					<Text m={0}>Offer file</Text>
+					<Text m={0}>File from file storage</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
@@ -102,16 +106,28 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 				</VStack>
 				{showDelete ? (
 					<VStack justify={'center'} align={'center'}>
-						<IconButton
-							aria-label={'Download'}
-							colorScheme={'red'}
-							size={'sm'} // does this work?
-							icon={<TrashIcon color={'white'} />}
-						/>
+						<ConfirmDialog
+							header={'Delete file'}
+							setIsOpen={setDialogOpen}
+							callback={async (b) => {
+								if (b) {
+									await deleteTenderDocumentAsync(file);
+								}
+								setDialogOpen(false);
+							}}
+							isOpen={dialogOpen}
+						>
+							<IconButton
+								aria-label={'Download'}
+								colorScheme={'red'}
+								size={'sm'} // does this work?
+								icon={<TrashIcon color={'white'} />}
+							/>
 
-						<Text color={'black'} fontSize={'l'}>
-							Delete
-						</Text>
+							<Text color={'black'} fontSize={'l'}>
+								Delete
+							</Text>
+						</ConfirmDialog>
 					</VStack>
 				) : null}
 			</HStack>

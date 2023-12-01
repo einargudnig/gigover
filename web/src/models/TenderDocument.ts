@@ -17,6 +17,7 @@ export interface TenderDocument {
 
 export interface TenderDocumentByTenderOwner {
 	id: number;
+	offerId: number;
 	tenderId: number;
 	name: string;
 	type: DocumentTypes;

@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { ApiService } from '../services/ApiService';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { devError } from '../utils/ConsoleUtils';
 import { TenderDocumentByTenderOwner } from '../models/TenderDocument'; //? Maybe I need to update this?
 
@@ -8,6 +8,8 @@ export interface DocumentInput
 	extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
 
 export const useAddTenderDocumentByTenderOwner = () => {
+	const client = useQueryClient();
+
 	return useMutation<{ tenderDocument: TenderDocumentByTenderOwner }, AxiosError, DocumentInput>(
 		async (variables) => {
 			try {
@@ -18,6 +20,8 @@ export const useAddTenderDocumentByTenderOwner = () => {
 						withCredentials: true
 					}
 				);
+
+				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
 
 				return response.data;
 			} catch (e) {
