@@ -48,7 +48,7 @@ export const OfferFile = (): JSX.Element => {
 									b.created && a.created ? b.created - a.created : -1
 								)
 								.map((p, pIndex) => (
-									<OtherGigoverFile key={pIndex} file={p} />
+									<OtherGigoverFile key={pIndex} showDelete={false} file={p} />
 								))}
 						</VStack>
 					) : (

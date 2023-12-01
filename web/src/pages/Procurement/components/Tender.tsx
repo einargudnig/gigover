@@ -5,9 +5,11 @@ import { useGetTenderById } from '../../../queries/useGetTenderById';
 import { useParams } from 'react-router-dom';
 import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { Text } from '@chakra-ui/react';
+import { Heading, Text, VStack } from '@chakra-ui/react';
 import { Center } from '../../../components/Center';
 import { PublishedTender } from './PublishedTender';
+import { EmptyState } from '../../../components/empty/EmptyState';
+import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 // import { TenderFile } from '../../Files/new/components/TenderFile';
 
 export const TenderPage = (): JSX.Element => {
@@ -15,6 +17,7 @@ export const TenderPage = (): JSX.Element => {
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: Tender | undefined = data?.tender;
 	// console.log('TenderPage tender: ', tender);
+	const tenderDocuments = tender?.documents;
 
 	const isTenderPublished = tender?.status === 1;
 	// const isTenderPublished = false;
@@ -45,7 +48,38 @@ export const TenderPage = (): JSX.Element => {
 									I want to get them from Tender Owner for this Tender
 									I can either re-use the component or create a new one.
 							*/}
-							{/* <TenderFile /> */}
+							<div>
+								{tenderDocuments!.length > 0 ? (
+									<VStack
+										style={{ width: '100%' }}
+										align={'stretch'}
+										spacing={4}
+										mt={4}
+									>
+										<Heading size={'md'}>
+											Files you added to this Tender
+										</Heading>
+										{tenderDocuments!
+											.sort((a, b) =>
+												b.created && a.created ? b.created - a.created : -1
+											)
+											.map((p, pIndex) => (
+												<OtherGigoverFile
+													key={pIndex}
+													showDelete={true}
+													file={p}
+												/>
+											))}
+									</VStack>
+								) : (
+									<EmptyState
+										title={'No files uploaded'}
+										text={
+											'Upload files to this offer to share them with the client'
+										}
+									/>
+								)}
+							</div>
 						</>
 					)}
 				</div>

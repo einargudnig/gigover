@@ -13,11 +13,13 @@ import { TenderDocument } from '../../../../models/Tender';
 import moment from 'moment';
 import { GANT_CHART_FORMAT } from '../../../Roadmap/GantChartDates';
 import { DownloadIcon } from '../../../../components/icons/DownloadIcon';
+import { TrashIcon } from '../../../../components/icons/TrashIcon';
 
 // OtherFile means files for Tenders and Offers.
 // I think I should just make a duplicate of the File.tsx so that I can more easily use it in two different places.
 // Ultimately I want to make the file component more generic so that I can use it in more places.
 interface OtherFileProps {
+	showDelete: boolean;
 	file: TenderDocument;
 }
 export const OtherFileIconForType = (fileType: DocumentTypes) => {
@@ -67,10 +69,11 @@ export const GetFileLink = (file: TenderDocument) => {
 	return href;
 };
 
-export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
+export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): JSX.Element => {
 	const Icon = OtherFileIconForType(file.type);
 	// const href = GetFileLink(file);
 
+	// const showDelete = ;
 	return (
 		<FileStyledNoLink>
 			<HStack spacing={8}>
@@ -97,6 +100,20 @@ export const OtherGigoverFile = ({ file }: OtherFileProps): JSX.Element => {
 						Download
 					</Text>
 				</VStack>
+				{showDelete ? (
+					<VStack justify={'center'} align={'center'}>
+						<IconButton
+							aria-label={'Download'}
+							colorScheme={'red'}
+							size={'sm'} // does this work?
+							icon={<TrashIcon color={'white'} />}
+						/>
+
+						<Text color={'black'} fontSize={'l'}>
+							Delete
+						</Text>
+					</VStack>
+				) : null}
 			</HStack>
 		</FileStyledNoLink>
 	);

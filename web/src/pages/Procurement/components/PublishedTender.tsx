@@ -317,7 +317,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						{tenderDocuments!
 							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 							.map((p, pIndex) => (
-								<OtherGigoverFile key={pIndex} file={p} />
+								<OtherGigoverFile key={pIndex} showDelete={true} file={p} />
 							))}
 					</VStack>
 				) : (

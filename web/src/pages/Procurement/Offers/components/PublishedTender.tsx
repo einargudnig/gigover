@@ -27,7 +27,7 @@ export const PublishedTender = (): JSX.Element => {
 						{offerDocuments!
 							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 							.map((p, pIndex) => (
-								<OtherGigoverFile key={pIndex} file={p} />
+								<OtherGigoverFile key={pIndex} showDelete={false} file={p} />
 							))}
 					</VStack>
 				) : (
