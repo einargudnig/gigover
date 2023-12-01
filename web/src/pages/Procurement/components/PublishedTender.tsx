@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { TenderItem, Bidder } from '../../../models/Tender';
 import { useParams, Link } from 'react-router-dom';
 import {
@@ -17,21 +17,29 @@ import {
 	Tbody,
 	Th,
 	Tooltip,
-	Button
+	Button,
+	Heading
 } from '@chakra-ui/react';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { InviteButton } from './InviteButton';
+import { UploadTenderDocuments } from '../Offers/components/UploadTenderDocuments';
+import { EmptyState } from '../../../components/empty/EmptyState';
+import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 
 export const PublishedTender = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
+	const [upload, setUpload] = useState(false);
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
 	// const finishDateStatus = false;
 	const bidders = tender?.bidders;
+	const tenderDocuments = tender?.documents;
+
+	console.log('tender', tender);
 
 	const getUniqueBidders = useMemo(() => {
 		return () => {
@@ -49,13 +57,23 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	}, [bidders]);
 
 	const uniqueBidders = getUniqueBidders();
-	console.log('uniqueBidders', uniqueBidders);
+	// console.log('uniqueBidders', uniqueBidders);
 	const tenderDescForEmail = tender?.description;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	return (
 		<>
+			{upload && (
+				<UploadTenderDocuments
+					onClose={() => setUpload(false)}
+					onComplete={(status) => {
+						console.log('status', status);
+					}}
+					tenderId={Number(tenderId)}
+				/>
+			)}
+
 			<div style={{ width: '100%' }}>
 				<Flex direction={'column'}>
 					<Box
@@ -271,6 +289,12 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				<Spacer />
 				<Flex>
 					<Box>
+						<Button onClick={() => setUpload(true)} ml={'1'}>
+							Upload files
+						</Button>
+					</Box>
+					<Spacer />
+					<Box>
 						<Button ml={'1'}>
 							<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
 						</Button>
@@ -279,12 +303,30 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					<Box>
 						<Button ml={'1'}>
 							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
-								View files
+								View files from offers
 							</Link>
 						</Button>
 					</Box>
 				</Flex>
 			</Flex>
+
+			<div>
+				{tenderDocuments!.length > 0 ? (
+					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
+						<Heading size={'md'}>Files you added to this Tender</Heading>
+						{tenderDocuments!
+							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
+							.map((p, pIndex) => (
+								<OtherGigoverFile key={pIndex} file={p} />
+							))}
+					</VStack>
+				) : (
+					<EmptyState
+						title={'No files uploaded'}
+						text={'Upload files to this offer to share them with the client'}
+					/>
+				)}
+			</div>
 		</>
 	);
 };

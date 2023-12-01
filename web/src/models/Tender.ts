@@ -39,6 +39,7 @@ export type DocumentTypes = DocumentTypeImage | DocumentTypeVideo | DocumentType
 export interface TenderDocument {
 	id: number;
 	offerId: number;
+	tenderId?: number;
 	name: string;
 	type: DocumentTypes;
 	url: string;

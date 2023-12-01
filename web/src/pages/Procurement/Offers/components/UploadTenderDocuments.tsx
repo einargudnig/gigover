@@ -4,7 +4,8 @@ import styled, { css } from 'styled-components';
 import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
 import { TenderDocument } from '../../../../models/TenderDocument';
-import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
+// import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
+import { useAddTenderDocumentByTenderOwner } from '../../../../mutations/useAddTenderDocumentByTenderOwner';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { FileUploadType } from '../../../../models/FileUploadType';
 import { FilterIcon } from '../../../../components/icons/FilterIcon';
@@ -96,7 +97,8 @@ const DropZone = ({
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
-	const { mutateAsync } = useAddTenderDocument();
+	// const { mutateAsync } = useAddTenderDocument();
+	const { mutateAsync } = useAddTenderDocumentByTenderOwner();
 
 	const toast = useToast();
 

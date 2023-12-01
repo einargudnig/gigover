@@ -29,7 +29,7 @@ import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-	console.log('Offer in publishedOffer component', { offerData });
+	// console.log('Offer in publishedOffer component', { offerData });
 	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;

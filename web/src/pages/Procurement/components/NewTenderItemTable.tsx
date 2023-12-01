@@ -200,7 +200,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					<Tr>
 						<Th width={'20%'}>
 							<HStack>
-								<p>Number</p>
+								<Text>Number</Text>
 								<ImportantIcon size={20} />
 							</HStack>
 						</Th>
@@ -208,7 +208,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						<Tooltip label="Description of a item">
 							<Th width={'20%'}>
 								<HStack>
-									<p>Description</p>
+									<Text>Description</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
@@ -217,7 +217,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						<Tooltip label="Volume">
 							<Th width={'20%'}>
 								<HStack>
-									<p color={'black'}>Volume</p>
+									<Text>Volume</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
@@ -226,14 +226,14 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						<Tooltip label="Unit of measurement. For example: m2, kg, t">
 							<Th width={'20%'}>
 								<HStack>
-									<p>Unit</p>
+									<Text>Unit</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
 						</Tooltip>
 
 						<Th width={'20%'}>
-							<p>Actions</p>
+							<Text>Actions</Text>
 						</Th>
 					</Tr>
 				</Thead>
@@ -482,17 +482,16 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					<Box>
 						<Button ml={'1'}>
 							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
-								View files
+								View files from offers
 							</Link>
 						</Button>
 					</Box>
 					<Spacer />
-					{/* // ! I need to figure out if this is possible here. Can the Tender owner add files?  */}
+
 					<Box>
 						<Button onClick={() => setUpload(true)} ml={'1'}>
 							Upload files
 						</Button>
-						{/* <Button ml={'1'}>Upload files</Button> */}
 					</Box>
 					<Spacer />
 					<Box>
