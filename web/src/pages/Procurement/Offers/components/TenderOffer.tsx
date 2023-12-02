@@ -37,6 +37,7 @@ export const TenderOffer = (): JSX.Element => {
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
 	const tender: Tender | undefined = tenderData?.tender;
+	// console.log('tender', tender);
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	const toast = useToast();

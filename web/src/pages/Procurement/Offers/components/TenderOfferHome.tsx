@@ -119,7 +119,7 @@ export const TenderOfferHome = (): JSX.Element => {
 									spacing={4}
 									mt={4}
 								>
-									<Heading size={'md'}>Files added to this Tender</Heading>
+									<Heading size={'md'}>Tender owner added these files</Heading>
 									{tenderDocuments!
 										.sort((a, b) =>
 											b.created && a.created ? b.created - a.created : -1
