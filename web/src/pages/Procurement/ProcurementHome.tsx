@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Text, HStack, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Text, HStack, Flex, Grid, GridItem, Spacer, Box, Button } from '@chakra-ui/react';
 import { Tender } from '../../models/Tender';
 import { handleFinishDate } from '../../utils/HandleFinishDate';
 import { Center } from '../../components/Center';
@@ -9,6 +9,8 @@ import { useUserTenders } from '../../queries/useUserTenders';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../utils/StringUtils';
 import { NoProcurementFound } from '../../components/empty/NoProcurementFound';
+import { PlusIcon } from '../../components/icons/PlusIcon';
+import { ModalContext } from '../../context/ModalContext';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -27,6 +29,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 `;
 
 export const ProcurementHome = (): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useUserTenders();
 
 	const finishDateStatus = (finishDate: number) => {
@@ -67,9 +70,22 @@ export const ProcurementHome = (): JSX.Element => {
 
 	return (
 		<>
-			<Text mb={'2'}>
-				This tab should be used for creating, managing, and reviewing tenders.
-			</Text>
+			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
+				<Box>
+					<Text mb={'2'}>
+						This tab should be used for creating, managing, and reviewing tenders.
+					</Text>
+				</Box>
+				<Spacer />
+				<Box>
+					<Button
+						onClick={() => setModalContext({ addTender: { tender: undefined } })}
+						leftIcon={<PlusIcon />}
+					>
+						New Tender
+					</Button>
+				</Box>
+			</Flex>
 
 			{isLoading ? (
 				<Center>

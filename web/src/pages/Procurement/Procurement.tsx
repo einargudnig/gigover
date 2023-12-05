@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { Outlet, NavLink } from 'react-router-dom';
-import { PlusIcon } from '../../components/icons/PlusIcon';
-import { ModalContext } from '../../context/ModalContext';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -14,7 +13,9 @@ const Container = styled.div`
 `;
 
 export const Procurement = (): JSX.Element => {
-	const [, setModalContext] = useContext(ModalContext);
+	const location = useLocation();
+
+	const isTenderRoute = location.pathname === '/tender';
 
 	// const notifications = {
 	// 	unread: 3
@@ -28,6 +29,11 @@ export const Procurement = (): JSX.Element => {
 				actions={
 					<>
 						<HStack>
+							{isTenderRoute ? null : (
+								<NavLink to={'/tender'}>
+									<Button>Tender</Button>
+								</NavLink>
+							)}
 							{/* <NavLink to={'client-answer'}>
 								{({ isActive }) => (
 									<Button
@@ -144,12 +150,12 @@ export const Procurement = (): JSX.Element => {
 						</HStack>
 
 						{/* by adding addTender as a parameter to the setModalContext I'm  `selecting` what modal to use. */}
-						<Button
+						{/* <Button
 							onClick={() => setModalContext({ addTender: { tender: undefined } })}
 							leftIcon={<PlusIcon />}
 						>
 							New Tender
-						</Button>
+						</Button> */}
 					</>
 				}
 			>
