@@ -72,7 +72,7 @@ export const ProcurementHome = (): JSX.Element => {
 		<>
 			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
 				<Box>
-					<Text mb={'2'}>
+					<Text>
 						This tab should be used for creating, managing, and reviewing tenders.
 					</Text>
 				</Box>

@@ -101,3 +101,39 @@ export interface Bidder {
 	status: number;
 	offerCount: number;
 }
+
+// This is for the create-bid
+// i will keep this in Tender context for now, since it's linked together in the app
+// Maybe I'll move it later...
+export interface Bid {
+	bidId: number;
+	description: string;
+	address: string;
+	delivery: number; // 1 - 0 1 is delivery, 0 is pickup
+	finishDate: number; // Timestamp -> 'Bid valid through'
+	bidder: BidBidder;
+	client: BidClient;
+}
+
+// This is a weird name?
+// to differentiate between the bidder in the tender and the bidder in the bid
+
+export interface BidBidder {
+	bidderId: number;
+	name: string;
+	email: string;
+	company: string;
+	address: string;
+	phoneNumber: string;
+	companyId: number;
+}
+
+// This the client in the bid portion, not the tender (bidder + tender owner)
+export interface BidClient {
+	clientId: number;
+	clientNumber: string;
+	address: string;
+	phoneNumber: string;
+	email: string;
+	other: string;
+}

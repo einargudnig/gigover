@@ -64,7 +64,7 @@ export const Procurement = (): JSX.Element => {
 										)}
 									</Button>
 								)}
-							</NavLink>
+							</NavLink>  */}
 							<NavLink to={'create-bid'}>
 								{({ isActive }) => (
 									<Button
@@ -74,7 +74,7 @@ export const Procurement = (): JSX.Element => {
 										Create Bid
 									</Button>
 								)}
-							</NavLink> */}
+							</NavLink>
 							<NavLink to={'tender-offers'}>
 								{({ isActive }) => (
 									<Button
