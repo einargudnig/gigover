@@ -7,6 +7,7 @@ import { ProjectFolder } from '../models/ProjectFolder';
 import { ProjectImage } from '../models/ProjectImage';
 import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 import { Tender } from '../models/Tender';
+import { Bid } from '../models/Tender';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -68,6 +69,9 @@ export interface IModalContext {
 	};
 	addTender?: {
 		tender?: Tender;
+	};
+	modifyBid?: {
+		bid?: Bid;
 	};
 }
 

@@ -102,7 +102,7 @@ export interface Bidder {
 	offerCount: number;
 }
 
-// This is for the create-bid
+// ! This is for the create-bid
 // i will keep this in Tender context for now, since it's linked together in the app
 // Maybe I'll move it later...
 export interface Bid {
@@ -116,8 +116,7 @@ export interface Bid {
 }
 
 // This is a weird name?
-// to differentiate between the bidder in the tender and the bidder in the bid
-
+//!  to differentiate between the bidder in the tender and the bidder in the bid
 export interface BidBidder {
 	bidderId: number;
 	name: string;
