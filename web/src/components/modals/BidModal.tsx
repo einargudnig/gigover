@@ -1,38 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Bid } from '../../models/Tender';
-import { Checkbox, Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import { FormActions } from '../FormActions';
-import { useCloseModal } from '../../hooks/useCloseModal';
-import { useQueryClient } from 'react-query';
-import { DatePicker } from '../forms/DatePicker';
-import { Controller, useForm } from 'react-hook-form';
+// import { Checkbox, Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+// import { FormActions } from '../FormActions';
+// import { useCloseModal } from '../../hooks/useCloseModal';
+// import { useQueryClient } from 'react-query';
+// import { DatePicker } from '../forms/DatePicker';
+// import { Controller, useForm } from 'react-hook-form';
 // import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
-import { ApiService } from '../../services/ApiService';
-import { devError } from '../../utils/ConsoleUtils';
-import { LoadingSpinner } from '../LoadingSpinner';
+// import { ApiService } from '../../services/ApiService';
+// import { devError } from '../../utils/ConsoleUtils';
+// import { LoadingSpinner } from '../LoadingSpinner';
 
 interface BidModalProps {
 	bid?: Bid;
 }
 
 export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
-	const closeModal = useCloseModal();
-	const queryClient = useQueryClient();
+	console.log(bid);
+	// const closeModal = useCloseModal();
+	// const queryClient = useQueryClient();
 
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, handleSubmit, control } = useForm<Bid>({
-		defaultValues: bid,
-		mode: 'onBlur'
-	});
+	// const { register, handleSubmit, control } = useForm<Bid>({
+	// 	defaultValues: bid,
+	// 	mode: 'onBlur'
+	// });
 
 	// For the checkbox
-	const [isChecked, setIsChecked] = useState(bid!.delivery);
-	const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const newValue = event.target.checked ? 1 : 0;
-		setIsChecked(newValue);
-	};
+	// const [isChecked, setIsChecked] = useState(bid!.delivery);
+	// const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// 	const newValue = event.target.checked ? 1 : 0;
+	// 	setIsChecked(newValue);
+	// };
 
-	const onSubmit = handleSubmit();
+	// const onSubmit = handleSubmit();
 	// async ({ description, terms, finishDate, address, phoneNumber }) => {
 	// try {
 	// await modify({
@@ -55,17 +56,16 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 
 	return (
 		<div>
+			BidForm
 			{/* {isError && (
 				<>
-
 					<p>{error?.errorText}</p>
 					<small>{error?.errorCode}</small>
 				</>
 			)} */}
-			<form onSubmit={onSubmit}>
+			{/* <form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
-					<Heading size={'md'}>Project</Heading>
-					{/* I intentionally lef the project and task out of the modify phase */}
+					<Heading size={'md'}>Create Bid</Heading>
 					<FormControl id={'description'}>
 						<FormLabel>Procurement Description</FormLabel>
 						<Input
@@ -140,7 +140,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 						onSubmit={onSubmit}
 					/>
 				</VStack>
-			</form>
+			</form> */}
 		</div>
 	);
 };

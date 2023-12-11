@@ -47,12 +47,12 @@ interface DropZoneProps {
 }
 
 export const DropZone = ({
-	uploadType = FileUploadType.Project,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	offerId = 0,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	tenderId = 0,
 	projectId,
+	uploadType = FileUploadType.Project,
 	folderId,
 	externalId,
 	callback,

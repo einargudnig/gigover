@@ -84,6 +84,8 @@ export class FileSystemService {
 
 	async updateDoc(
 		file: File,
+		offerId: number,
+		tenderId: number,
 		projectId: number,
 		fileId: string,
 		fileName: string,
@@ -91,9 +93,7 @@ export class FileSystemService {
 		downloadUrl: string,
 		uploadType: FileUploadType,
 		bytes: number,
-		externalId: number | null,
-		offerId: number,
-		tenderId: number
+		externalId: number | null
 	) {
 		const fileType: FileType = this.getFileTypeForFile(file);
 
@@ -116,8 +116,8 @@ export class FileSystemService {
 	async uploadFile(
 		file: File,
 		offerId: number, // why null?
-		projectId: number,
 		tenderId: number,
+		projectId: number,
 		folderId: number,
 		uploadType = FileUploadType.Project,
 		status: (progress: number, state: firebase.storage.TaskState) => void,
@@ -154,6 +154,8 @@ export class FileSystemService {
 
 					await this.updateDoc(
 						file,
+						offerId,
+						tenderId,
 						projectId,
 						fileName,
 						originalFileName,
@@ -161,9 +163,7 @@ export class FileSystemService {
 						downloadURL,
 						uploadType,
 						file.size,
-						externalId || null,
-						offerId,
-						tenderId
+						externalId || null
 					);
 
 					const currentFileType = this.getFileTypeForFile(file);
