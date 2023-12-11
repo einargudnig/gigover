@@ -90,8 +90,8 @@ export const FilesUi = ({ files, title, projectId }) => {
 				) : (
 					<DropZone
 						offerId={0}
-						projectId={projectId}
 						tenderId={0}
+						projectId={projectId}
 						folderId={folderId ? parseInt(folderId) : undefined}
 					>
 						{({ isDragActive, isUploading }) => (

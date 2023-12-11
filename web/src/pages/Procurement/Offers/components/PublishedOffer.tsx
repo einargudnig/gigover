@@ -41,7 +41,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 	const time = offer?.finishDate;
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date;
-
 	// const finishDateStatus = true;
 
 	const handleAccept = () => {
@@ -328,7 +327,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						<Box>
 							{showResultsButtons ? (
 								<>
-									{finishDateStatus ? (
+									{!finishDateStatus ? (
 										<Text>
 											You cannot answer offers until the finish date has
 											passed.

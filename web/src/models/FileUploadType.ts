@@ -3,5 +3,7 @@ export enum FileUploadType {
 	Project = 'Project',
 	Task = 'Task',
 	Comment = 'Comment',
-	Folder = 'Folder'
+	Folder = 'Folder',
+	Tender = 'Tender',
+	Offer = 'Offer'
 }

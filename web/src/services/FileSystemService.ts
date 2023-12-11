@@ -38,7 +38,6 @@ export class FileSystemService {
 	}
 
 	assertProjectAccess(projects: Project[], projectId: number) {
-		// How does this tie in to the uploading of files for tender and offers?
 		const foundProject = projects.find((p) => p.projectId === projectId);
 
 		if (!foundProject) {
@@ -125,7 +124,7 @@ export class FileSystemService {
 	): Promise<DocumentInput> {
 		// devInfo('Gigover File Upload initiated');
 		console.log('Gigover File Upload initiated');
-		console.log('tenderId', tenderId); //! here this becomes 0, which makes sense, since the default value is 0
+		console.log('tenderId', tenderId);
 		console.log('projectId', projectId);
 
 		const fileName = uuid();

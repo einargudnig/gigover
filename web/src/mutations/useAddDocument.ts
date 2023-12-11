@@ -7,12 +7,12 @@ import { ProjectImage } from '../models/ProjectImage';
 export interface DocumentInput
 	extends Pick<
 		ProjectImage,
-		| 'projectId'
-		| 'folderId'
 		| 'offerId'
 		| 'tenderId'
-		| 'name'
+		| 'projectId'
 		| 'type'
+		| 'folderId'
+		| 'name'
 		| 'url'
 		| 'bytes'
 		| 'taskId'

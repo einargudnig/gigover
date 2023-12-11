@@ -34,7 +34,12 @@ export const UploadTenderDocuments = ({ onClose, tenderId }: UploadModalProps): 
 					offer.
 				</Text>
 				<VStack mb={-6} align={'stretch'}>
-					<DropZone offerId={0} projectId={0} tenderId={tenderId} />
+					<DropZone
+						offerId={0}
+						tenderId={tenderId}
+						projectId={0}
+						uploadType={FileUploadType.Tender}
+					/>
 					<FormActions
 						hideSubmitButton={true}
 						submitText={'Upload'}
@@ -74,8 +79,8 @@ const DropZoneContainer = styled.div<{
 
 interface DropZoneProps {
 	offerId: number;
-	projectId: number;
 	tenderId: number;
+	projectId: number;
 	uploadType?: FileUploadType;
 	externalId?: number;
 	callback?: (tenderDocument?: TenderDocument, file?: File) => void;
@@ -88,10 +93,10 @@ interface DropZoneProps {
 }
 
 const DropZone = ({
-	uploadType = FileUploadType.Project,
 	offerId = 0,
-	projectId = 0,
 	tenderId,
+	projectId = 0,
+	uploadType = FileUploadType.Project,
 	externalId,
 	callback,
 	children
@@ -121,8 +126,8 @@ const DropZone = ({
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
 							offerId,
-							projectId,
 							tenderId,
+							projectId,
 							createdFolder ?? 0,
 							uploadType!,
 							(status: number) => {

@@ -103,8 +103,8 @@ export const DropZone = ({
 						setIsUploading(true);
 						const response = await fileService.uploadFile(
 							file,
-							(offerId = 0),
-							(tenderId = 0),
+							offerId,
+							tenderId,
 							projectId,
 							createdFolder ?? folderId ?? 0,
 							uploadType!,

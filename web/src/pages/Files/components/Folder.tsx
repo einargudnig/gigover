@@ -51,8 +51,8 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 	return (
 		<DropZone
 			offerId={0}
-			projectId={project.projectId}
 			tenderId={0}
+			projectId={project.projectId}
 			uploadType={FileUploadType.Project}
 		>
 			{({ isDragActive, isUploading }) => (
@@ -151,6 +151,8 @@ export const ProjectFolderComponent = ({
 			</div>
 
 			<DropZone
+				offerId={0}
+				tenderId={0}
 				projectId={projectId}
 				folderId={folder.folderId}
 				uploadType={FileUploadType.Project}

@@ -33,7 +33,12 @@ export const UploadCertifications = ({ onClose, offerId }: UploadModalProps): JS
 					offer.
 				</Text>
 				<VStack mb={-6} align={'stretch'}>
-					<DropZone offerId={offerId} projectId={0} tenderId={0} />
+					<DropZone
+						offerId={offerId}
+						tenderId={0}
+						projectId={0}
+						uploadType={FileUploadType.Offer}
+					/>
 					<FormActions
 						hideSubmitButton={true}
 						submitText={'Upload'}
@@ -87,10 +92,10 @@ interface DropZoneProps {
 }
 
 const DropZone = ({
-	uploadType = FileUploadType.Project,
 	offerId = 0,
-	projectId = 0,
 	tenderId = 0,
+	projectId = 0,
+	uploadType = FileUploadType.Project,
 	externalId,
 	callback,
 	children
