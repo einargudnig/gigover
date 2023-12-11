@@ -41,8 +41,6 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	);
 	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
 
-	// const { data: projectData } = useProjectDetails(selectedProject ?? 0);
-
 	// mustateAsync: modify
 	const { mutate: modify, isError, error } = useAddTender();
 	const { register, handleSubmit, control } = useForm<TenderFormData>({

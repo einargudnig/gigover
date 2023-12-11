@@ -1,11 +1,11 @@
 import React from 'react';
 import { Bid } from '../../models/Tender';
-// import { Checkbox, Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
-// import { FormActions } from '../FormActions';
-// import { useCloseModal } from '../../hooks/useCloseModal';
+import { Heading, VStack } from '@chakra-ui/react';
+import { FormActions } from '../FormActions';
+import { useCloseModal } from '../../hooks/useCloseModal';
 // import { useQueryClient } from 'react-query';
 // import { DatePicker } from '../forms/DatePicker';
-// import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 // import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
 // import { ApiService } from '../../services/ApiService';
 // import { devError } from '../../utils/ConsoleUtils';
@@ -17,14 +17,14 @@ interface BidModalProps {
 
 export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	console.log(bid);
-	// const closeModal = useCloseModal();
+	const closeModal = useCloseModal();
 	// const queryClient = useQueryClient();
 
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	// const { register, handleSubmit, control } = useForm<Bid>({
-	// 	defaultValues: bid,
-	// 	mode: 'onBlur'
-	// });
+	const { register, handleSubmit } = useForm<Bid>({
+		defaultValues: bid,
+		mode: 'onBlur'
+	});
 
 	// For the checkbox
 	// const [isChecked, setIsChecked] = useState(bid!.delivery);
@@ -33,114 +33,23 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	// 	setIsChecked(newValue);
 	// };
 
-	// const onSubmit = handleSubmit();
-	// async ({ description, terms, finishDate, address, phoneNumber }) => {
-	// try {
-	// await modify({
-	//   tenderId: tender!.tenderId,
-	//   description,
-	//   terms,
-	//   finishDate,
-	//   delivery: isChecked,
-	//   address,
-	//   phoneNumber
-	// });
-	// 		console.log('success');
-
-	// 		queryClient.refetchQueries(ApiService.userTenders);
-	// 		closeModal();
-	// 	} catch (e) {
-	// 		devError('Error', e);
-	// 	}
-	// }
+	const onSubmit = () => {
+		// console.log(data);
+	};
 
 	return (
 		<div>
-			BidForm
-			{/* {isError && (
-				<>
-					<p>{error?.errorText}</p>
-					<small>{error?.errorCode}</small>
-				</>
-			)} */}
-			{/* <form onSubmit={onSubmit}>
+			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
 					<Heading size={'md'}>Create Bid</Heading>
-					<FormControl id={'description'}>
-						<FormLabel>Procurement Description</FormLabel>
-						<Input
-							required={true}
-							{...register('description', {
-								required: 'Procurement description is required'
-							})}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'terms'}>
-						<FormLabel>Terms</FormLabel>
-						<Input
-							required={true}
-							{...register('terms', { required: 'terms are required' })}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'finishDate'}>
-						<FormLabel>Close Date</FormLabel>
-						<Controller
-							name="finishDate"
-							control={control}
-							// defaultValue={
-							// 	project?.endDate ? new Date(project.endDate) : null
-							// }
-							render={({ field: { onChange, value, onBlur } }) => (
-								<DatePicker
-									selected={value ? new Date(value) : null}
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									onBlur={onBlur}
-								/>
-							)}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'delivery'}>
-						<FormLabel>Delivery</FormLabel>
-						<Checkbox
-							name="delivery"
-							isChecked={isChecked === 1}
-							onChange={handleChangeCheckbox}
-							value={isChecked}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'address'}>
-						<FormLabel>Address - contact person on site</FormLabel>
-						<Input
-							required={true}
-							{...register('address', { required: 'address is required' })}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'phoneNumber'}>
-						<FormLabel>Phone Number</FormLabel>
-						<Input
-							required={true}
-							{...register('phoneNumber', { required: 'phone number is required' })}
-						/>
-					</FormControl>
 					<FormActions
 						cancelText={'Cancel'}
 						onCancel={closeModal}
-						submitText={isLoading ? <LoadingSpinner /> : 'Update'}
+						submitText={'Create'}
 						onSubmit={onSubmit}
 					/>
 				</VStack>
-			</form> */}
+			</form>
 		</div>
 	);
 };

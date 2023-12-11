@@ -14,7 +14,7 @@ export const CreateBid = (): JSX.Element => {
 				<Spacer />
 				<Box>
 					<Button
-						onClick={() => setModalContext({ addTender: { tender: undefined } })}
+						onClick={() => setModalContext({ addBid: { bid: undefined } })}
 						leftIcon={<PlusIcon />}
 					>
 						Create new bid

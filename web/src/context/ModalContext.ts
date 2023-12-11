@@ -70,7 +70,7 @@ export interface IModalContext {
 	addTender?: {
 		tender?: Tender;
 	};
-	modifyBid?: {
+	addBid?: {
 		bid?: Bid;
 	};
 }
