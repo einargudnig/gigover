@@ -8,8 +8,10 @@ import {
 	HStack,
 	Heading,
 	Input,
-	Spacer,
-	VStack
+	VStack,
+	Grid,
+	GridItem,
+	Text
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
@@ -44,14 +46,17 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 		setIsChecked(newValue);
 	};
 
-	const onSubmit = () => {
-		// console.log(data);
-	};
+	const onSubmit = handleSubmit(
+		async ({ description, terms, address, finishDate, bidder, client }) => {
+			console.log(description, terms, address, finishDate, bidder, client);
+		}
+	);
 
 	return (
 		<div>
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
+					<Text>Here you can create a bid and send to the bidder.</Text>
 					<FormControl id={'description'}>
 						<FormLabel>Description</FormLabel>
 						<Input
@@ -63,7 +68,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'terms'}>
-						<FormLabel>Description</FormLabel>
+						<FormLabel>Terms</FormLabel>
 						<Input
 							required={true}
 							{...register('terms', {
@@ -91,7 +96,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'finishDate'}>
-						<FormLabel>Close Date</FormLabel>
+						<FormLabel>Bid valid through</FormLabel>
 						<Controller
 							name="finishDate"
 							control={control}
@@ -112,7 +117,111 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 					</FormControl>
 					<hr />
 					<HStack>
-						<Box>
+						<Grid templateColumns="repeat(4, 1fr)" gap={2} width={'full'}>
+							<GridItem colSpan={2}>
+								<HStack mb={3}>
+									<Heading size={'md'}>Bidder</Heading>
+									<Text>- You are sending the bid to this bidder</Text>
+								</HStack>
+								<FormControl>
+									<FormLabel>Email</FormLabel>
+									<Input
+										required={true}
+										{...register('bidder.email', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Company</FormLabel>
+									<Input
+										required={true}
+										{...register('bidder.company', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Address</FormLabel>
+									<Input
+										required={true}
+										{...register('bidder.address', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Phone</FormLabel>
+									<Input
+										required={true}
+										{...register('bidder.phoneNumber', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Company Id</FormLabel>
+									<Input
+										required={true}
+										{...register('bidder.companyId', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+							</GridItem>
+							<GridItem colSpan={2}>
+								<HStack mb={3}>
+									<Heading size={'md'}>Client</Heading>
+									<Text>- You are creating the bid</Text>
+								</HStack>
+								<FormControl>
+									<FormLabel>Client number</FormLabel>
+									<Input
+										required={true}
+										{...register('client.clientNumber', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Client address</FormLabel>
+									<Input
+										required={true}
+										{...register('client.address', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Client phone</FormLabel>
+									<Input
+										required={true}
+										{...register('client.phoneNumber', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Client email</FormLabel>
+									<Input
+										required={true}
+										{...register('client.email', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+								<FormControl>
+									<FormLabel>Other</FormLabel>
+									<Input
+										required={true}
+										{...register('client.other', {
+											required: 'Company is required'
+										})}
+									/>
+								</FormControl>
+							</GridItem>
+						</Grid>
+						{/* <Box>
 							<Heading size={'md'}>Bidder</Heading>
 							<FormControl>
 								<FormLabel>Email</FormLabel>
@@ -208,7 +317,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 									})}
 								/>
 							</FormControl>
-						</Box>
+						</Box> */}
 					</HStack>
 					<FormActions
 						cancelText={'Cancel'}
