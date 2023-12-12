@@ -108,6 +108,7 @@ export interface Bidder {
 export interface Bid {
 	bidId: number;
 	description: string;
+	terms: string;
 	address: string;
 	delivery: number; // 1 - 0 1 is delivery, 0 is pickup
 	finishDate: number; // Timestamp -> 'Bid valid through'

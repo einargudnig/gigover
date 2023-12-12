@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Bid } from '../../models/Tender';
-import { Heading, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Checkbox,
+	FormControl,
+	FormLabel,
+	HStack,
+	Heading,
+	Input,
+	Spacer,
+	VStack
+} from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 // import { useQueryClient } from 'react-query';
 // import { DatePicker } from '../forms/DatePicker';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { DatePicker } from '../forms/DatePicker';
 // import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
 // import { ApiService } from '../../services/ApiService';
 // import { devError } from '../../utils/ConsoleUtils';
@@ -21,17 +32,17 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	// const queryClient = useQueryClient();
 
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, handleSubmit } = useForm<Bid>({
+	const { register, control, handleSubmit } = useForm<Bid>({
 		defaultValues: bid,
 		mode: 'onBlur'
 	});
 
 	// For the checkbox
-	// const [isChecked, setIsChecked] = useState(bid!.delivery);
-	// const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-	// 	const newValue = event.target.checked ? 1 : 0;
-	// 	setIsChecked(newValue);
-	// };
+	const [isChecked, setIsChecked] = useState<number>(0);
+	const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const newValue = event.target.checked ? 1 : 0;
+		setIsChecked(newValue);
+	};
 
 	const onSubmit = () => {
 		// console.log(data);
@@ -41,7 +52,164 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 		<div>
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
-					<Heading size={'md'}>Create Bid</Heading>
+					<FormControl id={'description'}>
+						<FormLabel>Description</FormLabel>
+						<Input
+							required={true}
+							{...register('description', {
+								required: 'Procurement description is required'
+							})}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'terms'}>
+						<FormLabel>Description</FormLabel>
+						<Input
+							required={true}
+							{...register('terms', {
+								required: 'Terms are required'
+							})}
+						/>
+					</FormControl>
+					<FormControl id={'addres'}>
+						<FormLabel>Address</FormLabel>
+						<Input
+							required={true}
+							{...register('address', {
+								required: 'Address is required'
+							})}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'delivery'}>
+						<FormLabel>Delivery</FormLabel>
+						<Checkbox
+							name="delivery"
+							isChecked={isChecked === 1}
+							onChange={handleChangeCheckbox}
+						/>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'finishDate'}>
+						<FormLabel>Close Date</FormLabel>
+						<Controller
+							name="finishDate"
+							control={control}
+							render={({ field: { onChange, onBlur, value } }) => (
+								<DatePicker
+									onChange={(date) => {
+										if (date) {
+											onChange((date as Date).getTime());
+										} else {
+											onChange(null);
+										}
+									}}
+									selected={value ? new Date(value) : null}
+									onBlur={onBlur}
+								/>
+							)}
+						/>
+					</FormControl>
+					<hr />
+					<HStack>
+						<Box>
+							<Heading size={'md'}>Bidder</Heading>
+							<FormControl>
+								<FormLabel>Email</FormLabel>
+								<Input
+									required={true}
+									{...register('bidder.email', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Company</FormLabel>
+								<Input
+									required={true}
+									{...register('bidder.company', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Address</FormLabel>
+								<Input
+									required={true}
+									{...register('bidder.address', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Phone</FormLabel>
+								<Input
+									required={true}
+									{...register('bidder.phoneNumber', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Company Id</FormLabel>
+								<Input
+									required={true}
+									{...register('bidder.companyId', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+						</Box>
+
+						<Box>
+							<Heading size={'md'}>Client</Heading>
+							<FormControl>
+								<FormLabel>Client number</FormLabel>
+								<Input
+									required={true}
+									{...register('client.clientNumber', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Client address</FormLabel>
+								<Input
+									required={true}
+									{...register('client.address', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Client phone</FormLabel>
+								<Input
+									required={true}
+									{...register('client.phoneNumber', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Client email</FormLabel>
+								<Input
+									required={true}
+									{...register('client.email', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+							<FormControl>
+								<FormLabel>Other</FormLabel>
+								<Input
+									required={true}
+									{...register('client.other', {
+										required: 'Company is required'
+									})}
+								/>
+							</FormControl>
+						</Box>
+					</HStack>
 					<FormActions
 						cancelText={'Cancel'}
 						onCancel={closeModal}
