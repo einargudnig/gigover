@@ -8,3 +8,5 @@ export interface IProperty {
 	email: string;
 	occupation: string;
 }
+
+export interface IPropertyForm {}

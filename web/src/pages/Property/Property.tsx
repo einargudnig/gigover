@@ -54,7 +54,7 @@ export const Property = (): JSX.Element => {
 			title={'Property'}
 			actions={
 				<Button
-					// onClick={() => setModalContext({ addTender: { tender: undefined } })}
+					onClick={() => setModalContext({ addProperty: { property: undefined } })}
 					leftIcon={<PlusIcon />}
 				>
 					New Property
