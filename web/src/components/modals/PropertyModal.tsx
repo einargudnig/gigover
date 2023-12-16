@@ -1,19 +1,20 @@
 import React from 'react';
-import { IProperty } from '../../models/Property';
+import { IProperty, IPropertyForm } from '../../models/Property';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { Controller, useForm } from 'react-hook-form';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 
 interface PropertyModalProps {
-	property?: IProperty;
+	property?: IPropertyForm;
 }
 
-export const PropertyModal = ({ property }: PropertyModalProps): JSX.Element => {
+// @ts-ignore
+export const PropertyModal = ({ property }: IProperty): JSX.Element => {
 	console.log(property);
 	const closeModal = useCloseModal();
 
-	const { register, control, handleSubmit } = useForm<IProperty>({
+	const { register, control, handleSubmit } = useForm<IPropertyForm>({
 		defaultValues: property,
 		mode: 'onBlur'
 	});
@@ -49,6 +50,46 @@ export const PropertyModal = ({ property }: PropertyModalProps): JSX.Element => 
 					<Input
 						required={true}
 						{...register('zip', {
+							required: 'Zip code is required'
+						})}
+					/>
+				</FormControl>
+				<Box mb={6} />
+				<FormControl id={'city'}>
+					<FormLabel>City</FormLabel>
+					<Input
+						required={true}
+						{...register('city', {
+							required: 'Zip code is required'
+						})}
+					/>
+				</FormControl>
+				<Box mb={6} />
+				<FormControl id={'country'}>
+					<FormLabel>Country</FormLabel>
+					<Input
+						required={true}
+						{...register('country', {
+							required: 'Zip code is required'
+						})}
+					/>
+				</FormControl>
+				<Box mb={6} />
+				<FormControl id={'size'}>
+					<FormLabel>Property size</FormLabel>
+					<Input
+						required={true}
+						{...register('size', {
+							required: 'Zip code is required'
+						})}
+					/>
+				</FormControl>
+				<Box mb={6} />
+				<FormControl id={'type'}>
+					<FormLabel>Property type</FormLabel>
+					<Input
+						required={true}
+						{...register('type', {
 							required: 'Zip code is required'
 						})}
 					/>

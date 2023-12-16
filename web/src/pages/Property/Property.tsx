@@ -1,17 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Page } from '../../components/Page';
-import { Button, Flex, Grid, GridItem } from '@chakra-ui/react';
-import { PlusIcon } from '../../components/icons/PlusIcon';
-import { SearchBar } from './components/SearchBar';
+import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../components/CardBase';
-import { ModalContext } from '../../context/ModalContext';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
-	margin-bottom: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -24,11 +19,9 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 `;
 
 export const Property = (): JSX.Element => {
-	const [, setModalContext] = useContext(ModalContext);
-
 	const tempData = [
 		{
-			id: 1,
+			propertyId: 1,
 			name: 'Lundur 1',
 			address: 'Lundur 1',
 			city: '200 Kopavogur',
@@ -38,7 +31,7 @@ export const Property = (): JSX.Element => {
 			occupation: 'Formadur husfelags'
 		},
 		{
-			id: 2,
+			propertyId: 2,
 			name: 'Hagkaup Smaralind',
 			address: 'Hagasmari 1',
 			city: '200 Kopavogur',
@@ -50,42 +43,53 @@ export const Property = (): JSX.Element => {
 	];
 
 	return (
-		<Page
-			title={'Property'}
-			actions={
-				<Button
-					onClick={() => setModalContext({ addProperty: { property: undefined } })}
-					leftIcon={<PlusIcon />}
-				>
-					New Property
-				</Button>
-			}
-			tabs={<SearchBar property={[]} />}
-		>
-			<>
-				{tempData
-					.slice()
-					.reverse()
-					.map((property) => (
-						<ProcurementCardStyled key={property.id} to={`/property/${property.id}`}>
-							<Flex direction={'column'}>
-								<Grid templateColumns="repeat(4, 1fr)" gap={1}>
-									<GridItem colSpan={2}>
-										<h3>{property.name}</h3>
-										<p>{property.address}</p>
-										<p>{property.city}</p>
-									</GridItem>
-									<GridItem colSpan={2}>
-										<p>{property.contact}</p>
-										<p>{property.phoneNumber}</p>
-										<p>{property.email}</p>
-										<p>{property.occupation}</p>
-									</GridItem>
-								</Grid>
-							</Flex>
-						</ProcurementCardStyled>
-					))}
-			</>
-		</Page>
+		<>
+			{tempData
+				.slice()
+				.reverse()
+				.map((property) => (
+					<ProcurementCardStyled
+						key={property.propertyId}
+						to={`/property/${property.propertyId}`}
+					>
+						<Flex direction={'column'}>
+							<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+								<GridItem colSpan={2}>
+									<HStack>
+										<Text color={'black'}>Name:</Text>
+										<Text>{property.name}</Text>
+									</HStack>
+									<HStack>
+										<Text color={'black'}>Address: </Text>
+										<Text>{property.address}</Text>
+									</HStack>
+									<HStack>
+										<Text color={'black'}>City: </Text>
+										<Text>{property.city}</Text>
+									</HStack>
+								</GridItem>
+								<GridItem colSpan={2}>
+									<HStack>
+										<Text color={'black'}>Contact: </Text>
+										<Text>{property.contact}</Text>
+									</HStack>
+									<HStack>
+										<Text color={'black'}>Phone number</Text>
+										<Text>{property.phoneNumber}</Text>
+									</HStack>
+									<HStack>
+										<Text color={'black'}>Email</Text>
+										<Text>{property.email}</Text>
+									</HStack>
+									<HStack>
+										<Text color={'black'}>Occupation</Text>
+										<Text>{property.occupation}</Text>
+									</HStack>
+								</GridItem>
+							</Grid>
+						</Flex>
+					</ProcurementCardStyled>
+				))}
+		</>
 	);
 };

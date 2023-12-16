@@ -9,4 +9,13 @@ export interface IProperty {
 	occupation: string;
 }
 
-export interface IPropertyForm {}
+export interface IPropertyForm {
+	propertyId: number;
+	name: string;
+	address: string;
+	zip: string;
+	city: string;
+	country: string;
+	size: string;
+	type: string;
+}

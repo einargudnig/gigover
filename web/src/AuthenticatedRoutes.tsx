@@ -33,6 +33,8 @@ import { OfferPublished } from './pages/Procurement/Offers/components/OfferPubli
 import { CreateBid } from './pages/Procurement/ClientBids/CreateBid';
 import { ClientAnswer } from './pages/Procurement/ClientBids/ClientAnswer';
 import { Property } from './pages/Property/Property';
+import { PropertyId } from './pages/Property/PropertyId';
+import { PropertyOutlet } from './pages/Property/PropertyOutlet';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -40,7 +42,10 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'project/:projectId'} element={<ProjectDetails />}>
 			<Route path={':taskId'} element={<Organize />} />
 		</Route>
-		<Route path={'property'} element={<Property />} />
+		<Route path={'property'} element={<PropertyOutlet />}>
+			<Route index element={<Property />} />
+			<Route path={':propertyId'} element={<PropertyId />} />
+		</Route>
 		<Route path={'roadmap'} element={<RoadmapPreloader />} />
 		<Route path={'files'} element={<Files />}>
 			<Route index element={<FilesHome />} />
