@@ -77,6 +77,9 @@ export interface IModalContext {
 	addProperty?: {
 		property?: IProperty;
 	};
+	unit?: {
+		unit?: IProperty;
+	};
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];

@@ -1,7 +1,7 @@
 import React from 'react';
-import { IProperty, IPropertyForm } from '../../models/Property';
-import { FormActions } from '../FormActions';
-import { useCloseModal } from '../../hooks/useCloseModal';
+import { IProperty, IPropertyForm } from '../../../models/Property';
+import { FormActions } from '../../FormActions';
+import { useCloseModal } from '../../../hooks/useCloseModal';
 import { Controller, useForm } from 'react-hook-form';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 

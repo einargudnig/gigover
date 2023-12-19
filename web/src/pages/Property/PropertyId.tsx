@@ -1,7 +1,13 @@
-import React from 'react';
-import { Text, Grid, GridItem, HStack, Box, Button, Heading } from '@chakra-ui/react';
+import React, { useContext } from 'react';
+import { ModalContext } from '../../context/ModalContext';
+import { Text, Grid, GridItem, HStack, Box, Button, Heading, Flex, Spacer } from '@chakra-ui/react';
+import { PlusIcon } from '../../components/icons/PlusIcon';
+import { Stakeholders } from './components/Stakeholders';
+import { Units } from './components/Units';
 
 export const PropertyId = (): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
+
 	return (
 		<>
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
@@ -64,6 +70,42 @@ export const PropertyId = (): JSX.Element => {
 				</Grid>
 			</Box>
 			<hr />
+			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
+				<Flex mb={4}>
+					<Box>
+						<Heading mb={'4'} fontSize={'xl'}>
+							Units
+						</Heading>
+					</Box>
+					<Spacer />
+					<Box>
+						<Button
+							leftIcon={<PlusIcon />}
+							onClick={() =>
+								setModalContext({ unit: { addPropertyUnit: undefined } })
+							}
+						>
+							Add unit
+						</Button>
+					</Box>
+				</Flex>
+				<Units />
+			</Box>
+			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
+				<hr />
+				<Flex mb={4}>
+					<Box>
+						<Heading mb={'4'} fontSize={'xl'}>
+							Stakeholders
+						</Heading>
+					</Box>
+					<Spacer />
+					<Box>
+						<Button leftIcon={<PlusIcon />}>Add stakeholders</Button>
+					</Box>
+				</Flex>
+				<Stakeholders />
+			</Box>
 		</>
 	);
 };
