@@ -1,16 +1,15 @@
 import React from 'react';
-import { IProperty, IPropertyForm } from '../../../models/Property';
+import { IPropertyForm } from '../../../models/Property';
 import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 
 interface PropertyModalProps {
 	property?: IPropertyForm;
 }
 
-// @ts-ignore
-export const PropertyModal = ({ property }: IProperty): JSX.Element => {
+export const PropertyModal = ({ property }: PropertyModalProps): JSX.Element => {
 	console.log(property);
 	const closeModal = useCloseModal();
 

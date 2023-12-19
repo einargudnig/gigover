@@ -13,10 +13,11 @@ import { UseResourceModal } from './modals/UseResourceModal';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { ProcurementModal } from './modals/ProcurementModal';
 import { BidModal } from './modals/BidModal';
-import { PropertyModal } from './modals/PropertyModals/PropertyModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
 import { Theme } from '../Theme';
+import { PropertyModal } from './modals/PropertyModals/PropertyModal';
 import { UnitModal } from './modals/PropertyModals/UnitModal';
+import { StakeholderModal } from './modals/PropertyModals/StakeholderModal';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -25,7 +26,8 @@ export const GlobalModals = (): JSX.Element => {
 	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || {};
 	const { property } = modalContext.addProperty || {};
-	const { units } = modalContext.addPropertyUnit || {};
+	const { unit } = modalContext.unit || {};
+	const { stakeholder } = modalContext.stakeholder || {};
 
 	return (
 		<>
@@ -80,9 +82,14 @@ export const GlobalModals = (): JSX.Element => {
 					<PropertyModal property={property} />
 				</Modal>
 			)}
-			{modalContext.addPropertyUnit && (
+			{modalContext.unit && (
 				<Modal open={true} title={'Create unit'}>
-					<UnitModal unit={units?.addPropertyUnit} />
+					<UnitModal unit={unit} />
+				</Modal>
+			)}
+			{modalContext.stakeholder && (
+				<Modal open={true} title={'Create stakeholder'}>
+					<StakeholderModal stakeholder={stakeholder} />
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (

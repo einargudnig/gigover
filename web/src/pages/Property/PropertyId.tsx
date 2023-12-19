@@ -81,9 +81,7 @@ export const PropertyId = (): JSX.Element => {
 					<Box>
 						<Button
 							leftIcon={<PlusIcon />}
-							onClick={() =>
-								setModalContext({ unit: { addPropertyUnit: undefined } })
-							}
+							onClick={() => setModalContext({ unit: { unit: undefined } })}
 						>
 							Add unit
 						</Button>
@@ -101,7 +99,14 @@ export const PropertyId = (): JSX.Element => {
 					</Box>
 					<Spacer />
 					<Box>
-						<Button leftIcon={<PlusIcon />}>Add stakeholders</Button>
+						<Button
+							leftIcon={<PlusIcon />}
+							onClick={() =>
+								setModalContext({ stakeholder: { stakeholder: undefined } })
+							}
+						>
+							Add stakeholders
+						</Button>
 					</Box>
 				</Flex>
 				<Stakeholders />

@@ -19,3 +19,19 @@ export interface IPropertyForm {
 	size: string;
 	type: string;
 }
+
+export interface IPropertyUnit {
+	unitId: number;
+	propertyId: number;
+	name: string;
+	size: string;
+	type: string;
+}
+
+export interface IStakeholder {
+	id: number;
+	name: string;
+	phoneNumber: string;
+	email: string;
+	role: string;
+}

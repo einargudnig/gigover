@@ -8,7 +8,7 @@ import { ProjectImage } from '../models/ProjectImage';
 import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 import { Tender } from '../models/Tender';
 import { Bid } from '../models/Tender';
-import { IProperty } from '../models/Property';
+import { IPropertyForm, IPropertyUnit, IStakeholder } from '../models/Property';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -75,10 +75,13 @@ export interface IModalContext {
 		bid?: Bid;
 	};
 	addProperty?: {
-		property?: IProperty;
+		property?: IPropertyForm;
 	};
 	unit?: {
-		unit?: IProperty;
+		unit?: IPropertyUnit;
+	};
+	stakeholder?: {
+		stakeholder?: IStakeholder;
 	};
 }
 
