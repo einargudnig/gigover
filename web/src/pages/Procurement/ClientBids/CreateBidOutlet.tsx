@@ -1,9 +1,17 @@
 import React, { useContext } from 'react';
-import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
+import styled from 'styled-components';
+import { Box, Button, Flex, HStack, Spacer, Text, VStack } from '@chakra-ui/react';
 import { PlusIcon } from '../../../components/icons/PlusIcon';
 import { ModalContext } from '../../../context/ModalContext';
+import { Outlet } from 'react-router-dom';
 
-export const CreateBid = (): JSX.Element => {
+const Container = styled.div`
+	flex: 1 0;
+	height: 100%;
+	overflow-y: auto;
+`;
+
+export const CreateBidOutlet = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	return (
 		<>
@@ -21,6 +29,13 @@ export const CreateBid = (): JSX.Element => {
 					</Button>
 				</Box>
 			</Flex>
+			<VStack style={{ height: '100%' }}>
+				<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+					<Container>
+						<Outlet />
+					</Container>
+				</HStack>
+			</VStack>
 		</>
 	);
 };
