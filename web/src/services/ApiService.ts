@@ -145,4 +145,16 @@ export class ApiService {
 	static addTenderDocument = API_BASE + 'tender/addDocument'; // This is used to add documents, but now we want the tender owner to be able to send documents wit the tender
 	static offerDocuments = (offerId: number) => API_BASE + 'tender/offer/' + offerId; // this one is GET for bidders documents on offer
 	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderowner documents
+
+	// Properties
+	static addProperty = API_BASE + 'properties/addProperty';
+	static editProperty = API_BASE + 'properties/editProperty';
+	static addunit = API_BASE + 'properties/addUnit';
+	static editUnit = API_BASE + 'properties/editUnit';
+	static addStakeholder = API_BASE + 'properties/addStakeHolder';
+	static removeStakeholder = API_BASE + 'properties/removeStakeHolder';
+	static addProject = (propertyId: number, projectId: number) =>
+		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId;
+	static removeProject = (propertyId: number, projectId: number) =>
+		API_BASE + 'properties/removeProject' + propertyId + '/' + projectId;
 }

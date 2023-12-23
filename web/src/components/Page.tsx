@@ -32,6 +32,7 @@ import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
+import { PropertyIcon } from './icons/PropertyIcon';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -226,6 +227,12 @@ export const Page = ({
 						</div>
 						<span>Projects</span>
 					</IconLink>
+					{/* <IconLink onClick={onLinkClick} to={'/property'}>
+						<div>
+							<PropertyIcon />
+						</div>
+						<span>Property</span>
+					</IconLink> */}
 					{/*<IconLink to={'/organize'}>*/}
 					{/*	<div>*/}
 					{/*		<OrganizeIcon />*/}

@@ -15,6 +15,9 @@ import { ProcurementModal } from './modals/ProcurementModal';
 import { BidModal } from './modals/BidModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
 import { Theme } from '../Theme';
+import { PropertyModal } from './modals/PropertyModals/PropertyModal';
+import { UnitModal } from './modals/PropertyModals/UnitModal';
+import { StakeholderModal } from './modals/PropertyModals/StakeholderModal';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -22,6 +25,9 @@ export const GlobalModals = (): JSX.Element => {
 	const { tender } = modalContext.addTender || {};
 	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || {};
+	const { property } = modalContext.addProperty || {};
+	const { unit } = modalContext.unit || {};
+	const { stakeholder } = modalContext.stakeholder || {};
 
 	return (
 		<>
@@ -69,6 +75,21 @@ export const GlobalModals = (): JSX.Element => {
 			{modalContext.addBid && (
 				<Modal open={true} title={'Create bid'}>
 					<BidModal bid={bid} />
+				</Modal>
+			)}
+			{modalContext.addProperty && (
+				<Modal open={true} title={'Create property'}>
+					<PropertyModal property={property} />
+				</Modal>
+			)}
+			{modalContext.unit && (
+				<Modal open={true} title={'Create unit'}>
+					<UnitModal unit={unit} />
+				</Modal>
+			)}
+			{modalContext.stakeholder && (
+				<Modal open={true} title={'Create stakeholder'}>
+					<StakeholderModal stakeholder={stakeholder} />
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (

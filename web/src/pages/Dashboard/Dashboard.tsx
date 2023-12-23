@@ -15,6 +15,7 @@ import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 import { Theme } from '../../Theme';
+import { SearchBar } from '../Property/components/SearchBar';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
@@ -45,11 +46,14 @@ export const Dashboard = (): JSX.Element => {
 		<Page
 			title={'Dashboard'}
 			tabs={
-				<DashboardTabs
-					statuses={statuses?.progressStatusList ?? []}
-					activeTab={activeTab}
-					onChange={(tab) => setActiveTab(tab)}
-				/>
+				<VStack>
+					<SearchBar property={[]} />
+					<DashboardTabs
+						statuses={statuses?.progressStatusList ?? []}
+						activeTab={activeTab}
+						onChange={(tab) => setActiveTab(tab)}
+					/>
+				</VStack>
 			}
 			actions={
 				<>
