@@ -121,7 +121,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 							isOpen={dialogOpen}
 						>
 							<IconButton
-								aria-label={'Download'}
+								aria-label={'Delete'}
 								colorScheme={'red'}
 								size={'sm'} // does this work?
 								icon={<TrashIcon color={'white'} />}

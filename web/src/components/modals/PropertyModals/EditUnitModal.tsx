@@ -9,7 +9,7 @@ interface UnitModalProps {
 	unit?: IPropertyUnit;
 }
 
-export const UnitModal = ({ unit }: UnitModalProps): JSX.Element => {
+export const EditUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 	console.log(unit);
 	const closeModal = useCloseModal();
 
@@ -20,7 +20,6 @@ export const UnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 	return (
 		<form>
 			<VStack mb={-6} align={'stretch'}>
-				<Text>Add a unit to the property.</Text>
 				<FormControl id={'name'}>
 					<FormLabel>Unit name</FormLabel>
 					<Input
@@ -33,12 +32,7 @@ export const UnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 				<Box mb={6} />
 				<FormControl id={'size'}>
 					<FormLabel>Unit size</FormLabel>
-					<Input
-						required={true}
-						{...register('size', {
-							required: 'Address is required'
-						})}
-					/>
+					<Input required={true} {...register('size')} />
 				</FormControl>
 				<Box mb={6} />
 				<FormControl id={'type'}>
@@ -46,7 +40,7 @@ export const UnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 					<Input
 						required={true}
 						{...register('type', {
-							required: 'Zip code is required'
+							required: 'Type is required'
 						})}
 					/>
 				</FormControl>

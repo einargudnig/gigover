@@ -20,7 +20,7 @@ export const StakeholderModal = ({ stakeholder }: StakeholderModalProps): JSX.El
 	return (
 		<form>
 			<VStack mb={-6} align={'stretch'}>
-				<Text>Add a unit to the property.</Text>
+				<Text>Add stakeholders</Text>
 				<FormControl id={'name'}>
 					<FormLabel>Stakeholder name</FormLabel>
 					<Input

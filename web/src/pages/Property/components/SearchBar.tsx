@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { IProperty } from '../../../models/Property';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
@@ -35,6 +35,9 @@ export const SearchBar = ({ property }: SearchBarProps): JSX.Element => {
 	const refInput = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
+
+	// Add fetch request to fetch the properties here?
+	// This helps us use this searchbar on more pages if we want.
 
 	useOutsideClick({
 		ref: ref,
@@ -98,7 +101,7 @@ export const SearchBar = ({ property }: SearchBarProps): JSX.Element => {
 					<StyledMenuList>
 						{searchResults.length > 0 ? (
 							searchResults.map((r, key) => (
-								<NavLink key={key} to={`/property/${r.id}`}>
+								<NavLink key={key} to={`/property/${r.propertyId}`}>
 									<MenuItem onClick={() => setSearchValue('')}>{r.name}</MenuItem>
 								</NavLink>
 							))

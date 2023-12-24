@@ -77,7 +77,10 @@ export interface IModalContext {
 	addProperty?: {
 		property?: IPropertyForm;
 	};
-	unit?: {
+	addUnit?: {
+		unit?: IPropertyUnit;
+	};
+	editUnit?: {
 		unit?: IPropertyUnit;
 	};
 	stakeholder?: {

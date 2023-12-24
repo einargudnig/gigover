@@ -68,10 +68,18 @@ export const PropertyId = (): JSX.Element => {
 						<Button>Upload files</Button>
 					</GridItem>
 				</Grid>
+				<Flex justifyContent={'flex-end'}>
+					<Button
+						leftIcon={<PlusIcon />}
+						onClick={() => setModalContext({ addProperty: { property: undefined } })}
+					>
+						Edit property
+					</Button>
+				</Flex>
 			</Box>
 			<hr />
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
-				<Flex mb={4}>
+				<Flex mb={8} alignItems={'center'}>
 					<Box>
 						<Heading mb={'4'} fontSize={'xl'}>
 							Units
@@ -81,7 +89,7 @@ export const PropertyId = (): JSX.Element => {
 					<Box>
 						<Button
 							leftIcon={<PlusIcon />}
-							onClick={() => setModalContext({ unit: { unit: undefined } })}
+							onClick={() => setModalContext({ addUnit: { unit: undefined } })}
 						>
 							Add unit
 						</Button>
@@ -91,11 +99,9 @@ export const PropertyId = (): JSX.Element => {
 			</Box>
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 				<hr />
-				<Flex mb={4}>
+				<Flex mb={8} alignItems={'center'}>
 					<Box>
-						<Heading mb={'4'} fontSize={'xl'}>
-							Stakeholders
-						</Heading>
+						<Heading fontSize={'xl'}>Stakeholders</Heading>
 					</Box>
 					<Spacer />
 					<Box>
