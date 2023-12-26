@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import { Tender } from '../../models/Tender';
-import { Checkbox, Box, Heading, VStack, FormControl, FormLabel, Input } from '@chakra-ui/react';
+import {
+	Checkbox,
+	Box,
+	Heading,
+	VStack,
+	FormControl,
+	FormLabel,
+	Input,
+	Flex,
+	Text
+} from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { useQueryClient } from 'react-query';
@@ -88,7 +98,12 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'finishDate'}>
-						<FormLabel>Close Date</FormLabel>
+						<Flex>
+							<FormLabel>Close Date - </FormLabel>
+							<Text>
+								You will not be able to answer offers until this date has passed
+							</Text>
+						</Flex>
 						<Controller
 							name="finishDate"
 							control={control}

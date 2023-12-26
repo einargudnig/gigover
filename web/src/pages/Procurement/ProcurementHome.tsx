@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
-import { Text, HStack, Flex, Grid, GridItem, Spacer, Box, Button } from '@chakra-ui/react';
+import { Text, HStack, Flex, Grid, GridItem, Spacer, Box, Button, Tooltip } from '@chakra-ui/react';
 import { Tender } from '../../models/Tender';
 import { handleFinishDate } from '../../utils/HandleFinishDate';
 import { Center } from '../../components/Center';
@@ -44,10 +44,12 @@ export const ProcurementHome = (): JSX.Element => {
 			);
 		}
 		return (
-			<HStack>
-				<Text as={'b'}>Close date:</Text>
-				<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
-			</HStack>
+			<Tooltip label="You cannot answer offers until this date has passed">
+				<HStack>
+					<Text as={'b'}>Close date:</Text>
+					<Text>{formatDateWithoutTime(new Date(finishDate))}*</Text>
+				</HStack>
+			</Tooltip>
 		);
 	};
 

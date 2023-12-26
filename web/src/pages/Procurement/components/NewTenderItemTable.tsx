@@ -496,7 +496,9 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					<Spacer />
 					<Box>
 						<Button ml={'1'}>
-							<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+							<Link to={`/tender/tender-offer/${Number(tenderId)}`}>
+								Published offers
+							</Link>
 						</Button>
 					</Box>
 				</Flex>

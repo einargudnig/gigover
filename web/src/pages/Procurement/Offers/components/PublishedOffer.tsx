@@ -22,6 +22,7 @@ import { Center } from '../../../../components/Center';
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import ReactToPdf from 'react-to-pdf';
+import { useGetTenderById } from '../../../../queries/useGetTenderById';
 import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 import { useAcceptOffer } from '../../../../mutations/useAcceptOffer';
 import { useRejectOffer } from '../../../../mutations/useRejectOffer';
@@ -29,9 +30,10 @@ import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-	// console.log('Offer in publishedOffer component', { offerData });
-	const { offerId } = useParams();
+	const { tenderId, offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
+	const { data: tenderData } = useGetTenderById(Number(tenderId));
+	const tender = tenderData?.tender;
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
@@ -39,7 +41,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 
 	const toast = useToast();
 
-	const time = offer?.finishDate;
+	const time = tender?.finishDate; // ! we don't have the offer finishdate so we use the tender finishdate instead, 'luckily' we have it in the URL
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date;
 	// const finishDateStatus = true;
 

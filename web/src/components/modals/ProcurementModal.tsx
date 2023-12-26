@@ -8,7 +8,9 @@ import {
 	VStack,
 	FormControl,
 	FormLabel,
-	Input
+	Input,
+	HStack,
+	Flex
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
@@ -180,7 +182,12 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'finishDate'}>
-						<FormLabel>Close Date</FormLabel>
+						<Flex>
+							<FormLabel>Close Date - </FormLabel>
+							<Text>
+								You will not be able to answer offers until this date has passed
+							</Text>
+						</Flex>
 						<Controller
 							name="finishDate"
 							control={control}

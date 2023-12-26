@@ -391,7 +391,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 				<Spacer />
 				{/* This button is for the tenderOwner to go to the offerPage */}
 				<Button ml={'1'}>
-					<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+					<Link to={`/tender/tender-offer/${Number(tenderId)}`}>Published offers</Link>
 				</Button>
 			</Flex>
 		</>

@@ -128,14 +128,16 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 											</VStack>
 											<Spacer />
 											<VStack ml={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Close Date:
-													</Text>
-													<Text fontSize={'lg'}>
-														{formatDateWithoutTime(date)}
-													</Text>
-												</HStack>
+												<Tooltip label="You will not be able to answer offer until this date has passed">
+													<HStack>
+														<Text fontWeight={'bold'} fontSize={'xl'}>
+															Close Date:
+														</Text>
+														<Text fontSize={'lg'}>
+															{formatDateWithoutTime(date)}*
+														</Text>
+													</HStack>
+												</Tooltip>
 												<HStack>
 													<Text fontWeight={'bold'} fontSize={'xl'}>
 														Phone:
@@ -294,7 +296,9 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					<Spacer />
 					<Box>
 						<Button ml={'1'}>
-							<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+							<Link to={`/tender/tender-offer/${Number(tenderId)}`}>
+								Published offers
+							</Link>
 						</Button>
 					</Box>
 					<Spacer />

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
-import { Center, Flex, Text, HStack, Grid, GridItem } from '@chakra-ui/react';
+import { Center, Flex, Text, HStack, Grid, GridItem, Tooltip } from '@chakra-ui/react';
 import { useUserTenders } from '../../../../queries/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
@@ -29,7 +29,6 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 
 export const OfferForTenders = (): JSX.Element => {
 	const { data: userTenders, isLoading } = useUserTenders();
-	console.log('userTenders', userTenders);
 	const finishDateStatus = (finishDate: number) => {
 		const res = handleFinishDate(finishDate);
 
@@ -42,10 +41,12 @@ export const OfferForTenders = (): JSX.Element => {
 			);
 		}
 		return (
-			<HStack>
-				<Text as={'b'}>Close date:</Text>
-				<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
-			</HStack>
+			<Tooltip label="Offers will not be answered until this date has passed">
+				<HStack>
+					<Text as={'b'}>Close date:</Text>
+					<Text>{formatDateWithoutTime(new Date(finishDate))}*</Text>
+				</HStack>
+			</Tooltip>
 		);
 	};
 
