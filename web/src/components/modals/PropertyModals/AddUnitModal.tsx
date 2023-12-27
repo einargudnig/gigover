@@ -1,6 +1,5 @@
 import React from 'react';
 import { IPropertyUnit } from '../../../models/Property';
-import { useParams } from 'react-router-dom';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
@@ -9,11 +8,10 @@ import { useAddUnit } from '../../../mutations/properties/useAddUnit';
 
 interface UnitModalProps {
 	unit?: IPropertyUnit;
+	propertyId: number;
 }
 
-export const AddUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
-	const params = useParams();
-	console.log('IN MODAL', params);
+export const AddUnitModal = ({ unit, propertyId }: UnitModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { mutate: addUnit } = useAddUnit();
 	const { register, handleSubmit } = useForm<IPropertyUnit>({
@@ -27,7 +25,7 @@ export const AddUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 				name,
 				size,
 				type,
-				propertyId: 2 //! This need to be fixed!
+				propertyId
 			});
 			console.log('Unit added');
 

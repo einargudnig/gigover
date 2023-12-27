@@ -8,9 +8,10 @@ import { useEditUnit } from '../../../mutations/properties/useEditUnit';
 
 interface UnitModalProps {
 	unit?: IPropertyUnit;
+	propertyId: number;
 }
 
-export const EditUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
+export const EditUnitModal = ({ unit, propertyId }: UnitModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { mutate: editUnit } = useEditUnit();
 
@@ -19,7 +20,7 @@ export const EditUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 		mode: 'onBlur'
 	});
 
-	const onSubmit = handleSubmit(async ({ unitId, name, size, type, propertyId }) => {
+	const onSubmit = handleSubmit(async ({ unitId, name, size, type }) => {
 		try {
 			editUnit({
 				unitId,

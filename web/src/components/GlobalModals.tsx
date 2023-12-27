@@ -28,8 +28,6 @@ export const GlobalModals = (): JSX.Element => {
 	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || {};
 	const { property } = modalContext.addProperty || modalContext.editProperty || {};
-	const { unit } = modalContext.addUnit || modalContext.editUnit || {};
-	const { stakeholder } = modalContext.stakeholder || {};
 
 	return (
 		<>
@@ -91,17 +89,26 @@ export const GlobalModals = (): JSX.Element => {
 			)}
 			{modalContext.addUnit && (
 				<Modal open={true} title={'Create unit'}>
-					<AddUnitModal unit={unit} />
+					<AddUnitModal
+						unit={modalContext.addUnit.unit}
+						propertyId={modalContext.addUnit.propertyId}
+					/>
 				</Modal>
 			)}
 			{modalContext.editUnit && (
 				<Modal open={true} title={'Edit unit'}>
-					<EditUnitModal unit={unit} />
+					<EditUnitModal
+						unit={modalContext.editUnit.unit}
+						propertyId={modalContext.editUnit.propertyId}
+					/>
 				</Modal>
 			)}
 			{modalContext.stakeholder && (
 				<Modal open={true} title={'Create stakeholder'}>
-					<StakeholderModal stakeholder={stakeholder} />
+					<StakeholderModal
+						stakeholder={modalContext.stakeholder.stakeholder}
+						propertyId={modalContext.stakeholder.propertyId}
+					/>
 				</Modal>
 			)}
 			{modalContext.resourceTracker && (

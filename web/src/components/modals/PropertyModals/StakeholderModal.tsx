@@ -8,9 +8,13 @@ import { useAddStakeHolder } from '../../../mutations/properties/useAddStakeHold
 
 interface StakeholderModalProps {
 	stakeholder?: IStakeholder;
+	propertyId: number;
 }
 
-export const StakeholderModal = ({ stakeholder }: StakeholderModalProps): JSX.Element => {
+export const StakeholderModal = ({
+	stakeholder,
+	propertyId
+}: StakeholderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
 	const { mutate: addStakeholder } = useAddStakeHolder();
 
@@ -27,7 +31,7 @@ export const StakeholderModal = ({ stakeholder }: StakeholderModalProps): JSX.El
 				email,
 				role,
 				unitId: 5, //! This need to be fixed!
-				propertyId: 2 //! This need to be fixed!
+				propertyId
 			});
 			console.log('Stakeholder added');
 

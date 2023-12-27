@@ -82,7 +82,9 @@ export const Units = ({ propertyId }): JSX.Element => {
 										variant={'outline'}
 										colorScheme={'black'}
 										onClick={() =>
-											setModalContext({ editUnit: { unit: unit } })
+											setModalContext({
+												editUnit: { unit: unit, propertyId: propertyId }
+											})
 										}
 									>
 										Edit

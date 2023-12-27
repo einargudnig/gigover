@@ -19,37 +19,37 @@ export const Stakeholders = (): JSX.Element => {
 		},
 		{
 			uId: 2,
-			name: 'Jon Jonsson',
-			phoneNumber: '555-5555',
-			email: 'jonjonson@email.com',
-			role: 'supervisor',
+			name: 'Arni runar',
+			phoneNumber: '390-1893',
+			email: 'arnirunar@email.com',
+			role: 'property manager',
 			propertyId: Number(propertyId),
 			unitId: 5
 		},
 		{
 			uId: 3,
-			name: 'Jon Jonsson',
-			phoneNumber: '555-5555',
-			email: 'jonjonson@email.com',
-			role: 'supervisor',
+			name: 'Jona',
+			phoneNumber: '987-6543',
+			email: 'jona@email.com',
+			role: 'administrator',
 			propertyId: Number(propertyId),
 			unitId: 5
 		},
 		{
 			uId: 4,
-			name: 'Jon Jonsson',
-			phoneNumber: '555-5555',
-			email: 'jonjonson@email.com',
-			role: 'supervisor',
+			name: 'Einar',
+			phoneNumber: '123-4575',
+			email: 'einar@email.com',
+			role: 'developer',
 			propertyId: Number(propertyId),
 			unitId: 5
 		},
 		{
 			uId: 5,
-			name: 'Jon Jonsson',
-			phoneNumber: '555-5555',
-			email: 'jonjonson@email.com',
-			role: 'supervisor',
+			name: 'Halldor',
+			phoneNumber: '789-5215',
+			email: 'halldor@email.com',
+			role: 'handyman',
 			propertyId: Number(propertyId),
 			unitId: 5
 		}
@@ -58,7 +58,7 @@ export const Stakeholders = (): JSX.Element => {
 	return (
 		<>
 			{tempData.map((stakeholder) => (
-				<>
+				<div key={stakeholder.uId}>
 					<Grid
 						templateColumns="repeat(8, 1fr)"
 						gap={1}
@@ -69,7 +69,7 @@ export const Stakeholders = (): JSX.Element => {
 						<GridItem colSpan={2}>
 							<HStack>
 								<Text fontSize={'xl'} fontWeight={'bold'}>
-									Stakeholder:
+									Name:
 								</Text>
 								<Text fontSize={'lg'}>{stakeholder.name}</Text>
 							</HStack>
@@ -126,7 +126,7 @@ export const Stakeholders = (): JSX.Element => {
 							</HStack>
 						</GridItem>
 					</Grid>
-				</>
+				</div>
 			))}
 		</>
 	);

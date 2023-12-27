@@ -82,12 +82,15 @@ export interface IModalContext {
 	};
 	addUnit?: {
 		unit?: IPropertyUnit;
+		propertyId: number;
 	};
 	editUnit?: {
 		unit?: IPropertyUnit;
+		propertyId: number;
 	};
 	stakeholder?: {
 		stakeholder?: IStakeholder;
+		propertyId: number;
 	};
 }
 

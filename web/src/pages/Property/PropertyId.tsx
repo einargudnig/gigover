@@ -8,13 +8,11 @@ import { Units } from './components/Units';
 import { useParams } from 'react-router-dom';
 
 export const PropertyId = (): JSX.Element => {
-	const params = useParams();
-	console.log('In propertyId', params);
+	const { propertyId } = useParams();
 	const [, setModalContext] = useContext(ModalContext);
 
 	const tempdata = {
-		// propertyId: Number(propertyId),
-		propertyId: Number(params.propertyId),
+		propertyId: Number(propertyId),
 		name: 'Hagkaup Smaralind',
 		address: 'Hagasmari 1',
 		city: '200 Kopavogur',
@@ -39,13 +37,17 @@ export const PropertyId = (): JSX.Element => {
 					<Box>
 						<Button
 							leftIcon={<PlusIcon />}
-							onClick={() => setModalContext({ addUnit: { unit: undefined } })}
+							onClick={() =>
+								setModalContext({
+									addUnit: { unit: undefined, propertyId: Number(propertyId) }
+								})
+							}
 						>
 							Add unit
 						</Button>
 					</Box>
 				</Flex>
-				<Units propertyId={Number(params.propertyId)} />
+				<Units propertyId={Number(propertyId)} />
 			</Box>
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 				<hr />
@@ -58,7 +60,12 @@ export const PropertyId = (): JSX.Element => {
 						<Button
 							leftIcon={<PlusIcon />}
 							onClick={() =>
-								setModalContext({ stakeholder: { stakeholder: undefined } })
+								setModalContext({
+									stakeholder: {
+										stakeholder: undefined,
+										propertyId: Number(propertyId)
+									}
+								})
 							}
 						>
 							Add stakeholders
