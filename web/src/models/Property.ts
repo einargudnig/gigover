@@ -13,7 +13,7 @@ export interface IPropertyForm {
 	propertyId: number;
 	name: string;
 	address: string;
-	zip: string;
+	zipCode: string;
 	city: string;
 	country: string;
 	size: string;

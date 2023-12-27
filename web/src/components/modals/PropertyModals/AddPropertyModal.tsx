@@ -4,6 +4,7 @@ import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useForm } from 'react-hook-form';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
+import { useAddProperty } from '../../../mutations/properties/useAddProperty';
 
 interface PropertyModalProps {
 	property?: IPropertyForm;
@@ -13,13 +14,34 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 	console.log(property);
 	const closeModal = useCloseModal();
 
-	const { register } = useForm<IPropertyForm>({
+	const { mutate: addProperty } = useAddProperty();
+
+	const { register, handleSubmit } = useForm<IPropertyForm>({
 		defaultValues: property,
 		mode: 'onBlur'
 	});
 
+	const onSubmit = handleSubmit(async ({ name, address, zipCode, city, country, size, type }) => {
+		try {
+			addProperty({
+				name,
+				address,
+				zipCode,
+				city,
+				country,
+				size,
+				type
+			});
+			console.log('Property added');
+
+			closeModal();
+		} catch (error) {
+			console.log(error);
+		}
+	});
+
 	return (
-		<form>
+		<form onSubmit={onSubmit}>
 			<VStack mb={-6} align={'stretch'}>
 				<Text>
 					Create a property here. You can add more info after you creat the property.
@@ -44,11 +66,11 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 					/>
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'zip'}>
+				<FormControl id={'zipCode'}>
 					<FormLabel>Zip code</FormLabel>
 					<Input
 						required={true}
-						{...register('zip', {
+						{...register('zipCode', {
 							required: 'Zip code is required'
 						})}
 					/>
@@ -59,7 +81,7 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 					<Input
 						required={true}
 						{...register('city', {
-							required: 'Zip code is required'
+							required: 'City is required'
 						})}
 					/>
 				</FormControl>
@@ -69,7 +91,7 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 					<Input
 						required={true}
 						{...register('country', {
-							required: 'Zip code is required'
+							required: 'Country is required'
 						})}
 					/>
 				</FormControl>
@@ -79,7 +101,7 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 					<Input
 						required={true}
 						{...register('size', {
-							required: 'Zip code is required'
+							required: 'Size is required'
 						})}
 					/>
 				</FormControl>
@@ -89,7 +111,7 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 					<Input
 						required={true}
 						{...register('type', {
-							required: 'Zip code is required'
+							required: 'Type code is required'
 						})}
 					/>
 				</FormControl>
@@ -97,7 +119,7 @@ export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element 
 					cancelText={'Cancel'}
 					onCancel={closeModal}
 					submitText={'Create property'}
-					// onSubmit={onSubmit}
+					onSubmit={onSubmit}
 				/>
 			</VStack>
 		</form>

@@ -7,7 +7,7 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 export interface PropertyFormData {
 	name: string;
 	address: string;
-	zip: string;
+	zipCode: string;
 	city: string;
 	country: string;
 	size: string;
@@ -15,7 +15,7 @@ export interface PropertyFormData {
 }
 
 export const useAddProperty = () => {
-	const client = useQueryClient();
+	// const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, PropertyFormData>(async (variables) => {
 		try {

@@ -42,11 +42,11 @@ export const EditPropertyModal = ({ property }: PropertyModalProps): JSX.Element
 					/>
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'zip'}>
+				<FormControl id={'zipCode'}>
 					<FormLabel>Zip code</FormLabel>
 					<Input
 						required={true}
-						{...register('zip', {
+						{...register('zipCode', {
 							required: 'Zip code is required'
 						})}
 					/>
