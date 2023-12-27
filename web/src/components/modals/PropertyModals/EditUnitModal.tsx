@@ -4,21 +4,39 @@ import { Box, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useForm } from 'react-hook-form';
+import { useEditUnit } from '../../../mutations/properties/useEditUnit';
 
 interface UnitModalProps {
 	unit?: IPropertyUnit;
 }
 
 export const EditUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
-	console.log(unit);
 	const closeModal = useCloseModal();
+	const { mutate: editUnit } = useEditUnit();
 
-	const { register } = useForm<IPropertyUnit>({
+	const { register, handleSubmit } = useForm<IPropertyUnit>({
 		defaultValues: unit,
 		mode: 'onBlur'
 	});
+
+	const onSubmit = handleSubmit(async ({ unitId, name, size, type, propertyId }) => {
+		try {
+			editUnit({
+				unitId,
+				name,
+				size,
+				type,
+				propertyId
+			});
+			console.log('Unit edited');
+
+			closeModal();
+		} catch (error) {
+			console.log(error);
+		}
+	});
 	return (
-		<form>
+		<form onSubmit={onSubmit}>
 			<VStack mb={-6} align={'stretch'}>
 				<FormControl id={'name'}>
 					<FormLabel>Unit name</FormLabel>
@@ -48,8 +66,8 @@ export const EditUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 				<FormActions
 					cancelText={'Cancel'}
 					onCancel={closeModal}
-					submitText={'Create property'}
-					// onSubmit={onSubmit}
+					submitText={'Edit unit'}
+					onSubmit={onSubmit}
 				/>
 			</VStack>
 		</form>

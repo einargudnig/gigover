@@ -21,17 +21,19 @@ export interface IPropertyForm {
 }
 
 export interface IPropertyUnit {
-	unitId: number;
-	propertyId: number;
 	name: string;
 	size: string;
+	unitId: number;
 	type: string;
+	propertyId: number;
 }
 
 export interface IStakeholder {
-	id: number;
+	uId: number;
 	name: string;
 	phoneNumber: string;
 	email: string;
 	role: string;
+	propertyId: number;
+	unitId: number;
 }

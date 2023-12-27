@@ -1,82 +1,32 @@
 import React, { useContext } from 'react';
 import { ModalContext } from '../../context/ModalContext';
-import { Text, Grid, GridItem, HStack, Box, Button, Heading, Flex, Spacer } from '@chakra-ui/react';
+import { Box, Button, Heading, Flex, Spacer } from '@chakra-ui/react';
 import { PlusIcon } from '../../components/icons/PlusIcon';
+import { PropertyInfo } from './components/PropertyInfo';
 import { Stakeholders } from './components/Stakeholders';
 import { Units } from './components/Units';
+import { useParams } from 'react-router-dom';
 
 export const PropertyId = (): JSX.Element => {
+	const params = useParams();
+	console.log('In propertyId', params);
 	const [, setModalContext] = useContext(ModalContext);
+
+	const tempdata = {
+		// propertyId: Number(propertyId),
+		propertyId: Number(params.propertyId),
+		name: 'Hagkaup Smaralind',
+		address: 'Hagasmari 1',
+		city: '200 Kopavogur',
+		country: 'Iceland',
+		zipCode: '200',
+		size: '2000',
+		type: 'Retail'
+	};
 
 	return (
 		<>
-			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
-				<Heading mb={'4'} fontSize={'xl'}>
-					Property information
-				</Heading>
-				<Grid templateColumns="repeat(6, 1fr)" gap={1} width={'full'}>
-					<GridItem colSpan={2}>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Property:
-							</Text>
-							<Text fontSize={'lg'}>Lundur 1</Text>
-						</HStack>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Address/Location:
-							</Text>
-							<Text fontSize={'lg'}>Lundur 1</Text>
-						</HStack>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Zip code:
-							</Text>
-							<Text fontSize={'lg'}>200</Text>
-						</HStack>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								City:
-							</Text>
-							<Text fontSize={'lg'}>Kopavogur</Text>
-						</HStack>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Country:
-							</Text>
-							<Text fontSize={'lg'}>Iceland</Text>
-						</HStack>
-					</GridItem>
-					<GridItem colSpan={2}>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Property size:
-							</Text>
-							<Text fontSize={'lg'}>5000 m2</Text>
-						</HStack>
-						<HStack m={'1'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Property type:
-							</Text>
-							<Text fontSize={'lg'}>apartment building</Text>
-						</HStack>
-					</GridItem>
-					<GridItem colSpan={2}>
-						<Text mb={'2'} fontSize={'xl'} fontWeight={'bold'}>
-							Drawing/Documents
-						</Text>
-						<Button>Upload files</Button>
-					</GridItem>
-				</Grid>
-				<Flex justifyContent={'flex-end'}>
-					<Button
-						leftIcon={<PlusIcon />}
-						onClick={() => setModalContext({ editProperty: { property: undefined } })}
-					>
-						Edit property
-					</Button>
-				</Flex>
-			</Box>
+			<PropertyInfo property={tempdata} />
 			<hr />
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 				<Flex mb={8} alignItems={'center'}>
@@ -95,7 +45,7 @@ export const PropertyId = (): JSX.Element => {
 						</Button>
 					</Box>
 				</Flex>
-				<Units />
+				<Units propertyId={Number(params.propertyId)} />
 			</Box>
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 				<hr />

@@ -2,44 +2,56 @@ import React, { useState } from 'react';
 import { Text, Grid, GridItem, HStack, Box, Spacer, Button } from '@chakra-ui/react';
 import { IStakeholder } from '../../../models/Property';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { useParams } from 'react-router-dom';
 
 export const Stakeholders = (): JSX.Element => {
+	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const tempData: IStakeholder[] = [
 		{
-			id: 1,
+			uId: 1,
 			name: 'Jon Jonsson',
 			phoneNumber: '555-5555',
 			email: 'jonjonson@email.com',
-			role: 'supervisor'
+			role: 'supervisor',
+			propertyId: Number(propertyId),
+			unitId: 5
 		},
 		{
-			id: 2,
+			uId: 2,
 			name: 'Jon Jonsson',
 			phoneNumber: '555-5555',
 			email: 'jonjonson@email.com',
-			role: 'supervisor'
+			role: 'supervisor',
+			propertyId: Number(propertyId),
+			unitId: 5
 		},
 		{
-			id: 3,
+			uId: 3,
 			name: 'Jon Jonsson',
 			phoneNumber: '555-5555',
 			email: 'jonjonson@email.com',
-			role: 'supervisor'
+			role: 'supervisor',
+			propertyId: Number(propertyId),
+			unitId: 5
 		},
 		{
-			id: 4,
+			uId: 4,
 			name: 'Jon Jonsson',
 			phoneNumber: '555-5555',
 			email: 'jonjonson@email.com',
-			role: 'supervisor'
+			role: 'supervisor',
+			propertyId: Number(propertyId),
+			unitId: 5
 		},
 		{
-			id: 5,
+			uId: 5,
 			name: 'Jon Jonsson',
 			phoneNumber: '555-5555',
 			email: 'jonjonson@email.com',
-			role: 'supervisor'
+			role: 'supervisor',
+			propertyId: Number(propertyId),
+			unitId: 5
 		}
 	];
 

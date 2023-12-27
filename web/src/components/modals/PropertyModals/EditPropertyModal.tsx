@@ -4,22 +4,46 @@ import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useForm } from 'react-hook-form';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
+import { useEditProperty } from '../../../mutations/properties/useEditProperty';
 
 interface PropertyModalProps {
 	property?: IPropertyForm;
 }
 
 export const EditPropertyModal = ({ property }: PropertyModalProps): JSX.Element => {
-	console.log(property);
 	const closeModal = useCloseModal();
 
-	const { register } = useForm<IPropertyForm>({
+	const { mutate: editProperty } = useEditProperty();
+
+	const { register, handleSubmit } = useForm<IPropertyForm>({
 		defaultValues: property,
 		mode: 'onBlur'
 	});
 
+	const onSubmit = handleSubmit(
+		async ({ propertyId, name, address, zipCode, city, country, size, type }) => {
+			try {
+				editProperty({
+					propertyId,
+					name,
+					address,
+					zipCode,
+					city,
+					country,
+					size,
+					type
+				});
+				console.log('Property edited!');
+
+				closeModal();
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	);
+
 	return (
-		<form>
+		<form onSubmit={onSubmit}>
 			<VStack mb={-6} align={'stretch'}>
 				<Text>Edit the property here, update name, sixe and more</Text>
 				<FormControl id={'name'}>
@@ -94,8 +118,8 @@ export const EditPropertyModal = ({ property }: PropertyModalProps): JSX.Element
 				<FormActions
 					cancelText={'Cancel'}
 					onCancel={closeModal}
-					submitText={'Create property'}
-					// onSubmit={onSubmit}
+					submitText={'Edit property'}
+					onSubmit={onSubmit}
 				/>
 			</VStack>
 		</form>

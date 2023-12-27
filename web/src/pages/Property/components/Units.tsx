@@ -4,7 +4,7 @@ import { IPropertyUnit } from '../../../models/Property';
 import { Label } from '../../../components/Label';
 import { ModalContext } from '../../../context/ModalContext';
 
-export const Units = (): JSX.Element => {
+export const Units = ({ propertyId }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const tempaData: IPropertyUnit[] = [
 		{
@@ -12,42 +12,42 @@ export const Units = (): JSX.Element => {
 			name: 'Bilastæði',
 			size: '800m',
 			type: 'Parking lot',
-			propertyId: 1
+			propertyId: propertyId
 		},
 		{
 			unitId: 2,
 			name: 'Bilastæði',
 			size: '1000m',
 			type: 'Parking lot',
-			propertyId: 1
+			propertyId: propertyId
 		},
 		{
 			unitId: 3,
 			name: 'Hjólageymslur',
 			size: '100fm',
 			type: 'Other',
-			propertyId: 1
+			propertyId: propertyId
 		},
 		{
 			unitId: 4,
 			name: 'Stærri lyfta',
 			size: '10',
 			type: 'Elevator',
-			propertyId: 1
+			propertyId: propertyId
 		},
 		{
 			unitId: 5,
 			name: 'Minni lyfta',
 			size: '5',
 			type: 'Elevator',
-			propertyId: 1
+			propertyId: propertyId
 		}
 	];
 
 	return (
 		<>
 			{tempaData.map((unit) => (
-				<>
+				<div key={unit.unitId}>
 					<Grid templateColumns="repeat(6, 1fr)" gap={1} width={'full'} m={1}>
 						<GridItem colSpan={2}>
 							<HStack>
@@ -91,7 +91,7 @@ export const Units = (): JSX.Element => {
 							</HStack>
 						</GridItem>
 					</Grid>
-				</>
+				</div>
 			))}
 		</>
 	);

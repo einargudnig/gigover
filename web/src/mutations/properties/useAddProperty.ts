@@ -22,7 +22,7 @@ export const useAddProperty = () => {
 			const response = await axios.post(ApiService.addProperty, variables, {
 				withCredentials: true
 			});
-			// await client.refetchQueries(ApiService.userProperties);
+			// await client.refetchQueries(ApiService.userProperties); -> Refetch list of properties afte creating a new one!
 
 			return response.data;
 		} catch (e) {

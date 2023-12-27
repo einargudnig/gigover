@@ -147,10 +147,10 @@ export class ApiService {
 	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderowner documents
 
 	// Properties
-	static addProperty = API_BASE + 'properties/addProperty';
-	static editProperty = API_BASE + 'properties/editProperty';
-	static addunit = API_BASE + 'properties/addUnit';
-	static editUnit = API_BASE + 'properties/editUnit';
+	static addProperty = API_BASE + 'properties/addProperty'; // ✅
+	static editProperty = API_BASE + 'properties/editProperty'; // ✅
+	static addUnit = API_BASE + 'properties/addUnit'; // ✅ -> Need to fix the propertyId
+	static editUnit = API_BASE + 'properties/editUnit'; // ✅ -> Need to fix the propertyId
 	static addStakeholder = API_BASE + 'properties/addStakeHolder';
 	static removeStakeholder = API_BASE + 'properties/removeStakeHolder';
 	static addProject = (propertyId: number, projectId: number) =>

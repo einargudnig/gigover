@@ -4,21 +4,41 @@ import { Text, Box, FormControl, FormLabel, Input, VStack } from '@chakra-ui/rea
 import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useForm } from 'react-hook-form';
+import { useAddStakeHolder } from '../../../mutations/properties/useAddStakeHolder';
 
 interface StakeholderModalProps {
 	stakeholder?: IStakeholder;
 }
 
 export const StakeholderModal = ({ stakeholder }: StakeholderModalProps): JSX.Element => {
-	console.log(stakeholder);
 	const closeModal = useCloseModal();
+	const { mutate: addStakeholder } = useAddStakeHolder();
 
-	const { register } = useForm<IStakeholder>({
+	const { register, handleSubmit } = useForm<IStakeholder>({
 		defaultValues: stakeholder,
 		mode: 'onBlur'
 	});
+
+	const onSubmit = handleSubmit(async ({ name, phoneNumber, email, role }) => {
+		try {
+			addStakeholder({
+				name,
+				phoneNumber,
+				email,
+				role,
+				unitId: 5, //! This need to be fixed!
+				propertyId: 2 //! This need to be fixed!
+			});
+			console.log('Stakeholder added');
+
+			closeModal();
+		} catch (error) {
+			console.log(error);
+		}
+	});
+
 	return (
-		<form>
+		<form onSubmit={onSubmit}>
 			<VStack mb={-6} align={'stretch'}>
 				<Text>Add stakeholders</Text>
 				<FormControl id={'name'}>
@@ -64,8 +84,8 @@ export const StakeholderModal = ({ stakeholder }: StakeholderModalProps): JSX.El
 				<FormActions
 					cancelText={'Cancel'}
 					onCancel={closeModal}
-					submitText={'Create property'}
-					// onSubmit={onSubmit}
+					submitText={'Add Stakeholder'}
+					onSubmit={onSubmit}
 				/>
 			</VStack>
 		</form>
