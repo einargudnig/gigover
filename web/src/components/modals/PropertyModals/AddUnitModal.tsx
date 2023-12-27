@@ -13,7 +13,7 @@ export const AddUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 	console.log(unit);
 	const closeModal = useCloseModal();
 
-	const { register, control, handleSubmit } = useForm<IPropertyUnit>({
+	const { register } = useForm<IPropertyUnit>({
 		defaultValues: unit,
 		mode: 'onBlur'
 	});

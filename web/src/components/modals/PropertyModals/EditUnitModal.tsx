@@ -1,6 +1,6 @@
 import React from 'react';
 import { IPropertyUnit } from '../../../models/Property';
-import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
+import { Box, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import { FormActions } from '../../FormActions';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useForm } from 'react-hook-form';
@@ -13,7 +13,7 @@ export const EditUnitModal = ({ unit }: UnitModalProps): JSX.Element => {
 	console.log(unit);
 	const closeModal = useCloseModal();
 
-	const { register, control, handleSubmit } = useForm<IPropertyUnit>({
+	const { register } = useForm<IPropertyUnit>({
 		defaultValues: unit,
 		mode: 'onBlur'
 	});

@@ -9,11 +9,11 @@ interface PropertyModalProps {
 	property?: IPropertyForm;
 }
 
-export const PropertyModal = ({ property }: PropertyModalProps): JSX.Element => {
+export const AddPropertyModal = ({ property }: PropertyModalProps): JSX.Element => {
 	console.log(property);
 	const closeModal = useCloseModal();
 
-	const { register, control, handleSubmit } = useForm<IPropertyForm>({
+	const { register } = useForm<IPropertyForm>({
 		defaultValues: property,
 		mode: 'onBlur'
 	});

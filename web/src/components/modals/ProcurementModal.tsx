@@ -9,7 +9,6 @@ import {
 	FormControl,
 	FormLabel,
 	Input,
-	HStack,
 	Flex
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';

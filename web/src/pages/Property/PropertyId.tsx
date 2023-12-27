@@ -71,7 +71,7 @@ export const PropertyId = (): JSX.Element => {
 				<Flex justifyContent={'flex-end'}>
 					<Button
 						leftIcon={<PlusIcon />}
-						onClick={() => setModalContext({ addProperty: { property: undefined } })}
+						onClick={() => setModalContext({ editProperty: { property: undefined } })}
 					>
 						Edit property
 					</Button>

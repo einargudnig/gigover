@@ -15,7 +15,8 @@ import { ProcurementModal } from './modals/ProcurementModal';
 import { BidModal } from './modals/BidModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
 import { Theme } from '../Theme';
-import { PropertyModal } from './modals/PropertyModals/PropertyModal';
+import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
+import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
 import { StakeholderModal } from './modals/PropertyModals/StakeholderModal';
@@ -26,8 +27,8 @@ export const GlobalModals = (): JSX.Element => {
 	const { tender } = modalContext.addTender || {};
 	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || {};
-	const { property } = modalContext.addProperty || {};
-	const { unit } = modalContext.addUnit || {};
+	const { property } = modalContext.addProperty || modalContext.editProperty || {};
+	const { unit } = modalContext.addUnit || modalContext.editUnit || {};
 	const { stakeholder } = modalContext.stakeholder || {};
 
 	return (
@@ -80,7 +81,12 @@ export const GlobalModals = (): JSX.Element => {
 			)}
 			{modalContext.addProperty && (
 				<Modal open={true} title={'Create property'}>
-					<PropertyModal property={property} />
+					<AddPropertyModal property={property} />
+				</Modal>
+			)}
+			{modalContext.editProperty && (
+				<Modal open={true} title={'Edit property'}>
+					<EditPropertyModal property={property} />
 				</Modal>
 			)}
 			{modalContext.addUnit && (

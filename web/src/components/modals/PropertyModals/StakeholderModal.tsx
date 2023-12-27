@@ -13,7 +13,7 @@ export const StakeholderModal = ({ stakeholder }: StakeholderModalProps): JSX.El
 	console.log(stakeholder);
 	const closeModal = useCloseModal();
 
-	const { register, control, handleSubmit } = useForm<IStakeholder>({
+	const { register } = useForm<IStakeholder>({
 		defaultValues: stakeholder,
 		mode: 'onBlur'
 	});
