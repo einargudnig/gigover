@@ -15,14 +15,14 @@ export interface PropertyFormData {
 }
 
 export const useAddProperty = () => {
-	// const client = useQueryClient();
+	const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, PropertyFormData>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.addProperty, variables, {
 				withCredentials: true
 			});
-			// await client.refetchQueries(ApiService.userProperties); -> Refetch list of properties afte creating a new one!
+			await client.refetchQueries(ApiService.getProperties);
 
 			return response.data;
 		} catch (e) {

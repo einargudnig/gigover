@@ -16,6 +16,7 @@ export const PropertyId = (): JSX.Element => {
 
 	const { data, isLoading } = useGetPropertyById(Number(propertyId));
 	const property = data?.property;
+	// console.log(property);
 	const units = data?.property.units;
 	const stakeholders = data?.property.stakeholders;
 

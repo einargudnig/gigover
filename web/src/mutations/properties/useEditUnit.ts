@@ -13,14 +13,14 @@ export interface UnitFormData {
 }
 
 export const useEditUnit = () => {
-	// const client = useQueryClient();
+	const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, UnitFormData>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.editUnit, variables, {
 				withCredentials: true
 			});
-			// await client.refetchQueries(ApiService.userProperties); -> Refetch Property by Id after editing it!
+			await client.refetchQueries(ApiService.getPropertyById(variables.propertyId));
 
 			return response.data;
 		} catch (e) {

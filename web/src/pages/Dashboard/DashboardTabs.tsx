@@ -21,7 +21,7 @@ export const DashboardTabs = ({
 	const { mutate: deleteProgressStatus } = useRemoveProgressTab();
 	const toast = useToast();
 	return (
-		<Tabs defaultIndex={1} variant="soft-rounded" colorScheme="green" size={'sm'}>
+		<Tabs defaultIndex={1} variant="soft-rounded" colorScheme="green" size={'sm'} mt={2}>
 			<TabList>
 				<Tab
 					onClick={() => onChange(ProjectStatus.ALL)}

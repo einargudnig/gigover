@@ -14,29 +14,6 @@ const Container = styled.div`
 `;
 
 export const PropertyOutlet = (): JSX.Element => {
-	const tempData = [
-		{
-			propertyId: 1,
-			name: 'Lundur 1',
-			address: 'Lundur 1',
-			city: '200 Kopavogur',
-			contact: 'Jon Jonsson',
-			phoneNumber: '555-5555',
-			email: 'jon@email.com',
-			occupation: 'Formadur husfelags'
-		},
-		{
-			propertyId: 2,
-			name: 'Hagkaup Smaralind',
-			address: 'Hagasmari 1',
-			city: '200 Kopavogur',
-			contact: 'Hannes Palsson',
-			phoneNumber: '663-789',
-			email: 'hannes@smahagkaup.is',
-			occupation: 'Verslunarstjori'
-		}
-	];
-
 	const [, setModalContext] = useContext(ModalContext);
 	return (
 		<Page
@@ -49,7 +26,7 @@ export const PropertyOutlet = (): JSX.Element => {
 					New Property
 				</Button>
 			}
-			// tabs={<SearchBar property={tempData} />}
+			tabs={<SearchBar />}
 		>
 			<VStack style={{ height: '100%' }}>
 				<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
