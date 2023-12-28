@@ -147,6 +147,8 @@ export class ApiService {
 	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderowner documents
 
 	// Properties
+	static getProperties = API_BASE + 'properties/properties';
+	static getPropertyById = (propertyId: number) => API_BASE + 'properties/' + propertyId;
 	static addProperty = API_BASE + 'properties/addProperty'; // ✅
 	static editProperty = API_BASE + 'properties/editProperty'; // ✅
 	static addUnit = API_BASE + 'properties/addUnit'; // ✅ -> Need to fix the propertyId

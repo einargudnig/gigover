@@ -1,12 +1,25 @@
+export interface IProperties {
+	propertyId: number;
+	name: string;
+	address: string;
+	city: string;
+	zipCode: string;
+	country: string;
+	size: string;
+	type: string;
+}
+
 export interface IProperty {
 	propertyId: number;
 	name: string;
 	address: string;
 	city: string;
-	contact: string;
-	phoneNumber: string;
-	email: string;
-	occupation: string;
+	zipCode: string;
+	country: string;
+	size: string;
+	type: string;
+	units: IPropertyUnit[];
+	stakeholders: IStakeholder[];
 }
 
 export interface IPropertyForm {

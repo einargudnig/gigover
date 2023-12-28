@@ -4,7 +4,8 @@ import { IStakeholder } from '../../../models/Property';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { useParams } from 'react-router-dom';
 
-export const Stakeholders = (): JSX.Element => {
+export const Stakeholders = ({ stakeholders }): JSX.Element => {
+	console.log(stakeholders);
 	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const tempData: IStakeholder[] = [

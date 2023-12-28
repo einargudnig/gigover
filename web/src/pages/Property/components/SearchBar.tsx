@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { IProperty } from '../../../models/Property';
+import { IProperties } from '../../../models/Property';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
 	Input,
@@ -14,7 +14,7 @@ import {
 import { NavLink } from 'react-router-dom';
 
 interface SearchBarProps {
-	property: IProperty[];
+	property: IProperties[];
 }
 
 const SearchResults = styled.div`
@@ -59,7 +59,7 @@ export const SearchBar = ({ property }: SearchBarProps): JSX.Element => {
 		}
 	}, [searchValue, refInput]);
 
-	const searchResults = useMemo<IProperty[]>(() => {
+	const searchResults = useMemo<IProperties[]>(() => {
 		if (searchValue.length > 0) {
 			const results = property.filter((res) =>
 				JSON.stringify(res).toLowerCase().includes(searchValue.toLowerCase())

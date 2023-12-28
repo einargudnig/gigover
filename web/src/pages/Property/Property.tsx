@@ -2,6 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../components/CardBase';
+import { useGetProperties } from '../../queries/properties/useGetPoperties';
+import { Center } from '../../components/Center';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -19,77 +22,70 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 `;
 
 export const Property = (): JSX.Element => {
-	const tempData = [
-		{
-			propertyId: 1,
-			name: 'Lundur 1',
-			address: 'Lundur 1',
-			city: '200 Kopavogur',
-			contact: 'Jon Jonsson',
-			phoneNumber: '555-5555',
-			email: 'jon@email.com',
-			occupation: 'Formadur husfelags'
-		},
-		{
-			propertyId: 2,
-			name: 'Hagkaup Smaralind',
-			address: 'Hagasmari 1',
-			city: '200 Kopavogur',
-			contact: 'Hannes Palsson',
-			phoneNumber: '663-789',
-			email: 'hannes@smahagkaup.is',
-			occupation: 'Verslunarstjori'
-		}
-	];
+	const { data, isLoading } = useGetProperties();
 
 	return (
 		<>
-			{tempData
-				.slice()
-				.reverse()
-				.map((property) => (
-					<ProcurementCardStyled
-						key={property.propertyId}
-						to={`/property/${property.propertyId}`}
-					>
-						<Flex direction={'column'}>
-							<Grid templateColumns="repeat(4, 1fr)" gap={1}>
-								<GridItem colSpan={2}>
-									<HStack>
-										<Text color={'black'}>Name:</Text>
-										<Text>{property.name}</Text>
-									</HStack>
-									<HStack>
-										<Text color={'black'}>Address: </Text>
-										<Text>{property.address}</Text>
-									</HStack>
-									<HStack>
-										<Text color={'black'}>City: </Text>
-										<Text>{property.city}</Text>
-									</HStack>
-								</GridItem>
-								<GridItem colSpan={2}>
-									<HStack>
-										<Text color={'black'}>Contact: </Text>
-										<Text>{property.contact}</Text>
-									</HStack>
-									<HStack>
-										<Text color={'black'}>Phone number</Text>
-										<Text>{property.phoneNumber}</Text>
-									</HStack>
-									<HStack>
-										<Text color={'black'}>Email</Text>
-										<Text>{property.email}</Text>
-									</HStack>
-									<HStack>
-										<Text color={'black'}>Occupation</Text>
-										<Text>{property.occupation}</Text>
-									</HStack>
-								</GridItem>
-							</Grid>
-						</Flex>
-					</ProcurementCardStyled>
-				))}
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<>
+					{!data || data.length === 0 ? (
+						<Center>
+							<Text>No Property Found</Text>
+						</Center>
+					) : (
+						data
+							.slice()
+							.reverse()
+							.map((property) => (
+								<ProcurementCardStyled
+									key={property.propertyId}
+									to={`/property/${property.propertyId}`}
+								>
+									<Flex direction={'column'}>
+										<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+											<GridItem colSpan={2}>
+												<HStack>
+													<Text color={'black'}>Name:</Text>
+													<Text>{property.name}</Text>
+												</HStack>
+												<HStack>
+													<Text color={'black'}>Address: </Text>
+													<Text>{property.address}</Text>
+												</HStack>
+												<HStack>
+													<Text color={'black'}>City: </Text>
+													<Text>{property.city}</Text>
+												</HStack>
+											</GridItem>
+											<GridItem colSpan={2}>
+												<HStack>
+													<Text color={'black'}>Zip Code: </Text>
+													<Text>{property.zipCode}</Text>
+												</HStack>
+												<HStack>
+													<Text color={'black'}>Country:</Text>
+													<Text>{property.country}</Text>
+												</HStack>
+												<HStack>
+													<Text color={'black'}>Size:</Text>
+													<Text>{property.size}</Text>
+												</HStack>
+												<HStack>
+													<Text color={'black'}>Type:</Text>
+													<Text>{property.type}</Text>
+												</HStack>
+											</GridItem>
+										</Grid>
+									</Flex>
+								</ProcurementCardStyled>
+							))
+					)}
+				</>
+			)}
 		</>
 	);
 };

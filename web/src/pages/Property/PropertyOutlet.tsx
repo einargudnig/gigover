@@ -49,7 +49,7 @@ export const PropertyOutlet = (): JSX.Element => {
 					New Property
 				</Button>
 			}
-			tabs={<SearchBar property={tempData} />}
+			// tabs={<SearchBar property={tempData} />}
 		>
 			<VStack style={{ height: '100%' }}>
 				<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
