@@ -12,7 +12,6 @@ interface UnitModalProps {
 }
 
 export const AddUnitModal = ({ unit, propertyId }: UnitModalProps): JSX.Element => {
-	console.log('UNIT IN MODAL', unit);
 	const closeModal = useCloseModal();
 	const { mutate: addUnit } = useAddUnit();
 	const { register, handleSubmit } = useForm<IPropertyUnit>({

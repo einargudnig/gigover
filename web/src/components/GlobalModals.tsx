@@ -20,6 +20,8 @@ import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
 import { StakeholderModal } from './modals/PropertyModals/StakeholderModal';
+import { PropertyIcon } from './icons/PropertyIcon';
+import { PropertyToProjectModal } from './modals/PropertyModals/PropertyToProjectModal';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -115,7 +117,7 @@ export const GlobalModals = (): JSX.Element => {
 				<Modal
 					title={
 						<>
-							<ToolsIcon size={32} color={Theme.colors.yellow} type={'solid'} />
+							<ToolsIcon size={32} color={Theme.colors.black} type={'solid'} />
 							<div>Resources</div>
 						</>
 					}
@@ -125,6 +127,24 @@ export const GlobalModals = (): JSX.Element => {
 					onClose={() => setModalContext({})}
 				>
 					<UseResourceModal resourceTracker={modalContext.resourceTracker} />
+				</Modal>
+			)}
+			{modalContext.propertyToProject && (
+				<Modal
+					title={
+						<>
+							<PropertyIcon size={32} color={Theme.colors.black} />
+							<div>Property to Project</div>
+						</>
+					}
+					open={true}
+					centerModal={true}
+					closeIcon={true}
+					onClose={() => setModalContext({})}
+				>
+					<PropertyToProjectModal
+						properties={modalContext.propertyToProject.properties}
+					/>
 				</Modal>
 			)}
 		</>

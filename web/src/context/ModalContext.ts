@@ -8,7 +8,7 @@ import { ProjectImage } from '../models/ProjectImage';
 import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 import { Tender } from '../models/Tender';
 import { Bid } from '../models/Tender';
-import { IPropertyForm, IPropertyUnit, IStakeholder } from '../models/Property';
+import { IProperties, IPropertyForm, IPropertyUnit, IStakeholder } from '../models/Property';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -49,6 +49,10 @@ export interface ResourceTrackerContext {
 	task?: Task;
 }
 
+export interface PropertyToProjectContext {
+	properties: IProperties[];
+}
+
 export interface IModalContext {
 	modifyProject?: {
 		project?: Project;
@@ -65,6 +69,7 @@ export interface IModalContext {
 	editPhoto?: IEditPhotoContext;
 	resources?: IResourceModalContext;
 	resourceTracker?: ResourceTrackerContext;
+	propertyToProject?: PropertyToProjectContext;
 	modifyTender?: {
 		modifyTender?: Tender;
 	};
