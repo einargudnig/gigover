@@ -51,6 +51,7 @@ export interface ResourceTrackerContext {
 
 export interface PropertyToProjectContext {
 	properties: IProperties[];
+	projectId: number;
 }
 
 export interface IModalContext {

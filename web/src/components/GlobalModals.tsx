@@ -144,6 +144,7 @@ export const GlobalModals = (): JSX.Element => {
 				>
 					<PropertyToProjectModal
 						properties={modalContext.propertyToProject.properties}
+						projectId={modalContext.propertyToProject.projectId}
 					/>
 				</Modal>
 			)}
