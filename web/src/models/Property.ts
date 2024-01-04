@@ -19,7 +19,7 @@ export interface IProperty {
 	size: string;
 	type: string;
 	units: IPropertyUnit[];
-	stakeholders: IStakeholder[];
+	stakeHolders: IStakeholder[];
 }
 
 export interface IPropertyForm {

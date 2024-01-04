@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Text, Grid, GridItem, HStack, Box, Spacer, Button } from '@chakra-ui/react';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 
-export const Stakeholders = ({ stakeholders }): JSX.Element => {
+export const Stakeholders = ({ stakeHolders }): JSX.Element => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 
 	return (
 		<>
-			{!stakeholders || stakeholders.length === 0 ? (
+			{!stakeHolders || stakeHolders.length === 0 ? (
 				<Text>No Stakeholders found</Text>
 			) : (
-				stakeholders.map((stakeholder) => (
+				stakeHolders.map((stakeholder) => (
 					<div key={stakeholder.uId}>
 						<Grid
 							templateColumns="repeat(8, 1fr)"

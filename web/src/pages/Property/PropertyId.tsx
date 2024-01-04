@@ -16,9 +16,9 @@ export const PropertyId = (): JSX.Element => {
 
 	const { data, isLoading } = useGetPropertyById(Number(propertyId));
 	const property = data?.property;
-	// console.log(property);
+	// console.log('property', property);
 	const units = data?.property.units;
-	const stakeholders = data?.property.stakeholders;
+	const stakeHolders = data?.property.stakeHolders;
 
 	return (
 		<>
@@ -93,7 +93,7 @@ export const PropertyId = (): JSX.Element => {
 								</Button>
 							</Box>
 						</Flex>
-						<Stakeholders stakeholders={stakeholders} />
+						<Stakeholders stakeHolders={stakeHolders} />
 					</Box>
 				</>
 			)}
