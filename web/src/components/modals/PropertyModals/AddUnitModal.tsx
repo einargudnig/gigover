@@ -27,7 +27,7 @@ export const AddUnitModal = ({ unit, propertyId }: UnitModalProps): JSX.Element 
 				type,
 				propertyId
 			});
-			console.log('Unit added');
+			console.log('Unit added to propertyId:', propertyId);
 
 			closeModal();
 		} catch (error) {

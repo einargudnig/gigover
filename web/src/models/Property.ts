@@ -50,3 +50,8 @@ export interface IStakeholder {
 	propertyId: number;
 	unitId: number;
 }
+
+export interface PropertyToProject {
+	propertyId: number;
+	projectId: number;
+}

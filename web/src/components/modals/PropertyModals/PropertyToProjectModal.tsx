@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { IProperties } from '../../../models/Property';
+import { IProperties, PropertyToProject } from '../../../models/Property';
 import { TrackerSelect } from '../../TrackerSelect';
-import { Button, Flex, Spacer } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
+import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
 
 interface PropertyToProjectModalProps {
 	properties: IProperties[];
@@ -13,12 +14,24 @@ export const PropertyToProjectModal = ({
 	projectId
 }: PropertyToProjectModalProps): JSX.Element => {
 	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
-
-	console.log('PROJECTID', projectId);
+	const { mutateAsync: addProjectToProperty } = useAddProjectToProperty();
 
 	const addProject = () => {
-		console.log('add project');
+		console.log(
+			'add project',
+			'projectId:',
+			projectId,
+			'propertyId',
+			selectedProperty?.propertyId
+		);
+		const data: PropertyToProject = {
+			projectId: projectId,
+			propertyId: selectedProperty!.propertyId
+		};
+
+		addProjectToProperty(data);
 	};
+
 	return (
 		<>
 			<p>Choose a property to add to this project</p>

@@ -134,7 +134,7 @@ export const GlobalModals = (): JSX.Element => {
 					title={
 						<>
 							<PropertyIcon size={32} color={Theme.colors.black} />
-							<div>Property to Project</div>
+							<div>Add Property to Project</div>
 						</>
 					}
 					open={true}

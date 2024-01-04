@@ -29,7 +29,7 @@ export const EditUnitModal = ({ unit, propertyId }: UnitModalProps): JSX.Element
 				type,
 				propertyId
 			});
-			console.log('Unit edited');
+			console.log('Unit edited for propertyId:', propertyId);
 
 			closeModal();
 		} catch (error) {
