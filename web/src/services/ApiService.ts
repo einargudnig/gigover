@@ -151,12 +151,12 @@ export class ApiService {
 	static getPropertyById = (propertyId: number) => API_BASE + 'properties/' + propertyId;
 	static addProperty = API_BASE + 'properties/addProperty'; // ✅
 	static editProperty = API_BASE + 'properties/editProperty'; // ✅
-	static addUnit = API_BASE + 'properties/addUnit'; // ✅ -> Need to fix the propertyId
-	static editUnit = API_BASE + 'properties/editUnit'; // ✅ -> Need to fix the propertyId
+	static addUnit = API_BASE + 'properties/addUnit'; // ✅
+	static editUnit = API_BASE + 'properties/editUnit'; // ✅
 	static addStakeholder = API_BASE + 'properties/addStakeHolder';
 	static removeStakeholder = API_BASE + 'properties/removeStakeHolder';
 	static addProject = (propertyId: number, projectId: number) =>
-		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId;
+		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId; // ✅
 	static removeProject = (propertyId: number, projectId: number) =>
 		API_BASE + 'properties/removeProject' + propertyId + '/' + projectId;
 }
