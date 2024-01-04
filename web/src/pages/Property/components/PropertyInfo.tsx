@@ -63,7 +63,8 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 						<Text mb={'2'} fontSize={'xl'} fontWeight={'bold'}>
 							Drawing/Documents
 						</Text>
-						<Button>Upload files</Button>
+						{/* <Button>Upload files</Button> */}
+						<Text>🚧 Upload files is under construction 🚧</Text>
 					</GridItem>
 				</Grid>
 				<Flex justifyContent={'flex-end'}>
