@@ -97,6 +97,7 @@ export interface IModalContext {
 	stakeholder?: {
 		stakeholder?: IStakeholder;
 		propertyId: number;
+		unitId: number;
 	};
 }
 

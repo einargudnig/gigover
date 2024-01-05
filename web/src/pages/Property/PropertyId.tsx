@@ -5,6 +5,7 @@ import { PlusIcon } from '../../components/icons/PlusIcon';
 import { PropertyInfo } from './components/PropertyInfo';
 import { Stakeholders } from './components/Stakeholders';
 import { Units } from './components/Units';
+import { Projects } from './components/Projects';
 import { useGetPropertyById } from '../../queries/properties/useGetPropertyById';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
@@ -19,6 +20,7 @@ export const PropertyId = (): JSX.Element => {
 	// console.log('property', property);
 	const units = data?.property.units;
 	const stakeHolders = data?.property.stakeHolders;
+	const projects = data?.property.projects;
 
 	return (
 		<>
@@ -29,7 +31,7 @@ export const PropertyId = (): JSX.Element => {
 			) : (
 				<>
 					<PropertyInfo property={property} />
-					<hr />
+
 					<Box
 						mb={1}
 						p={4}
@@ -71,7 +73,6 @@ export const PropertyId = (): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<hr />
 						<Flex mb={8} alignItems={'center'}>
 							<Box>
 								<Heading fontSize={'xl'}>Stakeholders</Heading>
@@ -84,7 +85,8 @@ export const PropertyId = (): JSX.Element => {
 										setModalContext({
 											stakeholder: {
 												stakeholder: undefined,
-												propertyId: Number(propertyId)
+												propertyId: Number(propertyId),
+												unitId: 18 //TODO FIX
 											}
 										})
 									}
@@ -94,6 +96,21 @@ export const PropertyId = (): JSX.Element => {
 							</Box>
 						</Flex>
 						<Stakeholders stakeHolders={stakeHolders} />
+					</Box>
+					<Box
+						mb={1}
+						p={4}
+						borderRadius={8}
+						borderColor={'#EFEFEE'}
+						bg={'#EFEFEE'}
+						w="100%"
+					>
+						<Box>
+							<Heading fontSize={'xl'}>Projects</Heading>
+						</Box>
+						<Spacer />
+
+						<Projects projects={projects} />
 					</Box>
 				</>
 			)}

@@ -11,6 +11,7 @@ export interface StakeHolderFormData {
 	role: string;
 	unitId: number;
 	propertyId: number;
+	uId: string;
 }
 
 export const useAddStakeHolder = () => {

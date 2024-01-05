@@ -110,6 +110,7 @@ export const GlobalModals = (): JSX.Element => {
 					<StakeholderModal
 						stakeholder={modalContext.stakeholder.stakeholder}
 						propertyId={modalContext.stakeholder.propertyId}
+						unitId={modalContext.stakeholder.unitId}
 					/>
 				</Modal>
 			)}

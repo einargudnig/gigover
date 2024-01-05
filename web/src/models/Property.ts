@@ -20,6 +20,7 @@ export interface IProperty {
 	type: string;
 	units: IPropertyUnit[];
 	stakeHolders: IStakeholder[];
+	projects: ProjectOnProperty[];
 }
 
 export interface IPropertyForm {
@@ -54,4 +55,13 @@ export interface IStakeholder {
 export interface PropertyToProject {
 	propertyId: number;
 	projectId: number;
+}
+
+export interface ProjectOnProperty {
+	projectId: number;
+	name: string;
+	status: string;
+	totalBytes: number;
+	fileCount: number;
+	owner: boolean;
 }
