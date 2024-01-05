@@ -18,7 +18,7 @@ export const StakeholderModal = ({
 	unitId
 }: StakeholderModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
-	const { mutate: addStakeholder } = useAddStakeHolder();
+	const { mutate: addStakeholder, isLoading } = useAddStakeHolder();
 
 	const { register, handleSubmit } = useForm<IStakeholder>({
 		defaultValues: stakeholder,

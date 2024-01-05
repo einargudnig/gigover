@@ -14,7 +14,7 @@ export const useAddProjectToProperty = () => {
 	return useMutation<AddProjectToPropertyResponse, AxiosError, PropertyToProject>(
 		async (variables) => {
 			try {
-				console.log('variable in mutation: ', variables);
+				// console.log('variable in mutation: ', variables);
 				const response = await axios.post(
 					ApiService.addProject(variables.propertyId, variables.projectId),
 					variables,

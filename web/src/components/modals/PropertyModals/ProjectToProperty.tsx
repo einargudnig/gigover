@@ -3,6 +3,8 @@ import { IProperties, PropertyToProject } from '../../../models/Property';
 import { TrackerSelect } from '../../TrackerSelect';
 import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
 import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
+import { Link } from 'react-router-dom';
+import { useCloseModal } from '../../../hooks/useCloseModal';
 
 interface PropertyToProjectModalProps {
 	properties: IProperties[];
@@ -14,6 +16,7 @@ export const ProjectToPropertyModal = ({
 	projectId
 }: PropertyToProjectModalProps): JSX.Element => {
 	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
+	const closeModal = useCloseModal();
 	const { mutateAsync: addProjectToProperty, isLoading } = useAddProjectToProperty();
 
 	const addProject = () => {
@@ -30,6 +33,10 @@ export const ProjectToPropertyModal = ({
 		};
 
 		addProjectToProperty(data);
+		// add a timeout to allow the mutation to complete
+		setTimeout(() => {
+			closeModal();
+		}, 1000);
 	};
 
 	return (
@@ -55,15 +62,17 @@ export const ProjectToPropertyModal = ({
 			<Box marginTop={2}>
 				{!selectedProperty ? (
 					<Flex justifyContent={'flex-start'}>
-						<Button>View Properties</Button>
+						<Link to={'/property'}>
+							<Button onClick={closeModal}>View Properties</Button>
+						</Link>
 					</Flex>
 				) : null}
 				{selectedProperty && (
 					<Flex marginTop={2} justifyContent={'justify-between'}>
 						<Box>
-							<Flex justifyContent={'flex-start'}>
-								<Button>View Properties</Button>
-							</Flex>
+							<Link to={'/property'}>
+								<Button onClick={closeModal}>View Properties</Button>
+							</Link>
 						</Box>
 						<Spacer />
 						<Box>

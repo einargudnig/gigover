@@ -14,7 +14,7 @@ export const useRemoveProjectFromProperty = () => {
 	return useMutation<AddProjectToPropertyResponse, AxiosError, PropertyToProject>(
 		async (variables) => {
 			try {
-				console.log('variable in mutation: ', variables);
+				// console.log('variable in mutation: ', variables);
 				const response = await axios.post(
 					ApiService.removeProject(variables.propertyId, variables.projectId),
 					variables,
