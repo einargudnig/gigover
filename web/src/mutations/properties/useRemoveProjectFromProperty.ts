@@ -23,7 +23,7 @@ export const useRemoveProjectFromProperty = () => {
 					}
 				);
 
-				await client.refetchQueries(ApiService.getProperties);
+				await client.refetchQueries(ApiService.getPropertyById(variables.propertyId));
 				console.log('response.data: ', response.data);
 				return response.data;
 			} catch (e) {

@@ -21,7 +21,7 @@ import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
 import { StakeholderModal } from './modals/PropertyModals/StakeholderModal';
 import { PropertyIcon } from './icons/PropertyIcon';
-import { PropertyToProjectModal } from './modals/PropertyModals/PropertyToProjectModal';
+import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -143,7 +143,7 @@ export const GlobalModals = (): JSX.Element => {
 					closeIcon={true}
 					onClose={() => setModalContext({})}
 				>
-					<PropertyToProjectModal
+					<ProjectToPropertyModal
 						properties={modalContext.propertyToProject.properties}
 						projectId={modalContext.propertyToProject.projectId}
 					/>

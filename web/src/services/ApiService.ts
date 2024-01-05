@@ -158,5 +158,5 @@ export class ApiService {
 	static addProject = (propertyId: number, projectId: number) =>
 		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId; // ✅
 	static removeProject = (propertyId: number, projectId: number) =>
-		API_BASE + 'properties/removeProject' + propertyId + '/' + projectId;
+		API_BASE + 'properties/removeProject/' + propertyId + '/' + projectId;
 }

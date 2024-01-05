@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Text, Box, Grid, GridItem, HStack, Spacer, Button } from '@chakra-ui/react';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { PropertyToProject } from '../../../models/Property';
+import { useRemoveProjectFromProperty } from '../../../mutations/properties/useRemoveProjectFromProperty';
 
 export const Projects = ({ projects }): JSX.Element => {
 	const [dialogOpen, setDialogOpen] = useState(false);
+	const { propertyId } = useParams();
+
+	const { mutateAsync: removeProjectFromProperty, isLoading } = useRemoveProjectFromProperty();
 
 	return (
 		<>
@@ -46,12 +51,20 @@ export const Projects = ({ projects }): JSX.Element => {
 									<Spacer />
 									<Box>
 										<ConfirmDialog
-											header={'Remove Stakeholder'}
+											header={'Remove Project from Property'}
 											setIsOpen={setDialogOpen}
 											callback={(b) => {
 												if (b) {
-													console.log('Did I press the delete?');
-													// remove Stakeholder mutation!
+													console.log(
+														'removing project from property',
+														project.projectId,
+														propertyId
+													);
+													const data: PropertyToProject = {
+														projectId: project.projectId,
+														propertyId: Number(propertyId)
+													};
+													removeProjectFromProperty(data);
 												}
 												setDialogOpen(false);
 											}}
@@ -61,6 +74,7 @@ export const Projects = ({ projects }): JSX.Element => {
 												colorScheme={'red'}
 												variant={'outline'}
 												onClick={() => setDialogOpen(true)}
+												isLoading={isLoading}
 											>
 												Remove
 											</Button>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IProperties, PropertyToProject } from '../../../models/Property';
 import { TrackerSelect } from '../../TrackerSelect';
-import { Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
 import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
 
 interface PropertyToProjectModalProps {
@@ -9,12 +9,12 @@ interface PropertyToProjectModalProps {
 	projectId: number;
 }
 
-export const PropertyToProjectModal = ({
+export const ProjectToPropertyModal = ({
 	properties,
 	projectId
 }: PropertyToProjectModalProps): JSX.Element => {
 	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
-	const { mutateAsync: addProjectToProperty } = useAddProjectToProperty();
+	const { mutateAsync: addProjectToProperty, isLoading } = useAddProjectToProperty();
 
 	const addProject = () => {
 		console.log(
@@ -52,13 +52,28 @@ export const PropertyToProjectModal = ({
 					}
 				}}
 			/>
-			{selectedProperty && (
-				<Flex marginTop={2} justifyContent={'flex-end'}>
-					{/* <Button onClick={() => console.log('cancel')}>Remove</Button>
-					<Spacer /> */}
-					<Button onClick={() => addProject()}>Add Property to Project</Button>
-				</Flex>
-			)}
+			<Box marginTop={2}>
+				{!selectedProperty ? (
+					<Flex justifyContent={'flex-start'}>
+						<Button>View Properties</Button>
+					</Flex>
+				) : null}
+				{selectedProperty && (
+					<Flex marginTop={2} justifyContent={'justify-between'}>
+						<Box>
+							<Flex justifyContent={'flex-start'}>
+								<Button>View Properties</Button>
+							</Flex>
+						</Box>
+						<Spacer />
+						<Box>
+							<Button onClick={() => addProject()} isLoading={isLoading}>
+								Add Property to Project
+							</Button>
+						</Box>
+					</Flex>
+				)}
+			</Box>
 		</>
 	);
 };
