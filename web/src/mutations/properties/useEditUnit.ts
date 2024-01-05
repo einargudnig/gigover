@@ -16,6 +16,7 @@ export const useEditUnit = () => {
 	const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, UnitFormData>(async (variables) => {
+		console.log('variables', variables);
 		try {
 			const response = await axios.post(ApiService.editUnit, variables, {
 				withCredentials: true
