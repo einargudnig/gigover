@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
 import { devError } from '../../utils/ConsoleUtils';

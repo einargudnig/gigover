@@ -43,13 +43,14 @@ export interface IPropertyUnit {
 }
 
 export interface IStakeholder {
-	uId: number;
-	name: string;
-	phoneNumber: string;
-	email: string;
-	role: string;
+	stakeHolderId: number;
 	propertyId: number;
 	unitId: number;
+	uId: string;
+	role: string;
+	name: string;
+	email: string;
+	phoneNumber: string;
 }
 
 export interface PropertyToProject {

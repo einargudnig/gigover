@@ -16,6 +16,7 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const [selectedUnit, setSelectedUnit] = useState<IPropertyUnit | undefined>();
 	const [userId, setUserId] = useState<string | undefined>(); // So we have access to uId outside of the search function
+	const [role, setRole] = useState<string>('');
 	const addStakeholder = useAddStakeHolder();
 	const searchMutation = useGetUserByEmail();
 	const search = useCallback(async () => {
@@ -42,11 +43,12 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 	const addStakeholderToUnit = useCallback(async () => {
 		try {
 			if (selectedUnit) {
+				console.log('values', propertyId, selectedUnit.unitId, userId, role);
 				const response = await addStakeholder.mutateAsync({
 					propertyId,
 					unitId: selectedUnit.unitId,
 					uId: userId!,
-					role: 'Stakeholder',
+					role,
 					name: '',
 					email: '',
 					phoneNumber: ''
@@ -68,22 +70,20 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 
 	const addStakeholderToProperty = useCallback(async () => {
 		try {
-			if (selectedUnit) {
-				const response = await addStakeholder.mutateAsync({
-					propertyId,
-					uId: userId!,
-					role: 'Stakeholder',
-					name: '',
-					email: '',
-					phoneNumber: ''
-				});
+			const response = await addStakeholder.mutateAsync({
+				propertyId,
+				uId: userId!,
+				role,
+				name: '',
+				email: '',
+				phoneNumber: ''
+			});
 
-				if (response.id !== 0) {
-					setSearchMail('');
-					setInviteSuccess(true);
-				} else {
-					throw new Error('Could not invite user.');
-				}
+			if (response.id !== 0) {
+				setSearchMail('');
+				setInviteSuccess(true);
+			} else {
+				throw new Error('Could not invite user.');
 			}
 		} catch (e) {
 			//
@@ -116,9 +116,11 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 								<Input
 									placeholder={'Role'}
 									name={'role'}
-									onChange={(e) => setSearchMail(e.target.value)}
+									onChange={(e) => setRole(e.target.value)}
 								/>
-								<Button mt={4}>Add Stake holder to property</Button>
+								<Button mt={4} onClick={addStakeholderToProperty}>
+									Add Stake holder to property
+								</Button>
 							</>
 						) : (
 							<>
@@ -154,9 +156,13 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 								<Input
 									placeholder={'Role'}
 									name={'role'}
-									onChange={(e) => setSearchMail(e.target.value)}
+									onChange={(e) => setRole(e.target.value)}
 								/>
-								{selectedUnit && <Button mt={4}>Add Stake holder to unit</Button>}
+								{selectedUnit && (
+									<Button onClick={addStakeholderToUnit} mt={4}>
+										Add Stake holder to unit
+									</Button>
+								)}
 							</>
 						)}
 					</>
