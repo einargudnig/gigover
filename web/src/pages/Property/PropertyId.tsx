@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ModalContext } from '../../context/ModalContext';
 import { Box, Button, Heading, Flex, Spacer } from '@chakra-ui/react';
 import { PlusIcon } from '../../components/icons/PlusIcon';
@@ -10,10 +10,12 @@ import { useGetPropertyById } from '../../queries/properties/useGetPropertyById'
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
 
 export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();
 	const [, setModalContext] = useContext(ModalContext);
+	const [manageStakeholders, setManageStakeholders] = useState(false);
 
 	const { data, isLoading } = useGetPropertyById(Number(propertyId));
 	const property = data?.property;
@@ -24,6 +26,13 @@ export const PropertyId = (): JSX.Element => {
 
 	return (
 		<>
+			{manageStakeholders && units && (
+				<StakeholderModal
+					propertyId={Number(propertyId)}
+					units={units}
+					onClose={() => setManageStakeholders(false)}
+				/>
+			)}
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -81,15 +90,7 @@ export const PropertyId = (): JSX.Element => {
 							<Box>
 								<Button
 									leftIcon={<PlusIcon />}
-									onClick={() =>
-										setModalContext({
-											stakeholder: {
-												stakeholder: undefined,
-												propertyId: Number(propertyId),
-												unitId: 18 //TODO FIX
-											}
-										})
-									}
+									onClick={() => setManageStakeholders(true)}
 								>
 									Add stakeholders
 								</Button>

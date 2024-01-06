@@ -105,7 +105,7 @@ export const GlobalModals = (): JSX.Element => {
 					/>
 				</Modal>
 			)}
-			{modalContext.stakeholder && (
+			{/* {modalContext.stakeholder && (
 				<Modal open={true} title={'Create stakeholder'}>
 					<StakeholderModal
 						stakeholder={modalContext.stakeholder.stakeholder}
@@ -113,7 +113,7 @@ export const GlobalModals = (): JSX.Element => {
 						unitId={modalContext.stakeholder.unitId}
 					/>
 				</Modal>
-			)}
+			)} */}
 			{modalContext.resourceTracker && (
 				<Modal
 					title={

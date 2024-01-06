@@ -1,100 +1,67 @@
 import React from 'react';
-import { IStakeholder } from '../../../models/Property';
-import { Text, Box, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
-import { FormActions } from '../../FormActions';
-import { useCloseModal } from '../../../hooks/useCloseModal';
-import { useForm } from 'react-hook-form';
-import { useAddStakeHolder } from '../../../mutations/properties/useAddStakeHolder';
+import styled from 'styled-components';
+import { IPropertyUnit } from '../../../models/Property';
+import { Text, Box, Flex, Spacer } from '@chakra-ui/react';
+import { InviteStakeholder } from '../../InviteUser/InviteStakeholder';
+import { Modal } from '../../Modal';
+// import { useAddStakeHolder } from '../../../mutations/properties/useAddStakeHolder';
 
 interface StakeholderModalProps {
-	stakeholder?: IStakeholder;
 	propertyId: number;
-	unitId: number;
+	units?: IPropertyUnit[];
+	onClose: () => void;
 }
 
-export const StakeholderModal = ({
-	stakeholder,
-	propertyId,
-	unitId
-}: StakeholderModalProps): JSX.Element => {
-	const closeModal = useCloseModal();
-	const { mutate: addStakeholder } = useAddStakeHolder();
+const StakeHolderModalStyled = styled.div`
+	h3 {
+		display: flex;
+		align-items: center;
+		margin-bottom: ${(props) => props.theme.padding(2)};
+		border-bottom: 1px solid ${(props) => props.theme.colors.border};
+		padding-bottom: ${(props) => props.theme.padding(2)};
 
-	const { register, handleSubmit } = useForm<IStakeholder>({
-		defaultValues: stakeholder,
-		mode: 'onBlur'
-	});
-
-	const onSubmit = handleSubmit(async ({ name, phoneNumber, email, role }) => {
-		try {
-			addStakeholder({
-				name,
-				phoneNumber,
-				email,
-				role,
-				unitId,
-				propertyId,
-				uId: 'Testing'
-			});
-			console.log('Stakeholder added');
-
-			closeModal();
-		} catch (error) {
-			console.log(error);
+		svg {
+			margin-left: 8px;
 		}
-	});
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding-left: 0;
+
+		li {
+			padding: 12px 0;
+			display: flex;
+			justify-content: space-between;
+
+			&:not(:last-child) {
+				border-bottom: 1px solid ${(props) => props.theme.colors.border};
+			}
+		}
+	}
+`;
+
+export const StakeholderModal = ({
+	propertyId,
+	units,
+	onClose
+}: StakeholderModalProps): JSX.Element => {
+	// const { mutate: addStakeholder } = useAddStakeHolder();
 
 	return (
-		<form onSubmit={onSubmit}>
-			<VStack mb={-6} align={'stretch'}>
-				<Text>Add stakeholders</Text>
-				<FormControl id={'name'}>
-					<FormLabel>Stakeholder name</FormLabel>
-					<Input
-						required={true}
-						{...register('name', {
-							required: 'Stakeholder name is required'
-						})}
-					/>
-				</FormControl>
-				<Box mb={6} />
-				<FormControl id={'phoneNumber'}>
-					<FormLabel>Phone number</FormLabel>
-					<Input
-						required={true}
-						{...register('phoneNumber', {
-							required: 'Phone number is required'
-						})}
-					/>
-				</FormControl>
-				<Box mb={6} />
-				<FormControl id={'email'}>
-					<FormLabel>Email</FormLabel>
-					<Input
-						required={true}
-						{...register('email', {
-							required: 'Email is required'
-						})}
-					/>
-				</FormControl>
-				<Box mb={6} />
-				<FormControl id={'role'}>
-					<FormLabel>Role</FormLabel>
-					<Input
-						required={true}
-						{...register('role', {
-							required: 'Role is required'
-						})}
-					/>
-				</FormControl>
-				<Box mb={6} />
-				<FormActions
-					cancelText={'Cancel'}
-					onCancel={closeModal}
-					submitText={'Add Stakeholder'}
-					onSubmit={onSubmit}
-				/>
-			</VStack>
-		</form>
+		<Modal title={'Add StakeHolder'} open={true} onClose={onClose}>
+			<StakeHolderModalStyled>
+				<Text marginBottom={'4'} as={'h4'}>
+					To add team members, they must have signed up for GigOver.
+				</Text>
+				<Flex justifyContent={'stretch'} alignItems={'start'}>
+					<Box flexGrow={1}>
+						<InviteStakeholder units={units} propertyId={propertyId} />
+					</Box>
+					<Spacer />
+				</Flex>
+			</StakeHolderModalStyled>
+		</Modal>
 	);
 };

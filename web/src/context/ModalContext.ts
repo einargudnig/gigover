@@ -94,11 +94,11 @@ export interface IModalContext {
 		unit?: IPropertyUnit;
 		propertyId: number;
 	};
-	stakeholder?: {
-		stakeholder?: IStakeholder;
-		propertyId: number;
-		unitId: number;
-	};
+	// stakeholder?: {
+	// 	stakeholder?: IStakeholder;
+	// 	propertyId: number;
+	// 	unitId: number;
+	// };
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];
