@@ -19,7 +19,6 @@ import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
 import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
-import { StakeholderModal } from './modals/PropertyModals/StakeholderModal';
 import { PropertyIcon } from './icons/PropertyIcon';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 
@@ -105,15 +104,6 @@ export const GlobalModals = (): JSX.Element => {
 					/>
 				</Modal>
 			)}
-			{/* {modalContext.stakeholder && (
-				<Modal open={true} title={'Create stakeholder'}>
-					<StakeholderModal
-						stakeholder={modalContext.stakeholder.stakeholder}
-						propertyId={modalContext.stakeholder.propertyId}
-						unitId={modalContext.stakeholder.unitId}
-					/>
-				</Modal>
-			)} */}
 			{modalContext.resourceTracker && (
 				<Modal
 					title={

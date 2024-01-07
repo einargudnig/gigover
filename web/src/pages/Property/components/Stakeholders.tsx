@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Text, Grid, GridItem, HStack, Box, Spacer, Button } from '@chakra-ui/react';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { useRemoveStakeHolder } from '../../../mutations/properties/useRemoveStakeHolder';
 import { IStakeholder } from '../../../models/Property';
 
 export const Stakeholders = ({ stakeHolders }): JSX.Element => {
+	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	console.log('stakeHolders', stakeHolders);
 
@@ -12,21 +14,21 @@ export const Stakeholders = ({ stakeHolders }): JSX.Element => {
 
 	const handleRemove = async (stakeholder: IStakeholder) => {
 		console.log('stakeholder in REMOVE', stakeholder);
-		// try {
-		// 	const response = await removeStakeholder({
-		// 		stakeHolderId: stakeholder.stakeHolderId,
-		// 		propertyId: stakeholder.propertyId,
-		// 		unitId: stakeholder.unitId,
-		// 		uId: stakeholder.uId,
-		// 		role: stakeholder.role,
-		// 		name: stakeholder.name,
-		// 		email: stakeholder.email,
-		// 		phoneNumber: stakeholder.phoneNumber
-		// 	});
-		// 	console.log('response', response);
-		// } catch (e) {
-		// 	console.log('error', e);
-		// }
+		try {
+			const response = await removeStakeholder({
+				stakeHolderId: stakeholder.stakeHolderId,
+				propertyId: Number(propertyId),
+				unitId: stakeholder.unitId,
+				uId: stakeholder.uId,
+				role: stakeholder.role,
+				name: stakeholder.name,
+				email: stakeholder.email,
+				phoneNumber: stakeholder.phoneNumber
+			});
+			console.log('response', response);
+		} catch (e) {
+			console.log('error', e);
+		}
 	};
 
 	return (

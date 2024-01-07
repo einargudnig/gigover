@@ -44,22 +44,22 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 		try {
 			if (selectedUnit) {
 				console.log('values', propertyId, selectedUnit.unitId, userId, role);
-				const response = await addStakeholder.mutateAsync({
-					propertyId,
-					unitId: selectedUnit.unitId,
-					uId: userId!,
-					role,
-					name: '',
-					email: '',
-					phoneNumber: ''
-				});
+				// const response = await addStakeholder.mutateAsync({
+				// 	propertyId,
+				// 	unitId: selectedUnit.unitId,
+				// 	uId: userId!,
+				// 	role,
+				// 	name: '',
+				// 	email: '',
+				// 	phoneNumber: ''
+				// });
 
-				if (response.id !== 0) {
-					setSearchMail('');
-					setInviteSuccess(true);
-				} else {
-					throw new Error('Could not invite user.');
-				}
+				// if (response.id !== 0) {
+				// 	setSearchMail('');
+				// 	setInviteSuccess(true);
+				// } else {
+				// 	throw new Error('Could not invite user.');
+				// }
 			}
 		} catch (e) {
 			//

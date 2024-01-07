@@ -8,7 +8,7 @@ import { ProjectImage } from '../models/ProjectImage';
 import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 import { Tender } from '../models/Tender';
 import { Bid } from '../models/Tender';
-import { IProperties, IPropertyForm, IPropertyUnit, IStakeholder } from '../models/Property';
+import { IProperties, IPropertyForm, IPropertyUnit } from '../models/Property';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;
@@ -94,11 +94,6 @@ export interface IModalContext {
 		unit?: IPropertyUnit;
 		propertyId: number;
 	};
-	// stakeholder?: {
-	// 	stakeholder?: IStakeholder;
-	// 	propertyId: number;
-	// 	unitId: number;
-	// };
 }
 
 export type ModalContextProvider = [IModalContext, Dispatch<SetStateAction<IModalContext>>];
