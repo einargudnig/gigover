@@ -8,7 +8,7 @@ import { IStakeholder } from '../../../models/Property';
 export const Stakeholders = ({ stakeHolders }): JSX.Element => {
 	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	console.log('stakeHolders', stakeHolders);
+	// console.log('stakeHolders', stakeHolders);
 
 	const { mutate: removeStakeholder } = useRemoveStakeHolder();
 
