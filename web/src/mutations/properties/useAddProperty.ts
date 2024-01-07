@@ -10,7 +10,7 @@ export interface PropertyFormData {
 	zipCode: string;
 	city: string;
 	country: string;
-	size: string;
+	size: number;
 	type: string;
 }
 

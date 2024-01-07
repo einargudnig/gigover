@@ -15,7 +15,11 @@ export const EditPropertyModal = ({ property }: PropertyModalProps): JSX.Element
 
 	const { mutate: editProperty } = useEditProperty();
 
-	const { register, handleSubmit } = useForm<IPropertyForm>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors }
+	} = useForm<IPropertyForm>({
 		defaultValues: property,
 		mode: 'onBlur'
 	});
@@ -45,75 +49,77 @@ export const EditPropertyModal = ({ property }: PropertyModalProps): JSX.Element
 	return (
 		<form onSubmit={onSubmit}>
 			<VStack mb={-6} align={'stretch'}>
-				<Text>Edit the property here, update name, sixe and more</Text>
-				<FormControl id={'name'}>
+				<Text>Edit a property.</Text>
+				<FormControl id={'name'} isInvalid={!!errors.name}>
 					<FormLabel>Property name</FormLabel>
 					<Input
-						required={true}
 						{...register('name', {
 							required: 'Property name is required'
 						})}
 					/>
+					{errors.name && <Text color="red.500">{errors.name.message}</Text>}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'address'}>
+				<FormControl id={'address'} isInvalid={!!errors.address}>
 					<FormLabel>Address/Location</FormLabel>
 					<Input
-						required={true}
 						{...register('address', {
 							required: 'Address is required'
 						})}
 					/>
+					{errors.address && <Text color="red.500">{errors.address.message}</Text>}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'zipCode'}>
+				<FormControl id={'zipCode'} isInvalid={!!errors.zipCode}>
 					<FormLabel>Zip code</FormLabel>
 					<Input
-						required={true}
 						{...register('zipCode', {
 							required: 'Zip code is required'
 						})}
 					/>
+					{errors.zipCode && <Text color="red.500">{errors.zipCode.message}</Text>}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'city'}>
+				<FormControl id={'city'} isInvalid={!!errors.city}>
 					<FormLabel>City</FormLabel>
 					<Input
-						required={true}
 						{...register('city', {
-							required: 'Zip code is required'
+							required: 'City is required'
 						})}
 					/>
+					{errors.city && <Text color="red.500">{errors.city.message}</Text>}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'country'}>
+				<FormControl id={'country'} isInvalid={!!errors.country}>
 					<FormLabel>Country</FormLabel>
 					<Input
-						required={true}
 						{...register('country', {
-							required: 'Zip code is required'
+							required: 'Country is required'
 						})}
 					/>
+					{errors.country && <Text color="red.500">{errors.country.message}</Text>}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'size'}>
+				<FormControl id={'size'} isInvalid={!!errors.size}>
 					<FormLabel>Property size</FormLabel>
 					<Input
-						required={true}
 						{...register('size', {
-							required: 'Zip code is required'
+							required: 'Size is required',
+							valueAsNumber: true,
+							validate: (value) => !isNaN(value) || 'Size must be a number'
 						})}
 					/>
+					{errors.size && <Text color="red.500">{errors.size.message}</Text>}
 				</FormControl>
 				<Box mb={6} />
-				<FormControl id={'type'}>
+				<FormControl id={'type'} isInvalid={!!errors.type}>
 					<FormLabel>Property type</FormLabel>
 					<Input
-						required={true}
 						{...register('type', {
-							required: 'Zip code is required'
+							required: 'Type code is required'
 						})}
 					/>
+					{errors.type && <Text color="red.500">{errors.type.message}</Text>}
 				</FormControl>
 				<FormActions
 					cancelText={'Cancel'}

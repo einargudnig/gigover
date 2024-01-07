@@ -5,7 +5,7 @@ export interface IProperties {
 	city: string;
 	zipCode: string;
 	country: string;
-	size: string;
+	size: number;
 	type: string;
 }
 
@@ -16,7 +16,7 @@ export interface IProperty {
 	city: string;
 	zipCode: string;
 	country: string;
-	size: string;
+	size: number;
 	type: string;
 	units: IPropertyUnit[];
 	stakeHolders: IStakeholder[];
@@ -30,7 +30,7 @@ export interface IPropertyForm {
 	zipCode: string;
 	city: string;
 	country: string;
-	size: string;
+	size: number;
 	type: string;
 }
 
