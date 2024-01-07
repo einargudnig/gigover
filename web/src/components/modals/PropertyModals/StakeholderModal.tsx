@@ -4,7 +4,6 @@ import { IPropertyUnit } from '../../../models/Property';
 import { Text, Box, Flex, Spacer } from '@chakra-ui/react';
 import { InviteStakeholder } from '../../InviteUser/InviteStakeholder';
 import { Modal } from '../../Modal';
-// import { useAddStakeHolder } from '../../../mutations/properties/useAddStakeHolder';
 
 interface StakeholderModalProps {
 	propertyId: number;
@@ -47,8 +46,6 @@ export const StakeholderModal = ({
 	units,
 	onClose
 }: StakeholderModalProps): JSX.Element => {
-	// const { mutate: addStakeholder } = useAddStakeHolder();
-
 	return (
 		<Modal title={'Add StakeHolder'} open={true} onClose={onClose}>
 			<StakeHolderModalStyled>

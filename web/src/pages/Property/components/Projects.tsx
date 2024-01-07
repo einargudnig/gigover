@@ -20,11 +20,12 @@ export const Projects = ({ projects }): JSX.Element => {
 				projects.map((project) => (
 					<div key={project.projectId}>
 						<Grid
-							templateColumns="repeat(8, 1fr)"
+							templateColumns="repeat(6, 1fr)"
 							gap={1}
 							width={'full'}
 							m={1}
 							alignItems={'center'}
+							p={'2'}
 						>
 							<GridItem colSpan={2}>
 								<HStack>
@@ -76,7 +77,7 @@ export const Projects = ({ projects }): JSX.Element => {
 												onClick={() => setDialogOpen(true)}
 												isLoading={isLoading}
 											>
-												Remove
+												Remove from property
 											</Button>
 										</ConfirmDialog>
 									</Box>
