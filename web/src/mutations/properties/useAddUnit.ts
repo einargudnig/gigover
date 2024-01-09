@@ -6,7 +6,7 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 
 export interface UnitFormData {
 	name: string;
-	size: string;
+	size: number;
 	type: string;
 	propertyId: number;
 }

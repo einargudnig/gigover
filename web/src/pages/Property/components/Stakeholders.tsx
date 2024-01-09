@@ -8,9 +8,9 @@ import { IStakeholder } from '../../../models/Property';
 export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	console.log('stakeHolder', stakeHolder);
+	// console.log('stakeHolder', stakeHolder);
 
-	const { mutate: removeStakeholder } = useRemoveStakeHolder();
+	const { mutate: removeStakeholder, isLoading } = useRemoveStakeHolder();
 
 	const handleRemove = async (stakeholder: IStakeholder) => {
 		console.log('stakeholder in REMOVE', stakeholder);
@@ -94,6 +94,7 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 										colorScheme={'red'}
 										variant={'outline'}
 										onClick={() => setDialogOpen(true)}
+										isLoading={isLoading}
 									>
 										Remove
 									</Button>

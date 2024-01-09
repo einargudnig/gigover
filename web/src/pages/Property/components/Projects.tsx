@@ -14,75 +14,73 @@ export const Projects = ({ project }): JSX.Element => {
 
 	return (
 		<>
-			<div key={project.projectId}>
-				<Grid
-					templateColumns="repeat(6, 1fr)"
-					gap={1}
-					width={'full'}
-					m={1}
-					alignItems={'center'}
-					p={'2'}
-				>
-					<GridItem colSpan={2}>
-						<HStack>
-							<Text fontSize={'xl'} fontWeight={'bold'}>
-								Project Name:
-							</Text>
-							<Text fontSize={'lg'}>{project.name}</Text>
-						</HStack>
-					</GridItem>
-					<GridItem colSpan={2}>
-						<HStack>
-							<Text fontSize={'xl'} fontWeight={'bold'}>
-								Project status:
-							</Text>
-							<Text fontSize={'lg'}>{project.status}</Text>
-						</HStack>
-					</GridItem>
+			<Grid
+				templateColumns="repeat(6, 1fr)"
+				gap={1}
+				width={'full'}
+				m={1}
+				alignItems={'center'}
+				p={'2'}
+			>
+				<GridItem colSpan={2}>
+					<HStack>
+						<Text fontSize={'xl'} fontWeight={'bold'}>
+							Project Name:
+						</Text>
+						<Text fontSize={'lg'}>{project.name}</Text>
+					</HStack>
+				</GridItem>
+				<GridItem colSpan={2}>
+					<HStack>
+						<Text fontSize={'xl'} fontWeight={'bold'}>
+							Project status:
+						</Text>
+						<Text fontSize={'lg'}>{project.status}</Text>
+					</HStack>
+				</GridItem>
 
-					<GridItem colSpan={2}>
-						<HStack>
-							<Link to={`/project/${project.projectId}`}>
-								<Button>Go to Project</Button>
-							</Link>
-							<Spacer />
-							<Box>
-								<ConfirmDialog
-									header={`Remove Project: "${project.name}" from Property`}
-									setIsOpen={setDialogOpen}
-									callback={(b) => {
-										if (b) {
-											console.log(
-												'removing project from property',
-												project.name,
-												'projectId:',
-												project.projectId
-											);
-											const data: PropertyToProject = {
-												projectId: project.projectId,
-												propertyId: Number(propertyId)
-											};
-											removeProjectFromProperty(data);
-										}
-										setDialogOpen(false);
-									}}
-									isOpen={dialogOpen}
+				<GridItem colSpan={2}>
+					<HStack>
+						<Link to={`/project/${project.projectId}`}>
+							<Button>Go to Project</Button>
+						</Link>
+						<Spacer />
+						<Box>
+							<ConfirmDialog
+								header={`Remove Project: "${project.name}" from Property`}
+								setIsOpen={setDialogOpen}
+								callback={(b) => {
+									if (b) {
+										console.log(
+											'removing project from property',
+											project.name,
+											'projectId:',
+											project.projectId
+										);
+										const data: PropertyToProject = {
+											projectId: project.projectId,
+											propertyId: Number(propertyId)
+										};
+										removeProjectFromProperty(data);
+									}
+									setDialogOpen(false);
+								}}
+								isOpen={dialogOpen}
+							>
+								<Button
+									colorScheme={'red'}
+									variant={'outline'}
+									onClick={() => setDialogOpen(true)}
+									isLoading={isLoading}
 								>
-									<Button
-										colorScheme={'red'}
-										variant={'outline'}
-										onClick={() => setDialogOpen(true)}
-										isLoading={isLoading}
-									>
-										Remove from property
-									</Button>
-								</ConfirmDialog>
-								{/* <Button onClick={removeProject}>Remove From Property</Button> */}
-							</Box>
-						</HStack>
-					</GridItem>
-				</Grid>
-			</div>
+									Remove from property
+								</Button>
+							</ConfirmDialog>
+							{/* <Button onClick={removeProject}>Remove From Property</Button> */}
+						</Box>
+					</HStack>
+				</GridItem>
+			</Grid>
 		</>
 	);
 };

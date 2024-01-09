@@ -8,7 +8,7 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 
 	return (
 		<>
-			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
+			<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 				<Heading mb={'4'} fontSize={'xl'}>
 					Property information
 				</Heading>

@@ -36,7 +36,7 @@ export interface IPropertyForm {
 
 export interface IPropertyUnit {
 	name: string;
-	size: string;
+	size: number;
 	unitId: number;
 	type: string;
 	propertyId: number;

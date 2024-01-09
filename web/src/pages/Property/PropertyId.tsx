@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { ModalContext } from '../../context/ModalContext';
-import { Box, Button, Heading, Flex, Spacer } from '@chakra-ui/react';
+import { Box, Button, Heading, Flex, Spacer, Text } from '@chakra-ui/react';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import { PropertyInfo } from './components/PropertyInfo';
 import { Stakeholders } from './components/Stakeholders';
@@ -19,7 +19,6 @@ export const PropertyId = (): JSX.Element => {
 
 	const { data, isLoading } = useGetPropertyById(Number(propertyId));
 	const property = data?.property;
-	// console.log('property', property);
 	const units = data?.property.units;
 	const stakeHolders = data?.property.stakeHolders;
 	const projects = data?.property.projects;
@@ -42,7 +41,7 @@ export const PropertyId = (): JSX.Element => {
 					<PropertyInfo property={property} />
 
 					<Box
-						mb={1}
+						mb={3}
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
@@ -72,10 +71,20 @@ export const PropertyId = (): JSX.Element => {
 								</Button>
 							</Box>
 						</Flex>
-						<Units units={units} propertyId={Number(propertyId)} />
+						{!units || units.length === 0 ? (
+							<Text m={4}>No units!</Text>
+						) : (
+							units?.map((unit) => (
+								<Units
+									unit={unit}
+									propertyId={Number(propertyId)}
+									key={unit.unitId}
+								/>
+							))
+						)}
 					</Box>
 					<Box
-						mb={1}
+						mb={3}
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
@@ -96,16 +105,19 @@ export const PropertyId = (): JSX.Element => {
 								</Button>
 							</Box>
 						</Flex>
-						{/* <Stakeholders stakeHolders={stakeHolders} /> */}
-						{stakeHolders?.map((stakeholder) => (
-							<Stakeholders
-								stakeHolder={stakeholder}
-								key={stakeholder.stakeHolderId}
-							/>
-						))}
+						{!stakeHolders || stakeHolders.length === 0 ? (
+							<Text m={4}>No stakeholders!</Text>
+						) : (
+							stakeHolders?.map((stakeholder) => (
+								<Stakeholders
+									stakeHolder={stakeholder}
+									key={stakeholder.stakeHolderId}
+								/>
+							))
+						)}
 					</Box>
 					<Box
-						mb={1}
+						mb={3}
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
@@ -116,10 +128,13 @@ export const PropertyId = (): JSX.Element => {
 							<Heading fontSize={'xl'}>Projects</Heading>
 						</Box>
 						<Spacer />
-						{projects?.map((project) => (
-							<Projects project={project} key={project.projectId} />
-						))}
-						{/* <Projects projects={projects} /> */}
+						{!projects || projects.length === 0 ? (
+							<Text m={4}>No projects!</Text>
+						) : (
+							projects?.map((project) => (
+								<Projects project={project} key={project.projectId} />
+							))
+						)}
 					</Box>
 				</>
 			)}

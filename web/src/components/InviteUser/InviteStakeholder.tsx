@@ -5,6 +5,7 @@ import { devError } from '../../utils/ConsoleUtils';
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
 import { TrackerSelect } from '../TrackerSelect';
 import { IPropertyUnit } from '../../models/Property';
+import { FormActions } from '../FormActions';
 
 interface InviteUserProps {
 	units?: IPropertyUnit[];
@@ -118,7 +119,11 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 									name={'role'}
 									onChange={(e) => setRole(e.target.value)}
 								/>
-								<Button mt={4} onClick={addStakeholderToProperty}>
+								<Button
+									mt={4}
+									onClick={addStakeholderToProperty}
+									isLoading={addStakeholder.isLoading}
+								>
 									Add Stake holder to property
 								</Button>
 							</>
@@ -159,9 +164,11 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 									onChange={(e) => setRole(e.target.value)}
 								/>
 								{selectedUnit && (
-									<Button onClick={addStakeholderToUnit} mt={4}>
-										Add Stake holder to unit
-									</Button>
+									<FormActions
+										submitText={'Add Stake holder to unit'}
+										onSubmit={addStakeholderToUnit}
+										submitLoading={addStakeholder.isLoading}
+									/>
 								)}
 							</>
 						)}
