@@ -96,7 +96,13 @@ export const PropertyId = (): JSX.Element => {
 								</Button>
 							</Box>
 						</Flex>
-						<Stakeholders stakeHolders={stakeHolders} />
+						{/* <Stakeholders stakeHolders={stakeHolders} /> */}
+						{stakeHolders?.map((stakeholder) => (
+							<Stakeholders
+								stakeHolder={stakeholder}
+								key={stakeholder.stakeHolderId}
+							/>
+						))}
 					</Box>
 					<Box
 						mb={1}
@@ -110,8 +116,10 @@ export const PropertyId = (): JSX.Element => {
 							<Heading fontSize={'xl'}>Projects</Heading>
 						</Box>
 						<Spacer />
-
-						<Projects projects={projects} />
+						{projects?.map((project) => (
+							<Projects project={project} key={project.projectId} />
+						))}
+						{/* <Projects projects={projects} /> */}
 					</Box>
 				</>
 			)}
