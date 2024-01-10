@@ -2,24 +2,41 @@ import React, { useCallback, useState } from 'react';
 import { useAddStakeHolder } from '../../mutations/properties/useAddStakeHolder';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { devError } from '../../utils/ConsoleUtils';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
+import {
+	Button,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Input,
+	Text,
+	useToast
+} from '@chakra-ui/react';
 import { TrackerSelect } from '../TrackerSelect';
 import { IPropertyUnit } from '../../models/Property';
 import { FormActions } from '../FormActions';
+import { useCloseModal } from '../../hooks/useCloseModal';
+import emailjs from '@emailjs/browser';
 
 interface InviteUserProps {
 	units?: IPropertyUnit[];
 	propertyId: number;
+	propertyName: string;
 }
 
-export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.Element => {
+export const InviteStakeholder = ({
+	units,
+	propertyId,
+	propertyName
+}: InviteUserProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const [selectedUnit, setSelectedUnit] = useState<IPropertyUnit | undefined>();
 	const [userId, setUserId] = useState<string | undefined>(); // So we have access to uId outside of the search function
 	const [role, setRole] = useState<string>('');
+	const closeModal = useCloseModal();
 	const addStakeholder = useAddStakeHolder();
 	const searchMutation = useGetUserByEmail();
+	const toast = useToast();
 	const search = useCallback(async () => {
 		try {
 			const response = await searchMutation.mutateAsync({
@@ -34,12 +51,51 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 				setInviteSuccess(true); // -> this might be enough to display the UI?
 				setUserId(response.uId);
 			}
+			toast({
+				title: 'Email sent',
+				description:
+					'The user was not found, we sent him an email to invite him to Gigover.',
+				status: 'info',
+				duration: 5000,
+				isClosable: true
+			});
+			// sendEmail();
 		} catch (e) {
-			//
 			devError(e);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchMutation, searchMail]);
+
+	// For the email we send if the user does not have a gigOver account.
+	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
+	const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_STAKEHOLDER_TEMPLATE_ID;
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+
+	// We send an email to ask the user to create a gigOver account if he doesn't have one.
+	const sendEmailNoAccount = async () => {
+		const templateParams = {
+			tenderDesc,
+			to_email: searchMail
+		};
+		console.log('Sending email to: ', searchMail);
+		console.log('tenderDesc: ', templateParams.tenderDesc);
+		try {
+			await emailjs
+				.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
+
+			onClose();
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	const addStakeholderToUnit = useCallback(async () => {
 		try {
@@ -58,6 +114,15 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 				if (response.id !== 0) {
 					setSearchMail('');
 					setInviteSuccess(true);
+					toast({
+						title: 'Stakeholder invited',
+						description:
+							'The user has been invited to make an offer to the tender, we also sent him an email.',
+						status: 'success',
+						duration: 3000,
+						isClosable: true
+					});
+					closeModal();
 				} else {
 					throw new Error('Could not invite user.');
 				}
@@ -83,6 +148,7 @@ export const InviteStakeholder = ({ units, propertyId }: InviteUserProps): JSX.E
 			if (response.id !== 0) {
 				setSearchMail('');
 				setInviteSuccess(true);
+				closeModal();
 			} else {
 				throw new Error('Could not invite user.');
 			}
