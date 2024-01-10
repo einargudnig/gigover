@@ -22,9 +22,9 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 						</HStack>
 						<HStack m={'1'}>
 							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Address/Location:
+								Address:
 							</Text>
-							<Text fontSize={'lg'}>{property.name}</Text>
+							<Text fontSize={'lg'}>{property.address}</Text>
 						</HStack>
 						<HStack m={'1'}>
 							<Text fontWeight={'bold'} fontSize={'xl'}>
