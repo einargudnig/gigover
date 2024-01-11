@@ -15,7 +15,7 @@ import { TrackerSelect } from '../TrackerSelect';
 import { IPropertyUnit } from '../../models/Property';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
-import emailjs from '@emailjs/browser';
+// import emailjs from '@emailjs/browser';
 
 interface InviteUserProps {
 	units?: IPropertyUnit[];
@@ -37,6 +37,7 @@ export const InviteStakeholder = ({
 	const addStakeholder = useAddStakeHolder();
 	const searchMutation = useGetUserByEmail();
 	const toast = useToast();
+	console.log('name for email', propertyName);
 	const search = useCallback(async () => {
 		try {
 			const response = await searchMutation.mutateAsync({
@@ -50,15 +51,15 @@ export const InviteStakeholder = ({
 				setInviteSuccess(true); // -> this might be enough to display the UI?
 				setUserId(response.uId);
 			}
+			//! Add email info here
 			toast({
-				title: 'Email sent',
-				description:
-					'The user was not found, we sent him an email to invite him to Gigover.',
+				title: 'user not',
+				description: 'The user was not found, make sure he has a gigover account',
 				status: 'info',
 				duration: 5000,
 				isClosable: true
 			});
-			sendEmailNoAccount();
+			// sendEmailNoAccount();
 		} catch (e) {
 			devError(e);
 		}
@@ -66,35 +67,35 @@ export const InviteStakeholder = ({
 	}, [searchMutation, searchMail]);
 
 	// For the email we send if the user does not have a gigOver account.
-	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_STAKEHOLDER_TEMPLATE_ID;
-	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+	// const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
+	// const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_STAKEHOLDER_TEMPLATE_ID;
+	// const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	// We send an email to ask the user to create a gigOver account if he doesn't have one.
-	const sendEmailNoAccount = async () => {
-		const templateParams = {
-			propertyName,
-			to_email: searchMail
-		};
-		console.log('Sending email to: ', searchMail);
-		console.log('propertyName: ', templateParams.propertyName);
-		try {
-			await emailjs
-				.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
-				.then(
-					function (response) {
-						console.log('SUCCESS!', response.status, response.text);
-					},
-					function (error) {
-						console.log('FAILED...', error);
-					}
-				);
+	// const sendEmailNoAccount = async () => {
+	// 	const templateParams = {
+	// 		propertyName,
+	// 		to_email: searchMail
+	// 	};
+	// 	console.log('Sending email to: ', searchMail);
+	// 	console.log('propertyName: ', templateParams.propertyName);
+	// 	try {
+	// 		await emailjs
+	// 			.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
+	// 			.then(
+	// 				function (response) {
+	// 					console.log('SUCCESS!', response.status, response.text);
+	// 				},
+	// 				function (error) {
+	// 					console.log('FAILED...', error);
+	// 				}
+	// 			);
 
-			// onClose();
-		} catch (e) {
-			console.log(e);
-		}
-	};
+	// 		// onClose();
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// };
 
 	const addStakeholderToUnit = useCallback(async () => {
 		try {
@@ -115,8 +116,7 @@ export const InviteStakeholder = ({
 					setInviteSuccess(true);
 					toast({
 						title: 'Stakeholder invited',
-						description:
-							'The user has been invited to make an offer to the tender, we also sent him an email.',
+						description: 'The user has been added as a stakeholder to this unit.',
 						status: 'success',
 						duration: 3000,
 						isClosable: true
@@ -147,6 +147,13 @@ export const InviteStakeholder = ({
 			if (response.id !== 0) {
 				setSearchMail('');
 				setInviteSuccess(true);
+				toast({
+					title: 'Stakeholder invited',
+					description: 'The user has been added as a stakeholder to this property.',
+					status: 'success',
+					duration: 3000,
+					isClosable: true
+				});
 				closeModal();
 			} else {
 				throw new Error('Could not invite user.');
