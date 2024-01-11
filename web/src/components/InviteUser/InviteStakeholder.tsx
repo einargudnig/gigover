@@ -43,7 +43,6 @@ export const InviteStakeholder = ({
 				email: searchMail
 			});
 
-			//return the response to show the UI?
 			if (response.uId) {
 				// devInfo('Found user with uId:', response.uId);
 				console.log('Found user with uId:', response.uId);

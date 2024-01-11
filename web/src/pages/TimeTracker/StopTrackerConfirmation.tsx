@@ -29,6 +29,7 @@ export const StopTrackerConfirmation = ({
 		});
 
 		onComplete();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [projectId, taskId, uId, comment, onComplete]);
 
 	return (
