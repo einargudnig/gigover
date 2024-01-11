@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TenderItem } from '../../../models/Tender';
-import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
-import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
-import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
-import { usePublishTender } from '../../../mutations/usePublishTender';
+import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
+import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
+import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
+import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
 import {
 	Box,
 	Button,

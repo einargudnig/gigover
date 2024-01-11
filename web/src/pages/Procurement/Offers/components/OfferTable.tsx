@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Input, Button, useToast } from '@chakra-ui/react';
-import { useAddOfferItems } from '../../../../mutations/useAddOfferItems';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
+import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 // import { GetOfferItem } from '../../../../models/Tender';
 // import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 

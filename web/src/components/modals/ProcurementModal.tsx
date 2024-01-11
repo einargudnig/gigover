@@ -20,7 +20,7 @@ import { useQueryClient } from 'react-query';
 import { ApiService } from '../../services/ApiService';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
+import { useAddTender, TenderFormData } from '../../mutations/procurement/useAddTender';
 import { devError } from '../../utils/ConsoleUtils';
 import { Task } from '../../models/Task';
 interface TenderModalProps {

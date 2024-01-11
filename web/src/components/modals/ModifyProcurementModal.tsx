@@ -16,7 +16,7 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { useQueryClient } from 'react-query';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
+import { useModifyTender, ProjectFormData } from '../../mutations/procurement/useModifyTender';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../LoadingSpinner';

@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { Offer } from '../models/Tender';
+import { ApiService } from '../../services/ApiService';
+import { ErrorResponse } from '../../models/ErrorResponse';
+import { Offer } from '../../models/Tender';
 
 export interface UserOfferResponse {
 	list: Offer[];

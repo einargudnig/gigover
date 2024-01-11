@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../utils/ConsoleUtils';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { devError } from '../../utils/ConsoleUtils';
+import { ErrorResponse } from '../../models/ErrorResponse';
 
 interface InviteBidderInput {
 	tenderId: number;

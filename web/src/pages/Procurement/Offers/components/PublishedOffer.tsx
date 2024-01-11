@@ -22,10 +22,10 @@ import { Center } from '../../../../components/Center';
 import { GetOfferItem } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import ReactToPdf from 'react-to-pdf';
-import { useGetTenderById } from '../../../../queries/useGetTenderById';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
-import { useAcceptOffer } from '../../../../mutations/useAcceptOffer';
-import { useRejectOffer } from '../../../../mutations/useRejectOffer';
+import { useAcceptOffer } from '../../../../mutations/procurement/useAcceptOffer';
+import { useRejectOffer } from '../../../../mutations/procurement/useRejectOffer';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {

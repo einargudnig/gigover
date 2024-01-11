@@ -1,21 +1,19 @@
 import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import { Tender } from '../models/Tender';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
+import { Tender } from '../../models/Tender';
+import { ErrorResponse } from '../../models/ErrorResponse';
 
 export interface TenderResponse {
 	list: Tender[];
 }
 
-export const useUserTenders = () => {
+export const useGetProjectTenders = (projectId: number) => {
 	const { data, isLoading, isError, error } = useQuery<TenderResponse, ErrorResponse>(
-		ApiService.userTenders,
+		ApiService.projectTenders(projectId),
 		{
 			refetchOnWindowFocus: true
-			// withCredentials: true
 		}
 	);
-
 	const tenders: Tender[] = data?.list || [];
 
 	return {

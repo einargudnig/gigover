@@ -7,6 +7,7 @@ import { Modal } from '../../Modal';
 
 interface StakeholderModalProps {
 	propertyId: number;
+	propertyName?: string;
 	units?: IPropertyUnit[];
 	onClose: () => void;
 }
@@ -43,6 +44,7 @@ const StakeHolderModalStyled = styled.div`
 
 export const StakeholderModal = ({
 	propertyId,
+	propertyName,
 	units,
 	onClose
 }: StakeholderModalProps): JSX.Element => {
@@ -54,7 +56,11 @@ export const StakeholderModal = ({
 				</Text>
 				<Flex justifyContent={'stretch'} alignItems={'start'}>
 					<Box flexGrow={1}>
-						<InviteStakeholder units={units} propertyId={propertyId} />
+						<InviteStakeholder
+							units={units}
+							propertyId={propertyId}
+							propertyName={propertyName}
+						/>
 					</Box>
 					<Spacer />
 				</Flex>

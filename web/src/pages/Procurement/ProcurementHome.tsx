@@ -5,7 +5,7 @@ import { Text, HStack, Flex, Grid, GridItem, Spacer, Box, Button, Tooltip } from
 import { Tender } from '../../models/Tender';
 import { handleFinishDate } from '../../utils/HandleFinishDate';
 import { Center } from '../../components/Center';
-import { useUserTenders } from '../../queries/useUserTenders';
+import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../utils/StringUtils';
 import { NoProcurementFound } from '../../components/empty/NoProcurementFound';

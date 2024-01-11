@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
 import axios, { AxiosError } from 'axios';
-import { ApiService } from '../services/ApiService';
-import { Tender } from '../models/Tender';
+import { ApiService } from '../../services/ApiService';
+import { Tender } from '../../models/Tender';
 
 interface TenderDeleteResponse {
 	errorText: 'OK';

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { TenderItem } from '../models/Tender';
-import { ApiService } from '../services/ApiService';
+import { TenderItem } from '../../models/Tender';
+import { ApiService } from '../../services/ApiService';
 import axios, { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
+import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
 import axios, { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
-import { TenderItem } from '../models/Tender';
+import { TenderItem } from '../../models/Tender';
 
 // Types
 export interface TenderItemResponse

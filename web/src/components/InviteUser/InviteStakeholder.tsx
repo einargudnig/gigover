@@ -20,7 +20,7 @@ import emailjs from '@emailjs/browser';
 interface InviteUserProps {
 	units?: IPropertyUnit[];
 	propertyId: number;
-	propertyName: string;
+	propertyName?: string;
 }
 
 export const InviteStakeholder = ({
@@ -59,7 +59,7 @@ export const InviteStakeholder = ({
 				duration: 5000,
 				isClosable: true
 			});
-			// sendEmail();
+			sendEmailNoAccount();
 		} catch (e) {
 			devError(e);
 		}
@@ -74,11 +74,11 @@ export const InviteStakeholder = ({
 	// We send an email to ask the user to create a gigOver account if he doesn't have one.
 	const sendEmailNoAccount = async () => {
 		const templateParams = {
-			tenderDesc,
+			propertyName,
 			to_email: searchMail
 		};
 		console.log('Sending email to: ', searchMail);
-		console.log('tenderDesc: ', templateParams.tenderDesc);
+		console.log('propertyName: ', templateParams.propertyName);
 		try {
 			await emailjs
 				.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
@@ -91,7 +91,7 @@ export const InviteStakeholder = ({
 					}
 				);
 
-			onClose();
+			// onClose();
 		} catch (e) {
 			console.log(e);
 		}

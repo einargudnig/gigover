@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { ApiService } from '../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { useMutation } from 'react-query';
-import { devError } from '../utils/ConsoleUtils';
+import { devError } from '../../utils/ConsoleUtils';
 
 export interface TenderOffer {
 	tenderId: number;

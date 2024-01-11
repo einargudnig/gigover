@@ -19,7 +19,7 @@ import {
 	useToast
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useAddOffer } from '../../../../mutations/useAddOffer';
+import { useAddOffer } from '../../../../mutations/procurement/useAddOffer';
 import { useParams, useNavigate } from 'react-router-dom';
 
 type OfferNote = {

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { ApiService } from '../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { OfferId } from '../models/Tender';
+import { ErrorResponse } from '../../models/ErrorResponse';
+import { OfferId } from '../../models/Tender';
 
 export const useRejectOffer = () => {
 	const client = useQueryClient();

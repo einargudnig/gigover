@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { HStack, VStack, Text, Heading, Center } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useGetUserOffers } from '../../../../queries/useGetUserOffers';
+import { useGetUserOffers } from '../../../../queries/procurement/useGetUserOffers';
 import { Offer } from '../../../../models/Tender';
 import { FolderIcon } from '../../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../../hooks/colorGenerator';

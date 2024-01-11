@@ -28,6 +28,7 @@ export const PropertyId = (): JSX.Element => {
 			{manageStakeholders && units && (
 				<StakeholderModal
 					propertyId={Number(propertyId)}
+					propertyName={property?.name}
 					units={units}
 					onClose={() => setManageStakeholders(false)}
 				/>

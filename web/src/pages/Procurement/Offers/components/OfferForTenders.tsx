@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center, Flex, Text, HStack, Grid, GridItem, Tooltip } from '@chakra-ui/react';
-import { useUserTenders } from '../../../../queries/useUserTenders';
+import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';

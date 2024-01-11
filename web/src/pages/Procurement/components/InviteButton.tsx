@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react';
-import { useInviteBidder } from '../../../mutations/useInviteBidder';
+import { useInviteBidder } from '../../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 import { devError } from '../../../utils/ConsoleUtils';
 import { Theme } from '../../../Theme';

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
+import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
 import axios from 'axios';
-import { Tender } from '../models/Tender';
-import { TenderResponse } from '../queries/useUserTenders';
+import { Tender } from '../../models/Tender';
+import { TenderResponse } from '../../queries/procurement/useUserTenders';
 
 // Types
 export interface ProjectFormData

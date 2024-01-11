@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Text } from '@chakra-ui/react';
 import { PublishedOffer } from './PublishedOffer';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
 
 export const OfferPublished = (): JSX.Element => {

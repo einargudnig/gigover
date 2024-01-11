@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { PublishedOffer } from './PublishedOffer';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 import { Heading, VStack } from '@chakra-ui/react';

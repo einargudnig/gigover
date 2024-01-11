@@ -4,7 +4,7 @@ import { Text, Flex, Box, HStack, Spacer } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { useParams } from 'react-router-dom';
 import { CardBaseLink } from '../../../../components/CardBase';
-import { useGetOfferForTender } from '../../../../queries/useGetOfferForTender';
+import { useGetOfferForTender } from '../../../../queries/procurement/useGetOfferForTender';
 import { Offer } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 

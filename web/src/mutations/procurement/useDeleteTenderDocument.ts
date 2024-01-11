@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../utils/ConsoleUtils';
-import { ApiService } from '../services/ApiService';
-import { TenderDocumentByTenderOwner } from '../models/TenderDocument';
+import { devError } from '../../utils/ConsoleUtils';
+import { ApiService } from '../../services/ApiService';
+import { TenderDocumentByTenderOwner } from '../../models/TenderDocument';
 
 // export interface DocumentInput extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> { }
 

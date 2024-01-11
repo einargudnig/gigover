@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
-import { ApiService } from '../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
-import { devError } from '../utils/ConsoleUtils';
-import { TenderDocumentByTenderOwner } from '../models/TenderDocument'; //? Maybe I need to update this?
+import { devError } from '../../utils/ConsoleUtils';
+import { TenderDocumentByTenderOwner } from '../../models/TenderDocument'; //? Maybe I need to update this?
 
 export interface DocumentInput
 	extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}

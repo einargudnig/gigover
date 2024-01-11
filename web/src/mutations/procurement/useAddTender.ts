@@ -1,9 +1,9 @@
 // import { Tender } from '../models/Tender';
 import axios, { AxiosError } from 'axios';
-import { ApiService } from '../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
-import { devError } from '../utils/ConsoleUtils';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { devError } from '../../utils/ConsoleUtils';
+import { ErrorResponse } from '../../models/ErrorResponse';
 
 export interface TenderFormData {
 	projectId?: number;

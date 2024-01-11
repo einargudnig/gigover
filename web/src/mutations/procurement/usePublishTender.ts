@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { ApiService } from '../services/ApiService';
+import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { ErrorResponse } from '../../models/ErrorResponse';
 interface PublishTenderResponse {
 	errorText: 'OK';
 }

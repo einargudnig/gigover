@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
+import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import { useQueryClient } from 'react-query';

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useInviteBidder } from '../../mutations/useInviteBidder';
+import { useInviteBidder } from '../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../utils/ConsoleUtils';
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
