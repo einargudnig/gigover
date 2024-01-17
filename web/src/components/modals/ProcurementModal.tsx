@@ -10,7 +10,8 @@ import {
 	FormLabel,
 	Input,
 	Flex,
-	useToast
+	useToast,
+	HStack
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
@@ -24,6 +25,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { useAddTender, TenderFormData } from '../../mutations/procurement/useAddTender';
 import { devError } from '../../utils/ConsoleUtils';
 import { Task } from '../../models/Task';
+import { CalendarIcon } from '../icons/Calendar';
+
 interface TenderModalProps {
 	tender?: Tender;
 }
@@ -199,7 +202,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 						/>
 						{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
 					</FormControl>
-					<Box mb={6} />
+					<Box width={['50%', '33%']} mb={6} />
 					<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
 						<Flex>
 							<FormLabel>Close Date - </FormLabel>
@@ -212,18 +215,21 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 							control={control}
 							rules={{ required: 'Finish date is required' }}
 							render={({ field: { onChange, onBlur, value } }) => (
-								<DatePicker
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									selected={value ? new Date(value) : null}
-									onBlur={onBlur}
-									minDate={currentDate}
-								/>
+								<HStack>
+									<DatePicker
+										onChange={(date) => {
+											if (date) {
+												onChange((date as Date).getTime());
+											} else {
+												onChange(null);
+											}
+										}}
+										selected={value ? new Date(value) : null}
+										onBlur={onBlur}
+										minDate={currentDate}
+									/>
+									<CalendarIcon color={'black'} />
+								</HStack>
 							)}
 						/>
 						{errors.finishDate && (
