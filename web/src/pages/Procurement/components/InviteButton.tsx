@@ -150,7 +150,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	return (
 		<>
 			<Button ml={'1'} onClick={handleOpenDialog}>
-				Invite User
+				Invite Bidder
 			</Button>
 
 			<AlertDialog

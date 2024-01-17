@@ -25,6 +25,10 @@ export const useAddTender = () => {
 			const response = await axios.post(ApiService.addTender, variables, {
 				withCredentials: true
 			});
+
+			if (response.data.errorCode === 'DATA_STORE_EXCEPTION') {
+				throw new Error(response.data?.errorCode);
+			}
 			await client.refetchQueries(ApiService.userTenders);
 
 			return response.data;
