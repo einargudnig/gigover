@@ -9,7 +9,8 @@ import {
 	FormLabel,
 	Input,
 	Flex,
-	Text
+	Text,
+	HStack
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
@@ -20,6 +21,7 @@ import { useModifyTender, ProjectFormData } from '../../mutations/procurement/us
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { CalendarIcon } from '../icons/Calendar';
 
 interface TenderModalProps {
 	tender?: Tender;
@@ -123,18 +125,21 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 							// 	project?.endDate ? new Date(project.endDate) : null
 							// }
 							render={({ field: { onChange, value, onBlur } }) => (
-								<DatePicker
-									selected={value ? new Date(value) : null}
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									onBlur={onBlur}
-									minDate={currentDate}
-								/>
+								<HStack>
+									<DatePicker
+										selected={value ? new Date(value) : null}
+										onChange={(date) => {
+											if (date) {
+												onChange((date as Date).getTime());
+											} else {
+												onChange(null);
+											}
+										}}
+										onBlur={onBlur}
+										minDate={currentDate}
+									/>
+									<CalendarIcon color={'black'} />
+								</HStack>
 							)}
 						/>
 						{errors.finishDate && (
