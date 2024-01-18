@@ -66,3 +66,20 @@ export interface ProjectOnProperty {
 	fileCount: number;
 	owner: boolean;
 }
+
+// needed for the document type
+type DocumentTypeImage = 0 | 'IMAGE';
+type DocumentTypeVideo = 1 | 'VIDEO';
+type DocumentTypeDoc = 2 | 'DOCUMENT';
+
+export type DocumentTypes = DocumentTypeImage | DocumentTypeVideo | DocumentTypeDoc;
+
+export interface PropertyDocument {
+	id: number;
+	propertyId: number;
+	name: string;
+	type: DocumentTypes;
+	url: string;
+	bytes: number;
+	created: number; // Timestamp
+}

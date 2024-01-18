@@ -7,6 +7,7 @@ import { ProjectImage } from '../models/ProjectImage';
 export interface DocumentInput
 	extends Pick<
 		ProjectImage,
+		| 'propertyId'
 		| 'offerId'
 		| 'tenderId'
 		| 'projectId'

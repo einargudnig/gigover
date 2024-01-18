@@ -22,6 +22,7 @@ export const PropertyId = (): JSX.Element => {
 	const units = data?.property.units;
 	const stakeHolders = data?.property.stakeHolders;
 	const projects = data?.property.projects;
+	// const documents = data?.property.documents;
 
 	return (
 		<>
@@ -136,6 +137,27 @@ export const PropertyId = (): JSX.Element => {
 								<Projects project={project} key={project.projectId} />
 							))
 						)}
+					</Box>
+					<Box
+						mb={3}
+						p={4}
+						borderRadius={8}
+						borderColor={'#EFEFEE'}
+						bg={'#EFEFEE'}
+						w="100%"
+					>
+						<Box>
+							<Heading fontSize={'xl'}>Documents</Heading>
+						</Box>
+						<Spacer />
+						<Text m={4}>No projects!</Text>
+						{/* {!documents || documents.length === 0 ? (
+							<Text m={4}>No projects!</Text>
+						) : (
+							documents?.map((document) => (
+								<Projects project={document} key={document.documentId} />
+							))
+						)} */}
 					</Box>
 				</>
 			)}

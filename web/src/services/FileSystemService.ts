@@ -17,6 +17,7 @@ export interface FileDocument {
 	fileId: string;
 	projectId: number;
 	externalId?: number;
+	propertyId: number;
 	offerId: number;
 	tenderId: number;
 }
@@ -83,6 +84,7 @@ export class FileSystemService {
 
 	async updateDoc(
 		file: File,
+		propertyId: number,
 		offerId: number,
 		tenderId: number,
 		projectId: number,
@@ -103,6 +105,7 @@ export class FileSystemService {
 			fileName,
 			filePath,
 			externalId,
+			propertyId,
 			offerId,
 			tenderId,
 			downloadUrl,
@@ -114,6 +117,7 @@ export class FileSystemService {
 
 	async uploadFile(
 		file: File,
+		propertyId: number,
 		offerId: number, // why null?
 		tenderId: number,
 		projectId: number,
@@ -124,8 +128,6 @@ export class FileSystemService {
 	): Promise<DocumentInput> {
 		// devInfo('Gigover File Upload initiated');
 		console.log('Gigover File Upload initiated');
-		console.log('tenderId', tenderId);
-		console.log('projectId', projectId);
 
 		const fileName = uuid();
 		const originalFileName = file.name;
@@ -153,6 +155,7 @@ export class FileSystemService {
 
 					await this.updateDoc(
 						file,
+						propertyId,
 						offerId,
 						tenderId,
 						projectId,
@@ -178,6 +181,7 @@ export class FileSystemService {
 						url: downloadURL,
 						bytes: file.size,
 						taskId: externalId ?? undefined,
+						propertyId: propertyId,
 						offerId: offerId,
 						tenderId: tenderId
 					};

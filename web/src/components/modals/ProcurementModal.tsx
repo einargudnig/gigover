@@ -263,7 +263,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 								required: 'Phone number is required',
 								maxLength: {
 									value: 10,
-									message: 'Phone number cannot be longer than 10 digits'
+									message: 'Phone number cannot be more than 10 digits'
 								}
 							})}
 						/>

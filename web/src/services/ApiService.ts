@@ -149,14 +149,17 @@ export class ApiService {
 	// Properties
 	static getProperties = API_BASE + 'properties/properties';
 	static getPropertyById = (propertyId: number) => API_BASE + 'properties/' + propertyId;
-	static addProperty = API_BASE + 'properties/addProperty'; // ✅
-	static editProperty = API_BASE + 'properties/editProperty'; // ✅
-	static addUnit = API_BASE + 'properties/addUnit'; // ✅
-	static editUnit = API_BASE + 'properties/editUnit'; // ✅
+	static addProperty = API_BASE + 'properties/addProperty';
+	static editProperty = API_BASE + 'properties/editProperty';
+	static addUnit = API_BASE + 'properties/addUnit';
+	static editUnit = API_BASE + 'properties/editUnit';
 	static addStakeholder = API_BASE + 'properties/addStakeHolder';
 	static removeStakeholder = API_BASE + 'properties/removeStakeHolder';
 	static addProject = (propertyId: number, projectId: number) =>
-		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId; // ✅
+		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId;
 	static removeProject = (propertyId: number, projectId: number) =>
 		API_BASE + 'properties/removeProject/' + propertyId + '/' + projectId;
+	static addPropertyDocument = API_BASE + 'properties/addDocument';
+	static removePropertyDocument = (documentId: number) =>
+		API_BASE + 'properties/removeDocument/' + documentId;
 }

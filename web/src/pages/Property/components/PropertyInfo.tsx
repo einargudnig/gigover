@@ -1,13 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Text, Box, Grid, GridItem, HStack, Heading, Button, Flex } from '@chakra-ui/react';
 import { PlusIcon } from '../../../components/icons/PlusIcon';
 import { ModalContext } from '../../../context/ModalContext';
+import { UploadPropertyDocuments } from './UploadPropertyDocuments';
 
 export const PropertyInfo = ({ property }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
+	const [upload, setUpload] = useState(false);
 
 	return (
 		<>
+			{upload && (
+				<UploadPropertyDocuments
+					onClose={() => setUpload(false)}
+					onComplete={(status) => {
+						console.log('status', status);
+					}}
+					propertyId={property.id}
+				/>
+			)}
 			<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 				<Heading mb={'4'} fontSize={'xl'}>
 					Property information
@@ -58,13 +69,34 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							</Text>
 							<Text fontSize={'lg'}>{property.type}</Text>
 						</HStack>
+						<HStack m={'1'}>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Number of Units:
+							</Text>
+							<Text fontSize={'lg'}>{property.units.length}</Text>
+						</HStack>
+						<HStack m={'1'}>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Number of Stakeholders:
+							</Text>
+							<Text fontSize={'lg'}>{property.stakeHolders.length}</Text>
+						</HStack>
+						<HStack m={'1'}>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Number of Projects:
+							</Text>
+							<Text fontSize={'lg'}>{property.projects.length}</Text>
+						</HStack>
 					</GridItem>
 					<GridItem colSpan={2}>
-						<Text mb={'2'} fontSize={'xl'} fontWeight={'bold'}>
-							Drawing/Documents
-						</Text>
-						{/* <Button>Upload files</Button> */}
-						<Text>🚧 Upload files is under construction 🚧</Text>
+						<HStack m={'1'}>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Number of Documents:
+							</Text>
+							{/* <Text fontSize={'lg'}>{property.documents.length}</Text> */}
+							<Text fontSize={'lg'}>0</Text>
+						</HStack>
+						<Button onClick={() => setUpload(true)}>Upload files</Button>
 					</GridItem>
 				</Grid>
 				<Flex justifyContent={'flex-end'}>

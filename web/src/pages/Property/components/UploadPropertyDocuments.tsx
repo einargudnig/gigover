@@ -1,22 +1,21 @@
-import React, { useState, useCallback } from 'react';
-import { Text, VStack, Progress, useToast } from '@chakra-ui/react';
+import React, { useCallback, useState } from 'react';
+import { VStack, Text, useToast, Progress } from '@chakra-ui/react';
 import styled, { css } from 'styled-components';
-import { Modal } from '../../../../components/Modal';
-import { FormActions } from '../../../../components/FormActions';
-import { TenderDocument } from '../../../../models/TenderDocument';
-// import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
-import { useAddTenderDocumentByTenderOwner } from '../../../../mutations/procurement/useAddTenderDocumentByTenderOwner';
-import { devError } from '../../../../utils/ConsoleUtils';
-import { FileUploadType } from '../../../../models/FileUploadType';
-import { FilterIcon } from '../../../../components/icons/FilterIcon';
+import { FormActions } from '../../../components/FormActions';
+import { Modal } from '../../../components/Modal';
+import { FileUploadType } from '../../../models/FileUploadType';
+import { useFileService } from '../../../hooks/useFileService';
+import { useAddPropertyDocument } from '../../../mutations/properties/useAddPropertyDocument';
+import { devError } from '../../../utils/ConsoleUtils';
 import { useDropzone } from 'react-dropzone';
-import { useFileService } from '../../../../hooks/useFileService';
-import { DocumentInput } from '../../../../mutations/useAddDocument';
+import { FilterIcon } from '../../../components/icons/FilterIcon';
+import { PropertyDocument } from '../../../models/Property';
+import { DocumentInput } from '../../../mutations/useAddDocument';
 
 interface UploadModalProps {
 	onClose: () => void;
 	onComplete: (status: boolean) => void;
-	tenderId: number;
+	propertyId: number;
 }
 
 const UploadModalStyled = styled.div`
@@ -25,21 +24,21 @@ const UploadModalStyled = styled.div`
 	}
 `;
 
-export const UploadTenderDocuments = ({ onClose, tenderId }: UploadModalProps): JSX.Element => {
+export const UploadPropertyDocuments = ({ onClose, propertyId }: UploadModalProps): JSX.Element => {
 	return (
-		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for offer'}>
+		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for property'}>
 			<UploadModalStyled>
 				<Text marginBottom={4}>
 					You can upload any file you file necessary, this file will be linked to this
-					offer.
+					property.
 				</Text>
 				<VStack mb={-6} align={'stretch'}>
 					<DropZone
-						propertyId={0}
+						propertyId={propertyId}
 						offerId={0}
-						tenderId={tenderId}
+						tenderId={0}
 						projectId={0}
-						uploadType={FileUploadType.Tender}
+						uploadType={FileUploadType.Property}
 					/>
 					<FormActions
 						hideSubmitButton={true}
@@ -54,9 +53,6 @@ export const UploadTenderDocuments = ({ onClose, tenderId }: UploadModalProps): 
 		</Modal>
 	);
 };
-
-// I need to make a new dropZone component that will be used for the upload certifications
-// I don't want to brake the other one. Their use is similar but not the same.
 
 const DropZoneContainer = styled.div<{
 	isDraggingOver: boolean;
@@ -85,7 +81,7 @@ interface DropZoneProps {
 	projectId: number;
 	uploadType?: FileUploadType;
 	externalId?: number;
-	callback?: (tenderDocument?: TenderDocument, file?: File) => void;
+	callback?: (propertyDocument?: PropertyDocument, file?: File) => void;
 
 	children?(props: {
 		isDragActive: boolean;
@@ -105,8 +101,7 @@ const DropZone = ({
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
-	// const { mutateAsync } = useAddTenderDocument();
-	const { mutateAsync } = useAddTenderDocumentByTenderOwner();
+	const { mutateAsync } = useAddPropertyDocument();
 
 	const toast = useToast();
 
@@ -140,7 +135,7 @@ const DropZone = ({
 							externalId
 						);
 						console.log('response in DropZone', response);
-						let uploadedFile: { tenderDocument: TenderDocument } | undefined;
+						let uploadedFile: { propertyDocument: PropertyDocument } | undefined;
 
 						try {
 							// @ts-ignore
@@ -163,7 +158,7 @@ const DropZone = ({
 							});
 						} finally {
 							if (callback) {
-								callback(uploadedFile?.tenderDocument, file);
+								callback(uploadedFile?.propertyDocument, file);
 							}
 						}
 					} finally {
