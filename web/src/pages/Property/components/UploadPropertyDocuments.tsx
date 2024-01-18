@@ -25,6 +25,8 @@ const UploadModalStyled = styled.div`
 `;
 
 export const UploadPropertyDocuments = ({ onClose, propertyId }: UploadModalProps): JSX.Element => {
+	console.log('UploadPropertyDocuments', propertyId);
+
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for property'}>
 			<UploadModalStyled>
@@ -39,6 +41,7 @@ export const UploadPropertyDocuments = ({ onClose, propertyId }: UploadModalProp
 						tenderId={0}
 						projectId={0}
 						uploadType={FileUploadType.Property}
+						onClose={onClose}
 					/>
 					<FormActions
 						hideSubmitButton={true}
@@ -81,6 +84,7 @@ interface DropZoneProps {
 	projectId: number;
 	uploadType?: FileUploadType;
 	externalId?: number;
+	onClose: () => void;
 	callback?: (propertyDocument?: PropertyDocument, file?: File) => void;
 
 	children?(props: {
@@ -98,6 +102,7 @@ const DropZone = ({
 	uploadType = FileUploadType.Project,
 	externalId,
 	callback,
+	onClose,
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
@@ -120,7 +125,7 @@ const DropZone = ({
 				acceptedFiles.forEach(async (file) => {
 					try {
 						setIsUploading(true);
-						console.log('tenderId, before uploadFile', tenderId);
+						console.log('propertyId, before uploadFile', propertyId);
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
 							propertyId,
@@ -142,11 +147,12 @@ const DropZone = ({
 							uploadedFile = await mutateAsync(response);
 							toast({
 								title: 'You have uplodaded a file!',
-								description: 'View it in your file system',
+								description: 'This file is now linked to this property',
 								status: 'success',
 								duration: 3000,
 								isClosable: true
 							});
+							onClose();
 						} catch (e) {
 							devError('FileUpload', e);
 							toast({

@@ -16,7 +16,7 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 					onComplete={(status) => {
 						console.log('status', status);
 					}}
-					propertyId={property.id}
+					propertyId={property.propertyId}
 				/>
 			)}
 			<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">

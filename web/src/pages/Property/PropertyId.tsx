@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
+// import { Documents } from './components/Documents';
 
 export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();
@@ -155,7 +156,7 @@ export const PropertyId = (): JSX.Element => {
 							<Text m={4}>No projects!</Text>
 						) : (
 							documents?.map((document) => (
-								<Projects project={document} key={document.documentId} />
+								<Documents project={document} key={document.documentId} />
 							))
 						)} */}
 					</Box>
