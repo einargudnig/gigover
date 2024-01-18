@@ -259,7 +259,13 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 						<FormLabel>Phone Number</FormLabel>
 						<Input
 							required={true}
-							{...register('phoneNumber', { required: 'Phone number is required' })}
+							{...register('phoneNumber', {
+								required: 'Phone number is required',
+								maxLength: {
+									value: 10,
+									message: 'Phone number cannot be longer than 10 digits'
+								}
+							})}
 						/>
 						{errors.phoneNumber && (
 							<Text color="red.500">{errors.phoneNumber.message}</Text>
