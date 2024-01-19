@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import { FileVideoIcon } from '../../../components/icons/FileTypes/FileVideoIcon';
 import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
 import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
@@ -54,10 +55,16 @@ export const CardBase = styled(Box)`
 const FileStyledNoLink = styled(CardBase)``;
 
 export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): JSX.Element => {
+	const { propertyId } = useParams();
 	const Icon = PropertyFilesIcon(file.type);
 	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
 	const { mutateAsync: removePropertyDocumentAsync } = useRemovePropertyDocument();
 	// const href = GetFileLink(file);
+
+	//! The propertyId does is not showing up in the file for some reason.
+	// This works for now, but I need to let Tommi know -> might be a bug in the backend.
+	const propertyIdNumber = Number(propertyId);
+	file.propertyId = propertyIdNumber;
 
 	return (
 		<FileStyledNoLink>
@@ -92,9 +99,6 @@ export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): J
 							setIsOpen={setDialogOpen}
 							callback={async (b) => {
 								if (b) {
-									console.log(
-										'Did I press the delete? in teh CONfirmation dialog?'
-									);
 									await removePropertyDocumentAsync(file);
 								}
 								setDialogOpen(false);
