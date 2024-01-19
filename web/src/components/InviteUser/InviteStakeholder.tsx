@@ -14,26 +14,26 @@ import {
 import { TrackerSelect } from '../TrackerSelect';
 import { IPropertyUnit } from '../../models/Property';
 import { FormActions } from '../FormActions';
-import { useCloseModal } from '../../hooks/useCloseModal';
 // import emailjs from '@emailjs/browser';
 
 interface InviteUserProps {
 	units?: IPropertyUnit[];
 	propertyId: number;
 	propertyName?: string;
+	onClose?: () => void;
 }
 
 export const InviteStakeholder = ({
 	units,
 	propertyId,
-	propertyName
+	propertyName,
+	onClose
 }: InviteUserProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const [selectedUnit, setSelectedUnit] = useState<IPropertyUnit | undefined>();
 	const [userId, setUserId] = useState<string | undefined>(); // So we have access to uId outside of the search function
 	const [role, setRole] = useState<string>('');
-	const closeModal = useCloseModal();
 	const addStakeholder = useAddStakeHolder();
 	const searchMutation = useGetUserByEmail();
 	const toast = useToast();
@@ -121,7 +121,7 @@ export const InviteStakeholder = ({
 						duration: 3000,
 						isClosable: true
 					});
-					closeModal();
+					onClose!();
 				} else {
 					throw new Error('Could not invite user.');
 				}
@@ -154,7 +154,7 @@ export const InviteStakeholder = ({
 					duration: 3000,
 					isClosable: true
 				});
-				closeModal();
+				onClose!();
 			} else {
 				throw new Error('Could not invite user.');
 			}

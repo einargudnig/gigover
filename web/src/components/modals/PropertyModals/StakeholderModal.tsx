@@ -60,6 +60,7 @@ export const StakeholderModal = ({
 							units={units}
 							propertyId={propertyId}
 							propertyName={propertyName}
+							onClose={onClose}
 						/>
 					</Box>
 					<Spacer />

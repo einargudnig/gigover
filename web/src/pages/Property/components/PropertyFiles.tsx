@@ -15,12 +15,8 @@ import { DownloadIcon } from '../../../components/icons/DownloadIcon';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
 
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
-// import { useDeleteTenderDocument } from '../../../../mutations/procurement/useDeleteTenderDocument';
 import { useRemovePropertyDocument } from '../../../mutations/properties/useRemovePropertyDocument';
 
-// OtherFile means files for Tenders and Offers.
-// I think I should just make a duplicate of the File.tsx so that I can more easily use it in two different places.
-// Ultimately I want to make the file component more generic so that I can use it in more places.
 interface PropertyFileProps {
 	showDelete: boolean;
 	file: PropertyDocument;
@@ -41,8 +37,6 @@ export const PropertyFilesIcon = (fileType: DocumentTypes) => {
 	}
 };
 
-// const FileStyled = styled(CardBaseLink)``;
-
 export const CardBase = styled(Box)`
 	max-width: 100%;
 	border-radius: 12px;
@@ -57,9 +51,8 @@ const FileStyledNoLink = styled(CardBase)``;
 export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): JSX.Element => {
 	const { propertyId } = useParams();
 	const Icon = PropertyFilesIcon(file.type);
-	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const { mutateAsync: removePropertyDocumentAsync } = useRemovePropertyDocument();
-	// const href = GetFileLink(file);
 
 	//! The propertyId does is not showing up in the file for some reason.
 	// This works for now, but I need to let Tommi know -> might be a bug in the backend.
