@@ -21,6 +21,7 @@ export interface IProperty {
 	units: IPropertyUnit[];
 	stakeHolders: IStakeholder[];
 	projects: ProjectOnProperty[];
+	documents: PropertyDocument[];
 }
 
 export interface IPropertyForm {

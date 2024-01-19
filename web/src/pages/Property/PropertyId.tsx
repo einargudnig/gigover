@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
-// import { Documents } from './components/Documents';
+import { PropertyFiles } from './components/PropertyFiles';
 
 export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();
@@ -23,7 +23,7 @@ export const PropertyId = (): JSX.Element => {
 	const units = data?.property.units;
 	const stakeHolders = data?.property.stakeHolders;
 	const projects = data?.property.projects;
-	// const documents = data?.property.documents;
+	const documents = data?.property.documents;
 
 	return (
 		<>
@@ -151,14 +151,19 @@ export const PropertyId = (): JSX.Element => {
 							<Heading fontSize={'xl'}>Documents</Heading>
 						</Box>
 						<Spacer />
-						<Text m={4}>No projects!</Text>
-						{/* {!documents || documents.length === 0 ? (
+						{!documents || documents.length === 0 ? (
 							<Text m={4}>No projects!</Text>
 						) : (
-							documents?.map((document) => (
-								<Documents project={document} key={document.documentId} />
-							))
-						)} */}
+							documents
+								?.sort((a, b) =>
+									b.created && a.created ? b.created - a.created : -1
+								)
+								.map((document, pIndex) => (
+									<Box key={pIndex} p={1}>
+										<PropertyFiles showDelete={true} file={document} />
+									</Box>
+								))
+						)}
 					</Box>
 				</>
 			)}
