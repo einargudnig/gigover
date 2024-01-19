@@ -5,7 +5,7 @@ import { Box } from '@chakra-ui/react';
 export const CardBase = styled(Box)`
 	max-width: 100%;
 	border-radius: 12px;
-	background: #fff;
+
 	box-shadow: ${(props) => props.theme.boxShadow()};
 	padding: 24px;
 	transition: all 0.2s linear;

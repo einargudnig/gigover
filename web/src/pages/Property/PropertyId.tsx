@@ -159,7 +159,7 @@ export const PropertyId = (): JSX.Element => {
 									b.created && a.created ? b.created - a.created : -1
 								)
 								.map((document, pIndex) => (
-									<Box key={pIndex} p={1}>
+									<Box key={pIndex} p={1} m={1}>
 										<PropertyFiles showDelete={true} file={document} />
 									</Box>
 								))

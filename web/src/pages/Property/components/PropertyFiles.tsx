@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { CardBase } from '../../../components/CardBase';
 import { FileVideoIcon } from '../../../components/icons/FileTypes/FileVideoIcon';
 import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
 import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
 import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
-import { Heading, HStack, Text, VStack, IconButton } from '@chakra-ui/react';
+import { Heading, HStack, Text, VStack, IconButton, Box } from '@chakra-ui/react';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
 import { DocumentTypes } from '../../../models/Property';
 import { PropertyDocument } from '../../../models/Property';
@@ -43,37 +41,19 @@ export const PropertyFilesIcon = (fileType: DocumentTypes) => {
 };
 
 // const FileStyled = styled(CardBaseLink)``;
+
+export const CardBase = styled(Box)`
+	max-width: 100%;
+	border-radius: 12px;
+	border: 1px solid ${(props) => props.theme.colors.black};
+	box-shadow: ${(props) => props.theme.boxShadow()};
+	padding: 24px;
+	transition: all 0.2s linear;
+`;
+
 const FileStyledNoLink = styled(CardBase)``;
 
-export const GetFileLink = (file: PropertyDocument) => {
-	const { offerId, tenderId } = useParams();
-	const location = useLocation();
-
-	// Extract the pathname and search from the location object
-	const { pathname } = location;
-
-	// Check if the current URL contains either 'offers' or 'tenders'
-	const isOffersUrl = pathname.includes('offers');
-	const isTendersUrl = pathname.includes('tenders');
-
-	let href = '';
-
-	if (isOffersUrl) {
-		// If it's an offers, append the fileId
-		return (href = `/files/tender/offers/${offerId}/${file.id}`);
-	} else if (isTendersUrl) {
-		// If it's a tender, append the fileId
-		return (href = `/files/tender/offers/${tenderId}/${file.id}`);
-	} else {
-		// If the URL doesn't contain 'offers' or 'tenders', handle it accordingly
-		// For example, you might want to show an error message or redirect to a default page.
-		console.error('Invalid URL format');
-	}
-
-	return href;
-};
-
-export const PropertyFiles = ({ showDelete = false, file }: PropertyFileProps): JSX.Element => {
+export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): JSX.Element => {
 	const Icon = PropertyFilesIcon(file.type);
 	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
 	const { mutateAsync: removePropertyDocumentAsync } = useRemovePropertyDocument();

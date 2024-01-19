@@ -12,6 +12,7 @@ export const useRemovePropertyDocument = () => {
 	const client = useQueryClient();
 
 	return useMutation<DocumentResponse, AxiosError, PropertyDocument>(async (variables) => {
+		console.log('VARIABLES I NMUTATION', variables);
 		try {
 			const response = await axios.post(
 				ApiService.removePropertyDocument(variables.id),
