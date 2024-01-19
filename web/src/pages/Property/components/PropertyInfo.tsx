@@ -93,8 +93,7 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							<Text fontWeight={'bold'} fontSize={'xl'}>
 								Number of Documents:
 							</Text>
-							{/* <Text fontSize={'lg'}>{property.documents.length}</Text> */}
-							<Text fontSize={'lg'}>0</Text>
+							<Text fontSize={'lg'}>{property.documents.length}</Text>
 						</HStack>
 						<Button onClick={() => setUpload(true)}>Upload files</Button>
 					</GridItem>

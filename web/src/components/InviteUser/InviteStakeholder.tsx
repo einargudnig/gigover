@@ -50,16 +50,17 @@ export const InviteStakeholder = ({
 
 				setInviteSuccess(true); // -> this might be enough to display the UI?
 				setUserId(response.uId);
+			} else {
+				toast({
+					title: 'User not found!',
+					description: 'The user was not found, We have sent an email to the user.',
+					status: 'error',
+					duration: 5000,
+					isClosable: true
+				});
+				// sendEmailNoAccount();
+				onClose!();
 			}
-			//! Add email info here
-			toast({
-				title: 'user not',
-				description: 'The user was not found, make sure he has a gigover account',
-				status: 'info',
-				duration: 5000,
-				isClosable: true
-			});
-			// sendEmailNoAccount();
 		} catch (e) {
 			devError(e);
 		}
@@ -77,8 +78,8 @@ export const InviteStakeholder = ({
 	// 		propertyName,
 	// 		to_email: searchMail
 	// 	};
-	// 	console.log('Sending email to: ', searchMail);
-	// 	console.log('propertyName: ', templateParams.propertyName);
+	// 	// console.log('Sending email to: ', searchMail);
+	// 	// console.log('propertyName: ', templateParams.propertyName);
 	// 	try {
 	// 		await emailjs
 	// 			.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
