@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { Outlet, NavLink } from 'react-router-dom';
 
@@ -17,9 +17,9 @@ export const Procurement = (): JSX.Element => {
 
 	const isTenderRoute = location.pathname === '/tender';
 
-	// const notifications = {
-	// 	unread: 3
-	// };
+	const notifications = {
+		unread: 0
+	};
 
 	return (
 		<>
@@ -34,7 +34,7 @@ export const Procurement = (): JSX.Element => {
 									<Button>Tender</Button>
 								</NavLink>
 							)}
-							{/* <NavLink to={'client-answer'}>
+							<NavLink to={'client-answer'}>
 								{({ isActive }) => (
 									<Button
 										colorScheme={isActive ? 'black' : 'yellow'}
@@ -60,12 +60,12 @@ export const Procurement = (): JSX.Element => {
 												>
 													{notifications.unread}
 												</Box>
-											 </Flex>
+											</Flex>
 										)}
 									</Button>
 								)}
-							</NavLink>  */}
-							{/* <NavLink to={'create-bid'}>
+							</NavLink>
+							<NavLink to={'create-bid'}>
 								{({ isActive }) => (
 									<Button
 										colorScheme={isActive ? 'black' : 'yellow'}
@@ -74,7 +74,7 @@ export const Procurement = (): JSX.Element => {
 										Create Bid
 									</Button>
 								)}
-							</NavLink> */}
+							</NavLink>
 							<NavLink to={'tender-offers'}>
 								{({ isActive }) => (
 									<Button
