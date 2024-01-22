@@ -14,7 +14,7 @@ import {
 import { TrackerSelect } from '../TrackerSelect';
 import { IPropertyUnit } from '../../models/Property';
 import { FormActions } from '../FormActions';
-// import emailjs from '@emailjs/browser';
+import emailjs from '@emailjs/browser';
 
 interface InviteUserProps {
 	units?: IPropertyUnit[];
@@ -58,7 +58,7 @@ export const InviteStakeholder = ({
 					duration: 5000,
 					isClosable: true
 				});
-				// sendEmailNoAccount();
+				sendEmailNoAccount();
 				onClose!();
 			}
 		} catch (e) {
@@ -68,35 +68,33 @@ export const InviteStakeholder = ({
 	}, [searchMutation, searchMail]);
 
 	// For the email we send if the user does not have a gigOver account.
-	// const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	// const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_STAKEHOLDER_TEMPLATE_ID;
-	// const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
+	const emailTemplateId = process.env.REACT_APP_EMAIL_STAKEHOLDER_TEMPLATE_ID;
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	// We send an email to ask the user to create a gigOver account if he doesn't have one.
-	// const sendEmailNoAccount = async () => {
-	// 	const templateParams = {
-	// 		propertyName,
-	// 		to_email: searchMail
-	// 	};
-	// 	// console.log('Sending email to: ', searchMail);
-	// 	// console.log('propertyName: ', templateParams.propertyName);
-	// 	try {
-	// 		await emailjs
-	// 			.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
-	// 			.then(
-	// 				function (response) {
-	// 					console.log('SUCCESS!', response.status, response.text);
-	// 				},
-	// 				function (error) {
-	// 					console.log('FAILED...', error);
-	// 				}
-	// 			);
-
-	// 		// onClose();
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
-	// };
+	const sendEmailNoAccount = async () => {
+		const templateParams = {
+			propertyName,
+			to_email: searchMail
+		};
+		console.log('Sending email to: ', searchMail);
+		console.log('propertyName: ', templateParams.propertyName);
+		try {
+			await emailjs
+				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	const addStakeholderToUnit = useCallback(async () => {
 		try {
