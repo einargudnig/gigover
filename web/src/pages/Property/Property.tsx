@@ -6,7 +6,7 @@ import { useGetProperties } from '../../queries/properties/useGetPoperties';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 
-const ProcurementCardStyled = styled(CardBaseLink)`
+const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
@@ -41,7 +41,7 @@ export const Property = (): JSX.Element => {
 							.slice()
 							.reverse()
 							.map((property) => (
-								<ProcurementCardStyled
+								<PropertyCardStyled
 									key={property.propertyId}
 									to={`/property/${property.propertyId}`}
 								>
@@ -81,7 +81,7 @@ export const Property = (): JSX.Element => {
 											</GridItem>
 										</Grid>
 									</Flex>
-								</ProcurementCardStyled>
+								</PropertyCardStyled>
 							))
 					)}
 				</>
