@@ -103,7 +103,8 @@ export interface Bidder {
 }
 
 // ! This is for the create-bid
-// i will keep this in Tender context for now, since it's linked together in the app
+// For increased context -> It's possible to send this straight without the Tender phase.
+// I will keep this in Tender context for now, since it's linked together in the app
 // Maybe I'll move it later...
 export interface Bid {
 	bidId: number;
@@ -112,6 +113,8 @@ export interface Bid {
 	address: string;
 	delivery: number; // 1 - 0 1 is delivery, 0 is pickup
 	finishDate: number; // Timestamp -> 'Bid valid through'
+	status: number;
+	bidItems: BidItems[];
 	bidder: BidBidder;
 	client: BidClient;
 }
@@ -136,4 +139,13 @@ export interface BidClient {
 	phoneNumber: string;
 	email: string;
 	other: string;
+}
+
+export interface BidItems {
+	bidItemId: number;
+	bidId: number;
+	name: string;
+	description: string;
+	volume: number;
+	cost: number;
 }
