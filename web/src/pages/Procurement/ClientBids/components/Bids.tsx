@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+// import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -22,7 +22,7 @@ const PropertyCardStyled = styled(CardBaseLink)`
 
 const data = [
 	{
-		id: 0,
+		id: 1,
 		name: 'bid A',
 		address: 'address A',
 		city: 'city A',
@@ -49,7 +49,7 @@ export const Bids = (): JSX.Element => {
 						.slice()
 						.reverse()
 						.map((bid) => (
-							<PropertyCardStyled key={bid.id} to={`/bid/${bid.id}`}>
+							<PropertyCardStyled key={bid.id} to={`/tender/create-bid/${bid.id}`}>
 								<Flex direction={'column'}>
 									<Grid templateColumns="repeat(4, 1fr)" gap={1}>
 										<GridItem colSpan={2}>

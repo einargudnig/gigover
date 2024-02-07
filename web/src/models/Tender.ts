@@ -149,3 +149,7 @@ export interface ClientBidItems {
 	volume: number;
 	cost: number;
 }
+
+export interface ClientBidId {
+	clientBidId: number;
+}

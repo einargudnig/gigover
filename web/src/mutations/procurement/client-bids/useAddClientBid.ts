@@ -2,9 +2,8 @@ import axios, { AxiosError } from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../../../services/ApiService';
 import { devError } from '../../../utils/ConsoleUtils';
-import { ClientBid } from '../../../models/Tender';}
+import { ClientBid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
-
 
 export const useAddClientBid = () => {
 	const client = useQueryClient();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bid } from '../../models/Tender';
+import { ClientBid } from '../../models/Tender';
 import {
 	Box,
 	Checkbox,
@@ -25,7 +25,7 @@ import { DatePicker } from '../forms/DatePicker';
 // import { LoadingSpinner } from '../LoadingSpinner';
 
 interface BidModalProps {
-	bid?: Bid;
+	bid?: ClientBid;
 }
 
 export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
@@ -34,7 +34,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	// const queryClient = useQueryClient();
 
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, control, handleSubmit } = useForm<Bid>({
+	const { register, control, handleSubmit } = useForm<ClientBid>({
 		defaultValues: bid,
 		mode: 'onBlur'
 	});
@@ -76,7 +76,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 							})}
 						/>
 					</FormControl>
-					<FormControl id={'addres'}>
+					<FormControl id={'address'}>
 						<FormLabel>Address</FormLabel>
 						<Input
 							required={true}

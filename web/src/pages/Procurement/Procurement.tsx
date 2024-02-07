@@ -71,7 +71,7 @@ export const Procurement = (): JSX.Element => {
 										colorScheme={isActive ? 'black' : 'yellow'}
 										variant={isActive ? 'outline' : 'solid'}
 									>
-										Create Bid
+										Client Bid
 									</Button>
 								)}
 							</NavLink>

@@ -1,16 +1,15 @@
 import { useMutation } from 'react-query';
-import { BidItems } from '../../../models/Tender';}
+import { ClientBidItems } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 import { ApiService } from '../../../services/ApiService';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import { useQueryClient } from 'react-query';
- 
 
 export const useAddClientBidItem = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ErrorResponse, AxiosError, BidItems>(async (variables) => {
+	return useMutation<ErrorResponse, AxiosError, ClientBidItems>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.addClientBidItem, variables, {
 				withCredentials: true

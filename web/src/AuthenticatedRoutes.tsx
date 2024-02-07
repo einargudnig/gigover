@@ -32,7 +32,7 @@ import { PublishedTender } from './pages/Procurement/Offers/components/Published
 import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
 import { CreateBidOutlet } from './pages/Procurement/ClientBids/CreateBidOutlet';
 import { Bids } from './pages/Procurement/ClientBids/components/Bids';
-// import { BidId } from './pages/Procurement/ClientBids/BidId';
+import { BidId } from './pages/Procurement/ClientBids/components/BidId';
 import { ClientAnswer } from './pages/Procurement/ClientBids/ClientAnswer';
 import { Property } from './pages/Property/Property';
 import { PropertyId } from './pages/Property/PropertyId';
@@ -87,7 +87,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'client-answer'} element={<ClientAnswer />} />
 			<Route path={'create-bid'} element={<CreateBidOutlet />}>
 				<Route index element={<Bids />} />
-				{/* <Route path={':bidId'} element={<BidId />} /> */}
+				<Route path={':bidId'} element={<BidId />} />
 			</Route>
 			<Route path={'tender-offers'} element={<OfferForTenders />} />
 			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
