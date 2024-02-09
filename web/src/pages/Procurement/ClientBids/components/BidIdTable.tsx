@@ -29,8 +29,9 @@ import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { Edit } from '../../../../components/icons/Edit';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
+import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 
-export const BidIDTable = ({ tender }): JSX.Element => {
+export const BidIdTable = ({ tender }): JSX.Element => {
 	const { clientBidId } = useParams();
 
 	const defaultData: ClientBidItems = {
@@ -49,10 +50,10 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
-	const [items, setItems] = useState<TenderItem[] | undefined>(tenderItems || []);
-	const [editingItem, setEditingItem] = useState<TenderItem | null>(null);
+	const [items, setItems] = useState<ClientBidItems[] | undefined>(tenderItems || []);
+	const [editingItem, setEditingItem] = useState<ClientBidItems | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [formData, setFormData] = useState<TenderItem>({
+	const [formData, setFormData] = useState<ClientBidItems>({
 		tenderId: Number(tenderId),
 		description: 'Description',
 		nr: 0,
@@ -60,7 +61,7 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 		unit: 'Unit'
 	});
 	// eslint-disable-next-line
-	const [updateFormData, setUpdateFormData] = useState<TenderItem>({
+	const [updateFormData, setUpdateFormData] = useState<ClientBidItems>({
 		tenderId: Number(tenderId),
 		description: 'Description',
 		nr: 0,
@@ -72,15 +73,15 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 		setItems(tenderItems);
 	}, [tenderItems]);
 
-	const {
-		mutate,
-		isLoading: isMutateLoading,
-		isError: isMutateError,
-		error: mutateError
-	} = useAddTenderItem();
-	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
-	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
-	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
+	// const {
+	// 	mutate,
+	// 	isLoading: isMutateLoading,
+	// 	isError: isMutateError,
+	// 	error: mutateError
+	// } = useAddTenderItem();
+	// const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
+	// const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
+	// const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 
 	const toast = useToast();
 
@@ -113,17 +114,17 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 			unit: formData.unit
 		});
 		console.log('Items', items);
-		mutate(formData);
+		// mutate(formData);
 		setFormData({ ...defaultData });
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
-	const handleEdit = (item: TenderItem) => {
+	const handleEdit = (item: ClientBidItems) => {
 		setEditingItem(item);
 		setUpdateFormData(item);
 	};
 
-	const handleUpdate = (item: TenderItem) => {
+	const handleUpdate = (item: ClientBidItems) => {
 		console.log('Editing item:', item);
 		console.log('Editing item:', item);
 
@@ -135,7 +136,7 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 		);
 
 		// Send the updated item to the server
-		mutateUpdate(updateFormData);
+		// mutateUpdate(updateFormData);
 
 		// Reset the editing state
 		setEditingItem(null);
@@ -147,7 +148,7 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 		};
 		if (tender !== undefined) {
 			try {
-				await publishTender(publishTenderBody);
+				// await publishTender(publishTenderBody);
 				toast({
 					title: 'Tender published',
 					description: 'Now you can invite people to send offers to your tender!',
@@ -181,7 +182,7 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 
 	return (
 		<>
-			{upload && (
+			{/* {upload && (
 				<UploadTenderDocuments
 					onClose={() => setUpload(false)}
 					onComplete={(status) => {
@@ -189,7 +190,7 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 					}}
 					tenderId={Number(tenderId)}
 				/>
-			)}
+			)} */}
 
 			<Table variant={'striped'}>
 				<Thead>
@@ -330,8 +331,8 @@ export const BidIDTable = ({ tender }): JSX.Element => {
 												setIsOpen={setDialogOpen}
 												callback={async (b) => {
 													if (b) {
-														await deleteTenderItem(item);
-														// console.log('Deleting item:', item); // Good for debugging
+														// await deleteTenderItem(item);
+														console.log('Deleting item:', item); // Good for debugging
 													}
 
 													setDialogOpen(false);
