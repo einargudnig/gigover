@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ClientBidItems } from '../../../../models/Tender';
-// add API calls
+import { useAddClientBidItem } from '../../../../mutations/procurement/client-bids/useAddClientBidItems';
+import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishClientBid';
+import { useRemoveClientBidItem } from '../../../../mutations/procurement/client-bids/useRemoveClientBidItem';
 
 import {
 	Button,
-	Box,
 	Flex,
 	FormControl,
-	FormHelperText,
 	HStack,
 	Input,
 	Table,
@@ -19,7 +19,6 @@ import {
 	Th,
 	Tr,
 	Tooltip,
-	Spacer,
 	useToast
 } from '@chakra-ui/react';
 // import { handleFinishDate } from '../../../utils/HandleFinishDate';
@@ -31,62 +30,89 @@ import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 
-export const BidIdTable = ({ tender }): JSX.Element => {
+export const BidIdTable = ({ clientBid }): JSX.Element => {
 	const { clientBidId } = useParams();
+
+	// ! fakeData until the backend stuff is working!
+	const fakeData = [
+		{
+			clientBidItemId: 1,
+			clientBidId: Number(clientBidId),
+			nr: 'asdf2',
+			description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+			volume: 100,
+			cost: 500
+		},
+		{
+			clientBidItemId: 2,
+			clientBidId: Number(clientBidId),
+			nr: 'khjsd9',
+			description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+			volume: 200,
+			cost: 1000
+		},
+		{
+			clientBidItemId: 3,
+			clientBidId: Number(clientBidId),
+			nr: 'sdfahj1',
+			description:
+				'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+			volume: 50,
+			cost: 250
+		}
+	];
 
 	const defaultData: ClientBidItems = {
 		clientBidId: Number(clientBidId),
+		nr: '0',
 		description: 'Description',
-		nr: 0,
 		volume: 0,
-		unit: 'Unit'
+		cost: 0
 	};
 
-	const tenderDescForEmail = tender?.description;
-	const tenderStatus = tender?.status;
-	const tenderItems: ClientBidItems[] | undefined = tender?.items;
-
-	const [upload, setUpload] = useState(false); // for the uploadModal
+	// const clientBidStatus = clientBid?.status;
+	const clientBidStatus = 1;
+	// const clientBidItems: ClientBidItems[] | undefined = clientBid?.items;
+	const clientBidItems: ClientBidItems[] | undefined = fakeData;
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
-	const [items, setItems] = useState<ClientBidItems[] | undefined>(tenderItems || []);
+	const [items, setItems] = useState<ClientBidItems[] | undefined>(clientBidItems || []);
 	const [editingItem, setEditingItem] = useState<ClientBidItems | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [formData, setFormData] = useState<ClientBidItems>({
-		tenderId: Number(tenderId),
+		clientBidId: Number(clientBidId),
 		description: 'Description',
-		nr: 0,
+		nr: '0',
 		volume: 0,
-		unit: 'Unit'
+		cost: 0
 	});
 	// eslint-disable-next-line
 	const [updateFormData, setUpdateFormData] = useState<ClientBidItems>({
-		tenderId: Number(tenderId),
+		clientBidId: Number(clientBidId),
 		description: 'Description',
-		nr: 0,
+		nr: '0',
 		volume: 0,
-		unit: 'Unit'
+		cost: 0
 	});
 
 	useEffect(() => {
-		setItems(tenderItems);
-	}, [tenderItems]);
+		setItems(clientBidItems);
+	}, [clientBidItems]);
 
-	// const {
-	// 	mutate,
-	// 	isLoading: isMutateLoading,
-	// 	isError: isMutateError,
-	// 	error: mutateError
-	// } = useAddTenderItem();
-	// const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
-	// const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
-	// const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
+	const {
+		mutate,
+		isLoading: isMutateLoading,
+		isError: isMutateError,
+		error: mutateError
+	} = useAddClientBidItem();
+	// TODO EditItem
+	// const { mutate: mutateUpdate, isLoading: isUpdateLoading } = ;
+	const { mutateAsync: deleteClientBidItem, isLoading: isDeleteLoading } =
+		useRemoveClientBidItem();
+	const { mutateAsync: publishClientBid, isLoading: isPublishLoading } = usePublishClientBid();
 
 	const toast = useToast();
-
-	// We only want the unit to be max 4 characters kg, m2, l, etc
-	const isInvalidUnit = formData.unit!.length > 5;
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -107,14 +133,14 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
-			tenderId: Number(tenderId),
+			clientBidId: Number(clientBidId),
 			description: formData.description,
 			nr: formData.nr,
 			volume: formData.volume,
-			unit: formData.unit
+			cost: formData.cost
 		});
 		console.log('Items', items);
-		// mutate(formData);
+		mutate(formData);
 		setFormData({ ...defaultData });
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
@@ -130,8 +156,8 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 
 		// Update the local items state
 		setItems(
-			tenderItems?.map((i) =>
-				i.tenderItemId === editingItem?.tenderItemId ? updateFormData : i
+			clientBidItems?.map((i) =>
+				i.clientBidItemId === editingItem?.clientBidItemId ? updateFormData : i
 			)
 		);
 
@@ -144,11 +170,11 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 
 	const handlePublish = async () => {
 		const publishTenderBody = {
-			tenderId: Number(tenderId)
+			clientBidId: Number(clientBidId)
 		};
-		if (tender !== undefined) {
+		if (clientBid !== undefined) {
 			try {
-				// await publishTender(publishTenderBody);
+				await publishClientBid(publishTenderBody);
 				toast({
 					title: 'Tender published',
 					description: 'Now you can invite people to send offers to your tender!',
@@ -177,21 +203,11 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 		}
 	};
 
-	const finishDateStatus = handleFinishDate(tender?.finishDate);
-	// const finishDateStatus = false;
+	// const finishDateStatus = handleFinishDate(clientBid?.finishDate);
+	const finishDateStatus = false;
 
 	return (
 		<>
-			{/* {upload && (
-				<UploadTenderDocuments
-					onClose={() => setUpload(false)}
-					onComplete={(status) => {
-						console.log('status', status);
-					}}
-					tenderId={Number(tenderId)}
-				/>
-			)} */}
-
 			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
@@ -223,7 +239,7 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 						<Tooltip label="Unit of measurement. For example: m2, kg, t">
 							<Th width={'20%'}>
 								<HStack>
-									<Text>Unit</Text>
+									<Text>Cost</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Th>
@@ -235,7 +251,7 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{tenderItems?.length === 0 ? (
+					{clientBidItems?.length === 0 ? (
 						<Tr>
 							<Td></Td>
 							<Td></Td>
@@ -247,8 +263,8 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 						</Tr>
 					) : null}
 					<>
-						{tenderItems?.map((item) => (
-							<Tr key={item.tenderItemId}>
+						{clientBidItems?.map((item) => (
+							<Tr key={item.clientBidItemId}>
 								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
@@ -286,11 +302,11 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 									{editingItem === item ? (
 										<Input
 											name="unit"
-											value={updateFormData.unit}
+											value={updateFormData.cost}
 											onChange={handleUpdateChange}
 										/>
 									) : (
-										item.unit
+										item.cost
 									)}
 								</Td>
 								{/* Action buttons */}
@@ -301,16 +317,17 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 												aria-label={'Update item'}
 												onClick={() => handleUpdate(item)}
 											>
-												{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
+												{/* {isUpdateLoading ? <LoadingSpinner /> : 'Update'} */}
+												Update
 											</Button>
 											<Button
 												onClick={() => {
 													setFormData({
-														tenderId: Number(tenderId),
+														clientBidId: Number(clientBidId),
 														description: '',
-														nr: 0,
+														nr: '0',
 														volume: 0,
-														unit: ''
+														cost: 0
 													});
 													setEditingItem(null);
 												}}
@@ -331,17 +348,17 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 												setIsOpen={setDialogOpen}
 												callback={async (b) => {
 													if (b) {
-														// await deleteTenderItem(item);
+														await deleteClientBidItem(item);
 														console.log('Deleting item:', item); // Good for debugging
 													}
 
 													setDialogOpen(false);
 													setFormData({
-														tenderId: Number(tenderId),
+														clientBidId: Number(clientBidId),
 														description: '',
-														nr: 0,
+														nr: '0',
 														volume: 0,
-														unit: ''
+														cost: 0
 													});
 												}}
 												isOpen={dialogOpen}
@@ -411,22 +428,15 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 									</FormControl>
 								</Td>
 								<Td>
-									{/* We only want the unit to be max 4 characters kg, m2, l, etc */}
-									<FormControl id="unit" isInvalid={isInvalidUnit}>
+									<FormControl id="cost">
 										<Input
 											htmlSize={4}
-											id="unit"
-											name="unit"
+											id="cost"
+											name="cost"
 											type="text"
-											value={formData.unit}
+											value={formData.cost}
 											onChange={handleChange}
 										/>
-										{isInvalidUnit ? (
-											<FormHelperText>
-												The measurement of unit should be in a short format:
-												kg, m, m2
-											</FormHelperText>
-										) : null}
 									</FormControl>
 								</Td>
 								<Td width={'20%'}>
@@ -452,19 +462,12 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 				<Flex alignItems={'center'} justifyContent={'center'}>
 					{!finishDateStatus ? (
 						<>
-							{tenderStatus === 0 ? (
+							{clientBidStatus === 1 ? (
 								<Button onClick={handlePublish} mr={'2'}>
 									{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
 								</Button>
 							) : (
 								<Text mr={'2'}>You have already published the Tender</Text>
-							)}
-							{tenderStatus === 1 ? (
-								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
-							) : (
-								<Text>
-									You need to publish the tender before you can invite people
-								</Text>
 							)}
 						</>
 					) : (
@@ -472,32 +475,6 @@ export const BidIdTable = ({ tender }): JSX.Element => {
 							<Text>The finish date has passed, you can not publish the tender.</Text>
 						</Flex>
 					)}
-				</Flex>
-				<Spacer />
-				{/* This button is for the tenderOwner to go to the offerPage */}
-				<Flex>
-					<Box>
-						<Button ml={'1'}>
-							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
-								View files from offers
-							</Link>
-						</Button>
-					</Box>
-					<Spacer />
-
-					<Box>
-						<Button onClick={() => setUpload(true)} ml={'1'}>
-							Upload files
-						</Button>
-					</Box>
-					<Spacer />
-					<Box>
-						<Button ml={'1'}>
-							<Link to={`/tender/tender-offer/${Number(tenderId)}`}>
-								Published offers
-							</Link>
-						</Button>
-					</Box>
 				</Flex>
 			</Flex>
 		</>

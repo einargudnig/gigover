@@ -142,9 +142,9 @@ export interface ClientBidClient {
 }
 
 export interface ClientBidItems {
-	clientBidItemId: number;
 	clientBidId: number;
-	name: string;
+	clientBidItemId?: number;
+	nr: string;
 	description: string;
 	volume: number;
 	cost: number;

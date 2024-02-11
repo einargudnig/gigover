@@ -11,7 +11,7 @@ interface PublishClientBidRequest {
 	clientBidId: number;
 }
 
-export const usePublishTender = () => {
+export const usePublishClientBid = () => {
 	const client = useQueryClient();
 
 	return useMutation<PublishClientBidResponse, ErrorResponse, PublishClientBidRequest>(

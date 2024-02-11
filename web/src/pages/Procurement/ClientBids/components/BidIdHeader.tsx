@@ -1,13 +1,18 @@
-import { Box, Grid, GridItem, HStack, VStack, Text } from '@chakra-ui/react';
 import React from 'react';
-// import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { Box, Grid, GridItem, HStack, VStack, Text } from '@chakra-ui/react';
 // import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
-export const BidIdHeader = (): JSX.Element => {
-	// TODO fix this
-	// const handleDelivery = 'Yes';
-	// const date = new Date(1703199600000);
-	// const finishDateStatus = handleFinishDate(date);
+export const BidIdHeader = ({ clientBid }): JSX.Element => {
+	console.log('clientBid', clientBid);
+	console.log(clientBid.bidItems);
+	console.log(clientBid.bidder);
+	const bidder = clientBid.bidder;
+	console.log('Bidder', bidder);
+	const client = clientBid?.client;
+
+	const handleDelivery = clientBid?.delivery ? 'Yes' : 'No';
+	// const time = clientBid?.finishDate;
+	// const date = new Date(time!);
 
 	return (
 		<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
@@ -20,19 +25,19 @@ export const BidIdHeader = (): JSX.Element => {
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Description:
 									</Text>
-									<Text fontSize={'lg'}>description</Text>
+									<Text fontSize={'lg'}>{clientBid.description}</Text>
 								</HStack>
 								<HStack>
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Terms:
 									</Text>
-									<Text fontSize={'lg'}>terms</Text>
+									<Text fontSize={'lg'}>{clientBid.terms}</Text>
 								</HStack>
 								<HStack>
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Status:
 									</Text>
-									<Text fontSize={'lg'}>Not published</Text>
+									<Text fontSize={'lg'}>{clientBid.status}</Text>
 								</HStack>
 							</VStack>
 
@@ -42,14 +47,13 @@ export const BidIdHeader = (): JSX.Element => {
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Address:
 										</Text>
-										<Text fontSize={'lg'}>address</Text>
+										<Text fontSize={'lg'}>{clientBid.address}</Text>
 									</HStack>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Delivery:
 										</Text>
-										{/* <Text fontSize={'lg'}>{handleDelivery}</Text> */}
-										<Text fontSize={'lg'}>delivery</Text>
+										<Text fontSize={'lg'}>{handleDelivery}</Text>
 									</HStack>
 								</VStack>
 								<VStack ml={'3'}>
@@ -58,13 +62,13 @@ export const BidIdHeader = (): JSX.Element => {
 											Close Date:
 										</Text>
 										{/* <Text fontSize={'lg'}>{formatDateWithoutTime(date)}</Text> */}
-										<Text fontSize={'lg'}>date</Text>
+										<Text fontSize={'lg'}>{clientBid.finishDate}</Text>
 									</HStack>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Phone:
 										</Text>
-										<Text fontSize={'lg'}>1234567</Text>
+										<Text fontSize={'lg'}>{clientBid.phoneNumber}</Text>
 									</HStack>
 								</VStack>
 							</HStack>
@@ -81,31 +85,31 @@ export const BidIdHeader = (): JSX.Element => {
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Name:
 								</Text>
-								<Text fontSize={'lg'}>name</Text>
+								<Text fontSize={'lg'}>{clientBid.bidder.name}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Email:
 								</Text>
-								<Text fontSize={'lg'}>email</Text>
+								<Text fontSize={'lg'}>{clientBid.bidder.email}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Company:
 								</Text>
-								<Text fontSize={'lg'}>company</Text>
+								<Text fontSize={'lg'}>{bidder.company}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Address:
 								</Text>
-								<Text fontSize={'lg'}>address</Text>
+								<Text fontSize={'lg'}>{bidder.address}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Phone:
 								</Text>
-								<Text fontSize={'lg'}>phoneNumber</Text>
+								<Text fontSize={'lg'}>{bidder.phoneNumber}</Text>
 							</HStack>
 						</VStack>
 					</Box>
@@ -118,33 +122,27 @@ export const BidIdHeader = (): JSX.Element => {
 							</Text>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Name:
-								</Text>
-								<Text fontSize={'lg'}>name</Text>
-							</HStack>
-							<HStack ml={'3'}>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Email:
 								</Text>
-								<Text fontSize={'lg'}>email</Text>
+								<Text fontSize={'lg'}>{client.email}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Address:
 								</Text>
-								<Text fontSize={'lg'}>address</Text>
+								<Text fontSize={'lg'}>{client.address}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Phone:
 								</Text>
-								<Text fontSize={'lg'}>phoneNumber</Text>
+								<Text fontSize={'lg'}>{client.phoneNumber}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
 									Other:
 								</Text>
-								<Text fontSize={'lg'}>other</Text>
+								<Text fontSize={'lg'}>{client.other}</Text>
 							</HStack>
 						</VStack>
 					</Box>
