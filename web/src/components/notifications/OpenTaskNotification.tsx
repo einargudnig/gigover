@@ -37,6 +37,7 @@ export const OpenTaskNotification = ({ notification }: OpenTaskNotificationProps
 				}
 			});
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, isLoading]);
 
 	if (isLoading) {

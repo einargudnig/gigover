@@ -44,12 +44,7 @@ export class Firebase {
 
 	// something missing here??
 	resetPassword = (email: string): Promise<void> => {
-		const actionCodeSettings = {
-			url: 'web.gigover.com',
-			handleCodeInApp: false
-		};
-
-		return this.auth.sendPasswordResetEmail(email, actionCodeSettings);
+		return this.auth.sendPasswordResetEmail(email);
 	};
 
 	signOut = (): Promise<void> => this.auth.signOut();
