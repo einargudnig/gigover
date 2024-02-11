@@ -42,6 +42,7 @@ export class Firebase {
 		return this.auth.signInWithEmailAndPassword(email, password);
 	};
 
+
 	resetPassword = (email: string): Promise<void> => {
 		return this.auth.sendPasswordResetEmail(email);
 	};

@@ -7,6 +7,7 @@ import { GoogleIcon } from '../components/icons/GoogleIcon';
 import { Center } from '@chakra-ui/react';
 import { EmailIcon } from '@chakra-ui/icons';
 import { LoginForm } from './LoginForm/LoginForm';
+import { ResetPasswordForm } from './LoginForm/ResetPasswordForm';
 
 const LoginStyled = styled.div`
 	width: 100%;
@@ -68,6 +69,8 @@ export const Login = (): JSX.Element => {
 
 	const [registrationForm, setRegistrationForm] = useState(false);
 	const [registrationError, setRegistrationError] = useState<string | null>(null);
+	const [resetPasswordForm, setResetPasswordForm] = useState(false);
+	const [resetPasswordError, setResetPasswordError] = useState<string | null>(null);
 
 	const [loading, setLoading] = useState(false);
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -112,6 +115,24 @@ export const Login = (): JSX.Element => {
 		}
 	};
 
+	const resetPassword = async (email: string) => {
+		console.log('Email', email);
+		try {
+			setResetPasswordError(null);
+			setLoading(true);
+			console.log('Resetting password');
+			console.log('email before firebase call', email);
+			const response = await firebase.resetPassword(email);
+			console.log('response from firebase', response);
+			setLoading(false);
+		} catch (e) {
+			setResetPasswordError('Resetting password failed');
+			console.log(e);
+			// Popup closed by user, or something failed..
+			setLoading(false);
+		}
+	};
+
 	return (
 		<LoginStyled>
 			<LoginWrapper>
@@ -151,6 +172,20 @@ export const Login = (): JSX.Element => {
 									onSubmit={register}
 								/>
 							</>
+						) : resetPasswordForm ? (
+							<>
+								{resetPasswordError && (
+									<div style={{ color: 'red', marginBottom: 16 }}>
+										{resetPasswordError}
+									</div>
+								)}
+								<ResetPasswordForm
+									loading={loading}
+									closeForm={() => setResetPasswordForm(false)}
+									buttonText={'Reset password'}
+									onSubmit={resetPassword}
+								/>
+							</>
 						) : (
 							<>
 								<LoginButton onClick={() => setLoginForm(!loginForm)}>
@@ -167,6 +202,12 @@ export const Login = (): JSX.Element => {
 								</Center>
 								<LoginButton onClick={() => setRegistrationForm(!registrationForm)}>
 									Create new account
+								</LoginButton>
+								<hr />
+								<LoginButton
+									onClick={() => setResetPasswordForm(!resetPasswordForm)}
+								>
+									Reset password
 								</LoginButton>
 							</>
 						)}
