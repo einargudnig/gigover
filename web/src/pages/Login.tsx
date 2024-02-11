@@ -69,8 +69,10 @@ export const Login = (): JSX.Element => {
 
 	const [registrationForm, setRegistrationForm] = useState(false);
 	const [registrationError, setRegistrationError] = useState<string | null>(null);
+
 	const [resetPasswordForm, setResetPasswordForm] = useState(false);
 	const [resetPasswordError, setResetPasswordError] = useState<string | null>(null);
+	const [successMessage, setSuccessMessage] = useState<string | null>(null); // this is used to show user success message after password reset
 
 	const [loading, setLoading] = useState(false);
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -116,15 +118,14 @@ export const Login = (): JSX.Element => {
 	};
 
 	const resetPassword = async (email: string) => {
-		console.log('Email', email);
 		try {
 			setResetPasswordError(null);
 			setLoading(true);
 			console.log('Resetting password');
-			console.log('email before firebase call', email);
-			const response = await firebase.resetPassword(email);
-			console.log('response from firebase', response);
+			await firebase.resetPassword(email);
+			console.log('Password reset email sent successfully.');
 			setLoading(false);
+			setSuccessMessage('Password reset email sent. Please check your inbox.');
 		} catch (e) {
 			setResetPasswordError('Resetting password failed');
 			console.log(e);
@@ -177,6 +178,11 @@ export const Login = (): JSX.Element => {
 								{resetPasswordError && (
 									<div style={{ color: 'red', marginBottom: 16 }}>
 										{resetPasswordError}
+									</div>
+								)}
+								{successMessage && (
+									<div style={{ color: 'green', marginBottom: 16 }}>
+										{successMessage}
 									</div>
 								)}
 								<ResetPasswordForm
