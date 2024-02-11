@@ -5,5 +5,6 @@ export enum FileUploadType {
 	Comment = 'Comment',
 	Folder = 'Folder',
 	Tender = 'Tender',
-	Offer = 'Offer'
+	Offer = 'Offer',
+	Property = 'Property'
 }

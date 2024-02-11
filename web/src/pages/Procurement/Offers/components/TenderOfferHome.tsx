@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
-import { useGetTenderById } from '../../../../queries/useGetTenderById';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { Tender } from '../../../../models/Tender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Box, Flex, Spacer, Button, Text, useToast, Heading, VStack } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { useBidderReject } from '../../../../mutations/useBidderReject';
+import { useBidderReject } from '../../../../mutations/procurement/useBidderReject';
 // import { UserContext } from '../../../../context/UserContext';
 
 import { OpenOffer } from './OpenOffer';

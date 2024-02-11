@@ -31,6 +31,7 @@ const DropZoneContainer = styled.div<{
 `;
 
 interface DropZoneProps {
+	propertyId?: number;
 	offerId?: number;
 	tenderId?: number;
 	projectId: number;
@@ -47,6 +48,8 @@ interface DropZoneProps {
 }
 
 export const DropZone = ({
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	propertyId = 0,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	offerId = 0,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -103,6 +106,7 @@ export const DropZone = ({
 						setIsUploading(true);
 						const response = await fileService.uploadFile(
 							file,
+							propertyId,
 							offerId,
 							tenderId,
 							projectId,

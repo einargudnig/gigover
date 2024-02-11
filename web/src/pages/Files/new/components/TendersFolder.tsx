@@ -5,7 +5,7 @@ import { CardBaseLink } from '../../../../components/CardBase';
 import { Center, Text, VStack, HStack, Heading } from '@chakra-ui/react';
 import { FolderIcon } from '../../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../../hooks/colorGenerator';
-import { useUserTenders } from '../../../../queries/useUserTenders';
+import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 const Container = styled.div`

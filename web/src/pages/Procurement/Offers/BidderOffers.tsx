@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Grid, GridItem, HStack, Text, Flex } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
-import { useGetUserOffers } from '../../../queries/useGetUserOffers';
+import { useGetUserOffers } from '../../../queries/procurement/useGetUserOffers';
 import { Offer } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Center } from '../../../components/Center';

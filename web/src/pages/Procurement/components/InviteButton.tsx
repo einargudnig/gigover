@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useEffect, useState } from 'react';
-import { useInviteBidder } from '../../../mutations/useInviteBidder';
+import { useInviteBidder } from '../../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 import { devError } from '../../../utils/ConsoleUtils';
 import { Theme } from '../../../Theme';
@@ -150,7 +150,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	return (
 		<>
 			<Button ml={'1'} onClick={handleOpenDialog}>
-				Invite User
+				Invite Bidder
 			</Button>
 
 			<AlertDialog

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ProcurementHeader } from './ProcurementHeader';
 import { NewTenderItemTable } from './NewTenderItemTable';
-import { useGetTenderById } from '../../../queries/useGetTenderById';
+import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
 import { useParams } from 'react-router-dom';
 import { Tender } from '../../../models/Tender';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';

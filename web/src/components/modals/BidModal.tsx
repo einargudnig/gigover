@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bid } from '../../models/Tender';
+import { ClientBid } from '../../models/Tender';
 import {
 	Box,
 	Checkbox,
@@ -25,7 +25,7 @@ import { DatePicker } from '../forms/DatePicker';
 // import { LoadingSpinner } from '../LoadingSpinner';
 
 interface BidModalProps {
-	bid?: Bid;
+	bid?: ClientBid;
 }
 
 export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
@@ -34,7 +34,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	// const queryClient = useQueryClient();
 
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, control, handleSubmit } = useForm<Bid>({
+	const { register, control, handleSubmit } = useForm<ClientBid>({
 		defaultValues: bid,
 		mode: 'onBlur'
 	});
@@ -76,7 +76,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 							})}
 						/>
 					</FormControl>
-					<FormControl id={'addres'}>
+					<FormControl id={'address'}>
 						<FormLabel>Address</FormLabel>
 						<Input
 							required={true}
@@ -221,103 +221,6 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 								</FormControl>
 							</GridItem>
 						</Grid>
-						{/* <Box>
-							<Heading size={'md'}>Bidder</Heading>
-							<FormControl>
-								<FormLabel>Email</FormLabel>
-								<Input
-									required={true}
-									{...register('bidder.email', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Company</FormLabel>
-								<Input
-									required={true}
-									{...register('bidder.company', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Address</FormLabel>
-								<Input
-									required={true}
-									{...register('bidder.address', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Phone</FormLabel>
-								<Input
-									required={true}
-									{...register('bidder.phoneNumber', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Company Id</FormLabel>
-								<Input
-									required={true}
-									{...register('bidder.companyId', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-						</Box>
-
-						<Box>
-							<Heading size={'md'}>Client</Heading>
-							<FormControl>
-								<FormLabel>Client number</FormLabel>
-								<Input
-									required={true}
-									{...register('client.clientNumber', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Client address</FormLabel>
-								<Input
-									required={true}
-									{...register('client.address', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Client phone</FormLabel>
-								<Input
-									required={true}
-									{...register('client.phoneNumber', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Client email</FormLabel>
-								<Input
-									required={true}
-									{...register('client.email', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-							<FormControl>
-								<FormLabel>Other</FormLabel>
-								<Input
-									required={true}
-									{...register('client.other', {
-										required: 'Company is required'
-									})}
-								/>
-							</FormControl>
-						</Box> */}
 					</HStack>
 					<FormActions
 						cancelText={'Cancel'}

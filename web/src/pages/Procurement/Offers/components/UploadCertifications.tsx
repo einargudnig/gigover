@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
 import { TenderDocument } from '../../../../models/TenderDocument';
-import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
+import { useAddTenderDocument } from '../../../../mutations/procurement/useAddTenderDocument';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { FileUploadType } from '../../../../models/FileUploadType';
 import { FilterIcon } from '../../../../components/icons/FilterIcon';
@@ -34,6 +34,7 @@ export const UploadCertifications = ({ onClose, offerId }: UploadModalProps): JS
 				</Text>
 				<VStack mb={-6} align={'stretch'}>
 					<DropZone
+						propertyId={0}
 						offerId={offerId}
 						tenderId={0}
 						projectId={0}
@@ -77,6 +78,7 @@ const DropZoneContainer = styled.div<{
 `;
 
 interface DropZoneProps {
+	propertyId: number;
 	offerId: number;
 	tenderId: number;
 	projectId: number;
@@ -92,6 +94,7 @@ interface DropZoneProps {
 }
 
 const DropZone = ({
+	propertyId = 0,
 	offerId = 0,
 	tenderId = 0,
 	projectId = 0,
@@ -122,6 +125,7 @@ const DropZone = ({
 						setIsUploading(true);
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
+							propertyId,
 							offerId,
 							projectId,
 							tenderId,

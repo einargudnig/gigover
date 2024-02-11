@@ -8,6 +8,7 @@ export interface ProjectImage {
 	imageId: number;
 	projectId: number;
 	folderId: number;
+	propertyId?: number;
 	offerId?: number;
 	tenderId?: number;
 	taskId?: number;

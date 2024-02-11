@@ -15,6 +15,12 @@ import { ProcurementModal } from './modals/ProcurementModal';
 import { BidModal } from './modals/BidModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
 import { Theme } from '../Theme';
+import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
+import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
+import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
+import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
+import { PropertyIcon } from './icons/PropertyIcon';
+import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -22,6 +28,7 @@ export const GlobalModals = (): JSX.Element => {
 	const { tender } = modalContext.addTender || {};
 	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || {};
+	const { property } = modalContext.addProperty || modalContext.editProperty || {};
 
 	return (
 		<>
@@ -71,11 +78,37 @@ export const GlobalModals = (): JSX.Element => {
 					<BidModal bid={bid} />
 				</Modal>
 			)}
+			{modalContext.addProperty && (
+				<Modal open={true} title={'Create property'}>
+					<AddPropertyModal property={property} />
+				</Modal>
+			)}
+			{modalContext.editProperty && (
+				<Modal open={true} title={'Edit property'}>
+					<EditPropertyModal property={property} />
+				</Modal>
+			)}
+			{modalContext.addUnit && (
+				<Modal open={true} title={'Create unit'}>
+					<AddUnitModal
+						unit={modalContext.addUnit.unit}
+						propertyId={modalContext.addUnit.propertyId}
+					/>
+				</Modal>
+			)}
+			{modalContext.editUnit && (
+				<Modal open={true} title={'Edit unit'}>
+					<EditUnitModal
+						unit={modalContext.editUnit.unit}
+						propertyId={modalContext.editUnit.propertyId}
+					/>
+				</Modal>
+			)}
 			{modalContext.resourceTracker && (
 				<Modal
 					title={
 						<>
-							<ToolsIcon size={32} color={Theme.colors.yellow} type={'solid'} />
+							<ToolsIcon size={32} color={Theme.colors.black} type={'solid'} />
 							<div>Resources</div>
 						</>
 					}
@@ -85,6 +118,25 @@ export const GlobalModals = (): JSX.Element => {
 					onClose={() => setModalContext({})}
 				>
 					<UseResourceModal resourceTracker={modalContext.resourceTracker} />
+				</Modal>
+			)}
+			{modalContext.propertyToProject && (
+				<Modal
+					title={
+						<>
+							<PropertyIcon size={32} color={Theme.colors.black} />
+							<div>Add Property to Project</div>
+						</>
+					}
+					open={true}
+					centerModal={true}
+					closeIcon={true}
+					onClose={() => setModalContext({})}
+				>
+					<ProjectToPropertyModal
+						properties={modalContext.propertyToProject.properties}
+						projectId={modalContext.propertyToProject.projectId}
+					/>
 				</Modal>
 			)}
 		</>

@@ -5,7 +5,7 @@ import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
 import { TenderDocument } from '../../../../models/TenderDocument';
 // import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
-import { useAddTenderDocumentByTenderOwner } from '../../../../mutations/useAddTenderDocumentByTenderOwner';
+import { useAddTenderDocumentByTenderOwner } from '../../../../mutations/procurement/useAddTenderDocumentByTenderOwner';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { FileUploadType } from '../../../../models/FileUploadType';
 import { FilterIcon } from '../../../../components/icons/FilterIcon';
@@ -35,6 +35,7 @@ export const UploadTenderDocuments = ({ onClose, tenderId }: UploadModalProps): 
 				</Text>
 				<VStack mb={-6} align={'stretch'}>
 					<DropZone
+						propertyId={0}
 						offerId={0}
 						tenderId={tenderId}
 						projectId={0}
@@ -78,6 +79,7 @@ const DropZoneContainer = styled.div<{
 `;
 
 interface DropZoneProps {
+	propertyId: number;
 	offerId: number;
 	tenderId: number;
 	projectId: number;
@@ -93,6 +95,7 @@ interface DropZoneProps {
 }
 
 const DropZone = ({
+	propertyId = 0,
 	offerId = 0,
 	tenderId,
 	projectId = 0,
@@ -125,6 +128,7 @@ const DropZone = ({
 						console.log('tenderId, before uploadFile', tenderId);
 						const response: DocumentInput = await fileService.uploadFile(
 							file,
+							propertyId,
 							offerId,
 							tenderId,
 							projectId,

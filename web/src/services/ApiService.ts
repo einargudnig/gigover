@@ -145,4 +145,32 @@ export class ApiService {
 	static addTenderDocument = API_BASE + 'tender/addDocument'; // This is used to add documents, but now we want the tender owner to be able to send documents wit the tender
 	static offerDocuments = (offerId: number) => API_BASE + 'tender/offer/' + offerId; // this one is GET for bidders documents on offer
 	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderowner documents
+	// Client bids
+	static addClientBid = API_BASE + 'tender/addClientBid';
+	static editClientBid = API_BASE + 'tender/editClientBid';
+	static addClientBidItem = API_BASE + 'tender/addClientBidItems';
+	static removeClientBidItem = API_BASE + 'tender/removeClientBidItems';
+	static publishClientBid = API_BASE + 'tender/publishClientBid';
+	static getClientBids = API_BASE + 'tender/clientBids';
+	static getClientBidsById = (clientBidId: number) =>
+		API_BASE + 'tender/clientBids/' + clientBidId;
+	static acceptClientBid = API_BASE + 'tender/acceptClientBid';
+	static rejectClientBid = API_BASE + 'tender/rejectClientBid';
+
+	// Properties
+	static getProperties = API_BASE + 'properties/properties';
+	static getPropertyById = (propertyId: number) => API_BASE + 'properties/' + propertyId;
+	static addProperty = API_BASE + 'properties/addProperty';
+	static editProperty = API_BASE + 'properties/editProperty';
+	static addUnit = API_BASE + 'properties/addUnit';
+	static editUnit = API_BASE + 'properties/editUnit';
+	static addStakeholder = API_BASE + 'properties/addStakeHolder';
+	static removeStakeholder = API_BASE + 'properties/removeStakeHolder';
+	static addProject = (propertyId: number, projectId: number) =>
+		API_BASE + 'properties/addProject/' + propertyId + '/' + projectId;
+	static removeProject = (propertyId: number, projectId: number) =>
+		API_BASE + 'properties/removeProject/' + propertyId + '/' + projectId;
+	static addPropertyDocument = API_BASE + 'properties/addDocument';
+	static removePropertyDocument = (documentId: number) =>
+		API_BASE + 'properties/removeDocument/' + documentId;
 }

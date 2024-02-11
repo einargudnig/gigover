@@ -30,14 +30,23 @@ import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTe
 import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
 import { PublishedTender } from './pages/Procurement/Offers/components/PublishedTender';
 import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
-import { CreateBid } from './pages/Procurement/ClientBids/CreateBid';
+import { CreateBidOutlet } from './pages/Procurement/ClientBids/CreateBidOutlet';
+import { Bids } from './pages/Procurement/ClientBids/components/Bids';
+import { BidId } from './pages/Procurement/ClientBids/components/BidId';
 import { ClientAnswer } from './pages/Procurement/ClientBids/ClientAnswer';
+import { Property } from './pages/Property/Property';
+import { PropertyId } from './pages/Property/PropertyId';
+import { PropertyOutlet } from './pages/Property/PropertyOutlet';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
 		<Route path={'/'} element={<Dashboard />} />
 		<Route path={'project/:projectId'} element={<ProjectDetails />}>
 			<Route path={':taskId'} element={<Organize />} />
+		</Route>
+		<Route path={'property'} element={<PropertyOutlet />}>
+			<Route index element={<Property />} />
+			<Route path={':propertyId'} element={<PropertyId />} />
 		</Route>
 		<Route path={'roadmap'} element={<RoadmapPreloader />} />
 		<Route path={'files'} element={<Files />}>
@@ -76,7 +85,10 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<TenderPage />} />
 			<Route path={'client-answer'} element={<ClientAnswer />} />
-			<Route path={'create-bid'} element={<CreateBid />} />
+			<Route path={'create-bid'} element={<CreateBidOutlet />}>
+				<Route index element={<Bids />} />
+				<Route path={':clientBidId'} element={<BidId />} />
+			</Route>
 			<Route path={'tender-offers'} element={<OfferForTenders />} />
 			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
 			<Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} />

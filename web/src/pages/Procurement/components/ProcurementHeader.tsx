@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDeleteProcurement } from '../../../mutations/useDeleteProcurement';
+import { useDeleteProcurement } from '../../../mutations/procurement/useDeleteProcurement';
 import {
 	Box,
 	Button,

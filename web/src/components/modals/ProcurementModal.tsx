@@ -8,7 +8,10 @@ import {
 	VStack,
 	FormControl,
 	FormLabel,
-	Input
+	Input,
+	Flex,
+	useToast,
+	HStack
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
@@ -19,9 +22,11 @@ import { useQueryClient } from 'react-query';
 import { ApiService } from '../../services/ApiService';
 import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
-import { useAddTender, TenderFormData } from '../../mutations/useAddTender';
+import { useAddTender, TenderFormData } from '../../mutations/procurement/useAddTender';
 import { devError } from '../../utils/ConsoleUtils';
 import { Task } from '../../models/Task';
+import { CalendarIcon } from '../icons/Calendar';
+
 interface TenderModalProps {
 	tender?: Tender;
 }
@@ -32,7 +37,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const { data } = useProjectList();
 	// I'm using the openProjects for the selecting of projects.
 	const openProjects = useOpenProjects(data);
-
+	const toast = useToast();
 	// This is so the user can select a project and then the tasks from the selected project.
 	// we want the procurement to be linked to a task and a project.
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
@@ -43,7 +48,12 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 
 	// mustateAsync: modify
 	const { mutate: modify, isError, error } = useAddTender();
-	const { register, handleSubmit, control } = useForm<TenderFormData>({
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+		control
+	} = useForm<TenderFormData>({
 		defaultValues: tender,
 		mode: 'onBlur'
 	});
@@ -54,6 +64,8 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 		const newValue = event.target.checked ? 1 : 0;
 		setIsChecked(newValue);
 	};
+
+	const currentDate = new Date(); // To help with validation for the datePicker
 
 	// We want to find the tasks from the selected project so the user can select a task.
 	// selectedProject as a parameter
@@ -73,7 +85,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 	const onSubmit = handleSubmit(
 		async ({ description, terms, finishDate, address, phoneNumber }) => {
 			try {
-				modify({
+				const response = modify({
 					projectId: selectedProject,
 					projectName: selectedProjectName, // this should set the projectName to the mutation!
 					taskId: selectedTask,
@@ -85,11 +97,19 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 					phoneNumber
 				});
 				console.log('success');
+				console.log('response', response);
 
 				queryClient.refetchQueries(ApiService.userTenders);
 				closeModal();
 			} catch (e) {
-				devError('Error', e);
+				devError('Error YES?', e);
+				toast({
+					title: 'Invalid tender!',
+					description: 'You could not add the Tender! There is an error.',
+					status: 'error',
+					duration: 3000,
+					isClosable: true
+				});
 			}
 		}
 	);
@@ -107,7 +127,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 				<VStack mb={-6} align={'stretch'}>
 					{openProjects ? (
 						<>
-							<FormControl id={'modal'}>
+							<FormControl id={'projectIds'} isInvalid={!!errors.projectId}>
 								<Heading size={'md'}>Select a project for your procurement</Heading>
 								<TrackerSelect
 									title={'Select a project'}
@@ -161,7 +181,7 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 							/>
 						</>
 					)}
-					<FormControl id={'description'}>
+					<FormControl id={'description'} isInvalid={!!errors.description}>
 						<FormLabel>Procurement Description</FormLabel>
 						<Input
 							required={true}
@@ -169,35 +189,52 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 								required: 'Procurement description is required'
 							})}
 						/>
+						{errors.description && (
+							<Text color="red.500">{errors.description.message}</Text>
+						)}
 					</FormControl>
 					<Box mb={6} />
-					<FormControl id={'terms'}>
+					<FormControl id={'terms'} isInvalid={!!errors.terms}>
 						<FormLabel>Terms</FormLabel>
 						<Input
 							required={true}
-							{...register('terms', { required: 'terms are required' })}
+							{...register('terms', { required: 'Terms are required' })}
 						/>
+						{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
 					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'finishDate'}>
-						<FormLabel>Close Date</FormLabel>
+					<Box width={['50%', '33%']} mb={6} />
+					<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
+						<Flex>
+							<FormLabel>Close Date - </FormLabel>
+							<Text>
+								You will not be able to answer offers until this date has passed
+							</Text>
+						</Flex>
 						<Controller
 							name="finishDate"
 							control={control}
+							rules={{ required: 'Finish date is required' }}
 							render={({ field: { onChange, onBlur, value } }) => (
-								<DatePicker
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									selected={value ? new Date(value) : null}
-									onBlur={onBlur}
-								/>
+								<HStack>
+									<DatePicker
+										onChange={(date) => {
+											if (date) {
+												onChange((date as Date).getTime());
+											} else {
+												onChange(null);
+											}
+										}}
+										selected={value ? new Date(value) : null}
+										onBlur={onBlur}
+										minDate={currentDate}
+									/>
+									<CalendarIcon color={'black'} />
+								</HStack>
 							)}
 						/>
+						{errors.finishDate && (
+							<Text color="red.500">{errors.finishDate.message}</Text>
+						)}
 					</FormControl>
 					<Box mb={6} />
 					<FormControl id={'delivery'}>
@@ -209,20 +246,30 @@ export const ProcurementModal = ({ tender }: TenderModalProps): JSX.Element => {
 						/>
 					</FormControl>
 					<Box mb={6} />
-					<FormControl id={'address'}>
+					<FormControl id={'address'} isInvalid={!!errors.address}>
 						<FormLabel>Address - contact person on site</FormLabel>
 						<Input
 							required={true}
-							{...register('address', { required: 'address is required' })}
+							{...register('address', { required: 'Address is required' })}
 						/>
+						{errors.address && <Text color="red.500">{errors.address.message}</Text>}
 					</FormControl>
 					<Box mb={6} />
-					<FormControl id={'phoneNumber'}>
+					<FormControl id={'phoneNumber'} isInvalid={!!errors.phoneNumber}>
 						<FormLabel>Phone Number</FormLabel>
 						<Input
 							required={true}
-							{...register('phoneNumber', { required: 'phone number is required' })}
+							{...register('phoneNumber', {
+								required: 'Phone number is required',
+								maxLength: {
+									value: 10,
+									message: 'Phone number cannot be more than 10 digits'
+								}
+							})}
 						/>
+						{errors.phoneNumber && (
+							<Text color="red.500">{errors.phoneNumber.message}</Text>
+						)}
 					</FormControl>
 					<FormActions
 						cancelText={'Cancel'}

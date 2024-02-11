@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetOfferByOfferId } from '../../../../queries/useGetOfferByOfferId';
+import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Center, VStack, Heading } from '@chakra-ui/react';
 import { OtherGigoverFile } from './OtherFile';

@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Text, HStack, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Text, HStack, Flex, Grid, GridItem, Tooltip } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
-import { useGetBidderTenders } from '../../../queries/useGetBidderTenders';
+import { useGetBidderTenders } from '../../../queries/procurement/useGetBidderTenders';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { Tender } from '../../../models/Tender';
@@ -60,10 +60,12 @@ export const BidderTenders = (): JSX.Element => {
 			);
 		}
 		return (
-			<HStack>
-				<Text as={'b'}>Close date:</Text>
-				<Text>{formatDateWithoutTime(new Date(finishDate))}</Text>
-			</HStack>
+			<Tooltip label="Offers will not be answered until this date has passed">
+				<HStack>
+					<Text as={'b'}>Close date:</Text>
+					<Text>{formatDateWithoutTime(new Date(finishDate))}*</Text>
+				</HStack>
+			</Tooltip>
 		);
 	};
 

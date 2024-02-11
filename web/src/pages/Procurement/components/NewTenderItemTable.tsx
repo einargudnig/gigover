@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { TenderItem } from '../../../models/Tender';
-import { useAddTenderItem } from '../../../mutations/useAddTenderItem';
-import { useModifyTenderItem } from '../../../mutations/useModifyTenderItem';
-import { useDeleteTenderItem } from '../../../mutations/useDeleteTenderItem';
-import { usePublishTender } from '../../../mutations/usePublishTender';
+import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
+import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
+import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
+import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
 import {
 	Button,
 	Box,
@@ -496,7 +496,9 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					<Spacer />
 					<Box>
 						<Button ml={'1'}>
-							<Link to={`/tender-offers/${Number(tenderId)}`}>Published offers</Link>
+							<Link to={`/tender/tender-offer/${Number(tenderId)}`}>
+								Published offers
+							</Link>
 						</Button>
 					</Box>
 				</Flex>

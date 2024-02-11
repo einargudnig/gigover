@@ -10,14 +10,14 @@ export const NoProcurementFound = (): JSX.Element => {
 	return (
 		<EmptyState
 			icon={<EmptyProjects />}
-			title={'No procurement found'}
+			title={'No Tender found'}
 			text={
-				'Seems that you haven’t created a procurement\n' +
-				'for you and your organisation yet. Why don’t you add a new procurement.'
+				'Seems that you haven’t created a tendert\n' +
+				'for you and your organisation yet. Why don’t you add a new tender.'
 			}
 			action={
 				<Button onClick={() => setModalContext({ addTender: { tender: undefined } })}>
-					Create a procurement
+					Create a Tender
 				</Button>
 			}
 		/>

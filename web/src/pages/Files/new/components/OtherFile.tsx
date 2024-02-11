@@ -16,7 +16,7 @@ import { DownloadIcon } from '../../../../components/icons/DownloadIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
-import { useDeleteTenderDocument } from '../../../../mutations/useDeleteTenderDocument';
+import { useDeleteTenderDocument } from '../../../../mutations/procurement/useDeleteTenderDocument';
 
 // OtherFile means files for Tenders and Offers.
 // I think I should just make a duplicate of the File.tsx so that I can more easily use it in two different places.
@@ -121,7 +121,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 							isOpen={dialogOpen}
 						>
 							<IconButton
-								aria-label={'Download'}
+								aria-label={'Delete'}
 								colorScheme={'red'}
 								size={'sm'} // does this work?
 								icon={<TrashIcon color={'white'} />}

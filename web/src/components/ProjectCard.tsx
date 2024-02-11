@@ -10,6 +10,8 @@ import { CardBaseLink } from './CardBase';
 import { ProjectTimeStatus } from './ProjectTimeStatus';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { HStack } from '@chakra-ui/react';
+import { PropertyIcon } from './icons/PropertyIcon';
+import { useGetProperties } from '../queries/properties/useGetPoperties';
 
 interface ProjectCardProps {
 	project: Project;
@@ -56,6 +58,23 @@ const ProjectCardEdit = styled.div`
 	}
 `;
 
+const ProjectCardProperty = styled.div`
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	background: transparent;
+	transition: all 0.2s linear;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: -16px;
+	margin-right: -16px;
+
+	&:hover {
+		background: ${(props) => props.theme.colors.blueBackground};
+	}
+`;
+
 const ProjectCardActions = styled.div`
 	display: flex;
 `;
@@ -63,6 +82,8 @@ const ProjectCardActions = styled.div`
 export const ProjectCard = React.memo(({ project }: ProjectCardProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 
+	const { data: properties } = useGetProperties();
+	const projectId = project.projectId; // for the propertyToProjectModal
 	const tasks = project.tasks.filter((task) => task.status !== TaskStatus.Archived) || [];
 	const completed = tasks.filter((task) => task.status === TaskStatus.Done);
 	const inProgress = tasks.filter((task) => task.status === TaskStatus.Doing);
@@ -81,6 +102,14 @@ export const ProjectCard = React.memo(({ project }: ProjectCardProps): JSX.Eleme
 					</HStack>
 				</div>
 				<ProjectCardActions>
+					<ProjectCardProperty
+						onClick={(event) => {
+							event.preventDefault();
+							setModalContext({ propertyToProject: { properties, projectId } });
+						}}
+					>
+						<PropertyIcon size={22} color={Theme.colors.darkLightBlue} />
+					</ProjectCardProperty>
 					<ProjectCardEdit
 						onClick={(event) => {
 							event.preventDefault();
