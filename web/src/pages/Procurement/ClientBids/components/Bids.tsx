@@ -31,6 +31,28 @@ const data = [
 		updatedAt: 'updatedAt A',
 		status: 'status A',
 		tender: 'tender A'
+	},
+	{
+		id: 2,
+		name: 'bid B',
+		address: 'address B',
+		city: 'city B',
+		country: 'country B',
+		createdAt: 'createdAt B',
+		updatedAt: 'updatedAt b',
+		status: 'status B',
+		tender: 'tender B'
+	},
+	{
+		id: 3,
+		name: 'bid C',
+		address: 'address C',
+		city: 'city C',
+		country: 'country C',
+		createdAt: 'createdAt C',
+		updatedAt: 'updatedAt C',
+		status: 'status C',
+		tender: 'tender C'
 	}
 ];
 

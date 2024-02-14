@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ClientBidItems } from '../../../../models/Tender';
 import { useAddClientBidItem } from '../../../../mutations/procurement/client-bids/useAddClientBidItems';
-import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishClientBid';
 import { useRemoveClientBidItem } from '../../../../mutations/procurement/client-bids/useRemoveClientBidItem';
 
 import {
 	Button,
-	Flex,
 	FormControl,
 	HStack,
 	Input,
@@ -18,8 +16,7 @@ import {
 	Thead,
 	Th,
 	Tr,
-	Tooltip,
-	useToast
+	Tooltip
 } from '@chakra-ui/react';
 // import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -70,8 +67,6 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 		cost: 0
 	};
 
-	// const clientBidStatus = clientBid?.status;
-	const clientBidStatus = 1;
 	// const clientBidItems: ClientBidItems[] | undefined = clientBid?.items;
 	const clientBidItems: ClientBidItems[] | undefined = fakeData;
 
@@ -107,12 +102,9 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 		error: mutateError
 	} = useAddClientBidItem();
 	// TODO EditItem
-	// const { mutate: mutateUpdate, isLoading: isUpdateLoading } = ;
+	// const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useEditClientBidItem();
 	const { mutateAsync: deleteClientBidItem, isLoading: isDeleteLoading } =
 		useRemoveClientBidItem();
-	const { mutateAsync: publishClientBid, isLoading: isPublishLoading } = usePublishClientBid();
-
-	const toast = useToast();
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -162,49 +154,16 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 		);
 
 		// Send the updated item to the server
+		// TODO add editItem
 		// mutateUpdate(updateFormData);
 
 		// Reset the editing state
 		setEditingItem(null);
 	};
 
-	const handlePublish = async () => {
-		const publishTenderBody = {
-			clientBidId: Number(clientBidId)
-		};
-		if (clientBid !== undefined) {
-			try {
-				await publishClientBid(publishTenderBody);
-				toast({
-					title: 'Tender published',
-					description: 'Now you can invite people to send offers to your tender!',
-					status: 'success',
-					duration: 2000,
-					isClosable: true
-				});
-			} catch (error) {
-				// console.log('ERROR', { error });
-				toast({
-					title: 'Error',
-					description: 'Something went wrong when we tried to publish your tender.',
-					status: 'error',
-					duration: 3000,
-					isClosable: true
-				});
-			}
-		} else {
-			toast({
-				title: 'Error',
-				description: 'Something went wrong when we tried to publish your tender.',
-				status: 'error',
-				duration: 5000,
-				isClosable: true
-			});
-		}
-	};
-
 	// const finishDateStatus = handleFinishDate(clientBid?.finishDate);
 	const finishDateStatus = false;
+	// const finishDateStatus = true;
 
 	return (
 		<>
@@ -379,7 +338,6 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 						))}
 					</>
 
-					{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
 					{finishDateStatus ? (
 						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
 							The finish date has passed, you cannot add more items to the Tender
@@ -455,28 +413,6 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 					) : null}
 				</Tbody>
 			</Table>
-
-			<br />
-
-			<Flex alignItems={'center'} justifyContent={'center'}>
-				<Flex alignItems={'center'} justifyContent={'center'}>
-					{!finishDateStatus ? (
-						<>
-							{clientBidStatus === 1 ? (
-								<Button onClick={handlePublish} mr={'2'}>
-									{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
-								</Button>
-							) : (
-								<Text mr={'2'}>You have already published the Tender</Text>
-							)}
-						</>
-					) : (
-						<Flex alignItems={'center'} justifyContent={'center'}>
-							<Text>The finish date has passed, you can not publish the tender.</Text>
-						</Flex>
-					)}
-				</Flex>
-			</Flex>
 		</>
 	);
 };
