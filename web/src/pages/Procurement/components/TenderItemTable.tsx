@@ -169,7 +169,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
-						<Tooltip label="Does this item have a special number?">
+						<Tooltip label="Cost code">
 							<Th>
 								<HStack>
 									<p>Number</p>
@@ -196,14 +196,14 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 							</Th>
 						</Tooltip>
 
-						<Tooltip label="Unit of measurement. For example: m2, kg, t">
-							<Th>
-								<HStack>
-									<p>Unit</p>
+						<Th>
+							<HStack>
+								<p>Unit</p>
+								<Tooltip label="Unit of measurement. For example: m2, kg, t">
 									<ImportantIcon size={20} />
-								</HStack>
-							</Th>
-						</Tooltip>
+								</Tooltip>
+							</HStack>
+						</Th>
 
 						<Th>
 							<p>Actions</p>

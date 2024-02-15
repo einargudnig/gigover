@@ -200,37 +200,39 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					<Tr>
 						<Th width={'20%'}>
 							<HStack>
-								<Text>Number</Text>
-								<ImportantIcon size={20} />
+								<Tooltip label="Cost Code">
+									<Text>Number</Text>
+									<ImportantIcon size={20} />
+								</Tooltip>
 							</HStack>
 						</Th>
 
-						<Tooltip label="Description of a item">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
-						<Tooltip label="Volume">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Volume">
 								<HStack>
 									<Text>Volume</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
-						<Tooltip label="Unit of measurement. For example: m2, kg, t">
-							<Th width={'20%'}>
-								<HStack>
+						<Th width={'20%'}>
+							<HStack>
+								<Tooltip label="Unit of measurement. For example: m2, kg, t">
 									<Text>Unit</Text>
 									<ImportantIcon size={20} />
-								</HStack>
-							</Th>
-						</Tooltip>
+								</Tooltip>
+							</HStack>
+						</Th>
 
 						<Th width={'20%'}>
 							<Text>Actions</Text>

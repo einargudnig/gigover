@@ -228,38 +228,40 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<HStack>
-								<Text>Number</Text>
-								<ImportantIcon size={20} />
-							</HStack>
+							<Tooltip label="Cost code">
+								<HStack>
+									<Text>Number</Text>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Tooltip>
 						</Th>
 
-						<Tooltip label="Description of a item">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
-						<Tooltip label="Volume">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Volume">
 								<HStack>
 									<Text color={'black'}>Volume</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
-						<Tooltip label="Unit of measurement. For example: m2, kg, t">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Unit</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 					</Tr>
 				</Thead>
 				<Tbody>

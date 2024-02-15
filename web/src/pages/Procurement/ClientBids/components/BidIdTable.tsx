@@ -28,6 +28,7 @@ import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 
 export const BidIdTable = ({ clientBid }): JSX.Element => {
+	console.log(clientBid);
 	const { clientBidId } = useParams();
 
 	// ! fakeData until the backend stuff is working!
@@ -171,38 +172,40 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<HStack>
-								<Text>Number</Text>
-								<ImportantIcon size={20} />
-							</HStack>
+							<Tooltip label="Cost Code">
+								<HStack>
+									<Text>Number</Text>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Tooltip>
 						</Th>
 
-						<Tooltip label="Description of a item">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
-						<Tooltip label="Volume">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Volume">
 								<HStack>
 									<Text>Volume</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
-						<Tooltip label="Unit of measurement. For example: m2, kg, t">
-							<Th width={'20%'}>
+						<Th width={'20%'}>
+							<Tooltip label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Cost</Text>
 									<ImportantIcon size={20} />
 								</HStack>
-							</Th>
-						</Tooltip>
+							</Tooltip>
+						</Th>
 
 						<Th width={'20%'}>
 							<Text>Actions</Text>
