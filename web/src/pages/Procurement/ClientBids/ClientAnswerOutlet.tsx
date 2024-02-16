@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { Box, Button, Flex, HStack, Spacer, Text, VStack } from '@chakra-ui/react';
-import { PlusIcon } from '../../../components/icons/PlusIcon';
-import { ModalContext } from '../../../context/ModalContext';
+import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+
 import { Outlet } from 'react-router-dom';
 
 const Container = styled.div`
@@ -12,21 +11,11 @@ const Container = styled.div`
 `;
 
 export const ClientAnswerOutlet = (): JSX.Element => {
-	const [, setModalContext] = useContext(ModalContext);
 	return (
 		<>
-			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
+			<Flex justifyContent={'start'} alignItems={'center'} mb={'2'}>
 				<Box>
 					<Text>This tab is used to answer bids that you receive</Text>
-				</Box>
-				<Spacer />
-				<Box>
-					<Button
-						onClick={() => setModalContext({ addBid: { bid: undefined } })}
-						leftIcon={<PlusIcon />}
-					>
-						your Bids
-					</Button>
 				</Box>
 			</Flex>
 			<VStack style={{ height: '100%' }}>

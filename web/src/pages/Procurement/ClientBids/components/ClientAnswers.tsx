@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
-import { CardBaseLink } from '../../../components/CardBase';
-import { Center } from '../../../components/Center';
+import { CardBaseLink } from '../../../../components/CardBase';
+import { Center } from '../../../../components/Center';
 // import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 const PropertyCardStyled = styled(CardBaseLink)`
@@ -56,7 +56,7 @@ const data = [
 	}
 ];
 
-export const ClientAnswer = (): JSX.Element => {
+export const ClientAnswers = (): JSX.Element => {
 	// const { data, isLoading } = useGetClientBids();
 
 	return (
@@ -71,7 +71,7 @@ export const ClientAnswer = (): JSX.Element => {
 						.slice()
 						.reverse()
 						.map((bid) => (
-							<PropertyCardStyled key={bid.id} to={`/tender/create-bid/${bid.id}`}>
+							<PropertyCardStyled key={bid.id} to={`/tender/client-answer/${bid.id}`}>
 								<Flex direction={'column'}>
 									<Grid templateColumns="repeat(4, 1fr)" gap={1}>
 										<GridItem colSpan={2}>

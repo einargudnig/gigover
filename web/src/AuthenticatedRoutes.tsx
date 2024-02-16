@@ -33,7 +33,8 @@ import { OfferPublished } from './pages/Procurement/Offers/components/OfferPubli
 import { CreateBidOutlet } from './pages/Procurement/ClientBids/CreateBidOutlet';
 import { Bids } from './pages/Procurement/ClientBids/components/Bids';
 import { BidId } from './pages/Procurement/ClientBids/components/BidId';
-import { ClientAnswer } from './pages/Procurement/ClientBids/ClientAnswer';
+import { ClientAnswers } from './pages/Procurement/ClientBids/components/ClientAnswers';
+import { ClientAnswerId } from './pages/Procurement/ClientBids/components/ClientAnswerId';
 import { Property } from './pages/Property/Property';
 import { PropertyId } from './pages/Property/PropertyId';
 import { PropertyOutlet } from './pages/Property/PropertyOutlet';
@@ -42,14 +43,22 @@ import { ClientAnswerOutlet } from './pages/Procurement/ClientBids/ClientAnswerO
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
 		<Route path={'/'} element={<Dashboard />} />
+
+		{/* 📝 Tasks 📝 */}
 		<Route path={'project/:projectId'} element={<ProjectDetails />}>
 			<Route path={':taskId'} element={<Organize />} />
 		</Route>
+
+		{/* 🏘️ Property system 🏘️ */}
 		<Route path={'property'} element={<PropertyOutlet />}>
 			<Route index element={<Property />} />
 			<Route path={':propertyId'} element={<PropertyId />} />
 		</Route>
+
+		{/* 🛣️ Roadmap 🛣️ */}
 		<Route path={'roadmap'} element={<RoadmapPreloader />} />
+
+		{/* 📂 File System 📂 */}
 		<Route path={'files'} element={<Files />}>
 			<Route index element={<FilesHome />} />
 			{/*			<Route path={':projectId/file/:fileId'} element={<FileId />} />
@@ -79,16 +88,16 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={':userId'} element={<Users />} />
 		</Route>
 
-		{/* This is going to be 'bigger' and more complicated with the new changes
-				/tender is the parent route for the whole tender system.
-		*/}
+		{/* 💰 Tender/Offer  system 💰 */}
 		<Route path={'tender'} element={<Procurement />}>
 			<Route index element={<ProcurementHome />} />
 			<Route path={':tenderId'} element={<TenderPage />} />
+			{/* Client-answer */}
 			<Route path={'client-answer'} element={<ClientAnswerOutlet />}>
-				<Route index element={<ClientAnswer />} />
-				<Route path={':clientBidId'} element={<ClientAnswer />} />
+				<Route index element={<ClientAnswers />} />
+				<Route path={':clientBidId'} element={<ClientAnswerId />} />
 			</Route>
+			{/* Client-bid */}
 			<Route path={'create-bid'} element={<CreateBidOutlet />}>
 				<Route index element={<Bids />} />
 				<Route path={':clientBidId'} element={<BidId />} />
@@ -106,8 +115,12 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 		</Route>
 
+		{/* 🛠️ Settings 🛠️ */}
 		<Route path={'settings'} element={<Settings />} />
+
+		{/* 🏎️ Resources 🏎️ */}
 		<Route path={'resources'} element={<Resources />} />
+
 		<Route path={'project'} element={<Dashboard />}>
 			<Route path={':id'} element={<Dashboard />} />
 		</Route>
