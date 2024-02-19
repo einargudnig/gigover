@@ -11,7 +11,11 @@ import {
 	Th,
 	Tooltip,
 	Tbody,
-	Td
+	Td,
+	Textarea,
+	Flex,
+	Spacer,
+	Button
 } from '@chakra-ui/react';
 import React from 'react';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
@@ -222,10 +226,56 @@ export const ClientAnswerId = (): JSX.Element => {
 								<Td width={'20%'}>{item.unit}</Td>
 							</Tr>
 						))} */}
-						Table body
+						<Tr>
+							<Td width={'20%'}>Number</Td>
+							<Td width={'20%'}>Description</Td>
+							<Td width={'20%'}>Volume</Td>
+							<Td width={'20%'}>Cost</Td>
+						</Tr>
+						<Tr>
+							<Td width={'20%'}>Number</Td>
+							<Td width={'20%'}>Description</Td>
+							<Td width={'20%'}>Volume</Td>
+							<Td width={'20%'}>Cost</Td>
+						</Tr>
+						<Tr>
+							<Td width={'20%'}>Number</Td>
+							<Td width={'20%'}>Description</Td>
+							<Td width={'20%'}>Volume</Td>
+							<Td width={'20%'}>Cost</Td>
+						</Tr>
 					</>
 				</Tbody>
 			</Table>
+
+			<Flex alignItems={'center'} marginX={10} marginTop={4}>
+				<Box>
+					<Textarea
+						placeholder="Notes..."
+						variant="outline"
+						size="lg"
+						border="1px"
+						rounded={5}
+						p={1}
+					/>
+				</Box>
+				<Spacer />
+				<Box>
+					<Text color={'black'} size={'xl'}>
+						Attachments
+					</Text>
+				</Box>
+			</Flex>
+
+			<Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
+				<Box>
+					<Button>Accept</Button>
+				</Box>
+				<Spacer />
+				<Box>
+					<Button>Reject</Button>
+				</Box>
+			</Flex>
 		</>
 	);
 };
