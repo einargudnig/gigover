@@ -7,7 +7,7 @@ export const DatePicker = ({
 	selected,
 	onChange,
 	isClearable = false,
-	required = true,
+	required = false,
 	...props
 }: ReactDatePickerProps) => {
 	return (

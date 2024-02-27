@@ -111,6 +111,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 									}}
 									selected={value ? new Date(value) : null}
 									onBlur={onBlur}
+									required={true}
 								/>
 							)}
 						/>

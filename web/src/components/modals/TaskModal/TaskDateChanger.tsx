@@ -71,6 +71,7 @@ export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => 
 								onBlur={() => {
 									onBlur();
 								}}
+								required={false}
 							/>
 						)}
 					/>

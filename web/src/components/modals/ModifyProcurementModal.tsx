@@ -137,6 +137,7 @@ export const ModifyProcurementModal = ({ tender }: TenderModalProps): JSX.Elemen
 										}}
 										onBlur={onBlur}
 										minDate={currentDate}
+										required={true}
 									/>
 									<CalendarIcon color={'black'} />
 								</HStack>

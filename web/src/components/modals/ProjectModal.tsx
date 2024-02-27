@@ -187,6 +187,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 										}
 									}}
 									onBlur={onBlur}
+									required={false}
 								/>
 							)}
 						/>
