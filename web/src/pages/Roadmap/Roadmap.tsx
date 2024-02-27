@@ -66,7 +66,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		});
 	}, [data, dispatch]);
 
-	// Should I put the "setCalendarType" in a callbakc or useEffect?
+	// Should I put the "setCalendarType" in a callback or useEffect?
 
 	return (
 		<Page
