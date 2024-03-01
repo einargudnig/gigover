@@ -95,6 +95,8 @@ export const ProjectDetails = (): JSX.Element | null => {
 		};
 	}, [project?.tasks]);
 
+	console.log('Tasks!!', tasks);
+
 	const onDragEnd = async (result: DropResult) => {
 		//Sort it baby
 		const nextStatus = result.destination?.droppableId ?? 0;
@@ -118,6 +120,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 		// USE LEXO RANK INSTEAD
 		const priority = result.destination ? result.destination.index : result.source.index;
 
+		// TODO Here I am updating the task with new lexoRank status. So why are the tasks in the Gantt chart not with it??
 		updateTask({
 			...task,
 			priority,

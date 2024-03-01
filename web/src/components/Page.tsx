@@ -225,7 +225,7 @@ export const Page = ({
 						<div>
 							<ProjectIcon />
 						</div>
-						<span>Projects</span>
+						<span>Projects - Tasks</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/property'}>
 						<div>

@@ -12,6 +12,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
 	const [state, dispatch] = useContext(GantChartContext);
 
+	// console.log('TaSKS', state.tasks); // TODO remove when done
 	return (
 		<>
 			{state.project && (
