@@ -34,7 +34,7 @@ export const Procurement = (): JSX.Element => {
 									<Button>Tender</Button>
 								</NavLink>
 							)}
-							<NavLink to={'client-answer'}>
+							{/* <NavLink to={'client-answer'}>
 								{({ isActive }) => (
 									<Button
 										colorScheme={isActive ? 'black' : 'yellow'}
@@ -74,7 +74,7 @@ export const Procurement = (): JSX.Element => {
 										Client Bid
 									</Button>
 								)}
-							</NavLink>
+							</NavLink> */}
 							<NavLink to={'tender-offers'}>
 								{({ isActive }) => (
 									<Button

@@ -97,7 +97,12 @@ export const ProjectDetails = (): JSX.Element | null => {
 
 	console.log('Tasks!!', tasks);
 
+	// destination has the droppable id and the index.
+	// DroppableId being the id of the column dropped to
+	// Index being the order in the list.
+	// source is the place it came from?
 	const onDragEnd = async (result: DropResult) => {
+		console.log('Drag end START', result);
 		//Sort it baby
 		const nextStatus = result.destination?.droppableId ?? 0;
 		const nextIndex = result.destination?.index ?? 0;
