@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react';
+import { Button, HStack, VStack } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { Outlet, NavLink } from 'react-router-dom';
 
@@ -17,9 +17,9 @@ export const Procurement = (): JSX.Element => {
 
 	const isTenderRoute = location.pathname === '/tender';
 
-	const notifications = {
-		unread: 0
-	};
+	// const notifications = {
+	// 	unread: 0
+	// };
 
 	return (
 		<>
