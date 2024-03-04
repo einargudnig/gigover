@@ -7,8 +7,11 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 ): LexoRank => {
 	const undefinedLexoRank = LexoRank.min();
 
+	// when a list is empty the first item gets the middle rank
+	// why does the second item place before the first item??
 	if (list.length === 0) {
-		return LexoRank.middle();
+		const firstItem = LexoRank.middle();
+		return firstItem;
 	}
 
 	// Current item being moved

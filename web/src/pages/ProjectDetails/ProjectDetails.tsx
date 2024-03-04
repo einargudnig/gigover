@@ -102,13 +102,14 @@ export const ProjectDetails = (): JSX.Element | null => {
 	// Index being the order in the list.
 	// source is the place it came from?
 	const onDragEnd = async (result: DropResult) => {
-		console.log('Drag end START', result);
+		// console.log('Drag end START', result);
 		//Sort it baby
 		const nextStatus = result.destination?.droppableId ?? 0;
 		const nextIndex = result.destination?.index ?? 0;
 
 		const nextRow: Task[] = tasks[nextStatus];
 		const nextRank = GetNextLexoRank(nextRow, result.source.index ?? -1, nextIndex);
+		// console.log('Next RANK', nextRank.toString());
 
 		const taskId = parseInt(result.draggableId || '0');
 
@@ -124,6 +125,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 
 		// USE LEXO RANK INSTEAD
 		const priority = result.destination ? result.destination.index : result.source.index;
+		// console.log('Priority', priority);
 
 		// TODO Here I am updating the task with new lexoRank status. So why are the tasks in the Gantt chart not with it??
 		updateTask({
