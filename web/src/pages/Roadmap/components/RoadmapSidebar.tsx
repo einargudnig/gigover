@@ -12,7 +12,12 @@ export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
 	const [state, dispatch] = useContext(GantChartContext);
 
-	// console.log('TaSKS', state.tasks); // TODO remove when done
+	console.log('State', state);
+
+	// The tasks object on the GantChartContext do not have their lexoRank property set.
+	// So we use the sortedItems to display the tasks from the project on the Context in the correct order.
+	const sortedItems = state.project?.tasks.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+
 	return (
 		<>
 			{state.project && (
@@ -139,7 +144,8 @@ export const RoadmapSidebar = (): JSX.Element => {
 						</HStack>
 					</Flex>
 				)}
-				{state.tasks.map((t, tIndex) => (
+				{/* {state.tasks.map((t, tIndex) => ( */}
+				{sortedItems?.map((t, tIndex) => (
 					<Flex
 						key={tIndex}
 						justifyContent={'space-between'}
