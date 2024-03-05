@@ -8,10 +8,19 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 	const undefinedLexoRank = LexoRank.min();
 
 	// when a list is empty the first item gets the middle rank
-	// why does the second item place before the first item??
 	if (list.length === 0) {
 		const firstItem = LexoRank.middle();
 		return firstItem;
+	} else if (list.length === 1 && sourceIndex === -1 && destinationIndex === list.length - 1) {
+		// ! why this if statement?
+		// there was weird bug when creating tasks.
+		// Every single time a second task in a list was created it would *always* be placed at the top.
+		// The second task created would automatically get higher rank than the first task.
+		// All tasks created after the second one would be placed correctly.
+		// This hack is to fix that and make the second task be placed correctly.
+		// hence we are making sure this is only done when there is already one task in the list.
+		const secondItem = LexoRank.middle().genPrev();
+		return secondItem;
 	}
 
 	// Current item being moved
@@ -28,8 +37,10 @@ export const GetNextLexoRank = <T extends { lexoRank: string }>(
 		: LexoRank.middle();
 
 	// If it is supposed to go to the top.
-	if (destinationIndex === 0 && destinationItemRank) {
-		return destinationItemRank.genPrev();
+	if (destinationIndex === 0 && list.length === 1) {
+		const firstItemRank = LexoRank.parse(list[0].lexoRank);
+		return firstItemRank.genNext();
+		// return destinationItemRank.genPrev();
 	}
 
 	// Dropping to the bottom
