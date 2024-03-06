@@ -119,7 +119,6 @@ export const ProjectDetails = (): JSX.Element | null => {
 		const priority = result.destination ? result.destination.index : result.source.index;
 		// console.log('Priority', priority);
 
-		// TODO Here I am updating the task with new lexoRank status. So why are the tasks in the Gantt chart not with it??
 		updateTask({
 			...task,
 			priority,
