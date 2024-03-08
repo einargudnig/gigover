@@ -25,7 +25,6 @@ export const Dashboard = (): JSX.Element => {
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 
 	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
-	// console.log('Projects:', projects);
 
 	useEffect(() => {
 		if (!isLoadingProjects) {

@@ -23,6 +23,12 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 	const updateLexoRank = useCallback(
 		async (project: Project, lexoRank: string) => {
 			try {
+				console.log(
+					'Updating lexoRank for Project: ',
+					project.projectId,
+					' to: ',
+					lexoRank
+				);
 				await mutateProject.mutateAsync({
 					projectId: project.projectId,
 					name: project.name,
@@ -74,6 +80,7 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 
 	const updateState = useCallback(
 		(result: DropResult) => {
+			console.log('updating state!!');
 			const { source, destination } = result;
 			if (!destination) {
 				return;
@@ -105,6 +112,7 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 		[projects, updateLexoRank]
 	);
 
+	console.log('SortableProjectList: ', projects);
 	return (
 		<DragDropContext onDragEnd={updateState}>
 			<Droppable droppableId="project-list">
