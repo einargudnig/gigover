@@ -29,7 +29,7 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 					' to: ',
 					lexoRank
 				);
-				await mutateProject.mutateAsync({
+				const rank = await mutateProject.mutateAsync({
 					projectId: project.projectId,
 					name: project.name,
 					description: project.description,
@@ -39,6 +39,7 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 					progressStatus: project.progressStatus,
 					lexoRank: lexoRank
 				});
+				console.log('Updated lexoRank: ', rank);
 			} catch (e) {
 				console.error(e);
 				alert('Could not update project ordering, please try again');
@@ -87,7 +88,9 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 			}
 
 			const sourceIndex = source.index;
+			console.log('sourceIndex', sourceIndex);
 			const destinationIndex = destination.index;
+			console.log('destinationIndex', destinationIndex);
 
 			if (sourceIndex === destinationIndex) {
 				return;
@@ -95,16 +98,19 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 
 			const item = projects[sourceIndex];
 			const nextRank = GetNextLexoRank(projects, sourceIndex, destinationIndex);
+			console.log('nextRank', nextRank.toString());
 
 			const newItem = {
 				...item,
 				lexoRank: nextRank.toString()
 			};
+			console.log('newItem', newItem);
 
 			const newProjects: Project[] = [
 				...projects.filter((p) => p.projectId !== item.projectId),
 				newItem
 			].sort(projectSorter);
+			console.log('newProjects', newProjects);
 
 			updateLexoRank(newItem, nextRank.toString()).then();
 			setProjects(newProjects);
@@ -112,7 +118,6 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 		[projects, updateLexoRank]
 	);
 
-	console.log('SortableProjectList: ', projects);
 	return (
 		<DragDropContext onDragEnd={updateState}>
 			<Droppable droppableId="project-list">
