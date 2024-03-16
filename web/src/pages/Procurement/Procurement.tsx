@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import { Button, HStack, VStack, Flex, Box } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { Outlet, NavLink } from 'react-router-dom';
 
@@ -17,9 +17,9 @@ export const Procurement = (): JSX.Element => {
 
 	const isTenderRoute = location.pathname === '/tender';
 
-	// const notifications = {
-	// 	unread: 0
-	// };
+	const notifications = {
+		unread: 0
+	};
 
 	return (
 		<>
@@ -34,7 +34,7 @@ export const Procurement = (): JSX.Element => {
 									<Button>Tender</Button>
 								</NavLink>
 							)}
-							{/* <NavLink to={'client-answer'}>
+							<NavLink to={'client-answer'}>
 								{({ isActive }) => (
 									<Button
 										colorScheme={isActive ? 'black' : 'yellow'}
@@ -74,7 +74,7 @@ export const Procurement = (): JSX.Element => {
 										Client Bid
 									</Button>
 								)}
-							</NavLink> */}
+							</NavLink>
 							<NavLink to={'tender-offers'}>
 								{({ isActive }) => (
 									<Button
@@ -82,7 +82,7 @@ export const Procurement = (): JSX.Element => {
 										variant={isActive ? 'outline' : 'solid'}
 									>
 										Offers Received
-										{/* {notifications.unread > 0 && (
+										{notifications.unread > 0 && (
 											<Flex
 												align={'center'}
 												justify={'center'}
@@ -102,7 +102,7 @@ export const Procurement = (): JSX.Element => {
 													{notifications.unread}
 												</Box>
 											</Flex>
-										)} */}
+										)}
 									</Button>
 								)}
 							</NavLink>
@@ -123,7 +123,7 @@ export const Procurement = (): JSX.Element => {
 										variant={isActive ? 'outline' : 'solid'}
 									>
 										Bid Invitations
-										{/* {notifications.unread > 0 && (
+										{notifications.unread > 0 && (
 											<Flex
 												align={'center'}
 												justify={'center'}
@@ -143,7 +143,7 @@ export const Procurement = (): JSX.Element => {
 													{notifications.unread}
 												</Box>
 											</Flex>
-										)} */}
+										)}
 									</Button>
 								)}
 							</NavLink>
