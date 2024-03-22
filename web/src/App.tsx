@@ -29,7 +29,9 @@ declare const window: Window & { Intercom: Intercom };
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
+	console.log('AUTH USER', authUser);
 	const { mutateAsync: verify, data, isLoading: loading, error } = useVerify();
+	console.log('error', error);
 
 	// Load Project Types
 	useProjectTypes();
