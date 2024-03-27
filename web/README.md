@@ -43,3 +43,7 @@ Deploys to _firebase_. You need access to the project to be able to deploy.
 ### 1.5.0
 
 -   Procurement system
+
+### 1.6.0
+
+-   Property management system

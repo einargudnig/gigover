@@ -144,11 +144,12 @@ export class ApiService {
 		API_BASE + 'tender/removeTenderDocument/' + documentId; // this one is used to remove documents from the Tender
 	static addTenderDocument = API_BASE + 'tender/addDocument'; // This is used to add documents, but now we want the tender owner to be able to send documents wit the tender
 	static offerDocuments = (offerId: number) => API_BASE + 'tender/offer/' + offerId; // this one is GET for bidders documents on offer
-	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderowner documents
+	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderOwner documents
 	// Client bids
 	static addClientBid = API_BASE + 'tender/addClientBid';
 	static editClientBid = API_BASE + 'tender/editClientBid';
 	static addClientBidItem = API_BASE + 'tender/addClientBidItems';
+	static editClientBidItem = API_BASE + 'tender/editClientBidItems';
 	static removeClientBidItem = API_BASE + 'tender/removeClientBidItems';
 	static publishClientBid = API_BASE + 'tender/publishClientBid';
 	static getClientBids = API_BASE + 'tender/clientBids';

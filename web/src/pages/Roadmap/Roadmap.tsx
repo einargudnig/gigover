@@ -37,8 +37,6 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		state.project?.projectId ?? selectedProject?.projectId ?? projects[0].projectId
 	);
 
-	// TODO: is this callback having effect on the rendering of tasks?
-	// If the ordering of the tasks is changed on the porjectDashboard it should reflect here!
 	const setProject = useCallback(
 		(project: Project) =>
 			dispatch({

@@ -341,7 +341,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
-			{/* <DevMenu /> */}
+			<DevMenu />
 		</PageStyled>
 	);
 };

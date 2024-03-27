@@ -19,6 +19,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 export const SortableProjectList = ({ list }: SortableGridProps) => {
 	const mutateProject = useModifyProject();
 	const [projects, setProjects] = useState(list);
+	console.log({ projects });
 
 	const updateLexoRank = useCallback(
 		async (project: Project, lexoRank: string) => {
@@ -118,6 +119,9 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 		[projects, updateLexoRank]
 	);
 
+	// TODO made this to be sure that we are
+	const sortedItems = projects.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+
 	return (
 		<DragDropContext onDragEnd={updateState}>
 			<Droppable droppableId="project-list">
@@ -127,7 +131,7 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 						ref={droppable.innerRef}
 						style={getListStyle(snapshot.isDraggingOver)}
 					>
-						{projects.map((project, projectIndex) => {
+						{sortedItems.map((project, projectIndex) => {
 							return (
 								<Draggable
 									key={project.projectId.toString()}

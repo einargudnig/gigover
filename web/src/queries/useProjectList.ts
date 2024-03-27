@@ -23,14 +23,13 @@ export const useProjectList = () => {
 		ProjectResponse,
 		ErrorResponse,
 		ProjectResponse
-	>(ApiService.projectList, {
-		refetchOnWindowFocus: true
-	});
+	>(ApiService.projectList);
 
 	const projects: Project[] = data?.projects || [];
 
 	return {
-		data: projects.sort(projectSorter),
+		// data: projects.sort(projectSorter),
+		data: projects,
 		isLoading,
 		isError,
 		error
