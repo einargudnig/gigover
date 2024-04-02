@@ -28,8 +28,8 @@ export const useProjectList = () => {
 	const projects: Project[] = data?.projects || [];
 
 	return {
-		// data: projects.sort(projectSorter),
-		data: projects,
+		data: projects.sort(projectSorter),
+		// data: projects,
 		isLoading,
 		isError,
 		error

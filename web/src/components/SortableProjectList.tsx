@@ -19,7 +19,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 export const SortableProjectList = ({ list }: SortableGridProps) => {
 	const mutateProject = useModifyProject();
 	const [projects, setProjects] = useState(list);
-	console.log({ projects });
+	// console.log({ projects });
 
 	const updateLexoRank = useCallback(
 		async (project: Project, lexoRank: string) => {

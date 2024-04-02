@@ -49,7 +49,6 @@ export const AppPreloader = (): JSX.Element => {
 			user_id: authUser?.uid,
 			phone_number: data?.data.phoneNumber
 		};
-
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
 			...userProperties

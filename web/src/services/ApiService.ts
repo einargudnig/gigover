@@ -146,17 +146,20 @@ export class ApiService {
 	static offerDocuments = (offerId: number) => API_BASE + 'tender/offer/' + offerId; // this one is GET for bidders documents on offer
 	static tenderDocuments = (tenderId: number) => API_BASE + 'tender/tender/' + tenderId; // this one is GET for the tenderOwner documents
 	// Client bids
-	static addClientBid = API_BASE + 'tender/addClientBid';
-	static editClientBid = API_BASE + 'tender/editClientBid';
-	static addClientBidItem = API_BASE + 'tender/addClientBidItems';
-	static editClientBidItem = API_BASE + 'tender/editClientBidItems';
-	static removeClientBidItem = API_BASE + 'tender/removeClientBidItems';
-	static publishClientBid = API_BASE + 'tender/publishClientBid';
-	static getClientBids = API_BASE + 'tender/clientBids';
-	static getClientBidsById = (clientBidId: number) =>
-		API_BASE + 'tender/clientBids/' + clientBidId;
-	static acceptClientBid = API_BASE + 'tender/acceptClientBid';
-	static rejectClientBid = API_BASE + 'tender/rejectClientBid';
+	static addBid = API_BASE + 'bid/addBid';
+	static editBid = API_BASE + 'bid/editBid';
+	static deleteBid = API_BASE + 'bid/deleteBid';
+	static addBidItem = API_BASE + 'bid/addBidItem';
+	static editBidItem = API_BASE + 'bid/editBidItem';
+	static deleteBidItem = API_BASE + 'bid/deleteBidItem';
+	static publishBid = API_BASE + 'bid/publishBid';
+	static acceptBid = API_BASE + 'bid/acceptBid';
+	static rejectBid = API_BASE + 'bid/rejectBid';
+	static getBids = API_BASE + 'bid/bids';
+	static getBidById = (bidId: number) => API_BASE + 'bid/' + bidId;
+	// TODO figure out for what those two are!
+	static getClientBids = API_BASE + 'bid/clientBids';
+	static getClientBidById = (bidId: number) => API_BASE + 'bid/clientBid/' + bidId;
 
 	// Properties
 	static getProperties = API_BASE + 'properties/properties';
