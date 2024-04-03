@@ -114,7 +114,7 @@ export interface Bid {
 	delivery: number; // 1 is delivery, 0 is pickup
 	finishDate: number; // Timestamp -> 'Bid valid through'
 	status: number; // 0 = unpublished, 1 = published, 2 = accepted, 3 = rejected
-	items: BidItems[];
+	items: BidItem[];
 	client: BidClient;
 }
 
@@ -128,13 +128,14 @@ export interface BidClient {
 	other: string;
 }
 
-export interface BidItems {
+export interface BidItem {
 	bidId: number;
 	bidItemId?: number;
-	nr: string;
-	description: string;
-	volume: number;
-	cost: number;
+	nr?: string;
+	description?: string;
+	volume?: number;
+	unit?: string;
+	cost?: number;
 }
 
 export interface BidId {

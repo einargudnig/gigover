@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { BidItems } from '../../../../models/Tender';
-import { useAddClientBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
+import { BidItem } from '../../../../models/Tender';
+import { useAddBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
+import { useEditBidItem } from '../../../../mutations/procurement/client-bids/useEditBidItem';
 import { useRemoveClientBidItem } from '../../../../mutations/procurement/client-bids/useDeleteBidItem';
 
 import {
@@ -29,36 +30,36 @@ import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 
 export const BidIdTable = ({ bidItems }): JSX.Element => {
 	const { bidId } = useParams();
-	// console.log({ bidItems });
 
-	// ! fakeData until the backend stuff is working!
-
-	const defaultData: BidItems = {
+	const defaultData: BidItem = {
 		bidId: Number(bidId),
 		nr: '0',
 		description: 'Description',
 		volume: 0,
+		unit: 'Unit',
 		cost: 0
 	};
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
-	const [items, setItems] = useState<BidItems[] | undefined>(bidItems || []);
-	const [editingItem, setEditingItem] = useState<BidItems | null>(null);
+	const [items, setItems] = useState<BidItem[] | undefined>(bidItems || []);
+	const [editingItem, setEditingItem] = useState<BidItem | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [formData, setFormData] = useState<BidItems>({
+	const [formData, setFormData] = useState<BidItem>({
 		bidId: Number(bidId),
 		description: 'Description',
 		nr: '0',
 		volume: 0,
+		unit: 'Unit',
 		cost: 0
 	});
 	// eslint-disable-next-line
-	const [updateFormData, setUpdateFormData] = useState<BidItems>({
+	const [updateFormData, setUpdateFormData] = useState<BidItem>({
 		bidId: Number(bidId),
 		description: 'Description',
 		nr: '0',
 		volume: 0,
+		unit: 'Unit',
 		cost: 0
 	});
 
@@ -67,22 +68,27 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 	}, [bidItems]);
 
 	const {
-		mutate,
+		mutate: mutateAdd,
 		isLoading: isMutateLoading,
 		isError: isMutateError,
 		error: mutateError
-	} = useAddClientBidItem();
-	// TODO EditItem
-	// const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useEditClientBidItem();
+	} = useAddBidItem();
+
+	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useEditBidItem(); // TODO make sure this works!
 	const { mutateAsync: deleteClientBidItem, isLoading: isDeleteLoading } =
 		useRemoveClientBidItem();
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target;
+		const { name, value, type } = event.target;
+		const updatedValue = type === 'number' ? parseFloat(value) : value;
 		setFormData({
 			...formData,
-			[name]: value
+			[name]: updatedValue
 		});
+		// setFormData({
+		// 	...formData,
+		// 	[name]: value
+		// });
 	};
 
 	const handleUpdateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,23 +103,25 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
 			bidId: Number(bidId),
-			description: formData.description,
 			nr: formData.nr,
+			description: formData.description,
 			volume: formData.volume,
+			unit: formData.unit,
 			cost: formData.cost
 		});
+
 		console.log('Items', items);
-		mutate(formData);
+		mutateAdd(formData);
 		setFormData({ ...defaultData });
-		// console.log('mutate with this formData:', formData); // Good for debugging
+		console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
-	const handleEdit = (item: BidItems) => {
+	const handleEdit = (item: BidItem) => {
 		setEditingItem(item);
 		setUpdateFormData(item);
 	};
 
-	const handleUpdate = (item: BidItems) => {
+	const handleUpdate = (item: BidItem) => {
 		console.log('Editing item:', item);
 		console.log('Editing item:', item);
 
@@ -124,7 +132,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 
 		// Send the updated item to the server
 		// TODO add editItem
-		// mutateUpdate(updateFormData);
+		mutateUpdate(updateFormData);
 
 		// Reset the editing state
 		setEditingItem(null);
@@ -167,6 +175,15 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
+							<Tooltip label="Unit">
+								<HStack>
+									<Text>Volume</Text>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Tooltip>
+						</Th>
+
+						<Th width={'20%'}>
 							<Tooltip label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Cost</Text>
@@ -183,6 +200,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 				<Tbody>
 					{bidItems?.length === 0 ? (
 						<Tr>
+							<Td></Td>
 							<Td></Td>
 							<Td></Td>
 							<Td>
@@ -232,6 +250,17 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 									{editingItem === item ? (
 										<Input
 											name="unit"
+											value={updateFormData.unit}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.unit
+									)}
+								</Td>
+								<Td width={'20%'}>
+									{editingItem === item ? (
+										<Input
+											name="cost"
 											value={updateFormData.cost}
 											onChange={handleUpdateChange}
 										/>
@@ -257,6 +286,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 														description: '',
 														nr: '0',
 														volume: 0,
+														unit: 'Unit',
 														cost: 0
 													});
 													setEditingItem(null);
@@ -288,6 +318,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 														description: '',
 														nr: '0',
 														volume: 0,
+														unit: 'Unit',
 														cost: 0
 													});
 												}}
@@ -323,10 +354,9 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 								<Td width={'20%'}>
 									<FormControl id="nr">
 										<Input
-											width={'200px'}
 											id="nr"
 											name="nr"
-											type="number"
+											type="text"
 											value={formData.nr}
 											onChange={handleChange}
 										/>
@@ -335,7 +365,6 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 								<Td width={'20%'}>
 									<FormControl id="description">
 										<Input
-											htmlSize={4}
 											id="description"
 											name="description"
 											type="text"
@@ -347,11 +376,21 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 								<Td width={'20%'}>
 									<FormControl id="volume">
 										<Input
-											htmlSize={4}
 											id="volume"
 											name="volume"
-											type="text"
+											type="number"
 											value={formData.volume}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td width={'20%'}>
+									<FormControl id="unit">
+										<Input
+											id="unit"
+											name="unit"
+											type="text"
+											value={formData.unit}
 											onChange={handleChange}
 										/>
 									</FormControl>
@@ -359,10 +398,9 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 								<Td>
 									<FormControl id="cost">
 										<Input
-											htmlSize={4}
 											id="cost"
 											name="cost"
-											type="text"
+											type="number"
 											value={formData.cost}
 											onChange={handleChange}
 										/>

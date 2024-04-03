@@ -1,15 +1,25 @@
 import { useMutation } from 'react-query';
-import { BidItems } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 import { ApiService } from '../../../services/ApiService';
 import { AxiosError } from 'axios';
 import axios from 'axios';
 import { useQueryClient } from 'react-query';
 
-export const useAddClientBidItem = () => {
+export interface BidItems {
+	bidId: number;
+	bidItemId?: number;
+	nr?: string;
+	description?: string;
+	volume?: number;
+	unit?: string;
+	cost?: number;
+}
+
+export const useAddBidItem = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<ErrorResponse, AxiosError, BidItems>(async (variables) => {
+		console.log({ variables });
 		try {
 			const response = await axios.post(ApiService.addBidItem, variables, {
 				withCredentials: true

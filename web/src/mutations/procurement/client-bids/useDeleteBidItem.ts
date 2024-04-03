@@ -1,5 +1,5 @@
 import { useMutation } from 'react-query';
-import { BidItems } from '../../../models/Tender';
+import { BidItem } from '../../../models/Tender';
 import { ApiService } from '../../../services/ApiService';
 import { AxiosError } from 'axios';
 import axios from 'axios';
@@ -12,7 +12,7 @@ interface ClientBidItemDeleteResponse {
 export const useRemoveClientBidItem = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ClientBidItemDeleteResponse, AxiosError, BidItems>(async (variables) => {
+	return useMutation<ClientBidItemDeleteResponse, AxiosError, BidItem>(async (variables) => {
 		try {
 			const response = await axios.post(ApiService.deleteBidItem, variables, {
 				withCredentials: true
