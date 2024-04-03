@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { ClientBidItems } from '../../../../models/Tender';
-import { useAddClientBidItem } from '../../../../mutations/procurement/client-bids/useAddClientBidItems';
-import { useRemoveClientBidItem } from '../../../../mutations/procurement/client-bids/useRemoveClientBidItem';
+import { BidItems } from '../../../../models/Tender';
+import { useAddClientBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
+import { useRemoveClientBidItem } from '../../../../mutations/procurement/client-bids/useDeleteBidItem';
 
 import {
 	Button,
@@ -27,65 +27,35 @@ import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 
-export const BidIdTable = ({ clientBid }): JSX.Element => {
-	console.log(clientBid);
-	const { clientBidId } = useParams();
+export const BidIdTable = ({ bidItems }): JSX.Element => {
+	const { bidId } = useParams();
+	// console.log({ bidItems });
 
 	// ! fakeData until the backend stuff is working!
-	const fakeData = [
-		{
-			clientBidItemId: 1,
-			clientBidId: Number(clientBidId),
-			nr: 'asdf2',
-			description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-			volume: 100,
-			cost: 500
-		},
-		{
-			clientBidItemId: 2,
-			clientBidId: Number(clientBidId),
-			nr: 'khjsd9',
-			description: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-			volume: 200,
-			cost: 1000
-		},
-		{
-			clientBidItemId: 3,
-			clientBidId: Number(clientBidId),
-			nr: 'sdfahj1',
-			description:
-				'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-			volume: 50,
-			cost: 250
-		}
-	];
 
-	const defaultData: ClientBidItems = {
-		clientBidId: Number(clientBidId),
+	const defaultData: BidItems = {
+		bidId: Number(bidId),
 		nr: '0',
 		description: 'Description',
 		volume: 0,
 		cost: 0
 	};
 
-	// const clientBidItems: ClientBidItems[] | undefined = clientBid?.items;
-	const clientBidItems: ClientBidItems[] | undefined = fakeData;
-
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
-	const [items, setItems] = useState<ClientBidItems[] | undefined>(clientBidItems || []);
-	const [editingItem, setEditingItem] = useState<ClientBidItems | null>(null);
+	const [items, setItems] = useState<BidItems[] | undefined>(bidItems || []);
+	const [editingItem, setEditingItem] = useState<BidItems | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [formData, setFormData] = useState<ClientBidItems>({
-		clientBidId: Number(clientBidId),
+	const [formData, setFormData] = useState<BidItems>({
+		bidId: Number(bidId),
 		description: 'Description',
 		nr: '0',
 		volume: 0,
 		cost: 0
 	});
 	// eslint-disable-next-line
-	const [updateFormData, setUpdateFormData] = useState<ClientBidItems>({
-		clientBidId: Number(clientBidId),
+	const [updateFormData, setUpdateFormData] = useState<BidItems>({
+		bidId: Number(bidId),
 		description: 'Description',
 		nr: '0',
 		volume: 0,
@@ -93,8 +63,8 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 	});
 
 	useEffect(() => {
-		setItems(clientBidItems);
-	}, [clientBidItems]);
+		setItems(bidItems);
+	}, [bidItems]);
 
 	const {
 		mutate,
@@ -126,7 +96,7 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
-			clientBidId: Number(clientBidId),
+			bidId: Number(bidId),
 			description: formData.description,
 			nr: formData.nr,
 			volume: formData.volume,
@@ -138,20 +108,18 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
-	const handleEdit = (item: ClientBidItems) => {
+	const handleEdit = (item: BidItems) => {
 		setEditingItem(item);
 		setUpdateFormData(item);
 	};
 
-	const handleUpdate = (item: ClientBidItems) => {
+	const handleUpdate = (item: BidItems) => {
 		console.log('Editing item:', item);
 		console.log('Editing item:', item);
 
 		// Update the local items state
 		setItems(
-			clientBidItems?.map((i) =>
-				i.clientBidItemId === editingItem?.clientBidItemId ? updateFormData : i
-			)
+			bidItems?.map((i) => (i.bidItemId === editingItem?.bidItemId ? updateFormData : i))
 		);
 
 		// Send the updated item to the server
@@ -213,7 +181,7 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 					</Tr>
 				</Thead>
 				<Tbody>
-					{clientBidItems?.length === 0 ? (
+					{bidItems?.length === 0 ? (
 						<Tr>
 							<Td></Td>
 							<Td></Td>
@@ -225,8 +193,8 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 						</Tr>
 					) : null}
 					<>
-						{clientBidItems?.map((item) => (
-							<Tr key={item.clientBidItemId}>
+						{bidItems?.map((item) => (
+							<Tr key={item.bidItemId}>
 								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
@@ -285,7 +253,7 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 											<Button
 												onClick={() => {
 													setFormData({
-														clientBidId: Number(clientBidId),
+														bidId: Number(bidId),
 														description: '',
 														nr: '0',
 														volume: 0,
@@ -316,7 +284,7 @@ export const BidIdTable = ({ clientBid }): JSX.Element => {
 
 													setDialogOpen(false);
 													setFormData({
-														clientBidId: Number(clientBidId),
+														bidId: Number(bidId),
 														description: '',
 														nr: '0',
 														volume: 0,

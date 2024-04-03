@@ -7,7 +7,7 @@ import { ProjectFolder } from '../models/ProjectFolder';
 import { ProjectImage } from '../models/ProjectImage';
 import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 import { Tender } from '../models/Tender';
-import { ClientBid } from '../models/Tender';
+import { Bid } from '../models/Tender';
 import { IProperties, IPropertyForm, IPropertyUnit } from '../models/Property';
 
 export interface ITimeTrackerModalContext {
@@ -78,7 +78,7 @@ export interface IModalContext {
 		tender?: Tender;
 	};
 	addBid?: {
-		bid?: ClientBid;
+		bid?: Bid;
 	};
 	addProperty?: {
 		property?: IPropertyForm;

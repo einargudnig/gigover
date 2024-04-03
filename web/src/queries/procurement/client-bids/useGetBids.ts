@@ -1,23 +1,23 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../../../services/ApiService';
-import { ClientBid } from '../../../models/Tender';
+import { Bid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
 export interface ClientBidResponse {
-	list: ClientBid[];
+	list: Bid[];
 }
 
-export const useGetClientBids = () => {
+export const useGetBids = () => {
 	const { data, isLoading, isSuccess, isError, error } = useQuery<
 		ClientBidResponse,
 		ErrorResponse
-	>(ApiService.getClientBids, {
+	>(ApiService.getBids, {
 		refetchOnWindowFocus: true
 	});
-	const clientBids: ClientBid[] = data?.list || [];
+	const bids: Bid[] = data?.list || [];
 
 	return {
-		data: clientBids,
+		data: bids,
 		isLoading,
 		isError,
 		isSuccess,

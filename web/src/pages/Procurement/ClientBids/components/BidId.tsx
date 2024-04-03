@@ -3,77 +3,33 @@ import { useParams } from 'react-router-dom';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
 import { Box, Button, Flex, Grid, GridItem, Spacer, Text, useToast } from '@chakra-ui/react';
-import { ClientBid } from '../../../../models/Tender';
-import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishClientBid';
+import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
+import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
 // import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { BidIdText } from './BidIdText';
 
 export const BidId = (): JSX.Element => {
-	const { clientBidId } = useParams<{ clientBidId: string }>();
-	//? FakeData to help me build UI
-	const clientBids: ClientBid[] = [
-		{
-			clientBidId: 1,
-			description: 'Looking for a supplier for construction materials',
-			terms: 'Payment due in 30 days',
-			address: '456 Park Avenue',
-			delivery: 1,
-			// finishDate: 1644537600000, // Feb 11, 2022
-			finishDate: 1703199600000,
-			status: 1,
-			bidItems: [
-				{
-					clientBidId: 1,
-					clientBidItemId: 1,
-					nr: 'CM001',
-					description: '10 tons of cement',
-					volume: 10,
-					cost: 1000
-				},
-				{
-					clientBidId: 1,
-					clientBidItemId: 2,
-					nr: 'BM001',
-					description: '100 bricks',
-					volume: 100,
-					cost: 500
-				}
-			],
-			bidder: {
-				bidderId: 2,
-				name: 'Jane Doe',
-				email: 'janedoe@example.com',
-				company: 'XYZ Inc.',
-				address: '456 Park Avenue',
-				phoneNumber: '555-987-6543',
-				companyId: 2
-			},
-			client: {
-				clientId: 1,
-				clientNumber: 'CL001',
-				address: '123 Main Street',
-				phoneNumber: '555-123-4567',
-				email: 'johnsmith@example.com',
-				other: ''
-			}
-		}
-	];
+	const { bidId } = useParams<{ bidId: string }>();
+	const { data, isLoading } = useGetBidById(Number(bidId));
+	console.log({ data });
+	const bid = data?.clientBid;
+	const bidItems = bid?.items;
+	console.log({ bidItems });
 
 	const toast = useToast();
 
 	const finishDateStatus = false;
-	// const clientBidStatus = clientBid?.status;
-	const clientBidStatus = 1;
+	const clientBidStatus = bid?.status;
 
 	const { mutateAsync: publishClientBid, isLoading: isPublishLoading } = usePublishClientBid();
 
 	const handlePublish = async () => {
 		const publishTenderBody = {
-			clientBidId: Number(clientBidId)
+			bidId: Number(bidId)
 		};
-		// if (clientBid !== undefined) {
-		if (clientBids !== undefined) {
+
+		if (data !== undefined) {
 			try {
 				await publishClientBid(publishTenderBody);
 				toast({
@@ -106,11 +62,10 @@ export const BidId = (): JSX.Element => {
 
 	return (
 		<>
-			{/* Client Bid header */}
 			<div style={{ width: '100%' }}>
 				<Flex direction={'column'}>
-					<BidIdHeader clientBid={clientBids} />
-					<BidIdTable clientBid={clientBids} />
+					<BidIdHeader bid={bid} />
+					<BidIdTable bidItems={bidItems} />
 					<Box marginTop={3}>
 						<Grid templateColumns="repeat(3, 1fr)" gap={2}>
 							<GridItem colSpan={2}>

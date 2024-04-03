@@ -1,15 +1,15 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../../../services/ApiService';
-import { ClientBid } from '../../../models/Tender';
+import { Bid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
 export interface ClientBidByIdResponse {
-	clientBid: ClientBid;
+	clientBid: Bid;
 }
 
-export const useGetClientBidById = (clientBidId: number) => {
+export const useGetBidById = (bidId: number) => {
 	const { data, isLoading, isError, error } = useQuery<ClientBidByIdResponse, ErrorResponse>(
-		ApiService.getClientBidsById(clientBidId),
+		ApiService.getBidById(bidId),
 		{
 			refetchOnWindowFocus: true
 		}

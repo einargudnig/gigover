@@ -106,33 +106,20 @@ export interface Bidder {
 // For increased context -> It's possible to send this straight without the Tender phase.
 // I will keep this in Tender context for now, since it's linked together in the app
 // Maybe I'll move it later...
-export interface ClientBid {
-	clientBidId: number;
+export interface Bid {
+	bidId: number;
 	description: string;
 	terms: string;
 	address: string;
 	delivery: number; // 1 is delivery, 0 is pickup
 	finishDate: number; // Timestamp -> 'Bid valid through'
 	status: number; // 0 = unpublished, 1 = published, 2 = accepted, 3 = rejected
-	bidItems: ClientBidItems[];
-	bidder: ClientBidBidder;
-	client: ClientBidClient;
-}
-
-// This is a weird name?
-//!  to differentiate between the bidder in the tender and the bidder in the bid
-export interface ClientBidBidder {
-	bidderId: number;
-	name: string;
-	email: string;
-	company: string;
-	address: string;
-	phoneNumber: string;
-	companyId: number;
+	items: BidItems[];
+	client: BidClient;
 }
 
 // This the client in the bid portion, not the tender (bidder + tender owner)
-export interface ClientBidClient {
+export interface BidClient {
 	clientId: number;
 	clientNumber: string;
 	address: string;
@@ -141,15 +128,15 @@ export interface ClientBidClient {
 	other: string;
 }
 
-export interface ClientBidItems {
-	clientBidId: number;
-	clientBidItemId?: number;
+export interface BidItems {
+	bidId: number;
+	bidItemId?: number;
 	nr: string;
 	description: string;
 	volume: number;
 	cost: number;
 }
 
-export interface ClientBidId {
-	clientBidId: number;
+export interface BidId {
+	bidId: number;
 }

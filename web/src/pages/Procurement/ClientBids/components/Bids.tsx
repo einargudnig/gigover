@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
+import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 // import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 const PropertyCardStyled = styled(CardBaseLink)`
@@ -20,44 +21,9 @@ const PropertyCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-const data = [
-	{
-		id: 1,
-		name: 'bid A',
-		address: 'address A',
-		city: 'city A',
-		country: 'country A',
-		createdAt: 'createdAt A',
-		updatedAt: 'updatedAt A',
-		status: 'status A',
-		tender: 'tender A'
-	},
-	{
-		id: 2,
-		name: 'bid B',
-		address: 'address B',
-		city: 'city B',
-		country: 'country B',
-		createdAt: 'createdAt B',
-		updatedAt: 'updatedAt b',
-		status: 'status B',
-		tender: 'tender B'
-	},
-	{
-		id: 3,
-		name: 'bid C',
-		address: 'address C',
-		city: 'city C',
-		country: 'country C',
-		createdAt: 'createdAt C',
-		updatedAt: 'updatedAt C',
-		status: 'status C',
-		tender: 'tender C'
-	}
-];
-
 export const Bids = (): JSX.Element => {
-	// const { data, isLoading } = useGetClientBids();
+	const { data, isLoading } = useGetBids();
+	console.log({ data });
 
 	return (
 		<>
@@ -71,43 +37,35 @@ export const Bids = (): JSX.Element => {
 						.slice()
 						.reverse()
 						.map((bid) => (
-							<PropertyCardStyled key={bid.id} to={`/tender/create-bid/${bid.id}`}>
+							<PropertyCardStyled
+								key={bid.bidId}
+								to={`/tender/create-bid/${bid.bidId}`}
+							>
 								<Flex direction={'column'}>
 									<Grid templateColumns="repeat(4, 1fr)" gap={1}>
 										<GridItem colSpan={2}>
 											<HStack>
-												<Text color={'black'}>Name:</Text>
-												<Text>{bid.name}</Text>
+												<Text color={'black'}>Description:</Text>
+												<Text>{bid.description}</Text>
+											</HStack>
+											<HStack>
+												<Text color={'black'}>Terms: </Text>
+												<Text>{bid.terms}</Text>
 											</HStack>
 											<HStack>
 												<Text color={'black'}>Address: </Text>
 												<Text>{bid.address}</Text>
 											</HStack>
-											<HStack>
-												<Text color={'black'}>City: </Text>
-												<Text>{bid.city}</Text>
-											</HStack>
-											<HStack>
-												<Text color={'black'}>Country: </Text>
-												<Text>{bid.country}</Text>
-											</HStack>
 										</GridItem>
 										<GridItem colSpan={2}>
 											<HStack>
-												<Text color={'black'}>Created At:</Text>
-												<Text>{bid.createdAt}</Text>
+												<Text color={'black'}>Status:</Text>
+												<Text>{bid.status}</Text>
 											</HStack>
-											<HStack>
-												<Text color={'black'}>Updated At:</Text>
-												<Text>{bid.updatedAt}</Text>
-											</HStack>
+
 											<HStack>
 												<Text color={'black'}>Status: </Text>
 												<Text>{bid.status}</Text>
-											</HStack>
-											<HStack>
-												<Text color={'black'}>Tender: </Text>
-												<Text>{bid.tender}</Text>
 											</HStack>
 										</GridItem>
 									</Grid>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ClientBid } from '../../models/Tender';
+import { Bid } from '../../models/Tender';
 import {
 	Box,
 	Checkbox,
@@ -25,7 +25,7 @@ import { DatePicker } from '../forms/DatePicker';
 // import { LoadingSpinner } from '../LoadingSpinner';
 
 interface BidModalProps {
-	bid?: ClientBid;
+	bid?: Bid;
 }
 
 export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
@@ -34,7 +34,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	// const queryClient = useQueryClient();
 
 	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
-	const { register, control, handleSubmit } = useForm<ClientBid>({
+	const { register, control, handleSubmit } = useForm<Bid>({
 		defaultValues: bid,
 		mode: 'onBlur'
 	});
@@ -46,11 +46,9 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 		setIsChecked(newValue);
 	};
 
-	const onSubmit = handleSubmit(
-		async ({ description, terms, address, finishDate, bidder, client }) => {
-			console.log(description, terms, address, finishDate, bidder, client);
-		}
-	);
+	const onSubmit = handleSubmit(async ({ description, terms, address, finishDate, client }) => {
+		console.log(description, terms, address, finishDate, client);
+	});
 
 	return (
 		<div>
@@ -119,57 +117,6 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 					<hr />
 					<HStack>
 						<Grid templateColumns="repeat(4, 1fr)" gap={2} width={'full'}>
-							<GridItem colSpan={2}>
-								<HStack mb={3}>
-									<Heading size={'md'}>Bidder</Heading>
-									<Text>- You are sending the bid to this bidder</Text>
-								</HStack>
-								<FormControl>
-									<FormLabel>Email</FormLabel>
-									<Input
-										required={true}
-										{...register('bidder.email', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Company</FormLabel>
-									<Input
-										required={true}
-										{...register('bidder.company', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Address</FormLabel>
-									<Input
-										required={true}
-										{...register('bidder.address', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Phone</FormLabel>
-									<Input
-										required={true}
-										{...register('bidder.phoneNumber', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Company Id</FormLabel>
-									<Input
-										required={true}
-										{...register('bidder.companyId', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-							</GridItem>
 							<GridItem colSpan={2}>
 								<HStack mb={3}>
 									<Heading size={'md'}>Client</Heading>

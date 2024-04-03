@@ -2,9 +2,8 @@ import React from 'react';
 import { Box, Grid, GridItem, HStack, VStack, Text } from '@chakra-ui/react';
 // import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
-export const BidIdHeader = ({ clientBid }): JSX.Element => {
-	const bidder = clientBid.bidder;
-	console.log('Bidder', bidder);
+export const BidIdHeader = ({ bid }): JSX.Element => {
+	console.log('Header', { bid });
 
 	// const handleDelivery = clientBid?.delivery ? 'Yes' : 'No';
 	// const time = clientBid?.finishDate;
@@ -21,22 +20,19 @@ export const BidIdHeader = ({ clientBid }): JSX.Element => {
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Description:
 									</Text>
-									{/* <Text fontSize={'lg'}>{clientBid.description}</Text> */}
-									<Text fontSize={'lg'}>description</Text>
+									<Text fontSize={'lg'}>{bid.description}</Text>
 								</HStack>
 								<HStack>
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Terms:
 									</Text>
-									{/* <Text fontSize={'lg'}>{clientBid.terms}</Text> */}
-									<Text fontSize={'lg'}>terms</Text>
+									<Text fontSize={'lg'}>{bid.terms}</Text>
 								</HStack>
 								<HStack>
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Status:
 									</Text>
-									{/* <Text fontSize={'lg'}>{clientBid.status}</Text> */}
-									<Text fontSize={'lg'}>status</Text>
+									<Text fontSize={'lg'}>{bid.status}</Text>
 								</HStack>
 							</VStack>
 
@@ -46,8 +42,7 @@ export const BidIdHeader = ({ clientBid }): JSX.Element => {
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Address:
 										</Text>
-										{/* <Text fontSize={'lg'}>{clientBid.address}</Text> */}
-										<Text fontSize={'lg'}>address</Text>
+										<Text fontSize={'lg'}>{bid.address}</Text>
 									</HStack>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
