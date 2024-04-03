@@ -8,12 +8,14 @@ import { usePublishClientBid } from '../../../../mutations/procurement/client-bi
 // import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { BidIdText } from './BidIdText';
+import { Bid } from '../../../../models/Tender';
+import { Center } from '../../../../components/Center';
 
 export const BidId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
 	const { data, isLoading } = useGetBidById(Number(bidId));
-	console.log({ data });
-	const bid = data?.clientBid;
+	const bid: Bid | undefined = data?.bid;
+	console.log({ bid });
 	const bidItems = bid?.items;
 	console.log({ bidItems });
 
@@ -62,52 +64,62 @@ export const BidId = (): JSX.Element => {
 
 	return (
 		<>
-			<div style={{ width: '100%' }}>
-				<Flex direction={'column'}>
-					<BidIdHeader bid={bid} />
-					<BidIdTable bidItems={bidItems} />
-					<Box marginTop={3}>
-						<Grid templateColumns="repeat(3, 1fr)" gap={2}>
-							<GridItem colSpan={2}>
-								<BidIdText />
-							</GridItem>
-							<GridItem colSpan={1}>
-								<Flex alignItems={'center'}>
-									<Button>Upload files</Button>
-								</Flex>
-							</GridItem>
-						</Grid>
-					</Box>
-					<Flex alignItems={'center'} marginTop={'4'}>
-						{!finishDateStatus ? (
-							<>
-								{clientBidStatus === 1 ? (
-									<Flex>
-										<Box>
-											<Button onClick={handlePublish} mr={'2'}>
-												{isPublishLoading ? <LoadingSpinner /> : 'Send Bid'}
-											</Button>
-										</Box>
-										<Spacer />
-										<Box>
-											<Button colorScheme="red">Delete Bid</Button>
-										</Box>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<div style={{ width: '100%' }}>
+					<Flex direction={'column'}>
+						<BidIdHeader bid={bid} />
+						<BidIdTable bidItems={bidItems} />
+						<Box marginTop={3}>
+							<Grid templateColumns="repeat(3, 1fr)" gap={2}>
+								<GridItem colSpan={2}>
+									<BidIdText />
+								</GridItem>
+								<GridItem colSpan={1}>
+									<Flex alignItems={'center'}>
+										<Button>Upload files</Button>
 									</Flex>
-								) : (
-									<Text mr={'2'}>You have already published the Tender</Text>
-								)}
-							</>
-						) : (
-							<Flex alignItems={'center'} justifyContent={'center'}>
-								<Text>
-									The finish date has passed, you cannot publish or delete the
-									tender.
-								</Text>
-							</Flex>
-						)}
+								</GridItem>
+							</Grid>
+						</Box>
+						<Flex alignItems={'center'} marginTop={'4'}>
+							{!finishDateStatus ? (
+								<>
+									{clientBidStatus === 1 ? (
+										<Flex>
+											<Box>
+												<Button onClick={handlePublish} mr={'2'}>
+													{isPublishLoading ? (
+														<LoadingSpinner />
+													) : (
+														'Send Bid'
+													)}
+												</Button>
+											</Box>
+											<Spacer />
+											<Box>
+												<Button colorScheme="red">Delete Bid</Button>
+											</Box>
+										</Flex>
+									) : (
+										<Text mr={'2'}>You have already published the Tender</Text>
+									)}
+								</>
+							) : (
+								<Flex alignItems={'center'} justifyContent={'center'}>
+									<Text>
+										The finish date has passed, you cannot publish or delete the
+										tender.
+									</Text>
+								</Flex>
+							)}
+						</Flex>
 					</Flex>
-				</Flex>
-			</div>
+				</div>
+			)}
 		</>
 	);
 };
