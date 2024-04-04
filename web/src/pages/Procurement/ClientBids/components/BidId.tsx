@@ -15,6 +15,7 @@ export const BidId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
 	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
+	// console.log({ bid });
 	const bidItems = bid?.items;
 
 	const toast = useToast();

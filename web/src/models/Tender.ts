@@ -107,25 +107,16 @@ export interface Bidder {
 // I will keep this in Tender context for now, since it's linked together in the app
 // Maybe I'll move it later...
 export interface Bid {
-	bidId: number;
+	bidId?: number;
 	description: string;
 	terms: string;
 	address: string;
 	delivery: number; // 1 is delivery, 0 is pickup
 	finishDate: number; // Timestamp -> 'Bid valid through'
-	status: number; // 0 = unpublished, 1 = published, 2 = accepted, 3 = rejected
-	items: BidItem[];
-	client: BidClient;
-}
-
-// This the client in the bid portion, not the tender (bidder + tender owner)
-export interface BidClient {
-	clientId: number;
-	clientNumber: string;
-	address: string;
-	phoneNumber: string;
-	email: string;
-	other: string;
+	status?: number; // 0 = unpublished, 1 = published, 2 = accepted, 3 = rejected
+	clientUId: string;
+	notes?: string;
+	items?: BidItem[];
 }
 
 export interface BidItem {

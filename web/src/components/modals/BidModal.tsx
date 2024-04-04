@@ -11,18 +11,15 @@ import {
 	VStack,
 	Grid,
 	GridItem,
-	Text
+	Text,
+	useToast
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
-// import { useQueryClient } from 'react-query';
-// import { DatePicker } from '../forms/DatePicker';
 import { Controller, useForm } from 'react-hook-form';
 import { DatePicker } from '../forms/DatePicker';
-// import { useModifyTender, ProjectFormData } from '../../mutations/useModifyTender';
-// import { ApiService } from '../../services/ApiService';
-// import { devError } from '../../utils/ConsoleUtils';
-// import { LoadingSpinner } from '../LoadingSpinner';
+import { useAddBid } from '../../mutations/procurement/client-bids/useAddBid';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface BidModalProps {
 	bid?: Bid;
@@ -31,9 +28,10 @@ interface BidModalProps {
 export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	console.log(bid);
 	const closeModal = useCloseModal();
-	// const queryClient = useQueryClient();
 
-	// const { mutate: modify, isLoading, isError, error } = useModifyTender();
+	const toast = useToast();
+
+	const { mutate: addBid, isError, error } = useAddBid();
 	const { register, control, handleSubmit } = useForm<Bid>({
 		defaultValues: bid,
 		mode: 'onBlur'
@@ -46,12 +44,44 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 		setIsChecked(newValue);
 	};
 
-	const onSubmit = handleSubmit(async ({ description, terms, address, finishDate, client }) => {
-		console.log(description, terms, address, finishDate, client);
-	});
+	const onSubmit = handleSubmit(
+		async ({ description, terms, address, finishDate, delivery, clientUId, notes }) => {
+			console.log(description, terms, address, finishDate, delivery, clientUId, notes);
+			try {
+				const response = addBid({
+					clientUId,
+					description,
+					terms,
+					address,
+					finishDate,
+					delivery,
+					notes
+				});
+				console.log('response', response);
+
+				closeModal();
+			} catch (e) {
+				devError('Error', e);
+				toast({
+					title: 'Invalid bid!',
+					description: 'You could not add the Bid! There is an error.',
+					status: 'error',
+					duration: 3000,
+					isClosable: true
+				});
+			}
+		}
+	);
 
 	return (
 		<div>
+			{isError && (
+				<>
+					{/* Server errors */}
+					<p>{error?.errorText}</p>
+					<small>{error?.errorCode}</small>
+				</>
+			)}
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
 					<Text>Here you can create a bid and send to the bidder.</Text>
@@ -60,7 +90,7 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 						<Input
 							required={true}
 							{...register('description', {
-								required: 'Procurement description is required'
+								required: 'Bid description is required'
 							})}
 						/>
 					</FormControl>
@@ -114,6 +144,10 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 							)}
 						/>
 					</FormControl>
+					<FormControl>
+						<FormLabel>Other - want to add something more?</FormLabel>
+						<Input {...register('notes', {})} />
+					</FormControl>
 					<hr />
 					<HStack>
 						<Grid templateColumns="repeat(4, 1fr)" gap={2} width={'full'}>
@@ -126,44 +160,8 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 									<FormLabel>Client number</FormLabel>
 									<Input
 										required={true}
-										{...register('client.clientNumber', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Client address</FormLabel>
-									<Input
-										required={true}
-										{...register('client.address', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Client phone</FormLabel>
-									<Input
-										required={true}
-										{...register('client.phoneNumber', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Client email</FormLabel>
-									<Input
-										required={true}
-										{...register('client.email', {
-											required: 'Company is required'
-										})}
-									/>
-								</FormControl>
-								<FormControl>
-									<FormLabel>Other</FormLabel>
-									<Input
-										required={true}
-										{...register('client.other', {
-											required: 'Company is required'
+										{...register('clientUId', {
+											required: 'client number is required'
 										})}
 									/>
 								</FormControl>
