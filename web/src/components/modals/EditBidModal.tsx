@@ -18,20 +18,20 @@ import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { Controller, useForm } from 'react-hook-form';
 import { DatePicker } from '../forms/DatePicker';
-import { useAddBid } from '../../mutations/procurement/client-bids/useAddBid';
+import { useEditBid } from '../../mutations/procurement/client-bids/useEditBid';
 import { devError } from '../../utils/ConsoleUtils';
 
 interface BidModalProps {
 	bid?: Bid;
 }
 
-export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
+export const EditBidModal = ({ bid }: BidModalProps): JSX.Element => {
 	console.log(bid);
 	const closeModal = useCloseModal();
 
 	const toast = useToast();
 
-	const { mutate: addBid, isError, error } = useAddBid();
+	const { mutate: editBid, isError, error } = useEditBid();
 	const { register, control, handleSubmit } = useForm<Bid>({
 		defaultValues: bid,
 		mode: 'onBlur'
@@ -45,10 +45,11 @@ export const BidModal = ({ bid }: BidModalProps): JSX.Element => {
 	};
 
 	const onSubmit = handleSubmit(
-		async ({ description, terms, address, finishDate, delivery, clientUId, notes }) => {
-			console.log(description, terms, address, finishDate, delivery, clientUId, notes);
+		async ({ bidId, description, terms, address, finishDate, delivery, clientUId, notes }) => {
+			console.log(bidId, description, terms, address, finishDate, delivery, clientUId, notes);
 			try {
-				const response = addBid({
+				const response = editBid({
+					bidId,
 					clientUId,
 					description,
 					terms,

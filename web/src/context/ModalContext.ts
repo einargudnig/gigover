@@ -80,6 +80,9 @@ export interface IModalContext {
 	addBid?: {
 		bid?: Bid;
 	};
+	editBid?: {
+		bid?: Bid;
+	};
 	addProperty?: {
 		property?: IPropertyForm;
 	};

@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
-import { Box, Button, Flex, Grid, GridItem, Spacer, Text, useToast } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Spacer,
+	Text,
+	useToast
+} from '@chakra-ui/react';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
 import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
-// import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { ModalContext } from '../../../../context/ModalContext';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { BidIdText } from './BidIdText';
 import { Bid } from '../../../../models/Tender';
 import { Center } from '../../../../components/Center';
+import { TrashIcon } from '../../../../components/icons/TrashIcon';
 
 export const BidId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
+	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
 	// console.log({ bid });
@@ -71,6 +83,26 @@ export const BidId = (): JSX.Element => {
 				<div style={{ width: '100%' }}>
 					<Flex direction={'column'}>
 						<BidIdHeader bid={bid} />
+						<Flex justifyContent={'flex-end'}>
+							<HStack>
+								<Button
+									onClick={() =>
+										setModalContext({
+											editBid: { bid: bid }
+										})
+									}
+								>
+									Edit Bid
+								</Button>
+								<Spacer />
+								<Button
+									colorScheme={'red'}
+									leftIcon={<TrashIcon color={'white'} size={20} />}
+								>
+									Delete Bid
+								</Button>
+							</HStack>
+						</Flex>
 						<BidIdTable bidItems={bidItems} />
 						<Box marginTop={3}>
 							<Grid templateColumns="repeat(3, 1fr)" gap={2}>

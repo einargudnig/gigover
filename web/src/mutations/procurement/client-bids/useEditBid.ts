@@ -5,7 +5,7 @@ import { devError } from '../../../utils/ConsoleUtils';
 import { Bid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
-export const useAddClientBid = () => {
+export const useEditBid = () => {
 	const client = useQueryClient();
 
 	return useMutation<AxiosError, ErrorResponse, Bid>(async (variables) => {
@@ -17,8 +17,8 @@ export const useAddClientBid = () => {
 			if (response.data.errorCode === 'DATA_STORE_EXCEPTION') {
 				throw new Error(response.data?.errorCode);
 			}
-			// TODO Fix this to fetch clientBidById
-			// await client.refetchQueries(ApiService.getBidById(bidId));
+
+			await client.refetchQueries(ApiService.getBidById(variables.bidId!));
 
 			return response.data;
 		} catch (e) {

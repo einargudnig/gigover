@@ -12,7 +12,8 @@ import ShareItem from '../pages/Files/components/ShareItem';
 import { UseResourceModal } from './modals/UseResourceModal';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { ProcurementModal } from './modals/ProcurementModal';
-import { BidModal } from './modals/BidModal';
+import { AddBidModal } from './modals/AddBidModal';
+import { EditBidModal } from './modals/EditBidModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
 import { Theme } from '../Theme';
 import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
@@ -27,7 +28,7 @@ export const GlobalModals = (): JSX.Element => {
 	const { project } = modalContext.modifyProject || {};
 	const { tender } = modalContext.addTender || {};
 	const { modifyTender } = modalContext.modifyTender || {};
-	const { bid } = modalContext.addBid || {};
+	const { bid } = modalContext.addBid || modalContext.editBid || {};
 	const { property } = modalContext.addProperty || modalContext.editProperty || {};
 
 	return (
@@ -75,7 +76,12 @@ export const GlobalModals = (): JSX.Element => {
 			)}
 			{modalContext.addBid && (
 				<Modal open={true} title={'Create bid'}>
-					<BidModal bid={bid} />
+					<AddBidModal bid={bid} />
+				</Modal>
+			)}
+			{modalContext.editBid && (
+				<Modal open={true} title={'Edit bid'}>
+					<EditBidModal bid={bid} />
 				</Modal>
 			)}
 			{modalContext.addProperty && (
