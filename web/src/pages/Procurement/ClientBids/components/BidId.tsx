@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
 import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { ModalContext } from '../../../../context/ModalContext';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { BidIdText } from './BidIdText';
@@ -32,7 +33,7 @@ export const BidId = (): JSX.Element => {
 
 	const toast = useToast();
 
-	const finishDateStatus = false;
+	const finishDateStatus = handleFinishDate(bid?.finishDate);
 	const clientBidStatus = bid?.status;
 
 	const { mutateAsync: publishClientBid, isLoading: isPublishLoading } = usePublishClientBid();
@@ -94,13 +95,6 @@ export const BidId = (): JSX.Element => {
 								>
 									Edit Bid
 								</Button>
-								<Spacer />
-								<Button
-									colorScheme={'red'}
-									leftIcon={<TrashIcon color={'white'} size={20} />}
-								>
-									Delete Bid
-								</Button>
 							</HStack>
 						</Flex>
 						<BidIdTable bidItems={bidItems} />
@@ -119,14 +113,14 @@ export const BidId = (): JSX.Element => {
 						<Flex alignItems={'center'} marginTop={'4'}>
 							{!finishDateStatus ? (
 								<>
-									{clientBidStatus === 1 ? (
-										<Flex>
+									{clientBidStatus === 0 ? (
+										<Flex justifyContent={'flex-end'}>
 											<Box>
 												<Button onClick={handlePublish} mr={'2'}>
 													{isPublishLoading ? (
 														<LoadingSpinner />
 													) : (
-														'Send Bid'
+														'Publish Bid'
 													)}
 												</Button>
 											</Box>
