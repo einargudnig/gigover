@@ -11,7 +11,7 @@ interface PublishBidRequest {
 	bidId: number;
 }
 
-export const usePublishClientBid = () => {
+export const usePublishBid = () => {
 	const client = useQueryClient();
 
 	return useMutation<PublishBidResponse, ErrorResponse, PublishBidRequest>(async (bidId) => {

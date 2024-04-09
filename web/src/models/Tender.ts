@@ -115,6 +115,7 @@ export interface Bid {
 	finishDate: number; // Timestamp -> 'Bid valid through'
 	status?: number; // 0 = unpublished, 1 = published, 2 = accepted, 3 = rejected
 	clientUId: string;
+	clientEmail?: string;
 	notes?: string;
 	items?: BidItem[];
 }

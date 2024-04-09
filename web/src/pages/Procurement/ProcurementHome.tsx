@@ -54,7 +54,7 @@ export const ProcurementHome = (): JSX.Element => {
 	};
 
 	const shouldDeliver = (tender: Tender) => {
-		if (tender.status === 1) {
+		if (tender.delivery === 1) {
 			return (
 				<HStack>
 					<Text as={'b'}>Deliver to:</Text>

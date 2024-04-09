@@ -66,36 +66,17 @@ export const BidIdHeader = ({ bid }): JSX.Element => {
 				<GridItem colSpan={2}>
 					<Box marginRight={'6'}>
 						<VStack ml={'3'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Client
-							</Text>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Email:
+									Notes:
 								</Text>
-								{/* <Text fontSize={'lg'}>{client.email}</Text> */}
-								<Text fontSize={'lg'}>email</Text>
+								<Text fontSize={'lg'}>{bid.notes}</Text>
 							</HStack>
 							<HStack ml={'3'}>
 								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Address:
+									Client email:
 								</Text>
-								{/* <Text fontSize={'lg'}>{client.address}</Text> */}
-								<Text fontSize={'lg'}>address</Text>
-							</HStack>
-							<HStack ml={'3'}>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Phone:
-								</Text>
-								{/* <Text fontSize={'lg'}>{client.phoneNumber}</Text> */}
-								<Text fontSize={'lg'}>phoneNumber</Text>
-							</HStack>
-							<HStack ml={'3'}>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Other:
-								</Text>
-								{/* <Text fontSize={'lg'}>{client.other}</Text> */}
-								<Text fontSize={'lg'}>other</Text>
+								<Text fontSize={'lg'}>{bid.clientEmail}</Text>
 							</HStack>
 						</VStack>
 					</Box>

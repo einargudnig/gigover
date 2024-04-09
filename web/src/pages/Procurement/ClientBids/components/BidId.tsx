@@ -2,26 +2,15 @@ import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
-import {
-	Box,
-	Button,
-	Flex,
-	Grid,
-	GridItem,
-	HStack,
-	Spacer,
-	Text,
-	useToast
-} from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Spacer, Text, useToast } from '@chakra-ui/react';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
-import { usePublishClientBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
+import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { ModalContext } from '../../../../context/ModalContext';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { BidIdText } from './BidIdText';
+// import { BidIdText } from './BidIdText';
 import { Bid } from '../../../../models/Tender';
 import { Center } from '../../../../components/Center';
-import { TrashIcon } from '../../../../components/icons/TrashIcon';
 
 export const BidId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
@@ -36,28 +25,28 @@ export const BidId = (): JSX.Element => {
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 	const clientBidStatus = bid?.status;
 
-	const { mutateAsync: publishClientBid, isLoading: isPublishLoading } = usePublishClientBid();
+	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
 
 	const handlePublish = async () => {
-		const publishTenderBody = {
+		const publishBidBody = {
 			bidId: Number(bidId)
 		};
 
 		if (data !== undefined) {
 			try {
-				await publishClientBid(publishTenderBody);
+				await publishBid(publishBidBody);
 				toast({
-					title: 'Tender published',
-					description: 'Now you can invite people to send offers to your tender!',
+					title: 'Bid published',
+					description: 'Bid has been published!',
 					status: 'success',
 					duration: 2000,
 					isClosable: true
 				});
 			} catch (error) {
-				// console.log('ERROR', { error });
+				console.log('ERROR', { error });
 				toast({
 					title: 'Error',
-					description: 'Something went wrong when we tried to publish your tender.',
+					description: 'Something went wrong when we tried to publish your bid.',
 					status: 'error',
 					duration: 3000,
 					isClosable: true
@@ -66,7 +55,7 @@ export const BidId = (): JSX.Element => {
 		} else {
 			toast({
 				title: 'Error',
-				description: 'Something went wrong when we tried to publish your tender.',
+				description: 'Something went wrong when we tried to publish your bid.',
 				status: 'error',
 				duration: 5000,
 				isClosable: true
@@ -98,8 +87,8 @@ export const BidId = (): JSX.Element => {
 							</HStack>
 						</Flex>
 						<BidIdTable bidItems={bidItems} />
-						<Box marginTop={3}>
-							<Grid templateColumns="repeat(3, 1fr)" gap={2}>
+						<Box marginTop={12}>
+							{/* <Grid templateColumns="repeat(3, 1fr)" gap={2}>
 								<GridItem colSpan={2}>
 									<BidIdText />
 								</GridItem>
@@ -108,13 +97,13 @@ export const BidId = (): JSX.Element => {
 										<Button>Upload files</Button>
 									</Flex>
 								</GridItem>
-							</Grid>
+							</Grid> */}
 						</Box>
-						<Flex alignItems={'center'} marginTop={'4'}>
+						<Flex justifyContent={'flex-end'} alignItems={'center'} marginTop={'4'}>
 							{!finishDateStatus ? (
 								<>
 									{clientBidStatus === 0 ? (
-										<Flex justifyContent={'flex-end'}>
+										<Flex>
 											<Box>
 												<Button onClick={handlePublish} mr={'2'}>
 													{isPublishLoading ? (
@@ -130,7 +119,9 @@ export const BidId = (): JSX.Element => {
 											</Box>
 										</Flex>
 									) : (
-										<Text mr={'2'}>You have already published the Tender</Text>
+										<Text mr={'2'} as="b">
+											You have already published the Tender
+										</Text>
 									)}
 								</>
 							) : (
