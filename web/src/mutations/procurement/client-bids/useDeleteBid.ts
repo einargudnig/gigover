@@ -2,27 +2,21 @@ import axios from 'axios';
 import { ApiService } from '../../../services/ApiService';
 import { useMutation } from 'react-query';
 import { ErrorResponse } from '../../../models/ErrorResponse';
+import { Bid } from '../../../models/Tender';
 
-interface PublishBidResponse {
+interface DeleteBidResponse {
 	errorText: 'OK';
 }
 
-interface PublishBidRequest {
-	bidId: number;
-}
-
-export const usePublishBid = () => {
-	// const client = useQueryClient();
-
-	return useMutation<PublishBidResponse, ErrorResponse, PublishBidRequest>(async (bidId) => {
+export const useDeleteBid = () => {
+	return useMutation<DeleteBidResponse, ErrorResponse, Bid>(async (bidId) => {
 		try {
-			const response = await axios.post(ApiService.publishBid, bidId, {
+			const response = await axios.post(ApiService.deleteBid, bidId, {
 				withCredentials: true
 			});
 
 			if (response.status === 200) {
 				console.log({ bidId });
-				// await client.refetchQueries(ApiService.getBidById(bidId));
 			}
 			return response.data;
 		} catch (e) {
