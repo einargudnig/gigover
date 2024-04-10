@@ -79,52 +79,56 @@ export const BidId = (): JSX.Element => {
 					<Flex direction={'column'}>
 						<BidIdHeader bid={bid} />
 						<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
-							<HStack>
-								<Button
-									onClick={() =>
-										setModalContext({
-											editBid: { bid: bid }
-										})
-									}
-								>
-									Edit Bid
-								</Button>
-								{bid === undefined ? null : (
-									<ConfirmDialog
-										header={'Delete bid'}
-										setIsOpen={setDialogOpen}
-										callback={async () => {
-											if (bid?.status === 1) {
-												toast({
-													title: 'Cannot delete published bid',
-													description:
-														'This bid has been published and cannot be deleted',
-													status: 'error',
-													duration: 2000,
-													isClosable: true
-												});
-											} else {
-												await deleteBidAsync(bid);
-												navigate('/tender/create-bid');
-											}
-											setDialogOpen(false);
-										}}
-										isOpen={dialogOpen}
+							{bid?.status === 0 || finishDateStatus ? (
+								<HStack>
+									<Button
+										onClick={() =>
+											setModalContext({
+												editBid: { bid: bid }
+											})
+										}
 									>
-										<Button
-											aria-label={'Delete'}
-											colorScheme={'red'}
-											isLoading={isLoadingDelete}
-											leftIcon={<TrashIcon color={'white'} size={20} />}
-											onClick={() => {
-												setDialogOpen(true);
+										Edit Bid
+									</Button>
+									{bid === undefined ? null : (
+										<ConfirmDialog
+											header={'Delete bid'}
+											setIsOpen={setDialogOpen}
+											callback={async () => {
+												if (bid?.status === 1) {
+													toast({
+														title: 'Cannot delete published bid',
+														description:
+															'This bid has been published and cannot be deleted',
+														status: 'error',
+														duration: 2000,
+														isClosable: true
+													});
+												} else {
+													await deleteBidAsync(bid);
+													navigate('/tender/create-bid');
+												}
+												setDialogOpen(false);
 											}}
+											isOpen={dialogOpen}
 										>
-											Delete tender
-										</Button>
-									</ConfirmDialog>
-								)}
-							</HStack>
+											<Button
+												aria-label={'Delete'}
+												colorScheme={'red'}
+												isLoading={isLoadingDelete}
+												leftIcon={<TrashIcon color={'white'} size={20} />}
+												onClick={() => {
+													setDialogOpen(true);
+												}}
+											>
+												Delete tender
+											</Button>
+										</ConfirmDialog>
+									)}
+								</HStack>
+							) : (
+								<Text>You have cannot edit or delete a published bid</Text>
+							)}
 						</Flex>
 						<BidIdTable bidItems={bidItems} />
 						<Box marginTop={12}>

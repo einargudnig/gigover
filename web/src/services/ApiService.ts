@@ -157,7 +157,7 @@ export class ApiService {
 	static rejectBid = API_BASE + 'bid/rejectBid';
 	static getBids = API_BASE + 'bid/bids';
 	static getBidById = (bidId: number) => API_BASE + 'bid/' + bidId;
-	// TODO figure out for what those two are!
+	// For the Client to see the Bid
 	static getClientBids = API_BASE + 'bid/clientBids';
 	static getClientBidById = (bidId: number) => API_BASE + 'bid/clientBid/' + bidId;
 
