@@ -109,9 +109,6 @@ export const ClientAnswers = (): JSX.Element => {
 														<Text color={'black'}>Notes:</Text>
 														<Text>{bid.notes}</Text>
 													</HStack>
-													<HStack>
-														<Text color={'black'}>Tender: </Text>
-													</HStack>
 												</GridItem>
 											</Grid>
 										</Flex>

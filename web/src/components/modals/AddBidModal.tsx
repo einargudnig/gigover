@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Bid } from '../../models/Tender';
 import {
 	Box,
@@ -9,10 +9,10 @@ import {
 	Heading,
 	Input,
 	VStack,
-	Grid,
-	GridItem,
 	Text,
-	useToast
+	useToast,
+	Button,
+	Flex
 } from '@chakra-ui/react';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
@@ -20,13 +20,37 @@ import { Controller, useForm } from 'react-hook-form';
 import { DatePicker } from '../forms/DatePicker';
 import { useAddBid } from '../../mutations/procurement/client-bids/useAddBid';
 import { devError } from '../../utils/ConsoleUtils';
+import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 
 interface BidModalProps {
 	bid?: Bid;
 }
 
 export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
-	console.log(bid);
+	const [searchMail, setSearchMail] = useState('');
+	const [uId, setUId] = useState('');
+	// const [inviteSuccess, setInviteSuccess] = useState(false); // use this to update the ui
+	const searchMutation = useGetUserByEmail();
+	//
+	const search = useCallback(async () => {
+		try {
+			const response = await searchMutation.mutateAsync({
+				email: searchMail
+			});
+
+			if (response.uId) {
+				console.log('Found user with uId:', response.uId);
+				// find a clientUid for the client
+				setUId(response.uId);
+			}
+		} catch (e) {
+			//
+			devError(e);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [searchMutation, searchMail]);
+	console.log({ uId });
+
 	const closeModal = useCloseModal();
 
 	const toast = useToast();
@@ -49,7 +73,7 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 			console.log(description, terms, address, finishDate, delivery, clientUId, notes);
 			try {
 				const response = addBid({
-					clientUId,
+					clientUId: uId, // this comes from the search function
 					description,
 					terms,
 					address,
@@ -149,25 +173,37 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 						<Input {...register('notes', {})} />
 					</FormControl>
 					<hr />
-					<HStack>
-						<Grid templateColumns="repeat(4, 1fr)" gap={2} width={'full'}>
-							<GridItem colSpan={2}>
-								<HStack mb={3}>
-									<Heading size={'md'}>Client</Heading>
-									<Text>- You are creating the bid</Text>
-								</HStack>
-								<FormControl>
-									<FormLabel>Client number</FormLabel>
+					<Flex justifyContent={'flex-start'}>
+						<VStack>
+							<HStack mb={3}>
+								<Heading size={'md'}>Client</Heading>
+								<Text>- You are creating the bid for this client</Text>
+							</HStack>
+							<Text width={96}>
+								Add the email of the Gigover user you want to send the bid to. If
+								the user does not have an email, he will be sent an invite email to
+								create an Gigover account.
+							</Text>
+							<Text as="b" width={96}>
+								Be aware that you cannot create this bid until the user has created
+								an account.
+							</Text>
+							<FormControl>
+								<FormLabel>Client number</FormLabel>
+								<HStack>
 									<Input
 										required={true}
 										{...register('clientUId', {
 											required: 'client number is required'
 										})}
+										value={searchMail}
+										onChange={(e) => setSearchMail(e.target.value)}
 									/>
-								</FormControl>
-							</GridItem>
-						</Grid>
-					</HStack>
+									<Button onClick={search}>Invite</Button>
+								</HStack>
+							</FormControl>
+						</VStack>
+					</Flex>
 					<FormActions
 						cancelText={'Cancel'}
 						onCancel={closeModal}
