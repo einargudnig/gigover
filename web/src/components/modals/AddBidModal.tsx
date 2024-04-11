@@ -72,17 +72,27 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 		async ({ description, terms, address, finishDate, delivery, clientUId, notes }) => {
 			console.log(description, terms, address, finishDate, delivery, clientUId, notes);
 			try {
-				const response = addBid({
-					clientUId: uId, // this comes from the search function
-					description,
-					terms,
-					address,
-					finishDate,
-					delivery,
-					notes
-				});
-				console.log('response', response);
+				if (uId !== '') {
+					const response = addBid({
+						clientUId: uId, // this comes from the search function
+						description,
+						terms,
+						address,
+						finishDate,
+						delivery,
+						notes
+					});
+					console.log('response', response);
 
+					closeModal();
+				}
+				toast({
+					title: 'Invalid bid!',
+					description: 'You need to make sure the client has a Gigover account',
+					status: 'error',
+					duration: 3000,
+					isClosable: true
+				});
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
@@ -193,9 +203,7 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 								<HStack>
 									<Input
 										required={true}
-										{...register('clientUId', {
-											required: 'client number is required'
-										})}
+										{...register('clientUId')}
 										value={searchMail}
 										onChange={(e) => setSearchMail(e.target.value)}
 									/>
