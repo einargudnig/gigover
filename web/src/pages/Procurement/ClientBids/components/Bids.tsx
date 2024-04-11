@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
+import { ModalContext } from '../../../../context/ModalContext';
+import { Text, Flex, Grid, GridItem, HStack, Box, Spacer, Button } from '@chakra-ui/react';
+import { PlusIcon } from '../../../../components/icons/PlusIcon';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
@@ -24,6 +26,7 @@ const PropertyCardStyled = styled(CardBaseLink)`
 `;
 
 export const Bids = (): JSX.Element => {
+	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useGetBids();
 
 	const shouldDeliver = (bid: Bid) => {
@@ -45,6 +48,21 @@ export const Bids = (): JSX.Element => {
 
 	return (
 		<>
+			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
+				<Box>
+					<Text>This tab is used to create bids that can be sent out to users</Text>
+				</Box>
+				<Spacer />
+				<Box>
+					<Button
+						onClick={() => setModalContext({ addBid: { bid: undefined } })}
+						leftIcon={<PlusIcon />}
+					>
+						Create new bid
+					</Button>
+				</Box>
+			</Flex>
+
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

@@ -14,6 +14,7 @@ import {
 	Button,
 	Flex
 } from '@chakra-ui/react';
+import { Theme } from '../../Theme';
 import { FormActions } from '../FormActions';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { Controller, useForm } from 'react-hook-form';
@@ -29,7 +30,7 @@ interface BidModalProps {
 export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [uId, setUId] = useState('');
-	// const [inviteSuccess, setInviteSuccess] = useState(false); // use this to update the ui
+	const [inviteSuccess, setInviteSuccess] = useState(false); // use this to update the ui
 	const searchMutation = useGetUserByEmail();
 	//
 	const search = useCallback(async () => {
@@ -42,6 +43,7 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 				console.log('Found user with uId:', response.uId);
 				// find a clientUid for the client
 				setUId(response.uId);
+				setInviteSuccess(true);
 			}
 		} catch (e) {
 			//
@@ -72,27 +74,18 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 		async ({ description, terms, address, finishDate, delivery, clientUId, notes }) => {
 			console.log(description, terms, address, finishDate, delivery, clientUId, notes);
 			try {
-				if (uId !== '') {
-					const response = addBid({
-						clientUId: uId, // this comes from the search function
-						description,
-						terms,
-						address,
-						finishDate,
-						delivery,
-						notes
-					});
-					console.log('response', response);
-
-					closeModal();
-				}
-				toast({
-					title: 'Invalid bid!',
-					description: 'You need to make sure the client has a Gigover account',
-					status: 'error',
-					duration: 3000,
-					isClosable: true
+				const response = addBid({
+					clientUId: uId, // this comes from the search function
+					description,
+					terms,
+					address,
+					finishDate,
+					delivery,
+					notes
 				});
+				console.log('response', response);
+
+				closeModal();
 				closeModal();
 			} catch (e) {
 				devError('Error', e);
@@ -207,12 +200,28 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 										value={searchMail}
 										onChange={(e) => setSearchMail(e.target.value)}
 									/>
-									<Button onClick={search}>Invite</Button>
+									<Button
+										onClick={search}
+										isLoading={searchMutation.isLoading}
+										isDisabled={
+											searchMutation.isLoading || searchMutation.isError
+										}
+									>
+										Invite
+									</Button>
 								</HStack>
+								{inviteSuccess ? (
+									<>
+										<Text mt={2} mb={4} color={Theme.colors.green}>
+											User has been invited to the project
+										</Text>
+									</>
+								) : null}
 							</FormControl>
 						</VStack>
 					</Flex>
 					<FormActions
+						submitDisabled={searchMutation.isLoading || searchMutation.isError}
 						cancelText={'Cancel'}
 						onCancel={closeModal}
 						submitText={'Create'}

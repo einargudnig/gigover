@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ApiService } from '../../../services/ApiService';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
 interface PublishBidResponse {
@@ -12,7 +12,7 @@ interface PublishBidRequest {
 }
 
 export const usePublishBid = () => {
-	// const client = useQueryClient();
+	const client = useQueryClient();
 
 	return useMutation<PublishBidResponse, ErrorResponse, PublishBidRequest>(async (bidId) => {
 		try {
@@ -22,7 +22,8 @@ export const usePublishBid = () => {
 
 			if (response.status === 200) {
 				console.log({ bidId });
-				// await client.refetchQueries(ApiService.getBidById(bidId));
+				await client.refetchQueries(ApiService.getBidById(bidId.bidId));
+				await client.refetchQueries(ApiService.getClientBids);
 			}
 			return response.data;
 		} catch (e) {

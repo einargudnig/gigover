@@ -116,6 +116,9 @@ export interface Bid {
 	status?: number; // 0 = unpublished, 1 = published, 2 = accepted, 3 = rejected
 	clientUId: string;
 	clientEmail?: string;
+	bidderUId?: string;
+	bidderName?: string;
+	bidderEmail?: string;
 	notes?: string;
 	items?: BidItem[];
 }

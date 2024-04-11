@@ -1,3 +1,5 @@
+import { useParams } from 'react-router-dom';
+import React from 'react';
 import {
 	Box,
 	Grid,
@@ -12,21 +14,29 @@ import {
 	Tooltip,
 	Tbody,
 	Td,
-	Textarea,
 	Flex,
 	Spacer,
 	Button
 } from '@chakra-ui/react';
-import React from 'react';
+import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
+import { Bid } from '../../../../models/Tender';
 
 export const ClientAnswerId = (): JSX.Element => {
+	const { bidId } = useParams<{ bidId: string }>();
+
+	const { data, isLoading } = useClientGetBidById(Number(bidId)); // TODO add error handling
+	const bid: Bid | undefined = data?.bid;
+	console.log({ bid });
+	// const bidItems = bid?.items;
+
 	return (
 		<>
 			{/* Bid Header */}
 			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
-				<Grid templateColumns="repeat(3, 1fr)" gap={4}>
-					<GridItem colSpan={1}>
+				<Grid templateColumns="repeat(4, 1fr)" gap={4}>
+					<GridItem colSpan={2}>
 						<Box>
 							<VStack>
 								<VStack mb={'4'}>
@@ -34,22 +44,19 @@ export const ClientAnswerId = (): JSX.Element => {
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Description:
 										</Text>
-										{/* <Text fontSize={'lg'}>{clientBid.description}</Text> */}
-										<Text fontSize={'lg'}>description</Text>
+										<Text fontSize={'lg'}>{bid?.description}</Text>
 									</HStack>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Terms:
 										</Text>
-										{/* <Text fontSize={'lg'}>{clientBid.terms}</Text> */}
-										<Text fontSize={'lg'}>terms</Text>
+										<Text fontSize={'lg'}>{bid?.terms}</Text>
 									</HStack>
 									<HStack>
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Status:
 										</Text>
-										{/* <Text fontSize={'lg'}>{clientBid.status}</Text> */}
-										<Text fontSize={'lg'}>status</Text>
+										<Text fontSize={'lg'}>{bid?.status}</Text>
 									</HStack>
 								</VStack>
 
@@ -59,8 +66,7 @@ export const ClientAnswerId = (): JSX.Element => {
 											<Text fontWeight={'bold'} fontSize={'xl'}>
 												Address:
 											</Text>
-											{/* <Text fontSize={'lg'}>{clientBid.address}</Text> */}
-											<Text fontSize={'lg'}>address</Text>
+											<Text fontSize={'lg'}>{bid?.address}</Text>
 										</HStack>
 										<HStack>
 											<Text fontWeight={'bold'} fontSize={'xl'}>
@@ -75,99 +81,35 @@ export const ClientAnswerId = (): JSX.Element => {
 											<Text fontWeight={'bold'} fontSize={'xl'}>
 												Close Date:
 											</Text>
-											{/* <Text fontSize={'lg'}>{formatDateWithoutTime(date)}</Text> */}
-											{/* <Text fontSize={'lg'}>{clientBid.finishDate}</Text> */}
-											<Text fontSize={'lg'}>finishdate</Text>
+											<Text fontSize={'lg'}>
+												{formatDateWithoutTime(new Date(bid!.finishDate))}
+											</Text>
 										</HStack>
 										<HStack>
 											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Phone:
+												Notes:
 											</Text>
-											{/* <Text fontSize={'lg'}>{clientBid.phoneNumber}</Text> */}
-											<Text fontSize={'lg'}>phoneNumber</Text>
+											<Text fontSize={'lg'}>{bid?.notes}</Text>
 										</HStack>
 									</VStack>
 								</HStack>
 							</VStack>
 						</Box>
 					</GridItem>
-					<GridItem colSpan={1}>
+					<GridItem colSpan={2}>
 						<Box marginRight={'6'}>
 							<VStack ml={'3'}>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Bidder
-								</Text>
+								<HStack ml={'3'}>
+									<Text fontWeight={'bold'} fontSize={'xl'}>
+										Email:
+									</Text>
+									<Text fontSize={'lg'}>{bid?.bidderEmail}</Text>
+								</HStack>
 								<HStack ml={'3'}>
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Name:
 									</Text>
-									{/* <Text fontSize={'lg'}>{clientBid.bidder.name}</Text> */}
-									<Text fontSize={'lg'}>name</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Email:
-									</Text>
-									{/* <Text fontSize={'lg'}>{clientBid.bidder.email}</Text> */}
-									<Text fontSize={'lg'}>email</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Company:
-									</Text>
-									{/* <Text fontSize={'lg'}>{bidder.company}</Text> */}
-									<Text fontSize={'lg'}>company</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Address:
-									</Text>
-									{/* <Text fontSize={'lg'}>{bidder.address}</Text> */}
-									<Text fontSize={'lg'}>address</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Phone:
-									</Text>
-									{/* <Text fontSize={'lg'}>{bidder.phoneNumber}</Text> */}
-									<Text fontSize={'lg'}>phoneNumber</Text>
-								</HStack>
-							</VStack>
-						</Box>
-					</GridItem>
-					<GridItem colSpan={1}>
-						<Box marginRight={'6'}>
-							<VStack ml={'3'}>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Client
-								</Text>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Email:
-									</Text>
-									{/* <Text fontSize={'lg'}>{client.email}</Text> */}
-									<Text fontSize={'lg'}>email</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Address:
-									</Text>
-									{/* <Text fontSize={'lg'}>{client.address}</Text> */}
-									<Text fontSize={'lg'}>address</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Phone:
-									</Text>
-									{/* <Text fontSize={'lg'}>{client.phoneNumber}</Text> */}
-									<Text fontSize={'lg'}>phoneNumber</Text>
-								</HStack>
-								<HStack ml={'3'}>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Other:
-									</Text>
-									{/* <Text fontSize={'lg'}>{client.other}</Text> */}
-									<Text fontSize={'lg'}>other</Text>
+									<Text fontSize={'lg'}>{bid?.bidderName}</Text>
 								</HStack>
 							</VStack>
 						</Box>
@@ -247,25 +189,6 @@ export const ClientAnswerId = (): JSX.Element => {
 					</>
 				</Tbody>
 			</Table>
-
-			<Flex alignItems={'center'} marginX={10} marginTop={4}>
-				<Box>
-					<Textarea
-						placeholder="Notes..."
-						variant="outline"
-						size="lg"
-						border="1px"
-						rounded={5}
-						p={1}
-					/>
-				</Box>
-				<Spacer />
-				<Box>
-					<Text color={'black'} size={'xl'}>
-						Attachments
-					</Text>
-				</Box>
-			</Flex>
 
 			<Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
 				<Box>
