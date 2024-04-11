@@ -67,6 +67,10 @@ export const ClientAnswers = (): JSX.Element => {
 									bidStatus = 'Unpublished';
 								} else if (bid.status === 1) {
 									bidStatus = 'Published';
+								} else if (bid.status === 2) {
+									bidStatus = 'Rejected';
+								} else if (bid.status === 3) {
+									bidStatus = 'Accepted';
 								} else {
 									bidStatus = 'Unknown';
 								}

@@ -14,6 +14,8 @@ export const useClientGetBidById = (bidId: number) => {
 			refetchOnWindowFocus: true
 		}
 	);
+
+	console.log({ data });
 	return {
 		data,
 		isLoading,

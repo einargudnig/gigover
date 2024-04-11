@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 import { BidId } from '../../../models/Tender';
 
-export const useAcceptOffer = () => {
+export const useAcceptBid = () => {
 	const client = useQueryClient();
 
 	return useMutation<BidId, ErrorResponse, BidId>(
