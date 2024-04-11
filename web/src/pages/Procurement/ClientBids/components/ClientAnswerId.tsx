@@ -93,6 +93,31 @@ export const ClientAnswerId = (): JSX.Element => {
 		}
 	};
 
+	const formatNumber = (num: number) => {
+		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	};
+
+	const status = () => {
+		if (bid?.status === 0) {
+			return <Text color={'gray'}>Unpublished</Text>;
+		} else if (bid?.status === 1) {
+			return <Text>Published</Text>;
+		} else if (bid?.status === 2) {
+			return (
+				<Text fontSize={'lg'} color={'green'}>
+					Accepted
+				</Text>
+			);
+		} else if (bid?.status === 3) {
+			return (
+				<Text fontSize={'lg'} color={'red'}>
+					Rejected
+				</Text>
+			);
+		}
+		return 'Unknown';
+	};
+
 	return (
 		<>
 			{isLoading ? (
@@ -130,7 +155,7 @@ export const ClientAnswerId = (): JSX.Element => {
 												<Text fontWeight={'bold'} fontSize={'xl'}>
 													Status:
 												</Text>
-												<Text fontSize={'lg'}>{bid?.status}</Text>
+												<Text fontSize={'lg'}>{status()}</Text>
 											</HStack>
 										</VStack>
 
@@ -231,6 +256,15 @@ export const ClientAnswerId = (): JSX.Element => {
 										</HStack>
 									</Tooltip>
 								</Th>
+
+								<Th width={'20%'}>
+									<Tooltip label="Cost of single item">
+										<HStack>
+											<Text>Cost</Text>
+											<ImportantIcon size={20} />
+										</HStack>
+									</Tooltip>
+								</Th>
 							</Tr>
 						</Thead>
 						<Tbody>
@@ -241,6 +275,7 @@ export const ClientAnswerId = (): JSX.Element => {
 										<Td width={'20%'}>{item.description}</Td>
 										<Td width={'20%'}>{item.volume}</Td>
 										<Td width={'20%'}>{item.unit}</Td>
+										<Td width={'20%'}>{formatNumber(item.cost!)}</Td>
 									</Tr>
 								))}
 							</>
