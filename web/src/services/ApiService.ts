@@ -153,8 +153,8 @@ export class ApiService {
 	static editBidItem = API_BASE + 'bid/editBidItem';
 	static deleteBidItem = API_BASE + 'bid/deleteBidItem';
 	static publishBid = API_BASE + 'bid/publishBid';
-	static acceptBid = API_BASE + 'bid/acceptBid';
-	static rejectBid = API_BASE + 'bid/rejectBid';
+	static acceptBid = API_BASE + 'bid/accept';
+	static rejectBid = API_BASE + 'bid/reject';
 	static getBids = API_BASE + 'bid/bids';
 	static getBidById = (bidId: number) => API_BASE + 'bid/' + bidId;
 	// For the Client to see the Bid

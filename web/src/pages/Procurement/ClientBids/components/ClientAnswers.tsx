@@ -26,8 +26,6 @@ const PropertyCardStyled = styled(CardBaseLink)`
 export const ClientAnswers = (): JSX.Element => {
 	const { data, isLoading } = useGetClientBids();
 
-	console.log({ data });
-
 	const shouldDeliver = (bid: Bid) => {
 		if (bid.delivery === 1) {
 			return (

@@ -14,7 +14,7 @@ export const useRejectBid = () => {
 		},
 		{
 			onSuccess: async (variables) => {
-				await client.refetchQueries(ApiService.getBidById(variables.bidId));
+				await client.refetchQueries(ApiService.getClientBidById(variables.bidId));
 			}
 		}
 	);
