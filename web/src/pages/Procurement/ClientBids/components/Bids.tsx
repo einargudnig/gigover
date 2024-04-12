@@ -50,7 +50,10 @@ export const Bids = (): JSX.Element => {
 		<>
 			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
 				<Box>
-					<Text>This tab is used to create bids that can be sent out to users</Text>
+					<Text>
+						This tab is used to create bids that can be sent out to users - 🚧 This
+						feature is still in development! 🚧
+					</Text>
 				</Box>
 				<Spacer />
 				<Box>

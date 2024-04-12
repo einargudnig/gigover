@@ -274,6 +274,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 										<HStack>
 											<Button
 												aria-label={'Update item'}
+												isLoading={isUpdateLoading}
 												onClick={() => handleUpdate(item)}
 											>
 												{/* {isUpdateLoading ? <LoadingSpinner /> : 'Update'} */}
