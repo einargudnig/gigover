@@ -13,11 +13,7 @@ import {
 	Th,
 	Tooltip,
 	Tbody,
-	Td,
-	Flex,
-	Spacer,
-	Button,
-	useToast
+	Td
 } from '@chakra-ui/react';
 import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
@@ -25,73 +21,73 @@ import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { Bid } from '../../../../models/Tender';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
-import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
+// import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
+// import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
 
 export const ClientAnswerId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
-	const { mutateAsync: acceptBid, isLoading: isAcceptBidLoading } = useAcceptBid();
-	const { mutateAsync: rejectBid, isLoading: isRejectBidLoading } = useRejectBid();
+	// const { mutateAsync: acceptBid, isLoading: isAcceptBidLoading } = useAcceptBid();
+	// const { mutateAsync: rejectBid, isLoading: isRejectBidLoading } = useRejectBid();
 	const { data, isLoading } = useClientGetBidById(Number(bidId)); // TODO add error handling
 
 	const bid: Bid | undefined = data?.bid;
 	const bidItems = bid?.items;
 
-	const toast = useToast();
+	// const toast = useToast();
 
-	const handleAcceptBid = () => {
-		const bidBody = {
-			bidId: Number(bidId)
-		};
+	// const handleAcceptBid = () => {
+	// 	const bidBody = {
+	// 		bidId: Number(bidId)
+	// 	};
 
-		try {
-			console.log('Accept bid with this body', bidBody);
-			acceptBid(bidBody);
+	// 	try {
+	// 		console.log('Accept bid with this body', bidBody);
+	// 		acceptBid(bidBody);
 
-			toast({
-				title: 'Bid accepted',
-				description: 'You have accepted this bid!',
-				status: 'info',
-				duration: 3000,
-				isClosable: true
-			});
-		} catch (error) {
-			console.log(error);
-			toast({
-				title: 'Error',
-				description: 'There was an error in accepting the bid.',
-				status: 'error',
-				duration: 2000,
-				isClosable: true
-			});
-		}
-	};
+	// 		toast({
+	// 			title: 'Bid accepted',
+	// 			description: 'You have accepted this bid!',
+	// 			status: 'info',
+	// 			duration: 3000,
+	// 			isClosable: true
+	// 		});
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		toast({
+	// 			title: 'Error',
+	// 			description: 'There was an error in accepting the bid.',
+	// 			status: 'error',
+	// 			duration: 2000,
+	// 			isClosable: true
+	// 		});
+	// 	}
+	// };
 
-	const handleRejectBid = () => {
-		const bidBody = {
-			bidId: Number(bidId)
-		};
-		console.log('Reject bid with this body:', bidBody);
-		try {
-			rejectBid(bidBody);
-			toast({
-				title: 'Bid rejected',
-				description: 'You have rejected this bid!',
-				status: 'info',
-				duration: 3000,
-				isClosable: true
-			});
-		} catch (error) {
-			console.log(error);
-			toast({
-				title: 'Error',
-				description: 'There was an error in rejecting the bid.',
-				status: 'error',
-				duration: 2000,
-				isClosable: true
-			});
-		}
-	};
+	// const handleRejectBid = () => {
+	// 	const bidBody = {
+	// 		bidId: Number(bidId)
+	// 	};
+	// 	console.log('Reject bid with this body:', bidBody);
+	// 	try {
+	// 		rejectBid(bidBody);
+	// 		toast({
+	// 			title: 'Bid rejected',
+	// 			description: 'You have rejected this bid!',
+	// 			status: 'info',
+	// 			duration: 3000,
+	// 			isClosable: true
+	// 		});
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		toast({
+	// 			title: 'Error',
+	// 			description: 'There was an error in rejecting the bid.',
+	// 			status: 'error',
+	// 			duration: 2000,
+	// 			isClosable: true
+	// 		});
+	// 	}
+	// };
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -284,7 +280,7 @@ export const ClientAnswerId = (): JSX.Element => {
 				</>
 			)}
 
-			<Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
+			{/* <Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
 				<Box>
 					<Button isLoading={isAcceptBidLoading} onClick={handleAcceptBid}>
 						Accept
@@ -296,7 +292,7 @@ export const ClientAnswerId = (): JSX.Element => {
 						Reject
 					</Button>
 				</Box>
-			</Flex>
+			</Flex> */}
 		</>
 	);
 };
