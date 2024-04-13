@@ -43,6 +43,27 @@ export const ClientAnswers = (): JSX.Element => {
 		);
 	};
 
+	const status = (bid: Bid) => {
+		if (bid?.status === 0) {
+			return <Text color={'gray'}>Unpublished</Text>;
+		} else if (bid?.status === 1) {
+			return <Text>Published</Text>;
+		} else if (bid?.status === 2) {
+			return (
+				<Text fontSize={'lg'} color={'red'}>
+					Rejected
+				</Text>
+			);
+		} else if (bid?.status === 3) {
+			return (
+				<Text fontSize={'lg'} color={'green'}>
+					Accepted
+				</Text>
+			);
+		}
+		return 'Unknown';
+	};
+
 	return (
 		<>
 			{isLoading ? (
@@ -60,18 +81,6 @@ export const ClientAnswers = (): JSX.Element => {
 							.slice()
 							.reverse()
 							.map((bid) => {
-								let bidStatus;
-								if (bid.status === 0) {
-									bidStatus = 'Unpublished';
-								} else if (bid.status === 1) {
-									bidStatus = 'Published';
-								} else if (bid.status === 2) {
-									bidStatus = 'Rejected';
-								} else if (bid.status === 3) {
-									bidStatus = 'Accepted';
-								} else {
-									bidStatus = 'Unknown';
-								}
 								return (
 									<PropertyCardStyled
 										key={bid.bidId}
@@ -94,7 +103,7 @@ export const ClientAnswers = (): JSX.Element => {
 													</HStack>
 													<HStack>
 														<Text color={'black'}>Status: </Text>
-														<Text>{bidStatus}</Text>
+														<Text>{status(bid)}</Text>
 													</HStack>
 												</GridItem>
 												<GridItem colSpan={2}>
