@@ -9,6 +9,27 @@ export const BidIdHeader = ({ bid }): JSX.Element => {
 	const time = bid?.finishDate;
 	const date = new Date(time!);
 
+	const status = () => {
+		if (bid?.status === 0) {
+			return <Text color={'gray'}>Unpublished</Text>;
+		} else if (bid?.status === 1) {
+			return <Text>Published</Text>;
+		} else if (bid?.status === 2) {
+			return (
+				<Text fontSize={'lg'} color={'red'}>
+					Rejected
+				</Text>
+			);
+		} else if (bid?.status === 3) {
+			return (
+				<Text fontSize={'lg'} color={'green'}>
+					Accepted
+				</Text>
+			);
+		}
+		return 'Unknown';
+	};
+
 	return (
 		<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
 			<Grid templateColumns="repeat(4, 1fr)" gap={4}>
@@ -32,7 +53,7 @@ export const BidIdHeader = ({ bid }): JSX.Element => {
 									<Text fontWeight={'bold'} fontSize={'xl'}>
 										Status:
 									</Text>
-									<Text fontSize={'lg'}>{bid.status}</Text>
+									<Text fontSize={'lg'}>{status()}</Text>
 								</HStack>
 							</VStack>
 

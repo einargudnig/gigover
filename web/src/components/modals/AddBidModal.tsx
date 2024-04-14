@@ -112,76 +112,9 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
 					<Text>Here you can create a bid and send to the bidder.</Text>
-					<FormControl id={'description'}>
-						<FormLabel>Description</FormLabel>
-						<Input
-							required={true}
-							{...register('description', {
-								required: 'Bid description is required'
-							})}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'terms'}>
-						<FormLabel>Terms</FormLabel>
-						<Input
-							required={true}
-							{...register('terms', {
-								required: 'Terms are required'
-							})}
-						/>
-					</FormControl>
-					<FormControl id={'address'}>
-						<FormLabel>Address</FormLabel>
-						<Input
-							required={true}
-							{...register('address', {
-								required: 'Address is required'
-							})}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'delivery'}>
-						<FormLabel>Delivery</FormLabel>
-						<Checkbox
-							name="delivery"
-							isChecked={isChecked === 1}
-							onChange={handleChangeCheckbox}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'finishDate'}>
-						<FormLabel>Bid valid through</FormLabel>
-						<Controller
-							name="finishDate"
-							control={control}
-							render={({ field: { onChange, onBlur, value } }) => (
-								<DatePicker
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									selected={value ? new Date(value) : null}
-									onBlur={onBlur}
-									required={true}
-								/>
-							)}
-						/>
-					</FormControl>
-					<FormControl>
-						<FormLabel>Other - want to add something more?</FormLabel>
-						<Input {...register('notes', {})} />
-					</FormControl>
-					<hr />
+
 					<Flex justifyContent={'flex-start'}>
 						<VStack>
-							<HStack mb={3}>
-								<Heading size={'md'}>Client</Heading>
-								<Text>- You are creating the bid for this client</Text>
-							</HStack>
 							<Text width={96}>
 								Add the email of the Gigover user you want to send the bid to. If
 								the user does not have an email, he will be sent an invite email to
@@ -192,7 +125,7 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 								an account.
 							</Text>
 							<FormControl>
-								<FormLabel>Client number</FormLabel>
+								<FormLabel>Client email</FormLabel>
 								<HStack>
 									<Input
 										required={true}
@@ -213,13 +146,82 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 								{inviteSuccess ? (
 									<>
 										<Text mt={2} mb={4} color={Theme.colors.green}>
-											User has been invited to the project
+											User found - You can create bid!
 										</Text>
+
+										<FormControl id={'description'}>
+											<FormLabel>Description</FormLabel>
+											<Input
+												required={true}
+												{...register('description', {
+													required: 'Bid description is required'
+												})}
+											/>
+										</FormControl>
+										<Box mb={6} />
+										<FormControl id={'terms'}>
+											<FormLabel>Terms</FormLabel>
+											<Input
+												required={true}
+												{...register('terms', {
+													required: 'Terms are required'
+												})}
+											/>
+										</FormControl>
+										<FormControl id={'address'}>
+											<FormLabel>Address</FormLabel>
+											<Input
+												required={true}
+												{...register('address', {
+													required: 'Address is required'
+												})}
+											/>
+										</FormControl>
+										<Box mb={6} />
+										<FormControl id={'delivery'}>
+											<FormLabel>Delivery</FormLabel>
+											<Checkbox
+												name="delivery"
+												isChecked={isChecked === 1}
+												onChange={handleChangeCheckbox}
+											/>
+										</FormControl>
+										<Box mb={6} />
+										<FormControl id={'finishDate'}>
+											<FormLabel>Bid valid through</FormLabel>
+											<Controller
+												name="finishDate"
+												control={control}
+												render={({
+													field: { onChange, onBlur, value }
+												}) => (
+													<DatePicker
+														onChange={(date) => {
+															if (date) {
+																onChange((date as Date).getTime());
+															} else {
+																onChange(null);
+															}
+														}}
+														selected={value ? new Date(value) : null}
+														onBlur={onBlur}
+														required={true}
+													/>
+												)}
+											/>
+										</FormControl>
+										<FormControl>
+											<FormLabel>
+												Other - want to add something more?
+											</FormLabel>
+											<Input {...register('notes', {})} />
+										</FormControl>
 									</>
 								) : null}
 							</FormControl>
 						</VStack>
 					</Flex>
+
 					<FormActions
 						submitDisabled={searchMutation.isLoading || searchMutation.isError}
 						cancelText={'Cancel'}

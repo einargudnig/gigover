@@ -9,7 +9,7 @@ interface ClientBidItemDeleteResponse {
 	errorText: 'OK';
 }
 
-export const useRemoveClientBidItem = () => {
+export const useDeleteBidItem = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<ClientBidItemDeleteResponse, AxiosError, BidItem>(async (variables) => {

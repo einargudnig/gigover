@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom';
 import { BidItem } from '../../../../models/Tender';
 import { useAddBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
 import { useEditBidItem } from '../../../../mutations/procurement/client-bids/useEditBidItem';
-import { useRemoveClientBidItem } from '../../../../mutations/procurement/client-bids/useDeleteBidItem';
-
+import { useDeleteBidItem } from '../../../../mutations/procurement/client-bids/useDeleteBidItem';
 import {
 	Button,
 	FormControl,
@@ -19,9 +18,8 @@ import {
 	Tr,
 	Tooltip
 } from '@chakra-ui/react';
-// import { handleFinishDate } from '../../../utils/HandleFinishDate';
+// import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-// import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { Edit } from '../../../../components/icons/Edit';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
@@ -67,6 +65,10 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 		setItems(bidItems);
 	}, [bidItems]);
 
+	const formatNumber = (num: number) => {
+		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	};
+
 	const {
 		mutate: mutateAdd,
 		isLoading: isMutateLoading,
@@ -75,8 +77,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 	} = useAddBidItem();
 
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useEditBidItem(); // TODO make sure this works!
-	const { mutateAsync: deleteClientBidItem, isLoading: isDeleteLoading } =
-		useRemoveClientBidItem();
+	const { mutateAsync: deleteClientBidItem, isLoading: isDeleteLoading } = useDeleteBidItem();
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value, type } = event.target;
@@ -140,7 +141,6 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 
 	// const finishDateStatus = handleFinishDate(clientBid?.finishDate);
 	const finishDateStatus = false;
-	// const finishDateStatus = true;
 
 	return (
 		<>
@@ -148,7 +148,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<Tooltip label="Cost Code">
+							<Tooltip label="Number">
 								<HStack>
 									<Text>Number</Text>
 									<ImportantIcon size={20} />
@@ -177,7 +177,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 						<Th width={'20%'}>
 							<Tooltip label="Unit">
 								<HStack>
-									<Text>Volume</Text>
+									<Text>Unit</Text>
 									<ImportantIcon size={20} />
 								</HStack>
 							</Tooltip>
@@ -202,9 +202,11 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 						<Tr>
 							<Td></Td>
 							<Td></Td>
-							<Td></Td>
 							<Td>
-								<Text fontSize="xl">The table is empty!</Text>
+								<Text fontSize="xl">The table is empty.</Text>
+							</Td>
+							<Td>
+								<Text fontSize="xl">Use the form below!</Text>
 							</Td>
 							<Td></Td>
 							<Td></Td>
@@ -265,7 +267,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 											onChange={handleUpdateChange}
 										/>
 									) : (
-										item.cost
+										formatNumber(item.cost)
 									)}
 								</Td>
 								{/* Action buttons */}
@@ -277,7 +279,6 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 												isLoading={isUpdateLoading}
 												onClick={() => handleUpdate(item)}
 											>
-												{/* {isUpdateLoading ? <LoadingSpinner /> : 'Update'} */}
 												Update
 											</Button>
 											<Button
