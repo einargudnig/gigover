@@ -420,11 +420,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										</Td>
 									</Tr>
 								</>
-							) : (
-								<Text mr={'2'} as="b">
-									You have already published the Tender
-								</Text>
-							)}
+							) : null}
 						</>
 					) : (
 						<Flex alignItems={'center'} justifyContent={'center'}>
