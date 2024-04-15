@@ -21,12 +21,11 @@ export const BidId = (): JSX.Element => {
 	const navigate = useNavigate();
 	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
-	// console.log({ bid });
-	const bidItems = bid?.items;
 
 	const toast = useToast();
 
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
+
 	const clientBidStatus = bid?.status;
 
 	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
@@ -79,7 +78,7 @@ export const BidId = (): JSX.Element => {
 					<Flex direction={'column'}>
 						<BidIdHeader bid={bid} />
 						<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
-							{bid?.status === 0 || finishDateStatus ? (
+							{clientBidStatus === 0 ? (
 								<HStack>
 									<Button
 										onClick={() =>
@@ -127,10 +126,10 @@ export const BidId = (): JSX.Element => {
 									)}
 								</HStack>
 							) : (
-								<Text>You have cannot edit or delete a published bid</Text>
+								<Text>You have edit or delete a published bid</Text>
 							)}
 						</Flex>
-						<BidIdTable bidItems={bidItems} />
+						<BidIdTable bid={bid} />
 						<Box marginTop={12}>
 							{/* <Grid templateColumns="repeat(3, 1fr)" gap={2}>
 								<GridItem colSpan={2}>

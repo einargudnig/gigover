@@ -3,7 +3,7 @@ import { Box, Grid, GridItem, HStack, VStack, Text } from '@chakra-ui/react';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export const BidIdHeader = ({ bid }): JSX.Element => {
-	console.log('Header', { bid });
+	// console.log('Header', { bid });
 
 	const handleDelivery = bid?.delivery ? 'Yes' : 'No';
 	const time = bid?.finishDate;

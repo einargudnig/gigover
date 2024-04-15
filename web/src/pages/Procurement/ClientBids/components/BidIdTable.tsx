@@ -16,18 +16,24 @@ import {
 	Thead,
 	Th,
 	Tr,
-	Tooltip
+	Tooltip,
+	Flex
 } from '@chakra-ui/react';
-// import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { Edit } from '../../../../components/icons/Edit';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
-export const BidIdTable = ({ bidItems }): JSX.Element => {
+export const BidIdTable = ({ bid }): JSX.Element => {
 	const { bidId } = useParams();
+
+	const clientBidStatus = bid?.status;
+
+	const finishDateStatus = handleFinishDate(bid?.finishDate);
+	const bidItems = bid?.items;
 
 	const defaultData: BidItem = {
 		bidId: Number(bidId),
@@ -132,15 +138,10 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 		);
 
 		// Send the updated item to the server
-		// TODO add editItem
 		mutateUpdate(updateFormData);
-
 		// Reset the editing state
 		setEditingItem(null);
 	};
-
-	// const finishDateStatus = handleFinishDate(clientBid?.finishDate);
-	const finishDateStatus = false;
 
 	return (
 		<>
@@ -302,6 +303,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 											<Button
 												aria-label={'Edit item'}
 												onClick={() => handleEdit(item)}
+												isDisabled={clientBidStatus === 1}
 											>
 												<Edit size={20} />
 											</Button>
@@ -331,6 +333,7 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 													colorScheme={'red'}
 													isLoading={isDeleteLoading}
 													onClick={() => setDialogOpen(true)}
+													isDisabled={clientBidStatus === 1}
 												>
 													<TrashIcon color={'white'} size={20} />
 												</Button>
@@ -342,79 +345,89 @@ export const BidIdTable = ({ bidItems }): JSX.Element => {
 						))}
 					</>
 
-					{finishDateStatus ? (
-						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-							The finish date has passed, you cannot add more items to the Tender
-						</Text>
-					) : (
+					{!finishDateStatus ? (
 						<>
-							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-								Enter details below to add items to tender
-							</Text>
+							{clientBidStatus === 0 ? (
+								<>
+									<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+										Enter details below to add items to bid
+									</Text>
 
-							<Tr>
-								<Td width={'20%'}>
-									<FormControl id="nr">
-										<Input
-											id="nr"
-											name="nr"
-											type="text"
-											value={formData.nr}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="description">
-										<Input
-											id="description"
-											name="description"
-											type="text"
-											value={formData.description}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="volume">
-										<Input
-											id="volume"
-											name="volume"
-											type="number"
-											value={formData.volume}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="unit">
-										<Input
-											id="unit"
-											name="unit"
-											type="text"
-											value={formData.unit}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td>
-									<FormControl id="cost">
-										<Input
-											id="cost"
-											name="cost"
-											type="number"
-											value={formData.cost}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<Button onClick={handleAdd}>
-										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-									</Button>
-								</Td>
-							</Tr>
+									<Tr>
+										<Td width={'20%'}>
+											<FormControl id="nr">
+												<Input
+													id="nr"
+													name="nr"
+													type="text"
+													value={formData.nr}
+													onChange={handleChange}
+												/>
+											</FormControl>
+										</Td>
+										<Td width={'20%'}>
+											<FormControl id="description">
+												<Input
+													id="description"
+													name="description"
+													type="text"
+													value={formData.description}
+													onChange={handleChange}
+												/>
+											</FormControl>
+										</Td>
+										<Td width={'20%'}>
+											<FormControl id="volume">
+												<Input
+													id="volume"
+													name="volume"
+													type="number"
+													value={formData.volume}
+													onChange={handleChange}
+												/>
+											</FormControl>
+										</Td>
+										<Td width={'20%'}>
+											<FormControl id="unit">
+												<Input
+													id="unit"
+													name="unit"
+													type="text"
+													value={formData.unit}
+													onChange={handleChange}
+												/>
+											</FormControl>
+										</Td>
+										<Td>
+											<FormControl id="cost">
+												<Input
+													id="cost"
+													name="cost"
+													type="number"
+													value={formData.cost}
+													onChange={handleChange}
+												/>
+											</FormControl>
+										</Td>
+										<Td width={'20%'}>
+											<Button onClick={handleAdd}>
+												{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+											</Button>
+										</Td>
+									</Tr>
+								</>
+							) : (
+								<Text mr={'2'} as="b">
+									You have already published the Tender
+								</Text>
+							)}
 						</>
+					) : (
+						<Flex alignItems={'center'} justifyContent={'center'}>
+							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+								The finish date has passed, you cannot add more items to the Bid
+							</Text>
+						</Flex>
 					)}
 
 					{isMutateError ? (
