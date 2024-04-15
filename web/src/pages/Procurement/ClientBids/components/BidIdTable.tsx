@@ -303,7 +303,9 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 											<Button
 												aria-label={'Edit item'}
 												onClick={() => handleEdit(item)}
-												isDisabled={clientBidStatus === 1}
+												isDisabled={
+													clientBidStatus === 1 || finishDateStatus
+												}
 											>
 												<Edit size={20} />
 											</Button>
@@ -333,7 +335,9 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 													colorScheme={'red'}
 													isLoading={isDeleteLoading}
 													onClick={() => setDialogOpen(true)}
-													isDisabled={clientBidStatus === 1}
+													isDisabled={
+														clientBidStatus === 1 || finishDateStatus
+													}
 												>
 													<TrashIcon color={'white'} size={20} />
 												</Button>
