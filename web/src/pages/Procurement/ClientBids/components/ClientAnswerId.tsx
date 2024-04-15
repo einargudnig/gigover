@@ -6,7 +6,6 @@ import {
 	GridItem,
 	HStack,
 	VStack,
-	Text,
 	Table,
 	Thead,
 	Tr,
@@ -15,6 +14,7 @@ import {
 	Tbody,
 	Td,
 	Flex,
+	Text,
 	Button,
 	Spacer,
 	useToast
@@ -284,19 +284,27 @@ export const ClientAnswerId = (): JSX.Element => {
 				</>
 			)}
 
-			<Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
-				<Box>
-					<Button isLoading={isAcceptBidLoading} onClick={handleAcceptBid}>
-						Accept
-					</Button>
-				</Box>
-				<Spacer />
-				<Box>
-					<Button isLoading={isRejectBidLoading} onClick={handleRejectBid}>
-						Reject
-					</Button>
-				</Box>
-			</Flex>
+			{bid?.status === 2 || bid?.status === 3 ? (
+				<Text marginTop={4} as="b">
+					Bid Answered!
+				</Text>
+			) : (
+				<>
+					<Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
+						<Box>
+							<Button isLoading={isAcceptBidLoading} onClick={handleAcceptBid}>
+								Accept
+							</Button>
+						</Box>
+						<Spacer />
+						<Box>
+							<Button isLoading={isRejectBidLoading} onClick={handleRejectBid}>
+								Reject
+							</Button>
+						</Box>
+					</Flex>
+				</>
+			)}
 		</>
 	);
 };
