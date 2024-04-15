@@ -28,6 +28,7 @@ const PropertyCardStyled = styled(CardBaseLink)`
 export const Bids = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useGetBids();
+	console.log({ data });
 
 	const shouldDeliver = (bid: Bid) => {
 		if (bid.delivery === 1) {

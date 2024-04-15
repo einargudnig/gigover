@@ -109,8 +109,8 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 	};
 
 	const onSubmit = handleSubmit(
-		async ({ description, terms, address, finishDate, delivery, clientUId, notes }) => {
-			console.log(description, terms, address, finishDate, delivery, clientUId, notes);
+		async ({ description, terms, address, finishDate, clientUId, notes }) => {
+			console.log(description, terms, address, finishDate, clientUId, notes);
 			try {
 				const response = addBid({
 					clientUId: uId, // this comes from the search function
@@ -118,7 +118,7 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 					terms,
 					address,
 					finishDate,
-					delivery,
+					delivery: isChecked,
 					notes
 				});
 				console.log('response', response);
