@@ -17,7 +17,8 @@ import {
 	Th,
 	Tr,
 	Tooltip,
-	Flex
+	Flex,
+	FormHelperText
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
@@ -142,6 +143,12 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 		// Reset the editing state
 		setEditingItem(null);
 	};
+
+	// We only want the unit to be max 4 characters kg, m2, l, etc
+	const isInvalidUnit = formData.unit!.length > 5;
+
+	// eslint-disable-next-line
+	const isInvalidCost = formData.cost! >= 100000;
 
 	return (
 		<>
@@ -392,7 +399,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 											</FormControl>
 										</Td>
 										<Td width={'20%'}>
-											<FormControl id="unit">
+											<FormControl id="unit" isInvalid={isInvalidUnit}>
 												<Input
 													id="unit"
 													name="unit"
@@ -400,10 +407,16 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 													value={formData.unit}
 													onChange={handleChange}
 												/>
+												{isInvalidUnit ? (
+													<FormHelperText>
+														The measurement of unit should be in a short
+														format: kg, m, m2
+													</FormHelperText>
+												) : null}
 											</FormControl>
 										</Td>
 										<Td>
-											<FormControl id="cost">
+											<FormControl id="cost" isInvalid={isInvalidCost}>
 												<Input
 													id="cost"
 													name="cost"
@@ -411,6 +424,12 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 													value={formData.cost}
 													onChange={handleChange}
 												/>
+												{isInvalidCost ? (
+													<FormHelperText>
+														This will be update soon, now the cost has
+														to be lower than 100.000
+													</FormHelperText>
+												) : null}
 											</FormControl>
 										</Td>
 										<Td width={'20%'}>

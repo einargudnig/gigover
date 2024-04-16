@@ -169,7 +169,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 							</ConfirmDialog>
 						</VStack>
 						<div>
-							<Tag mb={4}>Project owner</Tag>
+							<Tag mb={4}>Project manager</Tag>
 							<User
 								avatar={projectTask?.project.ownerAvatar || ''}
 								name={projectTask?.project.ownerName || 'unknown'}
