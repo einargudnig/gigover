@@ -321,20 +321,28 @@ export const ClientAnswerId = (): JSX.Element => {
 
 function HandledText({ status }: HandledTextProps) {
 	if (status === undefined) {
-		return <Text fontSize={'xl'}>Status not available</Text>;
+		return (
+			<Text fontSize={'xl'} marginTop={4}>
+				Status not available
+			</Text>
+		);
 	} else if (status === 2) {
 		return (
-			<Text fontSize={'xl'} color={'red'}>
+			<Text fontSize={'xl'} color={'red'} marginTop={4}>
 				This offer has been <strong>rejected!</strong>
 			</Text>
 		);
 	} else if (status === 3) {
 		return (
-			<Text fontSize={'xl'} color={'green'}>
+			<Text fontSize={'xl'} color={'green'} marginTop={4}>
 				This offer has been <strong>accepted!</strong>
 			</Text>
 		);
 	} else {
-		return <Text fontSize={'xl'}>Unknown status</Text>;
+		return (
+			<Text fontSize={'xl'} marginTop={4}>
+				Unknown status
+			</Text>
+		);
 	}
 }
