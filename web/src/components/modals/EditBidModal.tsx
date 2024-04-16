@@ -172,7 +172,7 @@ export const EditBidModal = ({ bid }: BidModalProps): JSX.Element => {
 					<FormActions
 						cancelText={'Cancel'}
 						onCancel={closeModal}
-						submitText={'Create'}
+						submitText={'Edit'}
 						onSubmit={onSubmit}
 					/>
 				</VStack>
