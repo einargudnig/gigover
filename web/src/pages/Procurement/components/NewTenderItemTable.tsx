@@ -385,7 +385,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 											width={'200px'}
 											id="nr"
 											name="nr"
-											type="number"
+											type="text"
 											value={formData.nr}
 											onChange={handleChange}
 										/>

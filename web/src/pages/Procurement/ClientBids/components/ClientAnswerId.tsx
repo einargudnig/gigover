@@ -15,7 +15,6 @@ import {
 	Td,
 	Flex,
 	Text,
-	Button,
 	Spacer,
 	useToast
 } from '@chakra-ui/react';
@@ -27,6 +26,11 @@ import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
+import { AnswerBid } from './AnswerBid';
+
+interface HandledTextProps {
+	status?: number;
+}
 
 export const ClientAnswerId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
@@ -38,6 +42,8 @@ export const ClientAnswerId = (): JSX.Element => {
 	const bidItems = bid?.items;
 
 	const toast = useToast();
+
+	const hasBidAnswer = bid?.status === 2 || bid?.status === 3;
 
 	const handleAcceptBid = () => {
 		const bidBody = {
@@ -284,27 +290,51 @@ export const ClientAnswerId = (): JSX.Element => {
 				</>
 			)}
 
-			{bid?.status === 2 || bid?.status === 3 ? (
-				<Text marginTop={4} as="b">
-					Bid Answered!
-				</Text>
+			{hasBidAnswer ? (
+				<HandledText status={bid?.status} />
 			) : (
-				<>
-					<Flex alignItems={'center'} justifyContent={'space-around'} marginTop={5}>
-						<Box>
-							<Button isLoading={isAcceptBidLoading} onClick={handleAcceptBid}>
-								Accept
-							</Button>
-						</Box>
-						<Spacer />
-						<Box>
-							<Button isLoading={isRejectBidLoading} onClick={handleRejectBid}>
-								Reject
-							</Button>
-						</Box>
-					</Flex>
-				</>
+				<Flex>
+					<Box>
+						<AnswerBid
+							mutationLoading={isAcceptBidLoading}
+							mutation={() => handleAcceptBid()}
+							buttonText="Accept bid"
+							status="accept"
+							statusText="Accept"
+						/>
+					</Box>
+					<Spacer />
+					<Box>
+						<AnswerBid
+							mutationLoading={isRejectBidLoading}
+							mutation={() => handleRejectBid()}
+							buttonText="Reject bid"
+							status="reject"
+							statusText="Reject"
+						/>
+					</Box>
+				</Flex>
 			)}
 		</>
 	);
 };
+
+function HandledText({ status }: HandledTextProps) {
+	if (status === undefined) {
+		return <Text fontSize={'xl'}>Status not available</Text>;
+	} else if (status === 2) {
+		return (
+			<Text fontSize={'xl'} color={'red'}>
+				This offer has been <strong>rejected!</strong>
+			</Text>
+		);
+	} else if (status === 3) {
+		return (
+			<Text fontSize={'xl'} color={'green'}>
+				This offer has been <strong>accepted!</strong>
+			</Text>
+		);
+	} else {
+		return <Text fontSize={'xl'}>Unknown status</Text>;
+	}
+}
