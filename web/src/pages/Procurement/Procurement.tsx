@@ -40,7 +40,7 @@ export const Procurement = (): JSX.Element => {
 										colorScheme={isActive ? 'black' : 'yellow'}
 										variant={isActive ? 'outline' : 'solid'}
 									>
-										Client Answer
+										Bid Received
 										{notifications.unread > 0 && (
 											<Flex
 												align={'center'}
@@ -71,7 +71,7 @@ export const Procurement = (): JSX.Element => {
 										colorScheme={isActive ? 'black' : 'yellow'}
 										variant={isActive ? 'outline' : 'solid'}
 									>
-										Client Bid
+										Create Bid
 									</Button>
 								)}
 							</NavLink>
@@ -112,7 +112,7 @@ export const Procurement = (): JSX.Element => {
 										colorScheme={isActive ? 'black' : 'yellow'}
 										variant={isActive ? 'outline' : 'solid'}
 									>
-										Submitted Bids
+										Submitted Offers
 									</Button>
 								)}
 							</NavLink>
@@ -122,7 +122,7 @@ export const Procurement = (): JSX.Element => {
 										colorScheme={isActive ? 'black' : 'yellow'}
 										variant={isActive ? 'outline' : 'solid'}
 									>
-										Bid Invitations
+										Tender Invitations
 										{notifications.unread > 0 && (
 											<Flex
 												align={'center'}

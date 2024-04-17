@@ -124,7 +124,7 @@ export const BidId = (): JSX.Element => {
 															setDialogOpen(true);
 														}}
 													>
-														Delete tender
+														Delete bid
 													</Button>
 												</ConfirmDialog>
 											)}
@@ -169,7 +169,7 @@ export const BidId = (): JSX.Element => {
 										</Flex>
 									) : (
 										<Text mr={'2'} as="b">
-											You have already published the Tender
+											Bid sent
 										</Text>
 									)}
 								</>
@@ -177,7 +177,7 @@ export const BidId = (): JSX.Element => {
 								<Flex alignItems={'center'} justifyContent={'center'}>
 									<Text>
 										The finish date has passed, you cannot publish or delete the
-										tender.
+										bid.
 									</Text>
 								</Flex>
 							)}
