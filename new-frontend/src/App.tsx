@@ -9,6 +9,13 @@ const Grid = styled.div`
 	grid-gap: 20px;
 	margin: 0 36px;
 	max-width: 1440px;
+
+	@media (max-width: 768px) {
+		grid-template-columns: repeat(4, 1fr);
+		grid-gap: 16px;
+		margin: 0 12px;
+		max-width: 390px;
+	}
 `;
 
 function App() {
