@@ -3,7 +3,7 @@ import { Logo } from './logo';
 
 export const Navbar = () => {
 	return (
-		<Box marginBottom={10} paddingY={4} paddingX={'36px'}>
+		<Box marginBottom={10} padding={4} paddingX={'36px'}>
 			<Flex justifyContent={'space-between'} alignItems={'center'}>
 				<Box>
 					<Flex alignItems={'center'}>

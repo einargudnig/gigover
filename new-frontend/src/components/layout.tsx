@@ -4,8 +4,17 @@ import { Navbar } from './navbar';
 import { Footer } from './footer';
 
 const Container = styled.div`
-	width: 100%;
-	height: 100vh;
+	width: 100vw;
+
+	background-color: #ffffff;
+`;
+
+const ContentContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin: 0 36px;
 `;
 
 const Grid = styled.div`
@@ -30,7 +39,7 @@ export const Layout = ({ children }: LayoutProps) => {
 	return (
 		<Container>
 			<Navbar />
-			<Grid>{children}</Grid>
+			<ContentContainer>{children}</ContentContainer>
 			<Footer />
 		</Container>
 	);

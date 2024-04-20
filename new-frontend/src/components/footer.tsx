@@ -40,10 +40,10 @@ export const Footer = () => {
 				<GridItem colSpan={2}>
 					<Flex flexDirection={'column'} alignItems={'end'}>
 						<Flex>
-							<Text fontSize="larger" color={'white'}>
+							<Text fontSize="larger" color={'white'} marginRight={2}>
 								Features
 							</Text>
-							<Text fontSize="larger" color={'white'}>
+							<Text fontSize="larger" color={'white'} marginRight={2}>
 								Pricing
 							</Text>
 							<Text fontSize="larger" color={'white'}>
