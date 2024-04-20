@@ -1,7 +1,25 @@
-import { Text } from "@chakra-ui/react"
+import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
+import { Logo } from './logo';
 
 export const Navbar = () => {
-  return (
-    <Text>Gigover</Text>
-  )
- }
+	return (
+		<Box marginBottom={10} paddingY={4} paddingX={'36px'}>
+			<Flex justifyContent={'space-between'} alignItems={'center'}>
+				<Box>
+					<Flex alignItems={'center'}>
+						<Logo color={'black'} scale={0.8} />
+					</Flex>
+				</Box>
+				<Spacer />
+				<Box>
+					<Flex justifyContent={'space-between'}>
+						<Button colorScheme="black" variant="outline">
+							Log in
+						</Button>
+						<Button>Sign up</Button>
+					</Flex>
+				</Box>
+			</Flex>
+		</Box>
+	);
+};
