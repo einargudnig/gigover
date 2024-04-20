@@ -7,7 +7,7 @@ import { AppButtons } from './icons/app-buttons';
 
 export const Footer = () => {
 	return (
-		<Box marginTop={10} paddingY={4} paddingX={'36px'} backgroundColor={'black'}>
+		<Box marginTop={10} paddingY={8} paddingX={'36px'} backgroundColor={'black'}>
 			<Grid templateColumns="repeat(6, 1fr)" gap={6}>
 				<GridItem colSpan={2}>
 					<Flex flexDirection={'column'} alignItems={'start'}>
