@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Spacer, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import { Logo } from './logo';
 import { FacebookIcon } from './icons/facebook';
 import { LinkedInIcon } from './icons/linkedin';

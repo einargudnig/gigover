@@ -16,7 +16,6 @@ export const Phone = () => {
 				h="32px"
 				w="3px"
 				bg="gray.800"
-				dark={{ bg: 'gray.800' }}
 				pos="absolute"
 				left="-17px"
 				top="72px"
@@ -26,7 +25,6 @@ export const Phone = () => {
 				h="46px"
 				w="3px"
 				bg="gray.800"
-				dark={{ bg: 'gray.800' }}
 				pos="absolute"
 				left="-17px"
 				top="124px"
@@ -36,7 +34,6 @@ export const Phone = () => {
 				h="46px"
 				w="3px"
 				bg="gray.800"
-				dark={{ bg: 'gray.800' }}
 				pos="absolute"
 				left="-17px"
 				top="178px"
@@ -46,20 +43,12 @@ export const Phone = () => {
 				h="64px"
 				w="3px"
 				bg="gray.800"
-				dark={{ bg: 'gray.800' }}
 				pos="absolute"
 				right="-17px"
 				top="142px"
 				roundedRight="lg"
 			></Box>
-			<Box
-				overflow="hidden"
-				w="272px"
-				h="572px"
-				bg="white"
-				dark={{ bg: 'gray.800' }}
-				rounded="xl"
-			>
+			<Box overflow="hidden" w="272px" h="572px" bg="white" rounded="xl">
 				<Image
 					src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/mockup-1-light.png"
 					className="dark:hidden"

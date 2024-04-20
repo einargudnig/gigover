@@ -13,7 +13,7 @@ export const Navbar = () => {
 				<Spacer />
 				<Box>
 					<Flex justifyContent={'space-between'}>
-						<Button colorScheme="black" variant="outline">
+						<Button colorScheme="black" variant="link" marginRight={6}>
 							Log in
 						</Button>
 						<Button>Sign up</Button>

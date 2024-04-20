@@ -2,7 +2,7 @@ import { Box, Flex, Text, Image, Spacer } from '@chakra-ui/react';
 
 export const Overview = () => {
 	return (
-		<Box marginTop={36}>
+		<Box marginTop={36} paddingX={'36px'} width={'65%'}>
 			<Flex flexDirection={'column'} alignItems={'center'}>
 				<Text fontSize="2xl">Help your maintenance and construction projects</Text>
 				<Text fontSize="2xl">stay on schedule and on budget!</Text>

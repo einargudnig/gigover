@@ -9,11 +9,10 @@ export const Computer = () => {
 				bg="gray.800"
 				borderWidth="16px"
 				borderTopRadius="xl"
-				h="172px"
-				maxW="301px"
-				md={{ h: '294px', maxW: '512px' }}
+				h="294px"
+				maxW="512px"
 			>
-				<Box overflow="hidden" h="140px" md={{ h: '262px' }} rounded="xl">
+				<Box overflow="hidden" h="262px" rounded="xl">
 					<Image
 						src="https://flowbite.s3.amazonaws.com/docs/device-mockups/screen-image-imac.png"
 						className="dark:hidden"
@@ -35,20 +34,12 @@ export const Computer = () => {
 			<Box
 				mx="auto"
 				bg="gray.900"
-				dark={{ bg: 'gray.700' }}
+				backgroundColor={'gray.700'}
 				borderBottomRadius="xl"
-				h="24px"
-				maxW="301px"
-				md={{ h: '42px', maxW: '512px' }}
+				h="42px"
+				maxW="512px"
 			></Box>
-			<Box
-				mx="auto"
-				bg="gray.800"
-				borderBottomRadius="xl"
-				h="55px"
-				maxW="83px"
-				md={{ h: '95px', maxW: '142px' }}
-			></Box>
+			<Box mx="auto" bg="gray.800" borderBottomRadius="xl" h="95px" maxW="142px"></Box>
 		</>
 	);
 };
