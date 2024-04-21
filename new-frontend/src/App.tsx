@@ -1,19 +1,11 @@
 import { Layout } from './components/layout';
-import { Hero } from './components/hero';
-import { LogoCloud } from './components/logo-cloud';
-import { Overview } from './components/overview';
-import { Cta } from './components/cta';
-import { Testimonials } from './components/testimonials';
+import { AppRoutes } from './app-routes';
 
 function App() {
 	return (
 		<>
 			<Layout>
-				<Hero />
-				<LogoCloud />
-				<Overview />
-				<Cta />
-				<Testimonials />
+				<AppRoutes />
 			</Layout>
 		</>
 	);

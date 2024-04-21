@@ -1,9 +1,10 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { ChakraThemeColors } from './theme';
-import App from './App.tsx'
-import './index.css'
+import App from './App.tsx';
+import './index.css';
 
 const ChakraTheme = extendTheme({
 	colors: ChakraThemeColors,
@@ -52,11 +53,12 @@ const ChakraTheme = extendTheme({
 	}
 });
 
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ChakraProvider theme={ChakraTheme}>
-      <App />
-    </ChakraProvider>
-  </React.StrictMode>,
-)
+	<React.StrictMode>
+		<BrowserRouter>
+			<ChakraProvider theme={ChakraTheme}>
+				<App />
+			</ChakraProvider>
+		</BrowserRouter>
+	</React.StrictMode>
+);

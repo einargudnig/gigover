@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
+import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { Navbar } from './navbar';
 import { Footer } from './footer';
 
 const Container = styled.div`
 	width: 100vw;
-
 	background-color: #ffffff;
 `;
 
@@ -31,15 +31,13 @@ const ContentContainer = styled.div`
 // 	}
 // `;
 
-type LayoutProps = {
-	children: ReactNode;
-};
-
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = () => {
 	return (
 		<Container>
 			<Navbar />
-			<ContentContainer>{children}</ContentContainer>
+			<ContentContainer>
+				<Outlet />
+			</ContentContainer>
 			<Footer />
 		</Container>
 	);
