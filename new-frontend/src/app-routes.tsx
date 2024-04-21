@@ -17,6 +17,8 @@ export const AppRoutes = (): JSX.Element => {
 				<Route path="blog" element={<Blog />} />
 				<Route path="mobile-app" element={<MobileApp />} />
 				<Route path="user-manual" element={<UserManual />} />
+				{/* catch-all route */}
+				<Route path="*" element={<div>Nothing here!</div>} />
 			</Route>
 		</Routes>
 	);

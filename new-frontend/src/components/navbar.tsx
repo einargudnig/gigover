@@ -8,7 +8,7 @@ export const Navbar = () => {
 			<Flex justifyContent={'space-between'} alignItems={'center'}>
 				<Box>
 					<Flex alignItems={'center'}>
-						<Link to={'/'}>
+						<Link to="/">
 							<Logo color={'black'} scale={0.8} />
 						</Link>
 					</Flex>
@@ -16,13 +16,13 @@ export const Navbar = () => {
 				<Box marginLeft={10}>
 					<Flex>
 						<Button colorScheme="black" variant="link" marginRight={6}>
-							<Link to={'features'}>Features</Link>
+							<Link to="/features">Features</Link>
 						</Button>
 						<Button colorScheme="black" variant="link" marginRight={6}>
-							<Link to={'pricing'}>Pricing</Link>
+							<Link to="/pricing">Pricing</Link>
 						</Button>
 						<Button colorScheme="black" variant="link" marginRight={6}>
-							<Link to={'blog'}>Blog</Link>
+							<Link to="/blog">Blog</Link>
 						</Button>
 					</Flex>
 				</Box>
