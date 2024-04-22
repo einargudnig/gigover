@@ -1,17 +1,11 @@
-import { Box, Flex, Spacer, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Flex, HStack, Spacer, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 
 export const Pricing = (): JSX.Element => {
 	return (
 		<>
 			<Text fontSize="2xl">Pricing</Text>
-			<Flex justifyContent={'space-around'} alignItems={'center'}>
-				<Box
-					rounded={'md'}
-					borderColor={'black'}
-					p={2}
-					border={1}
-					backgroundColor={'yellow'}
-				>
+			<Flex justifyContent={'space-around'} alignItems={'center'} marginTop={10}>
+				<Box rounded={'md'} borderColor={'black'} p={2} border="1px" marginRight={10}>
 					<Text fontSize="3xl">Free</Text>
 					<Box>
 						<Flex alignItems={'baseline'}>
@@ -23,7 +17,7 @@ export const Pricing = (): JSX.Element => {
 					<Text fontSize="md">Up to 5 users</Text>
 				</Box>
 				<Spacer />
-				<Box rounded={'md'} borderColor={'black'} p={2} border={1} backgroundColor={'gray'}>
+				<Box rounded={'md'} borderColor={'black'} p={2} border="1px">
 					<Text fontSize="xl">Pro</Text>
 					<Text fontSize="lg">10$</Text>
 					<Text fontSize="md">Up to 10 users</Text>
@@ -108,14 +102,27 @@ export const Pricing = (): JSX.Element => {
 					</Box>
 				</Flex>
 				<Flex>
-					<Box justifyContent={'center'} alignItems={'center'} marginTop={20}>
-						<Text>Unlimited seats/buildings: $2,500/month</Text>
-						<Text>
-							Suppliers/Vendors/Stores: $1,500/month or 2.5$ of total price per
-							successful bid - pay per sale (PPS)
-						</Text>
-						<Text>
-							App users in iOs or Android use the app for free. You can find the app
+					<Box
+						justifyContent={'center'}
+						alignItems={'center'}
+						marginTop={20}
+						p={4}
+						border="1px"
+						rounded={'md'}
+					>
+						<HStack>
+							<Text>Unlimited seats/buildings: </Text>
+							<Text as="b">$2,500/month</Text>
+						</HStack>
+						<HStack>
+							<Text>Suppliers/Vendors/Stores:</Text>
+							<Text as="b">
+								$1,500/month or 2.5$ of total price per successful bid - pay per
+								sale (PPS)
+							</Text>
+						</HStack>
+						<Text marginTop={6}>
+							App users in iOS or Android use the app for free. You can find the app
 							on the App Store (iOS) or Google Play Store (Android)
 						</Text>
 					</Box>
