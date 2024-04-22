@@ -1,28 +1,75 @@
-import { Box, Flex, HStack, Spacer, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
+	VStack
+} from '@chakra-ui/react';
 
 export const Pricing = (): JSX.Element => {
 	return (
 		<>
-			<Text fontSize="2xl">Pricing</Text>
-			<Flex justifyContent={'space-around'} alignItems={'center'} marginTop={10}>
-				<Box rounded={'md'} borderColor={'black'} p={2} border="1px" marginRight={10}>
-					<Text fontSize="3xl">Free</Text>
-					<Box>
-						<Flex alignItems={'baseline'}>
-							<Text as="sub">$</Text>
-							<Text fontSize="lg">16</Text>
-							<Text>/Month</Text>
+			<Text fontSize="4xl">Pricing</Text>
+			<Grid marginTop={10} templateColumns="repeat(2, 1fr)">
+				<GridItem>
+					<Box rounded={'md'} borderColor={'black'} p={6} border="1px" marginRight={10}>
+						<Flex flexDirection={'column'} alignItems={'center'}>
+							<Text fontSize="3xl">Project</Text>
+							<Box>
+								<Flex alignItems={'baseline'}>
+									<Text fontSize={'small'}>$</Text>
+									<Text fontSize="xl" as="b">
+										16
+									</Text>
+									<Text>/Month</Text>
+								</Flex>
+							</Box>
+							<Text fontSize="sm" marginTop={4}>
+								Per user
+							</Text>
+							<Box marginTop={4}>
+								<Button>Try free for 30 days</Button>
+							</Box>
 						</Flex>
 					</Box>
-					<Text fontSize="md">Up to 5 users</Text>
-				</Box>
-				<Spacer />
-				<Box rounded={'md'} borderColor={'black'} p={2} border="1px">
-					<Text fontSize="xl">Pro</Text>
-					<Text fontSize="lg">10$</Text>
-					<Text fontSize="md">Up to 10 users</Text>
-				</Box>
-			</Flex>
+				</GridItem>
+				<GridItem>
+					<Box rounded={'md'} borderColor={'black'} p={6} border="1px" marginRight={10}>
+						<Flex flexDirection={'column'} alignItems={'center'}>
+							<Text fontSize="3xl">Property</Text>
+							<Box>
+								<Flex alignItems={'baseline'}>
+									<Text fontSize={'small'}>$</Text>
+									<Text fontSize="xl" as="b">
+										16
+									</Text>
+									<Text>/Month</Text>
+								</Flex>
+							</Box>
+							<VStack>
+								<Text fontSize="sm" marginTop={4}>
+									Per building. Includes all stakeholders.
+								</Text>
+								<Text fontSize="sm" marginTop={-2}>
+									Unlimited units can be added per building.
+								</Text>
+							</VStack>
+							<Box marginTop={4}>
+								<Button>Try free for 30 days</Button>
+							</Box>
+						</Flex>
+					</Box>
+				</GridItem>
+			</Grid>
 			<Flex flexDirection={'column'} marginTop={20}>
 				<Flex justifyContent={'space-around'}>
 					<Box maxW={96}>
@@ -128,6 +175,7 @@ export const Pricing = (): JSX.Element => {
 					</Box>
 				</Flex>
 			</Flex>
+			<Flex></Flex>
 		</>
 	);
 };
