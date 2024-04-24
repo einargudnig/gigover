@@ -1,3 +1,4 @@
+import { Box, Flex, Text, Image } from '@chakra-ui/react';
 import { Blog } from '../queries/useBlogPosts';
 import styled from 'styled-components';
 
@@ -67,16 +68,35 @@ export interface BlogPostProps {
 }
 
 export const BlogPost = ({ blog }: BlogPostProps): JSX.Element => {
+	console.log({ blog });
 	return (
-		<BlogStyled>
-			<BlogImageContainer>
-				<img src={blog.image.url} alt={blog.title} />
-			</BlogImageContainer>
-			<BlogTitle>{blog.title}</BlogTitle>
-			<BlogPreviewContainer>
-				<BlogPreview>{blog.content.text.substr(0, 250)}</BlogPreview>
-			</BlogPreviewContainer>
-			<BlogFooter>By the Gigover Team</BlogFooter>
-		</BlogStyled>
+		<>
+			{/* <BlogStyled>
+				<BlogImageContainer>
+					<img src={blog.image.url} alt={blog.title} />
+				</BlogImageContainer>
+				<BlogTitle>{blog.title}</BlogTitle>
+				<BlogPreviewContainer>
+					<BlogPreview>{blog.content.text.substr(0, 250)}</BlogPreview>
+				</BlogPreviewContainer>
+				<BlogFooter>By the Gigover Team</BlogFooter>
+			</BlogStyled> */}
+			<Box>
+				<Flex flexDirection={'column'}>
+					<Box>
+						<Image src={blog.image.url} alt={blog.title} />
+					</Box>
+					<Box>
+						<Text>{blog.title}</Text>
+					</Box>
+					<Box>
+						<Text>{blog.content.text.substr(0, 250)}</Text>
+					</Box>
+					<Box>
+						<Text>By the Gigover Team</Text>
+					</Box>
+				</Flex>
+			</Box>
+		</>
 	);
 };
