@@ -81,19 +81,28 @@ export const BlogPost = ({ blog }: BlogPostProps): JSX.Element => {
 				</BlogPreviewContainer>
 				<BlogFooter>By the Gigover Team</BlogFooter>
 			</BlogStyled> */}
-			<Box>
+			<Box height={'440px'} width={'100%'} background={'#f6eada'} overflow={'hidden'}>
 				<Flex flexDirection={'column'}>
-					<Box>
+					<Box background={'#e5e5e5'} width={'100%'} height={'200px'} overflow={'hidden'}>
 						<Image src={blog.image.url} alt={blog.title} />
 					</Box>
-					<Box>
-						<Text>{blog.title}</Text>
+					<Box
+						lineHeight={'26px'}
+						padding={'24px'}
+						paddingBottom={'0'}
+						marginBottom={'16px'}
+					>
+						<Text fontSize={'lg'}>{blog.title}</Text>
 					</Box>
-					<Box>
-						<Text>{blog.content.text.substr(0, 250)}</Text>
+					<Box padding={'24px'} paddingTop={'0'}>
+						<Text overflow={'hidden'} textOverflow={'ellipsis'} lineHeight={'22px'}>
+							{blog.content.text.substr(0, 250)}
+						</Text>
 					</Box>
-					<Box>
-						<Text>By the Gigover Team</Text>
+					<Box color={'#000'} paddingLeft={'24px'} paddingBottom={'24px'}>
+						<Flex alignItems={'flex-end'}>
+							<Text as="b">By the Gigover Team</Text>
+						</Flex>
 					</Box>
 				</Flex>
 			</Box>
