@@ -5,6 +5,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { ChakraThemeColors } from './theme';
 import App from './App.tsx';
 import './index.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const ChakraTheme = extendTheme({
 	colors: ChakraThemeColors,
@@ -53,12 +54,17 @@ const ChakraTheme = extendTheme({
 	}
 });
 
+// Create a client
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<ChakraProvider theme={ChakraTheme}>
-				<App />
-			</ChakraProvider>
+			<QueryClientProvider client={queryClient}>
+				<ChakraProvider theme={ChakraTheme}>
+					<App />
+				</ChakraProvider>
+			</QueryClientProvider>
 		</BrowserRouter>
 	</React.StrictMode>
 );
