@@ -25,12 +25,14 @@ const BlogGridStyled = styled.div`
 	}
 `;
 
-export const Blog = (): JSX.Element => {
+export const BlogPosts = (): JSX.Element => {
 	const { data: blog, isLoading } = useBlogPosts();
 	console.log('in route', { blog });
 	return (
 		<>
-			<Text fontSize="4xl">Blog</Text>
+			<Text fontSize="4xl" marginBottom={10}>
+				Blog
+			</Text>
 			<BlogGridStyled>
 				{blog?.blogs.map((b) => (
 					<div key={b.id}>

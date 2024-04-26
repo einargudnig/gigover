@@ -9,6 +9,7 @@ export const BlogPost = ({ blog }: BlogPostProps): JSX.Element => {
 	return (
 		<Box
 			width="100%"
+			rounded={'md'}
 			height="440px"
 			bg="#f6eada"
 			display="flex"
