@@ -4,6 +4,7 @@ import { Landing } from './pages/landing';
 import { Features } from './pages/features';
 import { Pricing } from './pages/pricing';
 import { BlogPosts } from './pages/blog-posts';
+import { BlogPost } from './pages/blog-post';
 import { MobileApp } from './pages/mobile-app';
 import { UserManual } from './pages/user-manual';
 
@@ -15,7 +16,7 @@ export const AppRoutes = (): JSX.Element => {
 				<Route path="features" element={<Features />} />
 				<Route path="pricing" element={<Pricing />} />
 				<Route path="blog" element={<BlogPosts />}>
-					<Route path=":id/:slug" element={<Blog />} />
+					<Route path=":id" element={<BlogPost />} />
 				</Route>
 				<Route path="mobile-app" element={<MobileApp />} />
 				<Route path="user-manual" element={<UserManual />} />

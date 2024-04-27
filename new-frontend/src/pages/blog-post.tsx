@@ -1,18 +1,20 @@
+import { useParams } from 'react-router-dom';
+import { useBlogPost } from '../queries/useBlogPost';
 import { Text } from '@chakra-ui/react';
 import { Blog } from '../queries/useBlogPosts';
 
-export interface BlogPostProps {
-	blog: Blog | null;
-}
+export const BlogPost = (): JSX.Element => {
+	// const { id, slug } = useParams();
+	// const { data } = useBlogPost({ id: id || '', slug: slug || '' });
+	// console.log({ data });
 
-export const BlogPost = ({ blog }: BlogPostProps): JSX.Element => {
-	if (blog === null) {
+	if (data === null) {
 		throw new Error('Blog post not found');
 	}
 
 	return (
 		<>
-			<Text></Text>
+			<Text>Post</Text>
 		</>
 	);
 };

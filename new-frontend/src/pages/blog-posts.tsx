@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Text } from '@chakra-ui/react';
-import { useBlogPosts } from '../queries/useBlogPosts';
+import { Blog, useBlogPosts } from '../queries/useBlogPosts';
 import styled from 'styled-components';
 import { BlogPost } from '../components/blog-post';
 
@@ -27,19 +27,18 @@ const BlogGridStyled = styled.div`
 
 export const BlogPosts = (): JSX.Element => {
 	const { data: blog, isLoading } = useBlogPosts();
-	console.log('in route', { blog });
+	console.log({ location });
 	return (
 		<>
 			<Text fontSize="4xl" marginBottom={10}>
 				Blog
 			</Text>
 			<BlogGridStyled>
-				{blog?.blogs.map((b) => (
+				{blog?.blogs.map((b: Blog) => (
 					<div key={b.id}>
-						<Link to={`/blog/${b.id}/${b.slug}`}>
-							<a>
-								<BlogPost blog={b} />
-							</a>
+						<Link to={`/blog/${b.id}`}>
+							{/* <Link to="/pricing"> */}
+							<BlogPost blog={b} />
 						</Link>
 					</div>
 				))}
