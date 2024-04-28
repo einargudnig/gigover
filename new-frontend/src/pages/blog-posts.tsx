@@ -27,7 +27,6 @@ const BlogGridStyled = styled.div`
 
 export const BlogPosts = (): JSX.Element => {
 	const { data: blog, isLoading } = useBlogPosts();
-	console.log({ location });
 	return (
 		<>
 			<Text fontSize="4xl" marginBottom={10}>
@@ -36,8 +35,7 @@ export const BlogPosts = (): JSX.Element => {
 			<BlogGridStyled>
 				{blog?.blogs.map((b: Blog) => (
 					<div key={b.id}>
-						<Link to={`/blog/${b.id}`}>
-							{/* <Link to="/pricing"> */}
+						<Link to={`/blog/${b.id}/${b.slug}`}>
 							<BlogPost blog={b} />
 						</Link>
 					</div>
