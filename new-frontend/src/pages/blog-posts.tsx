@@ -3,6 +3,8 @@ import { Text } from '@chakra-ui/react';
 import { Blog, useBlogPosts } from '../queries/useBlogPosts';
 import styled from 'styled-components';
 import { BlogPost } from '../components/blog-post';
+import { Center } from '../components/center';
+import { LoadingSpinner } from '../components/loading-spinner';
 
 const BlogGridStyled = styled.div`
 	display: grid;
@@ -32,15 +34,21 @@ export const BlogPosts = (): JSX.Element => {
 			<Text fontSize="4xl" marginBottom={10}>
 				Blog
 			</Text>
-			<BlogGridStyled>
-				{blog?.blogs.map((b: Blog) => (
-					<div key={b.id}>
-						<Link to={`/blog/${b.id}/${b.slug}`}>
-							<BlogPost blog={b} />
-						</Link>
-					</div>
-				))}
-			</BlogGridStyled>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<BlogGridStyled>
+					{blog?.blogs.map((b: Blog) => (
+						<div key={b.id}>
+							<Link to={`/blog/${b.id}/${b.slug}`}>
+								<BlogPost blog={b} />
+							</Link>
+						</div>
+					))}
+				</BlogGridStyled>
+			)}
 		</>
 	);
 };

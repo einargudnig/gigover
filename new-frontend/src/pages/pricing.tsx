@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 import {
 	Box,
 	Button,
@@ -14,61 +15,53 @@ import {
 	Tr,
 	VStack
 } from '@chakra-ui/react';
+import { usePage } from '../queries/usePage';
 
 export const Pricing = (): JSX.Element => {
+	const location = useLocation();
+
+	const variable = {
+		slug: location.pathname.split('/')[1]
+	};
+	const { data } = usePage(variable);
+	console.log({ data });
+
 	return (
 		<>
 			<Text fontSize="4xl">Pricing</Text>
 			<Grid marginTop={10} templateColumns="repeat(2, 1fr)">
-				<GridItem>
-					<Box rounded={'md'} borderColor={'black'} p={6} border="1px" marginRight={10}>
-						<Flex flexDirection={'column'} alignItems={'center'}>
-							<Text fontSize="3xl">Project</Text>
-							<Box>
-								<Flex alignItems={'baseline'}>
-									<Text fontSize={'small'}>$</Text>
-									<Text fontSize="xl" as="b">
-										16
+				{data?.page.pricePlans.map((pricePlan: any) => (
+					<>
+						<GridItem>
+							<Box
+								rounded={'md'}
+								borderColor={'black'}
+								p={6}
+								border="1px"
+								marginRight={10}
+							>
+								<Flex flexDirection={'column'} alignItems={'center'}>
+									<Text fontSize="3xl">{pricePlan?.name}</Text>
+									<Box>
+										<Flex alignItems={'baseline'}>
+											<Text fontSize={'small'}>$</Text>
+											<Text fontSize="xl" as="b">
+												{pricePlan?.monthlyPrice}
+											</Text>
+											<Text>/Month</Text>
+										</Flex>
+									</Box>
+									<Text fontSize="sm" marginTop={4}>
+										{pricePlan?.description}
 									</Text>
-									<Text>/Month</Text>
+									<Box marginTop={4}>
+										<Button>Try free for 30 days</Button>
+									</Box>
 								</Flex>
 							</Box>
-							<Text fontSize="sm" marginTop={4}>
-								Per user
-							</Text>
-							<Box marginTop={4}>
-								<Button>Try free for 30 days</Button>
-							</Box>
-						</Flex>
-					</Box>
-				</GridItem>
-				<GridItem>
-					<Box rounded={'md'} borderColor={'black'} p={6} border="1px" marginRight={10}>
-						<Flex flexDirection={'column'} alignItems={'center'}>
-							<Text fontSize="3xl">Property</Text>
-							<Box>
-								<Flex alignItems={'baseline'}>
-									<Text fontSize={'small'}>$</Text>
-									<Text fontSize="xl" as="b">
-										16
-									</Text>
-									<Text>/Month</Text>
-								</Flex>
-							</Box>
-							<VStack>
-								<Text fontSize="sm" marginTop={4}>
-									Per building. Includes all stakeholders.
-								</Text>
-								<Text fontSize="sm" marginTop={-2}>
-									Unlimited units can be added per building.
-								</Text>
-							</VStack>
-							<Box marginTop={4}>
-								<Button>Try free for 30 days</Button>
-							</Box>
-						</Flex>
-					</Box>
-				</GridItem>
+						</GridItem>
+					</>
+				))}
 			</Grid>
 			<Flex flexDirection={'column'} marginTop={20}>
 				<Flex justifyContent={'space-around'}>

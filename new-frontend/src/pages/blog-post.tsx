@@ -1,8 +1,9 @@
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useBlogPost } from '../queries/useBlogPost';
-import { Text } from '@chakra-ui/react';
 import { Theme, ColorKey } from '../theme';
+import { Center } from '../components/center';
+import { LoadingSpinner } from '../components/loading-spinner';
 
 interface PageBlockWithBackgroundProps {
 	imageUrl: string;
@@ -107,14 +108,23 @@ export const BlogPost = (): JSX.Element => {
 
 	return (
 		<>
-			<Text>Post</Text>
-			<PageBlockWithBackground imageUrl={blog!.blog.image.url}>
-				<h4 style={{ marginTop: 60, marginBottom: -24 }}>By the Gigover Team</h4>
-				<h1 style={{ maxWidth: '70%' }}>{blog!.blog.title}</h1>
-			</PageBlockWithBackground>
-			<PageBlock color={'white'}>
-				<BlogArticle dangerouslySetInnerHTML={{ __html: blog!.blog.content.html }} />
-			</PageBlock>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<>
+					<PageBlockWithBackground imageUrl={blog!.blog.image.url}>
+						<h4 style={{ marginTop: 60, marginBottom: -24 }}>By the Gigover Team</h4>
+						<h1 style={{ maxWidth: '70%' }}>{blog!.blog.title}</h1>
+					</PageBlockWithBackground>
+					<PageBlock color={'white'}>
+						<BlogArticle
+							dangerouslySetInnerHTML={{ __html: blog!.blog.content.html }}
+						/>
+					</PageBlock>
+				</>
+			)}
 		</>
 	);
 };

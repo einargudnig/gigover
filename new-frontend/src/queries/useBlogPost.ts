@@ -31,7 +31,6 @@ export interface BlogPostResponse {
 }
 
 export const useBlogPost = (variables: BlogPostVariables) => {
-	console.log({ variables });
 	const GraphQLEndpoint = import.meta.env.VITE_GRAPHCMS_CONTENT_URL;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
