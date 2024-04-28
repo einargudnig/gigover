@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useBlogPost } from '../queries/useBlogPost';
 import { Text } from '@chakra-ui/react';
-import { ColorKey } from '../theme';
+import { Theme, ColorKey } from '../theme';
 
 interface PageBlockWithBackgroundProps {
 	imageUrl: string;
@@ -15,8 +15,8 @@ interface PageBlockProps {
 }
 
 export const ColorContainer = styled.div<{ backgroundColor: ColorKey }>`
-	color: ${({ theme, backgroundColor }) => theme.fontColors.bg[backgroundColor]};
-	background-color: ${({ theme, backgroundColor }) => theme.backgroundColors[backgroundColor]};
+	color: ${({ backgroundColor }) => Theme.fontColors.bg[backgroundColor]};
+	background-color: ${({ backgroundColor }) => Theme.backgroundColors[backgroundColor]};
 `;
 
 const PageContainerStyled = styled(ColorContainer)`
@@ -74,7 +74,7 @@ const BlogArticle = styled.div`
 
 	p {
 		line-height: 24px;
-		margin-bottom: ${(props) => props.theme.padding(3)};
+		margin-bottom: 24px;
 	}
 
 	h1,
@@ -83,33 +83,37 @@ const BlogArticle = styled.div`
 	h4,
 	h5 {
 		color: #000;
-		margin-bottom: ${(props) => props.theme.padding(3)};
+		margin-bottom: 24px;
 	}
 
 	img {
 		max-width: 80%;
-		margin: ${(props) => props.theme.padding(3)} auto;
+		margin: 24px auto;
 	}
 `;
 
 export const BlogPost = (): JSX.Element => {
 	const { id, slug } = useParams();
-	const { data: blog } = useBlogPost({ id: id || '', slug: slug || '' });
+	const { data: blog, isLoading } = useBlogPost({ id: id || '', slug: slug || '' });
 	console.log({ blog });
 
 	if (blog === null) {
 		throw new Error('Blog post not found');
 	}
 
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<>
 			<Text>Post</Text>
-			<PageBlockWithBackground imageUrl={blog?.image.url}>
+			<PageBlockWithBackground imageUrl={blog!.blog.image.url}>
 				<h4 style={{ marginTop: 60, marginBottom: -24 }}>By the Gigover Team</h4>
-				<h1 style={{ maxWidth: '70%' }}>{blog?.title}</h1>
+				<h1 style={{ maxWidth: '70%' }}>{blog!.blog.title}</h1>
 			</PageBlockWithBackground>
 			<PageBlock color={'white'}>
-				<BlogArticle dangerouslySetInnerHTML={{ __html: blog.content.html }} />
+				<BlogArticle dangerouslySetInnerHTML={{ __html: blog!.blog.content.html }} />
 			</PageBlock>
 		</>
 	);
