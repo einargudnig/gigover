@@ -30,6 +30,7 @@ export const Pricing = (): JSX.Element => {
 		<>
 			<Text fontSize="4xl">Pricing</Text>
 			<Grid marginTop={10} templateColumns="repeat(2, 1fr)">
+				{/* // eslint-disable-next-line @typescript-eslint/no-explicit-any */}
 				{data?.page.pricePlans.map((pricePlan: any) => (
 					<>
 						<GridItem>
@@ -66,7 +67,14 @@ export const Pricing = (): JSX.Element => {
 			<Flex flexDirection={'column'} marginTop={20}>
 				<Flex justifyContent={'space-around'}>
 					<Box maxW={96}>
-						<Text>
+						{data?.page.pageBlocks.map((content: any) => (
+							<>
+								{content.content.split('. ').map((sentence, index) => (
+									<Text key={index}>{sentence.content}</Text>
+								))}
+							</>
+						))}
+						{/* <Text>
 							You can invite stakeholders to your project. Your clients, outside
 							contractors, vendors and guests can all be invited to collaborate on
 							projects. Risk-free, cancel anytime, no long-term lock in.
@@ -91,7 +99,7 @@ export const Pricing = (): JSX.Element => {
 							For example, a study by the Construction Industry Institute (CII) found
 							that use of competitive bidding processes for procurement can experience
 							up to a 14% reduction in materials costs compared to those that do not.
-						</Text>
+						</Text> */}
 					</Box>
 					<Box>
 						<Flex
