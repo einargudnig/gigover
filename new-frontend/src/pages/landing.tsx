@@ -13,7 +13,6 @@ export const Landing = () => {
 	console.log({ data });
 
 	const heroData = data?.page.pageBlocks[0];
-	// const overviewData = data?.page.pageBlocks[1];
 	const testimonialsData = data?.page.pageBlocks[4];
 	return (
 		<>
