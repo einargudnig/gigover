@@ -14,14 +14,14 @@ export const Landing = () => {
 
 	const heroData = data?.page.pageBlocks[0];
 	// const overviewData = data?.page.pageBlocks[1];
-	// const testimonialsData = data?.page.pageBlocks[2];
+	const testimonialsData = data?.page.pageBlocks[4];
 	return (
 		<>
 			<Hero data={heroData} />
 			<LogoCloud />
 			<Overview />
 			<Cta />
-			<Testimonials />
+			<Testimonials data={testimonialsData} />
 		</>
 	);
 };
