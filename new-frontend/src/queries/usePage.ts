@@ -71,7 +71,7 @@ export const usePage = (variables: PageInput) => {
 	const GraphQLEndpoint = import.meta.env.VITE_GRAPHCMS_CONTENT_URL;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const { data } = useQuery<any, any, PageWithBlocksResponse>({
+	const { data, isLoading } = useQuery<any, any, PageWithBlocksResponse>({
 		queryKey: ['Page', variables],
 		queryFn: async () => {
 			return await request(GraphQLEndpoint, PageQuery, {
@@ -83,6 +83,7 @@ export const usePage = (variables: PageInput) => {
 	});
 
 	return {
-		data
+		data,
+		isLoading
 	};
 };

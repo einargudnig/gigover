@@ -1,4 +1,5 @@
 import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { Logo } from './logo';
 import { FacebookIcon } from './icons/facebook';
 import { LinkedInIcon } from './icons/linkedin';
@@ -41,13 +42,13 @@ export const Footer = () => {
 					<Flex flexDirection={'column'} alignItems={'end'}>
 						<Flex>
 							<Text fontSize="larger" color={'white'} marginRight={2}>
-								Features
+								<Link to="/features">Features</Link>
 							</Text>
 							<Text fontSize="larger" color={'white'} marginRight={2}>
-								Pricing
+								<Link to="pricing">Pricing</Link>
 							</Text>
 							<Text fontSize="larger" color={'white'}>
-								Blog
+								<Link to="/blog">Blog</Link>
 							</Text>
 						</Flex>
 						<Box marginTop={4}>

@@ -30,8 +30,7 @@ export type Page = {
 	pricePlans: PricePlan[];
 };
 
-import { ColorKey } from '../styles/theme';
-import { Asset } from './Asset';
+import { ColorKey } from './theme';
 
 export enum PageBlockType {
 	Hero = 'Hero',
@@ -52,7 +51,7 @@ export type Testimonial = {
 	testimonial: string;
 	name: string;
 	company: string;
-	image: Asset | null;
+	image: img | null;
 };
 
 export interface PageBlock {
