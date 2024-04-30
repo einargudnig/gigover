@@ -9,7 +9,7 @@ export const Landing = () => {
 	const variable = {
 		slug: 'index'
 	};
-	const { data, isLoading } = usePage(variable);
+	const { data } = usePage(variable);
 	console.log({ data });
 
 	const heroData = data?.page.pageBlocks[0];

@@ -1,8 +1,10 @@
 import { Box, Button, Flex, Text, Image } from '@chakra-ui/react';
+// import { Page } from '../types';
 // import { Computer } from './computer';
 // import { Phone } from './phone';
 
-export const Hero = ({ data }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Hero = ({ data }: any) => {
 	console.log('in hero', { data });
 	return (
 		<Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>

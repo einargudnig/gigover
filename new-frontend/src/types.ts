@@ -51,7 +51,7 @@ export type Testimonial = {
 	testimonial: string;
 	name: string;
 	company: string;
-	image: img | null;
+	image: Asset | null;
 };
 
 export interface PageBlock {
@@ -64,3 +64,12 @@ export interface PageBlock {
 	features: Feature[];
 	testimonials: Testimonial[];
 }
+
+export type Asset = {
+	id: string;
+	handle: string;
+	fileName: string;
+	width: number;
+	height: number;
+	url: string;
+};
