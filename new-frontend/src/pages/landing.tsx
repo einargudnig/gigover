@@ -3,11 +3,19 @@ import { Hero } from '../components/hero';
 import { LogoCloud } from '../components/logo-cloud';
 import { Overview } from '../components/overview';
 import { Testimonials } from '../components/testimonials';
+import { usePage } from '../queries/usePage';
 
 export const Landing = () => {
+	const variable = {
+		slug: 'index'
+	};
+	const { data, isLoading } = usePage(variable);
+	console.log({ data });
+
+	const heroData = data?.page.pageBlocks[0];
 	return (
 		<>
-			<Hero />
+			<Hero data={heroData} />
 			<LogoCloud />
 			<Overview />
 			<Cta />
