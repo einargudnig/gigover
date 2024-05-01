@@ -16,7 +16,9 @@ export const Features = (): JSX.Element => {
 
 	return (
 		<>
-			<Text fontSize="4xl">{data?.page.name}</Text>
+			<Text fontSize={'4xl'} textAlign={'center'}>
+				{data?.page.name}
+			</Text>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

@@ -3,21 +3,28 @@ import {
 	Box,
 	Button,
 	Flex,
-	Grid,
-	GridItem,
 	HStack,
+	Heading,
+	List,
+	ListIcon,
+	ListItem,
+	Stack,
 	Table,
 	Tbody,
 	Td,
 	Text,
 	Th,
 	Thead,
-	Tr
+	Tr,
+	VStack,
+	useColorModeValue
 } from '@chakra-ui/react';
+import { CheckCircleIcon } from '@chakra-ui/icons';
 import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
 import { usePage } from '../queries/usePage';
 import { PricePlan, PageBlock } from '../types';
+import { ReactNode } from 'react';
 
 export const Pricing = (): JSX.Element => {
 	const location = useLocation();
@@ -26,53 +33,158 @@ export const Pricing = (): JSX.Element => {
 		slug: location.pathname.split('/')[1]
 	};
 	const { data, isLoading } = usePage(variable);
+	console.log({ data });
 
 	return (
 		<>
-			<Text fontSize="4xl">{data?.page.name}</Text>
+			<Text fontSize={'4xl'} textAlign={'center'}>
+				{data?.page.name}
+			</Text>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
 				<>
-					<Grid marginTop={10} templateColumns="repeat(2, 1fr)">
-						{/* // eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-						{data?.page.pricePlans.map((pricePlan: PricePlan) => (
-							<>
-								<GridItem>
-									<Box
-										rounded={'md'}
-										borderColor={'black'}
-										p={6}
-										border="1px"
-										marginRight={10}
-										height={64}
-									>
-										<Flex flexDirection={'column'} alignItems={'center'}>
-											<Text fontSize="3xl">{pricePlan?.name}</Text>
-											<Box>
-												<Flex alignItems={'baseline'}>
-													<Text fontSize={'small'}>$</Text>
-													<Text fontSize="2xl" as="b">
-														{pricePlan?.monthlyPrice}
-													</Text>
-													<Text>/Month</Text>
-												</Flex>
-											</Box>
-											<Text fontSize="sm" marginTop={4}>
-												{pricePlan?.description}
+					<Box py={12}>
+						<VStack spacing={2} textAlign="center">
+							<Heading as="h1" fontSize="4xl">
+								Plans that fit your need
+							</Heading>
+							<Text fontSize="lg" color={'gray.500'}>
+								Start with 30-day free trial. No credit card needed. Cancel at
+								anytime.
+							</Text>
+						</VStack>
+
+						<Stack
+							direction={{ base: 'column', md: 'row' }}
+							textAlign="center"
+							justify="center"
+							spacing={{ base: 4, lg: 10 }}
+							py={10}
+						>
+							{/* // eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+							{data?.page.pricePlans.map((pricePlan: PricePlan) => (
+								<PriceWrapper>
+									<Box py={4} px={12}>
+										<Text fontWeight="500" fontSize="2xl">
+											{pricePlan?.name}
+										</Text>
+										<HStack justifyContent="center">
+											<Text fontSize="3xl" fontWeight="600">
+												$
 											</Text>
-											<Box marginTop={4}>
-												<Button>Try free for 30 days</Button>
-											</Box>
-										</Flex>
+											<Text fontSize="5xl" fontWeight="900">
+												{pricePlan?.monthlyPrice}
+											</Text>
+											<Text fontSize="3xl" color="gray.500">
+												/month
+											</Text>
+										</HStack>
 									</Box>
-								</GridItem>
-							</>
-						))}
-					</Grid>
-					<Flex flexDirection={'column'} marginTop={20}>
+									<VStack
+										// eslint-disable-next-line react-hooks/rules-of-hooks
+										bg={useColorModeValue('gray.50', 'gray.700')}
+										py={4}
+										borderBottomRadius={'xl'}
+									>
+										<Box w="80%" py={7}>
+											<Button w="full" colorScheme="yellow" variant="solid">
+												Start trial
+											</Button>
+										</Box>
+										<List spacing={3} textAlign="start" px={12}>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[0].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[0].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[1].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[1].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[2].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[2].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[3].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[3].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[4].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[4].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[5].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[5].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[6].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[6].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[7].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[7].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[8].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[8].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[9].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[9].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[10].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[10].fieldValue}
+											</ListItem>
+											<ListItem>
+												<ListIcon as={CheckCircleIcon} color="green.500" />
+												{pricePlan?.pricePlanFields[11].fieldKey}
+												&nbsp;-&nbsp;
+												{pricePlan?.pricePlanFields[11].fieldValue}
+											</ListItem>
+											{pricePlan?.pricePlanFields[12]?.fieldKey ? (
+												<ListItem>
+													<ListIcon
+														as={CheckCircleIcon}
+														color="green.500"
+													/>
+													{pricePlan?.pricePlanFields[12]?.fieldKey}
+													&nbsp;-&nbsp;
+													{pricePlan?.pricePlanFields[12]?.fieldValue}
+												</ListItem>
+											) : null}
+										</List>
+									</VStack>
+								</PriceWrapper>
+							))}
+						</Stack>
+					</Box>
+					<Flex flexDirection={'column'}>
 						<Flex justifyContent={'space-around'}>
 							<Box maxW={96}>
 								{data?.page.pageBlocks.map((content: PageBlock) => (
@@ -166,5 +278,20 @@ export const Pricing = (): JSX.Element => {
 				</>
 			)}
 		</>
+	);
+};
+
+const PriceWrapper = ({ children }: { children: ReactNode }) => {
+	return (
+		<Box
+			mb={4}
+			shadow="base"
+			borderWidth={'1px'}
+			alignSelf={{ base: 'center', lg: 'flex-start' }}
+			borderColor={useColorModeValue('gray.200', 'gray.500')}
+			borderRadius={'xl'}
+		>
+			{children}
+		</Box>
 	);
 };

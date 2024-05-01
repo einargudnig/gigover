@@ -31,7 +31,7 @@ export const BlogPosts = (): JSX.Element => {
 	const { data: blog, isLoading } = useBlogPosts();
 	return (
 		<>
-			<Text fontSize="4xl" marginBottom={10}>
+			<Text fontSize={'4xl'} textAlign={'center'} marginBottom={10}>
 				Blog
 			</Text>
 			{isLoading ? (
