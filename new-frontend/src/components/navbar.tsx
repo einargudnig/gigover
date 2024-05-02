@@ -55,10 +55,10 @@ export const Navbar = () => {
 								<Link to="/features">Features</Link>
 							</Button>
 							<Button variant="ghost" colorScheme="black">
-								Pricing
+								<Link to="/pricing">Pricing</Link>
 							</Button>
 							<Button variant="ghost" colorScheme="black">
-								Blog
+								<Link to="/blog">Blog</Link>
 							</Button>
 							<Button variant="ghost" colorScheme="black">
 								Log in
