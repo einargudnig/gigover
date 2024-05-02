@@ -7,13 +7,12 @@ import {
 	Flex,
 	HStack,
 	IconButton,
-	Spacer,
 	VStack,
 	VisuallyHidden,
 	chakra,
 	useDisclosure
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import { Logo } from './logo';
 
 export const Navbar = () => {
@@ -61,7 +60,6 @@ export const Navbar = () => {
 							<Button variant="ghost" colorScheme="black">
 								Blog
 							</Button>
-
 							<Button variant="ghost" colorScheme="black">
 								Log in
 							</Button>
@@ -107,19 +105,19 @@ export const Navbar = () => {
 								<CloseButton aria-label="Close menu" onClick={mobileNav.onClose} />
 
 								<Button w="full" variant="ghost" colorScheme="black">
-									Features
+									<Link to="/features">Features</Link>
 								</Button>
 								<Button w="full" variant="ghost" colorScheme="black">
-									Pricing
+									<Link to="/pricing">Pricing</Link>
 								</Button>
 								<Button w="full" variant="ghost" colorScheme="black">
-									Blog
+									<Link to="/blog">Blog</Link>
 								</Button>
 								<Button w="full" variant="ghost" colorScheme="black">
-									Company
+									Log in
 								</Button>
-								<Button w="full" variant="ghost" colorScheme="black">
-									Sign in
+								<Button w="full" variant="solid" colorScheme="yellow">
+									Sign up
 								</Button>
 							</VStack>
 						</Box>
@@ -127,33 +125,5 @@ export const Navbar = () => {
 				</Flex>
 			</chakra.header>
 		</React.Fragment>
-	);
-};
-
-export const MobileNavbar = () => {
-	const { isOpen, onToggle } = useDisclosure();
-	return (
-		<Box marginBottom={10} padding={4} paddingX={'36px'}>
-			<Flex justifyContent={'space-between'} alignItems={'center'}>
-				<Box>
-					<Flex alignItems={'center'}>
-						<Link to="/">
-							<Logo color={'black'} scale={0.8} />
-						</Link>
-					</Flex>
-				</Box>
-
-				<Spacer />
-				<Box>
-					<HamburgerIcon />
-					{/* <Flex justifyContent={'space-between'}>
-						<Button colorScheme="black" variant="link" marginRight={6}>
-							Log in
-						</Button>
-						<Button>Sign up</Button>
-					</Flex> */}
-				</Box>
-			</Flex>
-		</Box>
 	);
 };
