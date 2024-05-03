@@ -2,12 +2,17 @@ import { Box, Text, Image, Grid, Flex } from '@chakra-ui/react';
 
 export const LogoCloud = () => {
 	return (
-		<Box marginTop={44}>
+		<Box marginTop={[14, 44]}>
 			<Flex justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-				<Text fontSize="2xl">Trusted by dozens of customers just like you</Text>
+				<Text fontSize={['2xl', 'xl']} textAlign={'center'}>
+					Trusted by dozens of customers just like you
+				</Text>
 
 				<Box marginTop={8}>
-					<Grid templateColumns="repeat(6, 1fr)" gap={6}>
+					<Grid
+						templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(6, 1fr)' }}
+						gap={6}
+					>
 						<Image
 							src="https://via.placeholder.com/120"
 							alt="Logo cloud"

@@ -9,7 +9,9 @@ export const Hero = ({ data }: any) => {
 	return (
 		<Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
 			<Box>
-				<Text fontSize="4xl">{data?.heading}</Text>
+				<Text fontSize={['3xl', '4xl']} textAlign={'center'}>
+					{data?.heading}
+				</Text>
 			</Box>
 			<Box marginTop={10}>
 				<Flex justifyContent={'center'} textAlign={'center'}>

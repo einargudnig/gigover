@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { Cta } from '../components/cta';
 import { Hero } from '../components/hero';
 import { LogoCloud } from '../components/logo-cloud';
@@ -15,12 +16,12 @@ export const Landing = () => {
 	const heroData = data?.page.pageBlocks[0];
 	const testimonialsData = data?.page.pageBlocks[4];
 	return (
-		<>
+		<Box marginTop={10}>
 			<Hero data={heroData} />
 			<LogoCloud />
 			<Overview />
 			<Cta />
 			<Testimonials data={testimonialsData} />
-		</>
+		</Box>
 	);
 };
