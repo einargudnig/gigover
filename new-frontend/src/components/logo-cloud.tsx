@@ -4,7 +4,7 @@ export const LogoCloud = () => {
 	return (
 		<Box marginTop={[14, 44]}>
 			<Flex justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-				<Text fontSize={['2xl', 'xl']} textAlign={'center'}>
+				<Text fontSize={['2xl', '2xl']} textAlign={'center'}>
 					Trusted by dozens of customers just like you
 				</Text>
 

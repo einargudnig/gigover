@@ -11,7 +11,7 @@ export const Layout = () => {
 				as="main"
 				direction={'column'}
 				flex="1"
-				paddingX={'82px'}
+				paddingX={['12px', '82px']}
 				justifyContent={'center'}
 				alignItems={'center'}
 			>

@@ -6,15 +6,27 @@ export const Testimonials = ({ data }: any) => {
 	console.log({ data });
 	return (
 		<Box marginTop={24} marginBottom={10} backgroundColor={Theme.backgroundColors.yellow}>
-			<Flex justifyContent={'center'} alignItems={'center'}>
-				<Box marginRight={10} width={'60%'}>
-					<Flex flexDirection={'column'} alignItems={'start'} justifyContent={'center'}>
-						<Text fontSize="xl">{data?.testimonials[0].testimonial}</Text>
-						<Text>{data?.testimonials[0].name}</Text>
-						<Text>{data?.testimonials[0].company}</Text>
+			<Flex
+				flexDirection={['column-reverse', 'row']}
+				justifyContent={'center'}
+				alignItems={'center'}
+			>
+				<Box marginRight={[0, 10]} width={['80%', '60%']}>
+					<Flex
+						flexDirection={'column'}
+						alignItems={['center', 'start']}
+						justifyContent={'center'}
+					>
+						<Text fontSize="xl" marginTop={[6, 0]} textAlign={['center', 'start']}>
+							{data?.testimonials[0].testimonial}
+						</Text>
+						<Box marginTop={[6, 2]} marginBottom={[4, 0]}>
+							<Text>{data?.testimonials[0].name}</Text>
+							<Text as="em">{data?.testimonials[0].company}</Text>
+						</Box>
 					</Flex>
 				</Box>
-				<Box>
+				<Box marginTop={[4, 0]}>
 					<Image
 						src={data?.testimonials[0].image.url}
 						alt="Testimonial 1"
