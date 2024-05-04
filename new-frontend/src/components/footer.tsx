@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { Logo } from './logo';
 import { FacebookIcon } from './icons/facebook';
@@ -8,10 +8,10 @@ import { AppButtons } from './icons/app-buttons';
 
 export const Footer = () => {
 	return (
-		<Box as="footer" marginTop={10} paddingY={8} paddingX={'36px'} backgroundColor={'black'}>
-			<Grid templateColumns="repeat(6, 1fr)" gap={6}>
-				<GridItem colSpan={2}>
-					<Flex flexDirection={'column'} alignItems={'start'}>
+		<Box as="footer" marginTop={10} paddingY={8} paddingX={4} backgroundColor={'black'}>
+			<Flex flexDirection={['column-reverse', 'row']} alignItems={'center'}>
+				<Box marginTop={[6, 0]}>
+					<Flex flexDirection={'column'} alignItems={'center'}>
 						<Logo color={'white'} scale={0.8} />
 						<Box marginTop={6}>
 							<Flex justifyContent={'space-between'}>
@@ -30,16 +30,10 @@ export const Footer = () => {
 							© 2024 Gigover
 						</Text>
 					</Flex>
-				</GridItem>
-				<GridItem colSpan={2}>
-					{/* <Flex flexDirection={'column'} alignItems={'center'}>
-						<Text color={'white'}>About</Text>
-						<Text color={'white'}>Contact</Text>
-						<Text color={'white'}>Careers</Text>
-					</Flex> */}
-				</GridItem>
-				<GridItem colSpan={2}>
-					<Flex flexDirection={'column'} alignItems={'end'}>
+				</Box>
+				<Spacer />
+				<Box>
+					<Flex flexDirection={'column'} alignItems={'center'}>
 						<Flex>
 							<Text fontSize="larger" color={'white'} marginRight={2}>
 								<Link to="/features">Features</Link>
@@ -55,8 +49,8 @@ export const Footer = () => {
 							<AppButtons />
 						</Box>
 					</Flex>
-				</GridItem>
-			</Grid>
+				</Box>
+			</Flex>
 		</Box>
 	);
 };
