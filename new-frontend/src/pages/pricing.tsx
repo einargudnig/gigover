@@ -37,9 +37,9 @@ export const Pricing = (): JSX.Element => {
 
 	return (
 		<>
-			<Text fontSize={'4xl'} textAlign={'center'}>
+			<Heading as="b" textAlign={'center'}>
 				{data?.page.name}
-			</Text>
+			</Heading>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

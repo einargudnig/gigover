@@ -11,7 +11,6 @@ export const Landing = () => {
 		slug: 'index'
 	};
 	const { data } = usePage(variable);
-	console.log({ data });
 
 	const heroData = data?.page.pageBlocks[0];
 	const testimonialsData = data?.page.pageBlocks[4];

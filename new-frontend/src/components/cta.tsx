@@ -12,7 +12,7 @@ export const Cta = () => {
 				<Text fontSize="2xl" marginTop={8} marginBottom={8} textAlign={'center'}>
 					Help your maintenance and construction work stay on schedule and on budget!
 				</Text>
-				<Button>Start free trial</Button>
+				<Button size={'lg'}>Start free trial</Button>
 			</Flex>
 		</Box>
 	);
