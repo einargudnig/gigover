@@ -34,12 +34,19 @@ export const Features = (): JSX.Element => {
 											alt="Project dashboard"
 											width={['400px', '800px']}
 											height={['200px', '400px']}
+											rounded={'md'}
 										/>
 									</Box>
 									<Spacer />
-									<Box marginTop={20} textAlign={'center'}>
+									<Box
+										marginTop={20}
+										textAlign={'center'}
+										width={['100%', '40%']}
+									>
 										<VStack>
-											<Text fontSize={'2xl'}>{block.heading}</Text>
+											<Text fontSize={'2xl'} as="b">
+												{block.heading}
+											</Text>
 											<Text>{block.content}</Text>
 										</VStack>
 									</Box>

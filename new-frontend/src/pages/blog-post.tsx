@@ -115,7 +115,7 @@ export const BlogPost = (): JSX.Element => {
 			) : (
 				<>
 					<PageBlockWithBackground imageUrl={blog!.blog.image.url}>
-						<h4 style={{ marginTop: 60, marginBottom: -24 }}>By the Gigover Team</h4>
+						<h4 style={{ marginTop: 60, marginBottom: -10 }}>By the Gigover Team</h4>
 						<h1 style={{ maxWidth: '70%' }}>{blog!.blog.title}</h1>
 					</PageBlockWithBackground>
 					<PageBlock color={'white'}>
