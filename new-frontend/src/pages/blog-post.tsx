@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Image, Heading, Text } from '@chakra-ui/react';
+import { Box, Container, Image, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useBlogPost } from '../queries/useBlogPost';
 import { Theme, ColorKey } from '../theme';
@@ -19,20 +19,20 @@ const PageBlockImage = ({ imageUrl }: { imageUrl: string }) => {
 	return (
 		<Box
 			position="absolute"
-			width="100%"
+			w="full"
 			right={0}
 			top={0}
-			zIndex={1}
-			height="100%"
+			zIndex="docked"
+			height="full"
 			_before={{
-				bgGradient: 'linear(90deg, rgba(250,228,77,1) 0%, rgba(250,228,77,0) 100%)',
-				width: '40%',
+				bgGradient: 'linear(to-r, rgba(250,228,77,1) 0%, rgba(250,228,77,0) 100%)',
+				width: { base: 'full', md: '40%' },
 				opacity: '0.7',
-				zIndex: 2,
+				zIndex: 'docked',
 				position: 'absolute',
 				content: '""',
 				display: 'block',
-				height: '100%',
+				height: 'full',
 				top: 0,
 				right: 0
 			}}
@@ -41,11 +41,11 @@ const PageBlockImage = ({ imageUrl }: { imageUrl: string }) => {
 				position="absolute"
 				top={0}
 				right={0}
-				height="100%"
-				width="40%"
-				zIndex={1}
-				objectFit="cover"
+				height="full"
+				width={{ base: 'full', md: '40%' }}
+				zIndex="docked"
 				src={imageUrl}
+				objectFit="cover"
 				opacity={0.5}
 			/>
 		</Box>
@@ -54,7 +54,7 @@ const PageBlockImage = ({ imageUrl }: { imageUrl: string }) => {
 
 const BlogArticle = ({ contentHtml }: { contentHtml: string }) => {
 	return (
-		<Container maxW="90%" color="#747474">
+		<Container maxW={{ base: '100%', md: '90%' }} color="#747474">
 			<Box dangerouslySetInnerHTML={{ __html: contentHtml }} />
 		</Container>
 	);
@@ -65,10 +65,10 @@ const PageBlockWithBackground = ({ imageUrl, children }: PageBlockWithBackground
 		bg={Theme.backgroundColors.yellow}
 		color={Theme.fontColors.bg.yellow}
 		position="relative"
-		p={6}
+		p={{ base: 4, md: 6 }}
 	>
 		<PageBlockImage imageUrl={imageUrl} />
-		<Container maxW="1343px" m="0 auto" position="relative" zIndex={3}>
+		<Container maxW="full" position="relative" zIndex="docked">
 			{children}
 		</Container>
 	</Box>
@@ -79,9 +79,9 @@ const PageBlock = ({ children, color = 'black' }: PageBlockProps) => (
 		bg={Theme.backgroundColors[color]}
 		color={Theme.fontColors.bg[color]}
 		position="relative"
-		p={6}
+		p={{ base: 4, md: 6 }}
 	>
-		<Container maxW="1343px" m="0 auto" position="relative" zIndex={3}>
+		<Container maxW="full" position="relative" zIndex="docked">
 			{children}
 		</Container>
 	</Box>
@@ -98,18 +98,18 @@ export const BlogPost = () => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<>
+				<Box>
 					{isError ? (
-						<Text>Error!</Text>
+						<Text>Error fetching blog!</Text>
 					) : (
-						<Box>
+						<>
 							{blog && (
 								<>
 									<PageBlockWithBackground imageUrl={blog.blog.image.url}>
-										<Heading mt={10} mb={-2.5} size="md">
+										<Heading mt={10} size="md">
 											By the Gigover Team
 										</Heading>
-										<Heading maxW="70%" size="2xl">
+										<Heading maxW={{ base: '90%', md: '70%' }} size="2xl">
 											{blog.blog.title}
 										</Heading>
 									</PageBlockWithBackground>
@@ -118,9 +118,9 @@ export const BlogPost = () => {
 									</PageBlock>
 								</>
 							)}
-						</Box>
+						</>
 					)}
-				</>
+				</Box>
 			)}
 		</>
 	);
