@@ -66,6 +66,7 @@ const PageBlockWithBackground = ({ imageUrl, children }: PageBlockWithBackground
 		color={Theme.fontColors.bg.yellow}
 		position="relative"
 		p={{ base: 4, md: 6 }}
+		marginTop={10}
 	>
 		<PageBlockImage imageUrl={imageUrl} />
 		<Container maxW="full" position="relative" zIndex="docked">

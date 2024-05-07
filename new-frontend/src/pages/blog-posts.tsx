@@ -6,7 +6,7 @@ import { LoadingSpinner } from '../components/loading-spinner';
 
 export const BlogPosts = (): JSX.Element => {
 	const { data: blog, isLoading } = useBlogPosts();
-	console.log({ blog });
+
 	return (
 		<>
 			<Heading as="h1">Blog</Heading>
@@ -15,68 +15,56 @@ export const BlogPosts = (): JSX.Element => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<Container maxW={'7xl'} p="12">
+				<Container maxW={'7xl'} p="2">
 					{blog?.blogs.map((b: Blog) => (
-						<div key={b.id}>
-							<Link to={`/blog/${b.id}/${b.slug}`}>
-								<Box
-									marginTop={{ base: '1', sm: '5' }}
-									display="flex"
-									flexDirection={{ base: 'column', sm: 'row' }}
-									justifyContent="space-between"
-								>
+						<Box
+							key={b.id}
+							as={Link}
+							to={`/blog/${b.id}/${b.slug}`}
+							_hover={{ textDecoration: 'none' }}
+						>
+							<Box
+								mt={{ base: '1', sm: '5' }}
+								display="flex"
+								flexDir={{ base: 'column', sm: 'row' }}
+								justifyContent="space-between"
+								alignItems={'flex-start'}
+							>
+								<Box flex="1" mr="3" position="relative" alignItems="center">
 									<Box
-										display="flex"
-										flex="1"
-										marginRight="3"
-										position="relative"
-										alignItems="center"
+										w={{ base: '100%', sm: '85%' }}
+										zIndex="2"
+										ml={{ base: '0', sm: '5%' }}
+										mt="5%"
 									>
-										<Box
-											width={{ base: '100%', sm: '85%' }}
-											zIndex="2"
-											marginLeft={{ base: '0', sm: '5%' }}
-											marginTop="5%"
-										>
-											<Image
-												borderRadius="lg"
-												src={b?.image.url}
-												alt="some good alt text"
-												objectFit="contain"
-											/>
-										</Box>
-										<Box
-											zIndex="1"
-											width="100%"
-											position="absolute"
-											height="100%"
-										>
-											<Box
-												backgroundSize="20px 20px"
-												opacity="0.4"
-												height="100%"
-											/>
-										</Box>
-									</Box>
-									<Box
-										display="flex"
-										flex="1"
-										flexDirection="column"
-										justifyContent="center"
-										marginTop={{ base: '3', sm: '0' }}
-									>
-										<Heading marginTop="1">{b?.title}</Heading>
-										<Text as="p" marginTop="2" fontSize="lg">
-											{b?.content.text.substr(0, 250)}
-										</Text>
-										<BlogAuthor
-											name="The Gigover team"
-											date={new Date('2021-04-06T19:01:27Z')}
+										<Image
+											borderRadius="lg"
+											src={b?.image.url}
+											alt={b.title || 'Image alt text'}
+											objectFit="cover"
+											h={['200px', '200px']}
+											w={['400px', '450px']}
+											transition="transform 0.2s"
+											_hover={{ transform: 'scale(1.05)' }}
 										/>
 									</Box>
 								</Box>
-							</Link>
-						</div>
+								<Box
+									flex="1"
+									flexDir="column"
+									justifyContent="center"
+									marginTop={[2, 10]}
+								>
+									<Heading mt="1" size="md">
+										{b?.title}
+									</Heading>
+									<Text as="p" mt="2" fontSize="lg" noOfLines={3}>
+										{b?.content.text?.substr(0, 250)}
+									</Text>
+									<BlogAuthor name="The Gigover team" />
+								</Box>
+							</Box>
+						</Box>
 					))}
 				</Container>
 			)}
@@ -85,14 +73,13 @@ export const BlogPosts = (): JSX.Element => {
 };
 
 interface BlogAuthorProps {
-	date: Date;
 	name: string;
 }
 
-export const BlogAuthor: React.FC<BlogAuthorProps> = (props) => {
+export const BlogAuthor: React.FC<BlogAuthorProps> = ({ name }) => {
 	return (
-		<HStack marginTop="2" spacing="2" display="flex" alignItems="center">
-			<Text fontWeight="medium">{props.name}</Text>
+		<HStack mt="2" spacing="2" alignItems="center">
+			<Text as="b">{name}</Text>
 		</HStack>
 	);
 };
