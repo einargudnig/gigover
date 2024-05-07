@@ -34,7 +34,7 @@ export const useBlogPost = (variables: BlogPostVariables) => {
 	const GraphQLEndpoint = import.meta.env.VITE_GRAPHCMS_CONTENT_URL;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const { data, isLoading } = useQuery<any, any, BlogPostResponse>({
+	const { data, isLoading, isError } = useQuery<any, any, BlogPostResponse>({
 		queryKey: ['Blog', variables],
 		queryFn: async () => {
 			return await request(GraphQLEndpoint, SingleBlogPost, {
@@ -46,6 +46,7 @@ export const useBlogPost = (variables: BlogPostVariables) => {
 
 	return {
 		data,
-		isLoading
+		isLoading,
+		isError
 	};
 };

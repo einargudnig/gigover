@@ -1,5 +1,5 @@
+import { Box, Container, Flex, Image, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { useBlogPost } from '../queries/useBlogPost';
 import { Theme, ColorKey } from '../theme';
 import { Center } from '../components/center';
@@ -15,96 +15,81 @@ interface PageBlockProps {
 	children?: React.ReactNode;
 }
 
-export const ColorContainer = styled.div<{ backgroundColor: ColorKey }>`
-	color: ${({ backgroundColor }) => Theme.fontColors.bg[backgroundColor]};
-	background-color: ${({ backgroundColor }) => Theme.backgroundColors[backgroundColor]};
-`;
+const PageBlockImage = ({ imageUrl }: { imageUrl: string }) => {
+	return (
+		<Box
+			position="absolute"
+			width="100%"
+			right={0}
+			top={0}
+			zIndex={1}
+			height="100%"
+			_before={{
+				bgGradient: 'linear(90deg, rgba(250,228,77,1) 0%, rgba(250,228,77,0) 100%)',
+				width: '40%',
+				opacity: '0.7',
+				zIndex: 2,
+				position: 'absolute',
+				content: '""',
+				display: 'block',
+				height: '100%',
+				top: 0,
+				right: 0
+			}}
+		>
+			<Image
+				position="absolute"
+				top={0}
+				right={0}
+				height="100%"
+				width="40%"
+				zIndex={1}
+				objectFit="cover"
+				src={imageUrl}
+				opacity={0.5}
+			/>
+		</Box>
+	);
+};
 
-const PageContainerStyled = styled(ColorContainer)`
-	position: relative;
-	padding: 24px;
-`;
+const BlogArticle = ({ contentHtml }: { contentHtml: string }) => {
+	return (
+		<Container maxW="90%" color="#747474">
+			<Box dangerouslySetInnerHTML={{ __html: contentHtml }} />
+		</Container>
+	);
+};
 
-const PageBlockImage = styled.div<{ imageUrl: string }>`
-	position: absolute;
-	width: 100%;
-	right: 0;
-	top: 0;
-	z-index: 1;
-	height: 100%;
+const PageBlockWithBackground = ({ imageUrl, children }: PageBlockWithBackgroundProps) => (
+	<Box
+		bg={Theme.backgroundColors.yellow}
+		color={Theme.fontColors.bg.yellow}
+		position="relative"
+		p={6}
+	>
+		<PageBlockImage imageUrl={imageUrl} />
+		<Container maxW="1343px" m="0 auto" position="relative" zIndex={3}>
+			{children}
+		</Container>
+	</Box>
+);
 
-	.img {
-		position: absolute;
-		top: 0;
-		right: 0;
-		height: 100%;
-		width: 40%;
-		z-index: 1;
-		opacity: 0.5;
-		background-image: url(${(props) => props.imageUrl});
-		background-position: 50% 25%;
-		background-size: cover;
-		background-repeat: no-repeat;
-	}
+const PageBlock = ({ children, color = 'black' }: PageBlockProps) => (
+	<Box
+		bg={Theme.backgroundColors[color]}
+		color={Theme.fontColors.bg[color]}
+		position="relative"
+		p={6}
+	>
+		<Container maxW="1343px" m="0 auto" position="relative" zIndex={3}>
+			{children}
+		</Container>
+	</Box>
+);
 
-	&:before {
-		background: rgb(250, 228, 77);
-		background: linear-gradient(90deg, rgba(250, 228, 77, 1) 0%, rgba(250, 228, 77, 0) 100%);
-		width: 40%;
-		opacity: 0.7;
-		z-index: 2;
-		position: absolute;
-		content: '';
-		display: block;
-		height: 100%;
-		top: 0;
-		right: 0;
-	}
-`;
-
-const Container = styled.div`
-	position: relative;
-	z-index: 3;
-	max-width: 1343px;
-	margin: 0 auto;
-`;
-
-const BlogArticle = styled.div`
-	max-width: 90%;
-	color: #747474;
-
-	p {
-		line-height: 24px;
-		margin-bottom: 24px;
-	}
-
-	h1,
-	h2,
-	h3,
-	h4,
-	h5 {
-		color: #000;
-		margin-bottom: 24px;
-	}
-
-	img {
-		max-width: 80%;
-		margin: 24px auto;
-	}
-`;
-
-export const BlogPost = (): JSX.Element => {
-	const { id, slug } = useParams();
-	const { data: blog, isLoading } = useBlogPost({ id: id || '', slug: slug || '' });
-	console.log({ blog });
-
-	if (blog === null) {
-		throw new Error('Blog post not found');
-	}
-
-	if (isLoading) {
-		return <div>Loading...</div>;
-	}
+export const BlogPost = () => {
+	const { id, slug } = useParams<{ id?: string; slug?: string }>();
+	const { data: blog, isLoading, isError } = useBlogPost({ id: id || '', slug: slug || '' });
 
 	return (
 		<>
@@ -114,35 +99,29 @@ export const BlogPost = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					<PageBlockWithBackground imageUrl={blog!.blog.image.url}>
-						<h4 style={{ marginTop: 60, marginBottom: -10 }}>By the Gigover Team</h4>
-						<h1 style={{ maxWidth: '70%' }}>{blog!.blog.title}</h1>
-					</PageBlockWithBackground>
-					<PageBlock color={'white'}>
-						<BlogArticle
-							dangerouslySetInnerHTML={{ __html: blog!.blog.content.html }}
-						/>
-					</PageBlock>
+					{isError ? (
+						<Text>Error!</Text>
+					) : (
+						<Box>
+							{blog && (
+								<>
+									<PageBlockWithBackground imageUrl={blog.blog.image.url}>
+										<Heading mt={10} mb={-2.5} size="md">
+											By the Gigover Team
+										</Heading>
+										<Heading maxW="70%" size="2xl">
+											{blog.blog.title}
+										</Heading>
+									</PageBlockWithBackground>
+									<PageBlock color="white">
+										<BlogArticle contentHtml={blog.blog.content.html} />
+									</PageBlock>
+								</>
+							)}
+						</Box>
+					)}
 				</>
 			)}
 		</>
 	);
 };
-
-const PageBlockWithBackground = ({
-	imageUrl,
-	children
-}: PageBlockWithBackgroundProps): JSX.Element => (
-	<PageContainerStyled backgroundColor={'yellow'}>
-		<PageBlockImage imageUrl={imageUrl}>
-			<div className={'img'} />
-		</PageBlockImage>
-		<Container>{children}</Container>
-	</PageContainerStyled>
-);
-
-const PageBlock = ({ children, color = 'black' }: PageBlockProps): JSX.Element => (
-	<PageContainerStyled backgroundColor={color}>
-		<Container>{children}</Container>
-	</PageContainerStyled>
-);
