@@ -3,7 +3,6 @@ import { Theme } from '../theme';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Testimonials = ({ data }: any) => {
-	console.log({ data });
 	return (
 		<Box marginTop={24} marginBottom={10} backgroundColor={Theme.backgroundColors.yellow}>
 			<Flex

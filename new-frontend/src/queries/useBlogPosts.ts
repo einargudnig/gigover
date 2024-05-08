@@ -47,7 +47,7 @@ export const useBlogPosts = () => {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const { data, isLoading } = useQuery<BlogsResponse, any, any>({
+	const { data, isLoading, isError } = useQuery<BlogsResponse, any, any>({
 		queryKey: ['Blogs'],
 		queryFn: async () => {
 			return await request(GraphQLEndpoint, BlogPosts);
@@ -56,6 +56,7 @@ export const useBlogPosts = () => {
 
 	return {
 		data,
-		isLoading
+		isLoading,
+		isError
 	};
 };

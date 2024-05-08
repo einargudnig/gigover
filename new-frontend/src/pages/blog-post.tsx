@@ -1,4 +1,4 @@
-import { Box, Container, Image, Heading, Text } from '@chakra-ui/react';
+import { Box, Container, Flex, Image, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useBlogPost } from '../queries/useBlogPost';
 import { Theme, ColorKey } from '../theme';
@@ -101,13 +101,13 @@ export const BlogPost = () => {
 			) : (
 				<Box>
 					{isError ? (
-						<Text>Error fetching blog!</Text>
+						<Text>Error fetching blog post!</Text>
 					) : (
 						<>
 							{blog && (
 								<>
 									<PageBlockWithBackground imageUrl={blog.blog.image.url}>
-										<Heading mt={10} size="md">
+										<Heading mt={10} mb={-2.5} size="md">
 											By the Gigover Team
 										</Heading>
 										<Heading maxW={{ base: '90%', md: '70%' }} size="2xl">

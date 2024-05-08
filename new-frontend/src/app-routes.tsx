@@ -16,7 +16,6 @@ export const AppRoutes = (): JSX.Element => {
 				<Route path="features" element={<Features />} />
 				<Route path="pricing" element={<Pricing />} />
 				<Route path="blog" element={<BlogPosts />} />
-				{/* This could be a sub route - but I have to add Outlet to make it work. Let's keep it like this for now! */}
 				<Route path="blog/:id/:slug" element={<BlogPost />} />
 				<Route path="mobile-app" element={<MobileApp />} />
 				<Route path="user-manual" element={<UserManual />} />
