@@ -17,7 +17,7 @@ export const Hero = ({ data }: any) => {
 			</Box>
 			<Box marginTop={10}>
 				<Flex justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-					<Button size={'xl'}>Start free trial</Button>
+					<Button>Start free trial</Button>
 					<Text marginTop={4}>No credit card needed</Text>
 				</Flex>
 			</Box>
