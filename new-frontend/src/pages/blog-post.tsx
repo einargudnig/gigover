@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Image, Heading, Text } from '@chakra-ui/react';
+import { Box, Container, Image, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useBlogPost } from '../queries/useBlogPost';
 import { Theme, ColorKey } from '../theme';

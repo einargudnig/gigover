@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Image, Icon } from '@chakra-ui/react';
+import { Box, Flex, Text, Image } from '@chakra-ui/react';
 import { Theme } from '../theme';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Text, VStack, Image, Box, Flex, Spacer, Heading } from '@chakra-ui/react';
+import { Text, VStack, Image, Box, Flex, Spacer, Heading, Button } from '@chakra-ui/react';
 import { usePage } from '../queries/usePage';
 import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
@@ -24,7 +24,35 @@ export const Features = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					<Box marginTop={10}>
+					{/* <Box marginTop={10}>
+						<Flex flexDirection={['column', 'row']}>
+							<Box>
+								<Flex
+									flexDirection={'column'}
+									justifyContent={'center'}
+									textAlign={'center'}
+								>
+									<Heading>
+										Managing your work has never been easier, faster or more
+										efficient
+									</Heading>
+									<Text>Lorem ipsum</Text>
+									<Button size={'md'}>Start a free trial</Button>
+								</Flex>
+							</Box>
+							<Spacer />
+							<Box marginLeft={[0, 10]}>
+								<Image
+									src={'https://placehold.co/400x200'}
+									alt="Project dashboard"
+									width={['400px', '800px']}
+									height={['200px', '400px']}
+									rounded={'md'}
+								/>
+							</Box>
+						</Flex>
+					</Box> */}
+					<Box marginTop={10} paddingY={[0, 10]}>
 						{data?.page.pageBlocks.slice(1).map((block) => (
 							<React.Fragment key={block.id}>
 								<Flex flexDir={['column-reverse', 'row']}>
@@ -32,7 +60,7 @@ export const Features = (): JSX.Element => {
 										<Image
 											src={block.image?.url}
 											alt="Project dashboard"
-											width={['400px', '800px']}
+											width={['400px', '700px']}
 											height={['200px', '400px']}
 											rounded={'md'}
 										/>
