@@ -64,7 +64,9 @@ export const Navbar = () => {
 								Log in
 							</Button>
 						</HStack>
-						<Button colorScheme="yellow">Sign up</Button>
+						<Button colorScheme="yellow">
+							<Link to="https://web.gigover.com/">Sign up</Link>
+						</Button>
 						<Box
 							display={{
 								base: 'inline-flex',
@@ -117,7 +119,7 @@ export const Navbar = () => {
 									Log in
 								</Button>
 								<Button w="full" variant="solid" colorScheme="yellow">
-									Sign up
+									<Link to="https://web.gigover.com/">Sign up</Link>
 								</Button>
 							</VStack>
 						</Box>
