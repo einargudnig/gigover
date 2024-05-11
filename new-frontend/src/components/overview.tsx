@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Image, VStack } from '@chakra-ui/react';
+import { Box, Flex, Text, Image, VStack, Heading } from '@chakra-ui/react';
 
 type ContentBlock = {
 	id: number;
@@ -62,6 +62,11 @@ export const Overview = () => {
 
 	return (
 		<Box marginTop={[12, 36]} paddingX={'6px'}>
+			<Box marginY={10}>
+				<Heading textAlign={'center'} fontSize="4xl">
+					How Gigover helps you succeed
+				</Heading>
+			</Box>
 			<VStack spacing={10}>
 				{contentBlocks.map((block, index) => (
 					<Flex

@@ -4,7 +4,12 @@ import { Theme } from '../theme';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Testimonials = ({ data }: any) => {
 	return (
-		<Box marginTop={24} marginBottom={10} backgroundColor={Theme.backgroundColors.yellow}>
+		<Box
+			marginTop={10}
+			marginBottom={10}
+			backgroundColor={Theme.backgroundColors.yellow}
+			rounded={'md'}
+		>
 			<Flex
 				flexDirection={['column-reverse', 'row']}
 				justifyContent={'center'}

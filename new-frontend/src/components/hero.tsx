@@ -1,14 +1,13 @@
-import { Box, Button, Flex, Text, Image } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, Image, Heading } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Hero = ({ data }: any) => {
 	console.log('in hero', { data });
 	return (
 		<Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'}>
-			<Box>
-				<Text fontSize={['3xl', '4xl']} textAlign={'center'}>
-					{data?.heading}
-				</Text>
+			<Box textAlign={'center'}>
+				<Heading as="h1">{data?.heading}</Heading>
 			</Box>
 			<Box marginTop={10}>
 				<Flex justifyContent={'center'} textAlign={'center'}>
@@ -17,12 +16,21 @@ export const Hero = ({ data }: any) => {
 			</Box>
 			<Box marginTop={10}>
 				<Flex justifyContent={'center'} flexDirection={'column'} alignItems={'center'}>
-					<Button>Start free trial</Button>
+					<Button>
+						<Link to="https://web.gigover.com/">Start free trial</Link>
+					</Button>
 					<Text marginTop={4}>No credit card needed</Text>
 				</Flex>
 			</Box>
 			<Box marginTop={10}>
-				<Image src={data?.image.url} rounded="md" alt="App screenshot" />
+				<Flex justifyContent={'center'} alignItems={'center'}>
+					<Image
+						src={data?.image.url}
+						rounded="md"
+						alt="Mobile and desktop screenshot"
+						width={['100%', '85%']}
+					/>
+				</Flex>
 			</Box>
 		</Flex>
 	);

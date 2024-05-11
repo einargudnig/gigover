@@ -1,4 +1,5 @@
 import { Box, Text, Flex, Button } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
 export const Cta = () => {
 	return (
@@ -18,7 +19,9 @@ export const Cta = () => {
 				>
 					Help your maintenance and construction work stay on schedule and on budget!
 				</Text>
-				<Button size={'lg'}>Start free trial</Button>
+				<Button size={'lg'}>
+					<Link to="https://web.gigover.com/"> Start free trial</Link>
+				</Button>
 			</Flex>
 		</Box>
 	);
