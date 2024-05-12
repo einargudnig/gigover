@@ -38,9 +38,6 @@ export const Pricing = (): JSX.Element => {
 
 	return (
 		<>
-			<Heading as="h1" textAlign={'center'}>
-				{data?.page.name}
-			</Heading>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -85,6 +82,14 @@ export const Pricing = (): JSX.Element => {
 												</Text>
 											</HStack>
 										</Box>
+										<Text
+											fontSize="lg"
+											color="gray.500"
+											px={12}
+											marginBottom={4}
+										>
+											{pricePlan?.description}
+										</Text>
 										<VStack
 											// eslint-disable-next-line react-hooks/rules-of-hooks
 											bg={useColorModeValue('gray.50', 'gray.700')}

@@ -15,9 +15,6 @@ export const Features = (): JSX.Element => {
 
 	return (
 		<>
-			<Heading as="h1" textAlign={'center'}>
-				{data?.page.name}
-			</Heading>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -52,7 +49,7 @@ export const Features = (): JSX.Element => {
 							</Box>
 						</Flex>
 					</Box> */}
-					<Box marginTop={10} paddingY={[0, 10]}>
+					<Box paddingY={[0, 10]}>
 						{data?.page.pageBlocks.slice(1).map((block) => (
 							<React.Fragment key={block.id}>
 								<Flex flexDir={['column-reverse', 'row']}>
