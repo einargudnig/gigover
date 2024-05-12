@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { Text, VStack, Image, Box, Flex, Spacer, Heading } from '@chakra-ui/react';
+import { Text, VStack, Image, Box, Flex, Spacer } from '@chakra-ui/react';
 import { usePage } from '../queries/usePage';
 import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
