@@ -335,7 +335,7 @@ export const Pricing = (): JSX.Element => {
 
 const PriceWrapper = ({ children }: { children: ReactNode }) => {
 	return (
-		<Box mb={4} shadow="base" borderWidth={'1px'}>
+		<Box mb={4} shadow="base" borderWidth={'1px'} rounded={'md'}>
 			{children}
 		</Box>
 	);
