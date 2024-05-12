@@ -8,12 +8,16 @@ export const Layout = () => {
 		<Flex direction={'column'} flex="1">
 			<Navbar />
 			<Flex
-				as="main"
-				direction={'column'}
-				flex="1"
+				// as="main"
+				// direction={'column'}
+				// flex="1"
+				// paddingX={['12px', '124px']}
+				// justifyContent={'center'}
+				// alignItems={'center'}
+				flexGrow={1} // This will make the main content grow and take available space
 				paddingX={['12px', '124px']}
-				justifyContent={'center'}
-				alignItems={'center'}
+				justifyContent="center"
+				alignItems="center"
 			>
 				<Outlet />
 			</Flex>
