@@ -6,6 +6,7 @@ import { ChakraThemeColors } from './theme';
 import App from './App.tsx';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { IntercomProvider } from 'react-use-intercom';
 
 const ChakraTheme = extendTheme({
 	colors: ChakraThemeColors,
@@ -54,17 +55,21 @@ const ChakraTheme = extendTheme({
 	}
 });
 
+const INTERCOM_APP_ID = 'jsp3pks1';
+
 // Create a client
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<BrowserRouter>
-			<QueryClientProvider client={queryClient}>
-				<ChakraProvider theme={ChakraTheme}>
-					<App />
-				</ChakraProvider>
-			</QueryClientProvider>
-		</BrowserRouter>
+		<IntercomProvider appId={INTERCOM_APP_ID} autoBoot={true}>
+			<BrowserRouter>
+				<QueryClientProvider client={queryClient}>
+					<ChakraProvider theme={ChakraTheme}>
+						<App />
+					</ChakraProvider>
+				</QueryClientProvider>
+			</BrowserRouter>
+		</IntercomProvider>
 	</React.StrictMode>
 );
