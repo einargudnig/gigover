@@ -12,7 +12,7 @@
 		"postbuild": "react-snap"
 	},
 	"reactSnap": {
-		"source": "dist"
+		"source": "/"
 	},
 	"dependencies": {
 		"@chakra-ui/icons": "^2.1.1",
