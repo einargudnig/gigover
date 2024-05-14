@@ -19,6 +19,7 @@ import { FileSystemContext } from './context/FileSystemContext';
 import { FileSystemService } from './services/FileSystemService';
 import { pdfjs } from 'react-pdf';
 import ErrorBoundary from './ErrorBoundary';
+import { NewLogin } from './pages/new-login';
 
 // We need this for loading PDF viewer on production.
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -106,7 +107,8 @@ const App = ({
 				</QueryParamProvider>
 			) : (
 				<Routes>
-					<Route path={'*'} element={<Login />} />
+					{/* <Route path={'*'} element={<Login />} /> */}
+					<Route path={'*'} element={<NewLogin />} />
 				</Routes>
 			)}
 		</Router>
