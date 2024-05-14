@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { ChakraThemeColors } from './theme';
 import App from './App.tsx';
@@ -79,14 +80,16 @@ getAnalytics(app);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
-		<IntercomProvider appId={INTERCOM_APP_ID} autoBoot={true}>
-			<BrowserRouter>
-				<QueryClientProvider client={queryClient}>
-					<ChakraProvider theme={ChakraTheme}>
-						<App />
-					</ChakraProvider>
-				</QueryClientProvider>
-			</BrowserRouter>
-		</IntercomProvider>
+		<HelmetProvider>
+			<IntercomProvider appId={INTERCOM_APP_ID} autoBoot={true}>
+				<BrowserRouter>
+					<QueryClientProvider client={queryClient}>
+						<ChakraProvider theme={ChakraTheme}>
+							<App />
+						</ChakraProvider>
+					</QueryClientProvider>
+				</BrowserRouter>
+			</IntercomProvider>
+		</HelmetProvider>
 	</React.StrictMode>
 );

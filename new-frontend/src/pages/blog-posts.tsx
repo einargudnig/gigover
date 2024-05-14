@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { HStack, Text, Image, Container, Heading, Box } from '@chakra-ui/react';
 import { Blog, useBlogPosts } from '../queries/useBlogPosts';
 import { Center } from '../components/center';
@@ -10,7 +11,10 @@ export const BlogPosts = (): JSX.Element => {
 
 	return (
 		<>
-			<Heading as="h1">Blog</Heading>
+			<Helmet>
+				<title>Gigover | Blog</title>
+				<link rel="canonical" href="https://www.gigover.com/blog" />
+			</Helmet>
 			{isLoading ? (
 				<Box width="100%" height="100%">
 					<Center>

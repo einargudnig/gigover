@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { Box, Container, Image, Heading, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { useBlogPost } from '../queries/useBlogPost';
@@ -94,6 +95,10 @@ export const BlogPost = () => {
 
 	return (
 		<>
+			<Helmet>
+				<title>Gigover | Blog</title>
+				<link rel="canonical" href={`https://www.gigover.com/${id}/${slug}`} />
+			</Helmet>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { Text, VStack, Image, Box, Flex, Spacer } from '@chakra-ui/react';
 import { usePage } from '../queries/usePage';
@@ -15,6 +16,10 @@ export const Features = (): JSX.Element => {
 
 	return (
 		<>
+			<Helmet>
+				<title>Gigover | Features</title>
+				<link rel="canonical" href="https://www.gigover.com/features" />
+			</Helmet>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

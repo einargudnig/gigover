@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import {
 	Container,
@@ -38,6 +39,10 @@ export const Pricing = (): JSX.Element => {
 
 	return (
 		<>
+			<Helmet>
+				<title>Gigover | Pricing</title>
+				<link rel="canonical" href="https://www.gigover.com/pricing" />
+			</Helmet>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
