@@ -18,7 +18,7 @@ export const Landing = () => {
 	return (
 		<>
 			<Helmet>
-				<title>Gigover</title>
+				<title>Gigover | Construction made easy</title>
 				<link rel="canonical" href="https://www.gigover.com/" />
 			</Helmet>
 			<Box marginTop={10}>
