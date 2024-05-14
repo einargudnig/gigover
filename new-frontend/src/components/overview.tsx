@@ -1,3 +1,9 @@
+import projectStatus from '/project-status.jpeg';
+import responsibilities from '/responsibilities.jpeg';
+import keepInLoop from '/keep-in-loop.jpeg';
+import timeTracker from '/time-tracker.jpeg';
+import teamCommunication from '/team-communication.jpeg';
+import controlOfData from '/control-of-data.jpeg';
 import { Box, Flex, Text, Image, VStack, Heading } from '@chakra-ui/react';
 
 type ContentBlock = {
@@ -12,7 +18,7 @@ export const Overview = () => {
 	const contentBlocks: ContentBlock[] = [
 		{
 			id: 1,
-			image: '/project-status.jpeg',
+			image: projectStatus,
 			alt: 'App screenshot',
 			title: 'Avoid guesswork about project status',
 			description:
@@ -20,7 +26,7 @@ export const Overview = () => {
 		},
 		{
 			id: 2,
-			image: '/responsibilities.jpeg',
+			image: responsibilities,
 			alt: 'App screenshot',
 			title: "Clarify everyone's responsibilities",
 			description:
@@ -28,7 +34,7 @@ export const Overview = () => {
 		},
 		{
 			id: 3,
-			image: '/keep-in-loop.jpeg',
+			image: keepInLoop,
 			alt: 'App screenshot',
 			title: 'Keep everyone in the loop',
 			description:
@@ -36,7 +42,7 @@ export const Overview = () => {
 		},
 		{
 			id: 4,
-			image: '/time-tracker.jpeg',
+			image: timeTracker,
 			alt: 'App screenshot',
 			title: 'Simplify time tracking and payroll',
 			description:
@@ -44,7 +50,7 @@ export const Overview = () => {
 		},
 		{
 			id: 5,
-			image: '/team-communication.jpeg',
+			image: teamCommunication,
 			alt: 'App screenshot',
 			title: 'Improve team communication',
 			description:
@@ -52,7 +58,7 @@ export const Overview = () => {
 		},
 		{
 			id: 6,
-			image: '/control-of-data.jpeg',
+			image: controlOfData,
 			alt: 'App screenshot',
 			title: 'Take control of your data',
 			description:
