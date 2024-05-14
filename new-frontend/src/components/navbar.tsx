@@ -30,16 +30,36 @@ export const Navbar = () => {
 				py={4}
 			>
 				<Flex alignItems="center" justifyContent="space-between" mx="auto">
-					<Flex>
-						<chakra.a
-							href="/"
-							title="Gigover Home Page"
-							display="flex"
-							alignItems="center"
-						>
-							<Logo color="black" scale={0.7} />
-							<VisuallyHidden>Gigover</VisuallyHidden>
-						</chakra.a>
+					<Flex alignItems={'center'}>
+						<Box>
+							<chakra.a
+								href="/"
+								title="Gigover Home Page"
+								display="flex"
+								alignItems="center"
+							>
+								<Logo color="black" scale={0.7} />
+								<VisuallyHidden>Gigover</VisuallyHidden>
+							</chakra.a>
+						</Box>
+						<Box marginLeft={6}>
+							<HStack
+								display={{
+									base: 'none',
+									md: 'inline-flex'
+								}}
+							>
+								<Button variant="ghost" colorScheme="black">
+									<Link to="/features">Features</Link>
+								</Button>
+								<Button variant="ghost" colorScheme="black">
+									<Link to="/pricing">Pricing</Link>
+								</Button>
+								<Button variant="ghost" colorScheme="black">
+									<Link to="/blog">Blog</Link>
+								</Button>
+							</HStack>
+						</Box>
 					</Flex>
 					<HStack display="flex" alignItems="center" spacing={1}>
 						<HStack
@@ -51,15 +71,6 @@ export const Navbar = () => {
 								md: 'inline-flex'
 							}}
 						>
-							<Button variant="ghost" colorScheme="black">
-								<Link to="/features">Features</Link>
-							</Button>
-							<Button variant="ghost" colorScheme="black">
-								<Link to="/pricing">Pricing</Link>
-							</Button>
-							<Button variant="ghost" colorScheme="black">
-								<Link to="/blog">Blog</Link>
-							</Button>
 							<Button variant="ghost" colorScheme="black">
 								Log in
 							</Button>
