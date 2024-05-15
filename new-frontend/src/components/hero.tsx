@@ -1,5 +1,6 @@
 import { Box, Button, Flex, Text, Image, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import hero from '/hero.png';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Hero = ({ data }: any) => {
@@ -22,10 +23,11 @@ export const Hero = ({ data }: any) => {
 					<Text marginTop={4}>No credit card needed</Text>
 				</Flex>
 			</Box>
-			<Box marginTop={10}>
+			<Box>
 				<Flex justifyContent={'center'} alignItems={'center'}>
 					<Image
-						src={data?.image.url}
+						// src={data?.image.url}
+						src={hero}
 						rounded="md"
 						alt="Mobile and desktop screenshot"
 						width={['100%', '85%']}

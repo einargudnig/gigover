@@ -28,6 +28,9 @@ export const Navbar = () => {
 					sm: 4
 				}}
 				py={4}
+				position="sticky" // This makes the header stick at the top
+				top={0} // Stick at 0px from the top
+				zIndex={20} // Ensures the header is above other content
 			>
 				<Flex alignItems="center" justifyContent="space-between" mx="auto">
 					<Flex alignItems={'center'}>
