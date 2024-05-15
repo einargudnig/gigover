@@ -26,7 +26,7 @@ import {
 export const NewLogin = (): JSX.Element => {
 	return (
 		<Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }}>
-			<Tabs isFitted variant="enclosed">
+			<Tabs isFitted variant="enclosed" border={'1px'} rounded={'md'} shadow={'md'}>
 				<TabList mb="1em">
 					<Tab>Log In</Tab>
 					<Tab>Sign Up</Tab>
@@ -71,9 +71,12 @@ const LoginForm = () => (
 						<Input id="email" type="email" />
 					</FormControl>
 					{/* Password field can be added here */}
+					<FormControl>
+						<FormLabel htmlFor="password">Password</FormLabel>
+						<Input id="password" type="password" />
+					</FormControl>
 				</Stack>
 				<HStack justify="space-between">
-					<Checkbox defaultChecked>Remember me</Checkbox>
 					<Button variant="text" size="sm">
 						Forgot password?
 					</Button>
