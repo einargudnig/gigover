@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text, Image, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import hero from '/hero.png';
+import hero from '/hero1.png';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Hero = ({ data }: any) => {
