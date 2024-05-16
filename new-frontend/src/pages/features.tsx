@@ -5,6 +5,7 @@ import { Text, VStack, Image, Box, Flex, Spacer } from '@chakra-ui/react';
 import { usePage } from '../queries/usePage';
 import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
+import { FAQ } from '../components/faq';
 
 export const Features = (): JSX.Element => {
 	const location = useLocation();
@@ -83,6 +84,9 @@ export const Features = (): JSX.Element => {
 								</Flex>
 							</React.Fragment>
 						))}
+						<Box marginTop={20}>
+							<FAQ />
+						</Box>
 					</Box>
 				</>
 			)}

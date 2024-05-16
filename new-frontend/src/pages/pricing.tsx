@@ -27,6 +27,7 @@ import { Center } from '../components/center';
 import { usePage } from '../queries/usePage';
 import { PricePlan, PageBlock } from '../types';
 import { ReactNode } from 'react';
+import { FAQ } from '../components/faq';
 
 export const Pricing = (): JSX.Element => {
 	const location = useLocation();
@@ -331,6 +332,9 @@ export const Pricing = (): JSX.Element => {
 								</Box>
 							</Flex>
 						</Flex>
+						<Box marginTop={20}>
+							<FAQ />
+						</Box>
 					</Container>
 				</>
 			)}
