@@ -1,4 +1,4 @@
-import { Box, HStack, VStack, Text, Flex } from '@chakra-ui/react';
+import { Box, VStack, Text, Flex } from '@chakra-ui/react';
 import { TaskManagementFeatureIcon } from './icons/task-management';
 import { TimeTrackingFeatureIcon } from './icons/time-tracking';
 import { EstimatesAndReportsFeatureIcon } from './icons/estimates';
