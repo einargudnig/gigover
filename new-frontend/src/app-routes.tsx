@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './components/layout';
 import { Landing } from './pages/landing';
-import { FeaturesComp } from './pages/features';
+import { Features } from './pages/features';
 import { Pricing } from './pages/pricing';
 import { BlogPosts } from './pages/blog-posts';
 import { BlogPost } from './pages/blog-post';
@@ -13,7 +13,7 @@ export const AppRoutes = (): JSX.Element => {
 		<Routes>
 			<Route path="/" element={<Layout />}>
 				<Route index element={<Landing />} />
-				<Route path="features" element={<FeaturesComp />} />
+				<Route path="features" element={<Features />} />
 				<Route path="pricing" element={<Pricing />} />
 				<Route path="blog" element={<BlogPosts />} />
 				<Route path="blog/:id/:slug" element={<BlogPost />} />

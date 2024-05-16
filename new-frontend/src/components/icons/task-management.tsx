@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const TaskManagementFeatureIcon = (): JSX.Element => (
 	<svg
 		width="138"

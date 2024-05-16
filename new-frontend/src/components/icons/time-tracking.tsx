@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const TimeTrackingFeatureIcon = (): JSX.Element => (
 	<svg
 		width="110"
