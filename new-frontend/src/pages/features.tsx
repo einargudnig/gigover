@@ -5,6 +5,7 @@ import { Text, VStack, Image, Box, Flex, Spacer } from '@chakra-ui/react';
 import { usePage } from '../queries/usePage';
 import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
+import { FeaturesSection } from '../components/features-section';
 import { FAQ } from '../components/faq';
 
 export const Features = (): JSX.Element => {
@@ -56,6 +57,11 @@ export const Features = (): JSX.Element => {
 						</Flex>
 					</Box> */}
 					<Box paddingY={[0, 10]}>
+						<Box marginY={10} p={4}>
+							<VStack>
+								<FeaturesSection />
+							</VStack>
+						</Box>
 						{data?.page.pageBlocks.slice(1).map((block) => (
 							<React.Fragment key={block.id}>
 								<Flex flexDir={['column-reverse', 'row']}>
