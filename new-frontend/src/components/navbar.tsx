@@ -52,13 +52,25 @@ export const Navbar = () => {
 									md: 'inline-flex'
 								}}
 							>
-								<Button variant="ghost" colorScheme="black">
+								<Button
+									variant="ghost"
+									colorScheme="black"
+									_hover={{ textColor: 'yellow.500' }}
+								>
 									<Link to="/features">Features</Link>
 								</Button>
-								<Button variant="ghost" colorScheme="black">
+								<Button
+									variant="ghost"
+									colorScheme="black"
+									_hover={{ textColor: 'yellow.500' }}
+								>
 									<Link to="/pricing">Pricing</Link>
 								</Button>
-								<Button variant="ghost" colorScheme="black">
+								<Button
+									variant="ghost"
+									colorScheme="black"
+									_hover={{ textColor: 'yellow.500' }}
+								>
 									<Link to="/blog">Blog</Link>
 								</Button>
 							</HStack>
@@ -74,11 +86,15 @@ export const Navbar = () => {
 								md: 'inline-flex'
 							}}
 						>
-							<Button variant="ghost" colorScheme="black">
+							<Button
+								variant="ghost"
+								colorScheme="black"
+								_hover={{ textColor: 'yellow.500' }}
+							>
 								Log in
 							</Button>
 						</HStack>
-						<Button colorScheme="yellow">
+						<Button colorScheme="yellow" _hover={{ bg: 'yellow.900' }}>
 							<Link to="https://web.gigover.com/">Sign up</Link>
 						</Button>
 						<Box

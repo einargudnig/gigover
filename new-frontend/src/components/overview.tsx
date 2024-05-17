@@ -69,8 +69,8 @@ export const Overview = () => {
 	return (
 		<Box marginTop={[12, 36]} paddingX={'6px'}>
 			<Box marginY={10}>
-				<Heading textAlign={'center'} fontSize="4xl">
-					How Gigover helps you succeed
+				<Heading textAlign={'center'} fontSize={'30px'}>
+					Help your maintenance and construction projects stay on schedule and budget
 				</Heading>
 			</Box>
 			<VStack spacing={10}>
@@ -79,10 +79,11 @@ export const Overview = () => {
 						key={block.id}
 						flexDirection={{
 							base: 'column',
-							md: index % 2 === 0 ? 'row-reverse' : 'row'
+							md: 'row'
 						}}
 						justifyContent={'space-between'}
 						alignItems={'center'}
+						marginTop={'72px'}
 					>
 						<Box>
 							<Image
@@ -90,9 +91,10 @@ export const Overview = () => {
 								alt={block.alt}
 								rounded="md"
 								mb={{ base: 5, md: 0 }}
+								width={['100%', '445px']}
 							/>
 						</Box>
-						<Box textAlign={'center'} paddingX={{ md: 10 }}>
+						<Box textAlign={'center'} paddingX={{ md: 10 }} width={['635px', '635px']}>
 							<Text fontSize="2xl" as="b">
 								{block.title}
 							</Text>

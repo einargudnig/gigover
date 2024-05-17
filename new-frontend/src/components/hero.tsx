@@ -11,8 +11,14 @@ export const Hero = ({ data }: any) => {
 				<Heading as="h1">{data?.heading}</Heading>
 			</Box>
 			<Box marginTop={10}>
-				<Flex justifyContent={'center'} textAlign={'center'}>
-					<Text fontSize="2xl">{data?.content}</Text>
+				<Flex flexDirection={'column'} justifyContent={'center'} textAlign={'center'}>
+					{/* <Text fontSize="2xl">{data?.content}</Text> */}
+					<Text fontSize="2xl">
+						Simplify your project management from initiation to closing.
+					</Text>
+					<Text fontSize="2xl">
+						Streamline your process and ensure efficient execution at each stage.
+					</Text>
 				</Flex>
 			</Box>
 			<Box marginTop={10}>
@@ -20,7 +26,9 @@ export const Hero = ({ data }: any) => {
 					<Button>
 						<Link to="https://web.gigover.com/">Start free trial</Link>
 					</Button>
-					<Text marginTop={4}>No credit card needed</Text>
+					<Text fontSize={'12px'} marginTop={4}>
+						No credit card required
+					</Text>
 				</Flex>
 			</Box>
 			<Box>
