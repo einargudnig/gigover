@@ -67,7 +67,7 @@ export const Overview = () => {
 	];
 
 	return (
-		<Box marginTop={[12, 36]} paddingX={'6px'}>
+		<Box marginTop={[12, 36]} paddingX={'240px'}>
 			<Box marginY={10}>
 				<Heading textAlign={'center'} fontSize={'30px'}>
 					Help your maintenance and construction projects stay on schedule and budget

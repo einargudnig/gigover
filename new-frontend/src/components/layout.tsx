@@ -15,7 +15,7 @@ export const Layout = () => {
 				// justifyContent={'center'}
 				// alignItems={'center'}
 				flexGrow={1} // This will make the main content grow and take available space
-				paddingX={['12px', '124px']}
+				flexDirection={'column'}
 				justifyContent="center"
 				alignItems="center"
 			>

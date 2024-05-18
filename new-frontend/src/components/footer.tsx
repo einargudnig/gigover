@@ -8,7 +8,7 @@ import { AppButtons } from './icons/app-buttons';
 
 export const Footer = () => {
 	return (
-		<Box as="footer" marginTop={10} paddingY={8} paddingX={8} backgroundColor={'black'}>
+		<Box as="footer" paddingY={8} paddingX={8} backgroundColor={'black'}>
 			<Flex flexDirection={['column-reverse', 'row']} alignItems={'center'}>
 				<Box marginTop={[6, 0]}>
 					<Flex flexDirection={'column'} alignItems={'center'}>
