@@ -20,8 +20,10 @@ export const Testimonials = ({ data }: any) => {
 							{data?.testimonials[0].testimonial}
 						</Text>
 						<Box marginTop={[6, 2]} marginBottom={[4, 0]}>
-							<Text>{data?.testimonials[0].name}</Text>
-							<Text as="em">{data?.testimonials[0].company}</Text>
+							<Flex flexDir={'column'}>
+								<Text as="b">{data?.testimonials[0].name}</Text>
+								<Text as="em">{data?.testimonials[0].company}</Text>
+							</Flex>
 						</Box>
 					</Flex>
 				</Box>
