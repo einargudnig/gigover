@@ -67,14 +67,14 @@ export const Overview = () => {
 	];
 
 	return (
-		<Box marginTop={[12, 36]} paddingX={'240px'}>
+		<Box marginTop={[12, 36]} paddingX={['10px', '240px']}>
 			<Box marginY={10}>
 				<Heading textAlign={'center'} fontSize={'30px'}>
 					Help your maintenance and construction projects stay on schedule and budget
 				</Heading>
 			</Box>
 			<VStack spacing={10}>
-				{contentBlocks.map((block, index) => (
+				{contentBlocks.map((block) => (
 					<Flex
 						key={block.id}
 						flexDirection={{
@@ -91,14 +91,15 @@ export const Overview = () => {
 								alt={block.alt}
 								rounded="md"
 								mb={{ base: 5, md: 0 }}
-								width={['100%', '445px']}
+								width={['300px', '445px']}
+								height={['180px', '288px']}
 							/>
 						</Box>
-						<Box textAlign={'center'} paddingX={{ md: 10 }} width={['635px', '635px']}>
+						<Box textAlign={'center'} paddingX={{ md: 10 }} width={['100%', '635px']}>
 							<Text fontSize="2xl" as="b">
 								{block.title}
 							</Text>
-							<Text fontSize="xl" mt={4}>
+							<Text fontSize="16px" mt={4}>
 								{block.description}
 							</Text>
 						</Box>

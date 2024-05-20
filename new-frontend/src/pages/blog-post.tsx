@@ -104,7 +104,7 @@ export const BlogPost = () => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<Box>
+				<Box paddingX={['10px', '240px']}>
 					{isError ? (
 						<Text>Error fetching blog post!</Text>
 					) : (

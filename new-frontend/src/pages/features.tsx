@@ -28,35 +28,7 @@ export const Features = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					{/* <Box marginTop={10}>
-						<Flex flexDirection={['column', 'row']}>
-							<Box>
-								<Flex
-									flexDirection={'column'}
-									justifyContent={'center'}
-									textAlign={'center'}
-								>
-									<Heading>
-										Managing your work has never been easier, faster or more
-										efficient
-									</Heading>
-									<Text>Lorem ipsum</Text>
-									<Button size={'md'}>Start a free trial</Button>
-								</Flex>
-							</Box>
-							<Spacer />
-							<Box marginLeft={[0, 10]}>
-								<Image
-									src={'https://placehold.co/400x200'}
-									alt="Project dashboard"
-									width={['400px', '800px']}
-									height={['200px', '400px']}
-									rounded={'md'}
-								/>
-							</Box>
-						</Flex>
-					</Box> */}
-					<Box paddingY={[0, 10]}>
+					<Box paddingY={[0, 10]} paddingX={['10px', '240px']}>
 						<Box marginY={10} p={4}>
 							<VStack>
 								<FeaturesSection />
@@ -84,7 +56,7 @@ export const Features = (): JSX.Element => {
 											<Text fontSize={'2xl'} as="b">
 												{block.heading}
 											</Text>
-											<Text>{block.content}</Text>
+											<Text fontSize={'16px'}>{block.content}</Text>
 										</VStack>
 									</Box>
 								</Flex>

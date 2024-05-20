@@ -50,7 +50,7 @@ export const Pricing = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					<Container maxW={'100%'} p="2">
+					<Container maxW={'100%'} paddingX={['10px', '240px']}>
 						<Box py={12}>
 							<VStack spacing={2} textAlign="center">
 								<Heading as="h1" fontSize="4xl">
@@ -304,35 +304,8 @@ export const Pricing = (): JSX.Element => {
 									</Flex>
 								</Box>
 							</Flex>
-							<Flex>
-								<Box
-									justifyContent={'center'}
-									alignItems={'center'}
-									marginTop={20}
-									p={4}
-									border="1px"
-									rounded={'md'}
-								>
-									<HStack>
-										<Text>Unlimited seats/buildings: </Text>
-										<Text as="b">$2,500/month</Text>
-									</HStack>
-									<HStack>
-										<Text>Suppliers/Vendors/Stores:</Text>
-										<Text as="b">
-											$1,500/month or 2.5$ of total price per successful bid -
-											pay per sale (PPS)
-										</Text>
-									</HStack>
-									<Text marginTop={6}>
-										App users in iOS or Android use the app for free. You can
-										find the app on the App Store (iOS) or Google Play Store
-										(Android)
-									</Text>
-								</Box>
-							</Flex>
 						</Flex>
-						<Box marginTop={20}>
+						<Box marginTop={20} marginBottom={10}>
 							<FAQ />
 						</Box>
 					</Container>

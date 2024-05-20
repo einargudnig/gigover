@@ -22,7 +22,7 @@ export const BlogPosts = (): JSX.Element => {
 					</Center>
 				</Box>
 			) : (
-				<Container maxW={'7xl'} p="2">
+				<Container maxW={'7xl'} paddingX={['10px', '240px']}>
 					{isError ? (
 						<Text>No blog post found!</Text>
 					) : (

@@ -21,6 +21,7 @@ export const Navbar = () => {
 	return (
 		<React.Fragment>
 			<chakra.header
+				as="nav"
 				bg={'white'}
 				w="full"
 				px={{
@@ -33,8 +34,8 @@ export const Navbar = () => {
 				zIndex={20} // Ensures the header is above other content
 			>
 				<Flex alignItems="center" justifyContent="space-between" mx="auto">
-					<Flex alignItems={'center'}>
-						<Box>
+					<Flex alignItems={'center'} justifyContent={'center'}>
+						<Box paddingX={'20px'}>
 							<chakra.a
 								href="/"
 								title="Gigover Home Page"
