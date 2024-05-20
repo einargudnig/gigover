@@ -4,6 +4,7 @@ import { Text, VStack, Image, Box, Flex, Spacer } from '@chakra-ui/react';
 import { usePage } from '../queries/usePage';
 import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
+import { FeaturePageHero } from '../components/feature-page-hero';
 import { FeaturesSection } from '../components/features-section';
 import { FAQ } from '../components/faq';
 import { Theme } from '../theme';
@@ -30,7 +31,8 @@ export const Features = (): JSX.Element => {
 			) : (
 				<>
 					<Box paddingTop={[0, 10]}>
-						<Box marginY={10} p={4} backgroundColor={'gray.200'}>
+						<FeaturePageHero />
+						<Box marginY={10} p={8} backgroundColor={'gray.200'}>
 							<VStack>
 								<FeaturesSection />
 							</VStack>

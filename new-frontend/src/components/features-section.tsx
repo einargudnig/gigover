@@ -5,7 +5,10 @@ import { EstimatesAndReportsFeatureIcon } from './icons/estimates';
 
 export const FeaturesSection = () => {
 	return (
-		<Box paddingX={['10px', '165px']}>
+		<Box paddingX={['10px', '165px']} marginBottom={10}>
+			<Text fontSize={'32px'} textAlign="center" marginY={10}>
+				Everything you need to run your maintenance and construction projects efficiently:
+			</Text>
 			<Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }} gap={3}>
 				<GridItem colSpan={1}>
 					<VStack>

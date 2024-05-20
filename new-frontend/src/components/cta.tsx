@@ -12,7 +12,7 @@ export const Cta = ({ bgColor, buttonColor }: { bgColor: string; buttonColor: st
 					Help your maintenance and construction work stay on schedule and on budget!
 				</Text>
 				<Button size={'lg'} colorScheme={buttonColor}>
-					<Link to="https://web.gigover.com/"> Start free trial</Link>
+					<Link to="https://web.gigover.com/">Start free trial</Link>
 				</Button>
 			</Flex>
 		</Box>
