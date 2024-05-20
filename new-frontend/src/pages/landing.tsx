@@ -25,7 +25,7 @@ export const Landing = () => {
 				<Hero data={heroData} />
 				{/* <LogoCloud /> */}
 				<Overview />
-				<Cta />
+				<Cta bgColor={'gray.200'} buttonColor="yellow" />
 				<Testimonials data={testimonialsData} />
 			</Box>
 		</>

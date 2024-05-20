@@ -5,11 +5,11 @@ import { EstimatesAndReportsFeatureIcon } from './icons/estimates';
 
 export const FeaturesSection = () => {
 	return (
-		<Box>
+		<Box paddingX={['10px', '165px']}>
 			<Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }} gap={3}>
 				<GridItem colSpan={1}>
 					<VStack>
-						<Box marginTop={[10, 0]} backgroundColor={'gray.200'} rounded={'md'} p={10}>
+						<Box marginTop={[10, 0]} rounded={'md'} p={10}>
 							<TaskManagementFeatureIcon />
 						</Box>
 						<Box marginTop={[4, 0]}>
@@ -26,7 +26,7 @@ export const FeaturesSection = () => {
 				</GridItem>
 				<GridItem colSpan={1}>
 					<VStack>
-						<Box marginTop={[10, 0]} backgroundColor={'gray.200'} rounded={'md'} p={10}>
+						<Box marginTop={[10, 0]} rounded={'md'} p={10}>
 							<TimeTrackingFeatureIcon />
 						</Box>
 						<Box marginTop={[4, 0]}>
@@ -44,7 +44,7 @@ export const FeaturesSection = () => {
 				</GridItem>
 				<GridItem colSpan={1}>
 					<VStack>
-						<Box marginTop={[10, 0]} backgroundColor={'gray.200'} rounded={'md'} p={10}>
+						<Box marginTop={[10, 0]} rounded={'md'} p={10}>
 							<EstimatesAndReportsFeatureIcon />
 						</Box>
 						<Box marginTop={[4, 0]}>

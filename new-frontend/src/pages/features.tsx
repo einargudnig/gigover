@@ -1,4 +1,3 @@
-import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { Text, VStack, Image, Box, Flex, Spacer } from '@chakra-ui/react';
@@ -7,6 +6,8 @@ import { LoadingSpinner } from '../components/loading-spinner';
 import { Center } from '../components/center';
 import { FeaturesSection } from '../components/features-section';
 import { FAQ } from '../components/faq';
+import { Theme } from '../theme';
+import { Cta } from '../components/cta';
 
 export const Features = (): JSX.Element => {
 	const location = useLocation();
@@ -28,21 +29,27 @@ export const Features = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					<Box paddingY={[0, 10]} paddingX={['10px', '240px']}>
-						<Box marginY={10} p={4}>
+					<Box paddingTop={[0, 10]}>
+						<Box marginY={10} p={4} backgroundColor={'gray.200'}>
 							<VStack>
 								<FeaturesSection />
 							</VStack>
 						</Box>
-						{data?.page.pageBlocks.slice(1).map((block) => (
-							<React.Fragment key={block.id}>
-								<Flex flexDir={['column-reverse', 'row']}>
+						{data?.page.pageBlocks.slice(1).map((block, index) => (
+							<Box key={block.id} paddingX={['10px', '165px']}>
+								<Flex
+									flexDirection={{
+										base: 'column',
+										md: index % 2 === 0 ? 'row-reverse' : 'row'
+									}}
+									paddingY={'36px'}
+								>
 									<Box marginTop={10}>
 										<Image
 											src={block.image?.url}
 											alt="Project dashboard"
-											width={['400px', '700px']}
-											height={['200px', '400px']}
+											width={['400px', '539px']}
+											height={['200px', '301px']}
 											rounded={'md'}
 										/>
 									</Box>
@@ -50,7 +57,7 @@ export const Features = (): JSX.Element => {
 									<Box
 										marginTop={20}
 										textAlign={'center'}
-										width={['100%', '40%']}
+										width={['100%', '446px']}
 									>
 										<VStack>
 											<Text fontSize={'2xl'} as="b">
@@ -60,11 +67,12 @@ export const Features = (): JSX.Element => {
 										</VStack>
 									</Box>
 								</Flex>
-							</React.Fragment>
+							</Box>
 						))}
-						<Box marginTop={20}>
+						<Box marginTop={20} marginX={['10px', '165px']}>
 							<FAQ />
 						</Box>
+						<Cta bgColor={Theme.backgroundColors.yellow} buttonColor="gray" />
 					</Box>
 				</>
 			)}

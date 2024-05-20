@@ -50,7 +50,7 @@ export const Pricing = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
-					<Container maxW={'100%'} paddingX={['10px', '240px']}>
+					<Container maxW={'100%'} paddingX={['10px', '165px']}>
 						<Box py={12}>
 							<VStack spacing={2} textAlign="center">
 								<Heading as="h1" fontSize="4xl">
