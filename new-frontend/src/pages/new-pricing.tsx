@@ -16,7 +16,10 @@ import {
 	ListIcon,
 	Button
 } from '@chakra-ui/react';
-import { CheckCircleIcon, CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon } from '@chakra-ui/icons';
+import { useLocation } from 'react-router-dom';
+import { usePage } from '../queries/usePage';
+import { PageBlock } from '../types';
 
 interface Feature {
 	id: number;
@@ -84,6 +87,14 @@ export const NewPricing = (): JSX.Element => {
 	const [value, setValue] = useState(0);
 	const tier = pricingTiers[value];
 
+	const location = useLocation();
+
+	const variable = {
+		slug: location.pathname.split('/')[1]
+	};
+	const { data, isLoading } = usePage(variable);
+	console.log({ data });
+
 	return (
 		<>
 			<Helmet>
@@ -106,74 +117,95 @@ export const NewPricing = (): JSX.Element => {
 							mt={6}
 							colorScheme="yellow"
 						>
-							<SliderTrack>
+							<SliderTrack boxSize={3} rounded={'md'}>
 								<SliderFilledTrack />
 							</SliderTrack>
-							<SliderThumb />
+							<SliderThumb boxSize={6} border={'1px'} />
 						</Slider>
 
-						<HStack width={'200px'} marginLeft={4}>
-							<Text>{tier.units}</Text>
-							<Text>units</Text>
+						<HStack width={'200px'} marginLeft={5} marginBottom={-6}>
+							<Text fontSize={'18px'}>{tier.units}</Text>
+							<Text fontSize={'18px'}>units</Text>
 						</HStack>
 					</Flex>
 				</Box>
 
-				<Box p={10} shadow="md" borderWidth="1px" borderRadius="md" marginBottom={8}>
+				<Box
+					p={10}
+					shadow="md"
+					borderWidth="1px"
+					borderTop={'4px'}
+					borderRadius="md"
+					marginBottom={10}
+				>
 					<Flex flexDir={'row'}>
 						<Box>
 							<Text mb={4}>Price per unit:</Text>
 							<Text fontSize="3xl" as="b">
 								${tier.price}
 							</Text>
-							<Text>
-								Short description of the plan: scale your business, increase
-								efficiency..{' '}
-							</Text>
+							<Text>Scale your business, increase efficiency.. </Text>
 							<Button marginTop={6}>Get started</Button>
 						</Box>
 						<Spacer />
 						<Box>
-							<List spacing={3} textAlign={'start'} px={12}>
-								<ListItem>
-									<HStack>
-										<ListIcon as={CheckIcon} />
-										<Text>Properties</Text>
-									</HStack>
-								</ListItem>
-								<ListItem>
-									<HStack>
-										<ListIcon as={CheckIcon} />
-										<Text>Tasks</Text>
-									</HStack>
-								</ListItem>
-								<ListItem>
-									<HStack>
-										<ListIcon as={CheckIcon} />
-										<Text>File storage</Text>
-									</HStack>
-								</ListItem>
-								<ListItem>
-									<HStack>
-										<ListIcon as={CheckIcon} />
-										<Text>Project managers</Text>
-									</HStack>
-								</ListItem>
-								<ListItem>
-									<HStack>
-										<ListIcon as={CheckIcon} />
-										<Text>Messaging and notifications</Text>
-									</HStack>
-								</ListItem>
-								<ListItem>
-									<HStack>
-										<ListIcon as={CheckIcon} />
-										<Text>Time clocks and reports</Text>
-									</HStack>
-								</ListItem>
-							</List>
+							<Flex flexDir={'column'} alignItems={'center'}>
+								<Text marginBottom={4}>What's included:</Text>
+								<List spacing={3} textAlign={'start'} px={12}>
+									<ListItem>
+										<HStack>
+											<ListIcon as={CheckIcon} />
+											<Text>Properties</Text>
+										</HStack>
+									</ListItem>
+									<ListItem>
+										<HStack>
+											<ListIcon as={CheckIcon} />
+											<Text>Tasks</Text>
+										</HStack>
+									</ListItem>
+									<ListItem>
+										<HStack>
+											<ListIcon as={CheckIcon} />
+											<Text>File storage</Text>
+										</HStack>
+									</ListItem>
+									<ListItem>
+										<HStack>
+											<ListIcon as={CheckIcon} />
+											<Text>Project managers</Text>
+										</HStack>
+									</ListItem>
+									<ListItem>
+										<HStack>
+											<ListIcon as={CheckIcon} />
+											<Text>Messaging and notifications</Text>
+										</HStack>
+									</ListItem>
+									<ListItem>
+										<HStack>
+											<ListIcon as={CheckIcon} />
+											<Text>Time clocks and reports</Text>
+										</HStack>
+									</ListItem>
+								</List>
+							</Flex>
 						</Box>
 					</Flex>
+				</Box>
+				<Box marginTop={[10, 0]} marginBottom={8} textAlign={'center'}>
+					{data?.page.pageBlocks.map((content: PageBlock) => (
+						<>
+							{content.content &&
+								content.content
+									.split(/(?<=\.)\s+/)
+									.map((sentence: string, index: number) => (
+										<Text key={index} mb={2} as="p">
+											{sentence}
+										</Text>
+									))}
+						</>
+					))}
 				</Box>
 			</Box>
 		</>
