@@ -43,7 +43,7 @@ export const Navbar = () => {
 									<VisuallyHidden>Gigover</VisuallyHidden>
 								</chakra.a>
 							</Box>
-							<Box marginLeft={6}>
+							<Box marginLeft={4}>
 								<HStack
 									display={{
 										base: 'none',
@@ -51,21 +51,21 @@ export const Navbar = () => {
 									}}
 								>
 									<Button
-										variant="ghost"
+										variant="link"
 										colorScheme="black"
 										_hover={{ textColor: 'yellow.500' }}
 									>
 										<Link to="/features">Features</Link>
 									</Button>
 									<Button
-										variant="ghost"
+										variant="link"
 										colorScheme="black"
 										_hover={{ textColor: 'yellow.500' }}
 									>
 										<Link to="/pricing">Pricing</Link>
 									</Button>
 									<Button
-										variant="ghost"
+										variant="link"
 										colorScheme="black"
 										_hover={{ textColor: 'yellow.500' }}
 									>
@@ -85,9 +85,10 @@ export const Navbar = () => {
 								}}
 							>
 								<Button
-									variant="ghost"
+									variant="link"
 									colorScheme="black"
 									_hover={{ textColor: 'yellow.500' }}
+									marginRight={2}
 								>
 									Log in
 								</Button>
@@ -137,16 +138,16 @@ export const Navbar = () => {
 										onClick={mobileNav.onClose}
 									/>
 
-									<Button w="full" variant="ghost" colorScheme="black">
+									<Button w="full" variant="link" colorScheme="black">
 										<Link to="/features">Features</Link>
 									</Button>
-									<Button w="full" variant="ghost" colorScheme="black">
+									<Button w="full" variant="link" colorScheme="black">
 										<Link to="/pricing">Pricing</Link>
 									</Button>
-									<Button w="full" variant="ghost" colorScheme="black">
+									<Button w="full" variant="link" colorScheme="black">
 										<Link to="/blog">Blog</Link>
 									</Button>
-									<Button w="full" variant="ghost" colorScheme="black">
+									<Button w="full" variant="link" colorScheme="black">
 										Log in
 									</Button>
 									<Button w="full" variant="solid" colorScheme="yellow">

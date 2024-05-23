@@ -149,7 +149,11 @@ export const NewPricing = (): JSX.Element => {
 						</Box>
 						<Spacer />
 						<Box>
-							<Flex flexDir={'column'} alignItems={'center'}>
+							<Flex
+								flexDir={'column'}
+								alignItems={'center'}
+								justifyContent={'flex-start'}
+							>
 								<Text marginBottom={4}>What's included:</Text>
 								<List spacing={3} textAlign={'start'} px={12}>
 									<ListItem>
