@@ -45,6 +45,7 @@ export const Navbar = () => {
 							</Box>
 							<Box marginLeft={4}>
 								<HStack
+									spacing={'24px'}
 									display={{
 										base: 'none',
 										md: 'inline-flex'
@@ -57,6 +58,7 @@ export const Navbar = () => {
 									>
 										<Link to="/features">Features</Link>
 									</Button>
+
 									<Button
 										variant="link"
 										colorScheme="black"

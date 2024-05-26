@@ -92,7 +92,7 @@ export const NewPricing = (): JSX.Element => {
 	const variable = {
 		slug: location.pathname.split('/')[1]
 	};
-	const { data, isLoading } = usePage(variable);
+	const { data } = usePage(variable);
 	console.log({ data });
 
 	return (
