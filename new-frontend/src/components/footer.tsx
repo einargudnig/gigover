@@ -56,7 +56,7 @@ export const Footer = () => {
 								<Link to="/blog">Blog</Link>
 							</Text>
 						</Flex>
-						<Box marginTop={4}>
+						<Box marginTop={'31px'}>
 							<NewAppButtons />
 						</Box>
 					</Flex>
