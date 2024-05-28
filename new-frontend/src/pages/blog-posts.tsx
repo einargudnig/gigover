@@ -94,7 +94,6 @@ export const BlogPosts = (): JSX.Element => {
 };
 
 interface BlogAuthorProps {
-	date: Date;
 	name: string;
 }
 
@@ -102,8 +101,6 @@ export const BlogAuthor: React.FC<BlogAuthorProps> = ({ name, date }) => {
 	return (
 		<HStack mt="2" spacing="2" alignItems="center">
 			<Text as="b">{name}</Text>
-			<Text>—</Text>
-			<Text>{date.toLocaleDateString()}</Text>
 		</HStack>
 	);
 };
