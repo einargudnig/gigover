@@ -77,10 +77,7 @@ export const BlogPosts = (): JSX.Element => {
 											<Text as="p" mt="2" fontSize="lg" noOfLines={3}>
 												{b?.content.text?.substr(0, 250)}
 											</Text>
-											<BlogAuthor
-												name="The Gigover team"
-												date={new Date(b?.publishedAt)}
-											/>
+											<BlogAuthor name="The Gigover team" />
 										</Box>
 									</Box>
 								</Box>
@@ -97,7 +94,7 @@ interface BlogAuthorProps {
 	name: string;
 }
 
-export const BlogAuthor: React.FC<BlogAuthorProps> = ({ name, date }) => {
+export const BlogAuthor: React.FC<BlogAuthorProps> = ({ name }) => {
 	return (
 		<HStack mt="2" spacing="2" alignItems="center">
 			<Text as="b">{name}</Text>
