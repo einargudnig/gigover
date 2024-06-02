@@ -20,7 +20,7 @@ const faqData: FaqItem[] = [
 	{
 		id: 1,
 		question: 'Who is Gigover for?',
-		answer: 'Gigover simplifies project management for property management by helping managers streamline projects and guide them towards goals and task completion. All stakeholders involved with a property can benefit from using Gigover, including property owners, project managers, property managers, contractors, and renters.'
+		answer: 'Gigover simplifies project management for property management by helping managers streamline projects and guide them towards goals and task completion. All stakeholders involved with a property can benefit from using Gigover, including property owners, project managers, property managers, contractors, and tenants.'
 	},
 	{
 		id: 2,
