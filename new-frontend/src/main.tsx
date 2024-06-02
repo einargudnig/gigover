@@ -116,19 +116,3 @@ if (rootElement?.hasChildNodes()) {
 		</React.StrictMode>
 	);
 }
-
-// ReactDOM.createRoot(document.getElementById('root')!).render(
-// 	<React.StrictMode>
-// 		<HelmetProvider>
-// 			<IntercomProvider appId={INTERCOM_APP_ID} autoBoot={true}>
-// 				<BrowserRouter>
-// 					<QueryClientProvider client={queryClient}>
-// 						<ChakraProvider theme={ChakraTheme}>
-// 							<App />
-// 						</ChakraProvider>
-// 					</QueryClientProvider>
-// 				</BrowserRouter>
-// 			</IntercomProvider>
-// 		</HelmetProvider>
-// 	</React.StrictMode>
-// );
