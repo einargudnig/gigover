@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { GigoverLogo } from '../components/GigoverLogo';
 import {
 	Box,
@@ -22,11 +22,43 @@ import {
 	Tabs,
 	Text
 } from '@chakra-ui/react';
+import { Firebase } from '../firebase/firebase';
+import { FirebaseContext } from '../firebase/FirebaseContext';
 
 export const NewLogin = (): JSX.Element => {
+	const [loading, setLoading] = useState<boolean>(false);
+	const firebase: Firebase = useContext(FirebaseContext);
+
+	const { register, handleSubmit } = useForm<{ email: string; password: string }>({
+		defaultValues: {
+			email: '',
+			password: ''
+		}
+	});
+
+	// this function calls the firebase to log in the user with the provided credentials
+	const loginWithCredentials = async (email: string, password: string) => {
+		console.log({ email, password });
+		try {
+			setLoading(true);
+			await firebase.auth.signInWithEmailAndPassword(email, password);
+			setLoading(false);
+		} catch (e) {
+			console.error(e);
+			setLoading(false);
+		}
+	};
+
 	return (
 		<Container maxW="lg" py={{ base: '12', md: '24' }} px={{ base: '0', sm: '8' }}>
-			<Tabs isFitted variant="enclosed" border={'1px'} rounded={'md'} shadow={'md'}>
+			<Tabs
+				isFitted
+				variant="enclosed-colored"
+				colorScheme="black"
+				size="lg"
+				rounded={'md'}
+				shadow={'md'}
+			>
 				<TabList mb="1em">
 					<Tab>Log In</Tab>
 					<Tab>Sign Up</Tab>
@@ -66,23 +98,27 @@ const LoginForm = () => (
 		>
 			<Stack spacing="6">
 				<Stack spacing="5">
-					<FormControl>
-						<FormLabel htmlFor="email">Email</FormLabel>
-						<Input id="email" type="email" />
-					</FormControl>
-					{/* Password field can be added here */}
-					<FormControl>
-						<FormLabel htmlFor="password">Password</FormLabel>
-						<Input id="password" type="password" />
-					</FormControl>
+					<form>
+						<FormControl>
+							<FormLabel htmlFor="email">Email</FormLabel>
+							<Input id="email" type="email" />
+						</FormControl>
+
+						<FormControl>
+							<FormLabel htmlFor="password">Password</FormLabel>
+							<Input id="password" type="password" />
+						</FormControl>
+						<Stack spacing={'6'} marginTop={'4'}>
+							<Button>Log in</Button>
+						</Stack>
+					</form>
 				</Stack>
-				<HStack justify="space-between">
-					<Button variant="text" size="sm">
-						Forgot password?
-					</Button>
-				</HStack>
 				<Stack spacing="6">
-					<Button>Sign in</Button>
+					<HStack justify="center">
+						<Button variant="text" size="sm">
+							Forgot password?
+						</Button>
+					</HStack>
 					<HStack>
 						<Divider />
 						<Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
@@ -100,6 +136,15 @@ const LoginForm = () => (
 const SignUpForm = () => (
 	<Stack spacing="6">
 		<Stack spacing="5">
+			<Flex justifyContent={'center'} alignItems={'center'}>
+				<GigoverLogo color={'black'} />
+			</Flex>
+			<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
+				<Heading size={{ base: 'xs', md: 'sm' }}>Create a new account</Heading>
+				<Text color="fg.muted">
+					Already have an account? <Link href="#">Log in</Link>
+				</Text>
+			</Stack>
 			<FormControl>
 				<FormLabel htmlFor="email">Email</FormLabel>
 				<Input id="email" type="email" />
