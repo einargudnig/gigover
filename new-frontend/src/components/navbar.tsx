@@ -86,17 +86,17 @@ export const Navbar = () => {
 									md: 'inline-flex'
 								}}
 							>
-								<Button
+								{/* <Button
 									variant="link"
 									colorScheme="black"
 									_hover={{ textColor: 'yellow.500' }}
 									marginRight={2}
 								>
 									Log in
-								</Button>
+								</Button> */}
 							</HStack>
 							<Button colorScheme="yellow" _hover={{ bg: 'yellow.900' }}>
-								<Link to="https://web.gigover.com/">Sign up</Link>
+								<Link to="https://web.gigover.com/">Log in</Link>
 							</Button>
 							<Box
 								display={{
@@ -149,11 +149,11 @@ export const Navbar = () => {
 									<Button w="full" variant="link" colorScheme="black">
 										<Link to="/blog">Blog</Link>
 									</Button>
-									<Button w="full" variant="link" colorScheme="black">
+									{/* <Button w="full" variant="link" colorScheme="black">
 										Log in
-									</Button>
+									</Button> */}
 									<Button w="full" variant="solid" colorScheme="yellow">
-										<Link to="https://web.gigover.com/">Sign up</Link>
+										<Link to="https://web.gigover.com/">Log in</Link>
 									</Button>
 								</VStack>
 							</Box>
