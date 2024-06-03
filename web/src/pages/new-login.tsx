@@ -67,14 +67,14 @@ const LoginForm = () => {
 	// this function calls the firebase to log in the user with the provided credentials
 	const loginWithCredentials = async (email: string, password: string) => {
 		console.log({ email, password });
-		// try {
-		// 	setLoading(true);
-		// 	await firebase.auth.signInWithEmailAndPassword(email, password);
-		// 	setLoading(false);
-		// } catch (e) {
-		// 	console.error(e);
-		// 	setLoading(false);
-		// }
+		try {
+			setLoading(true);
+			await firebase.auth.signInWithEmailAndPassword(email, password);
+			setLoading(false);
+		} catch (e) {
+			console.error(e);
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -114,7 +114,9 @@ const LoginForm = () => {
 								<Input type="password" {...register('password')} />
 							</FormControl>
 							<Stack spacing={'6'} marginTop={'4'}>
-								<Button isLoading={loading}>Log in</Button>
+								<Button type={'submit'} isLoading={loading}>
+									Log in
+								</Button>
 							</Stack>
 						</form>
 					</Stack>
