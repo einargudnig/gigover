@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { GigoverLogo } from '../components/GigoverLogo';
+import { GoogleIcon } from '../components/icons/GoogleIcon';
 import {
 	Box,
 	Button,
@@ -55,6 +56,8 @@ export const NewLogin = (): JSX.Element => {
 
 const LoginForm = () => {
 	const [loading, setLoading] = useState<boolean>(false);
+	const [loginError, setLoginError] = useState<string | null>(null);
+	const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
 	const firebase: Firebase = useContext(FirebaseContext);
 
 	const { register, handleSubmit } = useForm<{ email: string; password: string }>({
@@ -68,25 +71,133 @@ const LoginForm = () => {
 	const loginWithCredentials = async (email: string, password: string) => {
 		console.log({ email, password });
 		try {
+			setLoginError(null);
 			setLoading(true);
 			await firebase.auth.signInWithEmailAndPassword(email, password);
 			setLoading(false);
 		} catch (e) {
 			console.error(e);
+			setLoginError('Could not login user, invalid credentials');
+			setLoading(false);
+		}
+	};
+
+	const googleAuthenticate = async () => {
+		try {
+			setLoading(true);
+			await firebase.signInWithGoogle();
+			setLoading(false);
+		} catch (e) {
+			// Popup closed by user, or something failed..
 			setLoading(false);
 		}
 	};
 
 	return (
-		<Stack spacing="8">
-			<Stack spacing="6">
+		<>
+			{!showResetPassword ? (
+				<Stack spacing="8">
+					<Stack spacing="6">
+						<Flex justifyContent={'center'} alignItems={'center'}>
+							<GigoverLogo color={'black'} />
+						</Flex>
+						<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
+							<Heading size={{ base: 'xs', md: 'sm' }}>
+								Log in to your account
+							</Heading>
+							<Text color="fg.muted">
+								Don&apos;t have an account? <Link href="#">Sign up</Link>
+							</Text>
+						</Stack>
+					</Stack>
+					<Box
+						py={{ base: '0', sm: '8' }}
+						px={{ base: '4', sm: '10' }}
+						bg={{ base: 'transparent', sm: 'bg.surface' }}
+						boxShadow={{ base: 'none', sm: 'md' }}
+						borderRadius={{ base: 'none', sm: 'xl' }}
+					>
+						<Stack spacing="6">
+							<Stack spacing="5">
+								<form
+									onSubmit={handleSubmit(async (values) => {
+										loginWithCredentials(values.email, values.password);
+									})}
+								>
+									<FormControl marginBottom={2}>
+										<FormLabel htmlFor="email">Email</FormLabel>
+										<Input type="email" {...register('email')} />
+									</FormControl>
+
+									<FormControl marginTop={2}>
+										<FormLabel htmlFor="password">Password</FormLabel>
+										<Input type="password" {...register('password')} />
+									</FormControl>
+									{loginError && (
+										<Box marginTop={3}>
+											<Text color="red.500" fontSize="sm">
+												{loginError}
+											</Text>
+										</Box>
+									)}
+									<Stack spacing={'6'} marginTop={4}>
+										<Button type={'submit'} isLoading={loading}>
+											Log in
+										</Button>
+									</Stack>
+								</form>
+							</Stack>
+							<Stack spacing="6">
+								<HStack justify="center">
+									<Button
+										variant="text"
+										size="sm"
+										onClick={() => setShowResetPassword(true)}
+									>
+										Forgot password?
+									</Button>
+								</HStack>
+								<HStack>
+									<Divider />
+									<Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
+										or continue with
+									</Text>
+									<Divider />
+								</HStack>
+								{/* OAuthButtonGroup can be added here */}
+								<HStack justify={'center'}>
+									<Button
+										leftIcon={<GoogleIcon size={24} />}
+										variant="text"
+										colorScheme="black"
+										size="md"
+										onClick={googleAuthenticate}
+									>
+										<Box>Sign in with Google</Box>
+									</Button>
+								</HStack>
+							</Stack>
+						</Stack>
+					</Box>
+				</Stack>
+			) : (
+				<ResetPassword />
+			)}
+		</>
+	);
+};
+
+const ResetPassword = () => {
+	return (
+		<Stack spacing="6">
+			<Stack spacing="5">
 				<Flex justifyContent={'center'} alignItems={'center'}>
 					<GigoverLogo color={'black'} />
 				</Flex>
 				<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-					<Heading size={{ base: 'xs', md: 'sm' }}>Log in to your account</Heading>
+					<Heading size={{ base: 'xs', md: 'sm' }}>Reset your password</Heading>
 					<Text color="fg.muted">
-						Don&apos;t have an account? <Link href="#">Sign up</Link>
+						Remember your password? <Button variant="text">Log in</Button>
 					</Text>
 				</Stack>
 			</Stack>
@@ -99,41 +210,15 @@ const LoginForm = () => {
 			>
 				<Stack spacing="6">
 					<Stack spacing="5">
-						<form
-							onSubmit={handleSubmit(async (values) => {
-								loginWithCredentials(values.email, values.password);
-							})}
-						>
+						<form>
 							<FormControl>
 								<FormLabel htmlFor="email">Email</FormLabel>
-								<Input type="email" {...register('email')} />
+								<Input type="email" />
 							</FormControl>
-
-							<FormControl>
-								<FormLabel htmlFor="password">Password</FormLabel>
-								<Input type="password" {...register('password')} />
-							</FormControl>
-							<Stack spacing={'6'} marginTop={'4'}>
-								<Button type={'submit'} isLoading={loading}>
-									Log in
-								</Button>
+							<Stack spacing={'6'} marginTop={4}>
+								<Button>Reset password</Button>
 							</Stack>
 						</form>
-					</Stack>
-					<Stack spacing="6">
-						<HStack justify="center">
-							<Button variant="text" size="sm">
-								Forgot password?
-							</Button>
-						</HStack>
-						<HStack>
-							<Divider />
-							<Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
-								or continue with
-							</Text>
-							<Divider />
-						</HStack>
-						{/* OAuthButtonGroup can be added here */}
 					</Stack>
 				</Stack>
 			</Box>
