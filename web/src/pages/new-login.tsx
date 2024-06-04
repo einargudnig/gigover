@@ -5,7 +5,6 @@ import { GoogleIcon } from '../components/icons/GoogleIcon';
 import {
 	Box,
 	Button,
-	Checkbox,
 	Container,
 	Divider,
 	Flex,
@@ -14,7 +13,6 @@ import {
 	Heading,
 	HStack,
 	Input,
-	Link,
 	Stack,
 	Tab,
 	TabList,
@@ -24,7 +22,6 @@ import {
 } from '@chakra-ui/react';
 import { Firebase } from '../firebase/firebase';
 import { FirebaseContext } from '../firebase/FirebaseContext';
-import { set } from 'date-fns';
 
 export const NewLogin = (): JSX.Element => {
 	const [currentForm, setCurrentForm] = useState<'login' | 'signup' | 'resetPassword'>('login');
@@ -52,7 +49,6 @@ export const NewLogin = (): JSX.Element => {
 						{currentForm === 'login' && (
 							<LoginForm
 								onForgotPassword={() => handleSwitchForms('resetPassword')}
-								onSignUp={() => handleSwitchForms('signup')}
 							/>
 						)}
 						{currentForm === 'signup' && <SignUpForm />}
@@ -66,7 +62,7 @@ export const NewLogin = (): JSX.Element => {
 	);
 };
 
-const LoginForm = ({ onForgotPassword, onSignUp }): JSX.Element => {
+const LoginForm = ({ onForgotPassword }): JSX.Element => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -107,7 +103,12 @@ const LoginForm = ({ onForgotPassword, onSignUp }): JSX.Element => {
 	return (
 		<Stack spacing="8">
 			<Stack spacing="6">
-				<Flex justifyContent={'center'} alignItems={'center'}>
+				<Flex
+					justifyContent={'center'}
+					alignItems={'center'}
+					paddingTop={8}
+					paddingBottom={6}
+				>
 					<GigoverLogo color={'black'} />
 				</Flex>
 				<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
@@ -172,7 +173,7 @@ const LoginForm = ({ onForgotPassword, onSignUp }): JSX.Element => {
 							</Stack>
 						</form>
 					</Stack>
-					<Stack>
+					<Stack paddingBottom={4}>
 						<HStack justify="center">
 							<Button variant="text" size="sm" onClick={onForgotPassword}>
 								Forgot password?
@@ -180,11 +181,6 @@ const LoginForm = ({ onForgotPassword, onSignUp }): JSX.Element => {
 						</HStack>
 					</Stack>
 				</Stack>
-				<Box textAlign={'center'} py={4}>
-					<Text color="fg.muted">
-						New to Gigover? <Link onClick={onSignUp}>Sign up</Link>
-					</Text>
-				</Box>
 			</Box>
 		</Stack>
 	);
@@ -283,40 +279,120 @@ const ResetPasswordForm = ({ onBackToLogin }): JSX.Element => {
 	);
 };
 
-const SignUpForm = () => (
-	<Stack spacing="6">
-		<Stack spacing="5">
-			<Flex justifyContent={'center'} alignItems={'center'}>
-				<GigoverLogo color={'black'} />
-			</Flex>
-			<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-				<Heading size={{ base: 'xs', md: 'sm' }}>Create a new account</Heading>
-				<Text color="fg.muted">
-					Already have an account? <Link href="#">Log in</Link>
-				</Text>
+const SignUpForm = () => {
+	const firebase: Firebase = useContext(FirebaseContext);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [registerError, setRegisterError] = useState<string | null>(null);
+
+	const { register, handleSubmit } = useForm<{ email: string; password: string }>({
+		defaultValues: {
+			email: '',
+			password: ''
+		}
+	});
+
+	const signUp = async (email: string, password: string) => {
+		try {
+			setRegisterError(null);
+			setLoading(true);
+			await firebase.auth.createUserWithEmailAndPassword(email, password);
+			setLoading(false);
+		} catch (e) {
+			console.error(e);
+			setRegisterError('Could not register user, this email may be registered already.');
+			// Popup closed by user, or something failed..
+			setLoading(false);
+		}
+	};
+
+	const googleAuthenticate = async () => {
+		try {
+			setLoading(true);
+			await firebase.signInWithGoogle();
+			setLoading(false);
+		} catch (e) {
+			// Popup closed by user, or something failed..
+			setLoading(false);
+		}
+	};
+
+	return (
+		<Stack spacing="8">
+			<Stack spacing="5">
+				<Flex
+					justifyContent={'center'}
+					alignItems={'center'}
+					paddingTop={8}
+					paddingBottom={6}
+				>
+					<GigoverLogo color={'black'} />
+				</Flex>
+				<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
+					<Heading size={{ base: 'xs', md: 'sm' }}>Create a new account</Heading>
+
+					<HStack justify={'center'} paddingTop={6}>
+						<Button
+							leftIcon={<GoogleIcon size={24} />}
+							variant="outline"
+							colorScheme="black"
+							size="md"
+							onClick={googleAuthenticate}
+						>
+							<Box>Sign up with Google</Box>
+						</Button>
+					</HStack>
+
+					<Box paddingX="6" paddingTop={4}>
+						<HStack>
+							<Divider />
+							<Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
+								or
+							</Text>
+							<Divider />
+						</HStack>
+					</Box>
+				</Stack>
 			</Stack>
-			<FormControl>
-				<FormLabel htmlFor="email">Email</FormLabel>
-				<Input id="email" type="email" />
-			</FormControl>
-			{/* Password field can be added here */}
+			<Box
+				py={{ base: '0', sm: '2' }}
+				px={{ base: '4', sm: '10' }}
+				bg={{ base: 'transparent', sm: 'bg.surface' }}
+				boxShadow={{ base: 'none', sm: 'md' }}
+				borderRadius={{ base: 'none', sm: 'xl' }}
+			>
+				<Stack spacing="6" paddingBottom={8}>
+					<Stack spacing="5">
+						<form
+							onSubmit={handleSubmit(async (values) => {
+								signUp(values.email, values.password);
+							})}
+						>
+							<FormControl marginBottom={2}>
+								<FormLabel htmlFor="email">Email</FormLabel>
+								<Input type="email" {...register('email')} />
+							</FormControl>
+
+							<FormControl marginTop={2}>
+								<FormLabel htmlFor="password">Password</FormLabel>
+								<Input type="password" {...register('password')} />
+							</FormControl>
+							{registerError && (
+								<Box marginTop={3}>
+									<Text color="red.500" fontSize="sm">
+										{registerError}
+									</Text>
+								</Box>
+							)}
+
+							<Stack spacing="6" marginTop={4}>
+								<Button type={'submit'} isLoading={loading}>
+									Sign up
+								</Button>
+							</Stack>
+						</form>
+					</Stack>
+				</Stack>
+			</Box>
 		</Stack>
-		<HStack justify="space-between">
-			<Checkbox defaultChecked>Remember me</Checkbox>
-			<Button variant="text" size="sm">
-				Forgot password?
-			</Button>
-		</HStack>
-		<Stack spacing="6">
-			<Button>Sign in</Button>
-			<HStack>
-				<Divider />
-				<Text textStyle="sm" whiteSpace="nowrap" color="fg.muted">
-					or continue with
-				</Text>
-				<Divider />
-			</HStack>
-			{/* OAuthButtonGroup can be added here */}
-		</Stack>
-	</Stack>
-);
+	);
+};
