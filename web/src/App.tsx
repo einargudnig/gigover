@@ -1,7 +1,6 @@
 import 'normalize.css';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Login } from './pages/Login';
 import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { IUserProfile } from './models/UserProfile';
@@ -107,7 +106,6 @@ const App = ({
 				</QueryParamProvider>
 			) : (
 				<Routes>
-					{/* <Route path={'*'} element={<Login />} /> */}
 					<Route path={'*'} element={<NewLogin />} />
 				</Routes>
 			)}
