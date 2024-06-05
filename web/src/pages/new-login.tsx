@@ -20,11 +20,18 @@ import {
 	Tabs,
 	Text
 } from '@chakra-ui/react';
+import { useSearchParams } from 'react-router-dom';
 import { Firebase } from '../firebase/firebase';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 
 export const NewLogin = (): JSX.Element => {
 	const [currentForm, setCurrentForm] = useState<'login' | 'signup' | 'resetPassword'>('login');
+	const [searchParams, setSearchParams] = useSearchParams();
+	const tabIndex = parseInt(searchParams.get('tab') || '0');
+
+	const handleTabsChange = (index: number) => {
+		setSearchParams({ tab: index.toString() });
+	};
 
 	const handleSwitchForms = (form: 'login' | 'signup' | 'resetPassword') => {
 		setCurrentForm(form);
@@ -39,6 +46,8 @@ export const NewLogin = (): JSX.Element => {
 				size="lg"
 				rounded={'md'}
 				shadow={'md'}
+				index={tabIndex}
+				onChange={handleTabsChange}
 			>
 				<TabList mb="1em">
 					<Tab onClick={() => handleSwitchForms('login')}>Log In</Tab>
