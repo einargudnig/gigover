@@ -233,11 +233,6 @@ export const Page = ({
 						</div>
 						<span>Property</span>
 					</IconLink>
-					{/*<IconLink to={'/organize'}>*/}
-					{/*	<div>*/}
-					{/*		<OrganizeIcon />*/}
-					{/*	</div>*/}
-					{/*</IconLink>*/}
 					<IconLink onClick={onLinkClick} to={'/roadmap'}>
 						<div>
 							<RoadmapIcon />
