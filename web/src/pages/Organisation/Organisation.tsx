@@ -7,8 +7,6 @@ import {
 	Flex,
 	HStack,
 	useColorModeValue,
-	Drawer,
-	DrawerContent,
 	Text,
 	useDisclosure,
 	BoxProps,
@@ -22,26 +20,15 @@ import {
 import { MemberTable } from './MemeberTable';
 
 export function Organisation() {
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { onOpen, onClose } = useDisclosure();
 
 	return (
 		<Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
 			<SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
-			<Drawer
-				autoFocus={false}
-				isOpen={isOpen}
-				placement="left"
-				onClose={onClose}
-				returnFocusOnClose={false}
-				onOverlayClick={onClose}
-				size="full"
-			>
-				<DrawerContent>
-					<MemberTable />
-				</DrawerContent>
-			</Drawer>
-			{/* mobilenav */}
 			<MobileNav onOpen={onOpen} />
+			<Flex ml={{ base: 0, md: 60 }} p="4">
+				<MemberTable />
+			</Flex>
 		</Box>
 	);
 }
@@ -66,6 +53,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 			<Flex align="center" p="4" mx="4" borderRadius="lg" color={'white'}>
 				<Text as="b">Organisation</Text>
 			</Flex>
+			{/* This needs a flex container to be able to flexed to the bottom! */}
+			<Flex alignItems={'flex-end'}>
+				<Button onClick={onClose} variant="outline" mx="4" my="4" w="full">
+					Invite Members
+				</Button>
+			</Flex>
 		</Box>
 	);
 };
@@ -75,6 +68,7 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 	const user = useContext(UserContext);
+	console.log({ user });
 	return (
 		<Flex
 			ml={{ base: 0, md: 60 }}
@@ -101,7 +95,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 				<Flex alignItems={'center'}>
 					<Menu>
 						<MenuButton py={2} transition="all 0.3s" _focus={{ boxShadow: 'none' }}>
-							<Avatar size={'sm'} name={user.email} src={user.avatar} />
+							<Avatar size={'sm'} name={user.userName} src={user.avatar} />
 						</MenuButton>
 						<MenuList
 							bg={useColorModeValue('white', 'gray.900')}
