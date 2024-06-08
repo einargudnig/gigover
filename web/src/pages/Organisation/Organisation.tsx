@@ -53,12 +53,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 			<Flex align="center" p="4" mx="4" borderRadius="lg" color={'white'}>
 				<Text as="b">Organisation</Text>
 			</Flex>
-			{/* This needs a flex container to be able to flexed to the bottom! */}
-			<Flex alignItems={'flex-end'}>
-				<Button onClick={onClose} variant="outline" mx="4" my="4" w="full">
-					Invite Members
-				</Button>
-			</Flex>
 		</Box>
 	);
 };
@@ -68,7 +62,7 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 	const user = useContext(UserContext);
-	console.log({ user });
+
 	return (
 		<Flex
 			ml={{ base: 0, md: 60 }}
