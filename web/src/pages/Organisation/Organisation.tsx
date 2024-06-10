@@ -17,7 +17,9 @@ import {
 	MenuList,
 	Button
 } from '@chakra-ui/react';
-import { MemberTable } from './MemeberTable';
+import { MemberTable } from './MemberTable';
+import { FirebaseContext } from '../../firebase/FirebaseContext';
+import { useLogout } from '../../mutations/useLogout';
 
 export function Organisation() {
 	const { onOpen, onClose } = useDisclosure();
@@ -61,7 +63,9 @@ interface MobileProps extends FlexProps {
 	onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+	const { mutateAsync: logout } = useLogout();
 	const user = useContext(UserContext);
+	const firebase = useContext(FirebaseContext);
 
 	return (
 		<Flex
@@ -95,7 +99,14 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 							bg={useColorModeValue('white', 'gray.900')}
 							borderColor={useColorModeValue('gray.200', 'gray.700')}
 						>
-							<MenuItem>Sign out</MenuItem>
+							<MenuItem
+								onClick={async () => {
+									await firebase.signOut();
+									await logout(undefined, undefined);
+								}}
+							>
+								Sign out
+							</MenuItem>
 						</MenuList>
 					</Menu>
 				</Flex>
