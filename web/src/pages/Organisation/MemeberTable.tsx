@@ -33,24 +33,28 @@ import { VerticalDots } from '../../components/icons/VerticalDots';
 
 const dummyData = [
 	{
+		id: 1,
 		name: 'Heimir Hermannson',
 		email: 'heimir@gigover.com',
 		access: 'Admin',
 		status: 'Joined'
 	},
 	{
+		id: 2,
 		name: 'Helgi Hermannson',
 		email: 'helgi@gigover.com',
 		access: 'Editor',
 		status: 'Joined'
 	},
 	{
+		id: 3,
 		name: 'Juyeon Lee',
 		email: 'juyeon@gigover.com',
 		access: 'Editor',
 		status: 'Joined'
 	},
 	{
+		id: 4,
 		name: 'Lyuba Kharitonova',
 		email: 'lyuba@gigover.com',
 		access: 'Viewer',
@@ -61,6 +65,31 @@ const dummyData = [
 export function MemberTable() {
 	const [members, setMembers] = useState(dummyData);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const removeUser = (index: number) => {
+		const newMembers = [...members];
+		newMembers.splice(index, 1);
+		console.log({ newMembers });
+		setMembers(newMembers);
+	};
+
+	const makeViewer = (index: number) => {
+		const newMembers = [...members];
+		newMembers[index].access = 'Viewer';
+		setMembers(newMembers);
+	};
+
+	const makeEditor = (index: number) => {
+		const newMembers = [...members];
+		newMembers[index].access = 'Editor';
+		setMembers(newMembers);
+	};
+
+	const makeAdmin = (index: number) => {
+		const newMembers = [...members];
+		newMembers[index].access = 'Admin';
+		setMembers(newMembers);
+	};
 
 	return (
 		<>
@@ -136,11 +165,19 @@ export function MemberTable() {
 												<VerticalDots />
 											</MenuButton>
 											<MenuList>
-												<MenuItem>Make admin</MenuItem>
-												<MenuItem>Make editor</MenuItem>
-												<MenuItem>Make viewer</MenuItem>
+												<MenuItem onClick={() => makeAdmin(index)}>
+													Make admin
+												</MenuItem>
+												<MenuItem onClick={() => makeEditor(index)}>
+													Make editor
+												</MenuItem>
+												<MenuItem onClick={() => makeViewer(index)}>
+													Make viewer
+												</MenuItem>
 												<Divider />
-												<MenuItem>Remove</MenuItem>
+												<MenuItem onClick={() => removeUser(index)}>
+													Remove
+												</MenuItem>
 											</MenuList>
 										</Menu>
 									</Td>
