@@ -52,6 +52,8 @@ export const AppPreloader = (): JSX.Element => {
 		};
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
+			alignment: 'right', // This aligns the widget to the right
+
 			...userProperties
 		});
 	}, [authUser?.uid, data]);
