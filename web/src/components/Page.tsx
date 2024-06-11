@@ -12,6 +12,7 @@ import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
+	Button,
 	Center,
 	Fade,
 	Flex,
@@ -33,6 +34,7 @@ import { GigoverLogo } from './GigoverLogo';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { PropertyIcon } from './icons/PropertyIcon';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -270,6 +272,26 @@ export const Page = ({
 						<span>Settings</span>
 					</IconLink>
 				</SidebarNav>
+
+				<Box width={'full'} justifySelf={'flex-end'}>
+					<Menu>
+						<MenuButton
+							as={Button}
+							variant={'outline'}
+							width={'full'}
+							rightIcon={<ChevronDownIcon />}
+							_active={{ bg: 'transparent' }}
+							_hover={{ textColor: 'yellow.700' }}
+						>
+							Organisation
+						</MenuButton>
+						<MenuList>
+							<MenuItem>Gigover</MenuItem>
+							<MenuItem>Ljosheimar 14-18</MenuItem>
+							<MenuItem>Hagar</MenuItem>
+						</MenuList>
+					</Menu>
+				</Box>
 				<small>v1.5</small>
 			</Sidebar>
 			<PageWrapper>
