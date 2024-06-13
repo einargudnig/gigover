@@ -177,4 +177,7 @@ export class ApiService {
 	static addPropertyDocument = API_BASE + 'properties/addDocument';
 	static removePropertyDocument = (documentId: number) =>
 		API_BASE + 'properties/removeDocument/' + documentId;
+
+	// Organization
+	static getOrganizations = API_BASE + 'user/orgs';
 }
