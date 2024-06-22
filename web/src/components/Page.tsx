@@ -33,7 +33,8 @@ import { GigoverLogo } from './GigoverLogo';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { PropertyIcon } from './icons/PropertyIcon';
-import { OrganizationSwitcher } from './OrganizationSwitcher';
+// import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
+// import { ManageOrganization } from './organizations/ManageOrganization';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -272,10 +273,22 @@ export const Page = ({
 					</IconLink>
 				</SidebarNav>
 
-				<Box width={'full'} justifySelf={'flex-end'}>
-					<OrganizationSwitcher />
-				</Box>
-				<small>v1.5</small>
+				{/* <Flex
+					flexDirection={'column'}
+					width={'full'}
+					justifySelf={'flex-end'}
+					py={2}
+					height={28}
+				>
+					<Box>
+						<OrganizationSwitcher />
+					</Box>
+					<Spacer />
+					<Box>
+						<ManageOrganization />
+					</Box>
+				</Flex> */}
+				<small>v1.8</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>
@@ -341,7 +354,7 @@ export const Page = ({
 					</Fade>
 				</PageContent>
 			</PageWrapper>
-			{/* <DevMenu /> */}
+			<DevMenu />
 		</PageStyled>
 	);
 };
