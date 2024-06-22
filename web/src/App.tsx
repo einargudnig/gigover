@@ -51,6 +51,8 @@ export const AppPreloader = (): JSX.Element => {
 		};
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
+			alignment: 'right', // This aligns the widget to the right
+
 			...userProperties
 		});
 	}, [authUser?.uid, data]);
@@ -88,6 +90,8 @@ const App = ({
 		}
 		return null;
 	}, [authUser, userProfile]);
+
+	console.log({ user });
 
 	return (
 		<Router>

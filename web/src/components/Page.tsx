@@ -33,6 +33,8 @@ import { GigoverLogo } from './GigoverLogo';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { PropertyIcon } from './icons/PropertyIcon';
+// import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
+// import { ManageOrganization } from './organizations/ManageOrganization';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -233,11 +235,6 @@ export const Page = ({
 						</div>
 						<span>Property</span>
 					</IconLink>
-					{/*<IconLink to={'/organize'}>*/}
-					{/*	<div>*/}
-					{/*		<OrganizeIcon />*/}
-					{/*	</div>*/}
-					{/*</IconLink>*/}
 					<IconLink onClick={onLinkClick} to={'/roadmap'}>
 						<div>
 							<RoadmapIcon />
@@ -275,7 +272,23 @@ export const Page = ({
 						<span>Settings</span>
 					</IconLink>
 				</SidebarNav>
-				<small>v1.5</small>
+
+				{/* <Flex
+					flexDirection={'column'}
+					width={'full'}
+					justifySelf={'flex-end'}
+					py={2}
+					height={28}
+				>
+					<Box>
+						<OrganizationSwitcher />
+					</Box>
+					<Spacer />
+					<Box>
+						<ManageOrganization />
+					</Box>
+				</Flex> */}
+				<small>v1.8</small>
 			</Sidebar>
 			<PageWrapper>
 				<PageHeader>

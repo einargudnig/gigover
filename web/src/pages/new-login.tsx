@@ -18,14 +18,17 @@ import {
 	TabList,
 	TabPanels,
 	Tabs,
-	Text
+	Text,
+	VStack
 } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
 import { Firebase } from '../firebase/firebase';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 
 export const NewLogin = (): JSX.Element => {
-	const [currentForm, setCurrentForm] = useState<'login' | 'signup' | 'resetPassword'>('login');
+	const [currentForm, setCurrentForm] = useState<
+		'login' | 'signup' | 'resetPassword' | 'organisationLogin'
+	>('login');
 	const [searchParams, setSearchParams] = useSearchParams();
 	const tabIndex = parseInt(searchParams.get('tab') || '0');
 
@@ -33,7 +36,9 @@ export const NewLogin = (): JSX.Element => {
 		setSearchParams({ tab: index.toString() });
 	};
 
-	const handleSwitchForms = (form: 'login' | 'signup' | 'resetPassword') => {
+	const handleSwitchForms = (
+		form: 'login' | 'signup' | 'resetPassword' | 'organisationLogin'
+	) => {
 		setCurrentForm(form);
 	};
 
@@ -58,11 +63,17 @@ export const NewLogin = (): JSX.Element => {
 						{currentForm === 'login' && (
 							<LoginForm
 								onForgotPassword={() => handleSwitchForms('resetPassword')}
+								onOrganisationLogin={() => handleSwitchForms('organisationLogin')}
 							/>
 						)}
 						{currentForm === 'signup' && <SignUpForm />}
 						{currentForm === 'resetPassword' && (
 							<ResetPasswordForm onBackToLogin={() => handleSwitchForms('login')} />
+						)}
+						{currentForm === 'organisationLogin' && (
+							<OrganisationSignUpForm
+								onBackToLogin={() => handleSwitchForms('login')}
+							/>
 						)}
 					</Box>
 				</TabPanels>
@@ -71,7 +82,7 @@ export const NewLogin = (): JSX.Element => {
 	);
 };
 
-const LoginForm = ({ onForgotPassword }): JSX.Element => {
+const LoginForm = ({ onForgotPassword, onOrganisationLogin }): JSX.Element => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
 	const firebase: Firebase = useContext(FirebaseContext);
@@ -184,9 +195,14 @@ const LoginForm = ({ onForgotPassword }): JSX.Element => {
 					</Stack>
 					<Stack paddingBottom={4}>
 						<HStack justify="center">
-							<Button variant="text" size="sm" onClick={onForgotPassword}>
-								Forgot password?
-							</Button>
+							<VStack>
+								<Button variant="text" size="sm" onClick={onForgotPassword}>
+									Forgot password?
+								</Button>
+								<Button variant="text" size="sm" onClick={onOrganisationLogin}>
+									<Text color="fg.muted">Log in to organisation</Text>
+								</Button>
+							</VStack>
 						</HStack>
 					</Stack>
 				</Stack>
@@ -401,6 +417,97 @@ const SignUpForm = () => {
 						</form>
 					</Stack>
 				</Stack>
+			</Box>
+		</Stack>
+	);
+};
+
+const OrganisationSignUpForm = ({ onBackToLogin }) => {
+	const firebase: Firebase = useContext(FirebaseContext);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [registerError, setRegisterError] = useState<string | null>(null);
+
+	const { register, handleSubmit } = useForm<{ username: string; password: string }>({
+		defaultValues: {
+			username: '',
+			password: ''
+		}
+	});
+
+	const signUp = async (username: string, password: string) => {
+		try {
+			setRegisterError(null);
+			setLoading(true);
+			// start with dummy login!
+			await firebase.auth.signInWithEmailAndPassword(username, password);
+			setLoading(false);
+		} catch (e) {
+			console.error(e);
+			setRegisterError('Could not log in to organisation!');
+			// Popup closed by user, or something failed..
+			setLoading(false);
+		}
+	};
+
+	return (
+		<Stack spacing="8">
+			<Stack spacing="5">
+				<Flex
+					justifyContent={'center'}
+					alignItems={'center'}
+					paddingTop={8}
+					paddingBottom={6}
+				>
+					<GigoverLogo color={'black'} />
+				</Flex>
+				<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
+					<Heading size={{ base: 'xs', md: 'sm' }}>Log in to your organisation</Heading>
+				</Stack>
+			</Stack>
+			<Box
+				py={{ base: '0', sm: '2' }}
+				px={{ base: '4', sm: '10' }}
+				bg={{ base: 'transparent', sm: 'bg.surface' }}
+				boxShadow={{ base: 'none', sm: 'md' }}
+				borderRadius={{ base: 'none', sm: 'xl' }}
+			>
+				<Stack spacing="6" paddingBottom={8}>
+					<Stack spacing="5">
+						<form
+							onSubmit={handleSubmit(async (values) => {
+								signUp(values.username, values.password);
+							})}
+						>
+							<FormControl marginBottom={2}>
+								<FormLabel htmlFor="username">Username</FormLabel>
+								<Input type="username" {...register('username')} />
+							</FormControl>
+
+							<FormControl marginTop={2}>
+								<FormLabel htmlFor="password">Password</FormLabel>
+								<Input type="password" {...register('password')} />
+							</FormControl>
+							{registerError && (
+								<Box marginTop={3}>
+									<Text color="red.500" fontSize="sm">
+										{registerError}
+									</Text>
+								</Box>
+							)}
+
+							<Stack spacing="6" marginTop={4}>
+								<Button type={'submit'} isLoading={loading}>
+									Sign up
+								</Button>
+							</Stack>
+						</form>
+					</Stack>
+				</Stack>
+				<HStack justify={'center'}>
+					<Button variant="text" onClick={onBackToLogin}>
+						<Text color="fg.muted">Back to Log in</Text>
+					</Button>
+				</HStack>
 			</Box>
 		</Stack>
 	);
