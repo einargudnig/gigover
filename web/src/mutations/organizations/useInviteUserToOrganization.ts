@@ -26,7 +26,7 @@ export const useInviteUserToOrganization = () => {
 				}
 
 				// we want to refetch this query so the user table updates after we invite a user.
-				queryClient.refetchQueries(ApiService.projectUsers(variables.tenderId));
+				queryClient.refetchQueries(ApiService.inviteToOrganization);
 				return response.data;
 			} catch (e) {
 				devError(e);

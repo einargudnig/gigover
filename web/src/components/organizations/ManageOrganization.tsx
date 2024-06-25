@@ -25,6 +25,7 @@ import {
 } from '@chakra-ui/react';
 import { GigoverLogo } from '../GigoverLogo';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
+import { CreateOrganization } from './CreateOrganization';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -69,6 +70,7 @@ export const ManageOrganization = (): JSX.Element => {
 								<TabList>
 									<Tab>Log in</Tab>
 									<Tab>Organizations</Tab>
+									<Tab>Create organization</Tab>
 								</TabList>
 								<TabPanels>
 									<TabPanel>
@@ -156,6 +158,9 @@ export const ManageOrganization = (): JSX.Element => {
 									</TabPanel>
 									<TabPanel>
 										<MemberTable />
+									</TabPanel>
+									<TabPanel>
+										<CreateOrganization />
 									</TabPanel>
 								</TabPanels>
 							</Tabs>
