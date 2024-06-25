@@ -29,6 +29,7 @@ import {
 	ModalCloseButton,
 	Input
 } from '@chakra-ui/react';
+import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
 import { VerticalDots } from '../../components/icons/VerticalDots';
 
 const dummyData = [
@@ -99,21 +100,13 @@ export function MemberTable() {
 					<ModalHeader>Invite Members</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Text>Invite members to your organisation</Text>
-
-						<Input marginY={2} placeholder="Member email" />
-
-						<Text fontSize={'sm'}>
-							If the member does not have a gigover account he will be sent an email.
-						</Text>
+						<InviteUserToOrg />
 					</ModalBody>
-					<ModalFooter>
+					<ModalFooter mt={-16}>
 						<Flex width={'full'}>
 							<Button colorScheme="grey" variant={'outline'} mr={3} onClick={onClose}>
 								Close
 							</Button>
-							<Spacer />
-							<Button>Invite</Button>
 						</Flex>
 					</ModalFooter>
 				</ModalContent>

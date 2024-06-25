@@ -6,7 +6,7 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 
 interface InviteUserToOrganizationInput {
 	email: string;
-	priv: 'admin' | 'editor' | 'viewer';
+	priv: 'A' | 'E' | 'V';
 }
 
 export const useInviteUserToOrganization = () => {

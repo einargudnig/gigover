@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 
 export const OrganizationSwitcher = () => {
@@ -19,9 +19,13 @@ export const OrganizationSwitcher = () => {
 				Organization
 			</MenuButton>
 			<MenuList>
-				{data?.map((org) => (
-					<MenuItem key={org.id}>{org.name}</MenuItem>
-				))}
+				{data && data.length > 0 ? (
+					data.map((org) => <MenuItem key={org.id}>{org.name}</MenuItem>)
+				) : (
+					<Text padding={1} textAlign="center">
+						No organizations
+					</Text>
+				)}
 			</MenuList>
 		</Menu>
 	);
