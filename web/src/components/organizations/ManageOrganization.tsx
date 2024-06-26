@@ -8,7 +8,6 @@ import {
 	ModalCloseButton,
 	ModalContent,
 	ModalOverlay,
-	ModalFooter,
 	Box,
 	Text,
 	Flex,
@@ -23,28 +22,32 @@ import {
 	FormLabel,
 	Input
 } from '@chakra-ui/react';
+import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { GigoverLogo } from '../GigoverLogo';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { CreateOrganization } from './CreateOrganization';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	const [showOrgs, setShowOrgs] = useState<boolean>(false);
+	// const [showOrgs, setShowOrgs] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
 
-	const { register, handleSubmit } = useForm<{ username: string; password: string }>({
+	const { mutate: loginOrg } = useLoginOrg();
+
+	const { register, handleSubmit } = useForm<{ name: string; password: string }>({
 		defaultValues: {
-			username: '',
+			name: '',
 			password: ''
 		}
 	});
 
-	const handleLogin = (username: string, password: string) => {
+	const handleLogin = (name: string, password: string) => {
 		try {
 			setLoginError(null);
 			setLoading(true);
-
+			// Login
+			loginOrg({ name, password });
 			setLoading(false);
 		} catch (error) {
 			setLoginError('Invalid username or password');
@@ -104,7 +107,7 @@ export const ManageOrganization = (): JSX.Element => {
 															onSubmit={handleSubmit(
 																async (values) => {
 																	handleLogin(
-																		values.username,
+																		values.name,
 																		values.password
 																	);
 																}
@@ -116,7 +119,7 @@ export const ManageOrganization = (): JSX.Element => {
 																</FormLabel>
 																<Input
 																	type="username"
-																	{...register('username')}
+																	{...register('name')}
 																/>
 															</FormControl>
 

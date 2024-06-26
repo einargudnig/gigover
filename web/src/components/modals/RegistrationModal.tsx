@@ -105,7 +105,7 @@ export const RegistrationModal = (): JSX.Element => {
 				</InputWrapper>
 				<InputWrapper>
 					<Label>Phone number</Label>
-					<Input maxLength={7} required={true} {...register('phoneNumber')} />
+					<Input maxLength={10} required={true} {...register('phoneNumber')} />
 				</InputWrapper>
 				<InputWrapper>
 					<Label>Address</Label>
