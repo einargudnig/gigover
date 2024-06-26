@@ -44,9 +44,7 @@ export const ManageOrganization = (): JSX.Element => {
 		try {
 			setLoginError(null);
 			setLoading(true);
-			if (username === 'gigover' && password === 'gigover') {
-				setShowOrgs(true);
-			}
+
 			setLoading(false);
 		} catch (error) {
 			setLoginError('Invalid username or password');

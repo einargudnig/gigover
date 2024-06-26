@@ -11,7 +11,7 @@ interface InviteUserToOrganizationInput {
 
 export const useInviteUserToOrganization = () => {
 	const queryClient = useQueryClient();
-	const mutationKey = ApiService.addUser;
+	const mutationKey = ApiService.inviteToOrganization;
 
 	return useMutation<ErrorResponse, AxiosError, InviteUserToOrganizationInput>(
 		mutationKey,

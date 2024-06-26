@@ -2,9 +2,16 @@ import React from 'react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Button, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
+import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
+	const { mutate } = useChangeOrganizations();
+
+	const handleOrganizationChange = (id: number) => {
+		console.log({ id });
+		mutate({ id });
+	};
 
 	return (
 		<Menu>
@@ -20,7 +27,11 @@ export const OrganizationSwitcher = () => {
 			</MenuButton>
 			<MenuList>
 				{data && data.length > 0 ? (
-					data.map((org) => <MenuItem key={org.id}>{org.name}</MenuItem>)
+					data.map((org) => (
+						<MenuItem key={org.id} onClick={() => handleOrganizationChange(org.id)}>
+							{org.name}
+						</MenuItem>
+					))
 				) : (
 					<Text padding={1} textAlign="center">
 						No organizations
