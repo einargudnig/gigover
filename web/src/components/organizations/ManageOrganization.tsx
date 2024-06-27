@@ -30,10 +30,10 @@ import { CreateOrganization } from './CreateOrganization';
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	// const [showOrgs, setShowOrgs] = useState<boolean>(false);
-	const [loading, setLoading] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
+	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-	const { mutate: loginOrg } = useLoginOrg();
+	const { mutateAsync: loginOrg, data, isLoading } = useLoginOrg();
 
 	const { register, handleSubmit } = useForm<{ name: string; password: string }>({
 		defaultValues: {
@@ -45,13 +45,11 @@ export const ManageOrganization = (): JSX.Element => {
 	const handleLogin = (name: string, password: string) => {
 		try {
 			setLoginError(null);
-			setLoading(true);
 			// Login
 			loginOrg({ name, password });
-			setLoading(false);
+			// console.log({ data });
 		} catch (error) {
 			setLoginError('Invalid username or password');
-			setLoading(false);
 		}
 	};
 
@@ -146,7 +144,7 @@ export const ManageOrganization = (): JSX.Element => {
 															<Stack spacing="6" marginTop={4}>
 																<Button
 																	type={'submit'}
-																	isLoading={loading}
+																	isLoading={isLoading}
 																>
 																	Log in
 																</Button>

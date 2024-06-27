@@ -4,9 +4,13 @@ import { devError } from '../../utils/ConsoleUtils';
 import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
+// interface InviteUserToOrganizationInput {
+// 	email: string;
+// 	priv: 'A' | 'E' | 'V';
+// }
+
 interface InviteUserToOrganizationInput {
-	email: string;
-	priv: 'A' | 'E' | 'V';
+	uId: string;
 }
 
 export const useInviteUserToOrganization = () => {
@@ -17,6 +21,7 @@ export const useInviteUserToOrganization = () => {
 		mutationKey,
 		async (variables) => {
 			try {
+				console.log('IN MUTATION', { variables });
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
 				});
@@ -26,7 +31,7 @@ export const useInviteUserToOrganization = () => {
 				}
 
 				// we want to refetch this query so the user table updates after we invite a user.
-				queryClient.refetchQueries(ApiService.inviteToOrganization);
+				// queryClient.refetchQueries(ApiService.inviteToOrganization);
 				return response.data;
 			} catch (e) {
 				devError(e);

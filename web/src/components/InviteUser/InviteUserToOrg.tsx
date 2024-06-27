@@ -12,6 +12,7 @@ import {
 	Select
 } from '@chakra-ui/react';
 import { Theme } from '../../Theme';
+import { devInfo } from '../../utils/ConsoleUtils';
 
 export const InviteUserToOrg = (): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
@@ -21,14 +22,21 @@ export const InviteUserToOrg = (): JSX.Element => {
 	const searchMutation = useGetUserByEmail();
 	const search = useCallback(async () => {
 		try {
-			const response = await inviteMutation.mutateAsync({
-				email: searchMail,
-				priv: privleges
+			const response = await searchMutation.mutateAsync({
+				email: searchMail
 			});
 
-			if (response.errorCode === 'OK') {
-				setSearchMail('');
-				setInviteSuccess(true);
+			if (response.uId) {
+				devInfo('Found user with uId:', response.uId);
+				// Add to tender
+				inviteMutation.mutateAsync({ uId: response.uId }).then((res) => {
+					if (res.errorCode === 'OK') {
+						setSearchMail('');
+						setInviteSuccess(true);
+					} else {
+						throw new Error('Could not invite user.');
+					}
+				});
 			}
 		} catch (e) {
 			console.error(e);
@@ -60,7 +68,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 					onChange={(e) => setSearchMail(e.target.value)}
 				/>
 
-				<FormLabel htmlFor={'inviteEmail'}>Privleges</FormLabel>
+				{/* <FormLabel htmlFor={'inviteEmail'}>Privleges</FormLabel>
 				<Select
 					placeholder="Select privleges"
 					onChange={(e) => setPrivleges(e.target.value as 'A' | 'E' | 'V')}
@@ -68,7 +76,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 					<option value="A">Admin</option>
 					<option value="V">Viewer</option>
 					<option value="E">Editor</option>
-				</Select>
+				</Select> */}
 
 				{inviteSuccess ? (
 					<>
