@@ -20,7 +20,8 @@ import {
 	MenuButton,
 	MenuGroup,
 	MenuItem,
-	MenuList
+	MenuList,
+	Spacer
 } from '@chakra-ui/react';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { RoadmapIcon } from './icons/RoadmapIcon';
@@ -33,8 +34,8 @@ import { GigoverLogo } from './GigoverLogo';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { PropertyIcon } from './icons/PropertyIcon';
-// import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
-// import { ManageOrganization } from './organizations/ManageOrganization';
+import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
+import { ManageOrganization } from './organizations/ManageOrganization';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -273,7 +274,7 @@ export const Page = ({
 					</IconLink>
 				</SidebarNav>
 
-				{/* <Flex
+				<Flex
 					flexDirection={'column'}
 					width={'full'}
 					justifySelf={'flex-end'}
@@ -287,7 +288,7 @@ export const Page = ({
 					<Box>
 						<ManageOrganization />
 					</Box>
-				</Flex> */}
+				</Flex>
 				<small>v1.8</small>
 			</Sidebar>
 			<PageWrapper>
