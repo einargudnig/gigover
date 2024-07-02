@@ -1,6 +1,6 @@
 import 'normalize.css';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { IUserProfile } from './models/UserProfile';
@@ -76,7 +76,9 @@ const App = ({
 	userProfile?: IUserProfile;
 	authUser: FirebaseUser | null;
 }): JSX.Element => {
+	// set up filesystem
 	const fileSystem = useMemo(() => new FileSystemService(), []);
+
 	const modalContext = useState<IModalContext>(
 		userProfile ? { registered: userProfile.registered } : {}
 	);
@@ -95,6 +97,7 @@ const App = ({
 
 	return (
 		<Router>
+			<OnboardingHandler userProfile={userProfile} />
 			{user !== null ? (
 				<QueryParamProvider>
 					<UserContext.Provider value={user}>
@@ -115,6 +118,23 @@ const App = ({
 			)}
 		</Router>
 	);
+};
+
+interface OnboardingHandlerProps {
+	userProfile?: IUserProfile;
+}
+
+const OnboardingHandler: React.FC<OnboardingHandlerProps> = ({ userProfile }) => {
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		// TODO change to check for registered
+		if (userProfile?.userName === 'einargudnig@gmail.com') {
+			navigate('/onboarding');
+		}
+	}, [userProfile, navigate]);
+
+	return null; // This component does not render anything
 };
 
 export default App;

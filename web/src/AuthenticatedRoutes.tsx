@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Dashboard } from './pages/Dashboard/Dashboard';
+import { Onboarding } from './pages/onboarding';
 import { Organize } from './pages/Organize';
 import { TimeTracker } from './pages/TimeTracker/TimeTracker';
 import { Users } from './pages/Users';
@@ -43,6 +44,9 @@ import { ClientAnswerOutlet } from './pages/Procurement/ClientBids/ClientAnswerO
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
 		<Route path={'/'} element={<Dashboard />} />
+
+		{/* Onboarding user -> only accessible when userProfile has registered = false */}
+		<Route path={'onboarding'} element={<Onboarding />} />
 
 		{/* 📝 Tasks 📝 */}
 		<Route path={'project/:projectId'} element={<ProjectDetails />}>
