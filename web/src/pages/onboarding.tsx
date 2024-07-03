@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
 	Box,
 	Button,
@@ -10,6 +10,7 @@ import {
 	Input,
 	Text
 } from '@chakra-ui/react';
+import onboarding from '../onboarding.png';
 import { GigoverLogo } from '../components/GigoverLogo';
 import { RegistrationData, useRegister } from '../queries/useRegister';
 import { useForm } from 'react-hook-form';
@@ -64,18 +65,18 @@ export const Onboarding = (): JSX.Element => {
 				<GigoverLogo scale={0.7} color="black" />
 
 				<Box p="4">
-					<Grid gap={4} templateColumns="repeat(2, 1fr)">
-						<GridItem>
+					<Grid gap={4} templateColumns="repeat(3, 1fr)">
+						<GridItem colSpan={1} backgroundColor={'gray.200'}>
 							<Box>
-								<Text fontSize="2xl" fontWeight="bold">
+								<Text fontSize="2xl" fontWeight="bold" textColor={'black'}>
 									Welcome to Gigover!
 								</Text>
-								<Text fontSize="lg">
+								<Text fontSize="lg" marginTop={4}>
 									We are excited to have you on board. Please fill in the
 									following information to get started.
 								</Text>
 							</Box>
-							<Box>
+							<Box marginTop={6}>
 								{/* Registration form */}
 								<form onSubmit={onSubmit}>
 									<FormControl id={'name'} isInvalid={!!errors.name}>
@@ -151,7 +152,18 @@ export const Onboarding = (): JSX.Element => {
 								</form>
 							</Box>
 						</GridItem>
-						<GridItem>Image!</GridItem>
+						{/* <GridItem colSpan={2}>
+							<Box>
+								<img src={onboarding} alt="Onboarding" />
+							</Box>
+						</GridItem> */}
+						<GridItem colSpan={2} position="relative" overflowX="visible">
+							<Box position="absolute" right="-20%">
+								{' '}
+								{/* Adjust the 'right' value to control how much the image overflows */}
+								<img src={onboarding} alt="Onboarding" />
+							</Box>
+						</GridItem>
 					</Grid>
 				</Box>
 			</Box>
