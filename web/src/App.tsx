@@ -1,24 +1,24 @@
 import 'normalize.css';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { pdfjs } from 'react-pdf';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
+import { QueryParamProvider } from 'use-query-params';
+import { AuthenticatedRoutes } from './AuthenticatedRoutes';
+import ErrorBoundary from './ErrorBoundary';
+import { FullscreenLoader } from './components/FullscreenLoader';
+import { GlobalModals } from './components/GlobalModals';
+import { FileSystemContext } from './context/FileSystemContext';
+import { IModalContext, ModalContext } from './context/ModalContext';
+import { UserContext } from './context/UserContext';
 import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
-import { IUserProfile } from './models/UserProfile';
-import { useFirebaseAuth } from './hooks/useFirebaseAuth';
-import { UserContext } from './context/UserContext';
-import { FullscreenLoader } from './components/FullscreenLoader';
-import { IModalContext, ModalContext } from './context/ModalContext';
-import { GlobalModals } from './components/GlobalModals';
-import { useVerify } from './queries/useVerify';
-import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import { FirebaseUser } from './firebase/firebaseTypes';
+import { useFirebaseAuth } from './hooks/useFirebaseAuth';
+import { IUserProfile } from './models/UserProfile';
+import { NewLogin } from './pages/NewLogin';
 import { useProjectTypes } from './queries/useProjectTypes';
-import { QueryParamProvider } from 'use-query-params';
-import { FileSystemContext } from './context/FileSystemContext';
+import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
-import { pdfjs } from 'react-pdf';
-import ErrorBoundary from './ErrorBoundary';
-import { NewLogin } from './pages/new-login';
 
 // We need this for loading PDF viewer on production.
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -129,7 +129,7 @@ const OnboardingHandler: React.FC<OnboardingHandlerProps> = ({ userProfile }) =>
 
 	useEffect(() => {
 		// TODO change to check for registered
-		if (userProfile?.userName === 'einargudnig@gmail.com') {
+		if (userProfile?.registered === false) {
 			navigate('/onboarding');
 		}
 	}, [userProfile, navigate]);

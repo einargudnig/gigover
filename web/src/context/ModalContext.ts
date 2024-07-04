@@ -1,14 +1,13 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Project, WorkerItem } from '../models/Project';
-import { Task } from '../models/Task';
 import { Milestone } from '../models/Milestone';
-import { Resource } from '../models/Resource';
+import { Project, WorkerItem } from '../models/Project';
 import { ProjectFolder } from '../models/ProjectFolder';
 import { ProjectImage } from '../models/ProjectImage';
-import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
-import { Tender } from '../models/Tender';
-import { Bid } from '../models/Tender';
 import { IProperties, IPropertyForm, IPropertyUnit } from '../models/Property';
+import { Resource } from '../models/Resource';
+import { Task } from '../models/Task';
+import { Bid, Tender } from '../models/Tender';
+import { TimeTrackerReportResultItem } from '../pages/TimeTracker/useTimeTrackerReport';
 
 export interface ITimeTrackerModalContext {
 	project?: Project;

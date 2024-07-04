@@ -1,27 +1,26 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import { Theme } from '../Theme';
 import { ModalContext } from '../context/ModalContext';
-import { Modal } from './Modal';
-import { RegistrationModal } from './modals/RegistrationModal';
-import { ProjectModal } from './modals/ProjectModal';
-import { TimeTrackerModal } from './modals/TimeTrackerModal';
-import { TaskModal } from './modals/TaskModal/TaskModal';
-import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
-import { MilestoneModal } from './modals/MilestoneModal';
-import { ResourceModal } from './modals/ResourceModal';
 import ShareItem from '../pages/Files/components/ShareItem';
-import { UseResourceModal } from './modals/UseResourceModal';
+import { Modal } from './Modal';
+import { PropertyIcon } from './icons/PropertyIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
-import { ProcurementModal } from './modals/ProcurementModal';
 import { AddBidModal } from './modals/AddBidModal';
 import { EditBidModal } from './modals/EditBidModal';
+import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
+import { MilestoneModal } from './modals/MilestoneModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
-import { Theme } from '../Theme';
+import { ProcurementModal } from './modals/ProcurementModal';
+import { ProjectModal } from './modals/ProjectModal';
 import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
-import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
+import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
-import { PropertyIcon } from './icons/PropertyIcon';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
+import { ResourceModal } from './modals/ResourceModal';
+import { TaskModal } from './modals/TaskModal/TaskModal';
+import { TimeTrackerModal } from './modals/TimeTrackerModal';
+import { UseResourceModal } from './modals/UseResourceModal';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
@@ -51,11 +50,6 @@ export const GlobalModals = (): JSX.Element => {
 					onClose={() => setModalContext({})}
 				>
 					<ProjectModal project={project} />
-				</Modal>
-			)}
-			{modalContext.registered === false && (
-				<Modal open={true} title={'Setup your account'}>
-					<RegistrationModal />
 				</Modal>
 			)}
 			{modalContext.resources && <ResourceModal />}

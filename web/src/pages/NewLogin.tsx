@@ -1,7 +1,3 @@
-import React, { useContext, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { GigoverLogo } from '../components/GigoverLogo';
-import { GoogleIcon } from '../components/icons/GoogleIcon';
 import {
 	Box,
 	Button,
@@ -10,8 +6,8 @@ import {
 	Flex,
 	FormControl,
 	FormLabel,
-	Heading,
 	HStack,
+	Heading,
 	Input,
 	Stack,
 	Tab,
@@ -21,9 +17,13 @@ import {
 	Text,
 	VStack
 } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
-import { Firebase } from '../firebase/firebase';
+import { GigoverLogo } from '../components/GigoverLogo';
+import { GoogleIcon } from '../components/icons/GoogleIcon';
 import { FirebaseContext } from '../firebase/FirebaseContext';
+import { Firebase } from '../firebase/firebase';
 
 export const NewLogin = (): JSX.Element => {
 	const [currentForm, setCurrentForm] = useState<
