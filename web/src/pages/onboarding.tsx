@@ -16,6 +16,7 @@ import { RegistrationData, useRegister } from '../queries/useRegister';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '../context/UserContext';
 import { devError } from '../utils/ConsoleUtils';
+import { Theme } from '../Theme';
 
 interface FormData extends Omit<RegistrationData, 'email' | 'type' | 'userName'> {
 	name: string;
@@ -64,9 +65,15 @@ export const Onboarding = (): JSX.Element => {
 			<Box minH="100vh" p="4">
 				<GigoverLogo scale={0.7} color="black" />
 
-				<Box p="4">
-					<Grid gap={4} templateColumns="repeat(3, 1fr)">
-						<GridItem colSpan={1} backgroundColor={'gray.200'}>
+				<Box p={4}>
+					<Grid gap={4} templateColumns="repeat(5, 1fr)">
+						<GridItem
+							colSpan={2}
+							border={'1px'}
+							borderColor={'gray.200'}
+							p={4}
+							rounded={'md'}
+						>
 							<Box>
 								<Text fontSize="2xl" fontWeight="bold" textColor={'black'}>
 									Welcome to Gigover!
@@ -152,13 +159,20 @@ export const Onboarding = (): JSX.Element => {
 								</form>
 							</Box>
 						</GridItem>
-						{/* <GridItem colSpan={2}>
-							<Box>
-								<img src={onboarding} alt="Onboarding" />
-							</Box>
-						</GridItem> */}
-						<GridItem colSpan={2} position="relative" overflowX="visible">
-							<Box position="absolute" right="-20%">
+						<GridItem
+							colSpan={3}
+							position="relative"
+							overflowX="visible"
+							marginLeft={10}
+							marginTop={8}
+						>
+							<Box
+								position="absolute"
+								right="-20%"
+								backgroundColor={Theme.colors.yellow}
+								p={6}
+								rounded={'md'}
+							>
 								{' '}
 								{/* Adjust the 'right' value to control how much the image overflows */}
 								<img src={onboarding} alt="Onboarding" />
