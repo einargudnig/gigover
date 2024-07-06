@@ -1,10 +1,9 @@
-import React from 'react';
-import { Task } from '../../../models/Task';
-import { TrackerSelect } from '../../TrackerSelect';
-import { LoadingSpinner } from '../../LoadingSpinner';
-import { useUpdateTask } from '../../../queries/useUpdateTask';
 import { HStack, Tag } from '@chakra-ui/react';
 import { WorkerItem } from '../../../models/Project';
+import { Task } from '../../../models/Task';
+import { useUpdateTask } from '../../../queries/useUpdateTask';
+import { LoadingSpinner } from '../../LoadingSpinner';
+import { TrackerSelect } from '../../TrackerSelect';
 
 interface WorkerAssigneUpdateProps {
 	projectId: number;
