@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import { Button, Flex, Text } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
+import { Modal } from '../../components/Modal';
+import { Input } from '../../components/forms/Input';
 import { TimeTrackerInput } from '../../queries/useTrackerStart';
 import { useTrackerStop } from '../../queries/useTrackerStop';
-import { Input } from '../../components/forms/Input';
-import { Modal } from '../../components/Modal';
-import { Button, Flex, Text } from '@chakra-ui/react';
 
 export interface StopTrackerConfirmationProps extends TimeTrackerInput {
 	onClose: () => void;

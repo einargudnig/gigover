@@ -1,26 +1,26 @@
-import React, { useRef } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import {
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogOverlay,
 	Button,
 	ButtonProps,
-	useDisclosure,
-	VStack,
-	AlertDialog,
-	AlertDialogOverlay,
-	AlertDialogContent,
 	FormControl,
 	FormLabel,
 	Input,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogBody,
-	Text,
 	Spacer,
+	Text,
+	VStack,
+	useDisclosure,
 	useToast
 } from '@chakra-ui/react';
+import { useRef } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAddOffer } from '../../../../mutations/procurement/useAddOffer';
-import { useParams, useNavigate } from 'react-router-dom';
 
 type OfferNote = {
 	notes: string;

@@ -1,3 +1,4 @@
+import { BellIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Flex,
@@ -9,17 +10,16 @@ import {
 	Text,
 	useDisclosure
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { Notification as NotificationType, useNotifications } from '../../hooks/useNotifications';
-import { useReadNotification } from '../../mutations/useReadNotification';
-import { OpenTaskNotification } from './OpenTaskNotification';
-import { timeSince } from '../../utils/TimeAndDateUtils';
-import { BellIcon } from '@chakra-ui/icons';
-import { useDeleteNotification } from '../../mutations/useDeleteNotification';
 import styled from '@emotion/styled';
-import { CrossIcon } from '../icons/CrossIcon';
-import { LoadingSpinner } from '../LoadingSpinner';
+import { useEffect, useState } from 'react';
+import { Notification as NotificationType, useNotifications } from '../../hooks/useNotifications';
+import { useDeleteNotification } from '../../mutations/useDeleteNotification';
+import { useReadNotification } from '../../mutations/useReadNotification';
+import { timeSince } from '../../utils/TimeAndDateUtils';
 import { Center } from '../Center';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { CrossIcon } from '../icons/CrossIcon';
+import { OpenTaskNotification } from './OpenTaskNotification';
 
 export const Notifications = (): JSX.Element => {
 	const { onOpen, onClose, isOpen } = useDisclosure();

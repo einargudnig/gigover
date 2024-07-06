@@ -1,18 +1,18 @@
 import { Box, Button, Grid, Portal, Select } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import ReactToPdf from 'react-to-pdf';
+import { NumberParam, useQueryParam } from 'use-query-params';
 import { Page } from '../../components/Page';
+import { Chevron } from '../../components/icons/Chevron';
+import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
-import { RoadmapHeader } from './components/RoadmapHeader';
+import { useMilestones } from '../../queries/useMilestones';
 import { DateAmountSlider } from './components/DateAmountSlider';
-import { RoadmapSidebar } from './components/RoadmapSidebar';
 import { GantChart } from './components/GantChart';
+import { RoadmapHeader } from './components/RoadmapHeader';
+import { RoadmapSidebar } from './components/RoadmapSidebar';
 import { GantChartContext } from './contexts/GantChartContext';
 import { GRID_SIDEBAR_WIDTH, useGantChart } from './hooks/useGantChart';
-import { Chevron } from '../../components/icons/Chevron';
-import { useMilestones } from '../../queries/useMilestones';
-import { Milestone } from '../../models/Milestone';
-import { useQueryParam, NumberParam } from 'use-query-params';
-import ReactToPdf from 'react-to-pdf';
 
 interface RoadmapProps {
 	projects: Project[];

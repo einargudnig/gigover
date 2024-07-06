@@ -1,7 +1,3 @@
-import React, { useContext } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { useCloseModal } from '../../hooks/useCloseModal';
-import { FormActions } from '../FormActions';
 import {
 	Box,
 	FormControl,
@@ -12,19 +8,23 @@ import {
 	Input,
 	Tag
 } from '@chakra-ui/react';
-import { ModalContext } from '../../context/ModalContext';
-import { useModifyResource } from '../../mutations/useModifyResource';
-import { devError } from '../../utils/ConsoleUtils';
-import { Resource, ResourceStatus } from '../../models/Resource';
-import { Modal } from '../Modal';
-import { Tabs } from '../tabs/Tabs';
+import { useContext } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import styled, { css } from 'styled-components';
-import { LoadingSpinner } from '../LoadingSpinner';
-import { TrackerSelect } from '../TrackerSelect';
+import { ModalContext } from '../../context/ModalContext';
+import { useCloseModal } from '../../hooks/useCloseModal';
+import { Resource, ResourceStatus } from '../../models/Resource';
+import { useModifyResource } from '../../mutations/useModifyResource';
 import { useResourceTypes } from '../../queries/useResourceTypes';
-import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
-import { ResourceComments } from '../Resources/ResourceComments';
+import { devError } from '../../utils/ConsoleUtils';
+import { FormActions } from '../FormActions';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { Modal } from '../Modal';
 import { CommentInput } from '../Resources/ResourceCommentInput';
+import { ResourceComments } from '../Resources/ResourceComments';
+import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
+import { TrackerSelect } from '../TrackerSelect';
+import { Tabs } from '../tabs/Tabs';
 
 const TabContent = styled.div<{ show: boolean }>`
 	background: #f9f9f9;

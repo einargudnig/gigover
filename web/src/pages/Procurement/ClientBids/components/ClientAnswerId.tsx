@@ -1,31 +1,30 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
 import {
 	Box,
+	Flex,
 	Grid,
 	GridItem,
 	HStack,
-	VStack,
+	Spacer,
 	Table,
-	Thead,
-	Tr,
-	Th,
-	Tooltip,
 	Tbody,
 	Td,
-	Flex,
 	Text,
-	Spacer,
+	Th,
+	Thead,
+	Tooltip,
+	Tr,
+	VStack,
 	useToast
 } from '@chakra-ui/react';
-import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { Bid } from '../../../../models/Tender';
+import { useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
+import { Bid } from '../../../../models/Tender';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
+import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { AnswerBid } from './AnswerBid';
 
 interface HandledTextProps {

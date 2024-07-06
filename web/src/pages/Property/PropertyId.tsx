@@ -1,17 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { ModalContext } from '../../context/ModalContext';
-import { Box, Button, Heading, Flex, Spacer, Text } from '@chakra-ui/react';
-import { PlusIcon } from '../../components/icons/PlusIcon';
-import { PropertyInfo } from './components/PropertyInfo';
-import { Stakeholders } from './components/Stakeholders';
-import { Units } from './components/Units';
-import { Projects } from './components/Projects';
-import { useGetPropertyById } from '../../queries/properties/useGetPropertyById';
+import { Box, Button, Flex, Heading, Spacer, Text } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { PlusIcon } from '../../components/icons/PlusIcon';
 import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
+import { ModalContext } from '../../context/ModalContext';
+import { useGetPropertyById } from '../../queries/properties/useGetPropertyById';
+import { Projects } from './components/Projects';
 import { PropertyFiles } from './components/PropertyFiles';
+import { PropertyInfo } from './components/PropertyInfo';
+import { Stakeholders } from './components/Stakeholders';
+import { Units } from './components/Units';
 
 export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();

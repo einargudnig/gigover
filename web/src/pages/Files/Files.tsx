@@ -1,17 +1,17 @@
 import { Button, HStack, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Outlet, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
 import { UploadIcon } from '../../components/icons/UploadIcon';
-import styled from 'styled-components';
-import { useProjectList } from '../../queries/useProjectList';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
-import { Outlet, useParams } from 'react-router-dom';
+import { useProjectList } from '../../queries/useProjectList';
 import { UploadModal } from './UploadModal';
 import { SearchBar } from './components/SearchBar';
 // import { devInfo } from '../../utils/ConsoleUtils';
-import { CreateNewFolderButton } from './components/CreateNewFolder';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { CreateNewFolderButton } from './components/CreateNewFolder';
 
 const Container = styled.div`
 	flex: 1 0;

@@ -1,28 +1,28 @@
-import React, { useRef, useCallback, useEffect, useState } from 'react';
+import {
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogOverlay,
+	Button,
+	ButtonProps,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Input,
+	Spacer,
+	Text,
+	VStack,
+	useDisclosure,
+	useToast
+} from '@chakra-ui/react';
+import emailjs from '@emailjs/browser';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Theme } from '../../../Theme';
 import { useInviteBidder } from '../../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
 import { devError } from '../../../utils/ConsoleUtils';
-import { Theme } from '../../../Theme';
-import emailjs from '@emailjs/browser';
-import {
-	Button,
-	ButtonProps,
-	useDisclosure,
-	VStack,
-	AlertDialog,
-	AlertDialogOverlay,
-	AlertDialogContent,
-	FormControl,
-	FormLabel,
-	Input,
-	FormErrorMessage,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogBody,
-	Text,
-	Spacer,
-	useToast
-} from '@chakra-ui/react';
 
 export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');

@@ -1,18 +1,18 @@
-import React, { useRef } from 'react';
 import {
-	Button,
-	ButtonProps,
 	AlertDialog,
 	AlertDialogBody,
+	AlertDialogContent,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogContent,
 	AlertDialogOverlay,
+	Button,
+	ButtonProps,
 	Text,
 	useDisclosure
 } from '@chakra-ui/react';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import emailjs from '@emailjs/browser';
+import { useRef } from 'react';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 export type ConfirmDialogProps = {
 	mutationLoading: boolean;

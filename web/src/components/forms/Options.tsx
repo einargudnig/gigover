@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactSelect from 'react-select';
 import { StateManagerProps } from 'react-select/dist/declarations/src/stateManager';
 

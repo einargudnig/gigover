@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react';
+import { Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
+import { useMemo } from 'react';
 import styled from 'styled-components';
-import { Text, HStack, Flex, Grid, GridItem, Tooltip } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
-import { useGetBidderTenders } from '../../../queries/procurement/useGetBidderTenders';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { Tender } from '../../../models/Tender';
-import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { Center } from '../../../components/Center';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { Tender } from '../../../models/Tender';
+import { useGetBidderTenders } from '../../../queries/procurement/useGetBidderTenders';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../utils/StringUtils';
 
 const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;

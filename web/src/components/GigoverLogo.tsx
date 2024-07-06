@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface GigoverLogoProps {
 	scale?: number;
 	color?: string;

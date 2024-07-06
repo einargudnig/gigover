@@ -1,4 +1,3 @@
-import React, { useCallback } from 'react';
 import {
 	FormControl,
 	FormErrorMessage,
@@ -7,11 +6,12 @@ import {
 	HStack,
 	Tag
 } from '@chakra-ui/react';
+import { useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { DatePicker } from '../../forms/DatePicker';
 import { ProjectTask } from '../../../queries/useTaskDetails';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
 import { LoadingSpinner } from '../../LoadingSpinner';
+import { DatePicker } from '../../forms/DatePicker';
 
 interface TaskDateChangerProps {
 	task: ProjectTask;

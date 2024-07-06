@@ -1,10 +1,10 @@
 // import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Resource } from '../../../models/Resource';
 // import { GigoverPin } from './GigoverPin';
+import { Box, Center } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { Center, Box } from '@chakra-ui/react';
 
 interface GigoverMapsWithResources {
 	resources?: Resource[];

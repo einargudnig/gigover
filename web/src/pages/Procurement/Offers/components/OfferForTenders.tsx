@@ -1,12 +1,11 @@
-import React from 'react';
+import { Center, Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
-import { Center, Flex, Text, HStack, Grid, GridItem, Tooltip } from '@chakra-ui/react';
-import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { Tender } from '../../../../models/Tender';
+import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;

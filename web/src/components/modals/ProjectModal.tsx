@@ -1,11 +1,3 @@
-import React, { useState } from 'react';
-import { Project, ProjectStatus, ProjectStatusType } from '../../models/Project';
-import { Controller, useForm } from 'react-hook-form';
-import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
-import { InputWrapper } from '../forms/Input';
-import { useCloseModal } from '../../hooks/useCloseModal';
-import { FormActions } from '../FormActions';
-import { devError } from '../../utils/ConsoleUtils';
 import {
 	Box,
 	Button,
@@ -14,19 +6,27 @@ import {
 	FormErrorMessage,
 	FormHelperText,
 	FormLabel,
-	Heading,
 	HStack,
+	Heading,
 	Input
 } from '@chakra-ui/react';
-import { DatePicker } from '../forms/DatePicker';
-import { InviteUser } from '../InviteUser/InviteUser';
-import { useProjectList } from '../../queries/useProjectList';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
-import { ApiService } from '../../services/ApiService';
-import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
-import { useProgressStatusList } from '../../queries/useProgressStatusList';
-import { ProgressStatus } from '../../models/ProgressStatus';
 import CreatableSelect from 'react-select/creatable';
+import { useCloseModal } from '../../hooks/useCloseModal';
+import { ProgressStatus } from '../../models/ProgressStatus';
+import { Project, ProjectStatus, ProjectStatusType } from '../../models/Project';
+import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
+import { useProgressStatusList } from '../../queries/useProgressStatusList';
+import { useProjectList } from '../../queries/useProjectList';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
+import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
+import { FormActions } from '../FormActions';
+import { InviteUser } from '../InviteUser/InviteUser';
+import { DatePicker } from '../forms/DatePicker';
+import { InputWrapper } from '../forms/Input';
 
 interface ProjectModalProps {
 	project?: Project;

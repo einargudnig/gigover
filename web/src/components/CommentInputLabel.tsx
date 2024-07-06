@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const CommentInputLabel = (): JSX.Element => {
 	return (
 		<small style={{ display: 'inline-block', marginTop: -24, fontStyle: 'italic' }}>

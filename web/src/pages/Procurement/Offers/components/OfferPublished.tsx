@@ -1,9 +1,8 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
 import { Box, Button, Text } from '@chakra-ui/react';
-import { PublishedOffer } from './PublishedOffer';
+import { Link, useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
+import { PublishedOffer } from './PublishedOffer';
 
 export const OfferPublished = (): JSX.Element => {
 	// ! This is the page where the bidder can see his published offer

@@ -1,12 +1,11 @@
-import React from 'react';
+import { Center, HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
-import { Center, Text, VStack, HStack, Heading } from '@chakra-ui/react';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { FolderIcon } from '../../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../../hooks/colorGenerator';
 import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 const Container = styled.div`
 	flex: 1 0;

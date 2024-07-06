@@ -1,15 +1,14 @@
 // @ts-nocheck
-import React from 'react';
-import { Flex, Table as ChakraTable, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Table as ChakraTable, Flex, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import {
 	CellPropGetter,
 	Column,
 	HeaderPropGetter,
 	TableRowProps,
+	UseTableColumnProps,
 	useExpanded,
 	useSortBy,
-	useTable,
-	UseTableColumnProps
+	useTable
 } from 'react-table';
 import styled from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';

@@ -1,6 +1,5 @@
-import React from 'react';
-import { IconProps } from '../IconProps';
 import { Theme } from '../../Theme';
+import { IconProps } from '../IconProps';
 
 export const CaretIcon = ({ scale = 1, color = Theme.colors.black }: IconProps): JSX.Element => (
 	<svg

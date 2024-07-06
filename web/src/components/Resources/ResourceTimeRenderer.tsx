@@ -1,4 +1,3 @@
-import React from 'react';
 import { CountdownRendererFn } from 'react-countdown';
 
 export const ResourceTimeRenderer: CountdownRendererFn = ({ days, hours, minutes, seconds }) => {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconProps } from '../IconProps';
 
 export const Edit = ({ size, color = '#000', ...props }: IconProps): JSX.Element => {

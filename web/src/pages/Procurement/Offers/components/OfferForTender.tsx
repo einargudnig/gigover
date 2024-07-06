@@ -1,12 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Text, Flex, Box, HStack, Spacer } from '@chakra-ui/react';
-import { Center } from '../../../../components/Center';
+import { Box, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
-import { useGetOfferForTender } from '../../../../queries/procurement/useGetOfferForTender';
-import { Offer } from '../../../../models/Tender';
+import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { Offer } from '../../../../models/Tender';
+import { useGetOfferForTender } from '../../../../queries/procurement/useGetOfferForTender';
 
 const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;

@@ -1,15 +1,15 @@
 import { GridItem, IconButton, Text } from '@chakra-ui/react';
-import React, { Dispatch, SetStateAction, useContext, useMemo } from 'react';
+import { Dispatch, SetStateAction, useContext, useMemo } from 'react';
 import styled, { css } from 'styled-components';
-import { GantChartContext } from '../contexts/GantChartContext';
-import { CalendarType, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
-import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Chevron } from '../../../components/icons/Chevron';
-import { GantChartDates } from '../GantChartDates';
+import { IModalContext, ModalContext } from '../../../context/ModalContext';
+import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Milestone } from '../../../models/Milestone';
 import { TaskItem } from '../../../models/Task';
-import { IModalContext, ModalContext } from '../../../context/ModalContext';
 import { displayTaskTitle } from '../../../utils/TaskUtils';
+import { GantChartDates } from '../GantChartDates';
+import { GantChartContext } from '../contexts/GantChartContext';
+import { CalendarType, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
 
 interface GridProps {
 	segments: number;

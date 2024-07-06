@@ -1,8 +1,7 @@
-import React from 'react';
-import { Project } from '../models/Project';
 import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
-import { ClockIcon } from './icons/ClockIcon';
 import moment from 'moment';
+import { Project } from '../models/Project';
+import { ClockIcon } from './icons/ClockIcon';
 
 const hoursToHumanReadable = (hours: number): string => {
 	const days = Math.floor(hours / 24);

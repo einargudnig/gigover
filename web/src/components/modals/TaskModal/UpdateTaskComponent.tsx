@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
-import { TaskCardInput } from '../../TaskCardInput';
+import { Box, Button, Tag, Text, VStack } from '@chakra-ui/react';
+import { useCallback } from 'react';
 import { Task } from '../../../models/Task';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
-import { Tag, VStack, Box, Text, Button } from '@chakra-ui/react';
+import { TaskCardInput } from '../../TaskCardInput';
 
 interface UpdateTaskComponentProps {
 	task: Task;

@@ -1,13 +1,13 @@
-import { EditPhotoModal } from '../../../../components/modals/EditPhotoModal';
-import React, { useEffect, useState } from 'react';
-import { Heading, HStack, VStack } from '@chakra-ui/react';
-import { GigoverFile } from '../../components/File';
-import { EmptyState } from '../../../../components/empty/EmptyState';
+import { HStack, Heading, VStack } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ProjectImage } from '../../../../models/ProjectImage';
+import { CardBase } from '../../../../components/CardBase';
 import { DropZone } from '../../../../components/DropZone';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { CardBase } from '../../../../components/CardBase';
+import { EmptyState } from '../../../../components/empty/EmptyState';
+import { EditPhotoModal } from '../../../../components/modals/EditPhotoModal';
+import { ProjectImage } from '../../../../models/ProjectImage';
+import { GigoverFile } from '../../components/File';
 
 export const FilesUi = ({ files, title, projectId }) => {
 	const params = useParams();

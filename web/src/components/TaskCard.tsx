@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
-import styled, { css } from 'styled-components';
-import { Task } from '../models/Task';
+import { Avatar, Flex } from '@chakra-ui/react';
 import { darken } from 'polished';
-import { useProjectTypes } from '../queries/useProjectTypes';
+import { useContext } from 'react';
+import styled, { css } from 'styled-components';
 import { ModalContext } from '../context/ModalContext';
+import { FileUploadType } from '../models/FileUploadType';
+import { Task } from '../models/Task';
+import { useProjectTypes } from '../queries/useProjectTypes';
+import { CardBase } from './CardBase';
+import { DropZone } from './DropZone';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
-import { CardBase } from './CardBase';
-import { FileUploadType } from '../models/FileUploadType';
-import { DropZone } from './DropZone';
-import { Avatar, Flex } from '@chakra-ui/react';
 
 const TaskCardStyled = styled(CardBase)<{
 	isEditing: boolean;

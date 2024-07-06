@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Text, Grid, GridItem, HStack, Button, Box, Spacer } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, HStack, Spacer, Text } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { Label } from '../../../components/Label';
 import { ModalContext } from '../../../context/ModalContext';
 

@@ -1,7 +1,3 @@
-import React, { useCallback, useState } from 'react';
-import { useAddStakeHolder } from '../../mutations/properties/useAddStakeHolder';
-import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
-import { devError } from '../../utils/ConsoleUtils';
 import {
 	Button,
 	FormControl,
@@ -11,10 +7,14 @@ import {
 	Text,
 	useToast
 } from '@chakra-ui/react';
-import { TrackerSelect } from '../TrackerSelect';
-import { IPropertyUnit } from '../../models/Property';
-import { FormActions } from '../FormActions';
 import emailjs from '@emailjs/browser';
+import { useCallback, useState } from 'react';
+import { IPropertyUnit } from '../../models/Property';
+import { useAddStakeHolder } from '../../mutations/properties/useAddStakeHolder';
+import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
+import { devError } from '../../utils/ConsoleUtils';
+import { FormActions } from '../FormActions';
+import { TrackerSelect } from '../TrackerSelect';
 
 interface InviteUserProps {
 	units?: IPropertyUnit[];

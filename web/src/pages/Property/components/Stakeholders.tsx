@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { Box, Button, Grid, GridItem, HStack, Spacer, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Text, Grid, GridItem, HStack, Box, Spacer, Button } from '@chakra-ui/react';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
-import { useRemoveStakeHolder } from '../../../mutations/properties/useRemoveStakeHolder';
 import { IStakeholder } from '../../../models/Property';
+import { useRemoveStakeHolder } from '../../../mutations/properties/useRemoveStakeHolder';
 
 export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 	const { propertyId } = useParams();

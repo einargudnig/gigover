@@ -1,12 +1,11 @@
-import React from 'react';
+import { Box, Button, Flex, Heading, Spacer, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
-import { Spacer, Box, Flex, Button, Heading, Text } from '@chakra-ui/react';
-import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { Project, WorkerItem } from '../../models/Project';
+import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
-import { Modal } from '../Modal';
-import { LoadingSpinner } from '../LoadingSpinner';
 import { InviteUser } from '../InviteUser/InviteUser';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { Modal } from '../Modal';
 import { TrashIcon } from '../icons/TrashIcon';
 // import { validateEmail } from '../../utils/StringUtils';
 import { useRemoveUser } from '../../queries/useRemoveUser';

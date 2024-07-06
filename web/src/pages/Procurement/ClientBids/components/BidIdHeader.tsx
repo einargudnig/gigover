@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Grid, GridItem, HStack, VStack, Text } from '@chakra-ui/react';
+import { Box, Grid, GridItem, HStack, Text, VStack } from '@chakra-ui/react';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export const BidIdHeader = ({ bid }): JSX.Element => {

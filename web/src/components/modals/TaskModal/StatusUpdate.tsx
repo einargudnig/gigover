@@ -1,9 +1,8 @@
-import React from 'react';
-import { Task, TaskStatus, TaskStatusType } from '../../../models/Task';
-import { TrackerSelect } from '../../TrackerSelect';
-import { LoadingSpinner } from '../../LoadingSpinner';
-import { useUpdateTask } from '../../../queries/useUpdateTask';
 import { HStack, Tag } from '@chakra-ui/react';
+import { Task, TaskStatus, TaskStatusType } from '../../../models/Task';
+import { useUpdateTask } from '../../../queries/useUpdateTask';
+import { LoadingSpinner } from '../../LoadingSpinner';
+import { TrackerSelect } from '../../TrackerSelect';
 
 interface StatusUpdateProps {
 	projectId: number;

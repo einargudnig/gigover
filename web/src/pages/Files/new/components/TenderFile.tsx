@@ -1,10 +1,9 @@
-import React from 'react';
+import { Heading, Text, VStack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { VStack, Heading, Text } from '@chakra-ui/react';
-import { OtherGigoverFile } from './OtherFile';
 import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { OtherGigoverFile } from './OtherFile';
 
 export const TenderFile = (): JSX.Element => {
 	const params = useParams();

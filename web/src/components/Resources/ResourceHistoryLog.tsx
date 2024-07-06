@@ -1,10 +1,9 @@
-import React from 'react';
+import { Flex } from '@chakra-ui/react';
+import styled from 'styled-components';
 import { Resource } from '../../models/Resource';
 import { useResourceHistory } from '../../queries/useResourceHistory';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { ResourceHistoryTimeSlot } from './ResourceHistoryTimeSlot';
-import styled from 'styled-components';
-import { Flex } from '@chakra-ui/react';
 
 const ResourceHistoryItem = styled.div`
 	display: flex;

@@ -1,14 +1,13 @@
-import React from 'react';
-import { devError } from '../../../utils/ConsoleUtils';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { useProjectFoldersQuery } from '../../../queries/useProjectFoldersQuery';
+import { Spacer, VStack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { SimpleGrid } from '../../../components/SimpleGrid';
+import { useProjectDocuments } from '../../../queries/useProjectDocuments';
+import { useProjectFoldersQuery } from '../../../queries/useProjectFoldersQuery';
+import { devError } from '../../../utils/ConsoleUtils';
 import { CreateNewFolder } from '../components/CreateNewFolder';
 import { ProjectFolderComponent } from '../components/Folder';
 import { FilesUi } from './components/FilesUi';
-import { Spacer, VStack } from '@chakra-ui/react';
-import { SimpleGrid } from '../../../components/SimpleGrid';
-import { useProjectDocuments } from '../../../queries/useProjectDocuments';
 
 export const ProjectFolder = (): JSX.Element => {
 	const params = useParams();

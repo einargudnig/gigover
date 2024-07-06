@@ -1,6 +1,5 @@
-import styled from 'styled-components';
 import { Box, Flex, Text } from '@chakra-ui/react';
-import React from 'react';
+import styled from 'styled-components';
 import { ResourceStatus } from '../../../models/Resource';
 
 const StatusLabelWrapper = styled(Flex)`

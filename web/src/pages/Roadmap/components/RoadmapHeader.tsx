@@ -11,13 +11,13 @@ import {
 	TagLabel,
 	TagLeftIcon
 } from '@chakra-ui/react';
-import React, { useContext } from 'react';
-import { GantChartContext } from '../contexts/GantChartContext';
-import { UsersIcon } from '../../../components/icons/UsersIcon';
 import moment from 'moment';
-import { Chevron } from '../../../components/icons/Chevron';
+import { useContext } from 'react';
 import styled from 'styled-components';
+import { Chevron } from '../../../components/icons/Chevron';
+import { UsersIcon } from '../../../components/icons/UsersIcon';
 import { ProjectTimeStatus } from '../../../components/ProjectTimeStatus';
+import { GantChartContext } from '../contexts/GantChartContext';
 
 const EqualFlex = styled.div`
 	display: flex;

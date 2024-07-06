@@ -1,13 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { Button } from '@chakra-ui/react';
+import { useCallback, useMemo, useState } from 'react';
+import { useAvailableResources } from '../../../hooks/useAvailableResources';
+import { useHoldResourceButton } from '../../../hooks/useHoldResource';
 import { Task } from '../../../models/Task';
 import { useResources } from '../../../queries/useResources';
-import { TrackerSelect } from '../../TrackerSelect';
-import { Button } from '@chakra-ui/react';
-import { LoadingSpinner } from '../../LoadingSpinner';
 import { devError } from '../../../utils/ConsoleUtils';
-import { useAvailableResources } from '../../../hooks/useAvailableResources';
+import { LoadingSpinner } from '../../LoadingSpinner';
+import { TrackerSelect } from '../../TrackerSelect';
 import { ResourceOnTask } from './ResourceOnTask';
-import { useHoldResourceButton } from '../../../hooks/useHoldResource';
 
 export interface UseResourceOnTaskProps {
 	task: Task;

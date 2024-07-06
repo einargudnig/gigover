@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form';
 import {
 	Avatar,
 	Box,
@@ -13,7 +12,7 @@ import {
 	InputRightElement,
 	Text
 } from '@chakra-ui/react';
-import React from 'react';
+import { useForm } from 'react-hook-form';
 import { ShareItemContext } from '../../../context/ModalContext';
 
 type FormData = {

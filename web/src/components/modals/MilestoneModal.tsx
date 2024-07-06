@@ -1,8 +1,3 @@
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Modal } from '../Modal';
-import { MilestoneModalContext } from '../../context/ModalContext';
-import { useCloseModal } from '../../hooks/useCloseModal';
 import {
 	Center,
 	FormControl,
@@ -13,16 +8,20 @@ import {
 	Input,
 	Textarea
 } from '@chakra-ui/react';
+import { Controller, useForm } from 'react-hook-form';
+import { MilestoneModalContext } from '../../context/ModalContext';
+import { useCloseModal } from '../../hooks/useCloseModal';
 import { MilestoneForm } from '../../models/Milestone';
-import { DatePicker } from '../forms/DatePicker';
-import { FormActions } from '../FormActions';
-import { useAddMilestone } from '../../mutations/useAddMilestone';
-import { devError } from '../../utils/ConsoleUtils';
 import { Task, TaskStatus } from '../../models/Task';
+import { useAddMilestone } from '../../mutations/useAddMilestone';
 import { useProjectDetails } from '../../queries/useProjectDetails';
-import { LoadingSpinner } from '../LoadingSpinner';
-import { Options } from '../forms/Options';
+import { devError } from '../../utils/ConsoleUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
+import { FormActions } from '../FormActions';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { Modal } from '../Modal';
+import { DatePicker } from '../forms/DatePicker';
+import { Options } from '../forms/Options';
 
 interface MilestoneModalProps {
 	context: MilestoneModalContext;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import { TenderItem } from '../../../../models/Tender';
 

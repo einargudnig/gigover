@@ -1,10 +1,9 @@
-import React from 'react';
+import { Heading, VStack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { PublishedOffer } from './PublishedOffer';
+import { EmptyState } from '../../../../components/empty/EmptyState';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
-import { EmptyState } from '../../../../components/empty/EmptyState';
-import { Heading, VStack } from '@chakra-ui/react';
+import { PublishedOffer } from './PublishedOffer';
 
 export const PublishedTender = (): JSX.Element => {
 	// ! This is the page for the tender owner to see the published offers

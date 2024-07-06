@@ -1,33 +1,33 @@
-import React, { useRef, useState } from 'react';
 import {
-	Button,
-	ButtonProps,
-	Box,
-	Flex,
-	useToast,
 	AlertDialog,
-	AlertDialogOverlay,
+	AlertDialogBody,
 	AlertDialogContent,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogBody,
-	useDisclosure,
+	AlertDialogOverlay,
+	Box,
+	Button,
+	ButtonProps,
+	Flex,
 	HStack,
 	Spacer,
+	Text,
 	Tooltip,
-	Text
+	useDisclosure,
+	useToast
 } from '@chakra-ui/react';
+import { useRef, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { Tender, TenderItem } from '../../../../models/Tender';
+import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { OfferFile } from '../../../Files/new/components/OfferFile';
 import { OfferInformation } from './OfferInformation';
 import { TenderTable } from './OfferTable';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { Tender, TenderItem } from '../../../../models/Tender';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { UploadCertifications } from './UploadCertifications';
-import { OfferFile } from '../../../Files/new/components/OfferFile';
 
 export const TenderOffer = (): JSX.Element => {
 	const { offerId } = useParams();

@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { Page } from '../components/Page';
-import { FirebaseContext } from '../firebase/FirebaseContext';
-import { InputWrapper } from '../components/forms/Input';
-import { CardBase } from '../components/CardBase';
 import { Button } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { CardBase } from '../components/CardBase';
+import { Page } from '../components/Page';
+import { InputWrapper } from '../components/forms/Input';
+import { FirebaseContext } from '../firebase/FirebaseContext';
 
 export const Settings = (): JSX.Element => {
 	const firebase = useContext(FirebaseContext);

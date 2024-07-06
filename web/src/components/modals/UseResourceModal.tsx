@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { TrackerSelect } from '../TrackerSelect';
+import { HStack } from '@chakra-ui/react';
+import { useState } from 'react';
+import { ResourceTrackerContext } from '../../context/ModalContext';
+import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { Task } from '../../models/Task';
 import { SubstringText } from '../../utils/StringUtils';
-import { useProjectTasks } from '../../hooks/useProjectTasks';
-import { ResourceTrackerContext } from '../../context/ModalContext';
-import { HStack } from '@chakra-ui/react';
-import { UseResourceOnTask } from './TaskModal/UseResourceOnTask';
 import { displayTaskTitle } from '../../utils/TaskUtils';
+import { TrackerSelect } from '../TrackerSelect';
+import { UseResourceOnTask } from './TaskModal/UseResourceOnTask';
 
 export const UseResourceModal = ({
 	resourceTracker

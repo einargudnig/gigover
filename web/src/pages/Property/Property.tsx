@@ -1,10 +1,9 @@
-import React from 'react';
+import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
-import { Text, Flex, Grid, GridItem, HStack } from '@chakra-ui/react';
 import { CardBaseLink } from '../../components/CardBase';
-import { useGetProperties } from '../../queries/properties/useGetPoperties';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { useGetProperties } from '../../queries/properties/useGetPoperties';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;

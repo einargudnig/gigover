@@ -1,11 +1,10 @@
-import React from 'react';
+import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
-import { Grid, GridItem, HStack, Text, Flex } from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
-import { useGetUserOffers } from '../../../queries/procurement/useGetUserOffers';
-import { Offer } from '../../../models/Tender';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Center } from '../../../components/Center';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { Offer } from '../../../models/Tender';
+import { useGetUserOffers } from '../../../queries/procurement/useGetUserOffers';
 
 const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;

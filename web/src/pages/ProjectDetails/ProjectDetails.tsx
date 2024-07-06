@@ -1,17 +1,17 @@
-import React, { useMemo, useState } from 'react';
-import styled from 'styled-components';
-import { Page } from '../../components/Page';
-import { Link, useParams } from 'react-router-dom';
-import { useProjectDetails } from '../../queries/useProjectDetails';
-import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
-import { TaskColumn } from './TaskColumn';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { useUpdateTask } from '../../queries/useUpdateTask';
-import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Button } from '@chakra-ui/react';
+import { useMemo, useState } from 'react';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { Link, useParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Page } from '../../components/Page';
+import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Project } from '../../models/Project';
+import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
+import { useProjectDetails } from '../../queries/useProjectDetails';
+import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
+import { TaskColumn } from './TaskColumn';
 
 const FeedBoard = styled.div`
 	display: flex;

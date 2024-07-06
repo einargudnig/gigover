@@ -1,7 +1,6 @@
-import React from 'react';
 import { Resource } from '../../models/Resource';
-import { Comment } from '../Comment';
 import { useResourceComments } from '../../queries/useResourceComments';
+import { Comment } from '../Comment';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export interface ResourceCommentsProps {

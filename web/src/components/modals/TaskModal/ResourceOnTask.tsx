@@ -1,14 +1,14 @@
-import React, { useMemo } from 'react';
+import { Flex, HStack, Text } from '@chakra-ui/react';
+import { useMemo } from 'react';
+import Countdown from 'react-countdown';
+import { Link } from 'react-router-dom';
+import { useCloseModal } from '../../../hooks/useCloseModal';
 import { Resource } from '../../../models/Resource';
 import { Task } from '../../../models/Task';
 import { useResourceHistory } from '../../../queries/useResourceHistory';
-import { Flex, HStack, Text } from '@chakra-ui/react';
-import Countdown from 'react-countdown';
+import { BorderDiv } from '../../BorderDiv';
 import { ResourceTimeRenderer } from '../../Resources/ResourceTimeRenderer';
 import { ToolsIcon } from '../../icons/ToolsIcon';
-import { BorderDiv } from '../../BorderDiv';
-import { Link } from 'react-router-dom';
-import { useCloseModal } from '../../../hooks/useCloseModal';
 
 export interface ResourceOnTaskProps {
 	resource: Resource;

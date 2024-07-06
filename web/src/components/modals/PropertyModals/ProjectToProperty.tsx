@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { IProperties, PropertyToProject } from '../../../models/Property';
-import { TrackerSelect } from '../../TrackerSelect';
 import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
-import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCloseModal } from '../../../hooks/useCloseModal';
+import { IProperties, PropertyToProject } from '../../../models/Property';
+import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
+import { TrackerSelect } from '../../TrackerSelect';
 
 interface PropertyToProjectModalProps {
 	properties: IProperties[];

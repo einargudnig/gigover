@@ -1,7 +1,7 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { devError } from './utils/ConsoleUtils';
-import { Page } from './components/Page';
 import { Box } from '@chakra-ui/react';
+import { Component, ErrorInfo, ReactNode } from 'react';
+import { Page } from './components/Page';
+import { devError } from './utils/ConsoleUtils';
 
 interface Props {
 	withPage?: boolean;

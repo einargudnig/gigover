@@ -1,4 +1,3 @@
-import React from 'react';
 import { Theme } from '../../Theme';
 
 export const TenderIcon = ({ size = 24, color = Theme.colors.white }): JSX.Element => {

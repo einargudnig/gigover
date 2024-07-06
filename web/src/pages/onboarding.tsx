@@ -181,7 +181,12 @@ export const Onboarding = (): JSX.Element => {
 											<FormLabel>Zip code</FormLabel>
 											<Input
 												{...register('zipCode', {
-													required: 'Zip code is required'
+													required: 'Zip code is required',
+													maxLength: {
+														value: 3,
+														message:
+															'Zip code no more than 3 digits long'
+													}
 												})}
 											/>
 											{errors.zipCode && (

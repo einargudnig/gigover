@@ -1,7 +1,6 @@
-import React from 'react';
+import { Box, Flex, Spacer, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { IPropertyUnit } from '../../../models/Property';
-import { Text, Box, Flex, Spacer } from '@chakra-ui/react';
 import { InviteStakeholder } from '../../InviteUser/InviteStakeholder';
 import { Modal } from '../../Modal';
 

@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import styled from 'styled-components';
 import { GeneratedColor, colorGenerator } from '../hooks/colorGenerator';
 

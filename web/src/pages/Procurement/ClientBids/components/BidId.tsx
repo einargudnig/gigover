@@ -1,18 +1,18 @@
-import React, { useContext, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Button, Flex, HStack, Text, useToast } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Center } from '../../../../components/Center';
+import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { TrashIcon } from '../../../../components/icons/TrashIcon';
+import { ModalContext } from '../../../../context/ModalContext';
+import { Bid } from '../../../../models/Tender';
+import { useDeleteBid } from '../../../../mutations/procurement/client-bids/useDeleteBid';
+import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
+import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
-import { Box, Button, Flex, HStack, Text, useToast } from '@chakra-ui/react';
-import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
-import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { ModalContext } from '../../../../context/ModalContext';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Bid } from '../../../../models/Tender';
-import { Center } from '../../../../components/Center';
-import { useDeleteBid } from '../../../../mutations/procurement/client-bids/useDeleteBid';
-import { ConfirmDialog } from '../../../../components/ConfirmDialog';
-import { TrashIcon } from '../../../../components/icons/TrashIcon';
 
 export const BidId = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();

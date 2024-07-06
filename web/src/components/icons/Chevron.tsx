@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconProps } from '../IconProps';
 
 type Direction = 'up' | 'right' | 'down' | 'left';

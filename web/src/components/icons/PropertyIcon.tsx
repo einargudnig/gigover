@@ -1,4 +1,3 @@
-import React from 'react';
 import { Theme } from '../../Theme';
 
 export const PropertyIcon = ({ size = 24, color = Theme.colors.white }) => {

@@ -1,9 +1,9 @@
-import { Tab, TabList, Tabs, Tooltip, IconButton, useToast } from '@chakra-ui/react';
 import { MinusIcon } from '@chakra-ui/icons';
-import React, { useState } from 'react';
+import { IconButton, Tab, TabList, Tabs, Tooltip, useToast } from '@chakra-ui/react';
+import { useState } from 'react';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
-import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { useRemoveProgressTab } from '../../mutations/useRemoveProgressTab';
 
 interface DashboardTabsProps {

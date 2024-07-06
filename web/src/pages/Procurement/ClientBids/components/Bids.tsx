@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import { Box, Button, Flex, Grid, GridItem, HStack, Spacer, Text } from '@chakra-ui/react';
+import { useContext } from 'react';
 import styled from 'styled-components';
-import { ModalContext } from '../../../../context/ModalContext';
-import { Text, Flex, Grid, GridItem, HStack, Box, Spacer, Button } from '@chakra-ui/react';
-import { PlusIcon } from '../../../../components/icons/PlusIcon';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { PlusIcon } from '../../../../components/icons/PlusIcon';
+import { ModalContext } from '../../../../context/ModalContext';
+import { Bid } from '../../../../models/Tender';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Bid } from '../../../../models/Tender';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;

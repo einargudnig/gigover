@@ -1,6 +1,3 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { IProperties } from '../../../models/Property';
 import { SearchIcon } from '@chakra-ui/icons';
 import {
 	Input,
@@ -12,7 +9,10 @@ import {
 	Text,
 	useOutsideClick
 } from '@chakra-ui/react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import { IProperties } from '../../../models/Property';
 import { useGetProperties } from '../../../queries/properties/useGetPoperties';
 
 const SearchResults = styled.div`

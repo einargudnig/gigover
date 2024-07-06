@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Text, Box, Grid, GridItem, HStack, Spacer, Button } from '@chakra-ui/react';
-import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { Box, Button, Grid, GridItem, HStack, Spacer, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { PropertyToProject } from '../../../models/Property';
 import { useRemoveProjectFromProperty } from '../../../mutations/properties/useRemoveProjectFromProperty';
 

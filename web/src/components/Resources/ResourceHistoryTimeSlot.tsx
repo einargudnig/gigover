@@ -1,11 +1,10 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
 import { Flex, Text } from '@chakra-ui/react';
-import { LocationPinIcon } from '../icons/LocationPinIcon';
-import { ResourceHistoryItem } from '../../models/ResourceHistoryItem';
-import { Resource } from '../../models/Resource';
 import { format } from 'date-fns';
 import Countdown from 'react-countdown';
+import styled, { css } from 'styled-components';
+import { Resource } from '../../models/Resource';
+import { ResourceHistoryItem } from '../../models/ResourceHistoryItem';
+import { LocationPinIcon } from '../icons/LocationPinIcon';
 import { ResourceTimeRenderer } from './ResourceTimeRenderer';
 
 const TimeslotContainer = styled.div<{ inUse: boolean }>`

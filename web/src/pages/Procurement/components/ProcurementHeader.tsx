@@ -1,29 +1,29 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDeleteProcurement } from '../../../mutations/procurement/useDeleteProcurement';
 import {
 	Box,
 	Button,
+	Flex,
 	Grid,
 	GridItem,
-	Flex,
 	HStack,
-	VStack,
-	Text,
 	Spacer,
-	useToast,
 	Table,
-	Tr,
 	Td,
+	Text,
 	Thead,
-	Tooltip
+	Tooltip,
+	Tr,
+	VStack,
+	useToast
 } from '@chakra-ui/react';
-import { ImportantIcon } from '../../../components/icons/ImportantIcon';
-import { ModalContext } from '../../../context/ModalContext';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { ModalContext } from '../../../context/ModalContext';
+import { useDeleteProcurement } from '../../../mutations/procurement/useDeleteProcurement';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../utils/StringUtils';
 
 export const ProcurementHeader = ({ tender }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);

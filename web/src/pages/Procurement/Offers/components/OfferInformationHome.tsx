@@ -1,5 +1,4 @@
-import React from 'react';
-import { Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
+import { Box, Flex, HStack, Spacer, Text, VStack } from '@chakra-ui/react';
 
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 

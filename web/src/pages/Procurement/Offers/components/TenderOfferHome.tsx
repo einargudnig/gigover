@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Box, Button, Flex, Heading, Spacer, Text, VStack, useToast } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { Tender } from '../../../../models/Tender';
+import { useBidderReject } from '../../../../mutations/procurement/useBidderReject';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { Tender } from '../../../../models/Tender';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Box, Flex, Spacer, Button, Text, useToast, Heading, VStack } from '@chakra-ui/react';
-import { Center } from '../../../../components/Center';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { useBidderReject } from '../../../../mutations/procurement/useBidderReject';
 // import { UserContext } from '../../../../context/UserContext';
 
-import { OpenOffer } from './OpenOffer';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
+import { OpenOffer } from './OpenOffer';
 
 type TenderIdParams = {
 	tenderId: string;

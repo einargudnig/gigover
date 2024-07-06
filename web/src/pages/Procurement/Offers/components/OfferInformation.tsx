@@ -1,5 +1,4 @@
-import React from 'react';
-import { Divider, Box, Flex, HStack, VStack, Text, Spacer } from '@chakra-ui/react';
+import { Box, Divider, Flex, HStack, Spacer, Text, VStack } from '@chakra-ui/react';
 // import { useParams } from 'react-router-dom';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 

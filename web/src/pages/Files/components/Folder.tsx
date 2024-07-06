@@ -1,8 +1,3 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-import { FolderIcon } from '../../../components/icons/FolderIcon';
-import { colorGenerator } from '../../../hooks/colorGenerator';
-import { CardBaseLink } from '../../../components/CardBase';
 import {
 	Button,
 	Heading,
@@ -15,16 +10,21 @@ import {
 	Text,
 	VStack
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled, { css } from 'styled-components';
+import { CardBaseLink } from '../../../components/CardBase';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { DropZone } from '../../../components/DropZone';
+import { FolderIcon } from '../../../components/icons/FolderIcon';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { colorGenerator } from '../../../hooks/colorGenerator';
+import { FileUploadType } from '../../../models/FileUploadType';
 import { Project } from '../../../models/Project';
 import { ProjectFolder } from '../../../models/ProjectFolder';
-import { humanFileSize } from '../../../utils/FileSizeUtils';
-import { DropZone } from '../../../components/DropZone';
-import { FileUploadType } from '../../../models/FileUploadType';
-import { useFolderDocuments } from '../../../queries/useFolderDocuments';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { useDeleteFolder } from '../../../mutations/useDeleteFolder';
-import { ConfirmDialog } from '../../../components/ConfirmDialog';
-import { useNavigate } from 'react-router-dom';
+import { useFolderDocuments } from '../../../queries/useFolderDocuments';
+import { humanFileSize } from '../../../utils/FileSizeUtils';
 
 interface FolderProps {
 	project: Project;

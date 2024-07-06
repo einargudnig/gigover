@@ -1,13 +1,13 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
+import { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useAddFolder } from '../../../queries/useAddFolder';
-import { Button, FormControl, FormErrorMessage, Input, FormLabel, Text } from '@chakra-ui/react';
-import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { CardBase } from '../../../components/CardBase';
-import { Modal } from '../../../components/Modal';
-import { FormActions } from '../../../components/FormActions';
 import { DropZone } from '../../../components/DropZone';
+import { FormActions } from '../../../components/FormActions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { Modal } from '../../../components/Modal';
+import { FolderIcon } from '../../../components/icons/FolderIcon';
+import { useAddFolder } from '../../../queries/useAddFolder';
 
 const NewFolderCard = styled(CardBase)`
 	display: flex;

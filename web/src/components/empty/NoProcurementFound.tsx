@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { EmptyState } from './EmptyState';
-import { EmptyProjects } from './EmptyProjects';
 import { Button } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { ModalContext } from '../../context/ModalContext';
+import { EmptyProjects } from './EmptyProjects';
+import { EmptyState } from './EmptyState';
 
 export const NoProcurementFound = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);

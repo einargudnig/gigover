@@ -1,14 +1,14 @@
 import { Heading, Text, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Modal } from '../../components/Modal';
-import { FormActions } from '../../components/FormActions';
 import { DropZone } from '../../components/DropZone';
-import { useProjectList } from '../../queries/useProjectList';
+import { FormActions } from '../../components/FormActions';
+import { Modal } from '../../components/Modal';
 import { TrackerSelect } from '../../components/TrackerSelect';
-import { useProjectFolders } from '../../mutations/useProjectFolders';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { useProjectFolders } from '../../mutations/useProjectFolders';
 import { useFolderFolders } from '../../queries/useFolderFolders';
+import { useProjectList } from '../../queries/useProjectList';
 
 interface UploadModalProps {
 	onClose: () => void;

@@ -1,19 +1,19 @@
-import React, { useContext, useMemo } from 'react';
-import { Page } from '../../components/Page';
-import { Table } from '../../components/table/Table';
+import { Button, Flex, HStack, Heading } from '@chakra-ui/react';
+import { useContext, useMemo } from 'react';
 import { CellProps, Column } from 'react-table';
-import { Button, Flex, Heading, HStack } from '@chakra-ui/react';
-import { CardBase } from '../../components/CardBase';
 import styled from 'styled-components';
-import GigoverMaps from './components/GigoverMaps';
-import { useResources } from '../../queries/useResources';
-import { Resource, ResourceStatus } from '../../models/Resource';
-import { ModalContext } from '../../context/ModalContext';
-import { useResourceTypes } from '../../queries/useResourceTypes';
-import { HoldResource } from './HoldResource';
-import { useResourceDelete } from '../../mutations/useResourceDelete';
-import { TrashIcon } from '../../components/icons/TrashIcon';
+import { CardBase } from '../../components/CardBase';
+import { Page } from '../../components/Page';
 import { PlusIcon } from '../../components/icons/PlusIcon';
+import { TrashIcon } from '../../components/icons/TrashIcon';
+import { Table } from '../../components/table/Table';
+import { ModalContext } from '../../context/ModalContext';
+import { Resource, ResourceStatus } from '../../models/Resource';
+import { useResourceDelete } from '../../mutations/useResourceDelete';
+import { useResourceTypes } from '../../queries/useResourceTypes';
+import { useResources } from '../../queries/useResources';
+import { HoldResource } from './HoldResource';
+import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`

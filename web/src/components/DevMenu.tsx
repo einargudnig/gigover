@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
-import { IS_LOCAL } from '../services/ApiService';
 import { Button } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
+import styled from 'styled-components';
 import { useChangeUid } from '../mutations/useChangeUid';
+import { IS_LOCAL } from '../services/ApiService';
 
 const DevMenuStyled = styled.div`
 	position: fixed;

@@ -1,6 +1,5 @@
-import React from 'react';
-import { IconProps } from '../IconProps';
 import { Theme } from '../../Theme';
+import { IconProps } from '../IconProps';
 
 export const ProjectIcon = ({ size = 24, color = Theme.colors.white }: IconProps): JSX.Element => {
 	return (

@@ -1,32 +1,32 @@
-import React, { useMemo, useState } from 'react';
-import { TenderItem, Bidder } from '../../../models/Tender';
-import { useParams, Link } from 'react-router-dom';
 import {
 	Box,
+	Button,
+	Flex,
 	Grid,
 	GridItem,
-	Flex,
 	HStack,
-	VStack,
-	Text,
+	Heading,
 	Spacer,
 	Table,
-	Tr,
-	Td,
-	Thead,
 	Tbody,
+	Td,
+	Text,
 	Th,
+	Thead,
 	Tooltip,
-	Button,
-	Heading
+	Tr,
+	VStack
 } from '@chakra-ui/react';
-import { ImportantIcon } from '../../../components/icons/ImportantIcon';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { InviteButton } from './InviteButton';
-import { UploadTenderDocuments } from '../Offers/components/UploadTenderDocuments';
+import { useMemo, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { EmptyState } from '../../../components/empty/EmptyState';
+import { ImportantIcon } from '../../../components/icons/ImportantIcon';
+import { Bidder, TenderItem } from '../../../models/Tender';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
+import { UploadTenderDocuments } from '../Offers/components/UploadTenderDocuments';
+import { InviteButton } from './InviteButton';
 
 export const PublishedTender = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();

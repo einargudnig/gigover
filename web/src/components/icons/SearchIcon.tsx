@@ -1,6 +1,5 @@
-import React from 'react';
-import { IconProps } from '../IconProps';
 import { Theme } from '../../Theme';
+import { IconProps } from '../IconProps';
 
 export const SearchIcon = ({ size = 24, color = Theme.colors.black }: IconProps): JSX.Element => {
 	return (

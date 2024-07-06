@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
 	Input,
 	InputGroup,
@@ -8,10 +7,11 @@ import {
 	MenuList,
 	useOutsideClick
 } from '@chakra-ui/react';
+import styled from '@emotion/styled';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { SearchIcon } from '../../../components/icons/SearchIcon';
 import { ProjectFile } from '../../../models/ProjectFile';
-import styled from '@emotion/styled';
-import { NavLink } from 'react-router-dom';
 
 interface SearchBarProps {
 	files: ProjectFile[];

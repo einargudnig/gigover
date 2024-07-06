@@ -1,5 +1,5 @@
 import { Box, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { getMinMaxForCalendarType } from '../hooks/useGantChart';

@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { ModalContext } from '../../context/ModalContext';
 import { Button, HStack, VStack } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { PlusIcon } from '../../components/icons/PlusIcon';
+import { ModalContext } from '../../context/ModalContext';
 import { SearchBar } from './components/SearchBar';
-import styled from 'styled-components';
 
 const Container = styled.div`
 	flex: 1 0;

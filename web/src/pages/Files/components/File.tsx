@@ -1,18 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import { FileType, ProjectFile } from '../../../models/ProjectFile';
-import { CardBaseLink } from '../../../components/CardBase';
-import { FileTextIcon } from '../../../components/icons/FileTypes/FileTextIcon';
-import { FileStarIcon } from '../../../components/icons/FileTypes/FileStarIcon';
-import { FileVideoIcon } from '../../../components/icons/FileTypes/FileVideoIcon';
-import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
-import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
-import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import moment from 'moment';
-import { GANT_CHART_FORMAT } from '../../Roadmap/GantChartDates';
-import { humanFileSize } from '../../../utils/FileSizeUtils';
+import styled from 'styled-components';
+import { CardBaseLink } from '../../../components/CardBase';
+import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
+import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
+import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
+import { FileStarIcon } from '../../../components/icons/FileTypes/FileStarIcon';
+import { FileTextIcon } from '../../../components/icons/FileTypes/FileTextIcon';
+import { FileVideoIcon } from '../../../components/icons/FileTypes/FileVideoIcon';
+import { FileType, ProjectFile } from '../../../models/ProjectFile';
 import { DocumentTypes, ProjectImage } from '../../../models/ProjectImage';
+import { humanFileSize } from '../../../utils/FileSizeUtils';
+import { GANT_CHART_FORMAT } from '../../Roadmap/GantChartDates';
 
 interface FileProps {
 	file: ProjectFile;

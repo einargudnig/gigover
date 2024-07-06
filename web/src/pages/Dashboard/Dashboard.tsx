@@ -1,21 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Page } from '../../components/Page';
-import { useProjectList } from '../../queries/useProjectList';
-import { DashboardTabs } from './DashboardTabs';
-import { ProjectStatus } from '../../models/Project';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Center } from '../../components/Center';
-import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { TimeIcon } from '../../components/icons/TimeIcon';
-import { PlusIcon } from '../../components/icons/PlusIcon';
 import { Button, IconButton, VStack } from '@chakra-ui/react';
-import { ModalContext } from '../../context/ModalContext';
-import { SortableProjectList } from '../../components/SortableProjectList';
-import { useProgressStatusList } from '../../queries/useProgressStatusList';
-import { ProgressStatus } from '../../models/ProgressStatus';
-import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
+import { useContext, useEffect, useState } from 'react';
 import { Theme } from '../../Theme';
+import { Center } from '../../components/Center';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Page } from '../../components/Page';
+import { SortableProjectList } from '../../components/SortableProjectList';
+import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
+import { PlusIcon } from '../../components/icons/PlusIcon';
+import { TimeIcon } from '../../components/icons/TimeIcon';
+import { ModalContext } from '../../context/ModalContext';
+import { ProgressStatus } from '../../models/ProgressStatus';
+import { ProjectStatus } from '../../models/Project';
+import { useProgressStatusList } from '../../queries/useProgressStatusList';
+import { useProjectList } from '../../queries/useProjectList';
 import { SearchBar } from '../Property/components/SearchBar';
+import { DashboardTabs } from './DashboardTabs';
+import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();

@@ -1,7 +1,6 @@
-import React from 'react';
+import { darken } from 'polished';
 import styled, { css } from 'styled-components';
 import { CaretIcon } from './icons/CaretIcon';
-import { darken } from 'polished';
 
 const TrackerSelectStyled = styled.div<{ minWidth?: number; margin: number }>`
 	display: flex;

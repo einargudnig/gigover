@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const ImportantIcon = ({ size = 29 }): JSX.Element => {
 	return (
 		<svg

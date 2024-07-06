@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Task } from '../../../models/Task';
-import { LoadingSpinner } from '../../LoadingSpinner';
-import { useUpdateTask } from '../../../queries/useUpdateTask';
 import { Button, Tag, Textarea, VStack, useToast } from '@chakra-ui/react';
+import { useState } from 'react';
+import { Task } from '../../../models/Task';
+import { useUpdateTask } from '../../../queries/useUpdateTask';
+import { LoadingSpinner } from '../../LoadingSpinner';
 
 interface StatusUpdateProps {
 	projectId: number;

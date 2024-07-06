@@ -1,5 +1,3 @@
-import React from 'react';
-
 export const EmptyProjects = ({ scale = 1 }) => (
 	<svg
 		width={scale * 182}

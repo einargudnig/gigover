@@ -1,10 +1,9 @@
-import React from 'react';
+import { Center, Heading, VStack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Center, VStack, Heading } from '@chakra-ui/react';
-import { OtherGigoverFile } from './OtherFile';
 import { EmptyState } from '../../../../components/empty/EmptyState';
+import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
+import { OtherGigoverFile } from './OtherFile';
 // import { OfferDocument } from '../../../../models/Tender';
 // import { EditPhotoModal } from '../../../../components/modals/EditPhotoModal';
 

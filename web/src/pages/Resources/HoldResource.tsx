@@ -1,9 +1,8 @@
-import React from 'react';
 import { Button } from '@chakra-ui/react';
-import { Resource } from '../../models/Resource';
-import { useReleaseResource } from '../../mutations/useReleaseResource';
 import { useGetLocation } from '../../hooks/useGetLocation';
 import { useHoldResourceButton } from '../../hooks/useHoldResource';
+import { Resource } from '../../models/Resource';
+import { useReleaseResource } from '../../mutations/useReleaseResource';
 
 export interface HoldResourceProps {
 	resource: Resource;

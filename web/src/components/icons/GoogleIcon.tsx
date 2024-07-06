@@ -1,4 +1,3 @@
-import React from 'react';
 import { IconProps } from '../IconProps';
 
 export const GoogleIcon = ({ size = 32, ...props }: IconProps): JSX.Element => {

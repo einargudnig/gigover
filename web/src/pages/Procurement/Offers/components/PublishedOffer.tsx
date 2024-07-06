@@ -1,32 +1,32 @@
-import React, { useRef } from 'react';
-import { useParams } from 'react-router-dom';
 import {
-	Button,
-	Table,
-	Td,
-	Th,
-	Thead,
-	Tr,
-	Tooltip,
-	Divider,
 	Box,
+	Button,
+	Divider,
 	Flex,
 	HStack,
-	VStack,
-	Text,
-	Tbody,
 	Spacer,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tooltip,
+	Tr,
+	VStack,
 	useToast
 } from '@chakra-ui/react';
-import { Center } from '../../../../components/Center';
-import { GetOfferItem } from '../../../../models/Tender';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import ReactToPdf from 'react-to-pdf';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
+import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { GetOfferItem } from '../../../../models/Tender';
 import { useAcceptOffer } from '../../../../mutations/procurement/useAcceptOffer';
 import { useRejectOffer } from '../../../../mutations/procurement/useRejectOffer';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 
 export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);

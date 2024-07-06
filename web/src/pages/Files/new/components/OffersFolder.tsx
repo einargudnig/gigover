@@ -1,13 +1,12 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import { Center, HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import { HStack, VStack, Text, Heading, Center } from '@chakra-ui/react';
+import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { useGetUserOffers } from '../../../../queries/procurement/useGetUserOffers';
-import { Offer } from '../../../../models/Tender';
 import { FolderIcon } from '../../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../../hooks/colorGenerator';
+import { Offer } from '../../../../models/Tender';
+import { useGetUserOffers } from '../../../../queries/procurement/useGetUserOffers';
 
 const Container = styled.div`
 	flex: 1 0;

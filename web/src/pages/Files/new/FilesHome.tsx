@@ -1,9 +1,8 @@
-import React from 'react';
-import { useProjectList } from '../../../queries/useProjectList';
-import { useOpenProjects } from '../../../hooks/useAvailableProjects';
-import { Folder } from '../components/Folder';
-import { SimpleGrid } from '../../../components/SimpleGrid';
 import { Heading, HStack, VStack } from '@chakra-ui/react';
+import { SimpleGrid } from '../../../components/SimpleGrid';
+import { useOpenProjects } from '../../../hooks/useAvailableProjects';
+import { useProjectList } from '../../../queries/useProjectList';
+import { Folder } from '../components/Folder';
 
 // For the Tender Folder
 import styled, { css } from 'styled-components';

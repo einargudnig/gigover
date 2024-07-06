@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
+import { useCallback, useEffect, useState } from 'react';
+import { Theme } from '../../Theme';
 import { useInviteUserToProject } from '../../mutations/useInviteUserToProject';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { devError } from '../../utils/ConsoleUtils';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
-import { Theme } from '../../Theme';
 
 export interface InviteUserProps {
 	projectId: number;

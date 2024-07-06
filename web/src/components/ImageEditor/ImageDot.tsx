@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Image as ChakraImage } from '@chakra-ui/react';
-import useResizeObserver from 'use-resize-observer';
-import { IImageDot } from '../modals/EditPhotoModal';
+import { useCallback, useEffect, useState } from 'react';
+import 'react-medium-image-zoom/dist/styles.css';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 import styled from 'styled-components';
-import ImagePoint from './ImagePoint';
+import useResizeObserver from 'use-resize-observer';
+import useKeyPress from '../../hooks/useArrowKey';
 import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
-import 'react-medium-image-zoom/dist/styles.css';
-import useKeyPress from '../../hooks/useArrowKey';
+import { IImageDot } from '../modals/EditPhotoModal';
+import ImagePoint from './ImagePoint';
 // import ImageCanvas from './ImageCanvas';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 

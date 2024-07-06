@@ -1,15 +1,14 @@
-import React from 'react';
-import { ProcurementHeader } from './ProcurementHeader';
-import { NewTenderItemTable } from './NewTenderItemTable';
-import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
-import { useParams } from 'react-router-dom';
-import { Tender } from '../../../models/Tender';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Heading, Text, VStack } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 import { Center } from '../../../components/Center';
-import { PublishedTender } from './PublishedTender';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { EmptyState } from '../../../components/empty/EmptyState';
+import { Tender } from '../../../models/Tender';
+import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
+import { NewTenderItemTable } from './NewTenderItemTable';
+import { ProcurementHeader } from './ProcurementHeader';
+import { PublishedTender } from './PublishedTender';
 // import { TenderFile } from '../../Files/new/components/TenderFile';
 
 export const TenderPage = (): JSX.Element => {

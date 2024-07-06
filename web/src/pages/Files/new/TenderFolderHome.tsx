@@ -1,8 +1,7 @@
-import React from 'react';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`

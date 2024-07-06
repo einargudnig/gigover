@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
 import { HStack, VStack } from '@chakra-ui/react';
+import styled from 'styled-components';
 
 import { Outlet } from 'react-router-dom';
 

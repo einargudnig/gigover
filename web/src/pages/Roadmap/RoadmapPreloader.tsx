@@ -1,11 +1,10 @@
-import React from 'react';
-import { Page } from '../../components/Page';
-import { useProjectList } from '../../queries/useProjectList';
+import { NumberParam, useQueryParam } from 'use-query-params';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Roadmap } from './Roadmap';
+import { Page } from '../../components/Page';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
-import { useQueryParam, NumberParam } from 'use-query-params';
+import { useProjectList } from '../../queries/useProjectList';
+import { Roadmap } from './Roadmap';
 
 export const RoadmapPreloader = (): JSX.Element => {
 	const [projectId] = useQueryParam('project', NumberParam);

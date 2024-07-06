@@ -1,10 +1,9 @@
-import React from 'react';
-import { IPropertyUnit } from '../../../models/Property';
 import { Box, FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
-import { FormActions } from '../../FormActions';
-import { useCloseModal } from '../../../hooks/useCloseModal';
 import { useForm } from 'react-hook-form';
+import { useCloseModal } from '../../../hooks/useCloseModal';
+import { IPropertyUnit } from '../../../models/Property';
 import { useAddUnit } from '../../../mutations/properties/useAddUnit';
+import { FormActions } from '../../FormActions';
 
 interface UnitModalProps {
 	unit?: IPropertyUnit;

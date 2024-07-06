@@ -1,6 +1,5 @@
-import React from 'react';
-import { IconProps } from '../../IconProps';
 import { Theme } from '../../../Theme';
+import { IconProps } from '../../IconProps';
 
 export const FileVideoIcon = ({
 	size = 24,
