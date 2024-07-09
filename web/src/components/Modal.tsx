@@ -2,7 +2,6 @@ import { IconButton } from '@chakra-ui/react';
 import React, { FC, ReactElement, useCallback, useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useEventListener } from '../hooks/useEventListener';
-import { CrossIcon } from './icons/CrossIcon';
 import {
 	CenterModalWrapper,
 	ModalCloseCross,
@@ -13,6 +12,8 @@ import {
 	ModalTitleContainer,
 	ModalWrapper
 } from './ModalStyles';
+import { CrossIcon } from './icons/CrossIcon';
+import { VerticalDots } from './icons/VerticalDots';
 
 const modalRoot = document.createElement('div');
 
@@ -64,6 +65,8 @@ export const Modal: FC<IModalContainerProps> = ({
 
 	const Wrapper = centerModal ? CenterModalWrapper : ModalWrapper;
 
+	const isMoreInfo = true;
+
 	return open ? (
 		<ModalRenderer>
 			<ModalContainerStyles />
@@ -73,6 +76,14 @@ export const Modal: FC<IModalContainerProps> = ({
 						<ModalTitleContainer maxWidth={maxWidth}>
 							<span>{title}</span>
 						</ModalTitleContainer>
+						{isMoreInfo && (
+							<IconButton
+								aria-label="More"
+								colorScheme="gray"
+								icon={<VerticalDots />}
+							/>
+						)}
+
 						{onClose && closeIcon && (
 							<ModalCloseCross>
 								<IconButton
