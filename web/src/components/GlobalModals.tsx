@@ -35,8 +35,10 @@ export const GlobalModals = (): JSX.Element => {
 			{modalContext.taskDetails && (
 				<NewModalComponent
 					open={true}
-					title={'Task Details'}
+					title={'Edit Task'}
 					onClose={() => setModalContext({})}
+					task={modalContext.taskDetails.task}
+					projectId={modalContext.taskDetails.projectId}
 				/>
 			)}
 			{modalContext.timeTracker && <TimeTrackerModal context={modalContext.timeTracker} />}
