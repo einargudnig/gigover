@@ -3,6 +3,7 @@ import { Theme } from '../Theme';
 import { ModalContext } from '../context/ModalContext';
 import ShareItem from '../pages/Files/components/ShareItem';
 import { Modal } from './Modal';
+import { NewModalComponent } from './NewModal';
 import { PropertyIcon } from './icons/PropertyIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { AddBidModal } from './modals/AddBidModal';
@@ -18,7 +19,6 @@ import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 import { ResourceModal } from './modals/ResourceModal';
-import { TaskModal } from './modals/TaskModal/TaskModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
 import { UseResourceModal } from './modals/UseResourceModal';
 
@@ -33,9 +33,10 @@ export const GlobalModals = (): JSX.Element => {
 	return (
 		<>
 			{modalContext.taskDetails && (
-				<TaskModal
-					task={modalContext.taskDetails.task}
-					projectId={modalContext.taskDetails.projectId}
+				<NewModalComponent
+					open={true}
+					title={'Task Details'}
+					onClose={() => setModalContext({})}
 				/>
 			)}
 			{modalContext.timeTracker && <TimeTrackerModal context={modalContext.timeTracker} />}

@@ -1,37 +1,30 @@
 import {
+	Drawer,
+	DrawerBody,
+	DrawerCloseButton,
+	DrawerContent,
+	DrawerHeader,
+	DrawerOverlay,
 	IconButton,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalHeader,
-	ModalOverlay,
 	useDisclosure
 } from '@chakra-ui/react';
 import React, { FC, useCallback } from 'react';
-import ReactDOM from 'react-dom';
 import { useEventListener } from '../hooks/useEventListener';
 import { VerticalDots } from './icons/VerticalDots';
-
-const modalRoot = document.createElement('div');
-
-const ModalRenderer = ({ children }) => ReactDOM.createPortal(children, modalRoot);
 
 export interface IModalContainerProps {
 	open: boolean;
 	title?: string | React.ReactNode;
-	children: React.ReactNode;
 	onClose?: () => void;
 	closeIcon?: boolean;
 	centerModal?: boolean;
 	maxWidth?: number;
 }
 
-export const ModalComponent: FC<IModalContainerProps> = ({
+export const NewModalComponent: FC<IModalContainerProps> = ({
 	open,
 	title,
 	onClose,
-	children,
 	centerModal = false,
 	closeIcon = true,
 	maxWidth
@@ -51,21 +44,16 @@ export const ModalComponent: FC<IModalContainerProps> = ({
 	});
 
 	return (
-		<Modal
-			isOpen={isOpen}
-			onClose={chakraOnClose}
-			size={centerModal ? 'xl' : 'full'}
-			isCentered={centerModal}
-		>
-			<ModalOverlay />
-			<ModalContent maxWidth={maxWidth ? `${maxWidth}px` : '90vw'}>
-				<ModalHeader>
+		<Drawer isOpen={isOpen} onClose={chakraOnClose}>
+			<DrawerOverlay />
+			<DrawerContent>
+				<DrawerCloseButton onClick={() => closeModal()} />
+				<DrawerHeader>
 					{title}
 					<IconButton aria-label="More" icon={<VerticalDots />} variant="ghost" />
-					{closeIcon && <ModalCloseButton onClick={closeModal} />}
-				</ModalHeader>
-				<ModalBody>{children}</ModalBody>
-			</ModalContent>
-		</Modal>
+				</DrawerHeader>
+				<DrawerBody>New modal</DrawerBody>
+			</DrawerContent>
+		</Drawer>
 	);
 };
