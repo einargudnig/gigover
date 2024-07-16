@@ -19,6 +19,7 @@ import {
 	TabPanels,
 	Tabs,
 	Tag,
+	Textarea,
 	VStack,
 	useDisclosure
 } from '@chakra-ui/react';
@@ -27,21 +28,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { useEventListener } from '../hooks/useEventListener';
 import { Project } from '../models/Project';
-import { Task } from '../models/Task';
+import { Task, TaskStatus } from '../models/Task';
 import { useProjectDetails } from '../queries/useProjectDetails';
 import { ProjectTask, useTaskDetails } from '../queries/useTaskDetails';
 import { useUpdateTask } from '../queries/useUpdateTask';
 import { Comment } from './Comment';
 import { FormActions } from './FormActions';
 import { LoadingSpinner } from './LoadingSpinner';
+import { TrackerSelect } from './TrackerSelect';
 import { User } from './User';
 import { DatePicker } from './forms/DatePicker';
 import { CrossIcon } from './icons/CrossIcon';
 import { VerticalDots } from './icons/VerticalDots';
 import { CommentInput } from './modals/TaskModal/CommentInput';
-import { DescriptionUpdate } from './modals/TaskModal/DescriptionUpdate';
-import { StatusUpdate } from './modals/TaskModal/StatusUpdate';
-import { TaskDateChanger } from './modals/TaskModal/TaskDateChanger';
 import { UseResourceOnTask } from './modals/TaskModal/UseResourceOnTask';
 import { WorkerAssigneUpdate } from './modals/TaskModal/WorkerAssigneUpdate';
 
@@ -60,6 +59,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
 	const [dialogOpen, setDialogOpen] = useState(false);
+	// description
+	const [descValue, setDescValue] = useState(task.text);
+	const [descToLong, setDescToLong] = useState(false);
 
 	const { data: projectData } = useProjectDetails(projectId);
 	const project: Project | undefined = projectData && projectData.project;
@@ -94,6 +96,11 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 			closeModal();
 		}
 	});
+
+	const handleChange = (event) => {
+		setDescValue(event.target.value);
+		setDescToLong(event.target.value.length > 600);
+	};
 
 	const onSubmit = () => {
 		console.log('submit');
@@ -228,11 +235,45 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 													/>
 												</HStack>
 											</FormControl>
-											{data && data.projectTask && (
+											{/* {data && data.projectTask && (
 												<TaskDateChanger task={data.projectTask} />
-											)}
-											<StatusUpdate task={task} projectId={projectId} />
-											<DescriptionUpdate task={task} projectId={projectId} />
+											)} */}
+											<FormControl>
+												<FormLabel>Task status</FormLabel>
+												<TrackerSelect
+													title={'Status'}
+													value={task.status}
+													options={[
+														{
+															value: TaskStatus.Backlog,
+															label: 'Backlog'
+														},
+														{ value: TaskStatus.Todo, label: 'Todo' },
+														{ value: TaskStatus.Doing, label: 'Doing' },
+														{ value: TaskStatus.Done, label: 'Done' }
+													]}
+													valueChanged={(newValue) =>
+														// updateTaskStatus(newValue as TaskStatusType)
+														console.log(newValue)
+													}
+												/>
+											</FormControl>
+											{/* <StatusUpdate task={task} projectId={projectId} /> */}
+											<FormControl>
+												<FormLabel>Description</FormLabel>
+												<Textarea
+													value={descValue}
+													onChange={handleChange}
+													placeholder="Write a description for this task"
+													colorScheme={'gray'}
+													size={'md'}
+													variant={'outline'}
+													isInvalid={descToLong}
+													errorBorderColor={'red.300'}
+													borderColor={'gray.300'}
+												/>
+											</FormControl>
+											{/* <DescriptionUpdate task={task} projectId={projectId} /> */}
 											<WorkerAssigneUpdate
 												workers={project?.workers}
 												task={task}
