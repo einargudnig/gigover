@@ -3,7 +3,7 @@ import { Theme } from '../Theme';
 import { ModalContext } from '../context/ModalContext';
 import ShareItem from '../pages/Files/components/ShareItem';
 import { Modal } from './Modal';
-import { NewModalComponent } from './NewModal';
+import { NewTaskModal } from './NewTaskModal';
 import { PropertyIcon } from './icons/PropertyIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { AddBidModal } from './modals/AddBidModal';
@@ -33,7 +33,7 @@ export const GlobalModals = (): JSX.Element => {
 	return (
 		<>
 			{modalContext.taskDetails && (
-				<NewModalComponent
+				<NewTaskModal
 					open={true}
 					title={'Edit Task'}
 					onClose={() => setModalContext({})}
