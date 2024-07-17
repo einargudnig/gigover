@@ -1,9 +1,11 @@
 import {
 	Box,
+	Button,
 	Center,
 	Drawer,
 	DrawerBody,
 	DrawerContent,
+	DrawerFooter,
 	DrawerHeader,
 	DrawerOverlay,
 	Flex,
@@ -19,6 +21,7 @@ import {
 	TabPanels,
 	Tabs,
 	Tag,
+	Text,
 	Textarea,
 	VStack,
 	useDisclosure
@@ -27,22 +30,27 @@ import React, { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { useEventListener } from '../hooks/useEventListener';
+import { FileUploadType } from '../models/FileUploadType';
 import { Project } from '../models/Project';
+import { ProjectType } from '../models/ProjectType';
 import { Task, TaskStatus } from '../models/Task';
+import { GigoverFile } from '../pages/Files/components/File';
 import { useProjectDetails } from '../queries/useProjectDetails';
+import { useProjectTypes } from '../queries/useProjectTypes';
 import { ProjectTask, useTaskDetails } from '../queries/useTaskDetails';
 import { useUpdateTask } from '../queries/useUpdateTask';
+import { ApiService } from '../services/ApiService';
 import { Comment } from './Comment';
-import { FormActions } from './FormActions';
+import { DropZone } from './DropZone';
 import { LoadingSpinner } from './LoadingSpinner';
 import { TrackerSelect } from './TrackerSelect';
 import { User } from './User';
 import { DatePicker } from './forms/DatePicker';
+import { Options } from './forms/Options';
 import { CrossIcon } from './icons/CrossIcon';
 import { VerticalDots } from './icons/VerticalDots';
 import { CommentInput } from './modals/TaskModal/CommentInput';
 import { UseResourceOnTask } from './modals/TaskModal/UseResourceOnTask';
-import { WorkerAssigneUpdate } from './modals/TaskModal/WorkerAssigneUpdate';
 
 export interface TaskModalProps {
 	open: boolean;
@@ -65,6 +73,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 
 	const { data: projectData } = useProjectDetails(projectId);
 	const project: Project | undefined = projectData && projectData.project;
+	const { data: projectTypes } = useProjectTypes();
 
 	const { isOpen, onOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: open });
 
@@ -132,7 +141,11 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 							</Flex>
 						</Box>
 					</Flex>
-					<DrawerBody>
+					<DrawerBody
+						style={{
+							overflowY: 'auto' // Enables vertical scrolling
+						}}
+					>
 						{isLoading ? (
 							<Center>
 								<LoadingSpinner />
@@ -147,9 +160,12 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 							<TabList>
 								<Tab>Details</Tab>
 								<Tab>Comments</Tab>
+								<Tab>Files</Tab>
+								<Tab>Resources</Tab>
 							</TabList>
 
 							<TabPanels>
+								{/* //! Details */}
 								<TabPanel>
 									<div>
 										<Tag mb={4}>Project manager</Tag>
@@ -159,11 +175,48 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 										/>
 									</div>
 
-									<form>
+									<form id="updateTask">
 										<VStack mt={6}>
 											<FormControl>
 												<FormLabel>Task name</FormLabel>
 												<Input />
+											</FormControl>
+											<FormControl id={'typeId'}>
+												<FormLabel>Tags</FormLabel>
+												<Controller
+													name={'typeId'}
+													control={control}
+													render={({
+														field: {
+															onChange: ptChange,
+															value: ptValue,
+															onBlur
+														}
+													}) => (
+														<Options
+															isMulti={false}
+															onBlur={onBlur}
+															onChange={(newValue) => {
+																const v = (newValue as ProjectType)
+																	.typeId;
+																ptChange(parseInt(`${v}`));
+															}}
+															value={projectTypes?.projectTypes.find(
+																(pt) => pt.typeId === ptValue
+															)}
+															getOptionLabel={(option: unknown) =>
+																(option as ProjectType).name
+															}
+															getOptionValue={(option: unknown) =>
+																(option as ProjectType)
+																	.typeId as unknown as string
+															}
+															options={
+																projectTypes?.projectTypes || []
+															}
+														/>
+													)}
+												/>
 											</FormControl>
 											<FormControl>
 												<FormLabel>Start and End date</FormLabel>
@@ -270,59 +323,139 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 													variant={'outline'}
 													isInvalid={descToLong}
 													errorBorderColor={'red.300'}
-													borderColor={'gray.300'}
+													borderColor={'gray.100'} // Sets the color of the border
+													borderWidth={'2px'} // Sets the width of the border
+													borderStyle={'solid'} // Optional: Sets the style of the border
+													rounded={'md'} // Sets the border-radius
+													p={1}
 												/>
 											</FormControl>
 											{/* <DescriptionUpdate task={task} projectId={projectId} /> */}
-											<WorkerAssigneUpdate
-												workers={project?.workers}
-												task={task}
-												projectId={projectId}
-											/>
-											<UseResourceOnTask
-												task={{ ...task, projectId: projectId }}
-											/>
+											<FormControl>
+												<FormLabel>Assigned to</FormLabel>
+												<TrackerSelect
+													title={'Worker'}
+													value={task.worker?.uId}
+													options={
+														project?.workers.map((worker) => ({
+															value: worker.uId,
+															label: worker.name
+														})) ?? []
+													}
+													valueChanged={(newValue) =>
+														// updateTaskStatus(newValue as TaskStatusType)
+														console.log(newValue)
+													}
+												/>
+											</FormControl>
 										</VStack>
-										<FormActions
-											cancelText={'Cancel'}
-											onCancel={closeModal}
-											submitText={'Create task!'}
-											onSubmit={onSubmit}
-										/>
 									</form>
+									<DrawerFooter>
+										<Button type="submit" form="updateTask" colorScheme="gray">
+											Save
+										</Button>
+									</DrawerFooter>
 								</TabPanel>
+								{/* //! Comments panel */}
 								<TabPanel>
-									<div>
+									<Box height={'600px'}>
 										<HStack spacing={4} justifyContent={'space-between'} mb={4}>
 											{isLoading && <LoadingSpinner />}
 										</HStack>
-										<div>
-											{projectTask?.comments &&
-											projectTask.comments.length > 0 ? (
-												projectTask?.comments.map(
-													(taskComment, taskCommentId) => (
-														<Comment
-															key={taskCommentId}
-															author={taskComment.fullName}
-															comment={taskComment.comment}
-															images={projectTask?.images ?? []}
-															imageId={taskComment.imageId}
-															date={new Date(taskComment.sent)}
-														/>
+										<Flex direction={'column'}>
+											<Box>
+												{projectTask?.comments &&
+												projectTask.comments.length > 0 ? (
+													projectTask?.comments.map(
+														(taskComment, taskCommentId) => (
+															<Comment
+																key={taskCommentId}
+																author={taskComment.fullName}
+																comment={taskComment.comment}
+																images={projectTask?.images ?? []}
+																imageId={taskComment.imageId}
+																date={new Date(taskComment.sent)}
+															/>
+														)
 													)
-												)
-											) : (
-												<p>No comments yet</p>
-											)}
-										</div>
-										<div>
-											<CommentInput
-												projectId={project?.projectId || -1}
-												taskId={task.taskId}
-												workers={project?.workers ?? []}
+												) : (
+													<p>No comments yet</p>
+												)}
+											</Box>
+
+											<Box>
+												<CommentInput
+													projectId={project?.projectId || -1}
+													taskId={task.taskId}
+													workers={project?.workers ?? []}
+												/>
+											</Box>
+										</Flex>
+									</Box>
+								</TabPanel>
+								{/* //! Files for task */}
+								<TabPanel>
+									<DropZone
+										offerId={0}
+										tenderId={0}
+										projectId={projectId}
+										uploadType={FileUploadType.Task}
+										externalId={task.taskId}
+										callback={() => {
+											queryClient.invalidateQueries(
+												ApiService.taskDetails(task.taskId)
+											);
+										}}
+									>
+										{/* // eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+										{({ isDragActive, open }) => (
+											<Box
+												border={'2px'}
+												rounded={'md'}
+												borderColor={'gray.100'}
+												p={1}
+												_hover={{ borderColor: 'green.200' }}
+											>
+												{projectTask?.images &&
+												projectTask?.images.length > 0 ? (
+													<Box>
+														<Button ml={2} onClick={() => open()}>
+															Upload
+														</Button>
+														{projectTask?.images.map((f, fIndex) => (
+															<GigoverFile file={f} key={fIndex} />
+														))}
+													</Box>
+												) : (
+													<Box w={'full'}>
+														<Flex
+															alignItems={'center'}
+															justifyContent={'center'}
+														>
+															<Text>
+																No task files, drop files here to
+																upload some.
+															</Text>
+															<Button ml={2} onClick={() => open()}>
+																Upload
+															</Button>
+														</Flex>
+													</Box>
+												)}
+											</Box>
+										)}
+									</DropZone>
+								</TabPanel>
+								{/* //! Resources for task */}
+								<TabPanel>
+									<Box>
+										<Text>Select a resource to use on this task</Text>
+										<HStack>
+											<UseResourceOnTask
+												task={{ ...task, projectId: projectId }}
 											/>
-										</div>
-									</div>
+										</HStack>
+									</Box>
 								</TabPanel>
 							</TabPanels>
 						</Tabs>
