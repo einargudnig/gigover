@@ -20,7 +20,6 @@ import {
 	TabPanel,
 	TabPanels,
 	Tabs,
-	Tag,
 	Text,
 	Textarea,
 	VStack,
@@ -167,13 +166,13 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 							<TabPanels>
 								{/* //! Details */}
 								<TabPanel>
-									<div>
-										<Tag mb={4}>Project manager</Tag>
+									<Box>
+										<FormLabel>Project manager</FormLabel>
 										<User
 											avatar={projectTask?.project.ownerAvatar || ''}
 											name={projectTask?.project.ownerName || 'unknown'}
 										/>
-									</div>
+									</Box>
 
 									<form id="updateTask">
 										<VStack mt={6}>
