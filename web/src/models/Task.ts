@@ -1,6 +1,6 @@
-import { TaskComment } from './TaskComment';
 import { GantChartItem } from './GantChartItem';
 import { ProjectImage } from './ProjectImage';
+import { TaskComment } from './TaskComment';
 
 export const TaskStatus = {
 	Backlog: 0,
@@ -16,7 +16,7 @@ export interface Task {
 	taskId: number;
 	projectId: number;
 	typeId?: number;
-	text: string;
+	text: string; // Task description
 	status: TaskStatusType;
 	minutes: number; // Minutes tracked
 	comments: TaskComment[];
@@ -25,7 +25,7 @@ export interface Task {
 	endDate: number | null;
 	images: ProjectImage[];
 	lexoRank: string;
-	subject: string;
+	subject: string; // Task name/header
 	worker?: {
 		uId: string;
 		name: string;

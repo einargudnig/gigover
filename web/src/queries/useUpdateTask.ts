@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ProjectResponse } from './useProjectList';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
 import axios from 'axios';
-import { Task } from '../models/Task';
-import { Project } from '../models/Project';
 import { LexoRank } from 'lexorank';
+import { useMutation, useQueryClient } from 'react-query';
+import { ErrorResponse } from '../models/ErrorResponse';
+import { Project } from '../models/Project';
+import { Task } from '../models/Task';
+import { ApiService } from '../services/ApiService';
+import { ProjectResponse } from './useProjectList';
 
 export interface UpdateTaskFormData
 	extends Pick<Task, 'taskId' | 'status' | 'typeId' | 'text' | 'subject'> {

@@ -14,6 +14,10 @@ import {
 	HStack,
 	IconButton,
 	Input,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
 	Spacer,
 	Tab,
 	TabList,
@@ -25,7 +29,7 @@ import {
 	VStack,
 	useDisclosure
 } from '@chakra-ui/react';
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { useEventListener } from '../hooks/useEventListener';
@@ -47,9 +51,11 @@ import { User } from './User';
 import { DatePicker } from './forms/DatePicker';
 import { Options } from './forms/Options';
 import { CrossIcon } from './icons/CrossIcon';
+import { TrashIcon } from './icons/TrashIcon';
 import { VerticalDots } from './icons/VerticalDots';
 import { CommentInput } from './modals/TaskModal/CommentInput';
 import { UseResourceOnTask } from './modals/TaskModal/UseResourceOnTask';
+import { WorkerAssigneUpdate } from './modals/TaskModal/WorkerAssigneUpdate';
 
 export interface TaskModalProps {
 	open: boolean;
@@ -61,40 +67,36 @@ export interface TaskModalProps {
 
 export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, projectId, task }) => {
 	const queryClient = useQueryClient();
-	const [taskTitle, setTaskTitle] = useState(task.subject);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
-	const [dialogOpen, setDialogOpen] = useState(false);
-	// description
-	const [descValue, setDescValue] = useState(task.text);
-	const [descToLong, setDescToLong] = useState(false);
-
 	const { data: projectData } = useProjectDetails(projectId);
 
 	const project: Project | undefined = projectData && projectData.project;
 	const { data: projectTypes } = useProjectTypes();
 
-	const { isOpen, onOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: open });
+	const { isOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: open });
 
-	const {
-		getValues,
-		control,
-		formState: { errors }
-	} = useForm<ProjectTask>({
+	const { handleSubmit, control } = useForm<ProjectTask>({
 		defaultValues: {
+			taskId: task.taskId,
+			subject: task.subject,
+			text: task.text,
+			typeId: task.typeId,
 			startDate: task.startDate,
-			endDate: task.endDate
+			endDate: task.endDate,
+			status: task.status
 		}
 	});
 
 	const {
-		mutateAsync: updateTask
-		// isLoading: taskLoading,
+		mutateAsync: updateTask,
+		isLoading: taskLoading
 		// error: taskError
 	} = useUpdateTask(projectId);
 
 	const closeModal = useCallback(() => {
 		if (onClose) {
+			console.log('Closing drawer');
 			onClose();
 		}
 	}, [onClose]);
@@ -105,14 +107,26 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 		}
 	});
 
-	const handleChange = (event) => {
-		setDescValue(event.target.value);
-		setDescToLong(event.target.value.length > 600);
-	};
+	const onSubmit = handleSubmit(
+		async ({ taskId, subject, text, typeId, startDate, endDate, status }) => {
+			console.log({ taskId, subject, text, typeId, startDate, endDate, status });
+			try {
+				await updateTask({
+					taskId,
+					subject,
+					text,
+					typeId,
+					startDate,
+					endDate,
+					status
+				});
 
-	const onSubmit = () => {
-		console.log('submit');
-	};
+				closeModal();
+			} catch (e) {
+				console.log(e);
+			}
+		}
+	);
 
 	return (
 		<Drawer isOpen={isOpen} onClose={chakraOnClose} size="lg">
@@ -126,11 +140,23 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 						<Spacer />
 						<Box>
 							<Flex alignItems={'center'} mr="4">
-								<IconButton
+								{/* <IconButton
 									aria-label="More"
 									icon={<VerticalDots />}
 									variant="ghost"
-								/>
+								/> */}
+								<Menu>
+									<MenuButton
+										as={IconButton}
+										aria-label="More"
+										icon={<VerticalDots />}
+										variant="ghost"
+										_active={{ bg: 'gray.100' }}
+									/>
+									<MenuList>
+										<MenuItem icon={<TrashIcon />}>Archive task</MenuItem>
+									</MenuList>
+								</Menu>
 								<IconButton
 									aria-label="Close"
 									icon={<CrossIcon />}
@@ -140,16 +166,13 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 							</Flex>
 						</Box>
 					</Flex>
-					<DrawerBody
-						style={{
-							overflowY: 'auto' // Enables vertical scrolling
-						}}
-					>
+					<DrawerBody>
 						<Tabs colorScheme="black">
 							<TabList>
 								<Tab>Details</Tab>
 								<Tab>Comments</Tab>
 								<Tab>Files</Tab>
+								<Tab>Workers</Tab>
 								<Tab>Resources</Tab>
 							</TabList>
 
@@ -166,195 +189,299 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 											{error?.errorText}. Code: {error?.errorCode}
 										</p>
 									) : null}
-									<Box>
-										<FormLabel>Project manager</FormLabel>
-										<User
-											avatar={projectTask?.project.ownerAvatar || ''}
-											name={projectTask?.project.ownerName || 'unknown'}
-										/>
-									</Box>
+									<Flex direction={'column'}>
+										<Box flex={'1'} overflowY={'auto'}>
+											<Box>
+												<FormLabel>Project manager</FormLabel>
+												<User
+													avatar={projectTask?.project.ownerAvatar || ''}
+													name={
+														projectTask?.project.ownerName || 'unknown'
+													}
+												/>
+											</Box>
 
-									<form id="updateTask">
-										<VStack mt={6}>
-											<FormControl id="taskName">
-												<FormLabel>Task name</FormLabel>
-												<Input value={taskTitle} />
-											</FormControl>
-											<FormControl id={'typeId'}>
-												<FormLabel>Tags</FormLabel>
-												<Controller
-													name={'typeId'}
-													control={control}
-													render={({
-														field: {
-															onChange: ptChange,
-															value: ptValue = task.typeId,
-															onBlur
-														}
-													}) => (
-														<Options
-															isMulti={false}
-															onBlur={onBlur}
-															onChange={(newValue) => {
-																const v = (newValue as ProjectType)
-																	.typeId;
-																ptChange(parseInt(`${v}`));
-															}}
-															// value={projectTypes?.projectTypes.find(
-															// 	(pt) => pt.typeId === ptValue
-															// )}
-															value={projectTypes?.projectTypes.find(
-																(pt) => pt.typeId === ptValue
+											<form id="updateTask" onSubmit={onSubmit}>
+												<VStack mt={6}>
+													<FormControl id="subject">
+														<FormLabel>Task name</FormLabel>
+														<Controller
+															name={'subject'}
+															control={control}
+															render={({
+																field: { onChange, onBlur, value }
+															}) => (
+																<Input
+																	onChange={onChange}
+																	onBlur={onBlur}
+																	value={value}
+																/>
 															)}
-															getOptionLabel={(option: unknown) =>
-																(option as ProjectType).name
-															}
-															getOptionValue={(option: unknown) =>
-																(option as ProjectType)
-																	.typeId as unknown as string
-															}
+														/>
+													</FormControl>
+													<FormControl id={'typeId'}>
+														<FormLabel>Tags</FormLabel>
+														<Controller
+															name={'typeId'}
+															control={control}
+															render={({
+																field: {
+																	onChange: ptChange,
+																	value: ptValue = task.typeId,
+																	onBlur
+																}
+															}) => (
+																<Options
+																	isMulti={false}
+																	onBlur={onBlur}
+																	onChange={(newValue) => {
+																		const v = (
+																			newValue as ProjectType
+																		).typeId;
+																		ptChange(parseInt(`${v}`));
+																	}}
+																	value={projectTypes?.projectTypes.find(
+																		(pt) =>
+																			pt.typeId === ptValue
+																	)}
+																	getOptionLabel={(
+																		option: unknown
+																	) =>
+																		(option as ProjectType).name
+																	}
+																	getOptionValue={(
+																		option: unknown
+																	) =>
+																		(option as ProjectType)
+																			.typeId as unknown as string
+																	}
+																	options={
+																		projectTypes?.projectTypes ||
+																		[]
+																	}
+																/>
+															)}
+														/>
+													</FormControl>
+													<FormControl>
+														<FormLabel>Start and End date</FormLabel>
+														<HStack>
+															<Controller
+																name="startDate"
+																control={control}
+																defaultValue={
+																	task?.startDate
+																		? (task.startDate.valueOf() as number)
+																		: undefined
+																}
+																render={({
+																	field: {
+																		onChange,
+																		value,
+																		onBlur
+																	}
+																}) => (
+																	<DatePicker
+																		selected={
+																			value
+																				? new Date(value)
+																				: null
+																		}
+																		onChange={(date) => {
+																			if (date) {
+																				onChange(
+																					(
+																						date as Date
+																					).getTime()
+																				);
+																			} else {
+																				onChange(null);
+																			}
+																		}}
+																		onBlur={() => {
+																			onBlur();
+																		}}
+																		required={false}
+																	/>
+																)}
+															/>
+															<Controller
+																name="endDate"
+																control={control}
+																defaultValue={
+																	task?.endDate
+																		? (task.endDate.valueOf() as number)
+																		: undefined
+																}
+																render={({
+																	field: {
+																		onChange,
+																		value,
+																		onBlur
+																	}
+																}) => (
+																	<DatePicker
+																		selected={
+																			value
+																				? new Date(value)
+																				: null
+																		}
+																		onChange={(date) => {
+																			if (date) {
+																				onChange(
+																					(
+																						date as Date
+																					).getTime()
+																				);
+																			} else {
+																				onChange(null);
+																			}
+
+																			// updateDates();
+																		}}
+																		onBlur={() => {
+																			onBlur();
+																		}}
+																	/>
+																)}
+															/>
+														</HStack>
+													</FormControl>
+
+													<FormControl id="status">
+														<FormLabel>Task status</FormLabel>
+														<Controller
+															name="status"
+															control={control}
+															defaultValue={task.status}
+															render={({
+																field: { onChange, value }
+															}) => (
+																<TrackerSelect
+																	title={'Status'}
+																	value={value}
+																	options={[
+																		{
+																			value: TaskStatus.Backlog,
+																			label: 'Backlog'
+																		},
+																		{
+																			value: TaskStatus.Todo,
+																			label: 'Todo'
+																		},
+																		{
+																			value: TaskStatus.Doing,
+																			label: 'Doing'
+																		},
+																		{
+																			value: TaskStatus.Done,
+																			label: 'Done'
+																		}
+																	]}
+																	valueChanged={onChange}
+																/>
+															)}
+														/>
+													</FormControl>
+													<FormControl id="text">
+														<FormLabel>Description</FormLabel>
+														<Controller
+															name="text"
+															control={control}
+															defaultValue={task.text}
+															rules={{
+																maxLength: {
+																	value: 599,
+																	message:
+																		'Description must be less than 600 characters' // Custom error message
+																}
+															}}
+															render={({
+																field: { onChange, onBlur, value },
+																fieldState: { error: formError }
+															}) => (
+																<>
+																	<Textarea
+																		value={value}
+																		onChange={onChange}
+																		onBlur={onBlur}
+																		placeholder="Write a description for this task"
+																		colorScheme={'gray'}
+																		size={'md'}
+																		variant={'outline'}
+																		isInvalid={!!formError}
+																		borderColor={'gray.100'} // Sets the color of the border
+																		borderWidth={'2px'} // Sets the width of the border
+																		borderStyle={'solid'} // Optional: Sets the style of the border
+																		rounded={'md'} // Sets the border-radius
+																		p={1}
+																	/>
+																	{formError && (
+																		<Text
+																			textColor={'red.600'}
+																			mt={2}
+																		>
+																			{formError.message}
+																		</Text>
+																	)}
+																</>
+															)}
+														/>
+													</FormControl>
+
+													{/* <FormControl id="worker">
+														<FormLabel>Assigned to</FormLabel>
+														<Controller
+															name="worker"
+															control={control}
+															defaultValue={task.worker?.uId}
+															render={({
+																field: { onChange, value }
+															}) => (
+																<TrackerSelect
+																	title={'Worker'}
+																	value={value}
+																	options={
+																		project?.workers.map(
+																			(worker) => ({
+																				value: worker.uId,
+																				label: worker.name
+																			})
+																		) ?? []
+																	}
+																	valueChanged={onChange}
+																/>
+															)}
+														/>
+														<TrackerSelect
+															title={'Worker'}
+															value={task.worker?.uId}
 															options={
-																projectTypes?.projectTypes || []
+																project?.workers.map((worker) => ({
+																	value: worker.uId,
+																	label: worker.name
+																})) ?? []
+															}
+															valueChanged={(newValue) =>
+																// updateTaskStatus(newValue as TaskStatusType)
+																console.log(newValue)
 															}
 														/>
-													)}
-												/>
-											</FormControl>
-											<FormControl>
-												<FormLabel>Start and End date</FormLabel>
-												<HStack>
-													<Controller
-														name="startDate"
-														control={control}
-														defaultValue={
-															task?.startDate
-																? (task.startDate.valueOf() as number)
-																: undefined
-														}
-														render={({
-															field: { onChange, value, onBlur }
-														}) => (
-															<DatePicker
-																selected={
-																	value ? new Date(value) : null
-																}
-																onChange={(date) => {
-																	if (date) {
-																		onChange(
-																			(date as Date).getTime()
-																		);
-																	} else {
-																		onChange(null);
-																	}
-
-																	// updateDates();
-																}}
-																onBlur={() => {
-																	onBlur();
-																}}
-																required={false}
-															/>
-														)}
-													/>
-													<Controller
-														name="endDate"
-														control={control}
-														defaultValue={
-															task?.endDate
-																? (task.endDate.valueOf() as number)
-																: undefined
-														}
-														render={({
-															field: { onChange, value, onBlur }
-														}) => (
-															<DatePicker
-																selected={
-																	value ? new Date(value) : null
-																}
-																onChange={(date) => {
-																	if (date) {
-																		onChange(
-																			(date as Date).getTime()
-																		);
-																	} else {
-																		onChange(null);
-																	}
-
-																	// updateDates();
-																}}
-																onBlur={() => {
-																	onBlur();
-																}}
-															/>
-														)}
-													/>
-												</HStack>
-											</FormControl>
-
-											<FormControl>
-												<FormLabel>Task status</FormLabel>
-												<TrackerSelect
-													title={'Status'}
-													value={task.status}
-													options={[
-														{
-															value: TaskStatus.Backlog,
-															label: 'Backlog'
-														},
-														{ value: TaskStatus.Todo, label: 'Todo' },
-														{ value: TaskStatus.Doing, label: 'Doing' },
-														{ value: TaskStatus.Done, label: 'Done' }
-													]}
-													valueChanged={(newValue) =>
-														// updateTaskStatus(newValue as TaskStatusType)
-														console.log(newValue)
-													}
-												/>
-											</FormControl>
-											{/* <StatusUpdate task={task} projectId={projectId} /> */}
-											<FormControl>
-												<FormLabel>Description</FormLabel>
-												<Textarea
-													value={descValue}
-													onChange={handleChange}
-													placeholder="Write a description for this task"
-													colorScheme={'gray'}
-													size={'md'}
-													variant={'outline'}
-													isInvalid={descToLong}
-													errorBorderColor={'red.300'}
-													borderColor={'gray.100'} // Sets the color of the border
-													borderWidth={'2px'} // Sets the width of the border
-													borderStyle={'solid'} // Optional: Sets the style of the border
-													rounded={'md'} // Sets the border-radius
-													p={1}
-												/>
-											</FormControl>
-											{/* <DescriptionUpdate task={task} projectId={projectId} /> */}
-											<FormControl>
-												<FormLabel>Assigned to</FormLabel>
-												<TrackerSelect
-													title={'Worker'}
-													value={task.worker?.uId}
-													options={
-														project?.workers.map((worker) => ({
-															value: worker.uId,
-															label: worker.name
-														})) ?? []
-													}
-													valueChanged={(newValue) =>
-														// updateTaskStatus(newValue as TaskStatusType)
-														console.log(newValue)
-													}
-												/>
-											</FormControl>
-										</VStack>
-									</form>
-									<DrawerFooter>
-										<Button type="submit" form="updateTask" colorScheme="gray">
-											Save
-										</Button>
-									</DrawerFooter>
+													</FormControl> */}
+												</VStack>
+											</form>
+											<DrawerFooter>
+												<Button
+													type="submit"
+													form="updateTask"
+													colorScheme="gray"
+													isLoading={taskLoading}
+												>
+													Save
+												</Button>
+											</DrawerFooter>
+										</Box>
+									</Flex>
 								</TabPanel>
 								{/* //! Comments panel */}
 								<TabPanel>
@@ -477,6 +604,29 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 											</Box>
 										)}
 									</DropZone>
+								</TabPanel>
+								{/* //! Workers for task */}
+								<TabPanel>
+									{isLoading ? (
+										<Center>
+											<LoadingSpinner />
+										</Center>
+									) : isError ? (
+										<p>
+											Error fetching task with id: {task.taskId} - Reason:{' '}
+											{error?.errorText}. Code: {error?.errorCode}
+										</p>
+									) : null}
+									<Box>
+										<Text mb={2}>Select a worker to assign this task</Text>
+										<HStack>
+											<WorkerAssigneUpdate
+												projectId={projectId}
+												task={task}
+												workers={project?.workers}
+											/>
+										</HStack>
+									</Box>
 								</TabPanel>
 								{/* //! Resources for task */}
 								<TabPanel>
