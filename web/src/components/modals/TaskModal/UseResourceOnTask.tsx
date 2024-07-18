@@ -78,7 +78,7 @@ export const UseResourceOnTask = ({ task }: UseResourceOnTaskProps): JSX.Element
 						/>
 					</div>
 					<Button
-						colorScheme={'yellow'}
+						colorScheme={'gray'}
 						style={{ height: '78px' }}
 						onClick={hold}
 						isLoading={holdResource.isLoading}

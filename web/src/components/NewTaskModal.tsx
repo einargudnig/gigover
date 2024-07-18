@@ -63,7 +63,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 	const queryClient = useQueryClient();
 	const [taskTitle, setTaskTitle] = useState(task.subject);
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
-	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
 	const [dialogOpen, setDialogOpen] = useState(false);
 	// description
@@ -71,6 +70,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 	const [descToLong, setDescToLong] = useState(false);
 
 	const { data: projectData } = useProjectDetails(projectId);
+
 	const project: Project | undefined = projectData && projectData.project;
 	const { data: projectTypes } = useProjectTypes();
 
@@ -145,16 +145,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 							overflowY: 'auto' // Enables vertical scrolling
 						}}
 					>
-						{isLoading ? (
-							<Center>
-								<LoadingSpinner />
-							</Center>
-						) : isError ? (
-							<p>
-								Error fetching task with id: {task.taskId} - Reason:{' '}
-								{error?.errorText}. Code: {error?.errorCode}
-							</p>
-						) : null}
 						<Tabs colorScheme="black">
 							<TabList>
 								<Tab>Details</Tab>
@@ -166,6 +156,16 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 							<TabPanels>
 								{/* //! Details */}
 								<TabPanel>
+									{isLoading ? (
+										<Center>
+											<LoadingSpinner />
+										</Center>
+									) : isError ? (
+										<p>
+											Error fetching task with id: {task.taskId} - Reason:{' '}
+											{error?.errorText}. Code: {error?.errorCode}
+										</p>
+									) : null}
 									<Box>
 										<FormLabel>Project manager</FormLabel>
 										<User
@@ -176,9 +176,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 
 									<form id="updateTask">
 										<VStack mt={6}>
-											<FormControl>
+											<FormControl id="taskName">
 												<FormLabel>Task name</FormLabel>
-												<Input />
+												<Input value={taskTitle} />
 											</FormControl>
 											<FormControl id={'typeId'}>
 												<FormLabel>Tags</FormLabel>
@@ -188,7 +188,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 													render={({
 														field: {
 															onChange: ptChange,
-															value: ptValue,
+															value: ptValue = task.typeId,
 															onBlur
 														}
 													}) => (
@@ -200,6 +200,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 																	.typeId;
 																ptChange(parseInt(`${v}`));
 															}}
+															// value={projectTypes?.projectTypes.find(
+															// 	(pt) => pt.typeId === ptValue
+															// )}
 															value={projectTypes?.projectTypes.find(
 																(pt) => pt.typeId === ptValue
 															)}
@@ -287,9 +290,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 													/>
 												</HStack>
 											</FormControl>
-											{/* {data && data.projectTask && (
-												<TaskDateChanger task={data.projectTask} />
-											)} */}
+
 											<FormControl>
 												<FormLabel>Task status</FormLabel>
 												<TrackerSelect
@@ -357,12 +358,22 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 								</TabPanel>
 								{/* //! Comments panel */}
 								<TabPanel>
-									<Box height={'600px'}>
+									{isLoading ? (
+										<Center>
+											<LoadingSpinner />
+										</Center>
+									) : isError ? (
+										<p>
+											Error fetching task with id: {task.taskId} - Reason:{' '}
+											{error?.errorText}. Code: {error?.errorCode}
+										</p>
+									) : null}
+									<Box height={'650px'}>
 										<HStack spacing={4} justifyContent={'space-between'} mb={4}>
 											{isLoading && <LoadingSpinner />}
 										</HStack>
-										<Flex direction={'column'}>
-											<Box>
+										<Flex direction={'column'} height={'100%'}>
+											<Box flex={'1'} overflowY={'auto'}>
 												{projectTask?.comments &&
 												projectTask.comments.length > 0 ? (
 													projectTask?.comments.map(
@@ -381,7 +392,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 													<p>No comments yet</p>
 												)}
 											</Box>
-
 											<Box>
 												<CommentInput
 													projectId={project?.projectId || -1}
@@ -394,6 +404,16 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 								</TabPanel>
 								{/* //! Files for task */}
 								<TabPanel>
+									{isLoading ? (
+										<Center>
+											<LoadingSpinner />
+										</Center>
+									) : isError ? (
+										<p>
+											Error fetching task with id: {task.taskId} - Reason:{' '}
+											{error?.errorText}. Code: {error?.errorCode}
+										</p>
+									) : null}
 									<DropZone
 										offerId={0}
 										tenderId={0}
@@ -418,9 +438,18 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 												{projectTask?.images &&
 												projectTask?.images.length > 0 ? (
 													<Box>
-														<Button ml={2} onClick={() => open()}>
-															Upload
-														</Button>
+														<Flex
+															alignItems={'center'}
+															justifyContent={'center'}
+														>
+															<Button
+																onClick={() => open()}
+																colorScheme="gray"
+																mb={2}
+															>
+																Upload
+															</Button>
+														</Flex>
 														{projectTask?.images.map((f, fIndex) => (
 															<GigoverFile file={f} key={fIndex} />
 														))}
@@ -435,7 +464,11 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 																No task files, drop files here to
 																upload some.
 															</Text>
-															<Button ml={2} onClick={() => open()}>
+															<Button
+																ml={2}
+																onClick={() => open()}
+																colorScheme="gray"
+															>
 																Upload
 															</Button>
 														</Flex>
@@ -447,8 +480,18 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 								</TabPanel>
 								{/* //! Resources for task */}
 								<TabPanel>
+									{isLoading ? (
+										<Center>
+											<LoadingSpinner />
+										</Center>
+									) : isError ? (
+										<p>
+											Error fetching task with id: {task.taskId} - Reason:{' '}
+											{error?.errorText}. Code: {error?.errorCode}
+										</p>
+									) : null}
 									<Box>
-										<Text>Select a resource to use on this task</Text>
+										<Text mb={2}>Select a resource to use on this task</Text>
 										<HStack>
 											<UseResourceOnTask
 												task={{ ...task, projectId: projectId }}

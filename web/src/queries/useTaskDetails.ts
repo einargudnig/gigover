@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import { Task } from '../models/Task';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ProjectStatusType } from '../models/Project';
+import { Task } from '../models/Task';
+import { ApiService } from '../services/ApiService';
 
 export type ProjectTask = {
 	project: {
