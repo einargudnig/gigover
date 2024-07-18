@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { formatDate } from '../utils/StringUtils';
-import { ProjectImage } from '../models/ProjectImage';
 import { Box } from '@chakra-ui/react';
-import { GetFileLink } from '../pages/Files/components/File';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { ProjectImage } from '../models/ProjectImage';
+import { GetFileLink } from '../pages/Files/components/File';
+import { formatDate } from '../utils/StringUtils';
 
 const CommentRegex = /@\[(.*?)\]\((?:.*?)\)/g;
 

@@ -1,16 +1,16 @@
+import { Box, Spinner } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import { useTaskComment } from '../../../queries/useTaskComment';
 import { Mention, MentionsInput } from 'react-mentions';
+import { FileUploadType } from '../../../models/FileUploadType';
 import { WorkerItem } from '../../../models/Project';
+import { ProjectImage } from '../../../models/ProjectImage';
+import { useDeleteDocument } from '../../../mutations/useDeleteDocument';
+import { useTaskComment } from '../../../queries/useTaskComment';
 import mentionsCls from '../../../styles/mentions.module.css';
 import mentionsDraggingCls from '../../../styles/mentionsFileDragActive.module.css';
 import { CommentInputLabel } from '../../CommentInputLabel';
-import { FileUploadType } from '../../../models/FileUploadType';
 import { DropZone } from '../../DropZone';
-import { ProjectImage } from '../../../models/ProjectImage';
-import { Box, Spinner } from '@chakra-ui/react';
 import { CrossIcon } from '../../icons/CrossIcon';
-import { useDeleteDocument } from '../../../mutations/useDeleteDocument';
 
 interface CommentInputProps {
 	projectId: number;

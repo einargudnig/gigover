@@ -1,12 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { Controller, useForm } from 'react-hook-form';
-import { Task } from '../models/Task';
-import { useProjectTypes } from '../queries/useProjectTypes';
-import { Options } from './forms/Options';
-import { FormControl, HStack, Button } from '@chakra-ui/react';
-import { ProjectType } from '../models/ProjectType';
+import { Button, Flex } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
+import React, { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
+import { Task } from '../models/Task';
 
 const TaskInput = styled.textarea`
 	background: transparent;
@@ -32,27 +29,23 @@ interface TaskCardInputProps {
 }
 
 export const TaskCardInput = ({
-	task,
 	value = '',
 	error,
 	loading = false,
 	onChange,
 	onSubmit
 }: TaskCardInputProps): JSX.Element => {
-	const { data } = useProjectTypes();
 	const textInputRef = useRef<HTMLTextAreaElement>();
 	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
 	const {
-		control,
 		register,
 		handleSubmit,
 		formState: { errors }
-	} = useForm<Pick<Task, 'typeId' | 'subject'>>({
+	} = useForm<Pick<Task, 'subject'>>({
 		defaultValues: {
-			subject: value,
-			typeId: task?.typeId
+			subject: value
 		}
 	});
 
@@ -63,9 +56,7 @@ export const TaskCardInput = ({
 			}
 
 			onSubmit({
-				subject: values.subject,
-				// Sending string because of the select value..
-				typeId: values.typeId ? parseInt(values.typeId?.toString()) : undefined
+				subject: values.subject
 			});
 		}
 	});
@@ -101,44 +92,22 @@ export const TaskCardInput = ({
 				<TaskInput
 					maxLength={599}
 					required={true}
-					placeholder={'Write the task name'}
+					placeholder={'Add task name'}
 					style={{ height: textAreaHeight }}
 					{...register('subject', { required: true, onChange: onChangeHandler })}
 				/>
 			</div>
-			<HStack>
-				<FormControl id={'typeId'}>
-					<Controller
-						name={'typeId'}
-						control={control}
-						render={({ field: { onChange: ptChange, value: ptValue, onBlur } }) => (
-							<Options
-								isMulti={false}
-								onBlur={onBlur}
-								onChange={(newValue) => {
-									const v = (newValue as ProjectType).typeId;
-									ptChange(parseInt(`${v}`));
-								}}
-								value={data?.projectTypes.find((pt) => pt.typeId === ptValue)}
-								getOptionLabel={(option: unknown) => (option as ProjectType).name}
-								getOptionValue={(option: unknown) =>
-									(option as ProjectType).typeId as unknown as string
-								}
-								options={data?.projectTypes || []}
-							/>
-						)}
-					/>
-				</FormControl>
+			<Flex justifyContent={'end'}>
 				<Button
 					type={'submit'}
-					colorScheme={'yellow'}
+					colorScheme={'gray'}
 					loadingText={'Saving'}
 					isLoading={loading}
 					disabled={loading}
 				>
 					Save
 				</Button>
-			</HStack>
+			</Flex>
 		</form>
 	);
 };
