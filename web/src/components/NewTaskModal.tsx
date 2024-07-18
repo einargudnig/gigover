@@ -68,7 +68,13 @@ export interface TaskModalProps {
 	task: Task;
 }
 
-export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, projectId, task }) => {
+export const NewTaskModal: FC<TaskModalProps> = ({
+	open: drawerOpen,
+	title,
+	onClose,
+	projectId,
+	task
+}) => {
 	const queryClient = useQueryClient();
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
@@ -78,7 +84,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 	const project: Project | undefined = projectData && projectData.project;
 	const { data: projectTypes } = useProjectTypes();
 
-	const { isOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: open });
+	const { isOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: drawerOpen });
 
 	const { handleSubmit, control } = useForm<ProjectTask>({
 		defaultValues: {
@@ -623,14 +629,17 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 											);
 										}}
 									>
-										{/* // eslint-disable-next-line @typescript-eslint/no-unused-vars */}
 										{({ isDragActive, open }) => (
 											<Box
 												border={'2px'}
 												rounded={'md'}
-												borderColor={'gray.100'}
+												borderColor={
+													isDragActive ? 'green.200' : 'gray.100'
+												}
 												p={1}
+												bg={isDragActive ? 'green.50' : 'white'}
 												_hover={{ borderColor: 'green.200' }}
+												onClick={open}
 											>
 												{projectTask?.images &&
 												projectTask?.images.length > 0 ? (
