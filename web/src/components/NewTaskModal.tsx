@@ -142,7 +142,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 		<Drawer isOpen={isOpen} onClose={chakraOnClose} size="lg">
 			<DrawerOverlay />
 			<DrawerContent maxHeight="100vh">
-				<Flex direction={'column'} height={'95%'}>
+				<Flex direction={'column'} height={'100%'}>
 					<Flex alignItems={'center'}>
 						<Box>
 							<DrawerHeader>{title}</DrawerHeader>
