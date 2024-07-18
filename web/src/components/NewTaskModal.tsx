@@ -141,8 +141,8 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 	return (
 		<Drawer isOpen={isOpen} onClose={chakraOnClose} size="lg">
 			<DrawerOverlay />
-			<DrawerContent>
-				<Flex direction={'column'}>
+			<DrawerContent maxHeight="100vh">
+				<Flex direction={'column'} height={'95%'}>
 					<Flex alignItems={'center'}>
 						<Box>
 							<DrawerHeader>{title}</DrawerHeader>
@@ -194,7 +194,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 							</Flex>
 						</Box>
 					</Flex>
-					<DrawerBody>
+					<DrawerBody overflowY={'auto'}>
 						<Tabs colorScheme="black">
 							<TabList>
 								<Tab>Details</Tab>
@@ -217,7 +217,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 									) : (
 										<>
 											<Flex direction={'column'}>
-												<Box flex={'1'} overflowY={'auto'}>
+												<Box flex={'1'}>
 													<Box>
 														<FormLabel>Project manager</FormLabel>
 														<User
