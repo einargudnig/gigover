@@ -29,7 +29,7 @@ import {
 	VStack,
 	useDisclosure
 } from '@chakra-ui/react';
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { useEventListener } from '../hooks/useEventListener';
@@ -44,6 +44,7 @@ import { ProjectTask, useTaskDetails } from '../queries/useTaskDetails';
 import { useUpdateTask } from '../queries/useUpdateTask';
 import { ApiService } from '../services/ApiService';
 import { Comment } from './Comment';
+import { ConfirmDialog } from './ConfirmDialog';
 import { DropZone } from './DropZone';
 import { LoadingSpinner } from './LoadingSpinner';
 import { TrackerSelect } from './TrackerSelect';
@@ -70,6 +71,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
 	const { data: projectData } = useProjectDetails(projectId);
+	const [dialogOpen, setDialogOpen] = useState(false);
 
 	const project: Project | undefined = projectData && projectData.project;
 	const { data: projectTypes } = useProjectTypes();
@@ -93,6 +95,15 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 		isLoading: taskLoading
 		// error: taskError
 	} = useUpdateTask(projectId);
+
+	const archiveTask = async () => {
+		await updateTask({
+			...task,
+			status: TaskStatus.Archived
+		});
+
+		closeModal();
+	};
 
 	const closeModal = useCallback(() => {
 		if (onClose) {
@@ -154,7 +165,30 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 										_active={{ bg: 'gray.100' }}
 									/>
 									<MenuList>
-										<MenuItem icon={<TrashIcon />}>Archive task</MenuItem>
+										<ConfirmDialog
+											header={'Archive task'}
+											setIsOpen={setDialogOpen}
+											callback={async (b) => {
+												if (b) {
+													await updateTask({
+														...task,
+														status: TaskStatus.Archived
+													});
+												}
+												setDialogOpen(false);
+												closeModal();
+											}}
+											isOpen={dialogOpen}
+										>
+											<MenuItem
+												icon={<TrashIcon />}
+												onClick={() => {
+													setDialogOpen(true);
+												}}
+											>
+												Archive task
+											</MenuItem>
+										</ConfirmDialog>
 									</MenuList>
 								</Menu>
 								<IconButton
