@@ -1,6 +1,6 @@
-import { Box, Button, Flex, Text, Image, Heading } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import hero from '/hero1.png';
+import hero from '/hero.png';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Hero = ({ data }: any) => {
@@ -31,7 +31,7 @@ export const Hero = ({ data }: any) => {
 						</Text>
 					</Flex>
 				</Box>
-				<Box>
+				<Box marginTop={4}>
 					<Flex justifyContent={'center'} alignItems={'center'}>
 						<Image
 							// src={data?.image.url}
