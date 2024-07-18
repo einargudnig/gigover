@@ -18,6 +18,8 @@ import {
 	MenuButton,
 	MenuItem,
 	MenuList,
+	SkeletonCircle,
+	SkeletonText,
 	Spacer,
 	Tab,
 	TabList,
@@ -96,15 +98,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 		// error: taskError
 	} = useUpdateTask(projectId);
 
-	const archiveTask = async () => {
-		await updateTask({
-			...task,
-			status: TaskStatus.Archived
-		});
-
-		closeModal();
-	};
-
 	const closeModal = useCallback(() => {
 		if (onClose) {
 			console.log('Closing drawer');
@@ -151,11 +144,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 						<Spacer />
 						<Box>
 							<Flex alignItems={'center'} mr="4">
-								{/* <IconButton
-									aria-label="More"
-									icon={<VerticalDots />}
-									variant="ghost"
-								/> */}
 								<Menu>
 									<MenuButton
 										as={IconButton}
@@ -214,256 +202,302 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 								{/* //! Details */}
 								<TabPanel>
 									{isLoading ? (
-										<Center>
-											<LoadingSpinner />
-										</Center>
-									) : isError ? (
-										<p>
-											Error fetching task with id: {task.taskId} - Reason:{' '}
-											{error?.errorText}. Code: {error?.errorCode}
-										</p>
-									) : null}
-									<Flex direction={'column'}>
-										<Box flex={'1'} overflowY={'auto'}>
-											<Box>
-												<FormLabel>Project manager</FormLabel>
-												<User
-													avatar={projectTask?.project.ownerAvatar || ''}
-													name={
-														projectTask?.project.ownerName || 'unknown'
-													}
-												/>
+										<>
+											<Box marginTop={4}>
+												<SkeletonCircle size="8" />
+												<SkeletonText mt="4" noOfLines={12} spacing="6" />
 											</Box>
-
-											<form id="updateTask" onSubmit={onSubmit}>
-												<VStack mt={6}>
-													<FormControl id="subject">
-														<FormLabel>Task name</FormLabel>
-														<Controller
-															name={'subject'}
-															control={control}
-															render={({
-																field: { onChange, onBlur, value }
-															}) => (
-																<Input
-																	onChange={onChange}
-																	onBlur={onBlur}
-																	value={value}
-																/>
-															)}
+										</>
+									) : (
+										<>
+											<Flex direction={'column'}>
+												<Box flex={'1'} overflowY={'auto'}>
+													<Box>
+														<FormLabel>Project manager</FormLabel>
+														<User
+															avatar={
+																projectTask?.project.ownerAvatar ||
+																''
+															}
+															name={
+																projectTask?.project.ownerName ||
+																'unknown'
+															}
 														/>
-													</FormControl>
-													<FormControl id={'typeId'}>
-														<FormLabel>Tags</FormLabel>
-														<Controller
-															name={'typeId'}
-															control={control}
-															render={({
-																field: {
-																	onChange: ptChange,
-																	value: ptValue = task.typeId,
-																	onBlur
-																}
-															}) => (
-																<Options
-																	isMulti={false}
-																	onBlur={onBlur}
-																	onChange={(newValue) => {
-																		const v = (
-																			newValue as ProjectType
-																		).typeId;
-																		ptChange(parseInt(`${v}`));
+													</Box>
+
+													<form id="updateTask" onSubmit={onSubmit}>
+														<VStack mt={6}>
+															<FormControl id="subject">
+																<FormLabel>Task name</FormLabel>
+																<Controller
+																	name={'subject'}
+																	control={control}
+																	render={({
+																		field: {
+																			onChange,
+																			onBlur,
+																			value
+																		}
+																	}) => (
+																		<Input
+																			onChange={onChange}
+																			onBlur={onBlur}
+																			value={value}
+																		/>
+																	)}
+																/>
+															</FormControl>
+															<FormControl id={'typeId'}>
+																<FormLabel>Tags</FormLabel>
+																<Controller
+																	name={'typeId'}
+																	control={control}
+																	render={({
+																		field: {
+																			onChange: ptChange,
+																			value: ptValue = task.typeId,
+																			onBlur
+																		}
+																	}) => (
+																		<Options
+																			isMulti={false}
+																			onBlur={onBlur}
+																			onChange={(
+																				newValue
+																			) => {
+																				const v = (
+																					newValue as ProjectType
+																				).typeId;
+																				ptChange(
+																					parseInt(`${v}`)
+																				);
+																			}}
+																			value={projectTypes?.projectTypes.find(
+																				(pt) =>
+																					pt.typeId ===
+																					ptValue
+																			)}
+																			getOptionLabel={(
+																				option: unknown
+																			) =>
+																				(
+																					option as ProjectType
+																				).name
+																			}
+																			getOptionValue={(
+																				option: unknown
+																			) =>
+																				(
+																					option as ProjectType
+																				)
+																					.typeId as unknown as string
+																			}
+																			options={
+																				projectTypes?.projectTypes ||
+																				[]
+																			}
+																		/>
+																	)}
+																/>
+															</FormControl>
+															<FormControl>
+																<FormLabel>
+																	Start and End date
+																</FormLabel>
+																<HStack>
+																	<Controller
+																		name="startDate"
+																		control={control}
+																		defaultValue={
+																			task?.startDate
+																				? (task.startDate.valueOf() as number)
+																				: undefined
+																		}
+																		render={({
+																			field: {
+																				onChange,
+																				value,
+																				onBlur
+																			}
+																		}) => (
+																			<DatePicker
+																				selected={
+																					value
+																						? new Date(
+																								value
+																						  )
+																						: null
+																				}
+																				onChange={(
+																					date
+																				) => {
+																					if (date) {
+																						onChange(
+																							(
+																								date as Date
+																							).getTime()
+																						);
+																					} else {
+																						onChange(
+																							null
+																						);
+																					}
+																				}}
+																				onBlur={() => {
+																					onBlur();
+																				}}
+																				required={false}
+																			/>
+																		)}
+																	/>
+																	<Controller
+																		name="endDate"
+																		control={control}
+																		defaultValue={
+																			task?.endDate
+																				? (task.endDate.valueOf() as number)
+																				: undefined
+																		}
+																		render={({
+																			field: {
+																				onChange,
+																				value,
+																				onBlur
+																			}
+																		}) => (
+																			<DatePicker
+																				selected={
+																					value
+																						? new Date(
+																								value
+																						  )
+																						: null
+																				}
+																				onChange={(
+																					date
+																				) => {
+																					if (date) {
+																						onChange(
+																							(
+																								date as Date
+																							).getTime()
+																						);
+																					} else {
+																						onChange(
+																							null
+																						);
+																					}
+
+																					// updateDates();
+																				}}
+																				onBlur={() => {
+																					onBlur();
+																				}}
+																			/>
+																		)}
+																	/>
+																</HStack>
+															</FormControl>
+
+															<FormControl id="status">
+																<FormLabel>Task status</FormLabel>
+																<Controller
+																	name="status"
+																	control={control}
+																	defaultValue={task.status}
+																	render={({
+																		field: { onChange, value }
+																	}) => (
+																		<TrackerSelect
+																			title={'Status'}
+																			value={value}
+																			options={[
+																				{
+																					value: TaskStatus.Backlog,
+																					label: 'Backlog'
+																				},
+																				{
+																					value: TaskStatus.Todo,
+																					label: 'Todo'
+																				},
+																				{
+																					value: TaskStatus.Doing,
+																					label: 'Doing'
+																				},
+																				{
+																					value: TaskStatus.Done,
+																					label: 'Done'
+																				}
+																			]}
+																			valueChanged={onChange}
+																		/>
+																	)}
+																/>
+															</FormControl>
+															<FormControl id="text">
+																<FormLabel>Description</FormLabel>
+																<Controller
+																	name="text"
+																	control={control}
+																	defaultValue={task.text}
+																	rules={{
+																		maxLength: {
+																			value: 599,
+																			message:
+																				'Description must be less than 600 characters' // Custom error message
+																		}
 																	}}
-																	value={projectTypes?.projectTypes.find(
-																		(pt) =>
-																			pt.typeId === ptValue
-																	)}
-																	getOptionLabel={(
-																		option: unknown
-																	) =>
-																		(option as ProjectType).name
-																	}
-																	getOptionValue={(
-																		option: unknown
-																	) =>
-																		(option as ProjectType)
-																			.typeId as unknown as string
-																	}
-																	options={
-																		projectTypes?.projectTypes ||
-																		[]
-																	}
-																/>
-															)}
-														/>
-													</FormControl>
-													<FormControl>
-														<FormLabel>Start and End date</FormLabel>
-														<HStack>
-															<Controller
-																name="startDate"
-																control={control}
-																defaultValue={
-																	task?.startDate
-																		? (task.startDate.valueOf() as number)
-																		: undefined
-																}
-																render={({
-																	field: {
-																		onChange,
-																		value,
-																		onBlur
-																	}
-																}) => (
-																	<DatePicker
-																		selected={
+																	render={({
+																		field: {
+																			onChange,
+																			onBlur,
 																			value
-																				? new Date(value)
-																				: null
-																		}
-																		onChange={(date) => {
-																			if (date) {
-																				onChange(
-																					(
-																						date as Date
-																					).getTime()
-																				);
-																			} else {
-																				onChange(null);
-																			}
-																		}}
-																		onBlur={() => {
-																			onBlur();
-																		}}
-																		required={false}
-																	/>
-																)}
-															/>
-															<Controller
-																name="endDate"
-																control={control}
-																defaultValue={
-																	task?.endDate
-																		? (task.endDate.valueOf() as number)
-																		: undefined
-																}
-																render={({
-																	field: {
-																		onChange,
-																		value,
-																		onBlur
-																	}
-																}) => (
-																	<DatePicker
-																		selected={
-																			value
-																				? new Date(value)
-																				: null
-																		}
-																		onChange={(date) => {
-																			if (date) {
-																				onChange(
-																					(
-																						date as Date
-																					).getTime()
-																				);
-																			} else {
-																				onChange(null);
-																			}
-
-																			// updateDates();
-																		}}
-																		onBlur={() => {
-																			onBlur();
-																		}}
-																	/>
-																)}
-															/>
-														</HStack>
-													</FormControl>
-
-													<FormControl id="status">
-														<FormLabel>Task status</FormLabel>
-														<Controller
-															name="status"
-															control={control}
-															defaultValue={task.status}
-															render={({
-																field: { onChange, value }
-															}) => (
-																<TrackerSelect
-																	title={'Status'}
-																	value={value}
-																	options={[
-																		{
-																			value: TaskStatus.Backlog,
-																			label: 'Backlog'
 																		},
-																		{
-																			value: TaskStatus.Todo,
-																			label: 'Todo'
-																		},
-																		{
-																			value: TaskStatus.Doing,
-																			label: 'Doing'
-																		},
-																		{
-																			value: TaskStatus.Done,
-																			label: 'Done'
+																		fieldState: {
+																			error: formError
 																		}
-																	]}
-																	valueChanged={onChange}
-																/>
-															)}
-														/>
-													</FormControl>
-													<FormControl id="text">
-														<FormLabel>Description</FormLabel>
-														<Controller
-															name="text"
-															control={control}
-															defaultValue={task.text}
-															rules={{
-																maxLength: {
-																	value: 599,
-																	message:
-																		'Description must be less than 600 characters' // Custom error message
-																}
-															}}
-															render={({
-																field: { onChange, onBlur, value },
-																fieldState: { error: formError }
-															}) => (
-																<>
-																	<Textarea
-																		value={value}
-																		onChange={onChange}
-																		onBlur={onBlur}
-																		placeholder="Write a description for this task"
-																		colorScheme={'gray'}
-																		size={'md'}
-																		variant={'outline'}
-																		isInvalid={!!formError}
-																		borderColor={'gray.100'} // Sets the color of the border
-																		borderWidth={'2px'} // Sets the width of the border
-																		borderStyle={'solid'} // Optional: Sets the style of the border
-																		rounded={'md'} // Sets the border-radius
-																		p={1}
-																	/>
-																	{formError && (
-																		<Text
-																			textColor={'red.600'}
-																			mt={2}
-																		>
-																			{formError.message}
-																		</Text>
+																	}) => (
+																		<>
+																			<Textarea
+																				value={value}
+																				onChange={onChange}
+																				onBlur={onBlur}
+																				placeholder="Write a description for this task"
+																				colorScheme={'gray'}
+																				size={'md'}
+																				variant={'outline'}
+																				isInvalid={
+																					!!formError
+																				}
+																				borderColor={
+																					'gray.100'
+																				} // Sets the color of the border
+																				borderWidth={'2px'} // Sets the width of the border
+																				borderStyle={
+																					'solid'
+																				} // Optional: Sets the style of the border
+																				rounded={'md'} // Sets the border-radius
+																				p={1}
+																			/>
+																			{formError && (
+																				<Text
+																					textColor={
+																						'red.600'
+																					}
+																					mt={2}
+																				>
+																					{
+																						formError.message
+																					}
+																				</Text>
+																			)}
+																		</>
 																	)}
-																</>
-															)}
-														/>
-													</FormControl>
+																/>
+															</FormControl>
 
-													{/* <FormControl id="worker">
+															{/* <FormControl id="worker">
 														<FormLabel>Assigned to</FormLabel>
 														<Controller
 															name="worker"
@@ -502,20 +536,22 @@ export const NewTaskModal: FC<TaskModalProps> = ({ open, title, onClose, project
 															}
 														/>
 													</FormControl> */}
-												</VStack>
-											</form>
-											<DrawerFooter>
-												<Button
-													type="submit"
-													form="updateTask"
-													colorScheme="gray"
-													isLoading={taskLoading}
-												>
-													Save
-												</Button>
-											</DrawerFooter>
-										</Box>
-									</Flex>
+														</VStack>
+													</form>
+													<DrawerFooter>
+														<Button
+															type="submit"
+															form="updateTask"
+															colorScheme="gray"
+															isLoading={taskLoading}
+														>
+															Save
+														</Button>
+													</DrawerFooter>
+												</Box>
+											</Flex>
+										</>
+									)}
 								</TabPanel>
 								{/* //! Comments panel */}
 								<TabPanel>
