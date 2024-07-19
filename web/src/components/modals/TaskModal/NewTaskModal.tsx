@@ -637,7 +637,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 												p={1}
 												bg={isDragActive ? 'green.50' : 'white'}
 												_hover={{ borderColor: 'green.200' }}
-												onClick={open}
 											>
 												{projectTask?.images &&
 												projectTask?.images.length > 0 ? (
@@ -655,7 +654,15 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 															</Button>
 														</Flex>
 														{projectTask?.images.map((f, fIndex) => (
-															<GigoverFile file={f} key={fIndex} />
+															<Box
+																key={fIndex}
+																onClick={() => closeModal()}
+															>
+																<GigoverFile
+																	file={f}
+																	key={fIndex}
+																/>
+															</Box>
 														))}
 													</Box>
 												) : (
