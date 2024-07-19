@@ -34,31 +34,31 @@ import {
 import React, { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
-import { useEventListener } from '../hooks/useEventListener';
-import { FileUploadType } from '../models/FileUploadType';
-import { Project } from '../models/Project';
-import { ProjectType } from '../models/ProjectType';
-import { Task, TaskStatus } from '../models/Task';
-import { GigoverFile } from '../pages/Files/components/File';
-import { useProjectDetails } from '../queries/useProjectDetails';
-import { useProjectTypes } from '../queries/useProjectTypes';
-import { ProjectTask, useTaskDetails } from '../queries/useTaskDetails';
-import { useUpdateTask } from '../queries/useUpdateTask';
-import { ApiService } from '../services/ApiService';
-import { Comment } from './Comment';
-import { ConfirmDialog } from './ConfirmDialog';
-import { DropZone } from './DropZone';
-import { LoadingSpinner } from './LoadingSpinner';
-import { TrackerSelect } from './TrackerSelect';
-import { User } from './User';
-import { DatePicker } from './forms/DatePicker';
-import { Options } from './forms/Options';
-import { CrossIcon } from './icons/CrossIcon';
-import { TrashIcon } from './icons/TrashIcon';
-import { VerticalDots } from './icons/VerticalDots';
-import { CommentInput } from './modals/TaskModal/CommentInput';
-import { UseResourceOnTask } from './modals/TaskModal/UseResourceOnTask';
-import { WorkerAssigneUpdate } from './modals/TaskModal/WorkerAssigneUpdate';
+import { useEventListener } from '../../../hooks/useEventListener';
+import { FileUploadType } from '../../../models/FileUploadType';
+import { Project } from '../../../models/Project';
+import { ProjectType } from '../../../models/ProjectType';
+import { Task, TaskStatus } from '../../../models/Task';
+import { GigoverFile } from '../../../pages/Files/components/File';
+import { useProjectDetails } from '../../../queries/useProjectDetails';
+import { useProjectTypes } from '../../../queries/useProjectTypes';
+import { ProjectTask, useTaskDetails } from '../../../queries/useTaskDetails';
+import { useUpdateTask } from '../../../queries/useUpdateTask';
+import { ApiService } from '../../../services/ApiService';
+import { Comment } from '../../Comment';
+import { ConfirmDialog } from '../../ConfirmDialog';
+import { DropZone } from '../../DropZone';
+import { LoadingSpinner } from '../../LoadingSpinner';
+import { TrackerSelect } from '../../TrackerSelect';
+import { User } from '../../User';
+import { DatePicker } from '../../forms/DatePicker';
+import { Options } from '../../forms/Options';
+import { CrossIcon } from '../../icons/CrossIcon';
+import { TrashIcon } from '../../icons/TrashIcon';
+import { VerticalDots } from '../../icons/VerticalDots';
+import { CommentInput } from './CommentInput';
+import { UseResourceOnTask } from './UseResourceOnTask';
+import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
 
 export interface TaskModalProps {
 	open: boolean;
@@ -394,8 +394,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 																							null
 																						);
 																					}
-
-																					// updateDates();
 																				}}
 																				onBlur={() => {
 																					onBlur();

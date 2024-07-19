@@ -3,7 +3,6 @@ import { Theme } from '../Theme';
 import { ModalContext } from '../context/ModalContext';
 import ShareItem from '../pages/Files/components/ShareItem';
 import { Modal } from './Modal';
-import { NewTaskModal } from './NewTaskModal';
 import { PropertyIcon } from './icons/PropertyIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { AddBidModal } from './modals/AddBidModal';
@@ -11,14 +10,15 @@ import { EditBidModal } from './modals/EditBidModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
+import { NewProjectModal } from './modals/NewProjectModal';
 import { ProcurementModal } from './modals/ProcurementModal';
-import { ProjectModal } from './modals/ProjectModal';
 import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
 import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 import { ResourceModal } from './modals/ResourceModal';
+import { NewTaskModal } from './modals/TaskModal/NewTaskModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
 import { UseResourceModal } from './modals/UseResourceModal';
 
@@ -47,13 +47,19 @@ export const GlobalModals = (): JSX.Element => {
 			)}
 			{modalContext.milestone && <MilestoneModal context={modalContext.milestone} />}
 			{modalContext.modifyProject && (
-				<Modal
+				// <Modal
+				// 	open={true}
+				// 	title={!project ? 'Create a new project' : `Edit ${project.name}`}
+				// 	onClose={() => setModalContext({})}
+				// >
+				// 	<ProjectModal project={project} />
+				// </Modal>
+				<NewProjectModal
+					project={project}
 					open={true}
 					title={!project ? 'Create a new project' : `Edit ${project.name}`}
 					onClose={() => setModalContext({})}
-				>
-					<ProjectModal project={project} />
-				</Modal>
+				/>
 			)}
 			{modalContext.resources && <ResourceModal />}
 			{modalContext.shareItem && (
