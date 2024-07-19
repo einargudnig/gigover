@@ -636,7 +636,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 												}
 												p={1}
 												bg={isDragActive ? 'green.50' : 'white'}
-												_hover={{ borderColor: 'green.200' }}
 											>
 												{projectTask?.images &&
 												projectTask?.images.length > 0 ? (
