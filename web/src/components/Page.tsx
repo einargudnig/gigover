@@ -1,11 +1,3 @@
-import React, { useContext } from 'react';
-import styled, { css } from 'styled-components';
-import { UserContext } from '../context/UserContext';
-import { Link, NavLink } from 'react-router-dom';
-import { ProjectIcon } from './icons/ProjectIcon';
-import { TimeIcon } from './icons/TimeIcon';
-import { SettingsIcon } from './icons/SettingsIcon';
-import { TenderIcon } from './icons/TenderIcon';
 import {
 	Avatar,
 	Box,
@@ -22,17 +14,25 @@ import {
 	MenuItem,
 	MenuList
 } from '@chakra-ui/react';
-import { FirebaseContext } from '../firebase/FirebaseContext';
-import { RoadmapIcon } from './icons/RoadmapIcon';
-import { Chevron } from './icons/Chevron';
+import React, { useContext } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import styled, { css } from 'styled-components';
 import { Theme } from '../Theme';
-import { FolderIcon } from './icons/FolderIcon';
+import { UserContext } from '../context/UserContext';
+import { FirebaseContext } from '../firebase/FirebaseContext';
 import { useLogout } from '../mutations/useLogout';
 import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
+import { Chevron } from './icons/Chevron';
+import { FolderIcon } from './icons/FolderIcon';
+import { ProjectIcon } from './icons/ProjectIcon';
+import { PropertyIcon } from './icons/PropertyIcon';
+import { RoadmapIcon } from './icons/RoadmapIcon';
+import { SettingsIcon } from './icons/SettingsIcon';
+import { TenderIcon } from './icons/TenderIcon';
+import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
-import { PropertyIcon } from './icons/PropertyIcon';
 // import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 // import { ManageOrganization } from './organizations/ManageOrganization';
 
@@ -291,6 +291,33 @@ export const Page = ({
 				<small>v1.8</small>
 			</Sidebar>
 			<PageWrapper>
+				<Box p={2} backgroundColor={'white'} borderBottom={'2px'} borderColor={'gray.300'}>
+					<Flex justifyContent={'end'}>
+						<Flex pr={5}>
+							<Notifications />
+							<Menu>
+								<MenuButton ml={2}>
+									<Avatar size={'sm'} name={user.email} src={user.avatar} />
+								</MenuButton>
+								<MenuList>
+									<MenuGroup title="Profile">
+										{/* <NavLink to={'/settings'}>
+											<MenuItem>Settings</MenuItem>
+										</NavLink> */}
+										<MenuItem
+											onClick={async () => {
+												await firebase.signOut();
+												await logout(undefined, undefined);
+											}}
+										>
+											Log out
+										</MenuItem>
+									</MenuGroup>
+								</MenuList>
+							</Menu>
+						</Flex>
+					</Flex>
+				</Box>
 				<PageHeader>
 					<div>
 						<div>
@@ -313,32 +340,7 @@ export const Page = ({
 								<Heading size={'md'}>{title}</Heading>
 							)}
 						</div>
-						<HeaderActions>
-							{actions}
-							<Flex>
-								<Notifications />
-								<Menu>
-									<MenuButton ml={2}>
-										<Avatar size={'sm'} name={user.email} src={user.avatar} />
-									</MenuButton>
-									<MenuList>
-										<MenuGroup title="Profile">
-											<NavLink to={'/settings'}>
-												<MenuItem>Settings</MenuItem>
-											</NavLink>
-											<MenuItem
-												onClick={async () => {
-													await firebase.signOut();
-													await logout(undefined, undefined);
-												}}
-											>
-												Sign out
-											</MenuItem>
-										</MenuGroup>
-									</MenuList>
-								</Menu>
-							</Flex>
-						</HeaderActions>
+						<HeaderActions>{actions}</HeaderActions>
 					</div>
 					{tabs && (
 						<Box mt={2}>

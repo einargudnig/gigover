@@ -100,8 +100,8 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 
 	const {
 		mutateAsync: updateTask,
-		isLoading: taskLoading
-		// error: taskError
+		isLoading: taskLoading,
+		error: taskError
 	} = useUpdateTask(projectId);
 
 	const closeModal = useCallback(() => {
@@ -207,6 +207,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 							<TabPanels>
 								{/* //! Details */}
 								<TabPanel>
+									{taskError && (
+										<Text color={'red.500'}>{taskError.errorText}</Text>
+									)}
 									{isLoading ? (
 										<>
 											<Box marginTop={4}>

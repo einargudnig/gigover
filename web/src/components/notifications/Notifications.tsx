@@ -30,7 +30,7 @@ export const Notifications = (): JSX.Element => {
 		<Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnBlur={true}>
 			<PopoverTrigger>
 				<IconButton
-					colorScheme={'yellow'}
+					colorScheme={'gray'}
 					aria-label={'Notifications'}
 					icon={
 						<>

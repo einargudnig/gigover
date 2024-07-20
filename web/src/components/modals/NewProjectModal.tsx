@@ -56,7 +56,12 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 			  }
 			: undefined
 	);
-	const { mutateAsync: modify, isLoading: projectLoading, isError, error } = useModifyProject();
+	const {
+		mutateAsync: modify,
+		isLoading: projectLoading,
+		isError: isProjectError,
+		error: projectError
+	} = useModifyProject();
 	const {
 		register,
 		handleSubmit,
@@ -115,6 +120,7 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 				<DrawerCloseButton onClick={() => closeDrawer()} />
 				<DrawerHeader>{title}</DrawerHeader>
 				<DrawerBody>
+					{isProjectError && <Text color="red.500">{projectError?.errorText}</Text>}
 					<form onSubmit={onSubmit} id="updateProject">
 						<VStack mb={-6} align={'stretch'}>
 							<FormControl id={'name'} isInvalid={!!errors.name}>

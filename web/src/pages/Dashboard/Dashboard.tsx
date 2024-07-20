@@ -1,20 +1,28 @@
-import { Button, IconButton, VStack } from '@chakra-ui/react';
+import {
+	Button,
+	IconButton,
+	Menu,
+	MenuButton,
+	MenuItemOption,
+	MenuList,
+	MenuOptionGroup,
+	VStack
+} from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
-import { Theme } from '../../Theme';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
 import { SortableProjectList } from '../../components/SortableProjectList';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
+import { FilterIcon } from '../../components/icons/FilterIcon';
 import { PlusIcon } from '../../components/icons/PlusIcon';
-import { TimeIcon } from '../../components/icons/TimeIcon';
+import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ModalContext } from '../../context/ModalContext';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
 import { SearchBar } from '../Property/components/SearchBar';
-import { DashboardTabs } from './DashboardTabs';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 
 export const Dashboard = (): JSX.Element => {
@@ -23,6 +31,7 @@ export const Dashboard = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
+	const [showSearch, setShowSearch] = useState(false);
 
 	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
 
@@ -45,32 +54,66 @@ export const Dashboard = (): JSX.Element => {
 	return (
 		<Page
 			title={'Dashboard'}
-			tabs={
-				<VStack>
-					<SearchBar />
-					<DashboardTabs
-						statuses={statuses?.progressStatusList ?? []}
-						activeTab={activeTab}
-						onChange={(tab) => setActiveTab(tab)}
-					/>
-				</VStack>
-			}
 			actions={
 				<>
-					<IconButton
-						variant={'outline'}
-						colorScheme={'gray'}
-						aria-label={'Track time'}
-						onClick={() => {
-							setModalContext({
-								timeTracker: {
-									project: undefined,
-									task: undefined
-								}
-							});
-						}}
-						icon={<TimeIcon color={Theme.colors.darkBlue} />}
-					/>
+					{showSearch ? (
+						<SearchBar />
+					) : (
+						<IconButton
+							variant={'outline'}
+							aria-label={'Search'}
+							colorScheme={'gray'}
+							icon={<SearchIcon color={'black'} />}
+							onClick={() => setShowSearch((v) => !v)}
+						/>
+					)}
+					<Menu>
+						<MenuButton
+							as={IconButton}
+							variant={'outline'}
+							colorScheme={'gray'}
+							aria-label={'Filter'}
+							icon={<FilterIcon color={'black'} />}
+						/>
+						<MenuList>
+							<MenuOptionGroup
+								defaultValue={'ALL'}
+								title="Project statuses"
+								type="radio"
+							>
+								<MenuItemOption
+									value="ALL"
+									style={{ textTransform: 'capitalize' }}
+									onClick={() => setActiveTab(ProjectStatus.ALL)}
+								>
+									{ProjectStatus.ALL.toLowerCase()}
+								</MenuItemOption>
+								<MenuItemOption
+									value="OPEN"
+									style={{ textTransform: 'capitalize' }}
+									onClick={() => setActiveTab(ProjectStatus.OPEN)}
+								>
+									{ProjectStatus.OPEN.toLowerCase()}
+								</MenuItemOption>
+								{statuses?.progressStatusList.map((status) => (
+									<MenuItemOption
+										key={status.id}
+										value={status.name}
+										onClick={() => setActiveTab(status)}
+									>
+										{status.name}
+									</MenuItemOption>
+								))}
+								<MenuItemOption
+									value="CLOSED"
+									style={{ textTransform: 'capitalize' }}
+									onClick={() => setActiveTab(ProjectStatus.CLOSED)}
+								>
+									{ProjectStatus.CLOSED.toLowerCase()}
+								</MenuItemOption>
+							</MenuOptionGroup>
+						</MenuList>
+					</Menu>
 					<Button
 						onClick={() => setModalContext({ modifyProject: { project: undefined } })}
 						leftIcon={<PlusIcon />}
