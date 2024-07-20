@@ -21,7 +21,7 @@ import {
 import { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
-import { Project, ProjectStatusType } from '../../models/Project';
+import { Project } from '../../models/Project';
 import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
@@ -46,6 +46,7 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 	const { isOpen, onClose: drawerClose } = useDisclosure({ isOpen: drawerOpen });
 	const queryClient = useQueryClient();
 	const { data: progressStatuses } = useProgressStatusList();
+
 	const { data: projects } = useProjectList();
 	const [progressStatus, setProgressStatus] = useState(
 		project?.progressStatus
@@ -55,14 +56,20 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 			  }
 			: undefined
 	);
-	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
+	const { mutateAsync: modify, isLoading: projectLoading, isError, error } = useModifyProject();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		control
 	} = useForm<ProjectFormData>({
-		defaultValues: project,
+		defaultValues: {
+			name: project?.name || '',
+			description: project?.description || '',
+			startDate: project?.startDate?.valueOf() || undefined,
+			endDate: project?.endDate?.valueOf() || undefined,
+			progressStatus: project?.progressStatus || ''
+		},
 		mode: 'onBlur'
 	});
 
@@ -80,6 +87,7 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 	});
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
+		console.log({ name, description, startDate, endDate });
 		try {
 			await modify({
 				projectId: project?.projectId,
@@ -100,35 +108,18 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 		}
 	});
 
-	const updateStatus = async (status: string) => {
-		try {
-			const projectId = project?.projectId;
-
-			if (projectId) {
-				await modify({
-					projectId,
-					status: status as ProjectStatusType
-				});
-				closeDrawer();
-			}
-		} catch (e) {
-			devError('Error', e);
-		}
-	};
-
 	return (
 		<Drawer isOpen={isOpen} onClose={drawerClose} size="lg">
 			<DrawerOverlay />
 			<DrawerContent>
 				<DrawerCloseButton onClick={() => closeDrawer()} />
-				<DrawerHeader>Create a new project</DrawerHeader>
+				<DrawerHeader>{title}</DrawerHeader>
 				<DrawerBody>
-					<form onSubmit={onSubmit}>
+					<form onSubmit={onSubmit} id="updateProject">
 						<VStack mb={-6} align={'stretch'}>
 							<FormControl id={'name'} isInvalid={!!errors.name}>
 								<FormLabel>Project name</FormLabel>
 								<Input
-									required={true}
 									{...register('name', {
 										required: 'Please add a project name'
 									})}
@@ -139,7 +130,6 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 							<FormControl id={'description'} isInvalid={!!errors.description}>
 								<FormLabel>Project description</FormLabel>
 								<Input
-									required={true}
 									{...register('description', {
 										required: 'Please add project description'
 									})}
@@ -150,23 +140,54 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 							</FormControl>
 							<Box mb={6} />
 							<FormControl id={'progressStatus'} isInvalid={!!errors.progressStatus}>
-								<FormLabel>Progress status</FormLabel>
+								<FormLabel>Status</FormLabel>
+								{/* <Controller
+									name="progressStatus"
+									control={control}
+									render={({ field: { onChange, value , onBlur } }) => (
+										<Select
+											value={value}
+											onChange={onChange}
+											onBlur={onBlur}
+											required={true}
+										>
+											{progressStatuses?.progressStatusList.map((ps) => (
+												<option key={ps.id} value={ps.name}>
+													{ps.name}
+												</option>
+											))}
+										</Select>
+									)}
+								/> */}
 								<Select
-									required={true}
 									{...register('progressStatus', {
 										required: 'Progress status is required'
 									})}
 								>
-									{/* {progressStatuses?.map((ps) => (
+									{progressStatuses?.progressStatusList.map((ps) => (
 										<option key={ps.id} value={ps.name}>
 											{ps.name}
 										</option>
-									))} */}
+									))}
 								</Select>
 								{errors.progressStatus && (
 									<Text color="red.500">{errors.progressStatus.message}</Text>
 								)}
 							</FormControl>
+							<Box mb={6} />
+							{/* <FormControl id={'property'} isInvalid={!!errors.property}>
+								<FormLabel>Property</FormLabel>
+								<Select required={true} {...register('property', {})}>
+									 {progressStatuses?.map((ps) => (
+										<option key={ps.id} value={ps.name}>
+											{ps.name}
+										</option>
+									))}
+								</Select>
+								{errors.property && (
+									<Text color="red.500">{errors.property.message}</Text>
+								)}
+							</FormControl> */}
 							<Box mb={6} />
 							<FormControl>
 								<FormLabel htmlFor="startDate">Start and end date</FormLabel>
@@ -227,11 +248,15 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 						</VStack>
 					</form>
 				</DrawerBody>
-				<DrawerFooter>
-					<Button variant="outline" mr={3} onClick={onClose}>
-						Cancel
+				<DrawerFooter mb={12}>
+					<Button
+						colorScheme="gray"
+						type="submit"
+						form="updateProject"
+						isLoading={projectLoading}
+					>
+						Save
 					</Button>
-					<Button colorScheme="blue">Save</Button>
 				</DrawerFooter>
 			</DrawerContent>
 		</Drawer>
