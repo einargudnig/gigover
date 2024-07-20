@@ -33,6 +33,7 @@ import { TenderIcon } from './icons/TenderIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
+import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 // import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 // import { ManageOrganization } from './organizations/ManageOrganization';
 
@@ -291,9 +292,10 @@ export const Page = ({
 				<small>v1.8</small>
 			</Sidebar>
 			<PageWrapper>
-				<Box p={2} backgroundColor={'white'} borderBottom={'2px'} borderColor={'gray.300'}>
+				<Box p={2} backgroundColor={'white'} borderBottom={'1px'} borderColor={'gray.300'}>
 					<Flex justifyContent={'end'}>
-						<Flex pr={5}>
+						<Flex pr={3}>
+							<OrganizationSwitcher />
 							<Notifications />
 							<Menu>
 								<MenuButton ml={2}>

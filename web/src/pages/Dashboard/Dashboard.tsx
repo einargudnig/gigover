@@ -15,7 +15,6 @@ import { Page } from '../../components/Page';
 import { SortableProjectList } from '../../components/SortableProjectList';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { FilterIcon } from '../../components/icons/FilterIcon';
-import { PlusIcon } from '../../components/icons/PlusIcon';
 import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ModalContext } from '../../context/ModalContext';
 import { ProgressStatus } from '../../models/ProgressStatus';
@@ -116,7 +115,6 @@ export const Dashboard = (): JSX.Element => {
 					</Menu>
 					<Button
 						onClick={() => setModalContext({ modifyProject: { project: undefined } })}
-						leftIcon={<PlusIcon />}
 					>
 						New project
 					</Button>
