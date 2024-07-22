@@ -68,7 +68,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 										</Box>
 									)}
 								</NavLink>
-								<NavLink to={`/roadmap?project=${projectId}`}>
+								<NavLink to={'gantt'}>
 									{({ isActive }) => (
 										<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
 											Gantt

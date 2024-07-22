@@ -1,21 +1,8 @@
-import {
-	Box,
-	Button,
-	Flex,
-	Grid,
-	HStack,
-	IconButton,
-	Portal,
-	Spacer,
-	Text
-} from '@chakra-ui/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { Box, Button, Grid, Portal } from '@chakra-ui/react';
+import { useCallback, useEffect, useRef } from 'react';
 import ReactToPdf from 'react-to-pdf';
 import { NumberParam, useQueryParam } from 'use-query-params';
 import { Page } from '../../components/Page';
-import { FilterIcon } from '../../components/icons/FilterIcon';
-import { SearchIcon } from '../../components/icons/SearchIcon';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
 import { useMilestones } from '../../queries/useMilestones';
@@ -33,8 +20,7 @@ interface RoadmapProps {
 
 export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-	const { projectId } = useParams<{ projectId: string }>();
-	const [showSearch, setShowSearch] = useState(false);
+
 	const [, setProjectQuery] = useQueryParam('project', NumberParam);
 	const [state, dispatch] = useGantChart({
 		initialState: {
@@ -133,64 +119,6 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 			// 				))}
 			// 	</Select>
 			// }
-			extraNav={
-				<Flex
-					borderBottom={'1px'}
-					backgroundColor={'white'}
-					borderColor={'gray.400'}
-					alignItems={'center'}
-					px={3}
-					py={1}
-				>
-					<Box>
-						<HStack>
-							<NavLink to={`/project/${projectId}`}>
-								{({ isActive }) => (
-									<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
-										Board
-									</Box>
-								)}
-							</NavLink>
-							<NavLink to={`/roadmap?project=${projectId}`}>
-								{({ isActive }) => (
-									<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
-										Gantt
-									</Box>
-								)}
-							</NavLink>
-							<NavLink to={`/files/${projectId}`}>
-								{({ isActive }) => (
-									<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
-										Files
-									</Box>
-								)}
-							</NavLink>
-						</HStack>
-					</Box>
-					<Spacer />
-					<Box>
-						{showSearch ? (
-							// <SearchBar />
-							<Text>Test</Text>
-						) : (
-							<IconButton
-								variant={'outline'}
-								aria-label={'Search'}
-								colorScheme={'gray'}
-								icon={<SearchIcon color={'black'} />}
-								onClick={() => setShowSearch((v) => !v)}
-							/>
-						)}
-						<IconButton
-							variant={'outline'}
-							colorScheme={'gray'}
-							aria-label={'Filter'}
-							icon={<FilterIcon color={'black'} />}
-							marginLeft={3}
-						/>
-					</Box>
-				</Flex>
-			}
 		>
 			<>
 				<GantChartContext.Provider value={[state, dispatch]}>
