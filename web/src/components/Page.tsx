@@ -7,14 +7,14 @@ import {
 	Center,
 	Fade,
 	Flex,
-	Heading,
 	Menu,
 	MenuButton,
 	MenuGroup,
 	MenuItem,
-	MenuList
+	MenuList,
+	Text
 } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Theme } from '../Theme';
@@ -24,11 +24,8 @@ import { useLogout } from '../mutations/useLogout';
 import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
 import { Chevron } from './icons/Chevron';
-import { FolderIcon } from './icons/FolderIcon';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { PropertyIcon } from './icons/PropertyIcon';
-import { RoadmapIcon } from './icons/RoadmapIcon';
-import { SettingsIcon } from './icons/SettingsIcon';
 import { TenderIcon } from './icons/TenderIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
@@ -49,6 +46,7 @@ interface PageProps {
 	actions?: React.ReactNode;
 	contentPadding?: boolean;
 	onLinkClick?: () => void;
+	extraNav?: React.ReactNode;
 }
 
 const PageStyled = styled.div`
@@ -99,10 +97,10 @@ const PageContent = styled.div<Pick<PageProps, 'contentPadding' | 'backgroundCol
 	${(props) =>
 		props.contentPadding &&
 		css`
-			padding: ${props.theme.padding(2)};
+			padding: ${props.theme.padding(1)};
 
 			@media screen and (max-width: 768px) {
-				padding: ${props.theme.padding(2)};
+				padding: ${props.theme.padding(1)};
 			}
 		`};
 `;
@@ -207,11 +205,13 @@ export const Page = ({
 	backgroundColor,
 	contentPadding = true,
 	actions,
+	extraNav = null,
 	onLinkClick
 }: PageProps): JSX.Element | null => {
 	const { mutateAsync: logout } = useLogout();
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
+	const [showSearch, setShowSearch] = useState(false);
 
 	if (user === null) {
 		return null;
@@ -228,26 +228,26 @@ export const Page = ({
 						<div>
 							<ProjectIcon />
 						</div>
-						<span>Projects - Tasks</span>
+						<span>Projects</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/property'}>
 						<div>
 							<PropertyIcon />
 						</div>
-						<span>Property</span>
+						<span>Properties</span>
 					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/roadmap'}>
+					{/* <IconLink onClick={onLinkClick} to={'/roadmap'}>
 						<div>
 							<RoadmapIcon />
 						</div>
-						<span>Gantt chart</span>
-					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/files'}>
+						<span>Gantt chart*</span>
+					</IconLink> */}
+					{/* <IconLink onClick={onLinkClick} to={'/files'}>
 						<div>
 							<FolderIcon color={Theme.colors.white} type={'bold'} />
 						</div>
-						<span>File storage</span>
-					</IconLink>
+						<span>File storage*</span>
+					</IconLink> */}
 					<IconLink onClick={onLinkClick} to={'/resources'}>
 						<div>
 							<ToolsIcon color={Theme.colors.white} type={'bold'} />
@@ -258,20 +258,20 @@ export const Page = ({
 						<div>
 							<TimeIcon />
 						</div>
-						<span>Time reports</span>
+						<span>Reports</span>
 					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/tender'}>
 						<div>
 							<TenderIcon />
 						</div>
-						<span>Tender</span>
+						<span>Tenders</span>
 					</IconLink>
-					<IconLink onClick={onLinkClick} to={'/settings'}>
+					{/* <IconLink onClick={onLinkClick} to={'/settings'}>
 						<div>
 							<SettingsIcon />
 						</div>
-						<span>Settings</span>
-					</IconLink>
+						<span>Settings*</span>
+					</IconLink> */}
 				</SidebarNav>
 
 				{/* <Flex
@@ -339,7 +339,7 @@ export const Page = ({
 									))}
 								</Breadcrumb>
 							) : (
-								<Heading size={'md'}>{title}</Heading>
+								<Text textColor={'black'}>{title}</Text>
 							)}
 						</div>
 						<HeaderActions>{actions}</HeaderActions>
@@ -352,6 +352,7 @@ export const Page = ({
 						</Box>
 					)}
 				</PageHeader>
+				{extraNav}
 				<PageContent contentPadding={contentPadding} backgroundColor={backgroundColor}>
 					<Fade in={true} style={{ flex: 1, height: '100%' }}>
 						{children}

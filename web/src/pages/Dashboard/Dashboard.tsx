@@ -52,7 +52,7 @@ export const Dashboard = (): JSX.Element => {
 
 	return (
 		<Page
-			title={'Dashboard'}
+			title={'Projects'}
 			actions={
 				<>
 					{showSearch ? (

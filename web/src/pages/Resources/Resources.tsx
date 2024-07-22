@@ -4,7 +4,6 @@ import { CellProps, Column } from 'react-table';
 import styled from 'styled-components';
 import { CardBase } from '../../components/CardBase';
 import { Page } from '../../components/Page';
-import { PlusIcon } from '../../components/icons/PlusIcon';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { Table } from '../../components/table/Table';
 import { ModalContext } from '../../context/ModalContext';
@@ -125,10 +124,7 @@ export const Resources = (): JSX.Element => {
 			title={'Resources'}
 			actions={
 				<>
-					<Button
-						onClick={() => setModalContext({ resources: { resource: undefined } })}
-						leftIcon={<PlusIcon />}
-					>
+					<Button onClick={() => setModalContext({ resources: { resource: undefined } })}>
 						New resource
 					</Button>
 				</>

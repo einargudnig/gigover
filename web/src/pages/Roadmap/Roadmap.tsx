@@ -1,9 +1,8 @@
-import { Box, Button, Grid, Portal, Select } from '@chakra-ui/react';
+import { Box, Button, Grid, Portal } from '@chakra-ui/react';
 import { useCallback, useEffect, useRef } from 'react';
 import ReactToPdf from 'react-to-pdf';
 import { NumberParam, useQueryParam } from 'use-query-params';
 import { Page } from '../../components/Page';
-import { Chevron } from '../../components/icons/Chevron';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
 import { useMilestones } from '../../queries/useMilestones';
@@ -93,33 +92,33 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 					</ReactToPdf>
 				)
 			}
-			tabs={
-				<Select
-					value={state.project?.projectId}
-					onChange={(e) => {
-						const project = projects.find(
-							(p) => p.projectId === parseInt(e.target.value)
-						);
-						if (project) {
-							setProject(project);
-							setProjectQuery(project.projectId);
-						}
-					}}
-					icon={<Chevron />}
-					colorScheme={'yellow'}
-					variant="filled"
-					placeholder="Select a project"
-				>
-					{projects.length > 0 &&
-						projects
-							.filter((p) => p.status === 'OPEN')
-							.map((p) => (
-								<option key={p.projectId} value={p.projectId}>
-									{p.name}
-								</option>
-							))}
-				</Select>
-			}
+			// tabs={
+			// 	<Select
+			// 		value={state.project?.projectId}
+			// 		onChange={(e) => {
+			// 			const project = projects.find(
+			// 				(p) => p.projectId === parseInt(e.target.value)
+			// 			);
+			// 			if (project) {
+			// 				setProject(project);
+			// 				setProjectQuery(project.projectId);
+			// 			}
+			// 		}}
+			// 		icon={<Chevron />}
+			// 		colorScheme={'yellow'}
+			// 		variant="filled"
+			// 		placeholder="Select a project"
+			// 	>
+			// 		{projects.length > 0 &&
+			// 			projects
+			// 				.filter((p) => p.status === 'OPEN')
+			// 				.map((p) => (
+			// 					<option key={p.projectId} value={p.projectId}>
+			// 						{p.name}
+			// 					</option>
+			// 				))}
+			// 	</Select>
+			// }
 		>
 			<>
 				<GantChartContext.Provider value={[state, dispatch]}>

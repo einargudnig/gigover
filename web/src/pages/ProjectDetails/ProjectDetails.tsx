@@ -1,10 +1,12 @@
-import { Button } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, IconButton, Spacer, Text } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { Link, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
+import { FilterIcon } from '../../components/icons/FilterIcon';
+import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
@@ -48,18 +50,12 @@ const FeedColumn = styled.div`
 	}
 `;
 
-const ProjectDetailsPage = styled.div`
-	max-width: 100%;
-	height: 100%;
-	flex: 1;
-	overflow-x: auto;
-`;
-
 export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
 	const projectIdNumber = parseInt(projectId as string);
 	const [manageWorkers, setManageWorkers] = useState(false);
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
+	const [showSearch, setShowSearch] = useState(false);
 
 	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const project: Project | undefined = data && data.project;
@@ -140,36 +136,71 @@ export const ProjectDetails = (): JSX.Element | null => {
 			<Page
 				breadcrumbs={[
 					{ title: 'Projects', url: '/' },
-					...(isLoading ? [] : [{ title: project?.name || '' }, { title: 'Tasks' }])
+					...(isLoading ? [] : [{ title: project?.name || '' }])
 				]}
 				actions={
 					!isLoading &&
 					project && (
 						<>
 							{project.owner && (
-								<Button colorScheme={'gray'} onClick={() => setManageWorkers(true)}>
-									Team members
+								<Button
+									colorScheme={'yellow'}
+									onClick={() => setManageWorkers(true)}
+								>
+									Add members
 								</Button>
 							)}
-							<Button
-								colorScheme={'gray'}
-								as={Link}
-								to={'/roadmap?project=' + project.projectId}
-							>
-								Gantt Chart
-							</Button>
-							<Button
-								colorScheme={'gray'}
-								as={Link}
-								to={'/files/' + project.projectId}
-							>
-								Project Files
-							</Button>
 						</>
 					)
 				}
+				extraNav={
+					<Flex
+						borderBottom={'1px'}
+						backgroundColor={'white'}
+						borderColor={'gray.400'}
+						alignItems={'center'}
+						px={3}
+						py={1}
+					>
+						<Box>
+							<HStack>
+								<NavLink to={`/project/${projectId}`}>
+									{({ isActive }) => (
+										<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+											Board
+										</Box>
+									)}
+								</NavLink>
+								<NavLink to={`/roadmap?project=${projectId}`}>Gantt</NavLink>
+								<NavLink to={`/files/${projectId}`}>Files</NavLink>
+							</HStack>
+						</Box>
+						<Spacer />
+						<Box>
+							{showSearch ? (
+								// <SearchBar />
+								<Text>Test</Text>
+							) : (
+								<IconButton
+									variant={'outline'}
+									aria-label={'Search'}
+									colorScheme={'gray'}
+									icon={<SearchIcon color={'black'} />}
+									onClick={() => setShowSearch((v) => !v)}
+								/>
+							)}
+							<IconButton
+								variant={'outline'}
+								colorScheme={'gray'}
+								aria-label={'Filter'}
+								icon={<FilterIcon color={'black'} />}
+								marginLeft={3}
+							/>
+						</Box>
+					</Flex>
+				}
 			>
-				<ProjectDetailsPage>
+				<Box maxWidth="100%" height="100%" flex="1" overflowX="auto">
 					{isLoading ? (
 						<LoadingSpinner />
 					) : isError ? (
@@ -196,7 +227,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 							</DragDropContext>
 						</KanbanBoard>
 					)}
-				</ProjectDetailsPage>
+				</Box>
 			</Page>
 		</>
 	);
