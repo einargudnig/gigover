@@ -1,8 +1,21 @@
-import { Box, Button, Grid, Portal } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef } from 'react';
+import {
+	Box,
+	Button,
+	Flex,
+	Grid,
+	HStack,
+	IconButton,
+	Portal,
+	Spacer,
+	Text
+} from '@chakra-ui/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
 import ReactToPdf from 'react-to-pdf';
 import { NumberParam, useQueryParam } from 'use-query-params';
 import { Page } from '../../components/Page';
+import { FilterIcon } from '../../components/icons/FilterIcon';
+import { SearchIcon } from '../../components/icons/SearchIcon';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
 import { useMilestones } from '../../queries/useMilestones';
@@ -20,7 +33,8 @@ interface RoadmapProps {
 
 export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-
+	const { projectId } = useParams<{ projectId: string }>();
+	const [showSearch, setShowSearch] = useState(false);
 	const [, setProjectQuery] = useQueryParam('project', NumberParam);
 	const [state, dispatch] = useGantChart({
 		initialState: {
@@ -137,8 +151,20 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 									</Box>
 								)}
 							</NavLink>
-							<NavLink to={`/roadmap?project=${projectId}`}>Gantt</NavLink>
-							<NavLink to={`/files/${projectId}`}>Files</NavLink>
+							<NavLink to={`/roadmap?project=${projectId}`}>
+								{({ isActive }) => (
+									<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+										Gantt
+									</Box>
+								)}
+							</NavLink>
+							<NavLink to={`/files/${projectId}`}>
+								{({ isActive }) => (
+									<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+										Files
+									</Box>
+								)}
+							</NavLink>
 						</HStack>
 					</Box>
 					<Spacer />

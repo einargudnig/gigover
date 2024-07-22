@@ -1,13 +1,9 @@
-import { Box, Button, Flex, HStack, IconButton, Spacer, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { NavLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Page } from '../../components/Page';
-import { FilterIcon } from '../../components/icons/FilterIcon';
-import { SearchIcon } from '../../components/icons/SearchIcon';
-import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
@@ -130,105 +126,34 @@ export const ProjectDetails = (): JSX.Element | null => {
 
 	return (
 		<>
-			{manageWorkers && project && (
-				<ManageProjectWorkers onClose={() => setManageWorkers(false)} project={project} />
-			)}
-			<Page
-				breadcrumbs={[
-					{ title: 'Projects', url: '/' },
-					...(isLoading ? [] : [{ title: project?.name || '' }])
-				]}
-				actions={
-					!isLoading &&
-					project && (
-						<>
-							{project.owner && (
-								<Button
-									colorScheme={'yellow'}
-									onClick={() => setManageWorkers(true)}
-								>
-									Add members
-								</Button>
-							)}
-						</>
-					)
-				}
-				extraNav={
-					<Flex
-						borderBottom={'1px'}
-						backgroundColor={'white'}
-						borderColor={'gray.400'}
-						alignItems={'center'}
-						px={3}
-						py={1}
-					>
-						<Box>
-							<HStack>
-								<NavLink to={`/project/${projectId}`}>
-									{({ isActive }) => (
-										<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
-											Board
-										</Box>
-									)}
-								</NavLink>
-								<NavLink to={`/roadmap?project=${projectId}`}>Gantt</NavLink>
-								<NavLink to={`/files/${projectId}`}>Files</NavLink>
-							</HStack>
-						</Box>
-						<Spacer />
-						<Box>
-							{showSearch ? (
-								// <SearchBar />
-								<Text>Test</Text>
-							) : (
-								<IconButton
-									variant={'outline'}
-									aria-label={'Search'}
-									colorScheme={'gray'}
-									icon={<SearchIcon color={'black'} />}
-									onClick={() => setShowSearch((v) => !v)}
-								/>
-							)}
-							<IconButton
-								variant={'outline'}
-								colorScheme={'gray'}
-								aria-label={'Filter'}
-								icon={<FilterIcon color={'black'} />}
-								marginLeft={3}
-							/>
-						</Box>
-					</Flex>
-				}
-			>
-				<Box maxWidth="100%" height="100%" flex="1" overflowX="auto">
-					{isLoading ? (
-						<LoadingSpinner />
-					) : isError ? (
-						<p>
-							Error fetching project with id: {projectId} - Reason: {error?.errorText}
-							. Code: {error?.errorCode}
-						</p>
-					) : (
-						<KanbanBoard>
-							<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
-								<FeedBoard>
-									{Object.values(TaskStatus)
-										.filter((status) => status !== TaskStatus.Archived)
-										.map((taskStatus, tIndex) => (
-											<FeedColumn key={tIndex}>
-												<TaskColumn
-													project={project!}
-													status={taskStatus}
-													tasks={tasks[taskStatus]}
-												/>
-											</FeedColumn>
-										))}
-								</FeedBoard>
-							</DragDropContext>
-						</KanbanBoard>
-					)}
-				</Box>
-			</Page>
+			<Box>
+				{isLoading ? (
+					<LoadingSpinner />
+				) : isError ? (
+					<p>
+						Error fetching project with id: {projectId} - Reason: {error?.errorText}.
+						Code: {error?.errorCode}
+					</p>
+				) : (
+					<KanbanBoard>
+						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
+							<FeedBoard>
+								{Object.values(TaskStatus)
+									.filter((status) => status !== TaskStatus.Archived)
+									.map((taskStatus, tIndex) => (
+										<FeedColumn key={tIndex}>
+											<TaskColumn
+												project={project!}
+												status={taskStatus}
+												tasks={tasks[taskStatus]}
+											/>
+										</FeedColumn>
+									))}
+							</FeedBoard>
+						</DragDropContext>
+					</KanbanBoard>
+				)}
+			</Box>
 		</>
 	);
 };

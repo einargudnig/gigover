@@ -36,6 +36,7 @@ import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOff
 import { Procurement } from './pages/Procurement/Procurement';
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { TenderPage } from './pages/Procurement/components/Tender';
+import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
 import { Property } from './pages/Property/Property';
 import { PropertyId } from './pages/Property/PropertyId';
 import { PropertyOutlet } from './pages/Property/PropertyOutlet';
@@ -48,7 +49,11 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'onboarding'} element={<Onboarding />} />
 
 		{/* 📝 Tasks 📝 */}
-		<Route path={'project/:projectId'} element={<ProjectDetails />}>
+		{/* This should also become an Outlet route */}
+		{/* Outlet route for all things related to this project */}
+		{/* Tasks, Gantt Chart and Files! */}
+		<Route path={'project/:projectId'} element={<ProjectDetailsOutlet />}>
+			<Route index element={<ProjectDetails />} />
 			<Route path={':taskId'} element={<Organize />} />
 		</Route>
 
