@@ -119,6 +119,52 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 			// 				))}
 			// 	</Select>
 			// }
+			extraNav={
+				<Flex
+					borderBottom={'1px'}
+					backgroundColor={'white'}
+					borderColor={'gray.400'}
+					alignItems={'center'}
+					px={3}
+					py={1}
+				>
+					<Box>
+						<HStack>
+							<NavLink to={`/project/${projectId}`}>
+								{({ isActive }) => (
+									<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+										Board
+									</Box>
+								)}
+							</NavLink>
+							<NavLink to={`/roadmap?project=${projectId}`}>Gantt</NavLink>
+							<NavLink to={`/files/${projectId}`}>Files</NavLink>
+						</HStack>
+					</Box>
+					<Spacer />
+					<Box>
+						{showSearch ? (
+							// <SearchBar />
+							<Text>Test</Text>
+						) : (
+							<IconButton
+								variant={'outline'}
+								aria-label={'Search'}
+								colorScheme={'gray'}
+								icon={<SearchIcon color={'black'} />}
+								onClick={() => setShowSearch((v) => !v)}
+							/>
+						)}
+						<IconButton
+							variant={'outline'}
+							colorScheme={'gray'}
+							aria-label={'Filter'}
+							icon={<FilterIcon color={'black'} />}
+							marginLeft={3}
+						/>
+					</Box>
+				</Flex>
+			}
 		>
 			<>
 				<GantChartContext.Provider value={[state, dispatch]}>
