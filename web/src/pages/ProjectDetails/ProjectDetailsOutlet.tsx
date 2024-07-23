@@ -61,23 +61,35 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 					>
 						<Box>
 							<HStack>
-								<NavLink to={`/project/${projectId}`}>
+								<NavLink to={`/project/${projectId}`} end>
 									{({ isActive }) => (
-										<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+										<Box
+											as="button"
+											borderBottom={isActive ? '2px' : 'hidden	'}
+											borderColor={'blue.400'}
+										>
 											Board
 										</Box>
 									)}
 								</NavLink>
 								<NavLink to={'gantt'}>
 									{({ isActive }) => (
-										<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+										<Box
+											as="button"
+											borderBottom={isActive ? '2px' : 'hidden	'}
+											borderColor={'blue.400'}
+										>
 											Gantt
 										</Box>
 									)}
 								</NavLink>
-								<NavLink to={`/files/${projectId}`}>
+								<NavLink to={'files'}>
 									{({ isActive }) => (
-										<Box as="button" borderBottom={isActive ? '1px' : 'hidden	'}>
+										<Box
+											as="button"
+											borderBottom={isActive ? '2px' : 'hidden	'}
+											borderColor={'blue.400'}
+										>
 											Files
 										</Box>
 									)}

@@ -36,6 +36,7 @@ import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOff
 import { Procurement } from './pages/Procurement/Procurement';
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { TenderPage } from './pages/Procurement/components/Tender';
+import { ProjectDetailsFiles } from './pages/ProjectDetails/ProjectDetailsFiles';
 import { ProjectDetailsGanttChart } from './pages/ProjectDetails/ProjectDetailsGanttChart';
 import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
 import { Property } from './pages/Property/Property';
@@ -56,6 +57,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'project/:projectId'} element={<ProjectDetailsOutlet />}>
 			<Route index element={<ProjectDetails />} />
 			<Route path={'gantt'} element={<ProjectDetailsGanttChart />} />
+			<Route path={'files'} element={<ProjectDetailsFiles />} />
 			<Route path={':taskId'} element={<Organize />} />
 		</Route>
 

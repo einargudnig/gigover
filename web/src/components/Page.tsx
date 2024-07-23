@@ -24,6 +24,7 @@ import { useLogout } from '../mutations/useLogout';
 import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
 import { Chevron } from './icons/Chevron';
+import { FolderIcon } from './icons/FolderIcon';
 import { ProjectIcon } from './icons/ProjectIcon';
 import { PropertyIcon } from './icons/PropertyIcon';
 import { TenderIcon } from './icons/TenderIcon';
@@ -242,12 +243,12 @@ export const Page = ({
 						</div>
 						<span>Gantt chart*</span>
 					</IconLink> */}
-					{/* <IconLink onClick={onLinkClick} to={'/files'}>
+					<IconLink onClick={onLinkClick} to={'/files'}>
 						<div>
 							<FolderIcon color={Theme.colors.white} type={'bold'} />
 						</div>
-						<span>File storage*</span>
-					</IconLink> */}
+						<span>File storage</span>
+					</IconLink>
 					<IconLink onClick={onLinkClick} to={'/resources'}>
 						<div>
 							<ToolsIcon color={Theme.colors.white} type={'bold'} />

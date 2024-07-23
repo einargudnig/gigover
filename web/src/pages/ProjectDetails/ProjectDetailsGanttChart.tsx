@@ -18,15 +18,13 @@ import { GRID_SIDEBAR_WIDTH, useGantChart } from '../Roadmap/hooks/useGantChart'
 export const ProjectDetailsGanttChart = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { projectId } = useParams<{ projectId: string }>();
-	console.log({ projectId });
+
 	const { data, isLoading, isError, error } = useProjectList();
-	console.log({ data });
 
 	const projects: Project[] = data;
 	const selectedProject: Project | undefined = projectId
 		? data.find((p) => p.projectId === Number(projectId))
 		: undefined;
-	console.log({ selectedProject });
 
 	const [state, dispatch] = useGantChart({
 		initialState: {
