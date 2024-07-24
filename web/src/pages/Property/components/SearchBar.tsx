@@ -26,6 +26,7 @@ const SearchResults = styled.div`
 
 const StyledMenuList = styled(MenuList)`
 	width: 400px;
+	z-index: 1000;
 `;
 
 export const SearchBar = (): JSX.Element => {

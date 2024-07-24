@@ -1,11 +1,10 @@
-import { Box, Button, Flex, Grid, GridItem, HStack, Spacer, Text, Tooltip } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
 import { useContext } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoProcurementFound } from '../../components/empty/NoProcurementFound';
-import { PlusIcon } from '../../components/icons/PlusIcon';
 import { ModalContext } from '../../context/ModalContext';
 import { Tender } from '../../models/Tender';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
@@ -72,23 +71,6 @@ export const ProcurementHome = (): JSX.Element => {
 
 	return (
 		<>
-			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
-				<Box>
-					<Text>
-						This tab should be used for creating, managing, and reviewing tenders.
-					</Text>
-				</Box>
-				<Spacer />
-				<Box>
-					<Button
-						onClick={() => setModalContext({ addTender: { tender: undefined } })}
-						leftIcon={<PlusIcon />}
-					>
-						New Tender
-					</Button>
-				</Box>
-			</Flex>
-
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

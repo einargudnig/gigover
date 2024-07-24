@@ -4,11 +4,9 @@ import { Outlet, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
-import { UploadIcon } from '../../components/icons/UploadIcon';
 import { Project } from '../../models/Project';
 import { useProjectList } from '../../queries/useProjectList';
 import { UploadModal } from './UploadModal';
-import { SearchBar } from './components/SearchBar';
 // import { devInfo } from '../../utils/ConsoleUtils';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
@@ -25,6 +23,7 @@ export const Files = (): JSX.Element => {
 	const params = useParams();
 	const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
+	const [showSearch, setShowSearch] = useState(false);
 	const projects = useOpenProjects(data);
 
 	useEffect(() => {
@@ -82,14 +81,12 @@ export const Files = (): JSX.Element => {
 						  ]
 						: [])
 				]}
-				tabs={<SearchBar files={[]} />}
 				contentPadding={false}
 				actions={
 					<>
+						{/* We used to have the search bar here, but there is no real way to fetch all files and search for them!*/}
 						{project && <CreateNewFolderButton projectId={project.projectId} />}
-						<Button onClick={() => setUpload(true)} leftIcon={<UploadIcon />}>
-							Upload
-						</Button>
+						<Button onClick={() => setUpload(true)}>Upload</Button>
 					</>
 				}
 			>
