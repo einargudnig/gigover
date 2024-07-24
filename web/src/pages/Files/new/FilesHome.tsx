@@ -12,6 +12,7 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export const FilesHome = (): JSX.Element => {
 	const { data, isLoading } = useProjectList();
+
 	const projects = useOpenProjects(data);
 
 	if (isLoading) {

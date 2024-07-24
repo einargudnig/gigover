@@ -1,5 +1,5 @@
 import { Box, Grid, Portal } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -18,15 +18,12 @@ import { GRID_SIDEBAR_WIDTH, useGantChart } from '../Roadmap/hooks/useGantChart'
 export const ProjectDetailsGanttChart = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { projectId } = useParams<{ projectId: string }>();
-	console.log({ projectId });
-
 	const { data, isLoading, isError, error } = useProjectList();
 
 	const projects: Project[] = data;
-	const selectedProject: Project | undefined =
-		projectId && projects.length > 0
-			? projects.find((p) => p.projectId === Number(projectId))
-			: undefined;
+	const selectedProject: Project | undefined = projectId
+		? projects.find((p) => p.projectId === Number(projectId))
+		: undefined;
 
 	const [state, dispatch] = useGantChart({
 		initialState: {
@@ -39,29 +36,16 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 		}
 	});
 
-	// const { data: mileStoneData } = useMilestones(
-	// 	state.project?.projectId ?? selectedProject?.projectId ?? projects[0].projectId
-	// );
 	const { data: mileStoneData } = useMilestones(
 		selectedProject?.projectId ?? projects[0].projectId
 	);
 
-	const setProject = useCallback(
-		(project: Project) =>
-			dispatch({
-				type: 'SetProject',
-				payload: project
-			}),
-		[dispatch]
-	);
-
 	useEffect(() => {
 		// Map to Milestone class
-		dispatch({
-			type: 'SetMilestones',
-			payload:
-				mileStoneData?.milestones.map((m) => {
-					return new Milestone(
+		if (mileStoneData && mileStoneData.milestones) {
+			const milestones = mileStoneData.milestones.map(
+				(m) =>
+					new Milestone(
 						m.milestoneId,
 						m.title,
 						m.description,
@@ -70,10 +54,22 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 						m.endDate,
 						m.projectId,
 						m.projectTasks
-					);
-				}) ?? []
-		});
-	}, [mileStoneData, dispatch]);
+					)
+			);
+			dispatch({
+				type: 'SetMilestones',
+				payload: milestones
+			});
+		}
+	}, [projectId, dispatch, mileStoneData]);
+
+	if (isLoading) {
+		return (
+			<Center>
+				<LoadingSpinner />
+			</Center>
+		);
+	}
 
 	if (!isLoading && isError) {
 		// TODO Replace with ErrorBoundary
