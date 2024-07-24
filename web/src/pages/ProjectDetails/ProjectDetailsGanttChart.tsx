@@ -18,13 +18,15 @@ import { GRID_SIDEBAR_WIDTH, useGantChart } from '../Roadmap/hooks/useGantChart'
 export const ProjectDetailsGanttChart = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { projectId } = useParams<{ projectId: string }>();
+	console.log({ projectId });
 
 	const { data, isLoading, isError, error } = useProjectList();
 
 	const projects: Project[] = data;
-	const selectedProject: Project | undefined = projectId
-		? data.find((p) => p.projectId === Number(projectId))
-		: undefined;
+	const selectedProject: Project | undefined =
+		projectId && projects.length > 0
+			? projects.find((p) => p.projectId === Number(projectId))
+			: undefined;
 
 	const [state, dispatch] = useGantChart({
 		initialState: {
@@ -40,7 +42,9 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 	// const { data: mileStoneData } = useMilestones(
 	// 	state.project?.projectId ?? selectedProject?.projectId ?? projects[0].projectId
 	// );
-	const { data: mileStoneData } = useMilestones(selectedProject!.projectId);
+	const { data: mileStoneData } = useMilestones(
+		selectedProject?.projectId ?? projects[0].projectId
+	);
 
 	const setProject = useCallback(
 		(project: Project) =>

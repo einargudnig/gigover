@@ -1,6 +1,6 @@
 import { Box, Button, Flex, HStack, IconButton, Spacer, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { FilterIcon } from '../../components/icons/FilterIcon';
@@ -17,8 +17,13 @@ const Container = styled.div`
 
 export const ProjectDetailsOutlet = (): JSX.Element => {
 	const { projectId } = useParams();
+	console.log({ projectId });
 	const projectIdNumber = parseInt(projectId as string);
 	const [manageWorkers, setManageWorkers] = useState(false);
+	const location = useLocation();
+
+	const showSearchIcon = location.pathname === `/project/${projectId}/files`;
+	const showFilterIcon = location.pathname === `/project/${projectId}`;
 
 	const [showSearch, setShowSearch] = useState(false);
 
@@ -98,25 +103,31 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 						</Box>
 						<Spacer />
 						<Box>
-							{showSearch ? (
-								// <SearchBar />
-								<Text>Test</Text>
-							) : (
+							{showSearchIcon ? (
+								<>
+									{showSearch ? (
+										// <SearchBar />
+										<Text>Test</Text>
+									) : (
+										<IconButton
+											variant={'outline'}
+											aria-label={'Search'}
+											colorScheme={'gray'}
+											icon={<SearchIcon color={'black'} />}
+											onClick={() => setShowSearch((v) => !v)}
+										/>
+									)}
+								</>
+							) : null}
+							{showFilterIcon ? (
 								<IconButton
 									variant={'outline'}
-									aria-label={'Search'}
 									colorScheme={'gray'}
-									icon={<SearchIcon color={'black'} />}
-									onClick={() => setShowSearch((v) => !v)}
+									aria-label={'Filter'}
+									icon={<FilterIcon color={'black'} />}
+									marginLeft={3}
 								/>
-							)}
-							<IconButton
-								variant={'outline'}
-								colorScheme={'gray'}
-								aria-label={'Filter'}
-								icon={<FilterIcon color={'black'} />}
-								marginLeft={3}
-							/>
+							) : null}
 						</Box>
 					</Flex>
 				}
