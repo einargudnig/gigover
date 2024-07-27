@@ -19,13 +19,12 @@ export const Procurement = (): JSX.Element => {
 	const location = useLocation();
 
 	useEffect(() => {
-		// This effect will run whenever the location.pathname changes
 		if (location.pathname.includes('create-bid')) {
 			setShowCreateBidButton(true);
 		} else {
 			setShowCreateBidButton(false);
 		}
-	}, [location.pathname]); // Dependency array includes location.pathname to trigger re-evaluation when it changes
+	}, [location.pathname]);
 
 	return (
 		<>
