@@ -23,7 +23,7 @@ export const Files = (): JSX.Element => {
 	const params = useParams();
 	const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
-	const [showSearch, setShowSearch] = useState(false);
+
 	const projects = useOpenProjects(data);
 
 	useEffect(() => {

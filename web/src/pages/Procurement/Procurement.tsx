@@ -20,7 +20,6 @@ export const Procurement = (): JSX.Element => {
 	const [showCreateBidButton, setShowCreateBidButton] = useState(false);
 	const [showSearch, setShowSearch] = useState(false);
 	const location = useLocation();
-	const showSearchIcon = location.pathname === '/tender';
 
 	const { data } = useUserTenders();
 

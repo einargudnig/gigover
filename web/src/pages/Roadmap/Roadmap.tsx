@@ -1,7 +1,6 @@
 import { Box, Button, Grid, Portal } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import ReactToPdf from 'react-to-pdf';
-import { NumberParam, useQueryParam } from 'use-query-params';
 import { Page } from '../../components/Page';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
@@ -21,7 +20,6 @@ interface RoadmapProps {
 export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 
-	const [, setProjectQuery] = useQueryParam('project', NumberParam);
 	const [state, dispatch] = useGantChart({
 		initialState: {
 			type: 'Days',
@@ -34,15 +32,6 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 	});
 	const { data } = useMilestones(
 		state.project?.projectId ?? selectedProject?.projectId ?? projects[0].projectId
-	);
-
-	const setProject = useCallback(
-		(project: Project) =>
-			dispatch({
-				type: 'SetProject',
-				payload: project
-			}),
-		[dispatch]
 	);
 
 	useEffect(() => {
