@@ -35,7 +35,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 	const location = useLocation();
 
 	const showSearchIcon = location.pathname === `/project/${projectId}/files`;
-	const showFilterIcon = location.pathname === `/project/${projectId}`;
+	const showFilterIcon = false;
 
 	const [showSearch, setShowSearch] = useState(false);
 
@@ -86,6 +86,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 						alignItems={'center'}
 						px={3}
 						py={1}
+						height={'50px'}
 					>
 						<Box>
 							<HStack>
@@ -137,13 +138,15 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 									{showSearch ? (
 										<SearchBar files={projectDocuments} />
 									) : (
-										<IconButton
-											variant={'outline'}
-											aria-label={'Search'}
-											colorScheme={'gray'}
-											icon={<SearchIcon color={'black'} />}
-											onClick={() => setShowSearch((v) => !v)}
-										/>
+										<Tooltip hasArrow label="Search project files">
+											<IconButton
+												variant={'outline'}
+												aria-label={'Search'}
+												colorScheme={'gray'}
+												icon={<SearchIcon color={'black'} />}
+												onClick={() => setShowSearch((v) => !v)}
+											/>
+										</Tooltip>
 									)}
 								</>
 							) : null}

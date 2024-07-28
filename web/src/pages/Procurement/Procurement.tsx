@@ -1,9 +1,12 @@
-import { Box, Button, Flex, HStack, Spacer, Tooltip, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, IconButton, Spacer, Tooltip, VStack } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
+import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ModalContext } from '../../context/ModalContext';
+import { useUserTenders } from '../../queries/procurement/useUserTenders';
+import { ProcurementSearchBar } from './ProcurementSearchBar';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -15,8 +18,11 @@ const Container = styled.div`
 export const Procurement = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const [showCreateBidButton, setShowCreateBidButton] = useState(false);
-
+	const [showSearch, setShowSearch] = useState(false);
 	const location = useLocation();
+	const showSearchIcon = location.pathname === '/tender';
+
+	const { data } = useUserTenders();
 
 	useEffect(() => {
 		if (location.pathname.includes('create-bid')) {
@@ -33,6 +39,20 @@ export const Procurement = (): JSX.Element => {
 				contentPadding={false}
 				actions={
 					<>
+						{showSearch ? (
+							<ProcurementSearchBar tenders={data} />
+						) : (
+							<Tooltip hasArrow label="Search tender">
+								<IconButton
+									variant={'outline'}
+									aria-label={'Search'}
+									colorScheme={'gray'}
+									icon={<SearchIcon color={'black'} />}
+									onClick={() => setShowSearch((v) => !v)}
+								/>
+							</Tooltip>
+						)}
+
 						<Button
 							onClick={() => setModalContext({ addTender: { tender: undefined } })}
 						>
@@ -170,15 +190,17 @@ export const Procurement = (): JSX.Element => {
 							</Box>
 						</Flex>
 						<Spacer />
-						{showCreateBidButton ? (
-							<Button
-								colorScheme={'gray'}
-								variant={'outline'}
-								onClick={() => setModalContext({ addBid: { bid: undefined } })}
-							>
-								Create bid
-							</Button>
-						) : null}
+						<Box>
+							{showCreateBidButton ? (
+								<Button
+									colorScheme={'gray'}
+									variant={'outline'}
+									onClick={() => setModalContext({ addBid: { bid: undefined } })}
+								>
+									Create bid
+								</Button>
+							) : null}
+						</Box>
 					</Flex>
 				}
 			>

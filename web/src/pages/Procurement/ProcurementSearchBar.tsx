@@ -14,7 +14,7 @@ import { SearchIcon } from '../../components/icons/SearchIcon';
 import { Tender } from '../../models/Tender';
 
 interface SearchBarProps {
-	files: Tender[];
+	tenders: Tender[];
 }
 
 const SearchResults = styled.div`
@@ -30,7 +30,7 @@ const StyledMenuList = styled(MenuList)`
 	width: 400px;
 `;
 
-export const ProcurementSearchBar = ({ files }: SearchBarProps): JSX.Element => {
+export const ProcurementSearchBar = ({ tenders }: SearchBarProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const refInput = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
@@ -58,14 +58,14 @@ export const ProcurementSearchBar = ({ files }: SearchBarProps): JSX.Element => 
 
 	const searchResults = useMemo<Tender[]>(() => {
 		if (searchValue.length > 0) {
-			const results = files.filter((res) =>
+			const results = tenders.filter((res) =>
 				JSON.stringify(res).toLowerCase().includes(searchValue.toLowerCase())
 			);
 			return results.slice(0, 4);
 		}
 
 		return [];
-	}, [files, searchValue]);
+	}, [tenders, searchValue]);
 
 	return (
 		<InputGroup>
@@ -73,7 +73,7 @@ export const ProcurementSearchBar = ({ files }: SearchBarProps): JSX.Element => 
 				autoComplete={'off'}
 				autoCorrect={'off'}
 				name="search"
-				placeholder="Search procurement"
+				placeholder="Search tender"
 				variant={'filled'}
 				style={{ minWidth: '400px' }}
 				value={searchValue}
