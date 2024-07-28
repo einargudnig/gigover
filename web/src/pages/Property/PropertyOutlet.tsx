@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { ModalContext } from '../../context/ModalContext';
-import { SearchBar } from './components/SearchBar';
+import { PropertySearchBar } from './components/PropertySearchBar';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -22,7 +22,7 @@ export const PropertyOutlet = (): JSX.Element => {
 			actions={
 				<>
 					{showSearch ? (
-						<SearchBar />
+						<PropertySearchBar />
 					) : (
 						<IconButton
 							variant={'outline'}

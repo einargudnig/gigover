@@ -29,7 +29,7 @@ const StyledMenuList = styled(MenuList)`
 	z-index: 1000;
 `;
 
-export const SearchBar = (): JSX.Element => {
+export const PropertySearchBar = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const refInput = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);

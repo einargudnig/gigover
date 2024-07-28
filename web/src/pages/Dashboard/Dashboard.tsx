@@ -22,7 +22,7 @@ import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
-import { SearchBar } from '../Property/components/SearchBar';
+import { ProjectSearchBar } from './ProjectSearchBar';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 
 export const Dashboard = (): JSX.Element => {
@@ -57,9 +57,9 @@ export const Dashboard = (): JSX.Element => {
 			actions={
 				<>
 					{showSearch ? (
-						<SearchBar />
+						<ProjectSearchBar />
 					) : (
-						<Tooltip hasArrow label="Search for property">
+						<Tooltip hasArrow label="Search for project">
 							<IconButton
 								variant={'outline'}
 								aria-label={'Search'}

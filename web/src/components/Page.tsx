@@ -30,7 +30,6 @@ import { TenderIcon } from './icons/TenderIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
-import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 // import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 // import { ManageOrganization } from './organizations/ManageOrganization';
 
@@ -292,7 +291,7 @@ export const Page = ({
 				<Box p={2} backgroundColor={'white'} borderBottom={'1px'} borderColor={'gray.300'}>
 					<Flex justifyContent={'end'}>
 						<Flex pr={3}>
-							<OrganizationSwitcher />
+							{/* <OrganizationSwitcher /> */}
 							<Notifications />
 							<Menu>
 								<MenuButton ml={2}>
