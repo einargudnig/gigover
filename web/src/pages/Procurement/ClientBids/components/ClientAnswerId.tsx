@@ -227,7 +227,7 @@ export const ClientAnswerId = (): JSX.Element => {
 						<Thead>
 							<Tr>
 								<Th width={'20%'}>
-									<Tooltip label="Cost code">
+									<Tooltip hasArrow label="Cost code">
 										<HStack>
 											<Text>Number</Text>
 											<ImportantIcon size={20} />
@@ -236,7 +236,7 @@ export const ClientAnswerId = (): JSX.Element => {
 								</Th>
 
 								<Th width={'20%'}>
-									<Tooltip label="Description of a item">
+									<Tooltip hasArrow label="Description of a item">
 										<HStack>
 											<Text>Description</Text>
 											<ImportantIcon size={20} />
@@ -245,7 +245,7 @@ export const ClientAnswerId = (): JSX.Element => {
 								</Th>
 
 								<Th width={'20%'}>
-									<Tooltip label="Volume">
+									<Tooltip hasArrow label="Volume">
 										<HStack>
 											<Text color={'black'}>Volume</Text>
 											<ImportantIcon size={20} />
@@ -254,7 +254,10 @@ export const ClientAnswerId = (): JSX.Element => {
 								</Th>
 
 								<Th width={'20%'}>
-									<Tooltip label="Unit of measurement. For example: m2, kg, t">
+									<Tooltip
+										hasArrow
+										label="Unit of measurement. For example: m2, kg, t"
+									>
 										<HStack>
 											<Text>Unit</Text>
 											<ImportantIcon size={20} />
@@ -263,7 +266,7 @@ export const ClientAnswerId = (): JSX.Element => {
 								</Th>
 
 								<Th width={'20%'}>
-									<Tooltip label="Cost of single item">
+									<Tooltip hasArrow label="Cost of single item">
 										<HStack>
 											<Text>Cost</Text>
 											<ImportantIcon size={20} />

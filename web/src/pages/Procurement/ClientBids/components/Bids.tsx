@@ -1,10 +1,8 @@
 import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
-import { useContext } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { ModalContext } from '../../../../context/ModalContext';
 import { Bid } from '../../../../models/Tender';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
@@ -25,7 +23,6 @@ const PropertyCardStyled = styled(CardBaseLink)`
 `;
 
 export const Bids = (): JSX.Element => {
-	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useGetBids();
 	console.log({ data });
 

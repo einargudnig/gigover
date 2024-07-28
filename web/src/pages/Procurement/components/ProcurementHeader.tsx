@@ -123,7 +123,10 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 								<Box marginRight={'6'}>
 									<VStack ml={'3'}>
 										<VStack>
-											<Tooltip label="Here you can see the bidders that have a Gigover account">
+											<Tooltip
+												hasArrow
+												label="Here you can see the bidders that have a Gigover account"
+											>
 												<HStack>
 													<Text fontWeight={'bold'} fontSize={'xl'}>
 														Bidders

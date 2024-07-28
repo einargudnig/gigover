@@ -28,7 +28,6 @@ const OfferCardStyled = styled(CardBaseLink)`
 
 export const BidderTenders = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
-	console.log('tenders', tenders);
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -60,7 +59,7 @@ export const BidderTenders = (): JSX.Element => {
 			);
 		}
 		return (
-			<Tooltip label="Offers will not be answered until this date has passed">
+			<Tooltip hasArrow label="Offers will not be answered until this date has passed">
 				<HStack>
 					<Text as={'b'}>Close date:</Text>
 					<Text>{formatDateWithoutTime(new Date(finishDate))}*</Text>

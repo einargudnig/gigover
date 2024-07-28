@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -49,9 +49,7 @@ const FeedColumn = styled.div`
 export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
 	const projectIdNumber = parseInt(projectId as string);
-	const [manageWorkers, setManageWorkers] = useState(false);
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
-	const [showSearch, setShowSearch] = useState(false);
 
 	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const project: Project | undefined = data && data.project;

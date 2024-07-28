@@ -6,6 +6,7 @@ import {
 	MenuItemOption,
 	MenuList,
 	MenuOptionGroup,
+	Tooltip,
 	VStack
 } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
@@ -58,22 +59,26 @@ export const Dashboard = (): JSX.Element => {
 					{showSearch ? (
 						<SearchBar />
 					) : (
-						<IconButton
-							variant={'outline'}
-							aria-label={'Search'}
-							colorScheme={'gray'}
-							icon={<SearchIcon color={'black'} />}
-							onClick={() => setShowSearch((v) => !v)}
-						/>
+						<Tooltip hasArrow label="Search for property">
+							<IconButton
+								variant={'outline'}
+								aria-label={'Search'}
+								colorScheme={'gray'}
+								icon={<SearchIcon color={'black'} />}
+								onClick={() => setShowSearch((v) => !v)}
+							/>
+						</Tooltip>
 					)}
 					<Menu>
-						<MenuButton
-							as={IconButton}
-							variant={'outline'}
-							colorScheme={'gray'}
-							aria-label={'Filter'}
-							icon={<FilterIcon color={'black'} />}
-						/>
+						<Tooltip hasArrow label="Filter project status">
+							<MenuButton
+								as={IconButton}
+								variant={'outline'}
+								colorScheme={'gray'}
+								aria-label={'Filter'}
+								icon={<FilterIcon color={'black'} />}
+							/>
+						</Tooltip>
 						<MenuList>
 							<MenuOptionGroup
 								defaultValue={'ALL'}

@@ -128,7 +128,10 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 											</VStack>
 											<Spacer />
 											<VStack ml={'3'}>
-												<Tooltip label="You will not be able to answer offer until this date has passed">
+												<Tooltip
+													hasArrow
+													label="You will not be able to answer offer until this date has passed"
+												>
 													<HStack>
 														<Text fontWeight={'bold'} fontSize={'xl'}>
 															Close Date:
@@ -155,7 +158,10 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 								<Box marginRight={'6'}>
 									<VStack ml={'3'}>
 										<VStack>
-											<Tooltip label="Here you can see the bidders that have a Gigover account">
+											<Tooltip
+												hasArrow
+												label="Here you can see the bidders that have a Gigover account"
+											>
 												<HStack>
 													<Text fontWeight={'bold'} fontSize={'xl'}>
 														Bidders
@@ -228,7 +234,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<Tooltip label="Cost code">
+							<Tooltip hasArrow label="Cost code">
 								<HStack>
 									<Text>Number</Text>
 									<ImportantIcon size={20} />
@@ -237,7 +243,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Description of a item">
+							<Tooltip hasArrow label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
 									<ImportantIcon size={20} />
@@ -246,7 +252,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Volume">
+							<Tooltip hasArrow label="Volume">
 								<HStack>
 									<Text color={'black'}>Volume</Text>
 									<ImportantIcon size={20} />
@@ -255,7 +261,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Unit</Text>
 									<ImportantIcon size={20} />

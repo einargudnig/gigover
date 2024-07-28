@@ -4,7 +4,6 @@ import {
 	Breadcrumb,
 	BreadcrumbItem,
 	BreadcrumbLink,
-	Center,
 	Fade,
 	Flex,
 	Menu,
@@ -14,7 +13,7 @@ import {
 	MenuList,
 	Text
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Theme } from '../Theme';
@@ -42,7 +41,6 @@ interface PageProps {
 		title: string;
 		url?: string;
 	}[];
-	tabs?: React.ReactNode;
 	backgroundColor?: string;
 	actions?: React.ReactNode;
 	contentPadding?: boolean;
@@ -201,7 +199,6 @@ const IconLink = styled(NavLink)`
 export const Page = ({
 	title,
 	breadcrumbs,
-	tabs,
 	children,
 	backgroundColor,
 	contentPadding = true,
@@ -212,7 +209,6 @@ export const Page = ({
 	const { mutateAsync: logout } = useLogout();
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
-	const [showSearch, setShowSearch] = useState(false);
 
 	if (user === null) {
 		return null;
@@ -345,13 +341,6 @@ export const Page = ({
 						</div>
 						<HeaderActions>{actions}</HeaderActions>
 					</div>
-					{tabs && (
-						<Box mt={2}>
-							<Center>
-								<div>{tabs}</div>
-							</Center>
-						</Box>
-					)}
 				</PageHeader>
 				{extraNav}
 				<PageContent contentPadding={contentPadding} backgroundColor={backgroundColor}>

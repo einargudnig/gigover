@@ -63,7 +63,7 @@ export const DashboardTabs = ({
 								}}
 								isOpen={dialogOpen}
 							>
-								<Tooltip label="Remove stream" aria-label="Remove">
+								<Tooltip hasArrow label="Remove stream" aria-label="Remove">
 									<IconButton
 										aria-label={'Remove'}
 										icon={<MinusIcon />}

@@ -108,7 +108,10 @@ export const TenderOffer = (): JSX.Element => {
 							<Spacer />
 							<Box>
 								<HStack>
-									<Tooltip label="We recommend you save your changes before uploading files.">
+									<Tooltip
+										hasArrow
+										label="We recommend you save your changes before uploading files."
+									>
 										<Button onClick={() => setUpload(true)}>
 											Upload files
 										</Button>

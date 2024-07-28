@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { BidItem } from '../../../../models/Tender';
-import { useAddBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
-import { useEditBidItem } from '../../../../mutations/procurement/client-bids/useEditBidItem';
-import { useDeleteBidItem } from '../../../../mutations/procurement/client-bids/useDeleteBidItem';
 import {
 	Button,
+	Flex,
 	FormControl,
+	FormHelperText,
 	HStack,
 	Input,
 	Table,
-	Text,
 	Tbody,
 	Td,
-	Thead,
+	Text,
 	Th,
-	Tr,
+	Thead,
 	Tooltip,
-	Flex,
-	FormHelperText
+	Tr
 } from '@chakra-ui/react';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { Edit } from '../../../../components/icons/Edit';
-import { TrashIcon } from '../../../../components/icons/TrashIcon';
-import { CrossIcon } from '../../../../components/icons/CrossIcon';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { CrossIcon } from '../../../../components/icons/CrossIcon';
+import { Edit } from '../../../../components/icons/Edit';
+import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
+import { TrashIcon } from '../../../../components/icons/TrashIcon';
+import { BidItem } from '../../../../models/Tender';
+import { useAddBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
+import { useDeleteBidItem } from '../../../../mutations/procurement/client-bids/useDeleteBidItem';
+import { useEditBidItem } from '../../../../mutations/procurement/client-bids/useEditBidItem';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const BidIdTable = ({ bid }): JSX.Element => {
@@ -156,7 +156,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<Tooltip label="Number">
+							<Tooltip hasArrow label="Number">
 								<HStack>
 									<Text>Number</Text>
 									<ImportantIcon size={20} />
@@ -165,7 +165,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Description of a item">
+							<Tooltip hasArrow label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
 									<ImportantIcon size={20} />
@@ -174,7 +174,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Volume">
+							<Tooltip hasArrow label="Volume">
 								<HStack>
 									<Text>Volume</Text>
 									<ImportantIcon size={20} />
@@ -183,7 +183,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Unit">
+							<Tooltip hasArrow label="Unit">
 								<HStack>
 									<Text>Unit</Text>
 									<ImportantIcon size={20} />
@@ -192,7 +192,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Cost</Text>
 									<ImportantIcon size={20} />

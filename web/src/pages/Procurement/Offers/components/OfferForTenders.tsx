@@ -40,7 +40,7 @@ export const OfferForTenders = (): JSX.Element => {
 			);
 		}
 		return (
-			<Tooltip label="Offers will not be answered until this date has passed">
+			<Tooltip hasArrow label="Offers will not be answered until this date has passed">
 				<HStack>
 					<Text as={'b'}>Close date:</Text>
 					<Text>{formatDateWithoutTime(new Date(finishDate))}*</Text>
@@ -68,10 +68,6 @@ export const OfferForTenders = (): JSX.Element => {
 
 	return (
 		<>
-			<Text mb={'2'} fontSize={'xl'}>
-				Press the tender to see the offers that have been published
-			</Text>
-
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

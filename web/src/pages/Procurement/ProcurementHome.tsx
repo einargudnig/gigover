@@ -1,11 +1,9 @@
 import { Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
-import { useContext } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../components/CardBase';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NoProcurementFound } from '../../components/empty/NoProcurementFound';
-import { ModalContext } from '../../context/ModalContext';
 import { Tender } from '../../models/Tender';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { handleFinishDate } from '../../utils/HandleFinishDate';
@@ -28,7 +26,6 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 `;
 
 export const ProcurementHome = (): JSX.Element => {
-	const [, setModalContext] = useContext(ModalContext);
 	const { data, isLoading } = useUserTenders();
 
 	const finishDateStatus = (finishDate: number) => {
@@ -43,7 +40,7 @@ export const ProcurementHome = (): JSX.Element => {
 			);
 		}
 		return (
-			<Tooltip label="You cannot answer offers until this date has passed">
+			<Tooltip hasArrow label="You cannot answer offers until this date has passed">
 				<HStack>
 					<Text as={'b'}>Close date:</Text>
 					<Text>{formatDateWithoutTime(new Date(finishDate))}*</Text>

@@ -239,35 +239,38 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 						<Table>
 							<Thead>
 								<Tr>
-									<Tooltip label="Item number">
+									<Tooltip hasArrow label="Item number">
 										<Th>Number</Th>
 									</Tooltip>
 
-									<Tooltip label="Description of the items">
+									<Tooltip hasArrow label="Description of the items">
 										<Th>Description</Th>
 									</Tooltip>
 
-									<Tooltip label="Volume, how many items">
+									<Tooltip hasArrow label="Volume, how many items">
 										<Th>Volume</Th>
 									</Tooltip>
 
-									<Tooltip label="The measurement of unit for items">
+									<Tooltip hasArrow label="The measurement of unit for items">
 										<Th>Unit</Th>
 									</Tooltip>
 
-									{/* <Tooltip label="The cost of one item">
+									{/* <Tooltip hasArrow label="The cost of one item">
 										<Th>Product number</Th>
 									</Tooltip> */}
 
-									<Tooltip label="The cost of one item">
+									<Tooltip hasArrow label="The cost of one item">
 										<Th>Cost pr item</Th>
 									</Tooltip>
 
-									<Tooltip label="Total cost of the item. Volume, multiplied with cost per item">
+									<Tooltip
+										hasArrow
+										label="Total cost of the item. Volume, multiplied with cost per item"
+									>
 										<Th>Total cost</Th>
 									</Tooltip>
 
-									<Tooltip label="Notes/certifications for the items.">
+									<Tooltip hasArrow label="Notes/certifications for the items.">
 										<Th>Notes/Certifications</Th>
 									</Tooltip>
 								</Tr>

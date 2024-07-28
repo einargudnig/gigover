@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Spacer, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Spacer, Tooltip, VStack } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
@@ -53,103 +53,119 @@ export const Procurement = (): JSX.Element => {
 						<Flex>
 							<Box>
 								<HStack>
-									<NavLink to={'/tender'} end>
-										{({ isActive }) => (
-											<Box
-												as="button"
-												borderBottom={isActive ? '2px' : 'hidden	'}
-												borderColor={'blue.400'}
-												p={1}
-												_hover={{
-													borderBottom: '2px',
-													borderColor: 'gray.700'
-												}}
-											>
-												Tender
-											</Box>
-										)}
-									</NavLink>
+									<Tooltip hasArrow label="View tenders">
+										<NavLink to={'/tender'} end>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'blue.400'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.700'
+													}}
+												>
+													Tender
+												</Box>
+											)}
+										</NavLink>
+									</Tooltip>
 
-									<NavLink to={'client-answer'}>
-										{({ isActive }) => (
-											<Box
-												as="button"
-												borderBottom={isActive ? '2px' : 'hidden	'}
-												borderColor={'blue.400'}
-												p={1}
-												_hover={{
-													borderBottom: '2px',
-													borderColor: 'gray.700'
-												}}
-											>
-												Bid Received
-											</Box>
-										)}
-									</NavLink>
-									<NavLink to={'create-bid'}>
-										{({ isActive }) => (
-											<Box
-												as="button"
-												borderBottom={isActive ? '2px' : 'hidden	'}
-												borderColor={'blue.400'}
-												p={1}
-												_hover={{
-													borderBottom: '2px',
-													borderColor: 'gray.700'
-												}}
-											>
-												Create Bid
-											</Box>
-										)}
-									</NavLink>
-									<NavLink to={'tender-offers'}>
-										{({ isActive }) => (
-											<Box
-												as="button"
-												borderBottom={isActive ? '2px' : 'hidden	'}
-												borderColor={'blue.400'}
-												p={1}
-												_hover={{
-													borderBottom: '2px',
-													borderColor: 'gray.700'
-												}}
-											>
-												Offers Received
-											</Box>
-										)}
-									</NavLink>
-									<NavLink to={'bidder-offers'}>
-										{({ isActive }) => (
-											<Box
-												as="button"
-												borderBottom={isActive ? '2px' : 'hidden	'}
-												borderColor={'blue.400'}
-												p={1}
-												_hover={{
-													borderBottom: '2px',
-													borderColor: 'gray.700'
-												}}
-											>
-												Submitted Offers
-											</Box>
-										)}
-									</NavLink>
-									<NavLink to={'bidder-tenders'}>
-										{({ isActive }) => (
-											<Box
-												as="button"
-												borderBottom={isActive ? '2px' : 'hidden	'}
-												borderColor={'blue.400'}
-												p={1}
-												_hover={{
-													borderBottom: '2px',
-													borderColor: 'gray.700'
-												}}
-											>
-												Tender Invitations
-											</Box>
-										)}
-									</NavLink>
+									<Tooltip hasArrow label="View client answers">
+										<NavLink to={'client-answer'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'blue.400'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.700'
+													}}
+												>
+													Bid Received
+												</Box>
+											)}
+										</NavLink>
+									</Tooltip>
+
+									<Tooltip hasArrow label="View created bids">
+										<NavLink to={'create-bid'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'blue.400'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.700'
+													}}
+												>
+													Create Bid
+												</Box>
+											)}
+										</NavLink>
+									</Tooltip>
+
+									<Tooltip hasArrow label="View tender offers">
+										<NavLink to={'tender-offers'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'blue.400'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.700'
+													}}
+												>
+													Offers Received
+												</Box>
+											)}
+										</NavLink>
+									</Tooltip>
+
+									<Tooltip hasArrow label="View offers I have submitted">
+										<NavLink to={'bidder-offers'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'blue.400'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.700'
+													}}
+												>
+													Submitted Offers
+												</Box>
+											)}
+										</NavLink>
+									</Tooltip>
+
+									<Tooltip hasArrow label="View bidder tenders">
+										<NavLink to={'bidder-tenders'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'blue.400'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.700'
+													}}
+												>
+													Tender Invitations
+												</Box>
+											)}
+										</NavLink>
+									</Tooltip>
 								</HStack>
 							</Box>
 						</Flex>

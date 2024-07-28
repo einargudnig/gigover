@@ -1,8 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
 import { HStack, VStack } from '@chakra-ui/react';
-import { Page } from '../../../components/Page';
 import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
+import { Page } from '../../../components/Page';
 
 const Container = styled.div`
 	flex: 1 0;

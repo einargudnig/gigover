@@ -92,33 +92,6 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 					</ReactToPdf>
 				)
 			}
-			// tabs={
-			// 	<Select
-			// 		value={state.project?.projectId}
-			// 		onChange={(e) => {
-			// 			const project = projects.find(
-			// 				(p) => p.projectId === parseInt(e.target.value)
-			// 			);
-			// 			if (project) {
-			// 				setProject(project);
-			// 				setProjectQuery(project.projectId);
-			// 			}
-			// 		}}
-			// 		icon={<Chevron />}
-			// 		colorScheme={'yellow'}
-			// 		variant="filled"
-			// 		placeholder="Select a project"
-			// 	>
-			// 		{projects.length > 0 &&
-			// 			projects
-			// 				.filter((p) => p.status === 'OPEN')
-			// 				.map((p) => (
-			// 					<option key={p.projectId} value={p.projectId}>
-			// 						{p.name}
-			// 					</option>
-			// 				))}
-			// 	</Select>
-			// }
 		>
 			<>
 				<GantChartContext.Provider value={[state, dispatch]}>

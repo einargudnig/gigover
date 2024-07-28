@@ -14,10 +14,7 @@ export const ClientAnswerOutlet = (): JSX.Element => {
 		<>
 			<Flex justifyContent={'start'} alignItems={'center'} mb={'2'}>
 				<Box>
-					<Text>
-						This tab is used to answer bids that you receive - 🚧 this feature is still
-						in development! 🚧
-					</Text>
+					<Text>🚧 this feature is still in development! 🚧</Text>
 				</Box>
 			</Flex>
 			<VStack style={{ height: '100%' }}>

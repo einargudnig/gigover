@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { TenderItem } from '../../../models/Tender';
-import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
-import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
-import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
-import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
 import {
-	Button,
 	Box,
+	Button,
 	Flex,
 	FormControl,
 	FormHelperText,
 	HStack,
 	Input,
+	Spacer,
 	Table,
-	Text,
 	Tbody,
 	Td,
-	Thead,
+	Text,
 	Th,
-	Tr,
+	Thead,
 	Tooltip,
-	Spacer,
+	Tr,
 	useToast
 } from '@chakra-ui/react';
-import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
-import { ImportantIcon } from '../../../components/icons/ImportantIcon';
-import { Edit } from '../../../components/icons/Edit';
-import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../components/icons/CrossIcon';
-import { InviteButton } from './InviteButton';
+import { Edit } from '../../../components/icons/Edit';
+import { ImportantIcon } from '../../../components/icons/ImportantIcon';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
+import { TenderItem } from '../../../models/Tender';
+import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
+import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
+import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
+import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { UploadTenderDocuments } from '../Offers/components/UploadTenderDocuments';
+import { InviteButton } from './InviteButton';
 
 export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
@@ -199,7 +199,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<Tooltip label="Cost Code">
+							<Tooltip hasArrow label="Cost Code">
 								<HStack>
 									<Text>Number</Text>
 									<ImportantIcon size={20} />
@@ -208,7 +208,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Description of a item">
+							<Tooltip hasArrow label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
 									<ImportantIcon size={20} />
@@ -217,7 +217,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Volume">
+							<Tooltip hasArrow label="Volume">
 								<HStack>
 									<Text>Volume</Text>
 									<ImportantIcon size={20} />
@@ -226,7 +226,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Unit</Text>
 									<ImportantIcon size={20} />

@@ -1,10 +1,11 @@
+import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { ApiService } from '../services/ApiService';
-import { AxiosError } from 'axios';
-import { ProjectImage } from '../models/ProjectImage';
+// import { ProjectImage } from '../models/ProjectImage';
+import { ProjectFile } from '../models/ProjectFile';
 
 interface FolderFilesResponse {
-	projectDocuments: ProjectImage[];
+	projectDocuments: ProjectFile[];
 }
 
 export const useProjectDocuments = (projectId: number) => {

@@ -1,36 +1,36 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { TenderItem } from '../../../models/Tender';
-import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
-import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
-import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
-import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
 import {
 	Box,
 	Button,
 	Flex,
 	FormControl,
-	FormLabel,
 	FormHelperText,
+	FormLabel,
 	HStack,
 	Input,
+	Spacer,
 	Table,
-	Text,
 	Tbody,
 	Td,
-	Thead,
+	Text,
 	Th,
-	Tr,
+	Thead,
 	Tooltip,
-	Spacer,
+	Tr,
 	useToast
 } from '@chakra-ui/react';
-import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../components/icons/TrashIcon';
-import ScrollIntoView from 'react-scroll-into-view'; // Nice for the UX, to scroll the edit form into view when pressing edit button
+import { TenderItem } from '../../../models/Tender';
+import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
+import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
+import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
+import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { InviteButton } from './InviteButton';
 
 export const TenderItemTable = ({ tender }): JSX.Element => {
@@ -170,7 +170,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 				<Thead>
 					<Tr>
 						<Th>
-							<Tooltip label="Cost code">
+							<Tooltip hasArrow label="Cost code">
 								<HStack>
 									<p>Number</p>
 									<ImportantIcon size={20} />
@@ -179,7 +179,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th>
-							<Tooltip label="Description of a item">
+							<Tooltip hasArrow label="Description of a item">
 								<HStack>
 									<p>Description</p>
 									<ImportantIcon size={20} />
@@ -188,7 +188,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th>
-							<Tooltip label="Volume">
+							<Tooltip hasArrow label="Volume">
 								<HStack>
 									<p color={'black'}>Volume</p>
 									<ImportantIcon size={20} />
@@ -197,7 +197,7 @@ export const TenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th>
-							<Tooltip label="Unit of measurement. For example: m2, kg, t">
+							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<p>Unit</p>
 									<ImportantIcon size={20} />
