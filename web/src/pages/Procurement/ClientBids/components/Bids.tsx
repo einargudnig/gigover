@@ -45,10 +45,6 @@ export const Bids = (): JSX.Element => {
 
 	return (
 		<>
-			<Flex justifyContent={'center'} alignItems={'center'} mb={'2'}>
-				<Text>🚧 This feature is still in development! 🚧</Text>
-			</Flex>
-
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

@@ -45,6 +45,7 @@ import { PropertyOutlet } from './pages/Property/PropertyOutlet';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
+		{/* <Route path={'/'} element={<Dashboard />} /> */}
 		<Route path={'/'} element={<Dashboard />} />
 
 		{/* Onboarding user -> only accessible when userProfile has registered = false */}
