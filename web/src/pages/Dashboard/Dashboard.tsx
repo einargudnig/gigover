@@ -139,6 +139,10 @@ export const Dashboard = (): JSX.Element => {
 							key={`projects_${counter}_${projects.length}`}
 							list={projects}
 						/>
+						// <NewProjectOverview
+						// 	key={`projects_${counter}_${projects.length}`}
+						// 	list={projects}
+						// />
 					)}
 				</VStack>
 			)}

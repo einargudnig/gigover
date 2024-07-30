@@ -1,11 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { Project } from '../models/Project';
-import { ProjectCard } from './ProjectCard';
 // import { LexoRank } from 'lexorank';
+import { Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
+import { TaskStatus } from '../models/Task';
 import { useModifyProject } from '../mutations/useModifyProject';
+import { useGetProperties } from '../queries/properties/useGetPoperties';
 import { projectSorter } from '../queries/useProjectList';
 import { GetNextLexoRank } from '../utils/GetNextLexoRank';
+import { VerticalDots } from './icons/VerticalDots';
 
 interface SortableGridProps {
 	list: Project[];
@@ -16,7 +19,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 	background: !isDraggingOver ? 'transparent' : '#e7fff3'
 });
 
-export const SortableProjectList = ({ list }: SortableGridProps) => {
+export const NewProjectOverview = ({ list }: SortableGridProps) => {
 	const mutateProject = useModifyProject();
 	const [projects, setProjects] = useState(list);
 	// console.log({ projects });
@@ -123,37 +126,86 @@ export const SortableProjectList = ({ list }: SortableGridProps) => {
 	const sortedItems = projects.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
 
 	return (
-		<DragDropContext onDragEnd={updateState}>
-			<Droppable droppableId="project-list">
-				{(droppable, snapshot) => (
-					<div
-						{...droppable.droppableProps}
-						ref={droppable.innerRef}
-						style={getListStyle(snapshot.isDraggingOver)}
-					>
-						{sortedItems.map((project, projectIndex) => {
-							return (
-								<Draggable
-									key={project.projectId.toString()}
-									draggableId={project.projectId.toString()}
-									index={projectIndex}
-								>
-									{(provided): JSX.Element => (
-										<div
-											ref={provided.innerRef}
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
-										>
-											<ProjectCard project={project} />
-										</div>
-									)}
-								</Draggable>
-							);
-						})}
-						{droppable.placeholder}
-					</div>
-				)}
-			</Droppable>
-		</DragDropContext>
+		<Box>
+			<DragDropContext onDragEnd={updateState}>
+				<TableContainer mt={3}>
+					<Table>
+						<Thead>
+							<Tr>
+								<Th>Project name</Th>
+								<Th>Due date</Th>
+								<Th>Status</Th>
+								<Th>Property</Th>
+								<Th></Th>
+							</Tr>
+						</Thead>
+						<Tbody backgroundColor={'white'}>
+							<Droppable droppableId="project-list">
+								{(droppable, snapshot) => (
+									<div
+										{...droppable.droppableProps}
+										ref={droppable.innerRef}
+										style={getListStyle(snapshot.isDraggingOver)}
+									>
+										{sortedItems.map((project, projectIndex) => {
+											return (
+												<Draggable
+													key={project.projectId.toString()}
+													draggableId={project.projectId.toString()}
+													index={projectIndex}
+												>
+													{(provided): JSX.Element => (
+														<div
+															ref={provided.innerRef}
+															{...provided.draggableProps}
+															{...provided.dragHandleProps}
+														>
+															{/* <ProjectCard project={project} /> */}
+															{/* <NewProjectCard project={project} /> */}
+
+															<Tr>
+																<Td>{project.name}</Td>
+																<Td>{project.endDate}</Td>
+																<Td>{project.status}</Td>
+																<Td>
+																	<VerticalDots />
+																</Td>
+															</Tr>
+														</div>
+													)}
+												</Draggable>
+											);
+										})}
+										{droppable.placeholder}
+									</div>
+								)}
+							</Droppable>
+						</Tbody>
+					</Table>
+				</TableContainer>
+			</DragDropContext>
+		</Box>
+	);
+};
+
+const NewProjectCard = ({ project }) => {
+	const { data: properties } = useGetProperties();
+	const projectId = project.projectId; // for the propertyToProjectModal
+	const tasks = project.tasks.filter((task) => task.status !== TaskStatus.Archived) || [];
+	const completed = tasks.filter((task) => task.status === TaskStatus.Done);
+	const inProgress = tasks.filter((task) => task.status === TaskStatus.Doing);
+	const percent = Math.round((completed.length / tasks.length) * 100) || 0;
+	const progress = Math.round((inProgress.length / tasks.length) * 100) || 0;
+
+	return (
+		<Box>
+			<Tbody>
+				<Tr>
+					<Td>{project.name}</Td>
+					<Td>{project.endDate}</Td>
+					<Td>{project.status}</Td>
+				</Tr>
+			</Tbody>
+		</Box>
 	);
 };
