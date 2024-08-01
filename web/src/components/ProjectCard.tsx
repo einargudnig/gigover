@@ -1,17 +1,17 @@
+import { HStack } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { Project } from '../models/Project';
-import { ProgressBar } from './ProgressBar';
-import { Edit } from './icons/Edit';
-import { ModalContext } from '../context/ModalContext';
 import { Theme } from '../Theme';
+import { ModalContext } from '../context/ModalContext';
+import { Project } from '../models/Project';
 import { TaskStatus } from '../models/Task';
-import { CardBaseLink } from './CardBase';
-import { ProjectTimeStatus } from './ProjectTimeStatus';
-import { ToolsIcon } from './icons/ToolsIcon';
-import { HStack } from '@chakra-ui/react';
-import { PropertyIcon } from './icons/PropertyIcon';
 import { useGetProperties } from '../queries/properties/useGetPoperties';
+import { CardBaseLink } from './CardBase';
+import { ProgressBar } from './ProgressBar';
+import { ProjectTimeStatus } from './ProjectTimeStatus';
+import { Edit } from './icons/Edit';
+import { PropertyIcon } from './icons/PropertyIcon';
+import { ToolsIcon } from './icons/ToolsIcon';
 
 interface ProjectCardProps {
 	project: Project;
@@ -25,6 +25,7 @@ const ProjectCardStyled = styled(CardBaseLink)`
 	justify-content: space-between;
 	flex-direction: column;
 	margin-bottom: 8px;
+	border: 1px solid #00ff00;
 
 	h3 {
 		margin-bottom: 16px;

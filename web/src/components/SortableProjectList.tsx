@@ -2,10 +2,10 @@ import React, { useCallback, useState } from 'react';
 import { Project } from '../models/Project';
 import { ProjectCard } from './ProjectCard';
 // import { LexoRank } from 'lexorank';
-import { projectSorter } from '../queries/useProjectList';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import { useModifyProject } from '../mutations/useModifyProject';
+import { projectSorter } from '../queries/useProjectList';
 import { GetNextLexoRank } from '../utils/GetNextLexoRank';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface SortableGridProps {
 	list: Project[];

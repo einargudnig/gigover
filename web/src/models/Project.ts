@@ -1,6 +1,6 @@
+import { ProjectImage } from './ProjectImage';
 import { Task } from './Task';
 import { TaskComment } from './TaskComment';
-import { ProjectImage } from './ProjectImage';
 
 export const ProjectStatus = {
 	ALL: 'ALL',

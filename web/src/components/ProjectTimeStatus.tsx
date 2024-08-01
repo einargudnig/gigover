@@ -44,3 +44,41 @@ export const ProjectTimeStatus = ({ project }: ProjectTimeStatusProps): JSX.Elem
 		</Tag>
 	);
 };
+
+interface ProjectStatusProps {
+	project: Project;
+}
+
+export const ProjectStatusTag = ({ project }: ProjectStatusProps): JSX.Element => {
+	const status = project.status;
+
+	if (status === 'OPEN') {
+		return (
+			<Tag colorScheme="green">
+				<TagLabel>Open</TagLabel>
+			</Tag>
+		);
+	}
+
+	if (status === 'DONE') {
+		return (
+			<Tag colorScheme="yellow">
+				<TagLabel>Done</TagLabel>
+			</Tag>
+		);
+	}
+
+	if (status === 'CLOSED') {
+		return (
+			<Tag colorScheme="red">
+				<TagLabel>Closed</TagLabel>
+			</Tag>
+		);
+	}
+
+	return (
+		<Tag colorScheme="gray">
+			<TagLabel>Unknown</TagLabel>
+		</Tag>
+	);
+};
