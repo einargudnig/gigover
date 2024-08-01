@@ -12,8 +12,8 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { NewProjectOverview } from '../../components/NewProjectOverview';
 import { Page } from '../../components/Page';
-import { SortableProjectList } from '../../components/SortableProjectList';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { FilterIcon } from '../../components/icons/FilterIcon';
 import { SearchIcon } from '../../components/icons/SearchIcon';
@@ -135,14 +135,14 @@ export const Dashboard = (): JSX.Element => {
 					{!projects || projects.length <= 0 ? (
 						<NoProjectsFound />
 					) : (
-						<SortableProjectList
-							key={`projects_${counter}_${projects.length}`}
-							list={projects}
-						/>
-						// <NewProjectOverview
+						// <SortableProjectList
 						// 	key={`projects_${counter}_${projects.length}`}
 						// 	list={projects}
 						// />
+						<NewProjectOverview
+							key={`projects_${counter}_${projects.length}`}
+							list={projects}
+						/>
 					)}
 				</VStack>
 			)}
