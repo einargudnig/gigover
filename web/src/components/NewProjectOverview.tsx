@@ -1,5 +1,5 @@
 /* eslint-disable no-shadow */
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { Project } from '../models/Project';
@@ -116,7 +116,20 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 			</Text>
 			<Text flex="2">Property</Text>
 			<Text flex="0.5">
-				<VerticalDots />
+				<Menu>
+					<MenuButton
+						as={IconButton}
+						variant={'ghost'}
+						_active={{ backgroundColor: 'transparent' }}
+					>
+						<VerticalDots />
+					</MenuButton>
+					<MenuList>
+						<MenuItem>Edit Project</MenuItem>
+						<MenuItem>Close Project</MenuItem>
+						<MenuItem>Delete Project</MenuItem>
+					</MenuList>
+				</Menu>
 			</Text>
 		</Flex>
 	);
