@@ -1,9 +1,11 @@
 /* eslint-disable no-shadow */
 import { Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Project } from '../models/Project';
+import { ModalContext } from '../context/ModalContext';
+import { Project, ProjectStatus, ProjectStatusType } from '../models/Project';
 import { useModifyProject } from '../mutations/useModifyProject';
+import { devError } from '../utils/ConsoleUtils';
 import { GetNextLexoRank } from '../utils/GetNextLexoRank';
 import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { VerticalDots } from './icons/VerticalDots';
@@ -100,10 +102,27 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 };
 
 const NewProjectCard = ({ project }: { project: Project }) => {
-	console.log({ project });
+	const [, setModalContext] = useContext(ModalContext);
+
+	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
+
+	const updateStatus = async (status: string) => {
+		try {
+			const projectId = project?.projectId;
+
+			if (projectId) {
+				await modify({
+					projectId,
+					status: status as ProjectStatusType
+				});
+			}
+		} catch (e) {
+			devError('Error', e);
+		}
+	};
 
 	return (
-		<Flex flex="1" justifyContent="space-between" p={1}>
+		<Flex flex="1" justifyContent="space-between" alignItems={'center'} p={1}>
 			<Text textColor={'black'} flex="3">
 				{project.name}
 			</Text>
@@ -125,8 +144,37 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 						<VerticalDots />
 					</MenuButton>
 					<MenuList>
-						<MenuItem>Edit Project</MenuItem>
-						<MenuItem>Close Project</MenuItem>
+						<MenuItem
+							onClick={(event) => {
+								event.preventDefault();
+								setModalContext({ modifyProject: { project } });
+							}}
+						>
+							Edit Project
+						</MenuItem>
+						{project?.projectId && project.status === ProjectStatus.OPEN ? (
+							<>
+								{project.owner && (
+									<MenuItem
+										onClick={async (event) => {
+											event.preventDefault();
+											await updateStatus(ProjectStatus.CLOSED);
+										}}
+									>
+										Close this project
+									</MenuItem>
+								)}
+							</>
+						) : project?.projectId ? (
+							<MenuItem
+								onClick={async (event) => {
+									event.preventDefault();
+									await updateStatus(ProjectStatus.OPEN);
+								}}
+							>
+								Re-open this project
+							</MenuItem>
+						) : null}
 						<MenuItem>Delete Project</MenuItem>
 					</MenuList>
 				</Menu>
