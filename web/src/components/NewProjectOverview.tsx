@@ -18,6 +18,7 @@ import { useModifyProject } from '../mutations/useModifyProject';
 import { ApiService } from '../services/ApiService';
 import { devError } from '../utils/ConsoleUtils';
 import { GetNextLexoRank } from '../utils/GetNextLexoRank';
+import { LoadingSpinner } from './LoadingSpinner';
 import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
@@ -118,7 +119,7 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 											p={2}
 											borderBottom="1px solid"
 											borderColor="gray.200"
-											bg={snapshot.isDragging ? 'gray.200' : 'white'} // Optional: change background color when dragging
+											bg={snapshot.isDragging ? 'gray.200' : 'white'}
 										>
 											{/* Conditionally display the DragDropIcon based on dragging state */}
 											{snapshot.isDragging && (
@@ -179,49 +180,55 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 			</Text>
 			<Text flex="2">Property</Text>
 			<Text flex="0.5">
-				<Menu>
-					<MenuButton
-						as={IconButton}
-						variant={'ghost'}
-						_active={{ backgroundColor: 'transparent' }}
-					>
-						<VerticalDots />
-					</MenuButton>
-					<MenuList>
-						<MenuItem
-							onClick={(event) => {
-								event.preventDefault();
-								setModalContext({ modifyProject: { project } });
-							}}
+				{isLoading ? (
+					<Box>
+						<LoadingSpinner />
+					</Box>
+				) : (
+					<Menu>
+						<MenuButton
+							as={IconButton}
+							variant={'ghost'}
+							_active={{ backgroundColor: 'transparent' }}
 						>
-							Edit Project
-						</MenuItem>
-						{project?.projectId && project.status === ProjectStatus.OPEN ? (
-							<>
-								{project.owner && (
-									<MenuItem
-										onClick={async (event) => {
-											event.preventDefault();
-											await updateStatus(ProjectStatus.CLOSED);
-										}}
-									>
-										Close this project
-									</MenuItem>
-								)}
-							</>
-						) : project?.projectId ? (
+							<VerticalDots />
+						</MenuButton>
+						<MenuList>
 							<MenuItem
-								onClick={async (event) => {
+								onClick={(event) => {
 									event.preventDefault();
-									await updateStatus(ProjectStatus.OPEN);
+									setModalContext({ modifyProject: { project } });
 								}}
 							>
-								Re-open this project
+								Edit Project
 							</MenuItem>
-						) : null}
-						<MenuItem>Delete Project</MenuItem>
-					</MenuList>
-				</Menu>
+							{project?.projectId && project.status === ProjectStatus.OPEN ? (
+								<>
+									{project.owner && (
+										<MenuItem
+											onClick={async (event) => {
+												event.preventDefault();
+												await updateStatus(ProjectStatus.CLOSED);
+											}}
+										>
+											Close this project
+										</MenuItem>
+									)}
+								</>
+							) : project?.projectId ? (
+								<MenuItem
+									onClick={async (event) => {
+										event.preventDefault();
+										await updateStatus(ProjectStatus.OPEN);
+									}}
+								>
+									Re-open this project
+								</MenuItem>
+							) : null}
+							<MenuItem>Delete Project</MenuItem>
+						</MenuList>
+					</Menu>
+				)}
 			</Text>
 		</Flex>
 	);
