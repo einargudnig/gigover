@@ -1,13 +1,25 @@
 /* eslint-disable no-shadow */
-import { Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Flex,
+	IconButton,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Text
+} from '@chakra-ui/react';
 import React, { useCallback, useContext, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { useQueryClient } from 'react-query';
 import { ModalContext } from '../context/ModalContext';
 import { Project, ProjectStatus, ProjectStatusType } from '../models/Project';
 import { useModifyProject } from '../mutations/useModifyProject';
+import { ApiService } from '../services/ApiService';
 import { devError } from '../utils/ConsoleUtils';
 import { GetNextLexoRank } from '../utils/GetNextLexoRank';
 import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
+import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
 
 interface SortableGridProps {
@@ -71,12 +83,33 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 							style={getListStyle(snapshot.isDraggingOver)}
 						>
 							{projects.map((project, index) => (
+								// <Draggable
+								// 	key={project.projectId}
+								// 	draggableId={project.projectId.toString()}
+								// 	index={index}
+								// >
+								// 	{(provided) => (
+								// 		<Flex
+								// 			ref={provided.innerRef}
+								// 			{...provided.draggableProps}
+								// 			{...provided.dragHandleProps}
+								// 			align="center"
+								// 			p={2}
+								// 			borderBottom="1px solid"
+								// 			borderColor="gray.200"
+								// 			bg="white"
+								// 			rounded="md"
+								// 		>
+								// 			<NewProjectCard project={project} />
+								// 		</Flex>
+								// 	)}
+								// </Draggable>
 								<Draggable
 									key={project.projectId}
 									draggableId={project.projectId.toString()}
 									index={index}
 								>
-									{(provided) => (
+									{(provided, snapshot) => (
 										<Flex
 											ref={provided.innerRef}
 											{...provided.draggableProps}
@@ -85,8 +118,14 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 											p={2}
 											borderBottom="1px solid"
 											borderColor="gray.200"
-											bg="white"
+											bg={snapshot.isDragging ? 'gray.200' : 'white'} // Optional: change background color when dragging
 										>
+											{/* Conditionally display the DragDropIcon based on dragging state */}
+											{snapshot.isDragging && (
+												<Box pr={2}>
+													<DragDropIcon />
+												</Box>
+											)}
 											<NewProjectCard project={project} />
 										</Flex>
 									)}
@@ -103,9 +142,11 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 
 const NewProjectCard = ({ project }: { project: Project }) => {
 	const [, setModalContext] = useContext(ModalContext);
+	const queryClient = useQueryClient();
 
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
 
+	// TODO trigger re-fetch of projects!
 	const updateStatus = async (status: string) => {
 		try {
 			const projectId = project?.projectId;
@@ -115,6 +156,9 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 					projectId,
 					status: status as ProjectStatusType
 				});
+
+				queryClient.refetchQueries(ApiService.projectList);
+				queryClient.refetchQueries(ApiService.getProgressStatusList);
 			}
 		} catch (e) {
 			devError('Error', e);
@@ -124,7 +168,7 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 	return (
 		<Flex flex="1" justifyContent="space-between" alignItems={'center'} p={1}>
 			<Text textColor={'black'} flex="3">
-				{project.name}
+				<Flex alignItems={'center'}>{project.name}</Flex>
 			</Text>
 			{/* <Text flex="1">{project.endDate}</Text> */}
 			<Text flex="1">
