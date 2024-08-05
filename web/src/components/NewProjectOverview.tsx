@@ -225,7 +225,16 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 									Re-open this project
 								</MenuItem>
 							) : null}
-							<MenuItem>Delete Project</MenuItem>
+							{project?.projectId && project.status === ProjectStatus.CLOSED && (
+								<MenuItem
+									onClick={async (event) => {
+										event.preventDefault();
+										await updateStatus(ProjectStatus.DONE);
+									}}
+								>
+									Archive project
+								</MenuItem>
+							)}
 						</MenuList>
 					</Menu>
 				)}
