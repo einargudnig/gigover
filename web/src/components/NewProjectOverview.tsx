@@ -36,8 +36,35 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 
 export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 	const [projects, setProjects] = useState<Project[]>(list);
-	console.log({ list });
 	const mutateProject = useModifyProject();
+
+	const updateLexoRank = useCallback(
+		async (project: Project, lexoRank: string) => {
+			try {
+				console.log(
+					'Updating lexoRank for Project: ',
+					project.projectId,
+					' to: ',
+					lexoRank
+				);
+				const rank = await mutateProject.mutateAsync({
+					projectId: project.projectId,
+					name: project.name,
+					description: project.description,
+					startDate: project.startDate,
+					endDate: project.endDate,
+					status: project.status,
+					progressStatus: project.progressStatus,
+					lexoRank: lexoRank
+				});
+				console.log('Updated lexoRank: ', rank);
+			} catch (e) {
+				console.error(e);
+				alert('Could not update project ordering, please try again');
+			}
+		},
+		[mutateProject]
+	);
 
 	const onDragEnd = useCallback(
 		(result) => {
@@ -53,9 +80,9 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 			const nextRank = GetNextLexoRank(newProjects, source.index, destination.index);
 			reorderedItem.lexoRank = nextRank.toString();
 			setProjects(newProjects);
-			// updateLexoRank(reorderedItem, nextRank.toString());
+			updateLexoRank(reorderedItem, nextRank.toString());
 		},
-		[projects]
+		[projects, updateLexoRank]
 	);
 
 	return (
@@ -180,6 +207,7 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 			</Text>
 			<Text flex="2">Property</Text>
 			<Text flex="0.5">
+				{isError && <Text>{error?.errorText}</Text>}
 				{isLoading ? (
 					<Box>
 						<LoadingSpinner />
