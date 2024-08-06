@@ -194,7 +194,14 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 	};
 
 	return (
-		<Flex flex="1" justifyContent="space-between" alignItems={'center'} p={1}>
+		<Flex
+			flex="1"
+			justifyContent="space-between"
+			alignItems={'center'}
+			p={1}
+			// as={Link}
+			// to={`/project/${project.projectId}`}
+		>
 			<Text textColor={'black'} flex="3">
 				<Flex alignItems={'center'}>{project.name}</Flex>
 			</Text>
@@ -217,14 +224,15 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 						<MenuButton
 							as={IconButton}
 							variant={'ghost'}
-							_active={{ backgroundColor: 'transparent' }}
-						>
-							<VerticalDots />
-						</MenuButton>
+							_hover={{ border: '1px', borderColor: 'gray.300' }}
+							zIndex={100}
+							icon={<VerticalDots />}
+						/>
 						<MenuList>
 							<MenuItem
 								onClick={(event) => {
 									event.preventDefault();
+									event.stopPropagation(); // Stop event from bubbling up
 									setModalContext({ modifyProject: { project } });
 								}}
 							>
@@ -236,6 +244,7 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 										<MenuItem
 											onClick={async (event) => {
 												event.preventDefault();
+												event.stopPropagation(); // Stop event from bubbling up
 												await updateStatus(ProjectStatus.CLOSED);
 											}}
 										>
@@ -247,6 +256,7 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 								<MenuItem
 									onClick={async (event) => {
 										event.preventDefault();
+										event.stopPropagation(); // Stop event from bubbling up
 										await updateStatus(ProjectStatus.OPEN);
 									}}
 								>
@@ -257,6 +267,7 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 								<MenuItem
 									onClick={async (event) => {
 										event.preventDefault();
+										event.stopPropagation(); // Stop event from bubbling up
 										await updateStatus(ProjectStatus.DONE);
 									}}
 								>
