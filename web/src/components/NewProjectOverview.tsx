@@ -12,8 +12,9 @@ import {
 import React, { useCallback, useContext, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
 import { ModalContext } from '../context/ModalContext';
-import { Project, ProjectStatus, ProjectStatusType } from '../models/Project';
+import { Project, ProjectStatus } from '../models/Project';
 import { useModifyProject } from '../mutations/useModifyProject';
 import { ApiService } from '../services/ApiService';
 import { devError } from '../utils/ConsoleUtils';
@@ -36,7 +37,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 
 export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 	const [projects, setProjects] = useState<Project[]>(list);
-	const mutateProject = useModifyProject();
+	const { mutateAsync: mutateProject, isLoading } = useModifyProject();
 
 	const updateLexoRank = useCallback(
 		async (project: Project, lexoRank: string) => {
@@ -47,7 +48,7 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 					' to: ',
 					lexoRank
 				);
-				const rank = await mutateProject.mutateAsync({
+				const rank = await mutateProject({
 					projectId: project.projectId,
 					name: project.name,
 					description: project.description,
@@ -88,20 +89,42 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Flex direction="column" mt={1} overflowX="auto">
-				<Flex bg="#F5F7FB" p={2}>
-					<Text fontSize={'lg'} fontWeight={'semibold'} flex="3">
-						Project name
-					</Text>
-					<Text fontSize={'lg'} fontWeight={'semibold'} flex="1">
-						Due date
-					</Text>
-					<Text fontSize={'lg'} fontWeight={'semibold'} flex="1">
-						Status
-					</Text>
-					<Text fontSize={'lg'} fontWeight={'semibold'} flex="2">
-						Property
-					</Text>
-					<Text fontSize={'lg'} fontWeight={'semibold'} flex="0.5"></Text>
+				<Flex
+					flex="1"
+					justifyContent={'space-between'}
+					alignItems={'center'}
+					bg="#F5F7FB"
+					p={2}
+				>
+					<Box style={{ flexGrow: 1 }}>
+						<Flex justifyContent={'space-between'} alignItems={'center'} flex="1">
+							<Box flex="3" width="200px">
+								<Text fontSize={'lg'} fontWeight={'semibold'}>
+									Project name
+								</Text>
+							</Box>
+							<Box flex="1" width={'75px'}>
+								<Text fontSize={'lg'} fontWeight={'semibold'}>
+									Due date
+								</Text>
+							</Box>
+							<Box flex="1" width={'75px'}>
+								<Text fontSize={'lg'} fontWeight={'semibold'}>
+									Status
+								</Text>
+							</Box>
+							<Box flex="2" width={'100px'}>
+								<Text fontSize={'lg'} fontWeight={'semibold'}>
+									Property
+								</Text>
+							</Box>
+						</Flex>
+					</Box>
+					<Box flex="0.5" width={'50px'}>
+						<Text fontSize={'lg'} fontWeight={'semibold'}>
+							Actions
+						</Text>
+					</Box>
 				</Flex>
 				<Droppable droppableId="project-list">
 					{(provided, snapshot) => (
@@ -111,27 +134,6 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 							style={getListStyle(snapshot.isDraggingOver)}
 						>
 							{projects.map((project, index) => (
-								// <Draggable
-								// 	key={project.projectId}
-								// 	draggableId={project.projectId.toString()}
-								// 	index={index}
-								// >
-								// 	{(provided) => (
-								// 		<Flex
-								// 			ref={provided.innerRef}
-								// 			{...provided.draggableProps}
-								// 			{...provided.dragHandleProps}
-								// 			align="center"
-								// 			p={2}
-								// 			borderBottom="1px solid"
-								// 			borderColor="gray.200"
-								// 			bg="white"
-								// 			rounded="md"
-								// 		>
-								// 			<NewProjectCard project={project} />
-								// 		</Flex>
-								// 	)}
-								// </Draggable>
 								<Draggable
 									key={project.projectId}
 									draggableId={project.projectId.toString()}
@@ -168,23 +170,19 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 	);
 };
 
-const NewProjectCard = ({ project }: { project: Project }) => {
+const NewProjectCard = ({ project }) => {
 	const [, setModalContext] = useContext(ModalContext);
 	const queryClient = useQueryClient();
-
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
 
-	// TODO trigger re-fetch of projects!
-	const updateStatus = async (status: string) => {
+	const updateStatus = async (status) => {
 		try {
 			const projectId = project?.projectId;
-
 			if (projectId) {
 				await modify({
 					projectId,
-					status: status as ProjectStatusType
+					status
 				});
-
 				queryClient.refetchQueries(ApiService.projectList);
 				queryClient.refetchQueries(ApiService.getProgressStatusList);
 			}
@@ -194,95 +192,106 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 	};
 
 	return (
-		<Flex
-			flex="1"
-			justifyContent="space-between"
-			alignItems={'center'}
-			p={1}
-			// as={Link}
-			// to={`/project/${project.projectId}`}
-		>
-			<Text textColor={'black'} flex="3">
-				<Flex alignItems={'center'}>{project.name}</Flex>
-			</Text>
-			{/* <Text flex="1">{project.endDate}</Text> */}
-			<Text flex="1">
-				<ProjectTimeStatus project={project} />
-			</Text>
-			<Text flex="1">
-				<ProjectStatusTag project={project} />
-			</Text>
-			<Text flex="2">Property</Text>
-			<Text flex="0.5">
-				{isError && <Text>{error?.errorText}</Text>}
-				{isLoading ? (
-					<Box>
-						<LoadingSpinner />
+		<Flex flex="1" justifyContent="space-between" alignItems="center" p={1}>
+			<Link
+				to={`/project/${project.projectId}`}
+				style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
+			>
+				<Flex justifyContent="space-between" alignItems="center" flex="1">
+					<Box flex="3" width={'200px'}>
+						<Text textColor="black">
+							<Flex alignItems="center">{project.name}</Flex>
+						</Text>
 					</Box>
-				) : (
-					<Menu>
-						<MenuButton
-							as={IconButton}
-							variant={'ghost'}
-							_hover={{ border: '1px', borderColor: 'gray.300' }}
-							_active={{
-								border: '1px',
-								borderColor: 'gray.300',
-								backgroundColor: 'transparent'
-							}}
-							zIndex={100}
-							icon={<VerticalDots />}
-						/>
-						<MenuList>
-							<MenuItem
-								onClick={(event) => {
-									event.preventDefault();
-									event.stopPropagation(); // Stop event from bubbling up
-									setModalContext({ modifyProject: { project } });
+					<Box flex="1" width="75px">
+						<Text>
+							<ProjectTimeStatus project={project} />
+						</Text>
+					</Box>
+					<Box flex="1" width="75px">
+						<Text>
+							<ProjectStatusTag project={project} />
+						</Text>
+					</Box>
+					<Box flex="2" width="100px">
+						<Text>Property</Text>
+					</Box>
+				</Flex>
+			</Link>
+			<Box flex="0.5" width={'50px'}>
+				<Text>
+					{isError && <Text>{error?.errorText}</Text>}
+					{isLoading ? (
+						<Box py={1}>
+							<LoadingSpinner size={32} />
+						</Box>
+					) : (
+						<Menu>
+							<MenuButton
+								as={IconButton}
+								variant="ghost"
+								_hover={{ border: '1px', borderColor: 'gray.300' }}
+								_active={{
+									border: '1px',
+									borderColor: 'gray.300',
+									backgroundColor: 'transparent'
 								}}
-							>
-								Edit Project
-							</MenuItem>
-							{project?.projectId && project.status === ProjectStatus.OPEN ? (
-								<>
-									{project.owner && (
-										<MenuItem
-											onClick={async (event) => {
-												event.preventDefault();
-												event.stopPropagation(); // Stop event from bubbling up
-												await updateStatus(ProjectStatus.CLOSED);
-											}}
-										>
-											Close this project
-										</MenuItem>
-									)}
-								</>
-							) : project?.projectId ? (
+								icon={<VerticalDots />}
+							/>
+							<MenuList>
 								<MenuItem
-									onClick={async (event) => {
+									onClick={(event) => {
 										event.preventDefault();
-										event.stopPropagation(); // Stop event from bubbling up
-										await updateStatus(ProjectStatus.OPEN);
+										event.stopPropagation();
+										setModalContext({ modifyProject: { project } });
 									}}
 								>
-									Re-open this project
+									Edit Project
 								</MenuItem>
-							) : null}
-							{project?.projectId && project.status === ProjectStatus.CLOSED && (
-								<MenuItem
-									onClick={async (event) => {
-										event.preventDefault();
-										event.stopPropagation(); // Stop event from bubbling up
-										await updateStatus(ProjectStatus.DONE);
-									}}
-								>
-									Archive project
-								</MenuItem>
-							)}
-						</MenuList>
-					</Menu>
-				)}
-			</Text>
+								{project?.projectId && project.status === ProjectStatus.OPEN ? (
+									<>
+										{project?.owner && (
+											<MenuItem
+												onClick={async (event) => {
+													event.preventDefault();
+													event.stopPropagation();
+													await updateStatus(ProjectStatus.CLOSED);
+												}}
+											>
+												Close this project
+											</MenuItem>
+										)}
+									</>
+								) : project?.projectId ? (
+									<>
+										{project?.owner && (
+											<MenuItem
+												onClick={async (event) => {
+													event.preventDefault();
+													await updateStatus(ProjectStatus.OPEN);
+												}}
+											>
+												Re-open this project
+											</MenuItem>
+										)}
+									</>
+								) : null}
+								{project?.projectId && project.status === ProjectStatus.CLOSED && (
+									<MenuItem
+										onClick={async (event) => {
+											event.preventDefault();
+											event.stopPropagation();
+											await updateStatus(ProjectStatus.DONE);
+										}}
+									>
+										Archive project
+									</MenuItem>
+								)}
+							</MenuList>
+						</Menu>
+					)}
+				</Text>
+			</Box>
 		</Flex>
 	);
 };
