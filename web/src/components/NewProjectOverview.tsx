@@ -225,6 +225,11 @@ const NewProjectCard = ({ project }: { project: Project }) => {
 							as={IconButton}
 							variant={'ghost'}
 							_hover={{ border: '1px', borderColor: 'gray.300' }}
+							_active={{
+								border: '1px',
+								borderColor: 'gray.300',
+								backgroundColor: 'transparent'
+							}}
 							zIndex={100}
 							icon={<VerticalDots />}
 						/>
