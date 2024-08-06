@@ -1,27 +1,27 @@
-import React, { useCallback, useContext, useState } from 'react';
-import styled from 'styled-components';
-import { TrackerSelect } from '../../components/TrackerSelect';
-import { DateRangePicker } from 'react-dates';
-import moment from 'moment';
-import { useTimeTrackerReport } from './useTimeTrackerReport';
-import { EmptyState } from '../../components/empty/EmptyState';
-import { darken } from 'polished';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import Timer from 'react-compound-timer';
 import { Button } from '@chakra-ui/react';
-import { Table } from '../../components/Table';
-import { TimerContainer, TimerWrapper } from './TimeTracker';
-import { showTimeSheetRange } from '../../utils/StringUtils';
-import { Edit } from '../../components/icons/Edit';
-import { ModalContext } from '../../context/ModalContext';
+import moment from 'moment';
+import { darken } from 'polished';
+import React, { useCallback, useContext, useState } from 'react';
+import Timer from 'react-compound-timer';
+import { DateRangePicker } from 'react-dates';
+import styled from 'styled-components';
 import { Center } from '../../components/Center';
-import { MomentDateFormat } from '../../utils/MomentDateFormat';
-import { useProjectTasks } from '../../hooks/useProjectTasks';
-import { displayTaskTitle } from '../../utils/TaskUtils';
-import { useReportToCSV } from '../../mutations/useReportToCSV';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { Table } from '../../components/Table';
+import { TrackerSelect } from '../../components/TrackerSelect';
+import { EmptyState } from '../../components/empty/EmptyState';
+import { Edit } from '../../components/icons/Edit';
 import { TrashIcon } from '../../components/icons/TrashIcon';
+import { ModalContext } from '../../context/ModalContext';
+import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { useDeleteTimeRecord } from '../../mutations/useDeleteTimeRecord';
+import { useReportToCSV } from '../../mutations/useReportToCSV';
 import { Timesheet } from '../../queries/useTrackerReport';
+import { MomentDateFormat } from '../../utils/MomentDateFormat';
+import { showTimeSheetRange } from '../../utils/StringUtils';
+import { displayTaskTitle } from '../../utils/TaskUtils';
+import { TimerContainer, TimerWrapper } from './TimeTracker';
+import { useTimeTrackerReport } from './useTimeTrackerReport';
 
 const TimeTrackerReportFilter = styled.div`
 	display: flex;
@@ -241,6 +241,8 @@ export const TimeTrackerReport = ({
 						height={'100%'}
 						lineHeight="72px"
 						ml={4}
+						variant={'outline'}
+						colorScheme="gray"
 					>
 						Export CSV
 					</Button>

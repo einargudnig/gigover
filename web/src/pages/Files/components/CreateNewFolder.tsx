@@ -79,10 +79,12 @@ export const CreateNewFolderButton = ({
 				</Modal>
 			)}
 			<Button
-				leftIcon={<FolderIcon />}
+				leftIcon={<FolderIcon type="light" color="gray" />}
 				onClick={() => {
 					setIsOpen(true);
 				}}
+				colorScheme="gray"
+				variant={'outline'}
 			>
 				Create folder
 			</Button>

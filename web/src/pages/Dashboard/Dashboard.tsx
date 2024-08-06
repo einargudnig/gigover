@@ -135,10 +135,6 @@ export const Dashboard = (): JSX.Element => {
 					{!projects || projects.length <= 0 ? (
 						<NoProjectsFound />
 					) : (
-						// <SortableProjectList
-						// 	key={`projects_${counter}_${projects.length}`}
-						// 	list={projects}
-						// />
 						<NewProjectOverview
 							key={`projects_${counter}_${projects.length}`}
 							list={projects}
