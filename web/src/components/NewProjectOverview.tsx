@@ -37,7 +37,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 
 export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 	const [projects, setProjects] = useState<Project[]>(list);
-	const { mutateAsync: mutateProject, isLoading } = useModifyProject();
+	const { mutateAsync: mutateProject } = useModifyProject();
 
 	const updateLexoRank = useCallback(
 		async (project: Project, lexoRank: string) => {
@@ -113,11 +113,11 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 									Status
 								</Text>
 							</Box>
-							<Box flex="2" width={'100px'}>
+							{/* <Box flex="2" width={'100px'}>
 								<Text fontSize={'lg'} fontWeight={'semibold'}>
 									Property
 								</Text>
-							</Box>
+							</Box> */}
 						</Flex>
 					</Box>
 					<Box flex="0.5" width={'50px'}>
@@ -213,9 +213,9 @@ const NewProjectCard = ({ project }) => {
 							<ProjectStatusTag project={project} />
 						</Text>
 					</Box>
-					<Box flex="2" width="100px">
+					{/* <Box flex="2" width="100px">
 						<Text>Property</Text>
-					</Box>
+					</Box> */}
 				</Flex>
 			</Link>
 			<Box flex="0.5" width={'50px'}>
