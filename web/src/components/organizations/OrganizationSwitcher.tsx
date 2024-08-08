@@ -1,7 +1,8 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Box, Button, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import { Box, Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
+import { CreateOrganization } from './CreateOrganization';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
@@ -33,10 +34,14 @@ export const OrganizationSwitcher = () => {
 							</MenuItem>
 						))
 					) : (
-						<Text padding={1} textAlign="center">
+						<MenuItem padding={1} textAlign="center">
 							No organizations
-						</Text>
+						</MenuItem>
 					)}
+					<MenuDivider />
+					<MenuItem>
+						<CreateOrganization />{' '}
+					</MenuItem>
 				</MenuList>
 			</Menu>
 		</Box>

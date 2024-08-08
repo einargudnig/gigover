@@ -79,44 +79,48 @@ export const Dashboard = (): JSX.Element => {
 								icon={<FilterIcon color={'black'} />}
 							/>
 						</Tooltip>
-						<MenuList>
-							<MenuOptionGroup
-								defaultValue={'ALL'}
-								title="Project statuses"
-								type="radio"
-							>
-								<MenuItemOption
-									value="ALL"
-									style={{ textTransform: 'capitalize' }}
-									onClick={() => setActiveTab(ProjectStatus.ALL)}
+						{isLoadingStatuses ? (
+							<LoadingSpinner />
+						) : (
+							<MenuList>
+								<MenuOptionGroup
+									defaultValue={'ALL'}
+									title="Project statuses"
+									type="radio"
 								>
-									{ProjectStatus.ALL.toLowerCase()}
-								</MenuItemOption>
-								<MenuItemOption
-									value="OPEN"
-									style={{ textTransform: 'capitalize' }}
-									onClick={() => setActiveTab(ProjectStatus.OPEN)}
-								>
-									{ProjectStatus.OPEN.toLowerCase()}
-								</MenuItemOption>
-								{statuses?.progressStatusList.map((status) => (
 									<MenuItemOption
-										key={status.id}
-										value={status.name}
-										onClick={() => setActiveTab(status)}
+										value="ALL"
+										style={{ textTransform: 'capitalize' }}
+										onClick={() => setActiveTab(ProjectStatus.ALL)}
 									>
-										{status.name}
+										{ProjectStatus.ALL.toLowerCase()}
 									</MenuItemOption>
-								))}
-								<MenuItemOption
-									value="CLOSED"
-									style={{ textTransform: 'capitalize' }}
-									onClick={() => setActiveTab(ProjectStatus.CLOSED)}
-								>
-									{ProjectStatus.CLOSED.toLowerCase()}
-								</MenuItemOption>
-							</MenuOptionGroup>
-						</MenuList>
+									<MenuItemOption
+										value="OPEN"
+										style={{ textTransform: 'capitalize' }}
+										onClick={() => setActiveTab(ProjectStatus.OPEN)}
+									>
+										{ProjectStatus.OPEN.toLowerCase()}
+									</MenuItemOption>
+									{statuses?.progressStatusList?.map((status) => (
+										<MenuItemOption
+											key={status.id}
+											value={status.name}
+											onClick={() => setActiveTab(status)}
+										>
+											{status.name}
+										</MenuItemOption>
+									))}
+									<MenuItemOption
+										value="CLOSED"
+										style={{ textTransform: 'capitalize' }}
+										onClick={() => setActiveTab(ProjectStatus.CLOSED)}
+									>
+										{ProjectStatus.CLOSED.toLowerCase()}
+									</MenuItemOption>
+								</MenuOptionGroup>
+							</MenuList>
+						)}
 					</Menu>
 					<Button
 						onClick={() => setModalContext({ modifyProject: { project: undefined } })}

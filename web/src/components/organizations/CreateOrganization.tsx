@@ -1,26 +1,30 @@
-import React, { useState } from 'react';
 import {
-	Box,
 	Button,
-	Flex,
 	FormControl,
 	FormLabel,
-	Heading,
 	Input,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalHeader,
+	ModalOverlay,
 	Stack,
-	Text
+	Text,
+	useDisclosure
 } from '@chakra-ui/react';
-import { GigoverLogo } from '../GigoverLogo';
+import { AxiosResponse } from 'axios';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useCreateOrganization } from '../../mutations/organizations/useCreateOrganization';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { AxiosResponse } from 'axios';
 
 export const CreateOrganization = (): JSX.Element => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [createError, setCreateError] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string>('');
 	const { mutateAsync: createOrg, isLoading } = useCreateOrganization();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const { register, handleSubmit, reset } = useForm<{ name: string; password: string }>({
 		defaultValues: {
@@ -52,29 +56,17 @@ export const CreateOrganization = (): JSX.Element => {
 	};
 
 	return (
-		<Stack spacing="8">
-			<Stack spacing="5">
-				<Flex
-					justifyContent={'center'}
-					alignItems={'center'}
-					paddingTop={8}
-					paddingBottom={6}
-				>
-					<GigoverLogo color={'black'} />
-				</Flex>
-				<Stack spacing={{ base: '2', md: '3' }} textAlign="center">
-					<Heading size={{ base: 'xs', md: 'sm' }}>Create a new organization</Heading>
-				</Stack>
-			</Stack>
-			<Box
-				py={{ base: '0', sm: '2' }}
-				px={{ base: '4', sm: '10' }}
-				bg={{ base: 'transparent', sm: 'bg.surface' }}
-				boxShadow={{ base: 'none', sm: 'md' }}
-				borderRadius={{ base: 'none', sm: 'xl' }}
-			>
-				<Stack spacing="6" paddingBottom={8}>
-					<Stack spacing="5">
+		<>
+			<Button onClick={onOpen} variant={'link'} colorScheme="gray.300" p={-1} size={'sm'}>
+				Create an organization
+			</Button>
+
+			<Modal isOpen={isOpen} onClose={onClose}>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader>Create an organization</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody>
 						<form
 							onSubmit={handleSubmit(async (values) => {
 								handleCreate(values.name, values.password);
@@ -104,9 +96,9 @@ export const CreateOrganization = (): JSX.Element => {
 
 							{createError && <Text color="red.500">{createError}</Text>}
 						</form>
-					</Stack>
-				</Stack>
-			</Box>
-		</Stack>
+					</ModalBody>
+				</ModalContent>
+			</Modal>
+		</>
 	);
 };
