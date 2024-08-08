@@ -1,5 +1,7 @@
 import {
+	Box,
 	Button,
+	Flex,
 	FormControl,
 	FormLabel,
 	Input,
@@ -44,6 +46,7 @@ export const CreateOrganization = (): JSX.Element => {
 			if (response && response.data.errorCode === 'OK') {
 				reset(); // Reset form values
 				setSuccessMessage('Organization created successfully!');
+				onClose();
 			} else {
 				setCreateError('Something went wrong');
 			}
@@ -91,10 +94,15 @@ export const CreateOrganization = (): JSX.Element => {
 									)}
 								</Button>
 							</Stack>
+							<Box p={2} mt={4}>
+								<Flex justifyContent={'center'} alignItems={'center'}>
+									{successMessage && (
+										<Text color="green.500">{successMessage}</Text>
+									)}
 
-							{successMessage && <Text color="green.500">{successMessage}</Text>}
-
-							{createError && <Text color="red.500">{createError}</Text>}
+									{createError && <Text color="red.500">{createError}</Text>}
+								</Flex>
+							</Box>
 						</form>
 					</ModalBody>
 				</ModalContent>
