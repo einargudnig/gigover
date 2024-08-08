@@ -70,11 +70,6 @@ export const AppPreloader = (): JSX.Element => {
 		return <FullscreenLoader />;
 	}
 
-	// if (data && !data.data.registered) {
-	// 	window.location.href = '/onboarding';
-	// 	return <></>;
-	// }
-
 	if (hasError) {
 		return (
 			<Flex justifyContent={'center'} alignItems={'center'}>
