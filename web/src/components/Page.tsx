@@ -30,7 +30,6 @@ import { TenderIcon } from './icons/TenderIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
-// import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 // import { ManageOrganization } from './organizations/ManageOrganization';
 
 interface PageProps {

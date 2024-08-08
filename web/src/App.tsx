@@ -1,3 +1,4 @@
+import { Flex, Text } from '@chakra-ui/react';
 import 'normalize.css';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { pdfjs } from 'react-pdf';
@@ -28,6 +29,7 @@ declare const window: Window & { Intercom: Intercom };
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
+	const [hasError, setHasError] = useState(false);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
 	const { mutateAsync: verify, data, isLoading: loading, error } = useVerify();
 
@@ -57,13 +59,28 @@ export const AppPreloader = (): JSX.Element => {
 		});
 	}, [authUser?.uid, data]);
 
-	if (loading || isLoadingFirebase) {
+	useEffect(() => {
+		if (error) {
+			console.log(error, 'error');
+			setHasError(true);
+		}
+	}, [error]);
+
+	if (loading || isLoadingFirebase || !data) {
 		return <FullscreenLoader />;
 	}
 
-	if (error) {
-		console.log(error, 'error');
-		throw new Error('The server is down for maintenance, please try again later.');
+	// if (data && !data.data.registered) {
+	// 	window.location.href = '/onboarding';
+	// 	return <></>;
+	// }
+
+	if (hasError) {
+		return (
+			<Flex justifyContent={'center'} alignItems={'center'}>
+				<Text>The server is down for maintenance, please try again later.</Text>
+			</Flex>
+		);
 	}
 
 	return <App userProfile={data?.data} authUser={authUser} />;
@@ -92,8 +109,6 @@ const App = ({
 		}
 		return null;
 	}, [authUser, userProfile]);
-
-	console.log({ user });
 
 	return (
 		<Router>
@@ -128,7 +143,6 @@ const OnboardingHandler: React.FC<OnboardingHandlerProps> = ({ userProfile }) =>
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		// TODO change to check for registered
 		if (userProfile?.registered === false) {
 			navigate('/onboarding');
 		}
