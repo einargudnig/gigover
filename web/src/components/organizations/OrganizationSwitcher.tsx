@@ -24,7 +24,7 @@ export const OrganizationSwitcher = () => {
 					_active={{ bg: 'transparent' }}
 					_hover={{ textColor: 'gray.700' }}
 				>
-					Organization
+					Change organization
 				</MenuButton>
 				<MenuList>
 					{data && data.length > 0 ? (

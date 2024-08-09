@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import {
-	useDisclosure,
+	Box,
 	Button,
+	Flex,
+	FormControl,
+	FormLabel,
+	Heading,
+	Input,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
 	ModalContent,
 	ModalOverlay,
-	Box,
-	Text,
-	Flex,
-	Tabs,
-	TabList,
-	TabPanels,
-	Tab,
-	TabPanel,
-	Heading,
 	Stack,
-	FormControl,
-	FormLabel,
-	Input
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
+	Text,
+	useDisclosure
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
-import { GigoverLogo } from '../GigoverLogo';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
+import { GigoverLogo } from '../GigoverLogo';
 import { CreateOrganization } from './CreateOrganization';
 
 export const ManageOrganization = (): JSX.Element => {
@@ -55,7 +55,12 @@ export const ManageOrganization = (): JSX.Element => {
 
 	return (
 		<div>
-			<Button variant="ghost" onClick={onOpen} _hover={{ textColor: 'yellow.500' }}>
+			<Button
+				variant="outline"
+				colorScheme="gray"
+				onClick={onOpen}
+				_hover={{ textColor: 'y.500' }}
+			>
 				Manage Organizations
 			</Button>
 
@@ -69,7 +74,6 @@ export const ManageOrganization = (): JSX.Element => {
 								<TabList>
 									<Tab>Log in</Tab>
 									<Tab>Organizations</Tab>
-									<Tab>Create organization</Tab>
 								</TabList>
 								<TabPanels>
 									<TabPanel>
