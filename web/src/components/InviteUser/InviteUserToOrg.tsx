@@ -1,17 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Flex, FormControl, FormLabel, Input, Select } from '@chakra-ui/react';
+import { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
-import {
-	Text,
-	Button,
-	FormControl,
-	FormErrorMessage,
-	FormLabel,
-	Input,
-	Flex,
-	Select
-} from '@chakra-ui/react';
-import { Theme } from '../../Theme';
 import { devInfo } from '../../utils/ConsoleUtils';
 
 export const InviteUserToOrg = (): JSX.Element => {
@@ -28,15 +19,16 @@ export const InviteUserToOrg = (): JSX.Element => {
 
 			if (response.uId) {
 				devInfo('Found user with uId:', response.uId);
+				setInviteSuccess(true);
 				// Add to tender
-				inviteMutation.mutateAsync({ uId: response.uId }).then((res) => {
-					if (res.errorCode === 'OK') {
-						setSearchMail('');
-						setInviteSuccess(true);
-					} else {
-						throw new Error('Could not invite user.');
-					}
-				});
+				// 	inviteMutation.mutateAsync({ email, priv }).then((res) => {
+				// 		if (res.errorCode === 'OK') {
+				// 			setSearchMail('');
+				// 			setInviteSuccess(true);
+				// 		} else {
+				// 			throw new Error('Could not invite user.');
+				// 		}
+				// 	});
 			}
 		} catch (e) {
 			console.error(e);
@@ -44,6 +36,13 @@ export const InviteUserToOrg = (): JSX.Element => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchMutation, searchMail]);
+
+	const { register, handleSubmit } = useForm<{ email: string; priv: string }>({
+		defaultValues: {
+			email: '',
+			priv: 'W'
+		}
+	});
 
 	useEffect(() => {
 		if (inviteSuccess) {
@@ -63,22 +62,25 @@ export const InviteUserToOrg = (): JSX.Element => {
 				<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
 				<Input
 					placeholder={'Enter e-mail address of a Gigover user'}
-					name={'inviteEmail'}
+					type="email"
 					value={searchMail}
 					onChange={(e) => setSearchMail(e.target.value)}
 				/>
 
-				{/* <FormLabel htmlFor={'inviteEmail'}>Privleges</FormLabel>
-				<Select
-					placeholder="Select privleges"
-					onChange={(e) => setPrivleges(e.target.value as 'A' | 'E' | 'V')}
-				>
-					<option value="A">Admin</option>
-					<option value="V">Viewer</option>
-					<option value="E">Editor</option>
-				</Select> */}
-
 				{inviteSuccess ? (
+					<>
+						<FormLabel htmlFor={'priv'}>Privleges</FormLabel>
+						<Select
+							placeholder="Select privleges"
+							onChange={(e) => setPrivleges(e.target.value as 'A' | 'E' | 'V')}
+						>
+							<option value="A">Admin</option>
+							<option value="V">Viewer</option>
+							<option value="E">Editor</option>
+						</Select>
+					</>
+				) : null}
+				{/* {inviteSuccess ? (
 					<>
 						<Text mt={4} color={Theme.colors.green}>
 							User has been invited to the organization
@@ -91,17 +93,19 @@ export const InviteUserToOrg = (): JSX.Element => {
 							invited.
 						</FormErrorMessage>
 					)
-				)}
+				)} */}
 			</FormControl>
 			<Flex justifyContent={'flex-end'}>
-				<Button
-					loadingText={'Inviting'}
-					isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-					disabled={searchMutation.isLoading || inviteMutation.isLoading}
-					onClick={search}
-				>
-					Invite
-				</Button>
+				{!inviteSuccess ? (
+					<Button
+						loadingText={'Inviting'}
+						isLoading={searchMutation.isLoading || inviteMutation.isLoading}
+						disabled={searchMutation.isLoading || inviteMutation.isLoading}
+						onClick={search}
+					>
+						Invite
+					</Button>
+				) : null}
 			</Flex>
 		</>
 	);

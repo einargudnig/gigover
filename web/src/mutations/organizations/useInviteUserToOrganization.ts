@@ -1,17 +1,17 @@
 import axios, { AxiosError } from 'axios';
-import { ApiService } from '../../services/ApiService';
-import { devError } from '../../utils/ConsoleUtils';
 import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
-
-// interface InviteUserToOrganizationInput {
-// 	email: string;
-// 	priv: 'A' | 'E' | 'V';
-// }
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface InviteUserToOrganizationInput {
-	uId: string;
+	email: string;
+	priv: 'A' | 'E' | 'V';
 }
+
+// interface InviteUserToOrganizationInput {
+// 	uId: string;
+// }
 
 export const useInviteUserToOrganization = () => {
 	const queryClient = useQueryClient();

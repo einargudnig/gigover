@@ -11,29 +11,20 @@ import {
 	ModalCloseButton,
 	ModalContent,
 	ModalOverlay,
-	Stack,
-	Tab,
-	TabList,
-	TabPanel,
-	TabPanels,
-	Tabs,
-	Text,
+	Spacer,
 	useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
-import { GigoverLogo } from '../GigoverLogo';
-import { CreateOrganization } from './CreateOrganization';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	// const [showOrgs, setShowOrgs] = useState<boolean>(false);
+	const [showOrgs, setShowOrgs] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
-	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-	const { mutateAsync: loginOrg, data, isLoading } = useLoginOrg();
+	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
 
 	const { register, handleSubmit } = useForm<{ name: string; password: string }>({
 		defaultValues: {
@@ -48,6 +39,7 @@ export const ManageOrganization = (): JSX.Element => {
 			// Login
 			loginOrg({ name, password });
 			// console.log({ data });
+			setShowOrgs(true);
 		} catch (error) {
 			setLoginError('Invalid username or password');
 		}
@@ -70,103 +62,69 @@ export const ManageOrganization = (): JSX.Element => {
 					<ModalCloseButton />
 					<ModalBody>
 						<Box>
-							<Tabs align="center" defaultIndex={0} isFitted>
-								<TabList>
-									<Tab>Log in</Tab>
-									<Tab>Organizations</Tab>
-								</TabList>
-								<TabPanels>
-									<TabPanel>
-										<Stack spacing="8">
-											<Stack spacing="5">
-												<Flex
-													justifyContent={'center'}
-													alignItems={'center'}
-													paddingTop={8}
-													paddingBottom={6}
-												>
-													<GigoverLogo color={'black'} />
-												</Flex>
-												<Stack
-													spacing={{ base: '2', md: '3' }}
-													textAlign="center"
-												>
-													<Heading size={{ base: 'xs', md: 'sm' }}>
-														Log in to your organisation
-													</Heading>
-												</Stack>
-											</Stack>
-											<Box
-												py={{ base: '0', sm: '2' }}
-												px={{ base: '4', sm: '10' }}
-												bg={{ base: 'transparent', sm: 'bg.surface' }}
-												boxShadow={{ base: 'none', sm: 'md' }}
-												borderRadius={{ base: 'none', sm: 'xl' }}
-											>
-												<Stack spacing="6" paddingBottom={8}>
-													<Stack spacing="5">
-														<form
-															onSubmit={handleSubmit(
-																async (values) => {
-																	handleLogin(
-																		values.name,
-																		values.password
-																	);
-																}
-															)}
-														>
-															<FormControl marginBottom={2}>
-																<FormLabel htmlFor="username">
-																	Username
-																</FormLabel>
-																<Input
-																	type="username"
-																	{...register('name')}
-																/>
-															</FormControl>
-
-															<FormControl marginTop={2}>
-																<FormLabel htmlFor="password">
-																	Password
-																</FormLabel>
-																<Input
-																	type="password"
-																	{...register('password')}
-																/>
-															</FormControl>
-															{loginError && (
-																<Box marginTop={3}>
-																	<Text
-																		color="red.500"
-																		fontSize="sm"
-																	>
-																		{loginError}
-																	</Text>
-																</Box>
-															)}
-
-															<Stack spacing="6" marginTop={4}>
-																<Button
-																	type={'submit'}
-																	isLoading={isLoading}
-																>
-																	Log in
-																</Button>
-															</Stack>
-														</form>
-													</Stack>
-												</Stack>
-											</Box>
-										</Stack>
-									</TabPanel>
-									<TabPanel>
-										<MemberTable />
-									</TabPanel>
-									<TabPanel>
-										<CreateOrganization />
-									</TabPanel>
-								</TabPanels>
-							</Tabs>
+							<Flex justifyContent={'space-between'}>
+								<Box>
+									<Heading size="lg">Manage Organizations</Heading>
+								</Box>
+								<Box>
+									{showOrgs ? null : (
+										<Button variant="outline" colorScheme="gray">
+											Create organization
+										</Button>
+									)}
+								</Box>
+							</Flex>
+							{showOrgs ? (
+								<MemberTable />
+							) : (
+								<Box>
+									<Heading size="md">Login to Organization</Heading>
+									<Box>
+										<form
+											onSubmit={handleSubmit((data) =>
+												handleLogin(data.name, data.password)
+											)}
+										>
+											<FormControl marginBottom={2}>
+												<FormLabel htmlFor="name">
+													Organization Name
+												</FormLabel>
+												<Input
+													type="text"
+													id="name"
+													{...register('name')}
+												/>
+											</FormControl>
+											<FormControl marginBottom={2}>
+												<FormLabel htmlFor="password">Password</FormLabel>
+												<Input
+													type="password"
+													id="password"
+													{...register('password')}
+												/>
+											</FormControl>
+											<Flex marginTop={4} marginBottom={3}>
+												<Box>
+													<Button variant={'outline'} colorScheme="gray">
+														Cancel
+													</Button>
+												</Box>
+												<Spacer />
+												<Box>
+													<Button
+														type="submit"
+														colorScheme="gray"
+														isLoading={isLoading}
+													>
+														Login
+													</Button>
+												</Box>
+											</Flex>
+											{loginError && <Box>{loginError}</Box>}
+										</form>
+									</Box>
+								</Box>
+							)}
 						</Box>
 					</ModalBody>
 					{/* <ModalFooter>

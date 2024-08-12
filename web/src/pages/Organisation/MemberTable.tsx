@@ -1,34 +1,33 @@
-import React, { useState } from 'react';
 import {
 	Avatar,
 	Box,
+	Button,
+	Divider,
 	Flex,
 	Heading,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	Spacer,
 	Table,
 	TableContainer,
 	Tbody,
-	Text,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tr,
-	Spacer,
-	Button,
-	Menu,
-	MenuButton,
-	MenuList,
-	MenuItem,
-	Divider,
-	useDisclosure,
-	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalOverlay,
-	ModalCloseButton,
-	Input
+	useDisclosure
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
 import { VerticalDots } from '../../components/icons/VerticalDots';
 
