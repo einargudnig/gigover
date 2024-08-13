@@ -3,12 +3,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
+import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { devInfo } from '../../utils/ConsoleUtils';
 
 export const InviteUserToOrg = (): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [privleges, setPrivleges] = useState<'A' | 'E' | 'V'>('E');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
+	const { data: userInfo } = useGetUserInfo();
 	const inviteMutation = useInviteUserToOrganization();
 	const searchMutation = useGetUserByEmail();
 	const search = useCallback(async () => {
@@ -36,6 +38,8 @@ export const InviteUserToOrg = (): JSX.Element => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchMutation, searchMail]);
+
+	console.log({ userInfo });
 
 	const { register, handleSubmit } = useForm<{ email: string; priv: string }>({
 		defaultValues: {
