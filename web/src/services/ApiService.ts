@@ -181,6 +181,7 @@ export class ApiService {
 	// Organization
 	static createOrganization = API_BASE + 'user/orgCreate'; // ✅
 	static getOrganizations = API_BASE + 'user/orgs'; // ✅
+	static getOrganizationUsers = API_BASE + 'user/orgUsers';
 	static changeOrganizations = API_BASE + 'user/orgChange'; // ✅
 	static inviteToOrganization = API_BASE + 'user/orgInvite'; // ✅
 	static removeInviteToOrganization = API_BASE + 'user/orgInviteRemove';

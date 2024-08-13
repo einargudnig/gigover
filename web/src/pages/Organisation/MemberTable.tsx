@@ -30,6 +30,7 @@ import {
 import { useState } from 'react';
 import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
 import { VerticalDots } from '../../components/icons/VerticalDots';
+import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
 
 const dummyData = [
 	{
@@ -63,6 +64,8 @@ const dummyData = [
 ];
 
 export function MemberTable() {
+	const { data, isLoading, isError, error } = useGetOrganizationUsers();
+	console.log({ data });
 	const [members, setMembers] = useState(dummyData);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -134,23 +137,22 @@ export function MemberTable() {
 							</Tr>
 						</Thead>
 						<Tbody>
-							{members.map((data, index) => (
+							{data?.organizationUsers.map((member, index) => (
 								<Tr key={index}>
 									<Td>
 										<Flex alignItems={'center'}>
 											<Avatar
 												size="sm"
-												name={data.name}
-												src={`https://bit.ly/${data.name}`}
+												name={member.name}
+												src={`https://bit.ly/${member.name}`}
 											/>
 											<Text marginLeft={1} color="black">
-												{data.name}
+												{member.name}
 											</Text>
 										</Flex>
 									</Td>
-									<Td>{data.email}</Td>
-									<Td>{data.access}</Td>
-									<Td>{data.status}</Td>
+									<Td>{member.email}</Td>
+									<Td>{member.priv}</Td>
 									<Td>
 										<Menu>
 											<MenuButton>
