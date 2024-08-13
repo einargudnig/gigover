@@ -2,14 +2,17 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { Box, Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
 import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
+import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { CreateOrganization } from './CreateOrganization';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
+	const { data: userInfo, isLoading } = useGetUserInfo();
 	const { mutate } = useChangeOrganizations();
 
+	const currentOrganization = userInfo?.organization;
+
 	const handleOrganizationChange = (id: number) => {
-		console.log({ id });
 		mutate({ id });
 	};
 
@@ -23,10 +26,12 @@ export const OrganizationSwitcher = () => {
 					rightIcon={<ChevronDownIcon />}
 					_active={{ bg: 'transparent' }}
 					_hover={{ textColor: 'gray.700' }}
+					isLoading={isLoading}
 				>
-					Change organization
+					{currentOrganization?.name || 'Personal Space'}
 				</MenuButton>
 				<MenuList>
+					<MenuItem onClick={() => handleOrganizationChange(0)}>Personal space</MenuItem>
 					{data && data.length > 0 ? (
 						data.map((org) => (
 							<MenuItem key={org.id} onClick={() => handleOrganizationChange(org.id)}>

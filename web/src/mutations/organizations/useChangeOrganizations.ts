@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../../services/ApiService';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../../utils/ConsoleUtils';
+import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 export const useChangeOrganizations = () => {
 	const queryClient = useQueryClient();
@@ -21,6 +21,7 @@ export const useChangeOrganizations = () => {
 				}
 
 				queryClient.refetchQueries(ApiService.changeOrganizations);
+				queryClient.refetchQueries(ApiService.getUserInfo);
 
 				return response.data;
 			} catch (e) {
