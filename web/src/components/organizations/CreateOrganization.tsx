@@ -41,7 +41,6 @@ export const CreateOrganization = (): JSX.Element => {
 			// Create organization
 			const response: AxiosResponse<{ errorCode: string; errorString: string }> =
 				await createOrg({ name, password });
-			console.log({ response });
 
 			if (response && response.data.errorCode === 'OK') {
 				reset(); // Reset form values

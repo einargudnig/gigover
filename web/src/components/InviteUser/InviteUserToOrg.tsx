@@ -1,21 +1,20 @@
-import { Button, Flex, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import { useCallback, useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Button, Flex, FormControl, FormLabel, Input, Select, useToast } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
-import { devInfo } from '../../utils/ConsoleUtils';
 import { FormActions } from '../FormActions';
-import { TrackerSelect } from '../TrackerSelect';
 
 export const InviteUserToOrg = (): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
-	const [privleges, setPrivleges] = useState<'A' | 'E' | 'V'>('V');
-	const [selectedPrivleges, setSelectedPrivleges] = useState<'A' | 'E' | 'V' | undefined>();
+	const [userId, setUserId] = useState<string | undefined>();
+	const [selectedPrivileges, setSelectedPrivileges] = useState<'A' | 'E' | 'V' | undefined>();
 	const [inviteSuccess, setInviteSuccess] = useState(false);
-	const { data: userInfo } = useGetUserInfo();
 	const inviteMutation = useInviteUserToOrganization();
 	const searchMutation = useGetUserByEmail();
+	const { data: userInfo } = useGetUserInfo();
+
+	const toast = useToast();
 	const search = useCallback(async () => {
 		try {
 			const response = await searchMutation.mutateAsync({
@@ -23,17 +22,19 @@ export const InviteUserToOrg = (): JSX.Element => {
 			});
 
 			if (response.uId) {
-				devInfo('Found user with uId:', response.uId);
-				setInviteSuccess(true);
+				console.log('Found user with uId:', response.uId);
 
-				// 	inviteMutation.mutateAsync({ email, priv }).then((res) => {
-				// 		if (res.errorCode === 'OK') {
-				// 			setSearchMail('');
-				// 			setInviteSuccess(true);
-				// 		} else {
-				// 			throw new Error('Could not invite user.');
-				// 		}
-				// 	});
+				setInviteSuccess(true);
+				setUserId(response.uId);
+			} else {
+				// TODO I need to add this!
+				toast({
+					title: 'User not found!',
+					description: 'The user was not found, We have sent an email to the user.',
+					status: 'error',
+					duration: 5000,
+					isClosable: true
+				});
 			}
 		} catch (e) {
 			console.error(e);
@@ -45,8 +46,9 @@ export const InviteUserToOrg = (): JSX.Element => {
 	const addMemberToOrganization = useCallback(async () => {
 		try {
 			const response = await inviteMutation.mutateAsync({
-				email: searchMail,
-				priv: privleges
+				email: userInfo?.userName ?? '',
+				uId: userId!, // we know this is defined, we will never get here if it is not!
+				priv: selectedPrivileges!
 			});
 
 			if (response.errorCode === 'OK') {
@@ -59,24 +61,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 			console.error(e);
 			throw new Error('Could not invite user.');
 		}
-	}, [inviteMutation, searchMail, privleges]);
-
-	console.log({ userInfo });
-
-	const { register, handleSubmit } = useForm<{ email: string; priv: string }>({
-		defaultValues: {
-			email: '',
-			priv: 'W'
-		}
-	});
-
-	useEffect(() => {
-		if (inviteSuccess) {
-			setTimeout(() => {
-				setInviteSuccess(false);
-			}, 3500);
-		}
-	}, [inviteSuccess]);
+	}, [inviteMutation, selectedPrivileges, userId, userInfo]);
 
 	return (
 		<>
@@ -91,40 +76,38 @@ export const InviteUserToOrg = (): JSX.Element => {
 					type="email"
 					value={searchMail}
 					onChange={(e) => setSearchMail(e.target.value)}
+					marginBottom={4}
 				/>
 
 				{inviteSuccess ? (
 					<>
-						<FormLabel htmlFor={'priv'}>Privleges</FormLabel>
-						<TrackerSelect
+						<FormLabel htmlFor={'priv'}>Privileges</FormLabel>
+						{/* <TrackerSelect
 							title={'Select privleges'}
 							options={[
 								{ value: 'A', label: 'Admin' },
 								{ value: 'V', label: 'Viewer' },
 								{ value: 'E', label: 'Editor' }
 							]}
-							valueChanged={(newValue) => {
-								if (!newValue) {
-									setSelectedPrivleges(undefined);
-								} else {
-									setSelectedPrivleges(
-										newValue.valueOf as unknown as 'A' | 'E' | 'V'
-									);
-								}
-							}}
-						/>
-						{/* <Select
-							placeholder="Select privleges"
-							onChange={(e) => setPrivleges(e.target.value as 'A' | 'E' | 'V')}
+							valueChanged={(value: 'A' | 'E' | 'V' | undefined) =>
+								setSelectedPrivileges(value)
+							}
+						/> */}
+						<Select
+							placeholder={'Select privileges'}
+							value={selectedPrivileges}
+							onChange={(e) =>
+								setSelectedPrivileges(e.target.value as 'A' | 'E' | 'V')
+							}
 						>
 							<option value="A">Admin</option>
-							<option value="V">Viewer</option>
 							<option value="E">Editor</option>
-						</Select> */}
+							<option value="V">Viewer</option>
+						</Select>
 					</>
 				) : null}
 
-				{selectedPrivleges && (
+				{selectedPrivileges && (
 					<FormActions
 						submitText={'Add member to organization'}
 						onSubmit={addMemberToOrganization}
@@ -140,7 +123,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 						disabled={searchMutation.isLoading || inviteMutation.isLoading}
 						onClick={search}
 					>
-						Invite
+						Search for user
 					</Button>
 				) : null}
 			</Flex>

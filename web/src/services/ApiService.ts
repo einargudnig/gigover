@@ -179,11 +179,12 @@ export class ApiService {
 		API_BASE + 'properties/removeDocument/' + documentId;
 
 	// Organization
-	static createOrganization = API_BASE + 'user/orgCreate'; // ✅
-	static getOrganizations = API_BASE + 'user/orgs'; // ✅
+	static createOrganization = API_BASE + 'user/orgCreate';
+	static getOrganizations = API_BASE + 'user/orgs';
 	static getOrganizationUsers = API_BASE + 'user/orgUsers';
-	static changeOrganizations = API_BASE + 'user/orgChange'; // ✅
-	static inviteToOrganization = API_BASE + 'user/orgInvite'; // ✅
+	static changeOrganizations = API_BASE + 'user/orgChange';
+	static changeOrganizationUserPrivileges = API_BASE + 'user/orgChangePriv';
+	static inviteToOrganization = API_BASE + 'user/orgInvite';
 	static removeInviteToOrganization = API_BASE + 'user/orgInviteRemove';
 	static acceptOrganizationInvite = API_BASE + 'user/orgInviteAccept';
 	static rejectOrganizationInvite = API_BASE + 'user/orgInviteDecline';

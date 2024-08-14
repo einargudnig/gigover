@@ -6,6 +6,7 @@ import { ApiService } from '../services/ApiService';
 export const useGetUserInfo = () => {
 	// This might be overkill. I only do this when registered and logged in, so this default user should never be used.
 	const defaultUserInfo: IUserInfo = {
+		userName: '',
 		name: '',
 		registered: false,
 		type: 0,

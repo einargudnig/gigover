@@ -32,17 +32,16 @@ export const OrganizationSwitcher = () => {
 				</MenuButton>
 				<MenuList>
 					<MenuItem onClick={() => handleOrganizationChange(0)}>Personal space</MenuItem>
-					{data && data.length > 0 ? (
-						data.map((org) => (
-							<MenuItem key={org.id} onClick={() => handleOrganizationChange(org.id)}>
-								{org.name}
-							</MenuItem>
-						))
-					) : (
-						<MenuItem padding={1} textAlign="center">
-							No organizations
-						</MenuItem>
-					)}
+					{data && data.length > 0
+						? data.map((org) => (
+								<MenuItem
+									key={org.id}
+									onClick={() => handleOrganizationChange(org.id)}
+								>
+									{org.name}
+								</MenuItem>
+						  ))
+						: null}
 					<MenuDivider />
 					<MenuItem>
 						<CreateOrganization />{' '}

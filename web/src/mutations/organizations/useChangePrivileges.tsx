@@ -4,21 +4,19 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
-interface InviteUserToOrganizationInput {
-	email: string;
+interface ChangePrivilegesProps {
 	uId: string;
-	priv: 'A' | 'E' | 'V';
+	priv: 'ADMIN' | 'EDITOR' | 'VIEWER';
 }
 
-export const useInviteUserToOrganization = () => {
+export const useChangePrivileges = () => {
 	const queryClient = useQueryClient();
-	const mutationKey = ApiService.inviteToOrganization;
+	const mutationKey = ApiService.changeOrganizationUserPrivileges;
 
-	return useMutation<ErrorResponse, AxiosError, InviteUserToOrganizationInput>(
+	return useMutation<ErrorResponse, AxiosError, ChangePrivilegesProps>(
 		mutationKey,
 		async (variables) => {
 			try {
-				console.log('IN MUTATION', { variables });
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
 				});
@@ -27,10 +25,8 @@ export const useInviteUserToOrganization = () => {
 					throw new Error(response.data?.errorCode);
 				}
 
-				// we want to refetch this query so the organizations updates after we invite a user.
 				queryClient.refetchQueries(ApiService.getOrganizationUsers);
-				queryClient.refetchQueries(ApiService.getUserInfo);
-				queryClient.refetchQueries(ApiService.getOrganizations);
+
 				return response.data;
 			} catch (e) {
 				devError(e);

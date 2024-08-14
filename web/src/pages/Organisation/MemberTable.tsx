@@ -13,7 +13,6 @@ import {
 	ModalBody,
 	ModalCloseButton,
 	ModalContent,
-	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
 	Spacer,
@@ -27,90 +26,52 @@ import {
 	Tr,
 	useDisclosure
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { VerticalDots } from '../../components/icons/VerticalDots';
+import { useChangePrivileges } from '../../mutations/organizations/useChangePrivileges';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
-
-const dummyData = [
-	{
-		id: 1,
-		name: 'Heimir Hermannson',
-		email: 'heimir@gigover.com',
-		access: 'Admin',
-		status: 'Joined'
-	},
-	{
-		id: 2,
-		name: 'Helgi Hermannson',
-		email: 'helgi@gigover.com',
-		access: 'Editor',
-		status: 'Joined'
-	},
-	{
-		id: 3,
-		name: 'Juyeon Lee',
-		email: 'juyeon@gigover.com',
-		access: 'Editor',
-		status: 'Joined'
-	},
-	{
-		id: 4,
-		name: 'Lyuba Kharitonova',
-		email: 'lyuba@gigover.com',
-		access: 'Viewer',
-		status: 'Invited'
-	}
-];
+import { useGetUserInfo } from '../../queries/useGetUserInfo';
 
 export function MemberTable() {
 	const { data, isLoading, isError, error } = useGetOrganizationUsers();
 	console.log({ data });
-	const [members, setMembers] = useState(dummyData);
+	const { data: userInfo } = useGetUserInfo();
+	console.log({ userInfo });
+	const changePrivileges = useChangePrivileges();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const removeUser = (index: number) => {
-		const newMembers = [...members];
-		newMembers.splice(index, 1);
-		console.log({ newMembers });
-		setMembers(newMembers);
-	};
+	// const removeUser = (index: number) => {
+	// 	const newMembers = [...members];
+	// 	newMembers.splice(index, 1);
+	// 	console.log({ newMembers });
+	// 	setMembers(newMembers);
+	// };
 
-	const makeViewer = (index: number) => {
-		const newMembers = [...members];
-		newMembers[index].access = 'Viewer';
-		setMembers(newMembers);
-	};
+	const makeViewer = ({ uId, priv }) => {};
 
-	const makeEditor = (index: number) => {
-		const newMembers = [...members];
-		newMembers[index].access = 'Editor';
-		setMembers(newMembers);
-	};
+	// const makeEditor = (index: number) => {
+	// 	const newMembers = [...members];
+	// 	newMembers[index].access = 'Editor';
+	// 	setMembers(newMembers);
+	// };
 
-	const makeAdmin = (index: number) => {
-		const newMembers = [...members];
-		newMembers[index].access = 'Admin';
-		setMembers(newMembers);
-	};
+	// const makeAdmin = (index: number) => {
+	// 	const newMembers = [...members];
+	// 	newMembers[index].access = 'Admin';
+	// 	setMembers(newMembers);
+	// };
 
 	return (
 		<>
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
-				<ModalContent>
+				<ModalContent pb={4}>
 					<ModalHeader>Invite Members</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<InviteUserToOrg />
 					</ModalBody>
-					<ModalFooter mt={-16}>
-						<Flex width={'full'}>
-							<Button colorScheme="grey" variant={'outline'} mr={3} onClick={onClose}>
-								Close
-							</Button>
-						</Flex>
-					</ModalFooter>
 				</ModalContent>
 			</Modal>
 
@@ -137,6 +98,22 @@ export function MemberTable() {
 							</Tr>
 						</Thead>
 						<Tbody>
+							{isLoading ? (
+								<Tr>
+									<Td>Loading...</Td>
+									<Td>
+										<LoadingSpinner />
+									</Td>
+								</Tr>
+							) : isError ? (
+								<Tr>
+									<Td>{error?.errorCode}</Td>
+								</Tr>
+							) : (
+								<Tr>
+									<Td>No data</Td>
+								</Tr>
+							)}
 							{data?.organizationUsers.map((member, index) => (
 								<Tr key={index}>
 									<Td>
@@ -159,19 +136,20 @@ export function MemberTable() {
 												<VerticalDots />
 											</MenuButton>
 											<MenuList>
-												<MenuItem onClick={() => makeAdmin(index)}>
-													Make admin
-												</MenuItem>
-												<MenuItem onClick={() => makeEditor(index)}>
-													Make editor
-												</MenuItem>
-												<MenuItem onClick={() => makeViewer(index)}>
+												<MenuItem>Make admin</MenuItem>
+												<MenuItem>Make editor</MenuItem>
+												<MenuItem
+													onClick={() =>
+														makeViewer({
+															uId: member.uId,
+															priv: 'VIEWER'
+														})
+													}
+												>
 													Make viewer
 												</MenuItem>
 												<Divider />
-												<MenuItem onClick={() => removeUser(index)}>
-													Remove
-												</MenuItem>
+												<MenuItem>Remove</MenuItem>
 											</MenuList>
 										</Menu>
 									</Td>
