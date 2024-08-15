@@ -48,19 +48,12 @@ export function MemberTable() {
 	// 	setMembers(newMembers);
 	// };
 
-	const makeViewer = ({ uId, priv }) => {};
-
-	// const makeEditor = (index: number) => {
-	// 	const newMembers = [...members];
-	// 	newMembers[index].access = 'Editor';
-	// 	setMembers(newMembers);
-	// };
-
-	// const makeAdmin = (index: number) => {
-	// 	const newMembers = [...members];
-	// 	newMembers[index].access = 'Admin';
-	// 	setMembers(newMembers);
-	// };
+	const updatePrivileges = ({ uId, priv }) => {
+		changePrivileges.mutate({
+			uId,
+			priv
+		});
+	};
 
 	return (
 		<>
@@ -145,14 +138,36 @@ export function MemberTable() {
 									<Td>
 										<Menu>
 											<MenuButton>
-												<VerticalDots />
+												{changePrivileges.isLoading ? (
+													<LoadingSpinner />
+												) : (
+													<VerticalDots />
+												)}
 											</MenuButton>
 											<MenuList>
-												<MenuItem>Make admin</MenuItem>
-												<MenuItem>Make editor</MenuItem>
 												<MenuItem
 													onClick={() =>
-														makeViewer({
+														updatePrivileges({
+															uId: member.uId,
+															priv: 'ADMIN'
+														})
+													}
+												>
+													Make admin
+												</MenuItem>
+												<MenuItem
+													onClick={() =>
+														updatePrivileges({
+															uId: member.uId,
+															priv: 'EDITOR'
+														})
+													}
+												>
+													Make editor
+												</MenuItem>
+												<MenuItem
+													onClick={() =>
+														updatePrivileges({
 															uId: member.uId,
 															priv: 'VIEWER'
 														})
@@ -170,6 +185,13 @@ export function MemberTable() {
 						</Tbody>
 					</Table>
 				</TableContainer>
+				<Box mt={4}>
+					<Flex>
+						{changePrivileges.isError && (
+							<Text color={'red.500'}>{changePrivileges.error?.message}</Text>
+						)}
+					</Flex>
+				</Box>
 			</Box>
 		</>
 	);
