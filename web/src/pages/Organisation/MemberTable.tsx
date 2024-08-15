@@ -110,9 +110,21 @@ export function MemberTable() {
 									<Td>{error?.errorCode}</Td>
 								</Tr>
 							) : (
-								<Tr>
-									<Td>No data</Td>
-								</Tr>
+								<>
+									{data?.organizationUsers.length === 0 ? (
+										<>
+											<Tr>
+												<Td>
+													No data, be sure that you have selected a
+													organization!
+												</Td>
+											</Tr>
+											<Tr>
+												<Td>You might be in your personal space.</Td>
+											</Tr>
+										</>
+									) : null}
+								</>
 							)}
 							{data?.organizationUsers.map((member, index) => (
 								<Tr key={index}>

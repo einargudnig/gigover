@@ -21,7 +21,6 @@ export const useGetOrganizationUsers = () => {
 		}
 	);
 
-	// const organizationUsers: OrganizationUsersResponse = data?.organizationUsers || [];
 	// Ensure the object structure matches OrganizationUsersResponse
 	const organizationUsers: OrganizationUsersResponse = {
 		organizationUsers: data?.organizationUsers || []

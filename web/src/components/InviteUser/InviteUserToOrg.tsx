@@ -1,4 +1,13 @@
-import { Button, Flex, FormControl, FormLabel, Input, Select, useToast } from '@chakra-ui/react';
+import {
+	Button,
+	Flex,
+	FormControl,
+	FormLabel,
+	Input,
+	Select,
+	Text,
+	useToast
+} from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
@@ -10,6 +19,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 	const [userId, setUserId] = useState<string | undefined>();
 	const [selectedPrivileges, setSelectedPrivileges] = useState<'A' | 'E' | 'V' | undefined>();
 	const [inviteSuccess, setInviteSuccess] = useState(false);
+	const [mutationSuccess, setMutationSuccess] = useState(false);
 	const inviteMutation = useInviteUserToOrganization();
 	const searchMutation = useGetUserByEmail();
 	const { data: userInfo } = useGetUserInfo();
@@ -51,9 +61,11 @@ export const InviteUserToOrg = (): JSX.Element => {
 				priv: selectedPrivileges!
 			});
 
+			// errorCode === "OK" means that the user was invited successfully
 			if (response.errorCode === 'OK') {
 				setSearchMail('');
 				setInviteSuccess(true);
+				setMutationSuccess(true);
 			} else {
 				throw new Error('Could not invite user.');
 			}
@@ -114,6 +126,11 @@ export const InviteUserToOrg = (): JSX.Element => {
 						submitLoading={inviteMutation.isLoading}
 					/>
 				)}
+				{mutationSuccess ? (
+					<Flex justifyContent={'center'} alignItems={'center'}>
+						<Text color={'green.500'}>Member added to organization</Text>
+					</Flex>
+				) : null}
 			</FormControl>
 			<Flex justifyContent={'flex-end'}>
 				{!inviteSuccess ? (
