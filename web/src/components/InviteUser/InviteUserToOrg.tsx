@@ -11,7 +11,6 @@ import {
 import { useCallback, useState } from 'react';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
-import { FormActions } from '../FormActions';
 
 export const InviteUserToOrg = (): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
@@ -108,25 +107,34 @@ export const InviteUserToOrg = (): JSX.Element => {
 				) : null}
 
 				{selectedPrivileges && (
-					<FormActions
-						submitText={'Add member to organization'}
-						onSubmit={addMemberToOrganization}
-						submitLoading={inviteMutation.isLoading}
-					/>
+					<Button
+						isLoading={inviteMutation.isLoading}
+						disabled={inviteMutation.isLoading}
+						onClick={addMemberToOrganization}
+						width={'full'}
+						variant={'outline'}
+						colorScheme={'gray'}
+						mt={3}
+					>
+						Invite user to organization
+					</Button>
 				)}
 				{mutationSuccess ? (
-					<Flex justifyContent={'center'} alignItems={'center'}>
-						<Text color={'green.500'}>Member added to organization</Text>
+					<Flex justifyContent={'center'} alignItems={'center'} mt={3}>
+						<Text color={'green.500'}>User invited to organization</Text>
 					</Flex>
 				) : null}
 			</FormControl>
 			<Flex justifyContent={'flex-end'}>
 				{!inviteSuccess ? (
 					<Button
-						loadingText={'Inviting'}
+						loadingText={'Searching...'}
 						isLoading={searchMutation.isLoading || inviteMutation.isLoading}
 						disabled={searchMutation.isLoading || inviteMutation.isLoading}
 						onClick={search}
+						width={'full'}
+						variant={'outline'}
+						colorScheme={'gray'}
 					>
 						Search for user
 					</Button>

@@ -3,3 +3,7 @@ export interface Organization {
 	name: string;
 	priv: 'A' | 'V' | 'E';
 }
+
+export interface OrganizationId {
+	id: number;
+}

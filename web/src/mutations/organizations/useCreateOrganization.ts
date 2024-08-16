@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../../services/ApiService';
-import { useMutation } from 'react-query';
 import { devError } from '../../utils/ConsoleUtils';
 
 export const useCreateOrganization = () => {
+	const queryClient = useQueryClient();
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	return useMutation<
 		AxiosResponse<{ errorCode: string; errorString: string }>,
@@ -14,6 +15,8 @@ export const useCreateOrganization = () => {
 			const response = await axios.post(ApiService.createOrganization, organization, {
 				withCredentials: true
 			});
+
+			queryClient.refetchQueries(ApiService.getOrganizations);
 			return response;
 		} catch (e) {
 			devError(e);

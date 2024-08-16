@@ -28,15 +28,15 @@ import {
 import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { VerticalDots } from '../../components/icons/VerticalDots';
+import { RemoveUserInvite } from '../../components/organizations/RemoveUserInvite';
 import { useChangePrivileges } from '../../mutations/organizations/useChangePrivileges';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
-import { useGetUserInfo } from '../../queries/useGetUserInfo';
 
-export function MemberTable() {
+export function MemberTable({ activeOrg }): JSX.Element {
 	const { data, isLoading, isError, error } = useGetOrganizationUsers();
-	console.log({ data });
-	const { data: userInfo } = useGetUserInfo();
-	console.log({ userInfo });
+
+	console.log({ activeOrg });
+
 	const changePrivileges = useChangePrivileges();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -73,10 +73,16 @@ export function MemberTable() {
 			<Box width="full">
 				<Box>
 					<Flex alignItems={'center'}>
-						<Heading size={'md'}>Member Table</Heading>
+						<Heading size={'md'}>Member Table - {activeOrg?.name ?? ''}</Heading>
 						<Spacer />
 						<Box>
-							<Button onClick={onOpen}>Invite Members</Button>
+							<Flex>
+								<RemoveUserInvite />
+								<Box width={4} />
+								<Button variant={'outline'} colorScheme={'gray'} onClick={onOpen}>
+									Invite Members
+								</Button>
+							</Flex>
 						</Box>
 					</Flex>
 				</Box>

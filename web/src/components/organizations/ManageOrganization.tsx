@@ -18,11 +18,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
+import { useGetUserInfo } from '../../queries/useGetUserInfo';
+import { CreateOrganization } from './CreateOrganization';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [showOrgs, setShowOrgs] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
+	const { data: org } = useGetUserInfo();
+	const activerOrg = org?.organization;
 
 	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
 
@@ -62,24 +66,24 @@ export const ManageOrganization = (): JSX.Element => {
 					<ModalCloseButton />
 					<ModalBody>
 						<Box>
-							<Flex justifyContent={'space-between'}>
+							<Flex justifyContent={'space-between'} alignItems={'center'}>
 								<Box>
 									<Heading size="lg">Manage Organizations</Heading>
 								</Box>
 								<Box>
 									{showOrgs ? null : (
-										<Button variant="outline" colorScheme="gray">
-											Create organization
-										</Button>
+										<Box mr={3}>
+											<CreateOrganization />
+										</Box>
 									)}
 								</Box>
 							</Flex>
 							{showOrgs ? (
-								<MemberTable />
+								<MemberTable activeOrg={activerOrg} />
 							) : (
-								<Box>
-									<Heading size="md">Login to Organization</Heading>
-									<Box>
+								<Box mt={4}>
+									<Heading size="md">Log in to Organization</Heading>
+									<Box mt={2}>
 										<form
 											onSubmit={handleSubmit((data) =>
 												handleLogin(data.name, data.password)

@@ -85,7 +85,12 @@ export const CreateOrganization = (): JSX.Element => {
 							</FormControl>
 
 							<Stack spacing="6" marginTop={4}>
-								<Button type="submit">
+								<Button
+									type="submit"
+									width={'full'}
+									variant={'outline'}
+									colorScheme="gray"
+								>
 									{isLoading || loading ? (
 										<LoadingSpinner />
 									) : (
