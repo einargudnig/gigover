@@ -2,7 +2,6 @@ import {
 	Avatar,
 	Box,
 	Button,
-	Divider,
 	Flex,
 	Heading,
 	Menu,
@@ -49,6 +48,9 @@ export function MemberTable() {
 	// };
 
 	const updatePrivileges = ({ uId, priv }) => {
+		console.log('Update the user with the userId:', { uId }, 'and his privileges to be: ', {
+			priv
+		});
 		changePrivileges.mutate({
 			uId,
 			priv
@@ -175,8 +177,6 @@ export function MemberTable() {
 												>
 													Make viewer
 												</MenuItem>
-												<Divider />
-												<MenuItem>Remove</MenuItem>
 											</MenuList>
 										</Menu>
 									</Td>

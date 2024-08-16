@@ -5,10 +5,13 @@ import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
 interface InviteUserToOrganizationInput {
-	email: string;
-	uId: string;
+	email: string; // email of the user we want to invite
+	uId: string; // the user id of the user who owns the organization
 	priv: 'A' | 'E' | 'V';
 }
+
+//? Note: The email is the email of the user who should be invited to the organization and the uId is the organizations owner uid.
+// This should not be the same user!
 
 export const useInviteUserToOrganization = () => {
 	const queryClient = useQueryClient();

@@ -11,7 +11,6 @@ import {
 import { useCallback, useState } from 'react';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
-import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { FormActions } from '../FormActions';
 
 export const InviteUserToOrg = (): JSX.Element => {
@@ -22,7 +21,6 @@ export const InviteUserToOrg = (): JSX.Element => {
 	const [mutationSuccess, setMutationSuccess] = useState(false);
 	const inviteMutation = useInviteUserToOrganization();
 	const searchMutation = useGetUserByEmail();
-	const { data: userInfo } = useGetUserInfo();
 
 	const toast = useToast();
 	const search = useCallback(async () => {
@@ -56,8 +54,8 @@ export const InviteUserToOrg = (): JSX.Element => {
 	const addMemberToOrganization = useCallback(async () => {
 		try {
 			const response = await inviteMutation.mutateAsync({
-				email: userInfo?.userName ?? '',
-				uId: userId!, // we know this is defined, we will never get here if it is not!
+				email: searchMail ?? '', // email of the user to invite -> searchMail
+				uId: userId!, // we know this is defined, we will never get here if it is not! // TODO maybe I can remove this
 				priv: selectedPrivileges!
 			});
 
@@ -73,7 +71,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 			console.error(e);
 			throw new Error('Could not invite user.');
 		}
-	}, [inviteMutation, selectedPrivileges, userId, userInfo]);
+	}, [inviteMutation, searchMail, selectedPrivileges, userId]);
 
 	return (
 		<>
@@ -94,17 +92,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 				{inviteSuccess ? (
 					<>
 						<FormLabel htmlFor={'priv'}>Privileges</FormLabel>
-						{/* <TrackerSelect
-							title={'Select privleges'}
-							options={[
-								{ value: 'A', label: 'Admin' },
-								{ value: 'V', label: 'Viewer' },
-								{ value: 'E', label: 'Editor' }
-							]}
-							valueChanged={(value: 'A' | 'E' | 'V' | undefined) =>
-								setSelectedPrivileges(value)
-							}
-						/> */}
+
 						<Select
 							placeholder={'Select privileges'}
 							value={selectedPrivileges}
