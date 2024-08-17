@@ -4,6 +4,7 @@ import { useChangeOrganizations } from '../../mutations/organizations/useChangeO
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { CreateOrganization } from './CreateOrganization';
+import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
@@ -45,6 +46,9 @@ export const OrganizationSwitcher = () => {
 					<MenuDivider />
 					<MenuItem>
 						<CreateOrganization />{' '}
+					</MenuItem>
+					<MenuItem>
+						<ManageOrganizationInvites />
 					</MenuItem>
 				</MenuList>
 			</Menu>

@@ -4,7 +4,7 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 import { OrganizationId } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
 
-export const useRejectOrganizationInvite = () => {
+export const useDeclineOrganizationInvite = () => {
 	const client = useQueryClient();
 
 	return useMutation<OrganizationId, ErrorResponse, OrganizationId>(
