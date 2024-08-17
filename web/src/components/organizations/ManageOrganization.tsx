@@ -12,6 +12,7 @@ import {
 	ModalContent,
 	ModalOverlay,
 	Spacer,
+	Text,
 	useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -30,23 +31,34 @@ export const ManageOrganization = (): JSX.Element => {
 
 	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
 
-	const { register, handleSubmit } = useForm<{ name: string; password: string }>({
+	const { register, handleSubmit, reset } = useForm<{ name: string; password: string }>({
 		defaultValues: {
 			name: '',
 			password: ''
 		}
 	});
 
-	const handleLogin = (name: string, password: string) => {
+	const handleLogin = async (name: string, password: string) => {
 		try {
 			setLoginError(null);
-			// Login
-			loginOrg({ name, password });
-			// console.log({ data });
-			setShowOrgs(true);
+
+			const response = await loginOrg({ name, password });
+			console.log(response);
+			if (response.errorCode === 'OK') {
+				setShowOrgs(true);
+				reset();
+			} else if (response.errorCode === 'WRONG_UER_PASSWORD') {
+				setLoginError('');
+			}
 		} catch (error) {
-			setLoginError('Invalid username or password');
+			setLoginError('Invalid username or password, try again');
 		}
+	};
+
+	const handleClose = () => {
+		setShowOrgs(false);
+		onClose(); // Ensure to call the onClose from useDisclosure to handle internal state
+		reset();
 	};
 
 	return (
@@ -60,7 +72,7 @@ export const ManageOrganization = (): JSX.Element => {
 				Manage Organizations
 			</Button>
 
-			<Modal isOpen={isOpen} onClose={onClose} size={'6xl'}>
+			<Modal isOpen={isOpen} onClose={handleClose} size={'6xl'}>
 				<ModalOverlay />
 				<ModalContent p={2}>
 					<ModalCloseButton />
@@ -124,28 +136,23 @@ export const ManageOrganization = (): JSX.Element => {
 													</Button>
 												</Box>
 											</Flex>
-											{loginError && <Box>{loginError}</Box>}
+											{loginError && (
+												<Flex
+													justifyContent={'center'}
+													alignItems={'center'}
+													mt={3}
+												>
+													<Text color={'red.400'} fontWeight={'semibold'}>
+														{loginError}
+													</Text>
+												</Flex>
+											)}
 										</form>
 									</Box>
 								</Box>
 							)}
 						</Box>
 					</ModalBody>
-					{/* <ModalFooter>
-						<Flex justifyContent={'space-between'}>
-							<Box>
-								<Button colorScheme="blue" mr={3} onClick={onClose}>
-									Close
-								</Button>
-							</Box>
-							<Spacer />
-							<Box>
-								<Button variant="ghost" colorScheme="black">
-									Secondary Action
-								</Button>
-							</Box>
-						</Flex>
-					</ModalFooter> */}
 				</ModalContent>
 			</Modal>
 		</div>
