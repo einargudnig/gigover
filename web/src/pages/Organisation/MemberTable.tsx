@@ -25,6 +25,7 @@ import {
 	Tr,
 	useDisclosure
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { VerticalDots } from '../../components/icons/VerticalDots';
@@ -34,27 +35,27 @@ import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrgan
 
 export function MemberTable({ activeOrg }): JSX.Element {
 	const { data, isLoading, isError, error } = useGetOrganizationUsers();
-
 	console.log({ activeOrg });
-
 	const changePrivileges = useChangePrivileges();
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
-	// const removeUser = (index: number) => {
-	// 	const newMembers = [...members];
-	// 	newMembers.splice(index, 1);
-	// 	console.log({ newMembers });
-	// 	setMembers(newMembers);
-	// };
+	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 
 	const updatePrivileges = ({ uId, priv }) => {
+		setUpdatingUserId(uId);
 		console.log('Update the user with the userId:', { uId }, 'and his privileges to be: ', {
 			priv
 		});
-		changePrivileges.mutate({
-			uId,
-			priv
-		});
+		changePrivileges.mutate(
+			{
+				uId,
+				priv
+			},
+			{
+				onSettled: () => {
+					setUpdatingUserId(null);
+				}
+			}
+		);
 	};
 
 	return (
@@ -127,8 +128,8 @@ export function MemberTable({ activeOrg }): JSX.Element {
 									) : null}
 								</>
 							)}
-							{data?.organizationUsers.map((member, index) => (
-								<Tr key={index}>
+							{data?.organizationUsers.map((member) => (
+								<Tr key={member.uId}>
 									<Td>
 										<Flex alignItems={'center'}>
 											<Avatar
@@ -142,11 +143,11 @@ export function MemberTable({ activeOrg }): JSX.Element {
 										</Flex>
 									</Td>
 									<Td>{member.email}</Td>
-									<Td>{member.priv}</Td>
+									<Td width={'65px'}>{member.priv}</Td>
 									<Td>
 										<Menu>
 											<MenuButton>
-												{changePrivileges.isLoading ? (
+												{updatingUserId === member.uId ? (
 													<LoadingSpinner />
 												) : (
 													<VerticalDots />
