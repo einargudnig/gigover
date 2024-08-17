@@ -66,7 +66,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 					<ModalHeader>Invite Members</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<InviteUserToOrg />
+						<InviteUserToOrg organizationName={activeOrg.name} />
 					</ModalBody>
 				</ModalContent>
 			</Modal>

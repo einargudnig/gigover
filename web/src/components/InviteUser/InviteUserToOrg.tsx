@@ -8,11 +8,16 @@ import {
 	Text,
 	useToast
 } from '@chakra-ui/react';
+import emailjs from '@emailjs/browser';
 import { useCallback, useState } from 'react';
 import { useInviteUserToOrganization } from '../../mutations/organizations/useInviteUserToOrganization';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 
-export const InviteUserToOrg = (): JSX.Element => {
+interface InviteUserToOrgProps {
+	organizationName: string;
+}
+
+export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [userId, setUserId] = useState<string | undefined>();
 	const [selectedPrivileges, setSelectedPrivileges] = useState<'A' | 'E' | 'V' | undefined>();
@@ -42,6 +47,7 @@ export const InviteUserToOrg = (): JSX.Element => {
 					duration: 5000,
 					isClosable: true
 				});
+				sendEmailNoAccount();
 			}
 		} catch (e) {
 			console.error(e);
@@ -49,6 +55,36 @@ export const InviteUserToOrg = (): JSX.Element => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchMutation, searchMail]);
+
+	// For the email we send if the user does not have a gigOver account.
+	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
+	// TODO update this to the correct template id
+	const emailTemplateId = process.env.REACT_APP_EMAIL_ORGANIZATION_INVITE_TEMPLATE_ID;
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+
+	// We send an email to ask the user to create a gigOver account if he doesn't have one.
+	const sendEmailNoAccount = async () => {
+		const templateParams = {
+			organizationName,
+			to_email: searchMail
+		};
+		console.log('Sending email to: ', searchMail);
+		console.log('propertyName: ', templateParams.organizationName);
+		try {
+			await emailjs
+				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	const addMemberToOrganization = useCallback(async () => {
 		try {

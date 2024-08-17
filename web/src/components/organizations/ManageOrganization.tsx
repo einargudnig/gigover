@@ -93,63 +93,73 @@ export const ManageOrganization = (): JSX.Element => {
 							{showOrgs ? (
 								<MemberTable activeOrg={activerOrg} />
 							) : (
-								<Box mt={4}>
-									<Heading size="md">Log in to Organization</Heading>
-									<Box mt={2}>
-										<form
-											onSubmit={handleSubmit((data) =>
-												handleLogin(data.name, data.password)
-											)}
-										>
-											<FormControl marginBottom={2}>
-												<FormLabel htmlFor="name">
-													Organization Name
-												</FormLabel>
-												<Input
-													type="text"
-													id="name"
-													{...register('name')}
-												/>
-											</FormControl>
-											<FormControl marginBottom={2}>
-												<FormLabel htmlFor="password">Password</FormLabel>
-												<Input
-													type="password"
-													id="password"
-													{...register('password')}
-												/>
-											</FormControl>
-											<Flex marginTop={4} marginBottom={3}>
-												<Box>
-													<Button variant={'outline'} colorScheme="gray">
-														Cancel
-													</Button>
-												</Box>
-												<Spacer />
-												<Box>
-													<Button
-														type="submit"
-														colorScheme="gray"
-														isLoading={isLoading}
-													>
-														Login
-													</Button>
-												</Box>
-											</Flex>
-											{loginError && (
-												<Flex
-													justifyContent={'center'}
-													alignItems={'center'}
-													mt={3}
-												>
-													<Text color={'red.400'} fontWeight={'semibold'}>
-														{loginError}
-													</Text>
+								<Flex justifyContent={'center'} alignItems={'center'}>
+									<Box mt={4} w={'500px'}>
+										<Heading size="md">Log in to Organization</Heading>
+										<Box mt={2}>
+											<form
+												onSubmit={handleSubmit((data) =>
+													handleLogin(data.name, data.password)
+												)}
+											>
+												<FormControl marginBottom={2}>
+													<FormLabel htmlFor="name">
+														Organization Name
+													</FormLabel>
+													<Input
+														type="text"
+														id="name"
+														{...register('name')}
+													/>
+												</FormControl>
+												<FormControl marginBottom={2}>
+													<FormLabel htmlFor="password">
+														Password
+													</FormLabel>
+													<Input
+														type="password"
+														id="password"
+														{...register('password')}
+													/>
+												</FormControl>
+												<Flex marginTop={4} marginBottom={3}>
+													<Box>
+														<Button
+															variant={'outline'}
+															colorScheme="gray"
+														>
+															Cancel
+														</Button>
+													</Box>
+													<Spacer />
+													<Box>
+														<Button
+															type="submit"
+															colorScheme="gray"
+															isLoading={isLoading}
+														>
+															Login
+														</Button>
+													</Box>
 												</Flex>
-											)}
-										</form>
+												{loginError && (
+													<Flex
+														justifyContent={'center'}
+														alignItems={'center'}
+														mt={3}
+													>
+														<Text
+															color={'red.400'}
+															fontWeight={'semibold'}
+														>
+															{loginError}
+														</Text>
+													</Flex>
+												)}
+											</form>
+										</Box>
 									</Box>
-								</Box>
+								</Flex>
 							)}
 						</Box>
 					</ModalBody>
