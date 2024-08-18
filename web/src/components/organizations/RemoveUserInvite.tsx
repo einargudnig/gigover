@@ -75,7 +75,7 @@ export function RemoveUserInvite() {
 
 	return (
 		<>
-			<Button onClick={onOpen} variant={'outline'} colorScheme="gray">
+			<Button onClick={onOpen} variant={'ghost'} colorScheme="gray">
 				Remove user invite
 			</Button>
 

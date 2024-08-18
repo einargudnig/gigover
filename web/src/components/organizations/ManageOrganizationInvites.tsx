@@ -18,24 +18,23 @@ import {
 import { useState } from 'react';
 import { useAcceptOrganizationInvite } from '../../mutations/organizations/useAcceptOrganizationInvite';
 import { useDeclineOrganizationInvite } from '../../mutations/organizations/useDeclineOrganizationInvite';
-import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
 
 const dummyData = [
 	{
 		id: 0,
-		orgName: 'Org1'
+		orgName: 'Org1Name'
 	},
 	{
 		id: 1,
-		orgName: 'Org2'
+		orgName: 'Org2Name'
 	},
 	{
 		id: 2,
-		orgName: 'Org3'
+		orgName: 'Org3Name'
 	},
 	{
 		id: 3,
-		orgName: 'Org4'
+		orgName: 'Org4Name'
 	}
 ];
 
@@ -45,8 +44,6 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 	const declineInvite = useDeclineOrganizationInvite();
 	const [answerOrgId, setAnswerOrgId] = useState<number | null>(null);
 	const [answerType, setAnswerType] = useState<'accept' | 'decline' | null>(null);
-	const { data: userInvites } = useGetUserOrgInvites();
-	console.log({ userInvites });
 
 	const acceptInvitation = (id: number) => {
 		setAnswerOrgId(id);
@@ -69,7 +66,7 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent>
-					<ModalHeader>Manage invites</ModalHeader>
+					<ModalHeader>Manage invites to organizations</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
 						<TableContainer>

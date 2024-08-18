@@ -25,13 +25,14 @@ import {
 	Tr,
 	useDisclosure
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { InviteUserToOrg } from '../../components/InviteUser/InviteUserToOrg';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { VerticalDots } from '../../components/icons/VerticalDots';
-import { RemoveUserInvite } from '../../components/organizations/RemoveUserInvite';
 import { useChangePrivileges } from '../../mutations/organizations/useChangePrivileges';
+import { useRemoveInviteToOrganization } from '../../mutations/organizations/useRemoveInviteToOrganization';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
+import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
 
 export function MemberTable({ activeOrg }): JSX.Element {
 	const { data, isLoading, isError, error } = useGetOrganizationUsers();
@@ -39,6 +40,8 @@ export function MemberTable({ activeOrg }): JSX.Element {
 	const changePrivileges = useChangePrivileges();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
+	const { data: userInvites } = useGetUserOrgInvites();
+	const removeInviteMutation = useRemoveInviteToOrganization();
 
 	const updatePrivileges = ({ uId, priv }) => {
 		setUpdatingUserId(uId);
@@ -57,6 +60,25 @@ export function MemberTable({ activeOrg }): JSX.Element {
 			}
 		);
 	};
+
+	const removeUserInvite = useCallback(
+		async (userId) => {
+			try {
+				const response = await removeInviteMutation.mutateAsync({
+					uId: userId!
+				});
+
+				if (response.errorCode === 'OK') {
+					console.log('User invite removed.');
+				} else {
+					throw new Error('Could not remove user invite.');
+				}
+			} catch (e) {
+				throw new Error('Could not remove user invite.');
+			}
+		},
+		[removeInviteMutation]
+	);
 
 	return (
 		<>
@@ -78,8 +100,6 @@ export function MemberTable({ activeOrg }): JSX.Element {
 						<Spacer />
 						<Box>
 							<Flex>
-								<RemoveUserInvite />
-								<Box width={4} />
 								<Button variant={'outline'} colorScheme={'gray'} onClick={onOpen}>
 									Invite Members
 								</Button>
@@ -96,7 +116,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 								<Th>Email</Th>
 								<Th>Access</Th>
 								<Th>Status</Th>
-								<Th></Th>
+								<Th>Actions</Th>
 							</Tr>
 						</Thead>
 						<Tbody>
@@ -144,6 +164,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 									</Td>
 									<Td>{member.email}</Td>
 									<Td width={'65px'}>{member.priv}</Td>
+									<Td>Joined</Td>
 									<Td>
 										<Menu>
 											<MenuButton>
@@ -183,6 +204,44 @@ export function MemberTable({ activeOrg }): JSX.Element {
 													}
 												>
 													Make viewer
+												</MenuItem>
+											</MenuList>
+										</Menu>
+									</Td>
+								</Tr>
+							))}
+
+							{userInvites?.map((invite, index) => (
+								<Tr key={index}>
+									<Td>
+										<Flex alignItems={'center'}>
+											<Avatar
+												size="sm"
+												name={invite.name}
+												src={`https://bit.ly/${invite.name}`}
+											/>
+											<Text marginLeft={1} color="black">
+												{invite.name}
+											</Text>
+										</Flex>
+									</Td>
+									<Td>{invite.email}</Td>
+									<Td>{invite.priv}</Td>
+									<Td>Invited</Td>
+									<Td>
+										<Menu>
+											<MenuButton>
+												<VerticalDots />
+											</MenuButton>
+											<MenuList>
+												<MenuItem
+													onClick={() =>
+														removeUserInvite({
+															uId: invite.uId
+														})
+													}
+												>
+													Remove invite
 												</MenuItem>
 											</MenuList>
 										</Menu>

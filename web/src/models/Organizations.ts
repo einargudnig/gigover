@@ -9,7 +9,7 @@ export interface OrganizationId {
 }
 
 export interface OrganizationInvites {
-	uid: string;
+	uId: string;
 	name: string;
 	email: string;
 	priv: string;

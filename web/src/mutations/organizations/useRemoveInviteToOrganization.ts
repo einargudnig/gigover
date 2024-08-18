@@ -4,7 +4,7 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
-interface RemoveINviteToOrganizationInput {
+interface RemoveInviteToOrganizationInput {
 	uId: string;
 }
 
@@ -12,7 +12,7 @@ export const useRemoveInviteToOrganization = () => {
 	const queryClient = useQueryClient();
 	const mutationKey = ApiService.removeInviteToOrganization;
 
-	return useMutation<ErrorResponse, AxiosError, RemoveINviteToOrganizationInput>(
+	return useMutation<ErrorResponse, AxiosError, RemoveInviteToOrganizationInput>(
 		mutationKey,
 		async (variables) => {
 			try {
