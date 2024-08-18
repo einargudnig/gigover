@@ -18,6 +18,7 @@ import {
 import { useState } from 'react';
 import { useAcceptOrganizationInvite } from '../../mutations/organizations/useAcceptOrganizationInvite';
 import { useDeclineOrganizationInvite } from '../../mutations/organizations/useDeclineOrganizationInvite';
+import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
 
 const dummyData = [
 	{
@@ -44,6 +45,8 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 	const declineInvite = useDeclineOrganizationInvite();
 	const [answerOrgId, setAnswerOrgId] = useState<number | null>(null);
 	const [answerType, setAnswerType] = useState<'accept' | 'decline' | null>(null);
+	const { data: userInvites } = useGetUserOrgInvites();
+	console.log({ userInvites });
 
 	const acceptInvitation = (id: number) => {
 		setAnswerOrgId(id);
