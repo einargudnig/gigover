@@ -1,14 +1,14 @@
 import { useQuery } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
-import { OrganizationInvites } from '../../models/Organizations';
+import { UserInvites } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
 
-interface OrganizationsResponse {
-	organizationUsers: OrganizationInvites[];
+interface UserInvitesResponse {
+	organizations: UserInvites[];
 }
 
 export const useGetUserInvites = () => {
-	const { data, isLoading, isError, error } = useQuery<OrganizationsResponse, ErrorResponse>(
+	const { data, isLoading, isError, error } = useQuery<UserInvitesResponse, ErrorResponse>(
 		ApiService.getUserInvites,
 		{
 			refetchOnWindowFocus: true
@@ -16,10 +16,10 @@ export const useGetUserInvites = () => {
 		}
 	);
 
-	const organizationsInvites: OrganizationInvites[] = data?.organizationUsers || [];
+	const organizations: UserInvites[] = data?.organizations || [];
 
 	return {
-		data: organizationsInvites,
+		data: organizations,
 		isLoading,
 		isError,
 		error

@@ -10,6 +10,7 @@ import {
 	TableCaption,
 	TableContainer,
 	Tbody,
+	Td,
 	Th,
 	Thead,
 	Tr,
@@ -18,6 +19,7 @@ import {
 import { useState } from 'react';
 import { useAcceptOrganizationInvite } from '../../mutations/organizations/useAcceptOrganizationInvite';
 import { useDeclineOrganizationInvite } from '../../mutations/organizations/useDeclineOrganizationInvite';
+import { useGetUserInvites } from '../../queries/organisations/useGetUserInvites';
 
 const dummyData = [
 	{
@@ -42,6 +44,8 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const acceptInvite = useAcceptOrganizationInvite();
 	const declineInvite = useDeclineOrganizationInvite();
+	const { data, isLoading, isError, error } = useGetUserInvites();
+	console.log('userInvites', { data });
 	const [answerOrgId, setAnswerOrgId] = useState<number | null>(null);
 	const [answerType, setAnswerType] = useState<'accept' | 'decline' | null>(null);
 
@@ -63,7 +67,7 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 				Manage invites
 			</Button>
 
-			<Modal isOpen={isOpen} onClose={onClose}>
+			<Modal isOpen={isOpen} onClose={onClose} size="xl">
 				<ModalOverlay />
 				<ModalContent>
 					<ModalHeader>Manage invites to organizations</ModalHeader>
@@ -75,20 +79,23 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 								<Thead>
 									<Tr>
 										<Th>Organization</Th>
+										<Th>Privileges</Th>
 										<Th>Actions</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
-									{dummyData.map((data) => (
-										<Tr key={data.id}>
-											<Th>{data.orgName}</Th>
-											<Th>
+									{data.map((invite) => (
+										<Tr key={invite.id}>
+											{/* <Th>{data.orgName}</Th> */}
+											<Td>orgName</Td>
+											<Td>{invite.priv}</Td>
+											<Td>
 												<Button
-													onClick={() => acceptInvitation(data.id)}
+													onClick={() => acceptInvitation(invite.id)}
 													variant="outline"
 													colorScheme="green"
 													isLoading={
-														answerOrgId === data.id &&
+														answerOrgId === invite.id &&
 														answerType === 'accept'
 													}
 													size="sm"
@@ -97,18 +104,18 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 													Accept
 												</Button>
 												<Button
-													onClick={() => declineInvitation(data.id)}
+													onClick={() => declineInvitation(invite.id)}
 													variant="outline"
 													colorScheme="red"
 													isLoading={
-														answerOrgId === data.id &&
+														answerOrgId === invite.id &&
 														answerType === 'decline'
 													}
 													size="sm"
 												>
 													Decline
 												</Button>
-											</Th>
+											</Td>
 										</Tr>
 									))}
 								</Tbody>

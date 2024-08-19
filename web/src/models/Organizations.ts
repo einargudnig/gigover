@@ -14,3 +14,9 @@ export interface OrganizationInvites {
 	email: string;
 	priv: string;
 }
+
+export interface UserInvites {
+	id: number;
+	//name: string;
+	priv: string;
+}
