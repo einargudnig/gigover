@@ -189,6 +189,7 @@ export class ApiService {
 	static acceptOrganizationInvite = API_BASE + 'user/orgInviteAccept';
 	static rejectOrganizationInvite = API_BASE + 'user/orgInviteDecline';
 	static getUserOrgInvites = API_BASE + 'user/orgInvites';
+	static getUserInvites = API_BASE + 'user/userInvites';
 	// org login?
 	static loginOrganization = API_BASE + 'org/login';
 }
