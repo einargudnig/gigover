@@ -17,6 +17,6 @@ export interface OrganizationInvites {
 
 export interface UserInvites {
 	id: number;
-	//name: string;
+	// name: string;
 	priv: string;
 }

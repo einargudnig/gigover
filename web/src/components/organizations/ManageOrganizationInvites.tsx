@@ -1,5 +1,7 @@
 import {
+	Box,
 	Button,
+	Flex,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
@@ -11,6 +13,7 @@ import {
 	TableContainer,
 	Tbody,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tr,
@@ -20,32 +23,13 @@ import { useState } from 'react';
 import { useAcceptOrganizationInvite } from '../../mutations/organizations/useAcceptOrganizationInvite';
 import { useDeclineOrganizationInvite } from '../../mutations/organizations/useDeclineOrganizationInvite';
 import { useGetUserInvites } from '../../queries/organisations/useGetUserInvites';
-
-const dummyData = [
-	{
-		id: 0,
-		orgName: 'Org1Name'
-	},
-	{
-		id: 1,
-		orgName: 'Org2Name'
-	},
-	{
-		id: 2,
-		orgName: 'Org3Name'
-	},
-	{
-		id: 3,
-		orgName: 'Org4Name'
-	}
-];
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export const ManageOrganizationInvites = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const acceptInvite = useAcceptOrganizationInvite();
 	const declineInvite = useDeclineOrganizationInvite();
 	const { data, isLoading, isError, error } = useGetUserInvites();
-	console.log('userInvites', { data });
 	const [answerOrgId, setAnswerOrgId] = useState<number | null>(null);
 	const [answerType, setAnswerType] = useState<'accept' | 'decline' | null>(null);
 
@@ -73,6 +57,12 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 					<ModalHeader>Manage invites to organizations</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
+						<Box mx={6} mt={2} mb={4}>
+							<Text>
+								These are organizations that you have been invited to and you still
+								have not answered
+							</Text>
+						</Box>
 						<TableContainer>
 							<Table>
 								<TableCaption>Manage organization invites</TableCaption>
@@ -84,40 +74,65 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 									</Tr>
 								</Thead>
 								<Tbody>
-									{data.map((invite) => (
-										<Tr key={invite.id}>
-											{/* <Th>{data.orgName}</Th> */}
-											<Td>orgName</Td>
-											<Td>{invite.priv}</Td>
-											<Td>
-												<Button
-													onClick={() => acceptInvitation(invite.id)}
-													variant="outline"
-													colorScheme="green"
-													isLoading={
-														answerOrgId === invite.id &&
-														answerType === 'accept'
-													}
-													size="sm"
-													mr={2}
+									{isError ? (
+										<Flex justifyContent={'center'} alignItems={'center'}>
+											<Text textColor={'red.500'} fontWeight={'semibold'}>
+												{error?.errorCode} - {error?.errorText}
+											</Text>
+										</Flex>
+									) : (
+										<>
+											{isLoading ? (
+												<Flex
+													justifyContent={'center'}
+													alignItems={'center'}
 												>
-													Accept
-												</Button>
-												<Button
-													onClick={() => declineInvitation(invite.id)}
-													variant="outline"
-													colorScheme="red"
-													isLoading={
-														answerOrgId === invite.id &&
-														answerType === 'decline'
-													}
-													size="sm"
-												>
-													Decline
-												</Button>
-											</Td>
-										</Tr>
-									))}
+													<LoadingSpinner />
+												</Flex>
+											) : (
+												<>
+													{data.map((invite) => (
+														<Tr key={invite.id}>
+															{/* <Th>{data.orgName}</Th> */}
+															<Td>orgName</Td>
+															<Td>{invite.priv}</Td>
+															<Td>
+																<Button
+																	onClick={() =>
+																		acceptInvitation(invite.id)
+																	}
+																	variant="outline"
+																	colorScheme="green"
+																	isLoading={
+																		answerOrgId === invite.id &&
+																		answerType === 'accept'
+																	}
+																	size="sm"
+																	mr={2}
+																>
+																	Accept
+																</Button>
+																<Button
+																	onClick={() =>
+																		declineInvitation(invite.id)
+																	}
+																	variant="outline"
+																	colorScheme="red"
+																	isLoading={
+																		answerOrgId === invite.id &&
+																		answerType === 'decline'
+																	}
+																	size="sm"
+																>
+																	Decline
+																</Button>
+															</Td>
+														</Tr>
+													))}
+												</>
+											)}
+										</>
+									)}
 								</Tbody>
 							</Table>
 						</TableContainer>
