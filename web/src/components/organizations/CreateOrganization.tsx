@@ -25,7 +25,12 @@ export const CreateOrganization = (): JSX.Element => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [createError, setCreateError] = useState<string | null>(null);
 	const [successMessage, setSuccessMessage] = useState<string>('');
-	const { mutateAsync: createOrg, isLoading } = useCreateOrganization();
+	const {
+		mutateAsync: createOrg,
+		isLoading,
+		isError,
+		error: mutateError
+	} = useCreateOrganization();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const { register, handleSubmit, reset } = useForm<{ name: string; password: string }>({
@@ -105,6 +110,7 @@ export const CreateOrganization = (): JSX.Element => {
 									)}
 
 									{createError && <Text color="red.500">{createError}</Text>}
+									{isError && <Text color="red.500">{mutateError?.code}</Text>}
 								</Flex>
 							</Box>
 						</form>
