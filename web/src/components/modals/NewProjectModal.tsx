@@ -3,16 +3,27 @@ import {
 	Button,
 	Drawer,
 	DrawerBody,
-	DrawerCloseButton,
 	DrawerContent,
 	DrawerFooter,
 	DrawerHeader,
 	DrawerOverlay,
+	Flex,
 	FormControl,
 	FormLabel,
 	HStack,
+	IconButton,
 	Input,
+	Menu,
+	MenuButton,
+	MenuItem,
+	MenuList,
 	Select,
+	Spacer,
+	Tab,
+	TabList,
+	TabPanel,
+	TabPanels,
+	Tabs,
 	Text,
 	VStack,
 	useDisclosure,
@@ -29,6 +40,9 @@ import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 import { DatePicker } from '../forms/DatePicker';
+import { CrossIcon } from '../icons/CrossIcon';
+import { TrashIcon } from '../icons/TrashIcon';
+import { VerticalDots } from '../icons/VerticalDots';
 
 export interface ProjectModalProps {
 	project?: Project;
@@ -117,71 +131,108 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 		<Drawer isOpen={isOpen} onClose={drawerClose} size="lg">
 			<DrawerOverlay />
 			<DrawerContent>
-				<DrawerCloseButton onClick={() => closeDrawer()} />
-				<DrawerHeader>{title}</DrawerHeader>
-				<DrawerBody>
-					{isProjectError && <Text color="red.500">{projectError?.errorText}</Text>}
-					<form onSubmit={onSubmit} id="updateProject">
-						<VStack mb={-6} align={'stretch'}>
-							<FormControl id={'name'} isInvalid={!!errors.name}>
-								<FormLabel>Project name</FormLabel>
-								<Input
-									{...register('name', {
-										required: 'Please add a project name'
-									})}
+				<Flex direction={'column'} height={'100'}>
+					<Flex alignItems={'center'}>
+						<Box>
+							<DrawerHeader>{title}</DrawerHeader>
+						</Box>
+						<Spacer />
+						<Box>
+							<Flex alignItems={'center'} mr="4">
+								<Menu>
+									<MenuButton
+										as={IconButton}
+										aria-label="More"
+										icon={<VerticalDots />}
+										variant="ghost"
+										_active={{ bg: 'gray.100' }}
+									/>
+									<MenuList>
+										<MenuItem icon={<TrashIcon />}>Archive project</MenuItem>
+									</MenuList>
+								</Menu>
+								<IconButton
+									aria-label="Close"
+									icon={<CrossIcon />}
+									variant="ghost"
+									onClick={onClose}
 								/>
-								{errors.name && <Text color="red.500">{errors.name.message}</Text>}
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'description'} isInvalid={!!errors.description}>
-								<FormLabel>Project description</FormLabel>
-								<Input
-									{...register('description', {
-										required: 'Please add project description'
-									})}
-								/>
-								{errors.description && (
-									<Text color="red.500">{errors.description.message}</Text>
-								)}
-							</FormControl>
-							<Box mb={6} />
-							<FormControl id={'progressStatus'} isInvalid={!!errors.progressStatus}>
-								<FormLabel>Status</FormLabel>
-								{/* <Controller
-									name="progressStatus"
-									control={control}
-									render={({ field: { onChange, value , onBlur } }) => (
-										<Select
-											value={value}
-											onChange={onChange}
-											onBlur={onBlur}
-											required={true}
-										>
-											{progressStatuses?.progressStatusList.map((ps) => (
-												<option key={ps.id} value={ps.name}>
-													{ps.name}
-												</option>
-											))}
-										</Select>
+							</Flex>
+						</Box>
+					</Flex>
+
+					<DrawerBody>
+						<Tabs colorScheme="black">
+							<TabList>
+								<Tab>Details</Tab>
+								<Tab>Properties</Tab>
+								<Tab>Resources</Tab>
+							</TabList>
+
+							<TabPanels>
+								<TabPanel>
+									{isProjectError && (
+										<Text color="red.500">{projectError?.errorText}</Text>
 									)}
-								/> */}
-								<Select
-									{...register('progressStatus', {
-										required: 'Progress status is required'
-									})}
-								>
-									{progressStatuses?.progressStatusList.map((ps) => (
-										<option key={ps.id} value={ps.name}>
-											{ps.name}
-										</option>
-									))}
-								</Select>
-								{errors.progressStatus && (
-									<Text color="red.500">{errors.progressStatus.message}</Text>
-								)}
-							</FormControl>
-							<Box mb={6} />
-							{/* <FormControl id={'property'} isInvalid={!!errors.property}>
+									<form onSubmit={onSubmit} id="updateProject">
+										<VStack mb={-6} align={'stretch'}>
+											<FormControl id={'name'} isInvalid={!!errors.name}>
+												<FormLabel>Project name</FormLabel>
+												<Input
+													{...register('name', {
+														required: 'Please add a project name'
+													})}
+												/>
+												{errors.name && (
+													<Text color="red.500">
+														{errors.name.message}
+													</Text>
+												)}
+											</FormControl>
+											<Box mb={6} />
+											<FormControl
+												id={'description'}
+												isInvalid={!!errors.description}
+											>
+												<FormLabel>Project description</FormLabel>
+												<Input
+													{...register('description', {
+														required: 'Please add project description'
+													})}
+												/>
+												{errors.description && (
+													<Text color="red.500">
+														{errors.description.message}
+													</Text>
+												)}
+											</FormControl>
+											<Box mb={6} />
+											<FormControl
+												id={'progressStatus'}
+												isInvalid={!!errors.progressStatus}
+											>
+												<FormLabel>Status</FormLabel>
+												<Select
+													{...register('progressStatus', {
+														required: 'Progress status is required'
+													})}
+												>
+													{progressStatuses?.progressStatusList.map(
+														(ps) => (
+															<option key={ps.id} value={ps.name}>
+																{ps.name}
+															</option>
+														)
+													)}
+												</Select>
+												{errors.progressStatus && (
+													<Text color="red.500">
+														{errors.progressStatus.message}
+													</Text>
+												)}
+											</FormControl>
+											<Box mb={6} />
+											{/* <FormControl id={'property'} isInvalid={!!errors.property}>
 								<FormLabel>Property</FormLabel>
 								<Select required={true} {...register('property', {})}>
 									 {progressStatuses?.map((ps) => (
@@ -194,76 +245,98 @@ export const NewProjectModal: FC<ProjectModalProps> = ({
 									<Text color="red.500">{errors.property.message}</Text>
 								)}
 							</FormControl> */}
-							<Box mb={6} />
-							<FormControl>
-								<FormLabel htmlFor="startDate">Start and end date</FormLabel>
-								<HStack>
-									<Controller
-										name="startDate"
-										control={control}
-										defaultValue={
-											project?.startDate
-												? (project.startDate.valueOf() as number)
-												: undefined
-										}
-										render={({ field: { onChange, value, onBlur } }) => (
-											<DatePicker
-												selected={value ? new Date(value) : null}
-												onChange={(date) => {
-													if (date) {
-														onChange((date as Date).getTime());
-													} else {
-														onChange(null);
-													}
-												}}
-												onBlur={onBlur}
-												required={false}
-											/>
-										)}
-									/>
-									<Controller
-										name="endDate"
-										control={control}
-										defaultValue={
-											project?.endDate
-												? (project.endDate.valueOf() as number)
-												: undefined
-										}
-										render={({ field: { onChange, value, onBlur } }) => (
-											<DatePicker
-												selected={value ? new Date(value) : null}
-												onChange={(date) => {
-													if (date) {
-														onChange((date as Date).getTime());
-													} else {
-														onChange(null);
-													}
-												}}
-												onBlur={onBlur}
-											/>
-										)}
-									/>
-								</HStack>
-								{errors.startDate && (
-									<Text textColor={'red.500'}>{errors.startDate?.message}</Text>
-								)}
-								{errors.endDate && (
-									<Text textColor={'red.500'}>{errors.endDate?.message}</Text>
-								)}
-							</FormControl>
-						</VStack>
-					</form>
-				</DrawerBody>
-				<DrawerFooter mb={12}>
-					<Button
-						colorScheme="gray"
-						type="submit"
-						form="updateProject"
-						isLoading={projectLoading}
-					>
-						Save
-					</Button>
-				</DrawerFooter>
+											<Box mb={6} />
+											<FormControl>
+												<FormLabel htmlFor="startDate">
+													Start and end date
+												</FormLabel>
+												<HStack>
+													<Controller
+														name="startDate"
+														control={control}
+														defaultValue={
+															project?.startDate
+																? (project.startDate.valueOf() as number)
+																: undefined
+														}
+														render={({
+															field: { onChange, value, onBlur }
+														}) => (
+															<DatePicker
+																selected={
+																	value ? new Date(value) : null
+																}
+																onChange={(date) => {
+																	if (date) {
+																		onChange(
+																			(date as Date).getTime()
+																		);
+																	} else {
+																		onChange(null);
+																	}
+																}}
+																onBlur={onBlur}
+																required={false}
+															/>
+														)}
+													/>
+													<Controller
+														name="endDate"
+														control={control}
+														defaultValue={
+															project?.endDate
+																? (project.endDate.valueOf() as number)
+																: undefined
+														}
+														render={({
+															field: { onChange, value, onBlur }
+														}) => (
+															<DatePicker
+																selected={
+																	value ? new Date(value) : null
+																}
+																onChange={(date) => {
+																	if (date) {
+																		onChange(
+																			(date as Date).getTime()
+																		);
+																	} else {
+																		onChange(null);
+																	}
+																}}
+																onBlur={onBlur}
+															/>
+														)}
+													/>
+												</HStack>
+												{errors.startDate && (
+													<Text textColor={'red.500'}>
+														{errors.startDate?.message}
+													</Text>
+												)}
+												{errors.endDate && (
+													<Text textColor={'red.500'}>
+														{errors.endDate?.message}
+													</Text>
+												)}
+											</FormControl>
+										</VStack>
+									</form>
+								</TabPanel>
+							</TabPanels>
+						</Tabs>
+					</DrawerBody>
+					<DrawerFooter mb={12}>
+						<Button
+							colorScheme="gray"
+							type="submit"
+							form="updateProject"
+							isLoading={projectLoading}
+						>
+							Save
+						</Button>
+					</DrawerFooter>
+				</Flex>
 			</DrawerContent>
 		</Drawer>
 	);

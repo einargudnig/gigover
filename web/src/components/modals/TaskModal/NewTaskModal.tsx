@@ -37,7 +37,6 @@ import { useQueryClient } from 'react-query';
 import { useEventListener } from '../../../hooks/useEventListener';
 import { FileUploadType } from '../../../models/FileUploadType';
 import { Project } from '../../../models/Project';
-import { ProjectType } from '../../../models/ProjectType';
 import { Task, TaskStatus } from '../../../models/Task';
 import { GigoverFile } from '../../../pages/Files/components/File';
 import { useProjectDetails } from '../../../queries/useProjectDetails';
@@ -52,7 +51,6 @@ import { LoadingSpinner } from '../../LoadingSpinner';
 import { TrackerSelect } from '../../TrackerSelect';
 import { User } from '../../User';
 import { DatePicker } from '../../forms/DatePicker';
-import { Options } from '../../forms/Options';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
 import { VerticalDots } from '../../icons/VerticalDots';
@@ -265,47 +263,21 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 																	render={({
 																		field: {
 																			onChange: ptChange,
-																			value: ptValue = task.typeId,
-																			onBlur
+																			value: ptValue = task.typeId
 																		}
 																	}) => (
-																		<Options
-																			isMulti={false}
-																			onBlur={onBlur}
-																			onChange={(
-																				newValue
-																			) => {
-																				const v = (
-																					newValue as ProjectType
-																				).typeId;
-																				ptChange(
-																					parseInt(`${v}`)
-																				);
-																			}}
-																			value={projectTypes?.projectTypes.find(
-																				(pt) =>
-																					pt.typeId ===
-																					ptValue
-																			)}
-																			getOptionLabel={(
-																				option: unknown
-																			) =>
-																				(
-																					option as ProjectType
-																				).name
-																			}
-																			getOptionValue={(
-																				option: unknown
-																			) =>
-																				(
-																					option as ProjectType
-																				)
-																					.typeId as unknown as string
-																			}
+																		<TrackerSelect
+																			title={'Tags'}
+																			value={ptValue}
 																			options={
-																				projectTypes?.projectTypes ||
-																				[]
+																				projectTypes?.projectTypes.map(
+																					(pt) => ({
+																						value: pt.typeId,
+																						label: pt.name
+																					})
+																				) ?? []
 																			}
+																			valueChanged={ptChange}
 																		/>
 																	)}
 																/>
