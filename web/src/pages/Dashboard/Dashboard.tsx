@@ -122,9 +122,7 @@ export const Dashboard = (): JSX.Element => {
 							</MenuList>
 						)}
 					</Menu>
-					<Button
-						onClick={() => setModalContext({ modifyProject: { project: undefined } })}
-					>
+					<Button onClick={() => setModalContext({ addProject: { project: undefined } })}>
 						New project
 					</Button>
 				</>

@@ -192,6 +192,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 							</Flex>
 						</Box>
 					</Flex>
+
 					<DrawerBody overflowY={'auto'}>
 						<Tabs colorScheme="black">
 							<TabList>

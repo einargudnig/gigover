@@ -38,6 +38,7 @@ export const AppPreloader = (): JSX.Element => {
 
 	useEffect(() => {
 		if (authUser) {
+			console.log({ authUser });
 			authUser.getIdToken().then(async (token) => {
 				await verify(token);
 			});
@@ -51,6 +52,7 @@ export const AppPreloader = (): JSX.Element => {
 			user_id: authUser?.uid,
 			phone_number: data?.data.phoneNumber
 		};
+		console.log({ userProperties });
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
 			alignment: 'right', // This aligns the widget to the right
@@ -65,6 +67,10 @@ export const AppPreloader = (): JSX.Element => {
 			setHasError(true);
 		}
 	}, [error]);
+
+	// one preview deployment was displaying infinite loading spinner
+	// this might be good to have 😬
+	console.log({ loading, isLoadingFirebase, data });
 
 	if (loading || isLoadingFirebase || !data) {
 		return <FullscreenLoader />;
