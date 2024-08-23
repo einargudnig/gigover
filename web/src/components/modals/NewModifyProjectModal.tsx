@@ -34,12 +34,8 @@ import {
 import { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
-import { useCloseModal } from '../../hooks/useCloseModal';
 import { Project } from '../../models/Project';
-import { IProperties, PropertyToProject } from '../../models/Property';
-import { useAddProjectToProperty } from '../../mutations/properties/useAddProjectToProperty';
 import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
-import { useGetProperties } from '../../queries/properties/useGetPoperties';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
 import { ApiService } from '../../services/ApiService';
@@ -67,8 +63,8 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 	const { data: progressStatuses } = useProgressStatusList();
 
 	const { data: projects } = useProjectList();
-	const { data: properties } = useGetProperties();
-	const [progressStatus, setProgressStatus] = useState(
+	// const { data: properties } = useGetProperties();
+	const [progressStatus] = useState(
 		project?.progressStatus
 			? {
 					name: project?.progressStatus,
@@ -112,9 +108,9 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 	});
 
 	// Property stuff
-	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
-	const closeModal = useCloseModal();
-	const { mutateAsync: addProjectToProperty, isLoading } = useAddProjectToProperty();
+	// const [selectedProperty] = useState<IProperties | undefined>();
+	// const closeModal = useCloseModal();
+	// const { mutateAsync: addProjectToProperty } = useAddProjectToProperty();
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
 		console.log({ name, description, startDate, endDate });
@@ -138,25 +134,25 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 		}
 	});
 
-	const addProject = () => {
-		console.log(
-			'add project',
-			'projectId:',
-			project?.projectId,
-			'propertyId',
-			selectedProperty?.propertyId
-		);
-		const data: PropertyToProject = {
-			projectId: project!.projectId,
-			propertyId: selectedProperty!.propertyId
-		};
+	// const addProject = () => {
+	// 	console.log(
+	// 		'add project',
+	// 		'projectId:',
+	// 		project?.projectId,
+	// 		'propertyId',
+	// 		selectedProperty?.propertyId
+	// 	);
+	// 	const data: PropertyToProject = {
+	// 		projectId: project!.projectId,
+	// 		propertyId: selectedProperty!.propertyId
+	// 	};
 
-		addProjectToProperty(data);
-		// add a timeout to allow the mutation to complete
-		setTimeout(() => {
-			closeModal();
-		}, 1000);
-	};
+	// 	addProjectToProperty(data);
+	// 	// add a timeout to allow the mutation to complete
+	// 	setTimeout(() => {
+	// 		closeModal();
+	// 	}, 1000);
+	// };
 
 	return (
 		<Drawer isOpen={isOpen} onClose={drawerClose} size="lg">

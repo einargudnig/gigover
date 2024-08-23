@@ -1,6 +1,6 @@
+import 'firebase/analytics';
 import app from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/analytics';
 
 const config = {
 	apiKey: 'AIzaSyAS-XYBiGnAMdLORL1ctzYgN81pwargt80',
@@ -12,7 +12,9 @@ const config = {
 	appId: '1:761785841920:web:6fe3194e754695b3621be5'
 };
 
+console.log('firebase config', { config });
 app.initializeApp(config);
+console.log('firebase after init', { app });
 
 export class Firebase {
 	public auth: app.auth.Auth;
@@ -27,6 +29,7 @@ export class Firebase {
 
 	user = async (): Promise<app.User | null> => {
 		await this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);
+		console.log('this.authenticated.currentUser', this.auth.currentUser);
 		return this.auth.currentUser;
 	};
 

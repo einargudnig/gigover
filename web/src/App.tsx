@@ -29,6 +29,7 @@ declare const window: Window & { Intercom: Intercom };
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
+	console.log('firebase form the fireBase context', { firebase });
 	const [hasError, setHasError] = useState(false);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
 	const { mutateAsync: verify, data, isLoading: loading, error } = useVerify();
@@ -36,15 +37,19 @@ export const AppPreloader = (): JSX.Element => {
 	// Load Project Types
 	useProjectTypes();
 
+	console.log('authUser', { authUser });
 	useEffect(() => {
 		if (authUser) {
 			console.log({ authUser });
 			authUser.getIdToken().then(async (token) => {
-				await verify(token);
+				console.log('inside effect, before verify call', { token });
+				const res = await verify(token);
+				console.log('response from verify call, still inside effect', { res });
 			});
 		}
 	}, [authUser, verify]);
 
+	console.log('data used in second effect, before it', { data });
 	useEffect(() => {
 		const userProperties = {
 			name: data?.data.name, // Full name
@@ -52,7 +57,7 @@ export const AppPreloader = (): JSX.Element => {
 			user_id: authUser?.uid,
 			phone_number: data?.data.phoneNumber
 		};
-		console.log({ userProperties });
+		console.log('inside second effect', { userProperties });
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
 			alignment: 'right', // This aligns the widget to the right
@@ -63,7 +68,7 @@ export const AppPreloader = (): JSX.Element => {
 
 	useEffect(() => {
 		if (error) {
-			console.log(error, 'error');
+			console.log(error, 'error from verify');
 			setHasError(true);
 		}
 	}, [error]);

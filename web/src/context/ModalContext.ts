@@ -54,9 +54,6 @@ export interface PropertyToProjectContext {
 }
 
 export interface IModalContext {
-	addProject?: {
-		project?: Project;
-	};
 	modifyProject?: {
 		project?: Project;
 	};
