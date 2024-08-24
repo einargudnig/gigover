@@ -10,8 +10,6 @@ import { EditBidModal } from './modals/EditBidModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
 import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
-// import { NewAddProjectModal } from './modals/NewAddProjectModal';
-// import { NewModifyProjectModal } from './modals/NewModifyProjectModal';
 import { ProcurementModal } from './modals/ProcurementModal';
 import { ProjectModal } from './modals/ProjectModal';
 import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
@@ -26,8 +24,7 @@ import { UseResourceModal } from './modals/UseResourceModal';
 
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
-	// const { project } = modalContext.addProject || {};
-	const { project: modifyProject } = modalContext.modifyProject || {};
+	const { project } = modalContext.modifyProject || {};
 	const { tender } = modalContext.addTender || {};
 	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || modalContext.editBid || {};
@@ -49,22 +46,13 @@ export const GlobalModals = (): JSX.Element => {
 				<EditTimeTrackerModal context={modalContext.editTimeTracker} />
 			)}
 			{modalContext.milestone && <MilestoneModal context={modalContext.milestone} />}
-			{/* {modalContext.addProject && (
-				<NewAddProjectModal
-					project={project}
-					open={true}
-					title={'Create project'}
-					onClose={() => setModalContext({})}
-				/>
-			)} */}
 			{modalContext.modifyProject && (
-				// <NewModifyProjectModal
-				// 	project={modifyProject}
-				// 	open={true}
-				// 	onClose={() => setModalContext({})}
-				// />
-				<Modal open={true} title={'Edit project'}>
-					<ProjectModal project={modifyProject} />
+				<Modal
+					open={true}
+					title={!project ? 'Create a new project' : `Edit ${project.name}`}
+					onClose={() => setModalContext({})}
+				>
+					<ProjectModal project={project} />
 				</Modal>
 			)}
 			{modalContext.resources && <ResourceModal />}

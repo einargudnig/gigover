@@ -16,6 +16,7 @@ export const useDeclineOrganizationInvite = () => {
 		},
 		{
 			onSuccess: async () => {
+				await client.refetchQueries(ApiService.getUserInvites);
 				await client.refetchQueries(ApiService.getOrganizations);
 				await client.refetchQueries(ApiService.getUserInfo);
 			}

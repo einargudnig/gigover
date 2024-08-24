@@ -15,7 +15,6 @@ import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
 
 const firebaseApp = new Firebase();
-console.log('firebase init in index.tsx', { firebaseApp });
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -26,8 +25,6 @@ const queryClient = new QueryClient({
 		}
 	}
 });
-
-console.log('queryClient in index.tsx', { queryClient });
 
 const ChakraTheme = extendTheme({
 	colors: ChakraThemeColors,

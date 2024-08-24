@@ -42,14 +42,11 @@ export const AppPreloader = (): JSX.Element => {
 		if (authUser) {
 			console.log({ authUser });
 			authUser.getIdToken().then(async (token) => {
-				console.log('inside effect, before verify call', { token });
-				const res = await verify(token);
-				console.log('response from verify call, still inside effect', { res });
+				await verify(token);
 			});
 		}
 	}, [authUser, verify]);
 
-	console.log('data used in second effect, before it', { data });
 	useEffect(() => {
 		const userProperties = {
 			name: data?.data.name, // Full name
@@ -57,7 +54,7 @@ export const AppPreloader = (): JSX.Element => {
 			user_id: authUser?.uid,
 			phone_number: data?.data.phoneNumber
 		};
-		console.log('inside second effect', { userProperties });
+
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
 			alignment: 'right', // This aligns the widget to the right
@@ -68,7 +65,6 @@ export const AppPreloader = (): JSX.Element => {
 
 	useEffect(() => {
 		if (error) {
-			console.log(error, 'error from verify');
 			setHasError(true);
 		}
 	}, [error]);
