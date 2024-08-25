@@ -29,7 +29,6 @@ declare const window: Window & { Intercom: Intercom };
 
 export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
-	console.log('firebase form the fireBase context', { firebase });
 	const [hasError, setHasError] = useState(false);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
 	const { mutateAsync: verify, data, isLoading: loading, error } = useVerify();
@@ -37,10 +36,8 @@ export const AppPreloader = (): JSX.Element => {
 	// Load Project Types
 	useProjectTypes();
 
-	console.log('authUser', { authUser });
 	useEffect(() => {
 		if (authUser) {
-			console.log({ authUser });
 			authUser.getIdToken().then(async (token) => {
 				await verify(token);
 			});
