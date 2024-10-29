@@ -70,7 +70,7 @@ export const AppPreloader = (): JSX.Element => {
 	// this might be good to have 😬
 	console.log({ loading, isLoadingFirebase, data });
 
-	if (loading || isLoadingFirebase || !data) {
+	if (loading || isLoadingFirebase) {
 		return <FullscreenLoader />;
 	}
 

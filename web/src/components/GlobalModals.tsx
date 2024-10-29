@@ -3,7 +3,7 @@ import { Theme } from '../Theme';
 import { ModalContext } from '../context/ModalContext';
 import ShareItem from '../pages/Files/components/ShareItem';
 import { Modal } from './Modal';
-import { PropertyIcon } from './icons/PropertyIcon';
+// import { PropertyIcon } from './icons/PropertyIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { AddBidModal } from './modals/AddBidModal';
 import { EditBidModal } from './modals/EditBidModal';
@@ -16,7 +16,7 @@ import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
 import { EditPropertyModal } from './modals/PropertyModals/EditPropertyModal';
 import { EditUnitModal } from './modals/PropertyModals/EditUnitModal';
-import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
+// import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 import { ResourceModal } from './modals/ResourceModal';
 import { NewTaskModal } from './modals/TaskModal/NewTaskModal';
 import { TimeTrackerModal } from './modals/TimeTrackerModal';
@@ -123,25 +123,26 @@ export const GlobalModals = (): JSX.Element => {
 					<UseResourceModal resourceTracker={modalContext.resourceTracker} />
 				</Modal>
 			)}
-			{modalContext.propertyToProject && (
-				<Modal
-					title={
-						<>
-							<PropertyIcon size={32} color={Theme.colors.black} />
-							<div>Add Property to Project</div>
-						</>
-					}
-					open={true}
-					centerModal={true}
-					closeIcon={true}
-					onClose={() => setModalContext({})}
-				>
-					<ProjectToPropertyModal
-						properties={modalContext.propertyToProject.properties}
-						projectId={modalContext.propertyToProject.projectId}
-					/>
-				</Modal>
-			)}
+			{/* {modalContext.propertyToProject && ( */}
+			{/* 	<Modal */}
+			{/* 		title={ */}
+			{/* 			<> */}
+			{/* 				<PropertyIcon size={32} color={Theme.colors.black} /> */}
+			{/* 				<div>Add Property to Project</div> */}
+			{/* 			</> */}
+			{/* 		} */}
+			{/* 		open={true} */}
+			{/* 		centerModal={true} */}
+			{/* 		closeIcon={true} */}
+			{/* 		onClose={() => setModalContext({})} */}
+			{/* 	> */}
+			{/* 		<ProjectToPropertyModal */}
+			{/* 			onClose={() => setModalContext({})} */}
+			{/* 			isOpen={true} */}
+			{/* 			projectId={modalContext.propertyToProject.projectId} */}
+			{/* 		/> */}
+			{/* 	</Modal> */}
+			{/* )} */}
 		</>
 	);
 };

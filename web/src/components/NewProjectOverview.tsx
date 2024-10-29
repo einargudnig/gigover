@@ -5,9 +5,11 @@ import {
 	IconButton,
 	Menu,
 	MenuButton,
+	MenuDivider,
 	MenuItem,
 	MenuList,
-	Text
+	Text,
+	useDisclosure
 } from '@chakra-ui/react';
 import React, { useCallback, useContext, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -23,6 +25,7 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
+import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
 
 interface SortableGridProps {
 	list: Project[];
@@ -174,6 +177,7 @@ const NewProjectCard = ({ project }) => {
 	const [, setModalContext] = useContext(ModalContext);
 	const queryClient = useQueryClient();
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
+	const { isOpen, onClose, onOpen } = useDisclosure();
 
 	const updateStatus = async (status) => {
 		try {
@@ -192,106 +196,117 @@ const NewProjectCard = ({ project }) => {
 	};
 
 	return (
-		<Flex flex="1" justifyContent="space-between" alignItems="center" p={1}>
-			<Link
-				to={`/project/${project.projectId}`}
-				style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
-			>
-				<Flex justifyContent="space-between" alignItems="center" flex="1">
-					<Box flex="3" width={'200px'}>
-						<Text textColor="black">
-							<Flex alignItems="center">{project.name}</Flex>
-						</Text>
-					</Box>
-					<Box flex="1" width="75px">
-						<Text>
-							<ProjectTimeStatus project={project} />
-						</Text>
-					</Box>
-					<Box flex="1" width="75px">
-						<Text>
-							<ProjectStatusTag project={project} />
-						</Text>
-					</Box>
-					{/* <Box flex="2" width="100px">
+		<>
+			<ProjectToPropertyModal
+				isOpen={isOpen}
+				onClose={onClose}
+				projectId={project.projectId}
+			/>
+
+			<Flex flex="1" justifyContent="space-between" alignItems="center" p={1}>
+				<Link
+					to={`/project/${project.projectId}`}
+					style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
+				>
+					<Flex justifyContent="space-between" alignItems="center" flex="1">
+						<Box flex="3" width={'200px'}>
+							<Text textColor="black">
+								<Flex alignItems="center">{project.name}</Flex>
+							</Text>
+						</Box>
+						<Box flex="1" width="75px">
+							<Text>
+								<ProjectTimeStatus project={project} />
+							</Text>
+						</Box>
+						<Box flex="1" width="75px">
+							<Text>
+								<ProjectStatusTag project={project} />
+							</Text>
+						</Box>
+						{/* <Box flex="2" width="100px">
 						<Text>Property</Text>
 					</Box> */}
-				</Flex>
-			</Link>
-			<Box flex="0.5" width={'50px'}>
-				<Text>
-					{isError && <Text>{error?.errorText}</Text>}
-					{isLoading ? (
-						<Box py={1}>
-							<LoadingSpinner size={32} />
-						</Box>
-					) : (
-						<Menu>
-							<MenuButton
-								as={IconButton}
-								variant="ghost"
-								_hover={{ border: '1px', borderColor: 'gray.300' }}
-								_active={{
-									border: '1px',
-									borderColor: 'gray.300',
-									backgroundColor: 'transparent'
-								}}
-								icon={<VerticalDots />}
-							/>
-							<MenuList>
-								<MenuItem
-									onClick={(event) => {
-										event.preventDefault();
-										event.stopPropagation();
-										setModalContext({ modifyProject: { project } });
+					</Flex>
+				</Link>
+				<Box flex="0.5" width={'50px'}>
+					<Text>
+						{isError && <Text>{error?.errorText}</Text>}
+						{isLoading ? (
+							<Box py={1}>
+								<LoadingSpinner size={32} />
+							</Box>
+						) : (
+							<Menu>
+								<MenuButton
+									as={IconButton}
+									variant="ghost"
+									_hover={{ border: '1px', borderColor: 'gray.300' }}
+									_active={{
+										border: '1px',
+										borderColor: 'gray.300',
+										backgroundColor: 'transparent'
 									}}
-								>
-									Edit Project
-								</MenuItem>
-								{project?.projectId && project.status === ProjectStatus.OPEN ? (
-									<>
-										{project?.owner && (
+									icon={<VerticalDots />}
+								/>
+								<MenuList>
+									<MenuItem
+										onClick={(event) => {
+											event.preventDefault();
+											event.stopPropagation();
+											setModalContext({ modifyProject: { project } });
+										}}
+									>
+										Edit Project
+									</MenuItem>
+									{project?.projectId && project.status === ProjectStatus.OPEN ? (
+										<>
+											{project?.owner && (
+												<MenuItem
+													onClick={async (event) => {
+														event.preventDefault();
+														event.stopPropagation();
+														await updateStatus(ProjectStatus.CLOSED);
+													}}
+												>
+													Close this project
+												</MenuItem>
+											)}
+										</>
+									) : project?.projectId ? (
+										<>
+											{project?.owner && (
+												<MenuItem
+													onClick={async (event) => {
+														event.preventDefault();
+														await updateStatus(ProjectStatus.OPEN);
+													}}
+												>
+													Re-open this project
+												</MenuItem>
+											)}
+										</>
+									) : null}
+									{project?.projectId &&
+										project.status === ProjectStatus.CLOSED && (
 											<MenuItem
 												onClick={async (event) => {
 													event.preventDefault();
 													event.stopPropagation();
-													await updateStatus(ProjectStatus.CLOSED);
+													await updateStatus(ProjectStatus.DONE);
 												}}
 											>
-												Close this project
+												Archive project
 											</MenuItem>
 										)}
-									</>
-								) : project?.projectId ? (
-									<>
-										{project?.owner && (
-											<MenuItem
-												onClick={async (event) => {
-													event.preventDefault();
-													await updateStatus(ProjectStatus.OPEN);
-												}}
-											>
-												Re-open this project
-											</MenuItem>
-										)}
-									</>
-								) : null}
-								{project?.projectId && project.status === ProjectStatus.CLOSED && (
-									<MenuItem
-										onClick={async (event) => {
-											event.preventDefault();
-											event.stopPropagation();
-											await updateStatus(ProjectStatus.DONE);
-										}}
-									>
-										Archive project
-									</MenuItem>
-								)}
-							</MenuList>
-						</Menu>
-					)}
-				</Text>
-			</Box>
-		</Flex>
+									<MenuDivider />
+									<MenuItem onClick={onOpen}>Add property to project</MenuItem>
+								</MenuList>
+							</Menu>
+						)}
+					</Text>
+				</Box>
+			</Flex>
+		</>
 	);
 };

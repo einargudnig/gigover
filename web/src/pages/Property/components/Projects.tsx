@@ -42,7 +42,9 @@ export const Projects = ({ project }): JSX.Element => {
 				<GridItem colSpan={2}>
 					<HStack>
 						<Link to={`/project/${project.projectId}`}>
-							<Button>Go to Project</Button>
+							<Button variant="outline" colorScheme="black">
+								Go to Project
+							</Button>
 						</Link>
 						<Spacer />
 						<Box>

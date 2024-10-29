@@ -1,22 +1,36 @@
-import { Box, Button, Flex, Spacer } from '@chakra-ui/react';
+import {
+	Button,
+	Flex,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCloseModal } from '../../../hooks/useCloseModal';
 import { IProperties, PropertyToProject } from '../../../models/Property';
 import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
 import { TrackerSelect } from '../../TrackerSelect';
+import { useGetProperties } from '../../../queries/properties/useGetPoperties';
 
 interface PropertyToProjectModalProps {
-	properties: IProperties[];
+	isOpen: boolean;
+	onClose: () => void;
 	projectId: number;
 }
 
 export const ProjectToPropertyModal = ({
-	properties,
+	isOpen,
+	onClose,
 	projectId
 }: PropertyToProjectModalProps): JSX.Element => {
 	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
 	const closeModal = useCloseModal();
+	const { data: properties } = useGetProperties();
 	const { mutateAsync: addProjectToProperty, isLoading } = useAddProjectToProperty();
 
 	const addProject = () => {
@@ -40,49 +54,53 @@ export const ProjectToPropertyModal = ({
 	};
 
 	return (
-		<>
-			<p>Choose a property to add to this project</p>
-			<TrackerSelect
-				title={'Select a property'}
-				value={selectedProperty?.propertyId}
-				options={properties.map((property) => ({
-					label: property.name,
-					value: property.propertyId
-				}))}
-				isNumber={true}
-				valueChanged={(newValue) => {
-					if (!newValue) {
-						setSelectedProperty(undefined);
-					} else {
-						const propertyId = newValue as number;
-						setSelectedProperty(properties.find((p) => p.propertyId === propertyId)!);
-					}
-				}}
-			/>
-			<Box marginTop={2}>
-				{!selectedProperty ? (
-					<Flex justifyContent={'flex-start'}>
-						<Link to={'/property'}>
-							<Button onClick={closeModal}>View Properties</Button>
-						</Link>
-					</Flex>
-				) : null}
-				{selectedProperty && (
-					<Flex marginTop={2} justifyContent={'justify-between'}>
-						<Box>
+		<Modal isOpen={isOpen} onClose={onClose}>
+			<ModalOverlay />
+			<ModalContent>
+				<ModalHeader>Add Property to Project</ModalHeader>
+				<ModalCloseButton />
+				<ModalBody>
+					<TrackerSelect
+						title={'Select a property'}
+						value={selectedProperty?.propertyId}
+						options={properties.map((property) => ({
+							label: property.name,
+							value: property.propertyId
+						}))}
+						isNumber={true}
+						valueChanged={(newValue) => {
+							if (!newValue) {
+								setSelectedProperty(undefined);
+							} else {
+								const propertyId = newValue as number;
+								setSelectedProperty(
+									properties.find((p) => p.propertyId === propertyId)
+								);
+							}
+						}}
+					/>
+				</ModalBody>
+				<ModalFooter>
+					<Flex justifyContent={'flex-end'}>
+						{!selectedProperty ? (
 							<Link to={'/property'}>
-								<Button onClick={closeModal}>View Properties</Button>
+								<Button variant="outline" colorScheme="gray" onClick={closeModal}>
+									View Properties
+								</Button>
 							</Link>
-						</Box>
-						<Spacer />
-						<Box>
-							<Button onClick={() => addProject()} isLoading={isLoading}>
+						) : (
+							<Button
+								variant="outline"
+								colorScheme="gray"
+								onClick={addProject}
+								isLoading={isLoading}
+							>
 								Add Property to Project
 							</Button>
-						</Box>
+						)}
 					</Flex>
-				)}
-			</Box>
-		</>
+				</ModalFooter>
+			</ModalContent>
+		</Modal>
 	);
 };

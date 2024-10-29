@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
-import { PlusIcon } from '../../../components/icons/PlusIcon';
 import { ModalContext } from '../../../context/ModalContext';
 import { UploadPropertyDocuments } from './UploadPropertyDocuments';
 
@@ -19,7 +18,7 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 					propertyId={property.propertyId}
 				/>
 			)}
-			<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
+			<Box mb={3} p={4} borderRadius={8} bg={'white'} w="100%">
 				<Heading mb={'4'} fontSize={'xl'}>
 					Property information
 				</Heading>
@@ -95,12 +94,19 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							</Text>
 							<Text fontSize={'lg'}>{property.documents.length}</Text>
 						</HStack>
-						<Button onClick={() => setUpload(true)}>Upload files</Button>
+						<Button
+							variant="outline"
+							colorScheme="black"
+							onClick={() => setUpload(true)}
+						>
+							Upload files
+						</Button>
 					</GridItem>
 				</Grid>
 				<Flex justifyContent={'flex-end'}>
 					<Button
-						leftIcon={<PlusIcon />}
+						variant="outline"
+						colorScheme="black"
 						onClick={() => setModalContext({ editProperty: { property: property } })}
 					>
 						Edit property

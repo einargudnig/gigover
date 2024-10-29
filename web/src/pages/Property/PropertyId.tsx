@@ -3,7 +3,6 @@ import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { PlusIcon } from '../../components/icons/PlusIcon';
 import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
 import { ModalContext } from '../../context/ModalContext';
 import { useGetPropertyById } from '../../queries/properties/useGetPropertyById';
@@ -40,7 +39,7 @@ export const PropertyId = (): JSX.Element => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<>
+				<Box bg={'#F5F7FB'}>
 					<PropertyInfo property={property} />
 
 					<Box
@@ -48,7 +47,7 @@ export const PropertyId = (): JSX.Element => {
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
-						bg={'#EFEFEE'}
+						bg={'white'}
 						w="100%"
 					>
 						<Flex mb={8} alignItems={'center'}>
@@ -60,7 +59,8 @@ export const PropertyId = (): JSX.Element => {
 							<Spacer />
 							<Box>
 								<Button
-									leftIcon={<PlusIcon />}
+									variant="outline"
+									colorScheme="black"
 									onClick={() =>
 										setModalContext({
 											addUnit: {
@@ -91,7 +91,7 @@ export const PropertyId = (): JSX.Element => {
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
-						bg={'#EFEFEE'}
+						bg={'white'}
 						w="100%"
 					>
 						<Flex mb={8} alignItems={'center'}>
@@ -101,7 +101,8 @@ export const PropertyId = (): JSX.Element => {
 							<Spacer />
 							<Box>
 								<Button
-									leftIcon={<PlusIcon />}
+									variant="outline"
+									colorScheme="black"
 									onClick={() => setManageStakeholders(true)}
 								>
 									Add stakeholders
@@ -124,7 +125,7 @@ export const PropertyId = (): JSX.Element => {
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
-						bg={'#EFEFEE'}
+						bg={'white'}
 						w="100%"
 					>
 						<Box>
@@ -144,7 +145,7 @@ export const PropertyId = (): JSX.Element => {
 						p={4}
 						borderRadius={8}
 						borderColor={'#EFEFEE'}
-						bg={'#EFEFEE'}
+						bg={'white'}
 						w="100%"
 					>
 						<Box>
@@ -165,7 +166,7 @@ export const PropertyId = (): JSX.Element => {
 								))
 						)}
 					</Box>
-				</>
+				</Box>
 			)}
 		</>
 	);

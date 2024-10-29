@@ -7,7 +7,8 @@ import {
 	Spacer,
 	Text,
 	Tooltip,
-	VStack
+	VStack,
+	useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
@@ -20,6 +21,8 @@ import { Project } from '../../models/Project';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useProjectDocuments } from '../../queries/useProjectDocuments';
 import { SearchBar } from '../Files/components/SearchBar';
+import { FileHouseIcon } from '../../components/icons/FileTypes/FileHouseIcon';
+import { ProjectToPropertyModal } from '../../components/modals/PropertyModals/ProjectToProperty';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -33,7 +36,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 
 	const [manageWorkers, setManageWorkers] = useState(false);
 	const location = useLocation();
-
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const showSearchIcon = location.pathname === `/project/${projectId}/files`;
 	const showFilterIcon = false;
 
@@ -46,6 +49,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 
 	return (
 		<>
+			<ProjectToPropertyModal projectId={projectId} isOpen={isOpen} onClose={onClose} />
 			{isError && (
 				<>
 					<Text>Oh no! An unexpected error.</Text>
@@ -159,6 +163,16 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 									marginLeft={3}
 								/>
 							) : null}
+							<Tooltip hasArrow label="Connect to property">
+								<IconButton
+									variant={'outline'}
+									colorScheme={'gray'}
+									aria-label={'Connect to property'}
+									icon={<FileHouseIcon color={'black'} />}
+									marginLeft={3}
+									onClick={onOpen}
+								/>
+							</Tooltip>
 						</Box>
 					</Flex>
 				}

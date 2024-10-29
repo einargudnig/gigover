@@ -8,7 +8,9 @@ import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
+	console.log('data from useGetOrganizations', data);
 	const { data: userInfo, isLoading } = useGetUserInfo();
+	console.log('data from useGetUserInfo', userInfo);
 	const { mutate } = useChangeOrganizations();
 
 	const currentOrganization = userInfo?.organization;
