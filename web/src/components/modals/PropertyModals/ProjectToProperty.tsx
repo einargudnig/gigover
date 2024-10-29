@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useCloseModal } from '../../../hooks/useCloseModal';
 import { IProperties, PropertyToProject } from '../../../models/Property';
 import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
 import { TrackerSelect } from '../../TrackerSelect';
@@ -29,7 +28,6 @@ export const ProjectToPropertyModal = ({
 	projectId
 }: PropertyToProjectModalProps): JSX.Element => {
 	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
-	const closeModal = useCloseModal();
 	const { data: properties } = useGetProperties();
 	const { mutateAsync: addProjectToProperty, isLoading } = useAddProjectToProperty();
 
@@ -49,7 +47,7 @@ export const ProjectToPropertyModal = ({
 		addProjectToProperty(data);
 		// add a timeout to allow the mutation to complete
 		setTimeout(() => {
-			closeModal();
+			isOpen = false;
 		}, 1000);
 	};
 
@@ -84,7 +82,7 @@ export const ProjectToPropertyModal = ({
 					<Flex justifyContent={'flex-end'}>
 						{!selectedProperty ? (
 							<Link to={'/property'}>
-								<Button variant="outline" colorScheme="gray" onClick={closeModal}>
+								<Button variant="outline" colorScheme="gray">
 									View Properties
 								</Button>
 							</Link>
