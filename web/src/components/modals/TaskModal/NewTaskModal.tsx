@@ -73,6 +73,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 	projectId,
 	task
 }) => {
+	console.log('Task in Modal', task);
 	const queryClient = useQueryClient();
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
@@ -120,6 +121,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 			console.log({ taskId, subject, text, typeId, startDate, endDate, status });
 			try {
 				await updateTask({
+					...task,
 					taskId,
 					subject,
 					text,

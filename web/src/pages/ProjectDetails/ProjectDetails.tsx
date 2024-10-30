@@ -10,6 +10,7 @@ import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 import { TaskColumn } from './TaskColumn';
+import { Center } from '../../components/Center';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -126,7 +127,9 @@ export const ProjectDetails = (): JSX.Element | null => {
 		<>
 			<Box>
 				{isLoading ? (
-					<LoadingSpinner />
+					<Center>
+						<LoadingSpinner />
+					</Center>
 				) : isError ? (
 					<p>
 						Error fetching project with id: {projectId} - Reason: {error?.errorText}.

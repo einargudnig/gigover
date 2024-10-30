@@ -300,7 +300,7 @@ const NewProjectCard = ({ project }) => {
 											</MenuItem>
 										)}
 									<MenuDivider />
-									<MenuItem onClick={onOpen}>Add property to project</MenuItem>
+									<MenuItem onClick={onOpen}>Add project to property</MenuItem>
 								</MenuList>
 							</Menu>
 						)}

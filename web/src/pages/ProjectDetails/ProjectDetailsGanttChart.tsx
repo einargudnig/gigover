@@ -71,9 +71,20 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 		);
 	}
 
-	if (!isLoading && isError) {
-		// TODO Replace with ErrorBoundary
-		return <p>{error?.errorText}</p>;
+	if (isError) {
+		return (
+			<Center>
+				<p>Error: {error?.errorText || 'An unexpected error occurred.'}</p>
+			</Center>
+		);
+	}
+
+	if (!selectedProject) {
+		return (
+			<Center>
+				<NoProjectsFound />
+			</Center>
+		);
 	}
 
 	return !isLoading && data && data.length > 0 ? (

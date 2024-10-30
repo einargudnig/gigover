@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { Page } from './components/Page';
 import { devError } from './utils/ConsoleUtils';
@@ -57,6 +57,14 @@ class ErrorBoundary extends Component<Props, State> {
 					>
 						<Box bg="white" borderRadius="base" p={4} boxShadow="base" maxWidth="60%">
 							<h1>Sorry.. there was an error</h1>
+							<Button
+								padding={5}
+								marginTop={4}
+								marginBottom={5}
+								onClick={() => window.location.assign('/')}
+							>
+								Try the homepage!
+							</Button>
 							<p>Error: {errorName}</p>
 							<p>Details: {errorDetails}</p>
 							<p>Stack: {stack}</p>
@@ -70,6 +78,14 @@ class ErrorBoundary extends Component<Props, State> {
 			return (
 				<div>
 					<h1>Sorry.. there was an error</h1>
+					<Button
+						padding={5}
+						marginTop={4}
+						marginBottom={5}
+						onClick={() => window.location.assign('/')}
+					>
+						Try the homepage!
+					</Button>
 					<p>Error: {errorName}</p>
 					<p>Details: {errorDetails}</p>
 					<p>Stack: {stack}</p>
