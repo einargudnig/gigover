@@ -55,7 +55,7 @@ export const ProjectToPropertyModal = ({
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
 			<ModalContent>
-				<ModalHeader>Add Property to Project</ModalHeader>
+				<ModalHeader>Add Project to Property</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
 					<TrackerSelect
