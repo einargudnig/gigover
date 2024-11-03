@@ -23,6 +23,7 @@ import { useProjectDocuments } from '../../queries/useProjectDocuments';
 import { SearchBar } from '../Files/components/SearchBar';
 import { FileHouseIcon } from '../../components/icons/FileTypes/FileHouseIcon';
 import { ProjectToPropertyModal } from '../../components/modals/PropertyModals/ProjectToProperty';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -33,6 +34,7 @@ const Container = styled.div`
 export const ProjectDetailsOutlet = (): JSX.Element => {
 	const params = useParams();
 	const projectId = params.projectId ? parseInt(params.projectId) : -1;
+	const { privileges, activeOrg } = useGetUserPrivileges();
 
 	const [manageWorkers, setManageWorkers] = useState(false);
 	const location = useLocation();
@@ -163,16 +165,48 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 									marginLeft={3}
 								/>
 							) : null}
-							<Tooltip hasArrow label="Connect to property">
-								<IconButton
-									variant={'outline'}
-									colorScheme={'gray'}
-									aria-label={'Connect to property'}
-									icon={<FileHouseIcon color={'black'} />}
-									marginLeft={3}
-									onClick={onOpen}
-								/>
-							</Tooltip>
+							<>
+								{activeOrg ? (
+									<>
+										{privileges?.includes('ADMIN') ||
+										privileges.includes('EDITOR') ? (
+											<Tooltip hasArrow label="Connect to property">
+												<IconButton
+													variant={'outline'}
+													colorScheme={'gray'}
+													aria-label={'Connect to property'}
+													icon={<FileHouseIcon color={'black'} />}
+													marginLeft={3}
+													onClick={onOpen}
+												/>
+											</Tooltip>
+										) : (
+											<Tooltip hasArrow label="You do not have permssion!">
+												<IconButton
+													variant={'outline'}
+													colorScheme={'gray'}
+													aria-label={'Connect to property'}
+													icon={<FileHouseIcon color={'black'} />}
+													marginLeft={3}
+													onClick={onOpen}
+													isDisabled
+												/>
+											</Tooltip>
+										)}
+									</>
+								) : (
+									<Tooltip hasArrow label="Connect to property">
+										<IconButton
+											variant={'outline'}
+											colorScheme={'gray'}
+											aria-label={'Connect to property'}
+											icon={<FileHouseIcon color={'black'} />}
+											marginLeft={3}
+											onClick={onOpen}
+										/>
+									</Tooltip>
+								)}
+							</>
 						</Box>
 					</Flex>
 				}

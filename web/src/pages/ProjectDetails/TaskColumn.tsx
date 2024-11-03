@@ -8,8 +8,9 @@ import { InputWrapper } from '../../components/forms/Input';
 import { useEventListener } from '../../hooks/useEventListener';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { devError } from '../../utils/ConsoleUtils';
-import { Button, Heading } from '@chakra-ui/react';
+import { Button, Heading, Tooltip } from '@chakra-ui/react';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 interface TaskColumnProps {
 	project: Project;
@@ -25,6 +26,7 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [taskError, setTaskError] = useState<string>();
+	const { privileges, activeOrg } = useGetUserPrivileges();
 	const { mutateAsync: addTask, isLoading } = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
@@ -101,14 +103,41 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 					</div>
 				)}
 			</Droppable>
-			<Button
-				colorScheme={'gray'}
-				leftIcon={<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />}
-				variant={'outline'}
-				onClick={() => setIsCreatingTask(true)}
-			>
-				Add task
-			</Button>
+			{activeOrg ? (
+				<>
+					{privileges?.includes('ADMIN') || privileges?.includes('EDITOR') ? (
+						<Button
+							colorScheme={'gray'}
+							leftIcon={<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />}
+							variant={'outline'}
+							onClick={() => setIsCreatingTask(true)}
+						>
+							Add task
+						</Button>
+					) : (
+						<Tooltip label="You do not have permission!">
+							<Button
+								colorScheme={'gray'}
+								leftIcon={<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />}
+								variant={'outline'}
+								onClick={() => setIsCreatingTask(true)}
+								isDisabled
+							>
+								Add task
+							</Button>
+						</Tooltip>
+					)}
+				</>
+			) : (
+				<Button
+					colorScheme={'gray'}
+					leftIcon={<PlusIcon style={{ margin: '0 8px 0 6px' }} size={14} />}
+					variant={'outline'}
+					onClick={() => setIsCreatingTask(true)}
+				>
+					Add task
+				</Button>
+			)}
 		</>
 	);
 };

@@ -10,11 +10,13 @@ import { CardBase } from './CardBase';
 import { DropZone } from './DropZone';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
+import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
 
 const TaskCardStyled = styled(CardBase)<{
 	isEditing: boolean;
 	error?: boolean;
 	isDragActive: boolean;
+	isDisabled?: boolean;
 }>`
 	padding: 16px;
 	margin: 8px 0;
@@ -98,6 +100,8 @@ export const TaskCard = ({
 	const [, setModalContext] = useContext(ModalContext);
 	const { data } = useProjectTypes();
 	const isEditing = Boolean(onSubmit);
+	const { privileges } = useGetUserPrivileges();
+	const isInteractable = privileges?.includes('ADMIN') || privileges?.includes('EDITOR');
 
 	if (!task && !onSubmit) {
 		throw new Error('No task or onSubmit was supplied for Task Component');
@@ -116,15 +120,18 @@ export const TaskCard = ({
 					isDragActive={isDragActive}
 					error={Boolean(error)}
 					isEditing={isEditing}
+					// isDisabled={isDisabled}
 					onClick={() =>
-						isEditing
-							? null
-							: setModalContext({
-									taskDetails: {
-										task: task!,
-										projectId: projectId
-									}
-							  })
+						isInteractable
+							? isEditing
+								? null
+								: setModalContext({
+										taskDetails: {
+											task: task!,
+											projectId: projectId
+										}
+								  })
+							: null
 					}
 				>
 					{task ? (

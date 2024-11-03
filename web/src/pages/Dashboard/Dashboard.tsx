@@ -6,7 +6,6 @@ import {
 	MenuItemOption,
 	MenuList,
 	MenuOptionGroup,
-	Text,
 	Tooltip,
 	VStack
 } from '@chakra-ui/react';
@@ -30,12 +29,13 @@ import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
 	const { data, isLoading: isLoadingProjects, isError, error } = useProjectList();
+	console.log('PROJECTS', data);
 	const [, setModalContext] = useContext(ModalContext);
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
 	const { privileges, activeOrg } = useGetUserPrivileges();
-	console.log(privileges, activeOrg);
+	// console.log(privileges, activeOrg);
 
 	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
 
