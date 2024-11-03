@@ -6,6 +6,7 @@ import {
 	MenuItemOption,
 	MenuList,
 	MenuOptionGroup,
+	Text,
 	Tooltip,
 	VStack
 } from '@chakra-ui/react';
@@ -24,6 +25,7 @@ import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
 import { ProjectSearchBar } from './ProjectSearchBar';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
@@ -32,6 +34,8 @@ export const Dashboard = (): JSX.Element => {
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
+	const { privileges, activeOrg } = useGetUserPrivileges();
+	console.log(privileges, activeOrg);
 
 	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
 
@@ -122,11 +126,31 @@ export const Dashboard = (): JSX.Element => {
 							</MenuList>
 						)}
 					</Menu>
-					<Button
-						onClick={() => setModalContext({ modifyProject: { project: undefined } })}
-					>
-						New project
-					</Button>
+					{activeOrg ? (
+						<>
+							{privileges?.includes('ADMIN') || privileges?.includes('EDITOR') ? (
+								<Button
+									onClick={() =>
+										setModalContext({ modifyProject: { project: undefined } })
+									}
+								>
+									New project
+								</Button>
+							) : (
+								<Tooltip label="You do not have permissions!">
+									<Button isDisabled>New project</Button>
+								</Tooltip>
+							)}
+						</>
+					) : (
+						<Button
+							onClick={() =>
+								setModalContext({ modifyProject: { project: undefined } })
+							}
+						>
+							New project
+						</Button>
+					)}
 				</>
 			}
 		>

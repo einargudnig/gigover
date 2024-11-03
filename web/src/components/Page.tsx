@@ -30,8 +30,8 @@ import { TenderIcon } from './icons/TenderIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
-// import { ManageOrganization } from './organizations/ManageOrganization';
-// import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
+import { ManageOrganization } from './organizations/ManageOrganization';
+import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 
 interface PageProps {
 	children: React.ReactNode;
@@ -269,31 +269,15 @@ export const Page = ({
 						<span>Settings*</span>
 					</IconLink> */}
 				</SidebarNav>
-
-				{/* <Flex
-					flexDirection={'column'}
-					width={'full'}
-					justifySelf={'flex-end'}
-					py={2}
-					height={28}
-				>
-					<Box>
-						<OrganizationSwitcher />
-					</Box>
-					<Spacer />
-					<Box>
-						<ManageOrganization />
-					</Box>
-				</Flex> */}
 				<small>v1.8</small>
 			</Sidebar>
 			<PageWrapper>
 				<Box p={2} backgroundColor={'white'} borderBottom={'1px'} borderColor={'gray.300'}>
 					<Flex justifyContent={'end'}>
 						<Flex pr={3}>
-							{/* <ManageOrganization /> */}
-							{/* <Box w={2} /> */}
-							{/* <OrganizationSwitcher /> */}
+							<ManageOrganization />
+							<Box w={2} />
+							<OrganizationSwitcher />
 							<Notifications />
 							<Menu>
 								<MenuButton ml={2}>

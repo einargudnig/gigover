@@ -14,6 +14,7 @@ import {
 	ModalOverlay,
 	Spacer,
 	Text,
+	Tooltip,
 	useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -23,6 +24,7 @@ import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { CreateOrganization } from './CreateOrganization';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,6 +32,7 @@ export const ManageOrganization = (): JSX.Element => {
 	const [loginError, setLoginError] = useState<string | null>(null);
 	const { data: org } = useGetUserInfo();
 	const activeOrg = org?.organization;
+	const { privileges, activeOrg: hasActiveOrg } = useGetUserPrivileges();
 
 	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
 
@@ -65,14 +68,41 @@ export const ManageOrganization = (): JSX.Element => {
 
 	return (
 		<div>
-			<Button
-				variant="outline"
-				colorScheme="gray"
-				onClick={onOpen}
-				_hover={{ textColor: 'y.500' }}
-			>
-				Manage Organizations
-			</Button>
+			{hasActiveOrg ? (
+				<>
+					{privileges.includes('ADMIN') || privileges.includes('EDITOR') ? (
+						<Button
+							variant="outline"
+							colorScheme="gray"
+							onClick={onOpen}
+							_hover={{ textColor: 'y.500' }}
+						>
+							Manage Organizations
+						</Button>
+					) : (
+						<Tooltip label="You do not have persmissions!">
+							<Button
+								variant="outline"
+								colorScheme="gray"
+								onClick={onOpen}
+								_hover={{ textColor: 'y.500' }}
+								isDisabled
+							>
+								Manage Organizations
+							</Button>
+						</Tooltip>
+					)}
+				</>
+			) : (
+				<Button
+					variant="outline"
+					colorScheme="gray"
+					onClick={onOpen}
+					_hover={{ textColor: 'y.500' }}
+				>
+					Manage Organizations
+				</Button>
+			)}
 
 			<Modal isOpen={isOpen} onClose={handleClose} size={'6xl'}>
 				<ModalOverlay />
