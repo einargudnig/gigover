@@ -34,7 +34,6 @@ export const Dashboard = (): JSX.Element => {
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
 	const { privileges, activeOrg } = useGetUserPrivileges();
-	// console.log(privileges, activeOrg);
 
 	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
 
@@ -92,18 +91,18 @@ export const Dashboard = (): JSX.Element => {
 									type="radio"
 								>
 									<MenuItemOption
-										value="ALL"
-										style={{ textTransform: 'capitalize' }}
-										onClick={() => setActiveTab(ProjectStatus.ALL)}
-									>
-										{ProjectStatus.ALL.toLowerCase()}
-									</MenuItemOption>
-									<MenuItemOption
 										value="OPEN"
 										style={{ textTransform: 'capitalize' }}
 										onClick={() => setActiveTab(ProjectStatus.OPEN)}
 									>
 										{ProjectStatus.OPEN.toLowerCase()}
+									</MenuItemOption>
+									<MenuItemOption
+										value="ALL"
+										style={{ textTransform: 'capitalize' }}
+										onClick={() => setActiveTab(ProjectStatus.ALL)}
+									>
+										{ProjectStatus.ALL.toLowerCase()}
 									</MenuItemOption>
 									{statuses?.progressStatusList?.map((status) => (
 										<MenuItemOption
