@@ -28,8 +28,7 @@ import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
-	const { data, isLoading: isLoadingProjects, isError, error } = useProjectList();
-	console.log('PROJECTS', data);
+	const { data, isLoading: isLoadingProjects, isFetching, isError, error } = useProjectList();
 	const [, setModalContext] = useContext(ModalContext);
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
@@ -53,7 +52,7 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
-	const isLoading = isLoadingProjects || isLoadingStatuses;
+	const isLoading = isLoadingProjects || isLoadingStatuses || isFetching;
 
 	return (
 		<Page
@@ -88,7 +87,7 @@ export const Dashboard = (): JSX.Element => {
 						) : (
 							<MenuList>
 								<MenuOptionGroup
-									defaultValue={'ALL'}
+									defaultValue={'OPEN'}
 									title="Project statuses"
 									type="radio"
 								>

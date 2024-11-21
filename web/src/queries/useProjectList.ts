@@ -19,7 +19,7 @@ export const projectSorter = (a: Project, b: Project) => {
 };
 
 export const useProjectList = () => {
-	const { data, isLoading, isError, error } = useQuery<
+	const { data, isLoading, isFetching, isError, error } = useQuery<
 		ProjectResponse,
 		ErrorResponse,
 		ProjectResponse
@@ -27,10 +27,14 @@ export const useProjectList = () => {
 
 	const projects: Project[] = data?.projects || [];
 
+	// call the useGetUserPermissions hook to get the active organization
+	// filter projects based on the active organization
+
 	return {
 		data: projects.sort(projectSorter),
 		// data: projects,
 		isLoading,
+		isFetching,
 		isError,
 		error
 	};

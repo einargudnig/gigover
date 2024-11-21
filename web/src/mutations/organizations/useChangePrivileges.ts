@@ -25,7 +25,7 @@ export const useChangePrivileges = () => {
 					throw new Error(response.data?.errorCode);
 				}
 
-				queryClient.refetchQueries(ApiService.getOrganizationUsers);
+				await queryClient.refetchQueries(ApiService.getOrganizationUsers);
 
 				return response.data;
 			} catch (e) {

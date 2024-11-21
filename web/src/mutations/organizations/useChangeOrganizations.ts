@@ -20,8 +20,9 @@ export const useChangeOrganizations = () => {
 					throw new Error(response.data?.errorCode);
 				}
 
-				queryClient.refetchQueries(ApiService.changeOrganizations);
-				queryClient.refetchQueries(ApiService.getUserInfo);
+				await queryClient.refetchQueries(ApiService.projectList);
+				await queryClient.refetchQueries(ApiService.changeOrganizations);
+				await queryClient.refetchQueries(ApiService.getUserInfo);
 
 				return response.data;
 			} catch (e) {
