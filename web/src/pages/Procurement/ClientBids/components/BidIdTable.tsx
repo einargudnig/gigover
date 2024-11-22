@@ -118,10 +118,8 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 			cost: formData.cost
 		});
 
-		console.log('Items', items);
 		mutateAdd(formData);
 		setFormData({ ...defaultData });
-		console.log('mutate with this formData:', formData); // Good for debugging
 	};
 
 	const handleEdit = (item: BidItem) => {
@@ -130,7 +128,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	};
 
 	const handleUpdate = (item: BidItem) => {
-		console.log('Editing item:', item);
 		console.log('Editing item:', item);
 
 		// Update the local items state

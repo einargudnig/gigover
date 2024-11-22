@@ -82,7 +82,6 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 									setIsOpen={setDialogOpen}
 									callback={(b) => {
 										if (b) {
-											console.log('Did I press the delete?');
 											// remove Stakeholder mutation!
 											handleRemove(stakeHolder);
 										}

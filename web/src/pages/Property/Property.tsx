@@ -21,11 +21,11 @@ const PropertyCardStyled = styled(CardBaseLink)`
 `;
 
 export const Property = (): JSX.Element => {
-	const { data, isLoading } = useGetProperties();
+	const { data, isLoading, isFetching } = useGetProperties();
 
 	return (
 		<>
-			{isLoading ? (
+			{isLoading || isFetching ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>

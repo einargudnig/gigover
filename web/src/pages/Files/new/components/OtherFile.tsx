@@ -110,9 +110,6 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 							setIsOpen={setDialogOpen}
 							callback={async (b) => {
 								if (b) {
-									console.log(
-										'Did I press the delete? in teh CONfirmation dialog?'
-									);
 									await deleteTenderDocumentAsync(file);
 								}
 								setDialogOpen(false);

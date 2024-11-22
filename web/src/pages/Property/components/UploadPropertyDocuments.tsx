@@ -25,8 +25,6 @@ const UploadModalStyled = styled.div`
 `;
 
 export const UploadPropertyDocuments = ({ onClose, propertyId }: UploadModalProps): JSX.Element => {
-	console.log('UploadPropertyDocuments', propertyId);
-
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for property'}>
 			<UploadModalStyled>
@@ -113,7 +111,6 @@ const DropZone = ({
 	const onDrop = useCallback(
 		async (acceptedFiles: (File & { path: string })[]) => {
 			// Do something with the files
-			console.log(isUploading, 'ISUPLOADING');
 			if (acceptedFiles.length > 0) {
 				let createdFolder: number | undefined;
 				const fPath = acceptedFiles[0]?.path ?? '';
@@ -139,7 +136,6 @@ const DropZone = ({
 							},
 							externalId
 						);
-						console.log('response in DropZone', response);
 						let uploadedFile: { propertyDocument: PropertyDocument } | undefined;
 
 						try {

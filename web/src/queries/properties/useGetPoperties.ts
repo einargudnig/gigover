@@ -8,19 +8,20 @@ export interface PropertiesResponse {
 }
 
 export const useGetProperties = () => {
-	const { data, isLoading, isError, error } = useQuery<PropertiesResponse, ErrorResponse>(
-		ApiService.getProperties,
-		{
-			refetchOnWindowFocus: true
-			// withCredentials: true
-		}
-	);
+	const { data, isLoading, isFetching, isError, error } = useQuery<
+		PropertiesResponse,
+		ErrorResponse
+	>(ApiService.getProperties, {
+		refetchOnWindowFocus: true
+		// withCredentials: true
+	});
 
 	const properties: IProperties[] = data?.properties || [];
 
 	return {
 		data: properties,
 		isLoading,
+		isFetching,
 		isError,
 		error
 	};

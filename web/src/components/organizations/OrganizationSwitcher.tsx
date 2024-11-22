@@ -1,10 +1,20 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { Box, Button, Menu, MenuButton, MenuDivider, MenuItem, MenuList } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Menu,
+	MenuButton,
+	MenuDivider,
+	MenuItem,
+	MenuList
+} from '@chakra-ui/react';
 import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { CreateOrganization } from './CreateOrganization';
 import { ManageOrganizationInvites } from './ManageOrganizationInvites';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
@@ -29,7 +39,10 @@ export const OrganizationSwitcher = () => {
 					_hover={{ textColor: 'gray.700' }}
 					isLoading={isLoading}
 				>
-					{currentOrganization?.name || 'Personal Space'}
+					<Flex>
+						{isLoading ? <LoadingSpinner /> : null}
+						{currentOrganization?.name || 'Personal Space'}
+					</Flex>
 				</MenuButton>
 				<MenuList>
 					<MenuItem onClick={() => handleOrganizationChange(0)}>Personal space</MenuItem>
