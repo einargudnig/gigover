@@ -43,16 +43,17 @@ export const ManageOrganization = (): JSX.Element => {
 		}
 	});
 
-	const handleLogin = async (name: string, password: string) => {
+	const handleLogin = async (password: string) => {
 		try {
 			setLoginError(null);
 
-			const response = await loginOrg({ name, password });
+			const orgName = activeOrg?.name;
+			const response = await loginOrg({ name: orgName, password });
 			console.log(response);
 			if (response.errorCode === 'OK') {
 				setShowOrgs(true);
 				reset();
-			} else if (response.errorCode === 'WRONG_UER_PASSWORD') {
+			} else if (response.errorCode === 'WRONG_USER_PASSWORD') {
 				setLoginError('');
 			}
 		} catch (error) {
@@ -77,7 +78,7 @@ export const ManageOrganization = (): JSX.Element => {
 							onClick={onOpen}
 							_hover={{ textColor: 'y.500' }}
 						>
-							Manage Organizations
+							Manage active organization
 						</Button>
 					) : (
 						<Tooltip label="You do not have persmissions!">
@@ -88,7 +89,7 @@ export const ManageOrganization = (): JSX.Element => {
 								_hover={{ textColor: 'y.500' }}
 								isDisabled
 							>
-								Manage Organizations
+								Manage active organization
 							</Button>
 						</Tooltip>
 					)}
@@ -100,7 +101,7 @@ export const ManageOrganization = (): JSX.Element => {
 					onClick={onOpen}
 					_hover={{ textColor: 'y.500' }}
 				>
-					Manage Organizations
+					Manage active organization
 				</Button>
 			)}
 
@@ -133,18 +134,21 @@ export const ManageOrganization = (): JSX.Element => {
 												<Box mt={2}>
 													<form
 														onSubmit={handleSubmit((data) =>
-															handleLogin(data.name, data.password)
+															handleLogin(data.password)
 														)}
 													>
 														<FormControl marginBottom={2}>
 															<FormLabel htmlFor="name">
-																Organization Name
+																Active organization Name
 															</FormLabel>
-															<Input
-																type="text"
-																id="name"
-																{...register('name')}
-															/>
+															<Tooltip label="To change the active organization, use the organization switcher">
+																<Input
+																	type="text"
+																	id="name"
+																	value={activeOrg?.name}
+																	isDisabled
+																/>
+															</Tooltip>
 														</FormControl>
 														<FormControl marginBottom={2}>
 															<FormLabel htmlFor="password">
@@ -161,6 +165,7 @@ export const ManageOrganization = (): JSX.Element => {
 																<Button
 																	variant={'outline'}
 																	colorScheme="gray"
+																	onClick={handleClose}
 																>
 																	Cancel
 																</Button>

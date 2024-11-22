@@ -15,20 +15,27 @@ import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 
 interface InviteUserToOrgProps {
 	organizationName: string;
+	onClose: () => void;
 }
 
-export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX.Element => {
+export const InviteUserToOrg = ({
+	organizationName,
+	onClose
+}: InviteUserToOrgProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [userId, setUserId] = useState<string | undefined>();
 	const [selectedPrivileges, setSelectedPrivileges] = useState<'A' | 'E' | 'V' | undefined>();
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const [mutationSuccess, setMutationSuccess] = useState(false);
+	const [mutationError, setMutationError] = useState<string | null>(null);
+	const [searchError, setSearchError] = useState<string | null>(null);
 	const inviteMutation = useInviteUserToOrganization();
 	const searchMutation = useGetUserByEmail();
 
 	const toast = useToast();
 	const search = useCallback(async () => {
 		try {
+			setSearchError(null);
 			const response = await searchMutation.mutateAsync({
 				email: searchMail
 			});
@@ -36,8 +43,10 @@ export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX
 			if (response.uId) {
 				console.log('Found user with uId:', response.uId);
 
+				setSearchError(null);
 				setInviteSuccess(true);
 				setUserId(response.uId);
+				setMutationError(null);
 			} else {
 				// TODO I need to add this!
 				toast({
@@ -51,6 +60,8 @@ export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX
 			}
 		} catch (e) {
 			console.error(e);
+			setMutationError(null);
+			setSearchError('Error searching for user');
 			throw new Error('Could not invite user.');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,6 +99,8 @@ export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX
 
 	const addMemberToOrganization = useCallback(async () => {
 		try {
+			setMutationError(null);
+
 			const response = await inviteMutation.mutateAsync({
 				email: searchMail ?? '', // email of the user to invite -> searchMail
 				uId: userId!, // we know this is defined, we will never get here if it is not! // TODO maybe I can remove this
@@ -99,22 +112,26 @@ export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX
 				setSearchMail('');
 				setInviteSuccess(true);
 				setMutationSuccess(true);
+				setTimeout(() => {
+					onClose();
+				}, 1500);
 			} else {
+				setMutationError(response.errorCode);
 				throw new Error('Could not invite user.');
 			}
 		} catch (e) {
 			console.error(e);
+			setMutationError('Error inviting user');
+			setSearchMail('');
+			setInviteSuccess(false);
+			setSelectedPrivileges(undefined);
 			throw new Error('Could not invite user.');
 		}
-	}, [inviteMutation, searchMail, selectedPrivileges, userId]);
+	}, [inviteMutation, onClose, searchMail, selectedPrivileges, userId]);
 
 	return (
 		<>
-			<FormControl
-				isRequired={true}
-				isInvalid={searchMutation.isError || inviteMutation.isError}
-				mb={4}
-			>
+			<FormControl isRequired={true} isInvalid={searchMutation.isError} mb={4}>
 				<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
 				<Input
 					placeholder={'Enter e-mail address of a Gigover user'}
@@ -123,6 +140,14 @@ export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX
 					onChange={(e) => setSearchMail(e.target.value)}
 					marginBottom={4}
 				/>
+
+				{searchError ? (
+					<Flex justifyContent={'center'} alignItems={'center'} mt={3}>
+						<Text color={'red.400'} fontWeight={'semibold'}>
+							{searchError}
+						</Text>
+					</Flex>
+				) : null}
 
 				{inviteSuccess ? (
 					<>
@@ -158,6 +183,13 @@ export const InviteUserToOrg = ({ organizationName }: InviteUserToOrgProps): JSX
 				{mutationSuccess ? (
 					<Flex justifyContent={'center'} alignItems={'center'} mt={3}>
 						<Text color={'green.500'}>User invited to organization</Text>
+					</Flex>
+				) : null}
+				{mutationError ? (
+					<Flex justifyContent={'center'} alignItems={'center'} mt={3}>
+						<Text color={'red.400'} fontWeight={'semibold'}>
+							{mutationError}
+						</Text>
 					</Flex>
 				) : null}
 			</FormControl>

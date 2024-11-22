@@ -37,8 +37,7 @@ import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrgan
 import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
 
 export function MemberTable({ activeOrg }): JSX.Element {
-	const { data, isLoading, isError, error } = useGetOrganizationUsers();
-	console.log({ activeOrg });
+	const { data, isLoading, isFetching, isError, error } = useGetOrganizationUsers();
 	const changePrivileges = useChangePrivileges();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
@@ -92,10 +91,10 @@ export function MemberTable({ activeOrg }): JSX.Element {
 			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent pb={4}>
-					<ModalHeader>Invite Members</ModalHeader>
+					<ModalHeader>Invite members to {activeOrg.name}</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<InviteUserToOrg organizationName={activeOrg.name} />
+						<InviteUserToOrg organizationName={activeOrg.name} onClose={onClose} />
 					</ModalBody>
 				</ModalContent>
 			</Modal>
@@ -135,7 +134,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 									</Tr>
 								</Thead>
 								<Tbody>
-									{isLoading ? (
+									{isLoading || isFetching ? (
 										<Tr>
 											<Td>Loading...</Td>
 											<Td>

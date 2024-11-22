@@ -14,12 +14,12 @@ interface OrganizationUsersResponse {
 }
 
 export const useGetOrganizationUsers = () => {
-	const { data, isLoading, isError, error } = useQuery<OrganizationUsersResponse, ErrorResponse>(
-		ApiService.getOrganizationUsers,
-		{
-			refetchOnWindowFocus: true
-		}
-	);
+	const { data, isLoading, isFetching, isError, error } = useQuery<
+		OrganizationUsersResponse,
+		ErrorResponse
+	>(ApiService.getOrganizationUsers, {
+		refetchOnWindowFocus: true
+	});
 
 	// Ensure the object structure matches OrganizationUsersResponse
 	const organizationUsers: OrganizationUsersResponse = {
@@ -29,6 +29,7 @@ export const useGetOrganizationUsers = () => {
 	return {
 		data: organizationUsers,
 		isLoading,
+		isFetching,
 		isError,
 		error
 	};

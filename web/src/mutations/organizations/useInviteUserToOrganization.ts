@@ -10,9 +10,6 @@ interface InviteUserToOrganizationInput {
 	priv: 'A' | 'E' | 'V';
 }
 
-//? Note: The email is the email of the user who should be invited to the organization and the uId is the organizations owner uid.
-// This should not be the same user!
-
 export const useInviteUserToOrganization = () => {
 	const queryClient = useQueryClient();
 	const mutationKey = ApiService.inviteToOrganization;
@@ -21,7 +18,6 @@ export const useInviteUserToOrganization = () => {
 		mutationKey,
 		async (variables) => {
 			try {
-				console.log('IN MUTATION', { variables });
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
 				});
