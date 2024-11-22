@@ -93,8 +93,7 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 												<>
 													{data.map((invite) => (
 														<Tr key={invite.id}>
-															{/* <Th>{data.orgName}</Th> */}
-															<Td>orgName</Td>
+															<Td>{invite.name}</Td>
 															<Td>{invite.priv}</Td>
 															<Td>
 																<Button
