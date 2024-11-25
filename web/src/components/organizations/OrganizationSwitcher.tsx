@@ -23,23 +23,22 @@ export const OrganizationSwitcher = () => {
 	const { data: userInfo, isLoading } = useGetUserInfo();
 	const { mutate } = useChangeOrganizations();
 	const location = useLocation();
-	console.log(location.pathname);
-	// const isOnProjectPage = location.pathname.includes('/project/');
 
 	const isOnProjectIdPage = /^\/project\/\d+$/.test(location.pathname);
 	const isOnPropertyIdPage = /^\/property\/\d+$/.test(location.pathname);
+	const isOnFilesIdPage = /^\/files\/\d+\/?$/.test(location.pathname);
 
 	const currentOrganization = userInfo?.organization;
 
 	const handleOrganizationChange = (id: number) => {
 		mutate({ id });
 
-		// trigger toast and redirect!
 		if (isOnProjectIdPage) {
-			// toast
 			window.location.assign('/');
 		} else if (isOnPropertyIdPage) {
 			window.location.assign('/property');
+		} else if (isOnFilesIdPage) {
+			window.location.assign('/files');
 		}
 	};
 
