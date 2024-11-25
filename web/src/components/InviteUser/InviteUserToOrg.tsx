@@ -1,4 +1,5 @@
 import {
+	Box,
 	Button,
 	Flex,
 	FormControl,
@@ -31,6 +32,16 @@ export const InviteUserToOrg = ({
 	const [searchError, setSearchError] = useState<string | null>(null);
 	const inviteMutation = useInviteUserToOrganization();
 	const searchMutation = useGetUserByEmail();
+
+	const extraInfoMap = {
+		A: 'Admin can see all projects, manage all users',
+		E: 'Editor can see projects they are added to, create new projects, edit tasks and members within those projects.',
+		V: 'Viewer see projects they are added to, action tasks they are assigned to, cannot create projects or tasks.'
+	};
+
+	const extraInfo = selectedPrivileges
+		? extraInfoMap[selectedPrivileges]
+		: 'Select a privilege level to see more information';
 
 	const toast = useToast();
 	const search = useCallback(async () => {
@@ -131,7 +142,7 @@ export const InviteUserToOrg = ({
 
 	return (
 		<>
-			<FormControl isRequired={true} isInvalid={searchMutation.isError} mb={4}>
+			<FormControl isInvalid={searchMutation.isError} mb={4}>
 				<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
 				<Input
 					placeholder={'Enter e-mail address of a Gigover user'}
@@ -168,17 +179,23 @@ export const InviteUserToOrg = ({
 				) : null}
 
 				{selectedPrivileges && (
-					<Button
-						isLoading={inviteMutation.isLoading}
-						disabled={inviteMutation.isLoading}
-						onClick={addMemberToOrganization}
-						width={'full'}
-						variant={'outline'}
-						colorScheme={'gray'}
-						mt={3}
-					>
-						Invite user to organization
-					</Button>
+					<Box>
+						<Text mt={2} align={'center'}>
+							{extraInfo}
+						</Text>
+						<Button
+							isLoading={inviteMutation.isLoading}
+							disabled={inviteMutation.isLoading}
+							onClick={addMemberToOrganization}
+							width={'full'}
+							variant={'outline'}
+							colorScheme={'gray'}
+							mt={3}
+							_hover={{ bg: 'gray.300' }}
+						>
+							Invite user to organization
+						</Button>
+					</Box>
 				)}
 				{mutationSuccess ? (
 					<Flex justifyContent={'center'} alignItems={'center'} mt={3}>

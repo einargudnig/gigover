@@ -15,6 +15,7 @@ import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { CreateOrganization } from './CreateOrganization';
 import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { ManageOrganization } from './ManageOrganization';
 
 export const OrganizationSwitcher = () => {
 	const { data } = useGetOrganizations();
@@ -58,8 +59,12 @@ export const OrganizationSwitcher = () => {
 						: null}
 					<MenuDivider />
 					<MenuItem>
-						<CreateOrganization />{' '}
+						<ManageOrganization />
 					</MenuItem>
+					<MenuItem>
+						<CreateOrganization />
+					</MenuItem>
+					<MenuDivider />
 					<MenuItem>
 						<ManageOrganizationInvites />
 					</MenuItem>

@@ -17,7 +17,6 @@ const DevMenuStyled = styled.div`
 export const DevMenu = (): JSX.Element | null => {
 	const { mutate } = useChangeUid();
 	const [uid, setUid] = useState('');
-	console.log('uid', uid);
 
 	const change = useCallback(() => {
 		if (uid.length > 0) {

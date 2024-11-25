@@ -73,21 +73,22 @@ export const ManageOrganization = (): JSX.Element => {
 				<>
 					{privileges.includes('ADMIN') || privileges.includes('EDITOR') ? (
 						<Button
-							variant="outline"
-							colorScheme="gray"
 							onClick={onOpen}
-							_hover={{ textColor: 'y.500' }}
+							variant={'link'}
+							colorScheme="gray.300"
+							p={-1}
+							size={'sm'}
 						>
 							Manage active organization
 						</Button>
 					) : (
 						<Tooltip label="You do not have persmissions!">
 							<Button
-								variant="outline"
-								colorScheme="gray"
+								variant="link"
+								colorScheme="gray.300"
 								onClick={onOpen}
-								_hover={{ textColor: 'y.500' }}
 								isDisabled
+								size={'sm'}
 							>
 								Manage active organization
 							</Button>
@@ -95,12 +96,7 @@ export const ManageOrganization = (): JSX.Element => {
 					)}
 				</>
 			) : (
-				<Button
-					variant="outline"
-					colorScheme="gray"
-					onClick={onOpen}
-					_hover={{ textColor: 'y.500' }}
-				>
+				<Button variant="link" colorScheme="gray.300" onClick={onOpen} size={'sm'}>
 					Manage active organization
 				</Button>
 			)}

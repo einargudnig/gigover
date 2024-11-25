@@ -30,7 +30,6 @@ import { TenderIcon } from './icons/TenderIcon';
 import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
-import { ManageOrganization } from './organizations/ManageOrganization';
 import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
 
 interface PageProps {
@@ -275,8 +274,6 @@ export const Page = ({
 				<Box p={2} backgroundColor={'white'} borderBottom={'1px'} borderColor={'gray.300'}>
 					<Flex justifyContent={'end'}>
 						<Flex pr={3}>
-							<ManageOrganization />
-							<Box w={2} />
 							<OrganizationSwitcher />
 							<Notifications />
 							<Menu>

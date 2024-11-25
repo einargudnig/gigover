@@ -100,8 +100,9 @@ export const TaskCard = ({
 	const [, setModalContext] = useContext(ModalContext);
 	const { data } = useProjectTypes();
 	const isEditing = Boolean(onSubmit);
-	const { privileges } = useGetUserPrivileges();
-	const isInteractable = privileges?.includes('ADMIN') || privileges?.includes('EDITOR');
+	const { privileges, activeOrg } = useGetUserPrivileges();
+	const isInteractable =
+		privileges?.includes('ADMIN') || privileges?.includes('EDITOR') || !activeOrg;
 
 	if (!task && !onSubmit) {
 		throw new Error('No task or onSubmit was supplied for Task Component');

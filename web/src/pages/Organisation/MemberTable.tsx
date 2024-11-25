@@ -23,6 +23,7 @@ import {
 	Text,
 	Th,
 	Thead,
+	Tooltip,
 	Tr,
 	useDisclosure
 } from '@chakra-ui/react';
@@ -35,6 +36,7 @@ import { useChangePrivileges } from '../../mutations/organizations/useChangePriv
 import { useRemoveInviteToOrganization } from '../../mutations/organizations/useRemoveInviteToOrganization';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
 import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
+import { InfoIcon } from '@chakra-ui/icons';
 
 export function MemberTable({ activeOrg }): JSX.Element {
 	const { data, isLoading, isFetching, isError, error } = useGetOrganizationUsers();
@@ -199,7 +201,12 @@ export function MemberTable({ activeOrg }): JSX.Element {
 																})
 															}
 														>
-															Make admin
+															<Flex align={'center'}>
+																Make admin
+																<Tooltip label="Manages organizations. See all projects and manage users.">
+																	<InfoIcon ml={2} />
+																</Tooltip>
+															</Flex>
 														</MenuItem>
 														<MenuItem
 															onClick={() =>
@@ -209,7 +216,12 @@ export function MemberTable({ activeOrg }): JSX.Element {
 																})
 															}
 														>
-															Make editor
+															<Flex align={'center'}>
+																Make editor
+																<Tooltip label="See projects they are added to, create new projects, edit tasks and members within those tasks.">
+																	<InfoIcon ml={2} />
+																</Tooltip>
+															</Flex>
 														</MenuItem>
 														<MenuItem
 															onClick={() =>
@@ -219,7 +231,12 @@ export function MemberTable({ activeOrg }): JSX.Element {
 																})
 															}
 														>
-															Make viewer
+															<Flex align={'center'}>
+																Make viewer
+																<Tooltip label="See projects they are added to, action tasks they are assigned to.">
+																	<InfoIcon ml={2} />
+																</Tooltip>
+															</Flex>
 														</MenuItem>
 													</MenuList>
 												</Menu>
