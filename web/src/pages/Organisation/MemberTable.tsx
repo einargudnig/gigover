@@ -46,6 +46,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 	const {
 		data: userInvites,
 		isLoading: userInvitesLoading,
+		isFetching: userInvitesFetching,
 		isError: userInvitesIsError,
 		error: userInvitesError
 	} = useGetUserOrgInvites();
@@ -136,36 +137,6 @@ export function MemberTable({ activeOrg }): JSX.Element {
 									</Tr>
 								</Thead>
 								<Tbody>
-									{isLoading || isFetching ? (
-										<Tr>
-											<Td>Loading...</Td>
-											<Td>
-												<LoadingSpinner />
-											</Td>
-										</Tr>
-									) : isError ? (
-										<Tr>
-											<Td>{error?.errorCode}</Td>
-										</Tr>
-									) : (
-										<>
-											{data?.organizationUsers.length === 0 ? (
-												<>
-													<Tr>
-														<Td>
-															No data, be sure that you have selected
-															a organization!
-														</Td>
-													</Tr>
-													<Tr>
-														<Td>
-															You might be in your personal space.
-														</Td>
-													</Tr>
-												</>
-											) : null}
-										</>
-									)}
 									{data?.organizationUsers.map((member) => (
 										<Tr key={member.uId}>
 											<Td>
@@ -244,12 +215,9 @@ export function MemberTable({ activeOrg }): JSX.Element {
 										</Tr>
 									))}
 
-									{userInvitesLoading ? (
+									{userInvitesLoading || userInvitesFetching ? (
 										<Tr>
-											<Td>Loading...</Td>
-											<Td>
-												<LoadingSpinner />
-											</Td>
+											<Td></Td>
 										</Tr>
 									) : userInvitesIsError ? (
 										<Tr>
@@ -294,6 +262,37 @@ export function MemberTable({ activeOrg }): JSX.Element {
 													</Td>
 												</Tr>
 											))}
+										</>
+									)}
+
+									{isLoading || isFetching ? (
+										<Tr>
+											<Td>Loading...</Td>
+											<Td>
+												<LoadingSpinner />
+											</Td>
+										</Tr>
+									) : isError ? (
+										<Tr>
+											<Td>{error?.errorCode}</Td>
+										</Tr>
+									) : (
+										<>
+											{data?.organizationUsers.length === 0 ? (
+												<>
+													<Tr>
+														<Td>
+															No data, be sure that you have selected
+															a organization!
+														</Td>
+													</Tr>
+													<Tr>
+														<Td>
+															You might be in your personal space.
+														</Td>
+													</Tr>
+												</>
+											) : null}
 										</>
 									)}
 								</Tbody>

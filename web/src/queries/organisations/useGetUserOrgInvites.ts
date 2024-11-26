@@ -8,19 +8,20 @@ interface OrganizationsResponse {
 }
 
 export const useGetUserOrgInvites = () => {
-	const { data, isLoading, isError, error } = useQuery<OrganizationsResponse, ErrorResponse>(
-		ApiService.getUserOrgInvites,
-		{
-			refetchOnWindowFocus: true
-			// withCredentials: true
-		}
-	);
+	const { data, isLoading, isFetching, isError, error } = useQuery<
+		OrganizationsResponse,
+		ErrorResponse
+	>(ApiService.getUserOrgInvites, {
+		refetchOnWindowFocus: true
+		// withCredentials: true
+	});
 
 	const organizationsInvites: OrganizationInvites[] = data?.organizationUsers || [];
 
 	return {
 		data: organizationsInvites,
 		isLoading,
+		isFetching,
 		isError,
 		error
 	};

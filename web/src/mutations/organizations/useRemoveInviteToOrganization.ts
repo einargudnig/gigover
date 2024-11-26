@@ -27,6 +27,7 @@ export const useRemoveInviteToOrganization = () => {
 
 				// we want to refetch this query so the organizations updates after we invite a user.
 				queryClient.refetchQueries(ApiService.getOrganizationUsers);
+				queryClient.refetchQueries(ApiService.getUserOrgInvites);
 				queryClient.refetchQueries(ApiService.getOrganizations);
 				return response.data;
 			} catch (e) {
