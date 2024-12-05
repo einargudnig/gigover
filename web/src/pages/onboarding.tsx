@@ -183,9 +183,9 @@ export const Onboarding = (): JSX.Element => {
 												{...register('zipCode', {
 													required: 'Zip code is required',
 													maxLength: {
-														value: 3,
+														value: 10,
 														message:
-															'Zip code no more than 3 digits long'
+															'Zip code no more than 10 digits long'
 													}
 												})}
 											/>
