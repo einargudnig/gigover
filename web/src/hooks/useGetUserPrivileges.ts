@@ -2,18 +2,21 @@ import { useGetUserInfo } from '../queries/useGetUserInfo';
 
 export const useGetUserPrivileges = () => {
 	const { data } = useGetUserInfo();
+
+	const activeOrganization = data?.organization;
+
 	// Make sure to handle the case where there is no active organization
-	if (!data?.organization) {
+	if (!activeOrganization) {
 		return {
 			privileges: '',
 			activeOrg: false
 		};
 	}
 
-	const activePrivileges = data?.organization.priv;
+	const activeOrgPriv = data.organizations.find((org) => org.id === activeOrganization.id)?.priv;
 
 	return {
-		privileges: activePrivileges,
+		privileges: activeOrgPriv ?? 'W',
 		activeOrg: true
 	};
 };

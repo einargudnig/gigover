@@ -19,8 +19,8 @@ import { LoadingSpinner } from '../LoadingSpinner';
 import { ManageOrganization } from './ManageOrganization';
 
 export const OrganizationSwitcher = () => {
-	const { data } = useGetOrganizations();
-	const { data: userInfo, isLoading } = useGetUserInfo();
+	const { data, isLoading, isFetching } = useGetOrganizations();
+	const { data: userInfo, isLoading: userIsLoading } = useGetUserInfo();
 	const { mutate } = useChangeOrganizations();
 	const location = useLocation();
 
@@ -52,10 +52,10 @@ export const OrganizationSwitcher = () => {
 					rightIcon={<ChevronDownIcon />}
 					_active={{ bg: 'transparent' }}
 					_hover={{ textColor: 'gray.700' }}
-					isLoading={isLoading}
+					isLoading={userIsLoading || isLoading || isFetching}
 				>
 					<Flex>
-						{isLoading ? <LoadingSpinner /> : null}
+						{isLoading || isFetching ? <LoadingSpinner /> : null}
 						{currentOrganization?.name || 'Personal Space'}
 					</Flex>
 				</MenuButton>
