@@ -52,12 +52,12 @@ export const CreateOrganization = (): JSX.Element => {
 				setSuccessMessage('Organization created successfully!');
 				onClose();
 			} else {
-				setCreateError('Something went wrong');
+				setCreateError('Something went wrong, make sure the name is unique');
 			}
 
 			setLoading(false);
 		} catch (error) {
-			setCreateError('Something went wrong');
+			setCreateError('Something went wrong, make sure that the name is unique');
 			setLoading(false);
 		}
 	};
