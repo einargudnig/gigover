@@ -12,6 +12,7 @@ export const SubstringText = (text: string, maxLength: number) => {
 
 export const formatDate = (date: Date): string => format(date, 'dd. MMM yyyy kk:mm');
 export const formatDateWithoutTime = (date: Date): string => format(date, 'dd. MMM yyyy');
+export const formatDateWithoutYear = (date: Date): string => format(date, 'dd. MMM');
 export const formatHours = (date: Date): string => format(date, 'kk:mm');
 
 export const validateEmail = (email: string): boolean => {

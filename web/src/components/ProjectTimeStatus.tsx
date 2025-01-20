@@ -2,16 +2,19 @@ import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import moment from 'moment';
 import { Project } from '../models/Project';
 import { ClockIcon } from './icons/ClockIcon';
+import { formatDateWithoutYear } from '../utils/StringUtils';
 
-const hoursToHumanReadable = (hours: number): string => {
-	const days = Math.floor(hours / 24);
-
-	if (days === 1) {
-		return '1 day left';
-	}
-
-	return days > 0 ? `${days} days left` : `${hours} hours left`;
-};
+// This was used to showcase project time left.
+// TODO: remove this function
+// const hoursToHumanReadable = (hours: number): string => {
+// 	const days = Math.floor(hours / 24);
+//
+// 	if (days === 1) {
+// 		return '1 day left';
+// 	}
+//
+// 	return days > 0 ? `${days} days left` : `${hours} hours left`;
+// };
 
 // Returns a colorScheme for the Project Hours Left Tag
 const getColorScheme = (hoursTotal: number): string => {
@@ -36,11 +39,14 @@ export const ProjectTimeStatus = ({ project }: ProjectTimeStatusProps): JSX.Elem
 	const now = moment(new Date());
 	const end = moment(project.endDate > 0 ? project.endDate : now);
 	const hoursLeft = end.diff(now, 'hours');
+	const dt = new Date(project.endDate);
+	const timeWithoutYear = formatDateWithoutYear(dt);
 
 	return (
 		<Tag colorScheme={getColorScheme(hoursLeft)}>
 			<TagLeftIcon as={ClockIcon} />
-			<TagLabel>{hoursLeft < 0 ? 'Finished' : hoursToHumanReadable(hoursLeft)}</TagLabel>
+			{/* <TagLabel>{hoursLeft < 0 ? 'Finished' : hoursToHumanReadable(hoursLeft)}</TagLabel> */}
+			<TagLabel>{timeWithoutYear}</TagLabel>
 		</Tag>
 	);
 };
