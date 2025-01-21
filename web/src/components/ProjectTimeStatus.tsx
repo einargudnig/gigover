@@ -2,7 +2,7 @@ import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
 import moment from 'moment';
 import { Project } from '../models/Project';
 import { ClockIcon } from './icons/ClockIcon';
-import { formatDateWithoutYear } from '../utils/StringUtils';
+import { formatDateWithoutTime } from '../utils/StringUtils';
 
 // This was used to showcase project time left.
 // TODO: remove this function
@@ -39,8 +39,8 @@ export const ProjectTimeStatus = ({ project }: ProjectTimeStatusProps): JSX.Elem
 	const now = moment(new Date());
 	const end = moment(project.endDate > 0 ? project.endDate : now);
 	const hoursLeft = end.diff(now, 'hours');
-	const dt = new Date(project.endDate);
-	const timeWithoutYear = formatDateWithoutYear(dt);
+	const timeWithoutYear =
+		project.endDate > 0 ? formatDateWithoutTime(new Date(project.endDate)) : 'No end date';
 
 	return (
 		<Tag colorScheme={getColorScheme(hoursLeft)}>
