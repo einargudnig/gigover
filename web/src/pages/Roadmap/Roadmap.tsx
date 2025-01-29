@@ -18,7 +18,10 @@ interface RoadmapProps {
 }
 
 export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Element => {
+	console.log('Roadmap', { projects, selectedProject });
 	const ref = useRef<HTMLDivElement | null>(null);
+
+	console.log({ projects, selectedProject });
 
 	const [state, dispatch] = useGantChart({
 		initialState: {
@@ -33,6 +36,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 	const { data } = useMilestones(
 		state.project?.projectId ?? selectedProject?.projectId ?? projects[0].projectId
 	);
+	console.log({ data });
 
 	useEffect(() => {
 		// Map to Milestone class

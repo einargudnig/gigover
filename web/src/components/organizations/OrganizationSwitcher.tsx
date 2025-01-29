@@ -30,6 +30,12 @@ export const OrganizationSwitcher = () => {
 
 	const currentOrganization = userInfo?.organization;
 
+	const privMap = {
+		ADMIN: '(Admin)',
+		EDITOR: '(Editor)',
+		VIEWER: '(Viewer)'
+	}[userInfo?.organization?.priv];
+
 	const handleOrganizationChange = (id: number) => {
 		mutate({ id });
 
@@ -56,7 +62,7 @@ export const OrganizationSwitcher = () => {
 				>
 					<Flex>
 						{isLoading || isFetching ? <LoadingSpinner /> : null}
-						{currentOrganization?.name || 'Personal Space'}
+						{currentOrganization?.name || 'Personal Space'} - {privMap}
 					</Flex>
 				</MenuButton>
 				<MenuList>

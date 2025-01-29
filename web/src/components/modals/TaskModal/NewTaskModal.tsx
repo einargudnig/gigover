@@ -73,7 +73,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 	projectId,
 	task
 }) => {
-	console.log('Task in Modal', task);
 	const queryClient = useQueryClient();
 	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
@@ -105,7 +104,6 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 
 	const closeModal = useCallback(() => {
 		if (onClose) {
-			console.log('Closing drawer');
 			onClose();
 		}
 	}, [onClose]);
