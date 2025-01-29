@@ -204,7 +204,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 														>
 															<Flex align={'center'}>
 																Make viewer
-																<Tooltip label="See projects they are added to, action tasks they are assigned to.">
+																<Tooltip label="Viewer can view task and communicate within Broadcast communication tasks.">
 																	<InfoIcon ml={2} />
 																</Tooltip>
 															</Flex>

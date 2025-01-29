@@ -16,10 +16,8 @@ import { GantChartContext } from '../Roadmap/contexts/GantChartContext';
 import { GRID_SIDEBAR_WIDTH, useGantChart } from '../Roadmap/hooks/useGantChart';
 
 export const ProjectDetailsGanttChart = (): JSX.Element => {
-	console.log('ProjectDetailsGanttChart');
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { projectId } = useParams<{ projectId: string }>();
-	// This doesn't make any sense, why fetch *all* projects to only use one when we ca nuse the projectDetails
 
 	const { data, isLoading, isError, error } = useProjectDetails(Number(projectId));
 
@@ -60,14 +58,6 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 			});
 		}
 	}, [projectId, dispatch, mileStoneData]);
-
-	if (isLoading) {
-		return (
-			<Center>
-				<LoadingSpinner />
-			</Center>
-		);
-	}
 
 	if (isError) {
 		return (

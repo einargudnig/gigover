@@ -11,7 +11,6 @@ import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
 	const [state, dispatch] = useContext(GantChartContext);
-
 	// The tasks object on the GantChartContext do not have their lexoRank property set.
 	// So we use the sortedItems to display the tasks from the project on the Context in the correct order.
 	// Lets also make sure that if for some reason we are missing the lexoRank we don't crash the app

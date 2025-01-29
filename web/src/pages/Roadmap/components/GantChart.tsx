@@ -215,6 +215,7 @@ export const GantChart = (): JSX.Element => {
 			// Tasks without Milestones
 			state.tasks.forEach((t) => {
 				const taskRow = convertTaskToRow(dates, state.type, t, setModalContext);
+				console.log({ taskRow });
 				rows.push(taskRow !== null ? taskRow : emptyRow());
 			});
 
