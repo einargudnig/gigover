@@ -19,7 +19,7 @@ import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
 import { TimeTrackerReport } from './TimeTrackerReport';
-import { DisabledPage } from '../../components/DisbledPage';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 
 const TitleContainer = styled.div`
 	display: flex;

@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { ModalContext } from '../../context/ModalContext';
 import { PropertySearchBar } from './components/PropertySearchBar';
-import { DisabledPage } from '../../components/DisbledPage';
-import { DisabledSubMenu } from '../../components/DisabledSubMenu';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
+import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
 
 const Container = styled.div`
 	flex: 1 0;

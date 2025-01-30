@@ -1,5 +1,5 @@
 import { Box } from '@chakra-ui/react';
-import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 // there are some subMenus that should all be disabled for viewers
 

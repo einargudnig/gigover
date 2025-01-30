@@ -14,8 +14,8 @@ import { useResources } from '../../queries/useResources';
 import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
-import { DisabledPage } from '../../components/DisbledPage';
-import { DisabledSubMenu } from '../../components/DisabledSubMenu';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
+import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;

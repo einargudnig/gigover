@@ -14,7 +14,7 @@ import { RoadmapHeader } from '../Roadmap/components/RoadmapHeader';
 import { RoadmapSidebar } from '../Roadmap/components/RoadmapSidebar';
 import { GantChartContext } from '../Roadmap/contexts/GantChartContext';
 import { GRID_SIDEBAR_WIDTH, useGantChart } from '../Roadmap/hooks/useGantChart';
-import { DisabledPage } from '../../components/DisbledPage';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 
 export const ProjectDetailsGanttChart = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);

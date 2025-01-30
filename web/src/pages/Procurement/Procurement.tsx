@@ -7,8 +7,8 @@ import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ModalContext } from '../../context/ModalContext';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { ProcurementSearchBar } from './ProcurementSearchBar';
-import { DisabledPage } from '../../components/DisbledPage';
-import { DisabledSubMenu } from '../../components/DisabledSubMenu';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
+import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
 
 const Container = styled.div`
 	flex: 1 0;

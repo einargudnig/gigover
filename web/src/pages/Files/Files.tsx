@@ -10,8 +10,8 @@ import { UploadModal } from './UploadModal';
 // import { devInfo } from '../../utils/ConsoleUtils';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
-import { DisabledPage } from '../../components/DisbledPage';
-import { DisabledSubMenu } from '../../components/DisabledSubMenu';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
+import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
 
 const Container = styled.div`
 	flex: 1 0;

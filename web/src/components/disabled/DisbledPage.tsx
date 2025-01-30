@@ -1,5 +1,5 @@
 import { Alert, AlertIcon, AlertTitle, AlertDescription, Box } from '@chakra-ui/react';
-import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 export function DisabledPage({ children }: { children: React.ReactNode }) {
 	const { privileges, activeOrg } = useGetUserPrivileges();

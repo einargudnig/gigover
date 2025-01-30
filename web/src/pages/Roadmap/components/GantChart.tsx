@@ -10,7 +10,6 @@ import { displayTaskTitle } from '../../../utils/TaskUtils';
 import { GantChartDates } from '../GantChartDates';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { CalendarType, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
-import { formatDate } from '../../../utils/StringUtils';
 
 interface GridProps {
 	segments: number;
@@ -158,7 +157,6 @@ const convertTaskToRow = (
 	task: TaskItem,
 	setModalContext: Dispatch<SetStateAction<IModalContext>>
 ): GridItemRow | null => {
-	console.log('convertTaskToRow', { dates, type, task });
 	const colors = colorGenerator(displayTaskTitle(task));
 	const result = task.getColPositions(dates, type);
 
