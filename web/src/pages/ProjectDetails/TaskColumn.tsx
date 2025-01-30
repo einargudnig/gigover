@@ -77,6 +77,7 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 								key={task.taskId}
 								draggableId={task.taskId.toString()}
 								index={taskIndex}
+								isDragDisabled={privileges?.includes('VIEWER')}
 							>
 								{(provided): JSX.Element => (
 									<div

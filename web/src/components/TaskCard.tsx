@@ -1,7 +1,5 @@
-import { Avatar, Flex } from '@chakra-ui/react';
-import { darken } from 'polished';
+import { Avatar, Box, Flex, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { useContext } from 'react';
-import styled, { css } from 'styled-components';
 import { ModalContext } from '../context/ModalContext';
 import { FileUploadType } from '../models/FileUploadType';
 import { Task } from '../models/Task';
@@ -11,76 +9,6 @@ import { DropZone } from './DropZone';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
 import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
-
-const TaskCardStyled = styled(CardBase)<{
-	isEditing: boolean;
-	error?: boolean;
-	isDragActive: boolean;
-	isDisabled?: boolean;
-}>`
-	padding: 16px;
-	margin: 8px 0;
-	cursor: pointer;
-	word-wrap: anywhere;
-
-	h4 {
-		font-weight: normal;
-	}
-
-	@media screen and (max-width: 1024px) {
-		padding: 12px;
-
-		h4 {
-			font-size: 15px;
-		}
-	}
-
-	@media screen and (max-width: 768px) {
-		padding: 8px;
-
-		h4 {
-			font-size: 14px;
-		}
-	}
-
-	${(props) =>
-		!props.isEditing &&
-		css`
-			&:hover {
-				background: ${darken(0.05, props.theme.colors.taskBackground)};
-			}
-		`}
-
-	${(props) =>
-		props.isEditing &&
-		css`
-			box-shadow: 0 5px 25px rgba(0, 140, 0, 0.2);
-		`};
-
-	${(props) =>
-		props.isEditing &&
-		props.error &&
-		css`
-			box-shadow: 0 5px 25px rgba(222, 39, 39, 0.2);
-		`};
-
-	${(props) =>
-		props.isDragActive &&
-		css`
-			outline: 3px solid ${props.theme.colors.green};
-		`}
-`;
-
-const TaskItem = styled.div`
-	min-height: 70px;
-	display: inline-flex;
-	justify-content: space-between;
-	flex-direction: column;
-
-	@media screen and (max-width: 768px) {
-		min-width: 240px;
-	}
-`;
 
 interface TaskProps {
 	projectId: number;
@@ -101,12 +29,26 @@ export const TaskCard = ({
 	const { data } = useProjectTypes();
 	const isEditing = Boolean(onSubmit);
 	const { privileges, activeOrg } = useGetUserPrivileges();
+
+	// couple of ways to control who can interact with the task card
+	// ADMINS, EDITORS of organizations can interact with the task card
+	// VIEWERS of ortanizations can only interact with the task card if the task is a broadcast type
+	// if no organization is active, the user can interact with the task card
+	const broadCastingtype = task?.typeId === 50;
 	const isInteractable =
-		privileges?.includes('ADMIN') || privileges?.includes('EDITOR') || !activeOrg;
+		privileges?.includes('ADMIN') ||
+		privileges?.includes('EDITOR') ||
+		!activeOrg ||
+		broadCastingtype;
 
 	if (!task && !onSubmit) {
 		throw new Error('No task or onSubmit was supplied for Task Component');
 	}
+
+	const hoverBg = useColorModeValue('gray.100', 'gray.700');
+	const editingBoxShadow = '0 5px 25px rgba(0, 140, 0, 0.2)';
+	const errorBoxShadow = '0 5px 25px rgba(222, 39, 39, 0.2)';
+	const dragActiveOutline = useColorModeValue('green.500', 'green.200');
 
 	return (
 		<DropZone
@@ -117,42 +59,74 @@ export const TaskCard = ({
 			externalId={task?.taskId}
 		>
 			{({ isDragActive }) => (
-				<TaskCardStyled
-					isDragActive={isDragActive}
-					error={Boolean(error)}
-					isEditing={isEditing}
-					// isDisabled={isDisabled}
-					onClick={() =>
+				<Tooltip
+					hasArrow
+					label={
 						isInteractable
-							? isEditing
-								? null
-								: setModalContext({
-										taskDetails: {
-											task: task!,
-											projectId: projectId
-										}
-								  })
-							: null
+							? 'Click to open'
+							: 'You do not have permission to open this task'
 					}
+					placement="top"
 				>
-					{task ? (
-						<TaskItem>
-							<h4>{task.subject}</h4>
-							<Flex mt={4} align={'center'}>
-								<Label
-									style={{ display: 'inline-block' }}
-									text={
-										data?.projectTypes.find((pt) => pt.typeId === task?.typeId)
-											?.name || 'unknown'
-									}
-								/>
-								{task.worker && <Avatar size="xs" ml={2} name={task.worker.name} />}
-							</Flex>
-						</TaskItem>
-					) : (
-						<TaskCardInput loading={loading} error={error} onSubmit={onSubmit} />
-					)}
-				</TaskCardStyled>
+					<Box
+						as={CardBase}
+						p={{ base: 2, md: 3, lg: 4 }}
+						m={2}
+						cursor={isInteractable ? 'pointer' : 'not-allowed'}
+						opacity={isInteractable ? 1 : 0.5}
+						bg={isEditing ? 'white' : undefined}
+						wordBreak="break-word"
+						boxShadow={
+							isEditing ? (error ? errorBoxShadow : editingBoxShadow) : undefined
+						}
+						outline={isDragActive ? `3px solid ${dragActiveOutline}` : undefined}
+						_hover={!isEditing ? { bg: hoverBg } : undefined}
+						onClick={() =>
+							isInteractable
+								? isEditing
+									? null
+									: setModalContext({
+											taskDetails: {
+												task: task!,
+												projectId: projectId
+											}
+									  })
+								: null
+						}
+					>
+						{task ? (
+							<Box
+								minH="70px"
+								display="flex"
+								justifyContent="space-between"
+								flexDirection="column"
+							>
+								<Box
+									as="h4"
+									fontWeight="normal"
+									fontSize={{ base: '14px', md: '15px', lg: '16px' }}
+								>
+									{task.subject}
+								</Box>
+								<Flex mt={4} align="center">
+									<Label
+										style={{ display: 'inline-block' }}
+										text={
+											data?.projectTypes.find(
+												(pt) => pt.typeId === task?.typeId
+											)?.name || 'unknown'
+										}
+									/>
+									{task.worker && (
+										<Avatar size="xs" ml={2} name={task.worker.name} />
+									)}
+								</Flex>
+							</Box>
+						) : (
+							<TaskCardInput loading={loading} error={error} onSubmit={onSubmit} />
+						)}
+					</Box>
+				</Tooltip>
 			)}
 		</DropZone>
 	);
