@@ -13,7 +13,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
 	const [state, dispatch] = useContext(GantChartContext);
 
-	const { privileges, activeOrg } = useGetUserPrivileges();
+	const { privileges } = useGetUserPrivileges();
 
 	// The tasks object on the GantChartContext do not have their lexoRank property set.
 	// So we use the sortedItems to display the tasks from the project on the Context in the correct order.

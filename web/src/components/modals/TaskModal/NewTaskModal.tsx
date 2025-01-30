@@ -86,7 +86,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 
 	const { isOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: drawerOpen });
 
-	const { privileges, activeOrg } = useGetUserPrivileges();
+	const { privileges } = useGetUserPrivileges();
 	const isViewer = privileges.includes('VIEWER');
 
 	const { handleSubmit, control } = useForm<ProjectTask>({
