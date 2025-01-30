@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { ModalContext } from '../../context/ModalContext';
 import { PropertySearchBar } from './components/PropertySearchBar';
+import { DisabledPage } from '../../components/DisbledPage';
+import { DisabledSubMenu } from '../../components/DisabledSubMenu';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -20,7 +22,7 @@ export const PropertyOutlet = (): JSX.Element => {
 		<Page
 			title={'Property'}
 			actions={
-				<>
+				<DisabledSubMenu>
 					{showSearch ? (
 						<PropertySearchBar />
 					) : (
@@ -39,16 +41,18 @@ export const PropertyOutlet = (): JSX.Element => {
 					>
 						New Property
 					</Button>
-				</>
+				</DisabledSubMenu>
 			}
 		>
-			<VStack style={{ height: '100%' }}>
-				<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-					<Container>
-						<Outlet />
-					</Container>
-				</HStack>
-			</VStack>
+			<DisabledPage>
+				<VStack style={{ height: '100%' }}>
+					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+						<Container>
+							<Outlet />
+						</Container>
+					</HStack>
+				</VStack>
+			</DisabledPage>
 		</Page>
 	);
 };

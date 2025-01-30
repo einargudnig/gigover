@@ -10,6 +10,8 @@ import { UploadModal } from './UploadModal';
 // import { devInfo } from '../../utils/ConsoleUtils';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
+import { DisabledPage } from '../../components/DisbledPage';
+import { DisabledSubMenu } from '../../components/DisabledSubMenu';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -83,24 +85,25 @@ export const Files = (): JSX.Element => {
 				]}
 				contentPadding={false}
 				actions={
-					<>
-						{/* We used to have the search bar here, but there is no real way to fetch all files and search for them!*/}
+					<DisabledSubMenu>
 						{project && <CreateNewFolderButton projectId={project.projectId} />}
 						<Button onClick={() => setUpload(true)}>Upload</Button>
-					</>
+					</DisabledSubMenu>
 				}
 			>
-				<VStack style={{ height: '100%' }}>
-					{isLoading ? (
-						<LoadingSpinner />
-					) : (
-						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-							<Container>
-								<Outlet />
-							</Container>
-						</HStack>
-					)}
-				</VStack>
+				<DisabledPage>
+					<VStack style={{ height: '100%' }}>
+						{isLoading ? (
+							<LoadingSpinner />
+						) : (
+							<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+								<Container>
+									<Outlet />
+								</Container>
+							</HStack>
+						)}
+					</VStack>
+				</DisabledPage>
 			</Page>
 		</>
 	);

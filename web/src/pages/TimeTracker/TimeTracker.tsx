@@ -19,6 +19,7 @@ import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
 import { TimeTrackerReport } from './TimeTrackerReport';
+import { DisabledPage } from '../../components/DisbledPage';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -183,124 +184,128 @@ export const TimeTracker = (): JSX.Element => {
 	return (
 		<>
 			<Page title={'Time tracker'}>
-				<TimeTrackerTotalReport>
-					<div />
-					<div>
-						<h3>Timesheets</h3>
-						{reportDataLoading ? (
-							<h1>
-								<LoadingSpinner />
-							</h1>
-						) : (
-							<h1>{totalTimesheets}</h1>
-						)}
-					</div>
-					<div className={'separator'} />
-					<div>
-						<h3>Minutes tracked</h3>
-						{reportDataLoading ? (
-							<h1>
-								<LoadingSpinner />
-							</h1>
-						) : (
-							<h1>{secondsToString(totalMinutes * 60)}</h1>
-						)}
-					</div>
-					<div className={'separator'} />
-					<div>
-						<h3>Workers</h3>
-						{reportDataLoading ? (
-							<h1>
-								<LoadingSpinner />
-							</h1>
-						) : (
-							<h1>{reportData?.data.report?.length || 0}</h1>
-						)}
-					</div>
-					<div />
-				</TimeTrackerTotalReport>
-				<ActiveTimeTrackers>
-					<TitleContainer>
-						<h3>Active timers</h3>
-						<StartTrackingAction />
-					</TitleContainer>
-					<div>
-						{!hasWorkers ? (
-							<div style={{ marginTop: 24 }}>
-								<EmptyState
-									title={'No current active workers'}
-									text={'Start tracking to see active timers'}
-									action={<StartTrackingAction />}
-								/>
-							</div>
-						) : (
-							<Table>
-								<thead>
-									<tr>
-										<th>Project</th>
-										<th>Worker</th>
-										<th align={'center'} style={{ width: 200 }}>
-											Timer
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									{data?.data?.workers?.map((worker) =>
-										worker.timeSheets.map((timeSheet, timeSheetIndex) => (
-											<tr key={`${worker.uId}_${timeSheetIndex}`}>
-												<td>
-													{getActiveTrackerHeader(
-														timeSheet.projectId,
-														timeSheet.taskId
-													)}
-												</td>
-												<td>{worker.name}</td>
-												<td>
-													<TimerWrapper>
-														<TimerContainer>
-															<Timer
-																formatValue={(value) =>
-																	value < 10
-																		? `0${value}`
-																		: value.toString()
+				<DisabledPage>
+					<TimeTrackerTotalReport>
+						<div />
+						<div>
+							<h3>Timesheets</h3>
+							{reportDataLoading ? (
+								<h1>
+									<LoadingSpinner />
+								</h1>
+							) : (
+								<h1>{totalTimesheets}</h1>
+							)}
+						</div>
+						<div className={'separator'} />
+						<div>
+							<h3>Minutes tracked</h3>
+							{reportDataLoading ? (
+								<h1>
+									<LoadingSpinner />
+								</h1>
+							) : (
+								<h1>{secondsToString(totalMinutes * 60)}</h1>
+							)}
+						</div>
+						<div className={'separator'} />
+						<div>
+							<h3>Workers</h3>
+							{reportDataLoading ? (
+								<h1>
+									<LoadingSpinner />
+								</h1>
+							) : (
+								<h1>{reportData?.data.report?.length || 0}</h1>
+							)}
+						</div>
+						<div />
+					</TimeTrackerTotalReport>
+					<ActiveTimeTrackers>
+						<TitleContainer>
+							<h3>Active timers</h3>
+							<StartTrackingAction />
+						</TitleContainer>
+						<div>
+							{!hasWorkers ? (
+								<div style={{ marginTop: 24 }}>
+									<EmptyState
+										title={'No current active workers'}
+										text={'Start tracking to see active timers'}
+										action={<StartTrackingAction />}
+									/>
+								</div>
+							) : (
+								<Table>
+									<thead>
+										<tr>
+											<th>Project</th>
+											<th>Worker</th>
+											<th align={'center'} style={{ width: 200 }}>
+												Timer
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{data?.data?.workers?.map((worker) =>
+											worker.timeSheets.map((timeSheet, timeSheetIndex) => (
+												<tr key={`${worker.uId}_${timeSheetIndex}`}>
+													<td>
+														{getActiveTrackerHeader(
+															timeSheet.projectId,
+															timeSheet.taskId
+														)}
+													</td>
+													<td>{worker.name}</td>
+													<td>
+														<TimerWrapper>
+															<TimerContainer>
+																<Timer
+																	formatValue={(value) =>
+																		value < 10
+																			? `0${value}`
+																			: value.toString()
+																	}
+																	initialTime={
+																		now.getTime() -
+																		timeSheet.start
+																	}
+																	lastUnit={'h'}
+																>
+																	<Timer.Hours />:
+																	<Timer.Minutes />:
+																	<Timer.Seconds />
+																</Timer>
+															</TimerContainer>
+															<Button
+																onClick={() =>
+																	setStopConfirmationModal({
+																		projectId:
+																			timeSheet.projectId,
+																		taskId: timeSheet.taskId,
+																		uId: worker.uId
+																	})
 																}
-																initialTime={
-																	now.getTime() - timeSheet.start
-																}
-																lastUnit={'h'}
 															>
-																<Timer.Hours />:
-																<Timer.Minutes />:
-																<Timer.Seconds />
-															</Timer>
-														</TimerContainer>
-														<Button
-															onClick={() =>
-																setStopConfirmationModal({
-																	projectId: timeSheet.projectId,
-																	taskId: timeSheet.taskId,
-																	uId: worker.uId
-																})
-															}
-														>
-															|&nbsp;|
-														</Button>
-													</TimerWrapper>
-												</td>
-											</tr>
-										))
-									)}
-								</tbody>
-							</Table>
-						)}
-					</div>
-				</ActiveTimeTrackers>
-				<ActiveTimeTrackers>
-					<TitleContainer>
-						<h3>Reports</h3>
-					</TitleContainer>
-					<TimeTrackerReport refetch={[refetch, setRefetch]} />
-				</ActiveTimeTrackers>
+																|&nbsp;|
+															</Button>
+														</TimerWrapper>
+													</td>
+												</tr>
+											))
+										)}
+									</tbody>
+								</Table>
+							)}
+						</div>
+					</ActiveTimeTrackers>
+					<ActiveTimeTrackers>
+						<TitleContainer>
+							<h3>Reports</h3>
+						</TitleContainer>
+						<TimeTrackerReport refetch={[refetch, setRefetch]} />
+					</ActiveTimeTrackers>
+				</DisabledPage>
 			</Page>
 			{stopConfirmationModal && (
 				<StopTrackerConfirmation

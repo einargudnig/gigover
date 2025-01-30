@@ -8,6 +8,7 @@ import { devError } from '../../utils/ConsoleUtils';
 import { CreateNewFolder } from '../Files/components/CreateNewFolder';
 import { ProjectFolderComponent } from '../Files/components/Folder';
 import { FilesUi } from '../Files/new/components/FilesUi';
+import { DisabledPage } from '../../components/DisbledPage';
 
 export const ProjectDetailsFiles = (): JSX.Element => {
 	const params = useParams();
@@ -30,7 +31,7 @@ export const ProjectDetailsFiles = (): JSX.Element => {
 	}
 
 	return (
-		<>
+		<DisabledPage>
 			{!data?.length ? (
 				<CreateNewFolder projectId={projectId} />
 			) : (
@@ -52,6 +53,6 @@ export const ProjectDetailsFiles = (): JSX.Element => {
 
 			<Spacer height={4} />
 			<FilesUi title={''} files={projectDocuments?.data ?? []} projectId={projectId} />
-		</>
+		</DisabledPage>
 	);
 };

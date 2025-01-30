@@ -7,6 +7,8 @@ import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ModalContext } from '../../context/ModalContext';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { ProcurementSearchBar } from './ProcurementSearchBar';
+import { DisabledPage } from '../../components/DisbledPage';
+import { DisabledSubMenu } from '../../components/DisabledSubMenu';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -37,7 +39,7 @@ export const Procurement = (): JSX.Element => {
 				title={'Procurement'}
 				contentPadding={false}
 				actions={
-					<>
+					<DisabledSubMenu>
 						{showSearch ? (
 							<ProcurementSearchBar tenders={data} />
 						) : (
@@ -57,159 +59,165 @@ export const Procurement = (): JSX.Element => {
 						>
 							New Tender
 						</Button>
-					</>
+					</DisabledSubMenu>
 				}
 				extraNav={
-					<Flex
-						borderBottom={'1px'}
-						backgroundColor={'white'}
-						borderColor={'gray.400'}
-						alignItems={'center'}
-						px={3}
-						py={1}
-						height={'50px'}
-					>
-						<Flex>
+					<DisabledSubMenu>
+						<Flex
+							borderBottom={'1px'}
+							backgroundColor={'white'}
+							borderColor={'gray.400'}
+							alignItems={'center'}
+							px={3}
+							py={1}
+							height={'50px'}
+						>
+							<Flex>
+								<Box>
+									<HStack>
+										<Tooltip hasArrow label="View tenders">
+											<NavLink to={'/tender'} end>
+												{({ isActive }) => (
+													<Box
+														as="button"
+														borderBottom={isActive ? '2px' : 'hidden	'}
+														borderColor={'blue.400'}
+														p={1}
+														_hover={{
+															borderBottom: '2px',
+															borderColor: 'gray.700'
+														}}
+													>
+														Tender
+													</Box>
+												)}
+											</NavLink>
+										</Tooltip>
+
+										<Tooltip hasArrow label="View client answers">
+											<NavLink to={'client-answer'}>
+												{({ isActive }) => (
+													<Box
+														as="button"
+														borderBottom={isActive ? '2px' : 'hidden	'}
+														borderColor={'blue.400'}
+														p={1}
+														_hover={{
+															borderBottom: '2px',
+															borderColor: 'gray.700'
+														}}
+													>
+														Bid Received
+													</Box>
+												)}
+											</NavLink>
+										</Tooltip>
+
+										<Tooltip hasArrow label="View created bids">
+											<NavLink to={'create-bid'}>
+												{({ isActive }) => (
+													<Box
+														as="button"
+														borderBottom={isActive ? '2px' : 'hidden	'}
+														borderColor={'blue.400'}
+														p={1}
+														_hover={{
+															borderBottom: '2px',
+															borderColor: 'gray.700'
+														}}
+													>
+														Create Bid
+													</Box>
+												)}
+											</NavLink>
+										</Tooltip>
+
+										<Tooltip hasArrow label="View tender offers">
+											<NavLink to={'tender-offers'}>
+												{({ isActive }) => (
+													<Box
+														as="button"
+														borderBottom={isActive ? '2px' : 'hidden	'}
+														borderColor={'blue.400'}
+														p={1}
+														_hover={{
+															borderBottom: '2px',
+															borderColor: 'gray.700'
+														}}
+													>
+														Offers Received
+													</Box>
+												)}
+											</NavLink>
+										</Tooltip>
+
+										<Tooltip hasArrow label="View offers I have submitted">
+											<NavLink to={'bidder-offers'}>
+												{({ isActive }) => (
+													<Box
+														as="button"
+														borderBottom={isActive ? '2px' : 'hidden	'}
+														borderColor={'blue.400'}
+														p={1}
+														_hover={{
+															borderBottom: '2px',
+															borderColor: 'gray.700'
+														}}
+													>
+														Submitted Offers
+													</Box>
+												)}
+											</NavLink>
+										</Tooltip>
+
+										<Tooltip hasArrow label="View bidder tenders">
+											<NavLink to={'bidder-tenders'}>
+												{({ isActive }) => (
+													<Box
+														as="button"
+														borderBottom={isActive ? '2px' : 'hidden	'}
+														borderColor={'blue.400'}
+														p={1}
+														_hover={{
+															borderBottom: '2px',
+															borderColor: 'gray.700'
+														}}
+													>
+														Tender Invitations
+													</Box>
+												)}
+											</NavLink>
+										</Tooltip>
+									</HStack>
+								</Box>
+							</Flex>
+							<Spacer />
 							<Box>
-								<HStack>
-									<Tooltip hasArrow label="View tenders">
-										<NavLink to={'/tender'} end>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'blue.400'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.700'
-													}}
-												>
-													Tender
-												</Box>
-											)}
-										</NavLink>
-									</Tooltip>
-
-									<Tooltip hasArrow label="View client answers">
-										<NavLink to={'client-answer'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'blue.400'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.700'
-													}}
-												>
-													Bid Received
-												</Box>
-											)}
-										</NavLink>
-									</Tooltip>
-
-									<Tooltip hasArrow label="View created bids">
-										<NavLink to={'create-bid'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'blue.400'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.700'
-													}}
-												>
-													Create Bid
-												</Box>
-											)}
-										</NavLink>
-									</Tooltip>
-
-									<Tooltip hasArrow label="View tender offers">
-										<NavLink to={'tender-offers'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'blue.400'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.700'
-													}}
-												>
-													Offers Received
-												</Box>
-											)}
-										</NavLink>
-									</Tooltip>
-
-									<Tooltip hasArrow label="View offers I have submitted">
-										<NavLink to={'bidder-offers'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'blue.400'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.700'
-													}}
-												>
-													Submitted Offers
-												</Box>
-											)}
-										</NavLink>
-									</Tooltip>
-
-									<Tooltip hasArrow label="View bidder tenders">
-										<NavLink to={'bidder-tenders'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'blue.400'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.700'
-													}}
-												>
-													Tender Invitations
-												</Box>
-											)}
-										</NavLink>
-									</Tooltip>
-								</HStack>
+								{showCreateBidButton ? (
+									<Button
+										colorScheme={'gray'}
+										variant={'outline'}
+										onClick={() =>
+											setModalContext({ addBid: { bid: undefined } })
+										}
+									>
+										Create bid
+									</Button>
+								) : null}
 							</Box>
 						</Flex>
-						<Spacer />
-						<Box>
-							{showCreateBidButton ? (
-								<Button
-									colorScheme={'gray'}
-									variant={'outline'}
-									onClick={() => setModalContext({ addBid: { bid: undefined } })}
-								>
-									Create bid
-								</Button>
-							) : null}
-						</Box>
-					</Flex>
+					</DisabledSubMenu>
 				}
 			>
-				<VStack style={{ height: '100%' }}>
-					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-						<Container>
-							<Outlet />
-						</Container>
-					</HStack>
-				</VStack>
+				<DisabledPage>
+					<VStack style={{ height: '100%' }}>
+						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+							<Container>
+								<Outlet />
+							</Container>
+						</HStack>
+					</VStack>
+				</DisabledPage>
 			</Page>
 		</>
 	);

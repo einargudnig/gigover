@@ -14,6 +14,7 @@ import { RoadmapHeader } from '../Roadmap/components/RoadmapHeader';
 import { RoadmapSidebar } from '../Roadmap/components/RoadmapSidebar';
 import { GantChartContext } from '../Roadmap/contexts/GantChartContext';
 import { GRID_SIDEBAR_WIDTH, useGantChart } from '../Roadmap/hooks/useGantChart';
+import { DisabledPage } from '../../components/DisbledPage';
 
 export const ProjectDetailsGanttChart = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
@@ -69,9 +70,11 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 
 	if (!project) {
 		return (
-			<Center>
-				<NoProjectsFound />
-			</Center>
+			<DisabledPage>
+				<Center>
+					<NoProjectsFound />
+				</Center>
+			</DisabledPage>
 		);
 	}
 
@@ -82,25 +85,27 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<GantChartContext.Provider value={[state, dispatch]}>
-					<div ref={ref} id={'gc-container'}>
-						<RoadmapHeader />
-						<Box mt={8}>
-							<Grid
-								templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
-								templateRows={'auto 1fr'}
-								rowGap={4}
-								columnGap={8}
-							>
-								<RoadmapSidebar />
-								<GantChart />
-							</Grid>
-						</Box>
-					</div>
-					<Portal>
-						<DateAmountSlider />
-					</Portal>
-				</GantChartContext.Provider>
+				<DisabledPage>
+					<GantChartContext.Provider value={[state, dispatch]}>
+						<div ref={ref} id={'gc-container'}>
+							<RoadmapHeader />
+							<Box mt={8}>
+								<Grid
+									templateColumns={`${GRID_SIDEBAR_WIDTH} 1fr`}
+									templateRows={'auto 1fr'}
+									rowGap={4}
+									columnGap={8}
+								>
+									<RoadmapSidebar />
+									<GantChart />
+								</Grid>
+							</Box>
+						</div>
+						<Portal>
+							<DateAmountSlider />
+						</Portal>
+					</GantChartContext.Provider>
+				</DisabledPage>
 			)}
 		</>
 	);

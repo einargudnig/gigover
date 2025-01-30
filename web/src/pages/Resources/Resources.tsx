@@ -14,6 +14,8 @@ import { useResources } from '../../queries/useResources';
 import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
+import { DisabledPage } from '../../components/DisbledPage';
+import { DisabledSubMenu } from '../../components/DisabledSubMenu';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -123,35 +125,37 @@ export const Resources = (): JSX.Element => {
 		<Page
 			title={'Resources'}
 			actions={
-				<>
+				<DisabledSubMenu>
 					<Button onClick={() => setModalContext({ resources: { resource: undefined } })}>
 						New resource
 					</Button>
-				</>
+				</DisabledSubMenu>
 			}
 		>
-			<Flex mb={4}>
-				<ResourceData>Total resources: {data?.length}</ResourceData>
-				<ResourceData color={'#1FDF83'}>
-					Available:{' '}
-					{data?.filter((r) => r.status === ResourceStatus.Available)?.length ?? 0}
-				</ResourceData>
-				<ResourceData color={'#EA4335'}>
-					In use: {data?.filter((r) => r.status === ResourceStatus.InUse)?.length ?? 0}
-				</ResourceData>
-			</Flex>
+			<DisabledPage>
+				<Flex mb={4}>
+					<ResourceData>Total resources: {data?.length}</ResourceData>
+					<ResourceData color={'#1FDF83'}>
+						Available:{' '}
+						{data?.filter((r) => r.status === ResourceStatus.Available)?.length ?? 0}
+					</ResourceData>
+					<ResourceData color={'#EA4335'}>
+						In use:{' '}
+						{data?.filter((r) => r.status === ResourceStatus.InUse)?.length ?? 0}
+					</ResourceData>
+				</Flex>
 
-			<CardBase>
-				<Table loading={isLoading} variant={'striped'} columns={columns} data={data} />
-			</CardBase>
+				<CardBase>
+					<Table loading={isLoading} variant={'striped'} columns={columns} data={data} />
+				</CardBase>
 
-			<CardBase mt={4}>
-				<Heading as={'h4'} fontSize={'16px'}>
-					Where are your resources?
-				</Heading>
-			</CardBase>
-			<CardBase mt={4}>
-				{/* <GigoverMaps
+				<CardBase mt={4}>
+					<Heading as={'h4'} fontSize={'16px'}>
+						Where are your resources?
+					</Heading>
+				</CardBase>
+				<CardBase mt={4}>
+					{/* <GigoverMaps
 					resources={data ?? []}
 					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8"
 					loadingElement={
@@ -162,8 +166,9 @@ export const Resources = (): JSX.Element => {
 					containerElement={<div style={{ height: '400px' }} />}
 					mapElement={<div style={{ height: '100%' }} />}
 				/> */}
-				<GigoverMaps resources={data ?? []} />
-			</CardBase>
+					<GigoverMaps resources={data ?? []} />
+				</CardBase>
+			</DisabledPage>
 		</Page>
 	);
 };
