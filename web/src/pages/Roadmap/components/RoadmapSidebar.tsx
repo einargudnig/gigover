@@ -7,10 +7,14 @@ import { ModalContext } from '../../../context/ModalContext';
 import { displayTaskTitle } from '../../../utils/TaskUtils';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
+import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
 	const [state, dispatch] = useContext(GantChartContext);
+
+	const { privileges, activeOrg } = useGetUserPrivileges();
+
 	// The tasks object on the GantChartContext do not have their lexoRank property set.
 	// So we use the sortedItems to display the tasks from the project on the Context in the correct order.
 	// Lets also make sure that if for some reason we are missing the lexoRank we don't crash the app
@@ -24,6 +28,8 @@ export const RoadmapSidebar = (): JSX.Element => {
 		// Ensure these properties exist or default to an empty string or zero
 		return (a.subject || '').localeCompare(b.subject || '');
 	});
+
+	const isViewer = privileges?.includes('VIEWER');
 
 	return (
 		<>
@@ -165,21 +171,23 @@ export const RoadmapSidebar = (): JSX.Element => {
 								{displayTaskTitle(t)}
 							</Text>
 						</HStack>
-						<IconButton
-							size={'xs'}
-							aria-label={'milestone-actions'}
-							icon={<Edit size={14} color={'black'} />}
-							variant={'ghost'}
-							colorScheme={'gray'}
-							onClick={() => {
-								setModalState({
-									taskDetails: {
-										projectId: state.project!.projectId!,
-										task: t
-									}
-								});
-							}}
-						/>
+						{!isViewer ? (
+							<IconButton
+								size={'xs'}
+								aria-label={'milestone-actions'}
+								icon={<Edit size={14} color={'black'} />}
+								variant={'ghost'}
+								colorScheme={'gray'}
+								onClick={() => {
+									setModalState({
+										taskDetails: {
+											projectId: state.project!.projectId!,
+											task: t
+										}
+									});
+								}}
+							/>
+						) : null}
 					</Flex>
 				))}
 				{state.tasks.length === 0 && state.milestones.length === 0 && (

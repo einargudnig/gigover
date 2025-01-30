@@ -57,6 +57,8 @@ import { VerticalDots } from '../../icons/VerticalDots';
 import { CommentInput } from './CommentInput';
 import { UseResourceOnTask } from './UseResourceOnTask';
 import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
+import { DisabledComponent } from '../../disabled/DisabledComponent';
+import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 
 export interface TaskModalProps {
 	open: boolean;
@@ -83,6 +85,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 	const { data: projectTypes } = useProjectTypes();
 
 	const { isOpen, onClose: chakraOnClose } = useDisclosure({ isOpen: drawerOpen });
+
+	const { privileges, activeOrg } = useGetUserPrivileges();
+	const isViewer = privileges.includes('VIEWER');
 
 	const { handleSubmit, control } = useForm<ProjectTask>({
 		defaultValues: {
@@ -148,41 +153,43 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 						<Spacer />
 						<Box>
 							<Flex alignItems={'center'} mr="4">
-								<Menu>
-									<MenuButton
-										as={IconButton}
-										aria-label="More"
-										icon={<VerticalDots />}
-										variant="ghost"
-										_active={{ bg: 'gray.100' }}
-									/>
-									<MenuList>
-										<ConfirmDialog
-											header={'Archive task'}
-											setIsOpen={setDialogOpen}
-											callback={async (b) => {
-												if (b) {
-													await updateTask({
-														...task,
-														status: TaskStatus.Archived
-													});
-												}
-												setDialogOpen(false);
-												closeModal();
-											}}
-											isOpen={dialogOpen}
-										>
-											<MenuItem
-												icon={<TrashIcon />}
-												onClick={() => {
-													setDialogOpen(true);
+								<DisabledComponent>
+									<Menu>
+										<MenuButton
+											as={IconButton}
+											aria-label="More"
+											icon={<VerticalDots />}
+											variant="ghost"
+											_active={{ bg: 'gray.100' }}
+										/>
+										<MenuList>
+											<ConfirmDialog
+												header={'Archive task'}
+												setIsOpen={setDialogOpen}
+												callback={async (b) => {
+													if (b) {
+														await updateTask({
+															...task,
+															status: TaskStatus.Archived
+														});
+													}
+													setDialogOpen(false);
+													closeModal();
 												}}
+												isOpen={dialogOpen}
 											>
-												Archive task
-											</MenuItem>
-										</ConfirmDialog>
-									</MenuList>
-								</Menu>
+												<MenuItem
+													icon={<TrashIcon />}
+													onClick={() => {
+														setDialogOpen(true);
+													}}
+												>
+													Archive task
+												</MenuItem>
+											</ConfirmDialog>
+										</MenuList>
+									</Menu>
+								</DisabledComponent>
 								<IconButton
 									aria-label="Close"
 									icon={<CrossIcon />}
@@ -194,13 +201,13 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 					</Flex>
 
 					<DrawerBody overflowY={'auto'}>
-						<Tabs colorScheme="black">
+						<Tabs colorScheme="black" defaultIndex={isViewer ? 1 : 0}>
 							<TabList>
-								<Tab>Details</Tab>
-								<Tab>Comments</Tab>
-								<Tab>Files</Tab>
-								<Tab>Workers</Tab>
-								<Tab>Resources</Tab>
+								<Tab isDisabled={isViewer ? true : false}>Details</Tab>
+								<Tab isDisabled={false}>Comments</Tab>
+								<Tab isDisabled={isViewer ? true : false}>Files</Tab>
+								<Tab isDisabled={isViewer ? true : false}>Workers</Tab>
+								<Tab isDisabled={isViewer ? true : false}>Resources</Tab>
 							</TabList>
 
 							<TabPanels>
