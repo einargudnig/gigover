@@ -6,7 +6,7 @@ import { IModalContext, ModalContext } from '../../../context/ModalContext';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Milestone } from '../../../models/Milestone';
 import { TaskItem } from '../../../models/Task';
-import { displayTaskTitle } from '../../../utils/TaskUtils';
+import { displayTaskTitle, displayTaskType } from '../../../utils/TaskUtils';
 import { GantChartDates } from '../GantChartDates';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { CalendarType, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
@@ -105,6 +105,7 @@ interface GridItemRow {
 		textColor: string;
 	};
 	title: string;
+	typeId?: string;
 	onClick: () => void;
 	type: 'deliverable' | 'task' | 'empty';
 }
@@ -171,6 +172,7 @@ const convertTaskToRow = (
 		end,
 		color: colors,
 		title: displayTaskTitle(task),
+		typeId: displayTaskType(task),
 		onClick: () => {
 			setModalContext({
 				taskDetails: {
@@ -185,6 +187,7 @@ const convertTaskToRow = (
 
 export const GantChart = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
+	console.log({ state });
 	const [, setModalContext] = useContext(ModalContext);
 	const columns = useMemo(() => new Array(state.segments).fill(0), [state.segments]);
 	const dates = useMemo<GantChartDates>(() => {
