@@ -11,10 +11,6 @@ export const User = ({ avatar, name }: UserProps): JSX.Element => {
 	// Extract the first letter of the user's name
 	const nameInitial = name.charAt(0).toUpperCase();
 
-	if (avatar === '') {
-		setIsImageLoaded(false);
-	}
-
 	const handleImageError = () => {
 		console.log('No avatar found, using fallback name initials');
 		setIsImageLoaded(false);
