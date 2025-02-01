@@ -8,7 +8,7 @@ import { ModalContext } from '../../context/ModalContext';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { ProcurementSearchBar } from './ProcurementSearchBar';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -39,7 +39,7 @@ export const Procurement = (): JSX.Element => {
 				title={'Procurement'}
 				contentPadding={false}
 				actions={
-					<DisabledSubMenu>
+					<DisabledComponent>
 						{showSearch ? (
 							<ProcurementSearchBar tenders={data} />
 						) : (
@@ -59,10 +59,10 @@ export const Procurement = (): JSX.Element => {
 						>
 							New Tender
 						</Button>
-					</DisabledSubMenu>
+					</DisabledComponent>
 				}
 				extraNav={
-					<DisabledSubMenu>
+					<DisabledComponent>
 						<Flex
 							borderBottom={'1px'}
 							backgroundColor={'white'}
@@ -206,7 +206,7 @@ export const Procurement = (): JSX.Element => {
 								) : null}
 							</Box>
 						</Flex>
-					</DisabledSubMenu>
+					</DisabledComponent>
 				}
 			>
 				<DisabledPage>

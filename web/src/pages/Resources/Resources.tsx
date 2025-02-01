@@ -15,7 +15,7 @@ import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -125,11 +125,11 @@ export const Resources = (): JSX.Element => {
 		<Page
 			title={'Resources'}
 			actions={
-				<DisabledSubMenu>
+				<DisabledComponent>
 					<Button onClick={() => setModalContext({ resources: { resource: undefined } })}>
 						New resource
 					</Button>
-				</DisabledSubMenu>
+				</DisabledComponent>
 			}
 		>
 			<DisabledPage>

@@ -11,7 +11,7 @@ import { UploadModal } from './UploadModal';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -85,10 +85,10 @@ export const Files = (): JSX.Element => {
 				]}
 				contentPadding={false}
 				actions={
-					<DisabledSubMenu>
+					<DisabledComponent>
 						{project && <CreateNewFolderButton projectId={project.projectId} />}
 						<Button onClick={() => setUpload(true)}>Upload</Button>
-					</DisabledSubMenu>
+					</DisabledComponent>
 				}
 			>
 				<DisabledPage>

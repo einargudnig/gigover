@@ -8,6 +8,7 @@ import { displayTaskTitle } from '../../../utils/TaskUtils';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
 import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
+import { DisabledComponent } from '../../../components/disabled/DisabledComponent';
 
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
@@ -35,23 +36,25 @@ export const RoadmapSidebar = (): JSX.Element => {
 		<>
 			{state.project && (
 				<GridItem colStart={1} rowStart={1}>
-					<Button
-						colorScheme={'gray'}
-						variant={'outline'}
-						width={'100%'}
-						onClick={() =>
-							setModalState({
-								milestone: {
-									projectId: state.project!.projectId!,
-									callback: () => {
-										return;
+					<DisabledComponent>
+						<Button
+							colorScheme={'gray'}
+							variant={'outline'}
+							width={'100%'}
+							onClick={() =>
+								setModalState({
+									milestone: {
+										projectId: state.project!.projectId!,
+										callback: () => {
+											return;
+										}
 									}
-								}
-							})
-						}
-					>
-						Add a deliverable
-					</Button>
+								})
+							}
+						>
+							Add a deliverable
+						</Button>
+					</DisabledComponent>
 				</GridItem>
 			)}
 			<GridItem colStart={1} rowStart={2}>
@@ -64,21 +67,25 @@ export const RoadmapSidebar = (): JSX.Element => {
 							height={GRID_ROW_HEIGHT}
 						>
 							<HStack maxWidth={`calc(${GRID_SIDEBAR_WIDTH} - 40px)`} spacing={4}>
-								<IconButton
-									size={'xs'}
-									aria-label={'milestone-expand'}
-									icon={
-										<span>{state.expanded.has(m.milestoneId) ? '-' : '+'}</span>
-									}
-									onClick={() => {
-										dispatch({
-											type: 'ToggleMilestone',
-											payload: m
-										});
-									}}
-									variant={'outline'}
-									colorScheme={'gray'}
-								/>
+								{!isViewer ? (
+									<IconButton
+										size={'xs'}
+										aria-label={'milestone-expand'}
+										icon={
+											<span>
+												{state.expanded.has(m.milestoneId) ? '-' : '+'}
+											</span>
+										}
+										onClick={() => {
+											dispatch({
+												type: 'ToggleMilestone',
+												payload: m
+											});
+										}}
+										variant={'outline'}
+										colorScheme={'gray'}
+									/>
+								) : null}
 								<Text
 									isTruncated
 									color={'black'}
@@ -88,24 +95,26 @@ export const RoadmapSidebar = (): JSX.Element => {
 									{m.title}
 								</Text>
 							</HStack>
-							<IconButton
-								size={'xs'}
-								aria-label={'milestone-actions'}
-								icon={<Edit size={14} color={'black'} />}
-								variant={'ghost'}
-								colorScheme={'gray'}
-								onClick={() => {
-									setModalState({
-										milestone: {
-											projectId: state.project!.projectId!,
-											milestone: m,
-											callback: () => {
-												return;
+							{!isViewer ? (
+								<IconButton
+									size={'xs'}
+									aria-label={'milestone-actions'}
+									icon={<Edit size={14} color={'black'} />}
+									variant={'ghost'}
+									colorScheme={'gray'}
+									onClick={() => {
+										setModalState({
+											milestone: {
+												projectId: state.project!.projectId!,
+												milestone: m,
+												callback: () => {
+													return;
+												}
 											}
-										}
-									});
-								}}
-							/>
+										});
+									}}
+								/>
+							) : null}
 						</Flex>
 						{state.expanded.has(m.milestoneId) &&
 							m.projectTasks.map((mTask, mTaskIndex) => (
@@ -124,21 +133,23 @@ export const RoadmapSidebar = (): JSX.Element => {
 											{displayTaskTitle(mTask)}
 										</Text>
 									</HStack>
-									<IconButton
-										size={'xs'}
-										aria-label={'milestone-actions'}
-										icon={<Edit size={14} color={'black'} />}
-										variant={'ghost'}
-										colorScheme={'gray'}
-										onClick={() => {
-											setModalState({
-												taskDetails: {
-													projectId: state.project!.projectId!,
-													task: mTask
-												}
-											});
-										}}
-									/>
+									{!isViewer ? (
+										<IconButton
+											size={'xs'}
+											aria-label={'milestone-actions'}
+											icon={<Edit size={14} color={'black'} />}
+											variant={'ghost'}
+											colorScheme={'gray'}
+											onClick={() => {
+												setModalState({
+													taskDetails: {
+														projectId: state.project!.projectId!,
+														task: mTask
+													}
+												});
+											}}
+										/>
+									) : null}
 								</Flex>
 							))}
 					</VStack>

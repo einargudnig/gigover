@@ -24,7 +24,7 @@ import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { CreateOrganization } from './CreateOrganization';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
-import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
+import { DisabledComponent } from '../disabled/DisabledComponent';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,7 +32,6 @@ export const ManageOrganization = (): JSX.Element => {
 	const [loginError, setLoginError] = useState<string | null>(null);
 	const { data: org } = useGetUserInfo();
 	const activeOrg = org?.organization;
-	const { privileges, activeOrg: hasActiveOrg } = useGetUserPrivileges();
 
 	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
 
@@ -69,37 +68,11 @@ export const ManageOrganization = (): JSX.Element => {
 
 	return (
 		<div>
-			{hasActiveOrg ? (
-				<>
-					{privileges.includes('ADMIN') || privileges.includes('EDITOR') ? (
-						<Button
-							onClick={onOpen}
-							variant={'link'}
-							colorScheme="gray.300"
-							p={-1}
-							size={'sm'}
-						>
-							Manage active organization
-						</Button>
-					) : (
-						<Tooltip label="You do not have persmissions!">
-							<Button
-								variant="link"
-								colorScheme="gray.300"
-								onClick={onOpen}
-								isDisabled
-								size={'sm'}
-							>
-								Manage active organization
-							</Button>
-						</Tooltip>
-					)}
-				</>
-			) : (
+			<DisabledComponent>
 				<Button variant="link" colorScheme="gray.300" onClick={onOpen} size={'sm'}>
 					Manage active organization
 				</Button>
-			)}
+			</DisabledComponent>
 
 			<Modal isOpen={isOpen} onClose={handleClose} size={'6xl'}>
 				<ModalOverlay />

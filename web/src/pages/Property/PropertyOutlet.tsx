@@ -7,7 +7,7 @@ import { Page } from '../../components/Page';
 import { ModalContext } from '../../context/ModalContext';
 import { PropertySearchBar } from './components/PropertySearchBar';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledSubMenu } from '../../components/disabled/DisabledSubMenu';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -22,7 +22,7 @@ export const PropertyOutlet = (): JSX.Element => {
 		<Page
 			title={'Property'}
 			actions={
-				<DisabledSubMenu>
+				<DisabledComponent>
 					{showSearch ? (
 						<PropertySearchBar />
 					) : (
@@ -41,7 +41,7 @@ export const PropertyOutlet = (): JSX.Element => {
 					>
 						New Property
 					</Button>
-				</DisabledSubMenu>
+				</DisabledComponent>
 			}
 		>
 			<DisabledPage>
