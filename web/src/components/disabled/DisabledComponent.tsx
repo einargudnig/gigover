@@ -1,4 +1,4 @@
-import { Box, Tooltip } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 
 export function DisabledComponent({ children }: { children: React.ReactNode }) {
@@ -17,7 +17,7 @@ export function DisabledComponent({ children }: { children: React.ReactNode }) {
 							opacity={0.5} // Makes it look disabled
 							bg="gray.200" // Optional: Change background color for visual cue
 						>
-							<Tooltip label="You do not have permission!">{children}</Tooltip>
+							{children}
 						</Box>
 					) : (
 						<Box>{children}</Box>
