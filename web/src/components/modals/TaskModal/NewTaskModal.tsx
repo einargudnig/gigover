@@ -183,6 +183,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 													onClick={() => {
 														setDialogOpen(true);
 													}}
+													disabled={isViewer}
 												>
 													Archive task
 												</MenuItem>

@@ -1,39 +1,43 @@
-import styled from 'styled-components';
+import { Box, Text, Avatar, Image } from '@chakra-ui/react';
+import { useState } from 'react';
 
 interface UserProps {
 	avatar: string;
 	name: string;
 }
 
-const UserStyled = styled.div`
-	display: flex;
-	align-items: center;
-	user-select: none;
+export const User = ({ avatar, name }: UserProps): JSX.Element => {
+	const [isImageLoaded, setIsImageLoaded] = useState(true);
+	// Extract the first letter of the user's name
+	const nameInitial = name.charAt(0).toUpperCase();
 
-	div.avatar {
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		overflow: hidden;
-		margin-right: ${(props) => props.theme.padding(1.5)};
-
-		img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-		}
+	if (avatar === '') {
+		setIsImageLoaded(false);
 	}
 
-	p {
-		font-size: 18px;
-	}
-`;
+	const handleImageError = () => {
+		console.log('No avatar found, using fallback name initials');
+		setIsImageLoaded(false);
+	};
 
-export const User = ({ avatar, name }: UserProps): JSX.Element => (
-	<UserStyled>
-		<div className={'avatar'}>
-			<img src={avatar} alt={name} />
-		</div>
-		<p>{name}</p>
-	</UserStyled>
-);
+	return (
+		<Box display="flex" alignItems="center" userSelect="none">
+			{isImageLoaded ? (
+				<Image
+					src={avatar}
+					alt={name}
+					boxSize="36px"
+					borderRadius="full"
+					onError={handleImageError}
+					marginRight={4}
+					objectFit="cover"
+				/>
+			) : (
+				<Avatar name={name} size="md" marginRight={4} bg="teal.500">
+					{nameInitial}
+				</Avatar>
+			)}
+			<Text fontSize="18px">{name}</Text>
+		</Box>
+	);
+};
