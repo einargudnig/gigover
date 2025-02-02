@@ -186,7 +186,6 @@ const convertTaskToRow = (
 
 export const GantChart = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
-	console.log({ state });
 	const [, setModalContext] = useContext(ModalContext);
 	const columns = useMemo(() => new Array(state.segments).fill(0), [state.segments]);
 	const dates = useMemo<GantChartDates>(() => {
