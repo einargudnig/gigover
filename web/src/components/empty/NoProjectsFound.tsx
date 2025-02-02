@@ -1,4 +1,4 @@
-import { Button, Tooltip } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { ModalContext } from '../../context/ModalContext';
 import { EmptyProjects } from './EmptyProjects';

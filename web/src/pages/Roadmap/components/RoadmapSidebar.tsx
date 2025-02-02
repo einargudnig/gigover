@@ -13,13 +13,22 @@ import { DisabledComponent } from '../../../components/disabled/DisabledComponen
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);
 	const [state, dispatch] = useContext(GantChartContext);
+	console.log({ state });
 
 	const { privileges } = useGetUserPrivileges();
+
+	// We shouldn't order be lexoRank here, we should sort by startDate!
+	// When we have the gantt chart on a linear date format it doesn't make sense to sort by lexoRank
+	// Unluss we could shcange the order on the gantt chart to be based on lexoRank
+	// Since that's not possible we should sort by startDate!
 
 	// The tasks object on the GantChartContext do not have their lexoRank property set.
 	// So we use the sortedItems to display the tasks from the project on the Context in the correct order.
 	// Lets also make sure that if for some reason we are missing the lexoRank we don't crash the app
 	const sortedItems = state.project?.tasks.sort((a, b) => {
+		if (a.startDate && b.startDate) {
+			return a.startDate - b.startDate; // Subtracting dates gives the difference in milliseconds
+		}
 		// Check if both lexoRanks are available
 		if (a.lexoRank && b.lexoRank) {
 			return a.lexoRank.localeCompare(b.lexoRank);
@@ -168,8 +177,8 @@ export const RoadmapSidebar = (): JSX.Element => {
 						</HStack>
 					</Flex>
 				)}
-				{/* {state.tasks.map((t, tIndex) => ( */}
-				{sortedItems?.map((t, tIndex) => (
+				{state.tasks.map((t, tIndex) => (
+					// {sortedItems?.map((t, tIndex) => (
 					<Flex
 						key={tIndex}
 						justifyContent={'space-between'}

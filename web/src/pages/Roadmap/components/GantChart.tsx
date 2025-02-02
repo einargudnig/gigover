@@ -6,7 +6,7 @@ import { IModalContext, ModalContext } from '../../../context/ModalContext';
 import { colorGenerator } from '../../../hooks/colorGenerator';
 import { Milestone } from '../../../models/Milestone';
 import { TaskItem } from '../../../models/Task';
-import { displayTaskTitle, displayTaskType } from '../../../utils/TaskUtils';
+import { displayTaskTitle } from '../../../utils/TaskUtils';
 import { GantChartDates } from '../GantChartDates';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { CalendarType, GRID_ROW_HEIGHT } from '../hooks/useGantChart';
@@ -172,7 +172,6 @@ const convertTaskToRow = (
 		end,
 		color: colors,
 		title: displayTaskTitle(task),
-		typeId: displayTaskType(task),
 		onClick: () => {
 			setModalContext({
 				taskDetails: {
