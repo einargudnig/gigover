@@ -26,6 +26,7 @@ import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
+import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
 
 interface SortableGridProps {
 	list: Project[];
@@ -178,6 +179,8 @@ const NewProjectCard = ({ project }) => {
 	const queryClient = useQueryClient();
 	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
 	const { isOpen, onClose, onOpen } = useDisclosure();
+	const { privileges } = useGetUserPrivileges();
+	const isViewer = privileges.includes('VIEWER');
 
 	const updateStatus = async (status) => {
 		try {
@@ -256,6 +259,7 @@ const NewProjectCard = ({ project }) => {
 											event.stopPropagation();
 											setModalContext({ modifyProject: { project } });
 										}}
+										isDisabled={isViewer}
 									>
 										Edit Project
 									</MenuItem>
@@ -268,6 +272,7 @@ const NewProjectCard = ({ project }) => {
 														event.stopPropagation();
 														await updateStatus(ProjectStatus.CLOSED);
 													}}
+													isDisabled={isViewer}
 												>
 													Close this project
 												</MenuItem>
@@ -281,6 +286,7 @@ const NewProjectCard = ({ project }) => {
 														event.preventDefault();
 														await updateStatus(ProjectStatus.OPEN);
 													}}
+													isDisabled={isViewer}
 												>
 													Re-open this project
 												</MenuItem>
@@ -295,12 +301,15 @@ const NewProjectCard = ({ project }) => {
 													event.stopPropagation();
 													await updateStatus(ProjectStatus.DONE);
 												}}
+												isDisabled={isViewer}
 											>
 												Archive project
 											</MenuItem>
 										)}
 									<MenuDivider />
-									<MenuItem onClick={onOpen}>Add project to property</MenuItem>
+									<MenuItem onClick={onOpen} isDisabled={isViewer}>
+										Add project to property
+									</MenuItem>
 								</MenuList>
 							</Menu>
 						)}

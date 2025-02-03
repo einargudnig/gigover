@@ -25,19 +25,19 @@ export const RoadmapSidebar = (): JSX.Element => {
 	// The tasks object on the GantChartContext do not have their lexoRank property set.
 	// So we use the sortedItems to display the tasks from the project on the Context in the correct order.
 	// Lets also make sure that if for some reason we are missing the lexoRank we don't crash the app
-	const sortedItems = state.project?.tasks.sort((a, b) => {
-		if (a.startDate && b.startDate) {
-			return a.startDate - b.startDate; // Subtracting dates gives the difference in milliseconds
-		}
-		// Check if both lexoRanks are available
-		if (a.lexoRank && b.lexoRank) {
-			return a.lexoRank.localeCompare(b.lexoRank);
-		}
-
-		// Fallback: If lexoRank is missing, sort by another property like title or id
-		// Ensure these properties exist or default to an empty string or zero
-		return (a.subject || '').localeCompare(b.subject || '');
-	});
+	// const sortedItems = state.project?.tasks.sort((a, b) => {
+	// 	if (a.startDate && b.startDate) {
+	// 		return a.startDate - b.startDate; // Subtracting dates gives the difference in milliseconds
+	// 	}
+	// 	// Check if both lexoRanks are available
+	// 	if (a.lexoRank && b.lexoRank) {
+	// 		return a.lexoRank.localeCompare(b.lexoRank);
+	// 	}
+	//
+	// 	// Fallback: If lexoRank is missing, sort by another property like title or id
+	// 	// Ensure these properties exist or default to an empty string or zero
+	// 	return (a.subject || '').localeCompare(b.subject || '');
+	// });
 
 	const isViewer = privileges?.includes('VIEWER');
 
