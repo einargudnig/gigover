@@ -8,17 +8,18 @@ export interface PropertyResponse {
 }
 
 export const useGetPropertyById = (propertyId: number) => {
-	const { data, isLoading, isError, error } = useQuery<PropertyResponse, ErrorResponse>(
-		ApiService.getPropertyById(propertyId),
-		{
-			refetchOnWindowFocus: true
-		}
-	);
+	const { data, isLoading, isError, error, isFetching } = useQuery<
+		PropertyResponse,
+		ErrorResponse
+	>(ApiService.getPropertyById(propertyId), {
+		refetchOnWindowFocus: true
+	});
 
 	return {
 		data,
 		isLoading,
 		isError,
-		error
+		error,
+		isFetching
 	};
 };

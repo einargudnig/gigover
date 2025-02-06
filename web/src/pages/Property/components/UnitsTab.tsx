@@ -3,13 +3,17 @@ import { Units } from './Units';
 import { IPropertyUnit } from '../../../models/Property';
 import { ChangeEvent, useContext, useMemo, useState } from 'react';
 import { ModalContext } from '../../../context/ModalContext';
+import { Center } from '../../../components/Center';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export function UnitTab({
 	propertyId,
-	units
+	units,
+	isFetching
 }: {
 	propertyId: number;
 	units: IPropertyUnit[];
+	isFetching: boolean;
 }): JSX.Element {
 	const [, setModalContext] = useContext(ModalContext);
 
@@ -72,11 +76,23 @@ export function UnitTab({
 			{!units || units.length === 0 ? (
 				<Text m={4}>No units!</Text>
 			) : (
-				<Box>
-					{filteredUnits?.map((unit) => (
-						<Units unit={unit} propertyId={Number(propertyId)} key={unit.unitId} />
-					))}
-				</Box>
+				<>
+					{isFetching ? (
+						<Center>
+							<LoadingSpinner />
+						</Center>
+					) : (
+						<Box>
+							{filteredUnits?.map((unit) => (
+								<Units
+									unit={unit}
+									propertyId={Number(propertyId)}
+									key={unit.unitId}
+								/>
+							))}
+						</Box>
+					)}
+				</>
 			)}
 		</Box>
 	);

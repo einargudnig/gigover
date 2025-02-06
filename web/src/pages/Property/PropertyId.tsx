@@ -15,7 +15,7 @@ export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();
 	const [manageStakeholders, setManageStakeholders] = useState(false);
 
-	const { data, isLoading } = useGetPropertyById(Number(propertyId));
+	const { data, isLoading, isFetching } = useGetPropertyById(Number(propertyId));
 	const property = data?.property;
 	const units = data?.property.units;
 	const stakeHolders = data?.property.stakeHolders;
@@ -50,7 +50,12 @@ export const PropertyId = (): JSX.Element => {
 
 						<TabPanels>
 							<TabPanel>
-								<UnitTab propertyId={Number(propertyId)} units={units!} />,
+								<UnitTab
+									propertyId={Number(propertyId)}
+									units={units!}
+									isFetching={isFetching}
+								/>
+								,
 							</TabPanel>
 							<TabPanel>
 								<StakeholdersTab
