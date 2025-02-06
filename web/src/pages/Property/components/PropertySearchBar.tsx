@@ -1,4 +1,3 @@
-import { SearchIcon } from '@chakra-ui/icons';
 import {
 	Input,
 	InputGroup,

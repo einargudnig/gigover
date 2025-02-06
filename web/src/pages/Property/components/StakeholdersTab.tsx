@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Spacer, Button, Text, Input } from '@chakra-ui/react';
 import { Stakeholders } from './Stakeholders';
-import { IStakeholder } from '../../../models/Property';
+import { IPropertyUnit, IStakeholder } from '../../../models/Property';
 import { useState, useMemo, ChangeEvent } from 'react';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -8,28 +8,38 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 export function StakeholdersTab({
 	stakeHolders,
 	setManageStakeholders,
+	units,
 	isFetching
 }: {
 	stakeHolders: IStakeholder[];
 	setManageStakeholders: (value: boolean) => void;
+	units: IPropertyUnit[];
 	isFetching: boolean;
 }): JSX.Element {
 	const [searchTerm, setSearchTerm] = useState('');
 
-	// Use useMemo to prevent unnecessary filtering on every render
 	const filteredStakeholders = useMemo(() => {
 		const searchTermLower = searchTerm.toLowerCase().trim();
 
-		return stakeHolders.filter(
-			(stakeholder) =>
-				stakeholder.name.toLowerCase().includes(searchTermLower) ||
-				stakeholder.email.toLowerCase().includes(searchTermLower)
-		);
-	}, [stakeHolders, searchTerm]);
+		return stakeHolders
+			.filter(
+				(stakeholder) =>
+					stakeholder.name.toLowerCase().includes(searchTermLower) ||
+					stakeholder.email.toLowerCase().includes(searchTermLower)
+			)
+			.map((stakeholder) => {
+				const unit = units.find((u) => u.unitId === stakeholder.unitId);
+				return {
+					...stakeholder,
+					unitName: unit?.name || 'No unit assigned'
+				};
+			});
+	}, [stakeHolders, searchTerm, units]); // Don't forget to add units to the dependency array
 
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 	};
+
 	return (
 		<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'white'} w="100%">
 			<Flex mb={8} alignItems={'center'}>

@@ -52,6 +52,7 @@ export interface IStakeholder {
 	name: string;
 	email: string;
 	phoneNumber: string;
+	unitName?: string;
 }
 
 export interface PropertyToProject {

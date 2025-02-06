@@ -4,7 +4,6 @@ import { Label } from '../../../components/Label';
 import { ModalContext } from '../../../context/ModalContext';
 
 export const Units = ({ unit, propertyId }): JSX.Element => {
-	console.log({ unit });
 	const [, setModalContext] = useContext(ModalContext);
 
 	return (

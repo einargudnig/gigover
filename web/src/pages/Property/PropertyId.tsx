@@ -61,6 +61,7 @@ export const PropertyId = (): JSX.Element => {
 								<StakeholdersTab
 									stakeHolders={stakeHolders!}
 									setManageStakeholders={setManageStakeholders}
+									units={units!}
 									isFetching={isFetching}
 								/>
 							</TabPanel>
