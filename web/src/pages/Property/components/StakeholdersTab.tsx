@@ -1,6 +1,7 @@
-import { Box, Flex, Heading, Spacer, Button, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Spacer, Button, Text, Input } from '@chakra-ui/react';
 import { Stakeholders } from './Stakeholders';
 import { IStakeholder } from '../../../models/Property';
+import { useState, useMemo, ChangeEvent } from 'react';
 
 export function StakeholdersTab({
 	stakeHolders,
@@ -9,6 +10,22 @@ export function StakeholdersTab({
 	stakeHolders: IStakeholder[];
 	setManageStakeholders: (value: boolean) => void;
 }): JSX.Element {
+	const [searchTerm, setSearchTerm] = useState('');
+
+	// Use useMemo to prevent unnecessary filtering on every render
+	const filteredStakeholders = useMemo(() => {
+		const searchTermLower = searchTerm.toLowerCase().trim();
+
+		return stakeHolders.filter(
+			(stakeholder) =>
+				stakeholder.name.toLowerCase().includes(searchTermLower) ||
+				stakeholder.email.toLowerCase().includes(searchTermLower)
+		);
+	}, [stakeHolders, searchTerm]);
+
+	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(event.target.value);
+	};
 	return (
 		<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'white'} w="100%">
 			<Flex mb={8} alignItems={'center'}>
@@ -17,19 +34,31 @@ export function StakeholdersTab({
 				</Box>
 				<Spacer />
 				<Box>
-					<Button
-						variant="outline"
-						colorScheme="black"
-						onClick={() => setManageStakeholders(true)}
-					>
-						Add stakeholders
-					</Button>
+					<Flex align="center">
+						<Input
+							placeholder="Search for name or email.."
+							size="md"
+							rounded="md"
+							borderColor={'black'}
+							mr={4}
+							value={searchTerm}
+							onChange={handleSearch}
+						/>
+						<Button
+							variant="outline"
+							width="220px"
+							colorScheme="black"
+							onClick={() => setManageStakeholders(true)}
+						>
+							Add stakeholder
+						</Button>
+					</Flex>
 				</Box>
 			</Flex>
 			{!stakeHolders || stakeHolders.length === 0 ? (
 				<Text m={4}>No stakeholders!</Text>
 			) : (
-				stakeHolders?.map((stakeholder) => (
+				filteredStakeholders?.map((stakeholder) => (
 					<Stakeholders stakeHolder={stakeholder} key={stakeholder.stakeHolderId} />
 				))
 			)}

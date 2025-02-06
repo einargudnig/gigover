@@ -1,5 +1,5 @@
 import { SearchIcon } from '@chakra-ui/icons';
-import { Button, HStack, IconButton, Tooltip, VStack } from '@chakra-ui/react';
+import { Button, Flex, HStack, IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
@@ -23,24 +23,28 @@ export const PropertyOutlet = (): JSX.Element => {
 			title={'Property'}
 			actions={
 				<DisabledComponent>
-					{showSearch ? (
-						<PropertySearchBar />
-					) : (
-						<Tooltip hasArrow label={'Search for property'}>
-							<IconButton
-								variant={'outline'}
-								aria-label={'Search'}
-								colorScheme={'gray'}
-								icon={<SearchIcon color={'black'} />}
-								onClick={() => setShowSearch((v) => !v)}
-							/>
-						</Tooltip>
-					)}
-					<Button
-						onClick={() => setModalContext({ addProperty: { property: undefined } })}
-					>
-						New Property
-					</Button>
+					<Flex align="center">
+						{showSearch ? (
+							<PropertySearchBar />
+						) : (
+							<Tooltip hasArrow label={'Search for property'}>
+								<IconButton
+									variant={'outline'}
+									aria-label={'Search'}
+									colorScheme={'gray'}
+									icon={<SearchIcon color={'black'} />}
+									onClick={() => setShowSearch((v) => !v)}
+								/>
+							</Tooltip>
+						)}
+						<Button
+							onClick={() =>
+								setModalContext({ addProperty: { property: undefined } })
+							}
+						>
+							New Property
+						</Button>
+					</Flex>
 				</DisabledComponent>
 			}
 		>

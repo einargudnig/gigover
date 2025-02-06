@@ -1,8 +1,19 @@
-import { Box, Button, Flex, Heading, Input, Spacer, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Heading,
+	Input,
+	InputGroup,
+	InputLeftAddon,
+	Spacer,
+	Text
+} from '@chakra-ui/react';
 import { Units } from './Units';
 import { IPropertyUnit } from '../../../models/Property';
 import { ChangeEvent, useContext, useMemo, useState } from 'react';
 import { ModalContext } from '../../../context/ModalContext';
+import { SearchIcon } from '@chakra-ui/icons';
 
 export function UnitTab({
 	propertyId,
@@ -29,6 +40,7 @@ export function UnitTab({
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 	};
+
 	return (
 		<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'white'} w="100%">
 			<Flex mb={8} alignItems={'center'}>
@@ -42,8 +54,9 @@ export function UnitTab({
 					<Flex align="center">
 						<Input
 							placeholder="Search for name or type.."
-							size="md"
 							rounded="md"
+							width="220px"
+							size="md"
 							borderColor={'black'}
 							mr={4}
 							value={searchTerm}

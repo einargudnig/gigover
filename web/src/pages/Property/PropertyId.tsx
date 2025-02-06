@@ -1,10 +1,9 @@
 import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
-import { ModalContext } from '../../context/ModalContext';
 import { useGetPropertyById } from '../../queries/properties/useGetPropertyById';
 import { PropertyInfo } from './components/PropertyInfo';
 import { StakeholdersTab } from './components/StakeholdersTab';
@@ -14,7 +13,6 @@ import { DocumentsTab } from './components/DocumentsTab';
 
 export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();
-	const [, setModalContext] = useContext(ModalContext);
 	const [manageStakeholders, setManageStakeholders] = useState(false);
 
 	const { data, isLoading } = useGetPropertyById(Number(propertyId));

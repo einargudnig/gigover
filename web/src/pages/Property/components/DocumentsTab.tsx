@@ -1,14 +1,15 @@
-import { Box, Heading, Spacer, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { PropertyDocument } from '../../../models/Property';
 import { PropertyFiles } from './PropertyFiles';
 
 export function DocumentsTab({ documents }: { documents: PropertyDocument[] }): JSX.Element {
 	return (
 		<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'white'} w="100%">
-			<Box>
-				<Heading fontSize={'xl'}>Documents</Heading>
-			</Box>
-			<Spacer />
+			<Flex mb={8} alignItems={'start'}>
+				<Box>
+					<Heading fontSize={'xl'}>Documents</Heading>
+				</Box>
+			</Flex>
 			{!documents || documents.length === 0 ? (
 				<Text m={4}>No projects!</Text>
 			) : (
