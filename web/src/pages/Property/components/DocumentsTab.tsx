@@ -3,13 +3,17 @@ import { PropertyDocument } from '../../../models/Property';
 import { PropertyFiles } from './PropertyFiles';
 import { useState } from 'react';
 import { UploadPropertyDocuments } from './UploadPropertyDocuments';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { Center } from '../../../components/Center';
 
 export function DocumentsTab({
 	propertyId,
-	documents
+	documents,
+	isFetching
 }: {
 	propertyId: number;
 	documents: PropertyDocument[];
+	isFetching: boolean;
 }): JSX.Element {
 	const [upload, setUpload] = useState(false);
 	return (
@@ -36,13 +40,23 @@ export function DocumentsTab({
 				{!documents || documents.length === 0 ? (
 					<Text m={4}>No projects!</Text>
 				) : (
-					documents
-						?.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
-						.map((document, pIndex) => (
-							<Box key={pIndex} p={1} m={1}>
-								<PropertyFiles showDelete={true} file={document} />
-							</Box>
-						))
+					<>
+						{isFetching ? (
+							<Center>
+								<LoadingSpinner />
+							</Center>
+						) : (
+							documents
+								?.sort((a, b) =>
+									b.created && a.created ? b.created - a.created : -1
+								)
+								.map((document, pIndex) => (
+									<Box key={pIndex} p={1} m={1}>
+										<PropertyFiles showDelete={true} file={document} />
+									</Box>
+								))
+						)}
+					</>
 				)}
 			</Box>
 		</>

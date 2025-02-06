@@ -2,13 +2,17 @@ import { Box, Flex, Heading, Spacer, Button, Text, Input } from '@chakra-ui/reac
 import { Stakeholders } from './Stakeholders';
 import { IStakeholder } from '../../../models/Property';
 import { useState, useMemo, ChangeEvent } from 'react';
+import { Center } from '../../../components/Center';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export function StakeholdersTab({
 	stakeHolders,
-	setManageStakeholders
+	setManageStakeholders,
+	isFetching
 }: {
 	stakeHolders: IStakeholder[];
 	setManageStakeholders: (value: boolean) => void;
+	isFetching: boolean;
 }): JSX.Element {
 	const [searchTerm, setSearchTerm] = useState('');
 
@@ -58,9 +62,20 @@ export function StakeholdersTab({
 			{!stakeHolders || stakeHolders.length === 0 ? (
 				<Text m={4}>No stakeholders!</Text>
 			) : (
-				filteredStakeholders?.map((stakeholder) => (
-					<Stakeholders stakeHolder={stakeholder} key={stakeholder.stakeHolderId} />
-				))
+				<>
+					{isFetching ? (
+						<Center>
+							<LoadingSpinner />
+						</Center>
+					) : (
+						filteredStakeholders?.map((stakeholder) => (
+							<Stakeholders
+								stakeHolder={stakeholder}
+								key={stakeholder.stakeHolderId}
+							/>
+						))
+					)}
+				</>
 			)}
 		</Box>
 	);

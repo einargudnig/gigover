@@ -15,7 +15,7 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 					<GridItem colSpan={2}>
 						<HStack m={'1'}>
 							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Property:
+								Name:
 							</Text>
 							<Text fontSize={'lg'}>{property.name}</Text>
 						</HStack>
@@ -57,6 +57,8 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							</Text>
 							<Text fontSize={'lg'}>{property.type}</Text>
 						</HStack>
+					</GridItem>
+					<GridItem colSpan={2}>
 						<HStack m={'1'}>
 							<Text fontWeight={'bold'} fontSize={'xl'}>
 								Number of Units:
@@ -75,8 +77,6 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							</Text>
 							<Text fontSize={'lg'}>{property.projects.length}</Text>
 						</HStack>
-					</GridItem>
-					<GridItem colSpan={2}>
 						<HStack m={'1'}>
 							<Text fontWeight={'bold'} fontSize={'xl'}>
 								Number of Documents:

@@ -72,7 +72,6 @@ export function UnitTab({
 					</Flex>
 				</Box>
 			</Flex>
-			{/* Only show five units, if more, show a show more button, perhaps add a search box when button pressed? */}
 			{!units || units.length === 0 ? (
 				<Text m={4}>No units!</Text>
 			) : (
