@@ -8,7 +8,7 @@ import { useRemoveStakeHolder } from '../../../mutations/properties/useRemoveSta
 export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	// console.log('stakeHolder', stakeHolder);
+	console.log('stakeHolder', stakeHolder);
 
 	const { mutate: removeStakeholder, isLoading } = useRemoveStakeHolder();
 

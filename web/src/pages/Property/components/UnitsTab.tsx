@@ -1,0 +1,81 @@
+import { Box, Button, Flex, Heading, Input, Spacer, Text } from '@chakra-ui/react';
+import { Units } from './Units';
+import { IPropertyUnit } from '../../../models/Property';
+import { ChangeEvent, useContext, useMemo, useState } from 'react';
+import { ModalContext } from '../../../context/ModalContext';
+
+export function UnitTab({
+	propertyId,
+	units
+}: {
+	propertyId: number;
+	units: IPropertyUnit[];
+}): JSX.Element {
+	const [, setModalContext] = useContext(ModalContext);
+
+	const [searchTerm, setSearchTerm] = useState('');
+
+	// Use useMemo to prevent unnecessary filtering on every render
+	const filteredUnits = useMemo(() => {
+		const searchTermLower = searchTerm.toLowerCase().trim();
+
+		return units.filter(
+			(unit) =>
+				unit.name.toLowerCase().includes(searchTermLower) ||
+				unit.type.toLowerCase().includes(searchTermLower)
+		);
+	}, [units, searchTerm]);
+
+	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(event.target.value);
+	};
+	return (
+		<Box mb={3} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'white'} w="100%">
+			<Flex mb={8} alignItems={'center'}>
+				<Box>
+					<Heading mb={'4'} fontSize={'xl'}>
+						Units
+					</Heading>
+				</Box>
+				<Spacer />
+				<Box>
+					<Flex align="center">
+						<Input
+							placeholder="Search for name or type.."
+							size="md"
+							rounded="md"
+							borderColor={'black'}
+							mr={4}
+							value={searchTerm}
+							onChange={handleSearch}
+						/>
+						<Button
+							variant="outline"
+							colorScheme="black"
+							onClick={() =>
+								setModalContext({
+									addUnit: {
+										unit: undefined,
+										propertyId: Number(propertyId)
+									}
+								})
+							}
+						>
+							Add unit
+						</Button>
+					</Flex>
+				</Box>
+			</Flex>
+			{/* Only show five units, if more, show a show more button, perhaps add a search box when button pressed? */}
+			{!units || units.length === 0 ? (
+				<Text m={4}>No units!</Text>
+			) : (
+				<Box>
+					{filteredUnits?.map((unit) => (
+						<Units unit={unit} propertyId={Number(propertyId)} key={unit.unitId} />
+					))}
+				</Box>
+			)}
+		</Box>
+	);
+}
