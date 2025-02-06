@@ -1,4 +1,4 @@
-import { Box, Button, Grid, GridItem, HStack, Spacer, Text } from '@chakra-ui/react';
+import { Box, Button, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
@@ -14,7 +14,7 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 	const handleRemove = async (stakeholder: IStakeholder) => {
 		console.log('stakeholder in REMOVE', stakeholder);
 		try {
-			const response = await removeStakeholder({
+			const response = removeStakeholder({
 				stakeHolderId: stakeholder.stakeHolderId,
 				propertyId: Number(propertyId),
 				unitId: stakeholder.unitId,
