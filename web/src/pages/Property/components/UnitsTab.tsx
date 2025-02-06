@@ -1,19 +1,8 @@
-import {
-	Box,
-	Button,
-	Flex,
-	Heading,
-	Input,
-	InputGroup,
-	InputLeftAddon,
-	Spacer,
-	Text
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Input, Spacer, Text } from '@chakra-ui/react';
 import { Units } from './Units';
 import { IPropertyUnit } from '../../../models/Property';
 import { ChangeEvent, useContext, useMemo, useState } from 'react';
 import { ModalContext } from '../../../context/ModalContext';
-import { SearchIcon } from '@chakra-ui/icons';
 
 export function UnitTab({
 	propertyId,

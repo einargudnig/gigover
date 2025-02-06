@@ -25,7 +25,7 @@ export const PropertyOutlet = (): JSX.Element => {
 				<DisabledComponent>
 					<Flex align="center">
 						{showSearch ? (
-							<PropertySearchBar />
+							<PropertySearchBar setShowSearch={setShowSearch} />
 						) : (
 							<Tooltip hasArrow label={'Search for property'}>
 								<IconButton
@@ -38,6 +38,7 @@ export const PropertyOutlet = (): JSX.Element => {
 							</Tooltip>
 						)}
 						<Button
+							ml={3}
 							onClick={() =>
 								setModalContext({ addProperty: { property: undefined } })
 							}

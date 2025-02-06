@@ -14,6 +14,7 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { IProperties } from '../../../models/Property';
 import { useGetProperties } from '../../../queries/properties/useGetPoperties';
+import { CrossIcon } from '../../../components/icons/CrossIcon';
 
 const SearchResults = styled.div`
 	position: absolute;
@@ -29,7 +30,11 @@ const StyledMenuList = styled(MenuList)`
 	z-index: 1000;
 `;
 
-export const PropertySearchBar = (): JSX.Element => {
+export const PropertySearchBar = ({
+	setShowSearch
+}: {
+	setShowSearch: (value: boolean) => void;
+}): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const refInput = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
@@ -89,8 +94,8 @@ export const PropertySearchBar = (): JSX.Element => {
 							e.target.focus(); // Keep the focus on the input
 						}}
 					/>
-					<InputRightElement pointerEvents={'none'}>
-						<SearchIcon />
+					<InputRightElement>
+						<CrossIcon onClick={() => setShowSearch(false)} />
 					</InputRightElement>
 					<SearchResults ref={ref}>
 						<Menu isOpen={isOpen} autoSelect={false}>
