@@ -1,23 +1,12 @@
 import { Box, Button, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { ModalContext } from '../../../context/ModalContext';
-import { UploadPropertyDocuments } from './UploadPropertyDocuments';
 
 export const PropertyInfo = ({ property }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const [upload, setUpload] = useState(false);
 
 	return (
 		<>
-			{upload && (
-				<UploadPropertyDocuments
-					onClose={() => setUpload(false)}
-					onComplete={(status) => {
-						console.log('status', status);
-					}}
-					propertyId={property.propertyId}
-				/>
-			)}
 			<Box mb={3} p={4} borderRadius={8} bg={'white'} w="100%">
 				<Heading mb={'4'} fontSize={'xl'}>
 					Property information
@@ -94,13 +83,6 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							</Text>
 							<Text fontSize={'lg'}>{property.documents.length}</Text>
 						</HStack>
-						<Button
-							variant="outline"
-							colorScheme="black"
-							onClick={() => setUpload(true)}
-						>
-							Upload files
-						</Button>
 					</GridItem>
 				</Grid>
 				<Flex justifyContent={'flex-end'}>

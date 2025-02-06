@@ -62,7 +62,10 @@ export const PropertyId = (): JSX.Element => {
 								<ProjectsTab projects={projects!} />
 							</TabPanel>
 							<TabPanel>
-								<DocumentsTab documents={documents!} />
+								<DocumentsTab
+									propertyId={Number(propertyId)}
+									documents={documents!}
+								/>
 							</TabPanel>
 						</TabPanels>
 					</Tabs>
