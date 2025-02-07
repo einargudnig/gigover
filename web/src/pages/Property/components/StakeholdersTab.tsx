@@ -1,9 +1,21 @@
-import { Box, Flex, Heading, Spacer, Button, Text, Input } from '@chakra-ui/react';
+import {
+	Box,
+	Flex,
+	Heading,
+	Spacer,
+	Button,
+	Text,
+	Input,
+	Grid,
+	GridItem,
+	HStack
+} from '@chakra-ui/react';
 import { Stakeholders } from './Stakeholders';
 import { IPropertyUnit, IStakeholder } from '../../../models/Property';
 import { useState, useMemo, ChangeEvent } from 'react';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
 
 export function StakeholdersTab({
 	stakeHolders,
@@ -78,12 +90,50 @@ export function StakeholdersTab({
 							<LoadingSpinner />
 						</Center>
 					) : (
-						filteredStakeholders?.map((stakeholder) => (
-							<Stakeholders
-								stakeHolder={stakeholder}
-								key={stakeholder.stakeHolderId}
-							/>
-						))
+						<>
+							<Box>
+								<Grid
+									templateColumns="repeat(8, 1fr)"
+									gap={1}
+									width={'full'}
+									m={1}
+									alignItems={'center'}
+								>
+									<GridItem colSpan={1}>
+										<Text fontSize={'xl'} fontWeight={'bold'}>
+											Unit
+										</Text>
+									</GridItem>
+									<GridItem colSpan={2}>
+										<Text fontSize={'xl'} fontWeight={'bold'}>
+											Stakeholder name
+										</Text>
+									</GridItem>
+									<GridItem colSpan={1}>
+										<Text fontSize={'xl'} fontWeight={'bold'}>
+											Phone
+										</Text>
+									</GridItem>
+									<GridItem colSpan={2}>
+										<Text fontSize={'xl'} fontWeight={'bold'}>
+											Email
+										</Text>
+									</GridItem>
+									<GridItem colSpan={1}>
+										<Text fontSize={'xl'} fontWeight={'bold'}>
+											Role
+										</Text>
+									</GridItem>
+									<GridItem colSpan={1}></GridItem>
+								</Grid>
+							</Box>
+							{filteredStakeholders?.map((stakeholder) => (
+								<Stakeholders
+									stakeHolder={stakeholder}
+									key={stakeholder.stakeHolderId}
+								/>
+							))}
+						</>
 					)}
 				</>
 			)}

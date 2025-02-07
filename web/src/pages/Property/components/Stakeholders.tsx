@@ -41,46 +41,19 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 					alignItems={'center'}
 				>
 					<GridItem colSpan={1}>
-						<HStack>
-							<Text fontSize={'xl'} fontWeight={'bold'}>
-								Unit:
-							</Text>
-							<Text fontSize={'lg'}>{stakeHolder.unitName}</Text>
-						</HStack>
+						<Text fontSize={'lg'}>{stakeHolder.unitName}</Text>
 					</GridItem>
 					<GridItem colSpan={2}>
-						<HStack>
-							<Text fontSize={'xl'} fontWeight={'bold'}>
-								Name:
-							</Text>
-							<Text fontSize={'lg'}>{stakeHolder.name}</Text>
-						</HStack>
+						<Text fontSize={'lg'}>{stakeHolder.name}</Text>
 					</GridItem>
 					<GridItem colSpan={1}>
-						<HStack>
-							<Text fontSize={'xl'} fontWeight={'bold'}>
-								Phone:
-							</Text>
-							<Text fontSize={'lg'}>{stakeHolder.phoneNumber}</Text>
-						</HStack>
+						<Text fontSize={'lg'}>{stakeHolder.phoneNumber}</Text>
 					</GridItem>
 					<GridItem colSpan={2}>
-						<HStack>
-							<Text fontSize={'xl'} fontWeight={'bold'}>
-								Email:
-							</Text>
-							<Text fontSize={'lg'}>{stakeHolder.email}</Text>
-						</HStack>
+						<Text fontSize={'lg'}>{stakeHolder.email}</Text>
 					</GridItem>
 					<GridItem colSpan={1}>
-						<HStack>
-							<HStack>
-								<Text fontSize={'xl'} fontWeight={'bold'}>
-									Role:
-								</Text>
-								<Text fontSize={'lg'}>{stakeHolder.role}</Text>
-							</HStack>
-						</HStack>
+						<Text fontSize={'lg'}>{stakeHolder.role}</Text>
 					</GridItem>
 
 					<GridItem colSpan={1}>
