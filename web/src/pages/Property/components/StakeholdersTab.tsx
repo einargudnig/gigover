@@ -165,23 +165,25 @@ export function StakeholdersTab({
 									key={stakeholder.stakeHolderId}
 								/>
 							))}
-							<Flex justify={'end'} mt={4}>
-								<Button
-									variant="outline"
-									colorScheme="black"
-									onClick={handleCopyPhonenumber}
-								>
-									Copy phonenumber
-								</Button>
-								<Box w={2} />
-								<Button
-									variant="outline"
-									colorScheme="black"
-									onClick={handleCopyEmails}
-								>
-									Copy emails
-								</Button>
-							</Flex>
+							{filteredStakeholders.length > 2 && (
+								<Flex justify={'end'} mt={4}>
+									<Button
+										variant="outline"
+										colorScheme="black"
+										onClick={handleCopyPhonenumber}
+									>
+										Copy phonenumber
+									</Button>
+									<Box w={2} />
+									<Button
+										variant="outline"
+										colorScheme="black"
+										onClick={handleCopyEmails}
+									>
+										Copy emails
+									</Button>
+								</Flex>
+							)}
 						</>
 					)}
 				</>

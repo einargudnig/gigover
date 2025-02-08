@@ -1,4 +1,15 @@
-import { Box, Button, Grid, GridItem, Text, useClipboard, useToast, Icon } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Grid,
+	GridItem,
+	Text,
+	useClipboard,
+	useToast,
+	Icon,
+	IconButton
+} from '@chakra-ui/react';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { CopyIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -70,14 +81,14 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 							}}
 							isOpen={dialogOpen}
 						>
-							<Button
+							<IconButton
+								aria-label="Remove Stakeholder"
 								colorScheme={'red'}
 								variant={'outline'}
 								onClick={() => setDialogOpen(true)}
 								isLoading={isLoading}
-							>
-								Remove
-							</Button>
+								icon={<TrashIcon color="red" />}
+							/>
 						</ConfirmDialog>
 					</Box>
 				</GridItem>
