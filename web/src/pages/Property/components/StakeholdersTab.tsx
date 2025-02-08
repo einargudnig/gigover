@@ -88,27 +88,27 @@ export function StakeholdersTab({
 									alignItems={'center'}
 								>
 									<GridItem colSpan={1}>
-										<Text fontSize={'xl'} fontWeight={'bold'}>
-											Unit
+										<Text fontSize={'xl'} fontWeight={'bold'} color={'black'}>
+											Unit name
 										</Text>
 									</GridItem>
 									<GridItem colSpan={2}>
-										<Text fontSize={'xl'} fontWeight={'bold'}>
+										<Text fontSize={'xl'} fontWeight={'bold'} color={'black'}>
 											Stakeholder name
 										</Text>
 									</GridItem>
 									<GridItem colSpan={1}>
-										<Text fontSize={'xl'} fontWeight={'bold'}>
+										<Text fontSize={'xl'} fontWeight={'bold'} color={'black'}>
 											Phone
 										</Text>
 									</GridItem>
 									<GridItem colSpan={2}>
-										<Text fontSize={'xl'} fontWeight={'bold'}>
+										<Text fontSize={'xl'} fontWeight={'bold'} color={'black'}>
 											Email
 										</Text>
 									</GridItem>
 									<GridItem colSpan={1}>
-										<Text fontSize={'xl'} fontWeight={'bold'}>
+										<Text fontSize={'xl'} fontWeight={'bold'} color={'black'}>
 											Role
 										</Text>
 									</GridItem>
