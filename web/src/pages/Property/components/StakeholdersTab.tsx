@@ -1,21 +1,9 @@
-import {
-	Box,
-	Flex,
-	Heading,
-	Spacer,
-	Button,
-	Text,
-	Input,
-	Grid,
-	GridItem,
-	HStack
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Spacer, Button, Text, Input, Grid, GridItem } from '@chakra-ui/react';
 import { Stakeholders } from './Stakeholders';
 import { IPropertyUnit, IStakeholder } from '../../../models/Property';
 import { useState, useMemo, ChangeEvent } from 'react';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { ConfirmDialog } from '../../../components/ConfirmDialog';
 
 export function StakeholdersTab({
 	stakeHolders,
