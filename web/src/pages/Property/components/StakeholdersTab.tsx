@@ -1,4 +1,16 @@
-import { Box, Flex, Heading, Spacer, Button, Text, Input, Grid, GridItem } from '@chakra-ui/react';
+import {
+	Box,
+	Flex,
+	Heading,
+	Spacer,
+	Button,
+	Text,
+	Input,
+	Grid,
+	GridItem,
+	useClipboard,
+	useToast
+} from '@chakra-ui/react';
 import { Stakeholders } from './Stakeholders';
 import { IPropertyUnit, IStakeholder } from '../../../models/Property';
 import { useState, useMemo, ChangeEvent } from 'react';
@@ -17,6 +29,7 @@ export function StakeholdersTab({
 	isFetching: boolean;
 }): JSX.Element {
 	const [searchTerm, setSearchTerm] = useState('');
+	const toast = useToast();
 
 	const filteredStakeholders = useMemo(() => {
 		const searchTermLower = searchTerm.toLowerCase().trim();
@@ -38,6 +51,37 @@ export function StakeholdersTab({
 
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
+	};
+
+	const filteredEmailstoCopy = filteredStakeholders
+		.map((stakeholder) => stakeholder.email)
+		.join(', ');
+
+	const filteredPhoneNumbers = filteredStakeholders
+		.map((stakeholder) => stakeholder.phoneNumber)
+		.join(', ');
+
+	const { onCopy: onCopyEmails } = useClipboard(filteredEmailstoCopy);
+	const { onCopy: onCopyPhoneNumbers } = useClipboard(filteredPhoneNumbers);
+
+	const handleCopyEmails = () => {
+		onCopyEmails();
+		toast({
+			title: 'Emails copied to clipboard',
+			status: 'success',
+			duration: 2000,
+			isClosable: true
+		});
+	};
+
+	const handleCopyPhonenumber = () => {
+		onCopyPhoneNumbers();
+		toast({
+			title: 'Phonenumbers copied to clipboard',
+			status: 'success',
+			duration: 2000,
+			isClosable: true
+		});
 	};
 
 	return (
@@ -121,6 +165,23 @@ export function StakeholdersTab({
 									key={stakeholder.stakeHolderId}
 								/>
 							))}
+							<Flex justify={'end'} mt={4}>
+								<Button
+									variant="outline"
+									colorScheme="black"
+									onClick={handleCopyPhonenumber}
+								>
+									Copy phonenumber
+								</Button>
+								<Box w={2} />
+								<Button
+									variant="outline"
+									colorScheme="black"
+									onClick={handleCopyEmails}
+								>
+									Copy emails
+								</Button>
+							</Flex>
 						</>
 					)}
 				</>

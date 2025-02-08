@@ -100,6 +100,7 @@ function CopyableText({ children }: { children: React.ReactNode }) {
 			isClosable: true
 		});
 	};
+
 	return (
 		<Box
 			as="text"
@@ -114,7 +115,7 @@ function CopyableText({ children }: { children: React.ReactNode }) {
 			}}
 		>
 			<Text fontSize={'lg'}>{children}</Text>
-			{isHovered ? (
+			{isHovered && (
 				<Icon
 					as={CopyIcon}
 					w={4}
@@ -124,8 +125,6 @@ function CopyableText({ children }: { children: React.ReactNode }) {
 					transition="opacity 0.2s"
 					opacity={isHovered ? 1 : 0}
 				/>
-			) : (
-				<Box w={2}></Box>
 			)}
 		</Box>
 	);
