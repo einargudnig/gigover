@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
@@ -24,7 +24,6 @@ const PropertyCardStyled = styled(CardBaseLink)`
 
 export const Bids = (): JSX.Element => {
 	const { data, isLoading } = useGetBids();
-	console.log({ data });
 
 	const shouldDeliver = (bid: Bid) => {
 		if (bid.delivery === 1) {
@@ -50,7 +49,7 @@ export const Bids = (): JSX.Element => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<>
+				<BidLayout>
 					{!data || data.length === 0 ? (
 						<Center>
 							<Text>No Bids Found</Text>
@@ -124,8 +123,21 @@ export const Bids = (): JSX.Element => {
 								);
 							})
 					)}
-				</>
+				</BidLayout>
 			)}
 		</>
 	);
 };
+
+function BidLayout({ children }) {
+	return (
+		<Box>
+			<Flex justify={'end'} mb={2}>
+				<Button variant="outline" colorScheme="black">
+					Create bid
+				</Button>
+			</Flex>
+			{children}
+		</Box>
+	);
+}

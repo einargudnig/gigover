@@ -72,7 +72,7 @@ export const Procurement = (): JSX.Element => {
 							py={1}
 							height={'50px'}
 						>
-							<Flex>
+							<Flex justify={'stretch'}>
 								<Box>
 									<HStack>
 										<Tooltip hasArrow label="View tenders">
