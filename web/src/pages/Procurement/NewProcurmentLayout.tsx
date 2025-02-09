@@ -16,6 +16,7 @@ import { ProcurementSearchBar } from './ProcurementSearchBar';
 import { useContext, useState } from 'react';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { ModalContext } from '../../context/ModalContext';
+import { NewTenderCreate } from './tabs/NewTenderCreate';
 
 export function NewProcurmentLayout() {
 	const [, setModalContext] = useContext(ModalContext);
@@ -62,13 +63,25 @@ export function NewProcurmentLayout() {
 
 					<TabPanels>
 						<TabPanel>
-							<p>one!</p>
+							<NewTenderCreate />
 						</TabPanel>
 						<TabPanel>
 							<p>two!</p>
 						</TabPanel>
 						<TabPanel>
 							<p>three!</p>
+						</TabPanel>
+
+						<TabPanel>
+							<p>four!</p>
+						</TabPanel>
+
+						<TabPanel>
+							<p>five!</p>
+						</TabPanel>
+
+						<TabPanel>
+							<p>six!</p>
 						</TabPanel>
 					</TabPanels>
 				</Tabs>

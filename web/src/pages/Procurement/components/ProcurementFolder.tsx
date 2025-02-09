@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../hooks/colorGenerator';
