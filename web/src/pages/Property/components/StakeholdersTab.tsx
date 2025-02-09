@@ -172,7 +172,7 @@ export function StakeholdersTab({
 										colorScheme="black"
 										onClick={handleCopyPhonenumber}
 									>
-										Copy all phonenumbers
+										Copy all phone numbers
 									</Button>
 									<Box w={2} />
 									<Button
