@@ -12,7 +12,6 @@ import {
 	Stepper
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { TenderPage } from '../components/Tender';
 import { CreateTender } from './Tender-Create-Steps/CreateTender';
 import { AddItems } from './Tender-Create-Steps/AddItems';
 import { PublishTender } from './Tender-Create-Steps/PublishTender';
