@@ -14,13 +14,15 @@ import {
 import { TenderFormData, useAddTender } from '../../../../mutations/procurement/useAddTender';
 import { Controller, useForm } from 'react-hook-form';
 import { CalendarIcon } from '@chakra-ui/icons';
-import { FormActions } from '../../../../components/FormActions';
 import { TrackerSelect } from '../../../../components/TrackerSelect';
 import { DatePicker } from '../../../../components/forms/DatePicker';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useOpenProjects } from '../../../../hooks/useAvailableProjects';
 import { useProjectList } from '../../../../queries/useProjectList';
+import { ApiService } from '../../../../services/ApiService';
+import { devError } from '../../../../utils/ConsoleUtils';
+import { Task } from '../../../../models/Task';
 
 export function CreateTender() {
 	const queryClient = useQueryClient();
@@ -30,11 +32,9 @@ export function CreateTender() {
 	const toast = useToast();
 	// This is so the user can select a project and then the tasks from the selected project.
 	// we want the procurement to be linked to a task and a project.
-	const [selectedProject, setSelectedProject] = useState<number | undefined>(tender?.projectId);
-	const [selectedProjectName, setSelectedProjectName] = useState<string | undefined>(
-		tender?.projectName
-	);
-	const [selectedTask, setSelectedTask] = useState<number | undefined>(tender?.taskId);
+	const [selectedProject, setSelectedProject] = useState<number | undefined>(undefined);
+	const [selectedProjectName, setSelectedProjectName] = useState<string | undefined>('');
+	const [selectedTask, setSelectedTask] = useState<number | undefined>(undefined);
 
 	const { mutate: modify, isError, error } = useAddTender();
 	const {
@@ -43,7 +43,17 @@ export function CreateTender() {
 		formState: { errors },
 		control
 	} = useForm<TenderFormData>({
-		defaultValues: tender,
+		defaultValues: {
+			projectId: 1,
+			projectName: 'Default Name',
+			taskId: 1,
+			description: 'Default Description',
+			terms: 'Default Terms',
+			finishDate: 1,
+			delivery: 0,
+			address: 'Default Address',
+			phoneNumber: 'Default Phone Number'
+		},
 		mode: 'onBlur'
 	});
 
@@ -89,7 +99,6 @@ export function CreateTender() {
 				console.log('response', response);
 
 				queryClient.refetchQueries(ApiService.userTenders);
-				closeModal();
 			} catch (e) {
 				devError('Error YES?', e);
 				toast({
@@ -106,7 +115,7 @@ export function CreateTender() {
 	return (
 		<Box>
 			<Text>Create Tender</Text>
-			<form onSubmit={}>
+			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
 					{openProjects ? (
 						<>
@@ -255,12 +264,6 @@ export function CreateTender() {
 							<Text color="red.500">{errors.phoneNumber.message}</Text>
 						)}
 					</FormControl>
-					<FormActions
-						cancelText={'Cancel'}
-						onCancel={closeModal}
-						submitText={'Create'}
-						onSubmit={onSubmit}
-					/>
 				</VStack>
 			</form>
 		</Box>

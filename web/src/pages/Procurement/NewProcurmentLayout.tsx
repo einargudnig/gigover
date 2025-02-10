@@ -17,10 +17,17 @@ import { useContext, useState } from 'react';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { ModalContext } from '../../context/ModalContext';
 import { NewTenderCreate } from './tabs/NewTenderCreate';
+import { ProcurementHome } from './ProcurementHome';
+import { BidderTenders } from './Offers/BidderTenders';
+import { OfferForTenders } from './Offers/components/OfferForTenders';
+import { BidderOffers } from './Offers/BidderOffers';
+import { ClientAnswers } from './ClientBids/components/ClientAnswers';
+import { Bids } from './ClientBids/components/Bids';
 
 export function NewProcurmentLayout() {
 	const [, setModalContext] = useContext(ModalContext);
 	const [showSearch, setShowSearch] = useState(false);
+	const [showCreateTender, setShowCreateTender] = useState(false);
 
 	const { data } = useUserTenders();
 
@@ -44,9 +51,8 @@ export function NewProcurmentLayout() {
 						</Tooltip>
 					)}
 
-					<Button onClick={() => setModalContext({ addTender: { tender: undefined } })}>
-						New Tender
-					</Button>
+					{/* <Button onClick={() => setModalContext({ addTender: { tender: undefined } })}> */}
+					<Button onClick={() => setShowCreateTender(true)}>New Tender</Button>
 				</DisabledComponent>
 			}
 		>
@@ -63,25 +69,27 @@ export function NewProcurmentLayout() {
 
 					<TabPanels>
 						<TabPanel>
-							<NewTenderCreate />
-						</TabPanel>
-						<TabPanel>
-							<p>two!</p>
-						</TabPanel>
-						<TabPanel>
-							<p>three!</p>
+							{showCreateTender ? <NewTenderCreate /> : <ProcurementHome />}
 						</TabPanel>
 
 						<TabPanel>
-							<p>four!</p>
+							<BidderTenders />
 						</TabPanel>
 
 						<TabPanel>
-							<p>five!</p>
+							<OfferForTenders />
 						</TabPanel>
 
 						<TabPanel>
-							<p>six!</p>
+							<BidderOffers />
+						</TabPanel>
+
+						<TabPanel>
+							<ClientAnswers />
+						</TabPanel>
+
+						<TabPanel>
+							<Bids />
 						</TabPanel>
 					</TabPanels>
 				</Tabs>
