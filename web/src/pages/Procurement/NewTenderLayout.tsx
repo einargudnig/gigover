@@ -23,7 +23,7 @@ import { BidderOffers } from './Offers/BidderOffers';
 import { ClientAnswers } from './ClientBids/components/ClientAnswers';
 import { Bids } from './ClientBids/components/Bids';
 
-export function NewProcurmentLayout() {
+export function NewTenderLayout() {
 	const [showSearch, setShowSearch] = useState(false);
 	const [showCreateTender, setShowCreateTender] = useState(false);
 

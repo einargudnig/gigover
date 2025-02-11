@@ -42,7 +42,8 @@ import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutle
 import { Property } from './pages/Property/Property';
 import { PropertyId } from './pages/Property/PropertyId';
 import { PropertyOutlet } from './pages/Property/PropertyOutlet';
-import { NewProcurmentLayout } from './pages/Procurement/NewProcurmentLayout';
+import { NewTenderLayout } from './pages/Procurement/NewTenderLayout';
+import { NewTenderPage } from './pages/Procurement/NewTenderPage';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -106,7 +107,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 
 		{/* 💰 Tender/Offer  system 💰 */}
-		<Route path={'tender'} element={<NewProcurmentLayout />} />
+		<Route path={'tender'} element={<NewTenderLayout />} />
+		<Route path={'tender/:tenderId'} element={<NewTenderPage />} />
 
 		{/* 🛠️ Settings 🛠️ */}
 		<Route path={'settings'} element={<Settings />} />
