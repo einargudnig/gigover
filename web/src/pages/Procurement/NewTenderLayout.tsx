@@ -8,7 +8,8 @@ import {
 	TabList,
 	TabPanel,
 	TabPanels,
-	Tooltip
+	Tooltip,
+	Flex
 } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
@@ -22,6 +23,7 @@ import { OfferForTenders } from './Offers/components/OfferForTenders';
 import { BidderOffers } from './Offers/BidderOffers';
 import { ClientAnswers } from './ClientBids/components/ClientAnswers';
 import { Bids } from './ClientBids/components/Bids';
+import { Outlet } from 'react-router-dom';
 
 export function NewTenderLayout() {
 	const [showSearch, setShowSearch] = useState(false);
@@ -63,34 +65,17 @@ export function NewTenderLayout() {
 						<Tab>Bids Received</Tab>
 						<Tab>Create Bid</Tab>
 					</TabList>
-
-					<TabPanels>
-						<TabPanel>
-							{showCreateTender ? <NewTenderCreate /> : <ProcurementHome />}
-						</TabPanel>
-
-						<TabPanel>
-							<BidderTenders />
-						</TabPanel>
-
-						<TabPanel>
-							<OfferForTenders />
-						</TabPanel>
-
-						<TabPanel>
-							<BidderOffers />
-						</TabPanel>
-
-						<TabPanel>
-							<ClientAnswers />
-						</TabPanel>
-
-						<TabPanel>
-							<Bids />
-						</TabPanel>
-					</TabPanels>
 				</Tabs>
+				<Flex>
+					<Button>Tender</Button>
+					<Button>Tender Invitations</Button>
+					<Button>Offers Received</Button>
+					<Button>Submitted Offers</Button>
+					<Button>Bids Received</Button>
+					<Button>Create Bid</Button>
+				</Flex>
 			</Box>
+			<Box>{<Outlet />}</Box>
 		</Page>
 	);
 }
