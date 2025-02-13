@@ -38,16 +38,6 @@ export function NewTenderLayout() {
 			}
 		>
 			<Box>
-				<Tabs isFitted size="lg" align="center" colorScheme="blackAlpha">
-					<TabList>
-						<Tab>Tenders</Tab>
-						<Tab>Tender Invitations</Tab>
-						<Tab>Offers Received</Tab>
-						<Tab>Submitted Offers</Tab>
-						<Tab>Bids Received</Tab>
-						<Tab>Create Bid</Tab>
-					</TabList>
-				</Tabs>
 				<Flex justify={'space-around'}>
 					<NavLink to={'/tender'} end>
 						{({ isActive }) => (
