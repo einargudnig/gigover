@@ -1,29 +1,11 @@
 import { SearchIcon } from '@chakra-ui/icons';
-import {
-	IconButton,
-	Button,
-	Box,
-	Tabs,
-	Tab,
-	TabList,
-	TabPanel,
-	TabPanels,
-	Tooltip,
-	Flex
-} from '@chakra-ui/react';
+import { IconButton, Button, Box, Tabs, Tab, TabList, Tooltip, Flex } from '@chakra-ui/react';
 import { Page } from '../../components/Page';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { ProcurementSearchBar } from './ProcurementSearchBar';
 import { useState } from 'react';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
-import { NewTenderCreate } from './tabs/NewTenderCreate';
-import { ProcurementHome } from './ProcurementHome';
-import { BidderTenders } from './Offers/BidderTenders';
-import { OfferForTenders } from './Offers/components/OfferForTenders';
-import { BidderOffers } from './Offers/BidderOffers';
-import { ClientAnswers } from './ClientBids/components/ClientAnswers';
-import { Bids } from './ClientBids/components/Bids';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 
 export function NewTenderLayout() {
 	const [showSearch, setShowSearch] = useState(false);
@@ -66,13 +48,105 @@ export function NewTenderLayout() {
 						<Tab>Create Bid</Tab>
 					</TabList>
 				</Tabs>
-				<Flex>
-					<Button>Tender</Button>
-					<Button>Tender Invitations</Button>
-					<Button>Offers Received</Button>
-					<Button>Submitted Offers</Button>
-					<Button>Bids Received</Button>
-					<Button>Create Bid</Button>
+				<Flex justify={'space-around'}>
+					<NavLink to={'/tender'} end>
+						{({ isActive }) => (
+							<Box
+								as="button"
+								borderBottom={isActive ? '2px' : 'hidden	'}
+								borderColor={'gray.600'}
+								p={1}
+								_hover={{
+									borderBottom: '2px',
+									borderColor: 'gray.300'
+								}}
+							>
+								Tender
+							</Box>
+						)}
+					</NavLink>
+					<NavLink to={'/tender'} end>
+						{({ isActive }) => (
+							<Box
+								as="button"
+								borderBottom={isActive ? '2px' : 'hidden	'}
+								borderColor={'gray.600'}
+								p={1}
+								_hover={{
+									borderBottom: '2px',
+									borderColor: 'gray.300'
+								}}
+							>
+								Tender Invitations
+							</Box>
+						)}
+					</NavLink>
+					<NavLink to={'/tender'} end>
+						{({ isActive }) => (
+							<Box
+								as="button"
+								borderBottom={isActive ? '2px' : 'hidden	'}
+								borderColor={'gray.600'}
+								p={1}
+								width={'100%'}
+								_hover={{
+									borderBottom: '2px',
+									borderColor: 'gray.300'
+								}}
+							>
+								Offers Received
+							</Box>
+						)}
+					</NavLink>
+
+					<NavLink to={'/tender'} end>
+						{({ isActive }) => (
+							<Box
+								as="button"
+								borderBottom={isActive ? '2px' : 'hidden	'}
+								borderColor={'gray.600'}
+								p={1}
+								_hover={{
+									borderBottom: '2px',
+									borderColor: 'gray.300'
+								}}
+							>
+								Sumbitted Offers
+							</Box>
+						)}
+					</NavLink>
+					<NavLink to={'/tender'} end>
+						{({ isActive }) => (
+							<Box
+								as="button"
+								borderBottom={isActive ? '2px' : 'hidden	'}
+								borderColor={'gray.600'}
+								p={1}
+								_hover={{
+									borderBottom: '2px',
+									borderColor: 'gray.300'
+								}}
+							>
+								Bids Received
+							</Box>
+						)}
+					</NavLink>
+					<NavLink to={'/tender'} end>
+						{({ isActive }) => (
+							<Box
+								as="button"
+								borderBottom={isActive ? '2px' : 'hidden	'}
+								borderColor={'gray.600'}
+								p={1}
+								_hover={{
+									borderBottom: '2px',
+									borderColor: 'gray.300'
+								}}
+							>
+								Create Bid
+							</Box>
+						)}
+					</NavLink>
 				</Flex>
 			</Box>
 			<Box>{<Outlet />}</Box>

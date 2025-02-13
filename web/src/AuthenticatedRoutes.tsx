@@ -107,8 +107,28 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 
 		{/* 💰 Tender/Offer  system 💰 */}
-		<Route path={'tender'} element={<NewTenderLayout />} />
-		<Route path={'tender/:tenderId'} element={<NewTenderPage />} />
+		<Route path={'tender'} element={<NewTenderLayout />}>
+			<Route index element={<NewTenderPage />} />
+		</Route>
+
+		{/* <Route index element={<ProcurementHome />} /> */}
+		{/* 			<Route path={':tenderId'} element={<TenderPage />} /> */}
+		{/* 			<Route path={'client-answer'} element={<ClientAnswerOutlet />}> */}
+		{/* 				<Route index element={<ClientAnswers />} /> */}
+		{/* 				<Route path={':bidId'} element={<ClientAnswerId />} /> */}
+		{/* 			</Route> */}
+		{/* 			<Route path={'create-bid'} element={<CreateBidOutlet />}> */}
+		{/* 				<Route index element={<Bids />} /> */}
+		{/* 				<Route path={':bidId'} element={<BidId />} /> */}
+		{/* 			</Route> */}
+		{/* 			<Route path={'tender-offers'} element={<OfferForTenders />} /> */}
+		{/* 			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} /> */}
+		{/* 			<Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} /> */}
+		{/* 			<Route path={'bidder-offers'} element={<BidderOffers />} /> */}
+		{/* 			<Route path={'bidder-tenders'} element={<BidderTenders />} /> */}
+		{/* 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} /> */}
+		{/* 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} /> */}
+		{/* 			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} /> */}
 
 		{/* 🛠️ Settings 🛠️ */}
 		<Route path={'settings'} element={<Settings />} />
