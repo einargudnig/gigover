@@ -19,23 +19,6 @@ import { Settings } from './pages/Settings';
 import { TimeTracker } from './pages/TimeTracker/TimeTracker';
 import { Users } from './pages/Users';
 // Procurement/Tenders/Offers
-// import { ClientAnswerOutlet } from './pages/Procurement/ClientBids/ClientAnswerOutlet';
-// import { CreateBidOutlet } from './pages/Procurement/ClientBids/CreateBidOutlet';
-// import { BidId } from './pages/Procurement/ClientBids/components/BidId';
-// import { Bids } from './pages/Procurement/ClientBids/components/Bids';
-// import { ClientAnswerId } from './pages/Procurement/ClientBids/components/ClientAnswerId';
-// import { ClientAnswers } from './pages/Procurement/ClientBids/components/ClientAnswers';
-// import { BidderOffers } from './pages/Procurement/Offers/BidderOffers';
-// import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
-// import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTender';
-// import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForTenders';
-// import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
-// import { PublishedTender } from './pages/Procurement/Offers/components/PublishedTender';
-// import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
-// import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
-// import { Procurement } from './pages/Procurement/Procurement';
-// import { ProcurementHome } from './pages/Procurement/ProcurementHome';
-// import { TenderPage } from './pages/Procurement/components/Tender';
 import { ProjectDetailsFiles } from './pages/ProjectDetails/ProjectDetailsFiles';
 import { ProjectDetailsGanttChart } from './pages/ProjectDetails/ProjectDetailsGanttChart';
 import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
@@ -44,6 +27,21 @@ import { PropertyId } from './pages/Property/PropertyId';
 import { PropertyOutlet } from './pages/Property/PropertyOutlet';
 import { NewTenderLayout } from './pages/Procurement/NewTenderLayout';
 import { NewTenderPage } from './pages/Procurement/NewTenderPage';
+import { ClientAnswerOutlet } from './pages/Procurement/ClientBids/ClientAnswerOutlet';
+import { CreateBidOutlet } from './pages/Procurement/ClientBids/CreateBidOutlet';
+import { BidId } from './pages/Procurement/ClientBids/components/BidId';
+import { Bids } from './pages/Procurement/ClientBids/components/Bids';
+import { ClientAnswerId } from './pages/Procurement/ClientBids/components/ClientAnswerId';
+import { ClientAnswers } from './pages/Procurement/ClientBids/components/ClientAnswers';
+import { BidderOffers } from './pages/Procurement/Offers/BidderOffers';
+import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
+import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTender';
+import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForTenders';
+import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
+import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
+import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
+import { PublishedTender } from './pages/Procurement/components/PublishedTender';
+import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -108,27 +106,26 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 		{/* 💰 Tender/Offer  system 💰 */}
 		<Route path={'tender'} element={<NewTenderLayout />}>
-			<Route index element={<NewTenderPage />} />
-		</Route>
+			<Route index element={<ProcurementHome />} />
+			<Route path={':tenderId'} element={<NewTenderPage />} />
 
-		{/* <Route index element={<ProcurementHome />} /> */}
-		{/* 			<Route path={':tenderId'} element={<TenderPage />} /> */}
-		{/* 			<Route path={'client-answer'} element={<ClientAnswerOutlet />}> */}
-		{/* 				<Route index element={<ClientAnswers />} /> */}
-		{/* 				<Route path={':bidId'} element={<ClientAnswerId />} /> */}
-		{/* 			</Route> */}
-		{/* 			<Route path={'create-bid'} element={<CreateBidOutlet />}> */}
-		{/* 				<Route index element={<Bids />} /> */}
-		{/* 				<Route path={':bidId'} element={<BidId />} /> */}
-		{/* 			</Route> */}
-		{/* 			<Route path={'tender-offers'} element={<OfferForTenders />} /> */}
-		{/* 			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} /> */}
-		{/* 			<Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} /> */}
-		{/* 			<Route path={'bidder-offers'} element={<BidderOffers />} /> */}
-		{/* 			<Route path={'bidder-tenders'} element={<BidderTenders />} /> */}
-		{/* 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} /> */}
-		{/* 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} /> */}
-		{/* 			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} /> */}
+			<Route path={'client-answer'} element={<ClientAnswerOutlet />}>
+				<Route index element={<ClientAnswers />} />
+				<Route path={':bidId'} element={<ClientAnswerId />} />
+			</Route>
+			<Route path={'create-bid'} element={<CreateBidOutlet />}>
+				<Route index element={<Bids />} />
+				<Route path={':bidId'} element={<BidId />} />
+			</Route>
+			<Route path={'tender-offers'} element={<OfferForTenders />} />
+			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
+			{/* <Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} /> */}
+			<Route path={'bidder-offers'} element={<BidderOffers />} />
+			<Route path={'bidder-tenders'} element={<BidderTenders />} />
+			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
+			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
+			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
+		</Route>
 
 		{/* 🛠️ Settings 🛠️ */}
 		<Route path={'settings'} element={<Settings />} />
