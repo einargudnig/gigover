@@ -47,15 +47,15 @@ export function NewTenderCreate() {
 		}
 
 		if (step === 1) {
-			return <AddItems />;
+			return <AddItems tender={tender} />;
 		}
 
 		if (step === 2) {
-			return <PublishTender />;
+			return <PublishTender tender={tender} />;
 		}
 
 		if (step === 3) {
-			return <AddBidder />;
+			return <AddBidder tenderId={tender.tenderId} />;
 		}
 
 		return null;
@@ -90,7 +90,7 @@ export function NewTenderCreate() {
 			<StepContent step={activeStep} />
 
 			{/* Navigation buttons */}
-			<Flex mt={4} justify="space-between">
+			<Flex mt={8} justify="space-between">
 				<Button
 					onClick={prevStep}
 					isDisabled={activeStep === 0}
@@ -111,3 +111,64 @@ export function NewTenderCreate() {
 		</Box>
 	);
 }
+
+const tender = {
+	tenderId: 12345,
+	projectId: 789,
+	projectName: 'Office Building Renovation',
+	taskId: 456,
+	description: 'Complete renovation of 3rd floor office space',
+	terms: 'Payment within 30 days after completion',
+	finishDate: 1740374400000,
+	delivery: 90,
+	address: 'Laugavegur 123, 101 Reykjavík',
+	status: 1,
+	phoneNumber: '+354 555 1234',
+	offerNote: 'Please include detailed timeline',
+	bidStatus: 0,
+	email: 'project@company.is',
+	items: [
+		{
+			tenderId: 12345,
+			tenderItemId: 1,
+			nr: 101,
+			description: 'Wall painting',
+			volume: 250.5,
+			unit: 'm²',
+			cost: 1500000,
+			notes: 'Premium quality paint required'
+		},
+		{
+			tenderId: 12345,
+			tenderItemId: 2,
+			nr: 102,
+			description: 'Flooring installation',
+			volume: 180,
+			unit: 'm²',
+			cost: 2800000
+		}
+	],
+	bidders: [],
+	documents: [
+		{
+			id: 1,
+			offerId: 5001,
+			tenderId: 12345,
+			name: 'floor-plan.pdf',
+			type: 'DOCUMENT',
+			url: 'https://example.com/documents/floor-plan.pdf',
+			bytes: 2048576,
+			created: 1708272000000
+		},
+		{
+			id: 2,
+			offerId: 5001,
+			tenderId: 12345,
+			name: 'site-photo.jpg',
+			type: 'IMAGE',
+			url: 'https://example.com/documents/site-photo.jpg',
+			bytes: 1048576,
+			created: 1708272000000
+		}
+	]
+};

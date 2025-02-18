@@ -42,6 +42,7 @@ import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
 import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
 import { PublishedTender } from './pages/Procurement/components/PublishedTender';
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
+import { TenderPage } from './pages/Procurement/components/Tender';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -107,7 +108,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		{/* 💰 Tender/Offer  system 💰 */}
 		<Route path={'tender'} element={<NewTenderLayout />}>
 			<Route index element={<ProcurementHome />} />
-			<Route path={':tenderId'} element={<NewTenderPage />} />
+			<Route path={':tenderId'} element={<TenderPage />} />
 
 			<Route path={'client-answer'} element={<ClientAnswerOutlet />}>
 				<Route index element={<ClientAnswers />} />
