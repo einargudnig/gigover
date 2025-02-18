@@ -3,6 +3,7 @@ import {
 	Button,
 	Flex,
 	HStack,
+	Heading,
 	Spacer,
 	Table,
 	Tbody,
@@ -27,6 +28,9 @@ export function PublishTender({ tender }) {
 
 	return (
 		<Box>
+			<Flex justifyContent={'center'} marginBottom={4}>
+				<Heading size={'md'}>Publish tender</Heading>
+			</Flex>
 			<Box>
 				<VStack>
 					<VStack mb={'4'}>

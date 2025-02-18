@@ -1,8 +1,11 @@
 import {
+	Box,
 	Button,
+	Flex,
 	FormControl,
 	FormHelperText,
 	HStack,
+	Heading,
 	Input,
 	Table,
 	Tbody,
@@ -26,7 +29,6 @@ import { useAddTenderItem } from '../../../../mutations/procurement/useAddTender
 import { useDeleteTenderItem } from '../../../../mutations/procurement/useDeleteTenderItem';
 import { useModifyTenderItem } from '../../../../mutations/procurement/useModifyTenderItem';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { UploadTenderDocuments } from '../../Offers/components/UploadTenderDocuments';
 
 export const AddItems = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
@@ -40,8 +42,6 @@ export const AddItems = ({ tender }): JSX.Element => {
 	};
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-
-	const [upload, setUpload] = useState(false); // for the uploadModal
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
@@ -138,16 +138,10 @@ export const AddItems = ({ tender }): JSX.Element => {
 	// const finishDateStatus = false;
 
 	return (
-		<>
-			{upload && (
-				<UploadTenderDocuments
-					onClose={() => setUpload(false)}
-					onComplete={(status) => {
-						console.log('status', status);
-					}}
-					tenderId={Number(tenderId)}
-				/>
-			)}
+		<Box>
+			<Flex justifyContent={'center'} marginBottom={4}>
+				<Heading size={'md'}>Add items</Heading>
+			</Flex>
 
 			<Table variant={'striped'}>
 				<Thead>
@@ -404,6 +398,6 @@ export const AddItems = ({ tender }): JSX.Element => {
 					) : null}
 				</Tbody>
 			</Table>
-		</>
+		</Box>
 	);
 };

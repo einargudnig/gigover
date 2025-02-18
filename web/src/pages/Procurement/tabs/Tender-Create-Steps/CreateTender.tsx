@@ -114,13 +114,15 @@ export function CreateTender() {
 
 	return (
 		<Box>
-			<Text>Create Tender</Text>
+			<Flex justifyContent={'center'}>
+				<Heading size={'md'}>Create Tender</Heading>
+			</Flex>
 			<form onSubmit={onSubmit}>
 				<VStack mb={-6} align={'stretch'}>
 					{openProjects ? (
 						<>
 							<FormControl id={'projectIds'} isInvalid={!!errors.projectId}>
-								<Heading size={'md'}>Select a project for your procurement</Heading>
+								<Text>Select a project for your procurement</Text>
 								<TrackerSelect
 									title={'Select a project'}
 									value={selectedProject}

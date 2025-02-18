@@ -3,11 +3,13 @@ import { useInviteBidder } from '../../../../mutations/procurement/useInviteBidd
 import { useGetUserByEmail } from '../../../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../../../utils/ConsoleUtils';
 import {
+	Box,
 	Button,
 	Flex,
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	Heading,
 	Input,
 	Text
 } from '@chakra-ui/react';
@@ -56,7 +58,10 @@ export const AddBidder = ({ tenderId }: InviteUserProps): JSX.Element => {
 	}, [inviteSuccess]);
 
 	return (
-		<>
+		<Box>
+			<Flex justifyContent={'center'} marginBottom={4}>
+				<Heading size={'md'}>Invite bidder</Heading>
+			</Flex>
 			<FormControl
 				isRequired={true}
 				isInvalid={searchMutation.isError || inviteMutation.isError}
@@ -96,6 +101,6 @@ export const AddBidder = ({ tenderId }: InviteUserProps): JSX.Element => {
 					Invite
 				</Button>
 			</Flex>
-		</>
+		</Box>
 	);
 };
