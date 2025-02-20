@@ -1,5 +1,6 @@
 import {
 	Box,
+	Button,
 	Checkbox,
 	Flex,
 	FormControl,
@@ -24,6 +25,7 @@ import { ApiService } from '../../../../services/ApiService';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { Task } from '../../../../models/Task';
 import { motion } from 'framer-motion';
+import { FormActions } from '../../../../components/FormActions';
 
 export function CreateTender() {
 	const queryClient = useQueryClient();
@@ -304,6 +306,9 @@ export function CreateTender() {
 							</>
 						)}
 					</VStack>
+					<Flex justifyContent={'end'}>
+						<Button>Create</Button>
+					</Flex>
 				</form>
 			</Box>
 		</Box>
