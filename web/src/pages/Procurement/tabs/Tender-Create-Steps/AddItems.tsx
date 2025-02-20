@@ -138,266 +138,274 @@ export const AddItems = ({ tender }): JSX.Element => {
 	// const finishDateStatus = false;
 
 	return (
-		<Box>
-			<Flex justifyContent={'center'} marginBottom={4}>
-				<Heading size={'md'}>Add items</Heading>
+		<Box backgroundColor={'white'} py={6} rounded={'md'}>
+			<Flex justifyContent={'center'}>
+				<Heading size={'md'}>Create Tender</Heading>
 			</Flex>
-
-			<Table variant={'striped'}>
-				<Thead>
-					<Tr>
-						<Th width={'20%'}>
-							<Tooltip hasArrow label="Cost Code">
-								<HStack>
-									<Text>Number</Text>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'20%'}>
-							<Tooltip hasArrow label="Description of a item">
-								<HStack>
-									<Text>Description</Text>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'20%'}>
-							<Tooltip hasArrow label="Volume">
-								<HStack>
-									<Text>Volume</Text>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'20%'}>
-							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-								<HStack>
-									<Text>Unit</Text>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'20%'}>
-							<Text>Actions</Text>
-						</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-					{tenderItems?.length === 0 ? (
+			<Box px={10} py={4}>
+				<Table variant={'striped'}>
+					<Thead>
 						<Tr>
-							<Td></Td>
-							<Td></Td>
-							<Td>
-								<Text fontSize="xl">The table is empty!</Text>
-							</Td>
-							<Td></Td>
-							<Td></Td>
+							<Th width={'20%'}>
+								<Tooltip hasArrow label="Cost Code">
+									<HStack>
+										<Text>Number</Text>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Tooltip>
+							</Th>
+
+							<Th width={'20%'}>
+								<Tooltip hasArrow label="Description of a item">
+									<HStack>
+										<Text>Description</Text>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Tooltip>
+							</Th>
+
+							<Th width={'20%'}>
+								<Tooltip hasArrow label="Volume">
+									<HStack>
+										<Text>Volume</Text>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Tooltip>
+							</Th>
+
+							<Th width={'20%'}>
+								<Tooltip
+									hasArrow
+									label="Unit of measurement. For example: m2, kg, t"
+								>
+									<HStack>
+										<Text>Unit</Text>
+										<ImportantIcon size={20} />
+									</HStack>
+								</Tooltip>
+							</Th>
+
+							<Th width={'20%'}>
+								<Text>Actions</Text>
+							</Th>
 						</Tr>
-					) : null}
-					<>
-						{tenderItems?.map((item) => (
-							<Tr key={item.tenderItemId}>
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<Input
-											name="nr"
-											value={updateFormData.nr}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.nr
-									)}
-								</Td>
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<Input
-											name="description"
-											value={updateFormData.description}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.description
-									)}
-								</Td>
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<Input
-											name="volume"
-											value={updateFormData.volume}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.volume
-									)}
-								</Td>
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<Input
-											name="unit"
-											value={updateFormData.unit}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.unit
-									)}
-								</Td>
-								{/* Action buttons */}
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<HStack>
-											<Button
-												aria-label={'Update item'}
-												onClick={() => handleUpdate(item)}
-											>
-												{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
-											</Button>
-											<Button
-												onClick={() => {
-													setFormData({
-														tenderId: Number(tenderId),
-														description: '',
-														nr: 0,
-														volume: 0,
-														unit: ''
-													});
-													setEditingItem(null);
-												}}
-											>
-												<CrossIcon size={24} />
-											</Button>
-										</HStack>
-									) : (
-										<HStack>
-											<Button
-												aria-label={'Edit item'}
-												onClick={() => handleEdit(item)}
-											>
-												<Edit size={20} />
-											</Button>
-											<ConfirmDialog
-												header={'Delete item'}
-												setIsOpen={setDialogOpen}
-												callback={async (b) => {
-													if (b) {
-														await deleteTenderItem(item);
-														// console.log('Deleting item:', item); // Good for debugging
-													}
-
-													setDialogOpen(false);
-													setFormData({
-														tenderId: Number(tenderId),
-														description: '',
-														nr: 0,
-														volume: 0,
-														unit: ''
-													});
-												}}
-												isOpen={dialogOpen}
-											>
-												<Button
-													aria-label={'Delete item'}
-													colorScheme={'red'}
-													isLoading={isDeleteLoading}
-													onClick={() => setDialogOpen(true)}
-												>
-													<TrashIcon color={'white'} size={20} />
-												</Button>
-											</ConfirmDialog>
-										</HStack>
-									)}
-								</Td>
-							</Tr>
-						))}
-					</>
-
-					{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
-					{finishDateStatus ? (
-						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-							The finish date has passed, you cannot add more items to the Tender
-						</Text>
-					) : (
-						<>
-							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-								Enter details below to add items to tender
-							</Text>
-
+					</Thead>
+					<Tbody>
+						{tenderItems?.length === 0 ? (
 							<Tr>
-								<Td width={'20%'}>
-									<FormControl id="nr">
-										<Input
-											width={'200px'}
-											id="nr"
-											name="nr"
-											type="text"
-											value={formData.nr}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="description">
-										<Input
-											htmlSize={4}
-											id="description"
-											name="description"
-											type="text"
-											value={formData.description}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="volume">
-										<Input
-											htmlSize={4}
-											id="volume"
-											name="volume"
-											type="text"
-											value={formData.volume}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
+								<Td></Td>
+								<Td></Td>
 								<Td>
-									{/* We only want the unit to be max 4 characters kg, m2, l, etc */}
-									<FormControl id="unit" isInvalid={isInvalidUnit}>
-										<Input
-											htmlSize={4}
-											id="unit"
-											name="unit"
-											type="text"
-											value={formData.unit}
-											onChange={handleChange}
-										/>
-										{isInvalidUnit ? (
-											<FormHelperText>
-												The measurement of unit should be in a short format:
-												kg, m, m2
-											</FormHelperText>
-										) : null}
-									</FormControl>
+									<Text fontSize="xl">The table is empty!</Text>
 								</Td>
-								<Td width={'20%'}>
-									<Button onClick={handleAdd}>
-										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-									</Button>
-								</Td>
+								<Td></Td>
+								<Td></Td>
 							</Tr>
-						</>
-					)}
+						) : null}
+						<>
+							{tenderItems?.map((item) => (
+								<Tr key={item.tenderItemId}>
+									<Td width={'20%'}>
+										{editingItem === item ? (
+											<Input
+												name="nr"
+												value={updateFormData.nr}
+												onChange={handleUpdateChange}
+											/>
+										) : (
+											item.nr
+										)}
+									</Td>
+									<Td width={'20%'}>
+										{editingItem === item ? (
+											<Input
+												name="description"
+												value={updateFormData.description}
+												onChange={handleUpdateChange}
+											/>
+										) : (
+											item.description
+										)}
+									</Td>
+									<Td width={'20%'}>
+										{editingItem === item ? (
+											<Input
+												name="volume"
+												value={updateFormData.volume}
+												onChange={handleUpdateChange}
+											/>
+										) : (
+											item.volume
+										)}
+									</Td>
+									<Td width={'20%'}>
+										{editingItem === item ? (
+											<Input
+												name="unit"
+												value={updateFormData.unit}
+												onChange={handleUpdateChange}
+											/>
+										) : (
+											item.unit
+										)}
+									</Td>
+									{/* Action buttons */}
+									<Td width={'20%'}>
+										{editingItem === item ? (
+											<HStack>
+												<Button
+													aria-label={'Update item'}
+													onClick={() => handleUpdate(item)}
+												>
+													{isUpdateLoading ? (
+														<LoadingSpinner />
+													) : (
+														'Update'
+													)}
+												</Button>
+												<Button
+													onClick={() => {
+														setFormData({
+															tenderId: Number(tenderId),
+															description: '',
+															nr: 0,
+															volume: 0,
+															unit: ''
+														});
+														setEditingItem(null);
+													}}
+												>
+													<CrossIcon size={24} />
+												</Button>
+											</HStack>
+										) : (
+											<HStack>
+												<Button
+													aria-label={'Edit item'}
+													onClick={() => handleEdit(item)}
+												>
+													<Edit size={20} />
+												</Button>
+												<ConfirmDialog
+													header={'Delete item'}
+													setIsOpen={setDialogOpen}
+													callback={async (b) => {
+														if (b) {
+															await deleteTenderItem(item);
+															// console.log('Deleting item:', item); // Good for debugging
+														}
 
-					{isMutateError ? (
-						<Td>
-							<Text>Something went wrong - {mutateError?.code}</Text>
-						</Td>
-					) : null}
-				</Tbody>
-			</Table>
+														setDialogOpen(false);
+														setFormData({
+															tenderId: Number(tenderId),
+															description: '',
+															nr: 0,
+															volume: 0,
+															unit: ''
+														});
+													}}
+													isOpen={dialogOpen}
+												>
+													<Button
+														aria-label={'Delete item'}
+														colorScheme={'red'}
+														isLoading={isDeleteLoading}
+														onClick={() => setDialogOpen(true)}
+													>
+														<TrashIcon color={'white'} size={20} />
+													</Button>
+												</ConfirmDialog>
+											</HStack>
+										)}
+									</Td>
+								</Tr>
+							))}
+						</>
+
+						{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
+						{finishDateStatus ? (
+							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+								The finish date has passed, you cannot add more items to the Tender
+							</Text>
+						) : (
+							<>
+								<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+									Enter details below to add items to tender
+								</Text>
+
+								<Tr>
+									<Td width={'20%'}>
+										<FormControl id="nr">
+											<Input
+												width={'200px'}
+												id="nr"
+												name="nr"
+												type="text"
+												value={formData.nr}
+												onChange={handleChange}
+											/>
+										</FormControl>
+									</Td>
+									<Td width={'20%'}>
+										<FormControl id="description">
+											<Input
+												htmlSize={4}
+												id="description"
+												name="description"
+												type="text"
+												value={formData.description}
+												onChange={handleChange}
+											/>
+										</FormControl>
+									</Td>
+									<Td width={'20%'}>
+										<FormControl id="volume">
+											<Input
+												htmlSize={4}
+												id="volume"
+												name="volume"
+												type="text"
+												value={formData.volume}
+												onChange={handleChange}
+											/>
+										</FormControl>
+									</Td>
+									<Td>
+										{/* We only want the unit to be max 4 characters kg, m2, l, etc */}
+										<FormControl id="unit" isInvalid={isInvalidUnit}>
+											<Input
+												htmlSize={4}
+												id="unit"
+												name="unit"
+												type="text"
+												value={formData.unit}
+												onChange={handleChange}
+											/>
+											{isInvalidUnit ? (
+												<FormHelperText>
+													The measurement of unit should be in a short
+													format: kg, m, m2
+												</FormHelperText>
+											) : null}
+										</FormControl>
+									</Td>
+									<Td width={'20%'}>
+										<Button onClick={handleAdd}>
+											{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+										</Button>
+									</Td>
+								</Tr>
+							</>
+						)}
+
+						{isMutateError ? (
+							<Td>
+								<Text>Something went wrong - {mutateError?.code}</Text>
+							</Td>
+						) : null}
+					</Tbody>
+				</Table>
+			</Box>
 		</Box>
 	);
 };

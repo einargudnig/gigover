@@ -1,5 +1,4 @@
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { NewTenderCreate } from './tabs/NewTenderCreate';
 
 export function NewTenderPage() {
 	return (

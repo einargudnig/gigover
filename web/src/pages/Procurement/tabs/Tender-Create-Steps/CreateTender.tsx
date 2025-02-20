@@ -36,7 +36,7 @@ export function CreateTender() {
 	const [selectedProjectName, setSelectedProjectName] = useState<string | undefined>('');
 	const [selectedTask, setSelectedTask] = useState<number | undefined>(undefined);
 
-	const { mutate: modify, isError, error } = useAddTender();
+	const { mutate: modify } = useAddTender();
 	const {
 		register,
 		handleSubmit,
@@ -113,161 +113,168 @@ export function CreateTender() {
 	);
 
 	return (
-		<Box>
+		<Box backgroundColor={'white'} py={6} rounded={'md'}>
 			<Flex justifyContent={'center'}>
 				<Heading size={'md'}>Create Tender</Heading>
 			</Flex>
-			<form onSubmit={onSubmit}>
-				<VStack mb={-6} align={'stretch'}>
-					{openProjects ? (
-						<>
-							<FormControl id={'projectIds'} isInvalid={!!errors.projectId}>
-								<Text>Select a project for your procurement</Text>
+			<Box px={10} py={4}>
+				<form onSubmit={onSubmit}>
+					<VStack mb={-6} align={'stretch'}>
+						{openProjects ? (
+							<>
+								<FormControl id={'projectIds'} isInvalid={!!errors.projectId}>
+									<Text>Select a project for your procurement</Text>
+									<TrackerSelect
+										title={'Select a project'}
+										value={selectedProject}
+										options={openProjects.map((project) => ({
+											label: project.name,
+											value: project.projectId
+										}))}
+										valueChanged={(newValue) => {
+											if (newValue === '') {
+												setSelectedProject(undefined);
+											} else {
+												setSelectedProject(
+													(newValue as number) ?? undefined
+												);
+												setSelectedProjectName(
+													openProjects.find(
+														(project) =>
+															project.projectId ===
+															(newValue as number)
+													)?.name
+												);
+											}
+										}}
+									/>
+								</FormControl>
+							</>
+						) : (
+							<>
+								<Heading>No projects</Heading>
+								<Text>
+									You do not have any projects, you have to create a project
+									before you can make a procurement
+								</Text>
+							</>
+						)}
+						{selectedProject && (
+							<>
+								<Heading size={'md'}>Select a task for your procurement</Heading>
 								<TrackerSelect
-									title={'Select a project'}
-									value={selectedProject}
-									options={openProjects.map((project) => ({
-										label: project.name,
-										value: project.projectId
+									title={'Select a task'}
+									value={selectedTask}
+									options={activeTasks(tasksFromSelectedProject)!.map((task) => ({
+										label: task.subject,
+										value: task.taskId
 									}))}
 									valueChanged={(newValue) => {
 										if (newValue === '') {
-											setSelectedProject(undefined);
+											setSelectedTask(undefined);
 										} else {
-											setSelectedProject((newValue as number) ?? undefined);
-											setSelectedProjectName(
-												openProjects.find(
-													(project) =>
-														project.projectId === (newValue as number)
-												)?.name
-											);
+											setSelectedTask((newValue as number) ?? undefined);
 										}
 									}}
 								/>
-							</FormControl>
-						</>
-					) : (
-						<>
-							<Heading>No projects</Heading>
-							<Text>
-								You do not have any projects, you have to create a project before
-								you can make a procurement
-							</Text>
-						</>
-					)}
-					{selectedProject && (
-						<>
-							<Heading size={'md'}>Select a task for your procurement</Heading>
-							<TrackerSelect
-								title={'Select a task'}
-								value={selectedTask}
-								options={activeTasks(tasksFromSelectedProject)!.map((task) => ({
-									label: task.subject,
-									value: task.taskId
-								}))}
-								valueChanged={(newValue) => {
-									if (newValue === '') {
-										setSelectedTask(undefined);
-									} else {
-										setSelectedTask((newValue as number) ?? undefined);
-									}
-								}}
+							</>
+						)}
+						<FormControl id={'description'} isInvalid={!!errors.description}>
+							<FormLabel>Procurement Description</FormLabel>
+							<Input
+								required={true}
+								{...register('description', {
+									required: 'Procurement description is required'
+								})}
 							/>
-						</>
-					)}
-					<FormControl id={'description'} isInvalid={!!errors.description}>
-						<FormLabel>Procurement Description</FormLabel>
-						<Input
-							required={true}
-							{...register('description', {
-								required: 'Procurement description is required'
-							})}
-						/>
-						{errors.description && (
-							<Text color="red.500">{errors.description.message}</Text>
-						)}
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'terms'} isInvalid={!!errors.terms}>
-						<FormLabel>Terms</FormLabel>
-						<Input
-							required={true}
-							{...register('terms', { required: 'Terms are required' })}
-						/>
-						{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
-					</FormControl>
-					<Box width={['50%', '33%']} mb={6} />
-					<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
-						<Flex>
-							<FormLabel>Close Date - </FormLabel>
-							<Text>
-								You will not be able to answer offers until this date has passed
-							</Text>
-						</Flex>
-						<Controller
-							name="finishDate"
-							control={control}
-							rules={{ required: 'Finish date is required' }}
-							render={({ field: { onChange, onBlur, value } }) => (
-								<HStack>
-									<DatePicker
-										onChange={(date) => {
-											if (date) {
-												onChange((date as Date).getTime());
-											} else {
-												onChange(null);
-											}
-										}}
-										selected={value ? new Date(value) : null}
-										onBlur={onBlur}
-										minDate={currentDate}
-										required={true}
-									/>
-									<CalendarIcon color={'black'} />
-								</HStack>
+							{errors.description && (
+								<Text color="red.500">{errors.description.message}</Text>
 							)}
-						/>
-						{errors.finishDate && (
-							<Text color="red.500">{errors.finishDate.message}</Text>
-						)}
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'delivery'}>
-						<FormLabel>Delivery</FormLabel>
-						<Checkbox
-							name="delivery"
-							isChecked={isChecked === 1}
-							onChange={handleChangeCheckbox}
-						/>
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'address'} isInvalid={!!errors.address}>
-						<FormLabel>Address - contact person on site</FormLabel>
-						<Input
-							required={true}
-							{...register('address', { required: 'Address is required' })}
-						/>
-						{errors.address && <Text color="red.500">{errors.address.message}</Text>}
-					</FormControl>
-					<Box mb={6} />
-					<FormControl id={'phoneNumber'} isInvalid={!!errors.phoneNumber}>
-						<FormLabel>Phone Number</FormLabel>
-						<Input
-							required={true}
-							{...register('phoneNumber', {
-								required: 'Phone number is required',
-								maxLength: {
-									value: 10,
-									message: 'Phone number cannot be more than 10 digits'
-								}
-							})}
-						/>
-						{errors.phoneNumber && (
-							<Text color="red.500">{errors.phoneNumber.message}</Text>
-						)}
-					</FormControl>
-				</VStack>
-			</form>
+						</FormControl>
+						<Box mb={6} />
+						<FormControl id={'terms'} isInvalid={!!errors.terms}>
+							<FormLabel>Terms</FormLabel>
+							<Input
+								required={true}
+								{...register('terms', { required: 'Terms are required' })}
+							/>
+							{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
+						</FormControl>
+						<Box width={['50%', '33%']} mb={6} />
+						<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
+							<Flex>
+								<FormLabel>Close Date - </FormLabel>
+								<Text>
+									You will not be able to answer offers until this date has passed
+								</Text>
+							</Flex>
+							<Controller
+								name="finishDate"
+								control={control}
+								rules={{ required: 'Finish date is required' }}
+								render={({ field: { onChange, onBlur, value } }) => (
+									<HStack>
+										<DatePicker
+											onChange={(date) => {
+												if (date) {
+													onChange((date as Date).getTime());
+												} else {
+													onChange(null);
+												}
+											}}
+											selected={value ? new Date(value) : null}
+											onBlur={onBlur}
+											minDate={currentDate}
+											required={true}
+										/>
+										<CalendarIcon color={'black'} />
+									</HStack>
+								)}
+							/>
+							{errors.finishDate && (
+								<Text color="red.500">{errors.finishDate.message}</Text>
+							)}
+						</FormControl>
+						<Box mb={6} />
+						<FormControl id={'delivery'}>
+							<FormLabel>Delivery</FormLabel>
+							<Checkbox
+								name="delivery"
+								isChecked={isChecked === 1}
+								onChange={handleChangeCheckbox}
+							/>
+						</FormControl>
+						<Box mb={6} />
+						<FormControl id={'address'} isInvalid={!!errors.address}>
+							<FormLabel>Address - contact person on site</FormLabel>
+							<Input
+								required={true}
+								{...register('address', { required: 'Address is required' })}
+							/>
+							{errors.address && (
+								<Text color="red.500">{errors.address.message}</Text>
+							)}
+						</FormControl>
+						<Box mb={6} />
+						<FormControl id={'phoneNumber'} isInvalid={!!errors.phoneNumber}>
+							<FormLabel>Phone Number</FormLabel>
+							<Input
+								required={true}
+								{...register('phoneNumber', {
+									required: 'Phone number is required',
+									maxLength: {
+										value: 10,
+										message: 'Phone number cannot be more than 10 digits'
+									}
+								})}
+							/>
+							{errors.phoneNumber && (
+								<Text color="red.500">{errors.phoneNumber.message}</Text>
+							)}
+						</FormControl>
+					</VStack>
+				</form>
+			</Box>
 		</Box>
 	);
 }

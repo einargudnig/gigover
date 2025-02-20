@@ -27,11 +27,11 @@ export function PublishTender({ tender }) {
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	return (
-		<Box>
-			<Flex justifyContent={'center'} marginBottom={4}>
-				<Heading size={'md'}>Publish tender</Heading>
+		<Box backgroundColor={'white'} py={6} rounded={'md'}>
+			<Flex justifyContent={'center'}>
+				<Heading size={'md'}>Create Tender</Heading>
 			</Flex>
-			<Box>
+			<Box px={10} py={4}>
 				<VStack>
 					<VStack mb={'4'}>
 						<HStack>

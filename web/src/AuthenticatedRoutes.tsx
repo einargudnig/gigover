@@ -19,20 +19,13 @@ import { Settings } from './pages/Settings';
 import { TimeTracker } from './pages/TimeTracker/TimeTracker';
 import { Users } from './pages/Users';
 // Procurement/Tenders/Offers
-import { ProjectDetailsFiles } from './pages/ProjectDetails/ProjectDetailsFiles';
-import { ProjectDetailsGanttChart } from './pages/ProjectDetails/ProjectDetailsGanttChart';
-import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
-import { Property } from './pages/Property/Property';
-import { PropertyId } from './pages/Property/PropertyId';
-import { PropertyOutlet } from './pages/Property/PropertyOutlet';
-import { NewTenderLayout } from './pages/Procurement/NewTenderLayout';
-import { NewTenderPage } from './pages/Procurement/NewTenderPage';
 import { ClientAnswerOutlet } from './pages/Procurement/ClientBids/ClientAnswerOutlet';
 import { CreateBidOutlet } from './pages/Procurement/ClientBids/CreateBidOutlet';
 import { BidId } from './pages/Procurement/ClientBids/components/BidId';
 import { Bids } from './pages/Procurement/ClientBids/components/Bids';
 import { ClientAnswerId } from './pages/Procurement/ClientBids/components/ClientAnswerId';
 import { ClientAnswers } from './pages/Procurement/ClientBids/components/ClientAnswers';
+import { NewTenderLayout } from './pages/Procurement/NewTenderLayout';
 import { BidderOffers } from './pages/Procurement/Offers/BidderOffers';
 import { BidderTenders } from './pages/Procurement/Offers/BidderTenders';
 import { OfferForTender } from './pages/Procurement/Offers/components/OfferForTender';
@@ -40,9 +33,14 @@ import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForT
 import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
 import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
 import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
-import { PublishedTender } from './pages/Procurement/components/PublishedTender';
 import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { TenderPage } from './pages/Procurement/components/Tender';
+import { ProjectDetailsFiles } from './pages/ProjectDetails/ProjectDetailsFiles';
+import { ProjectDetailsGanttChart } from './pages/ProjectDetails/ProjectDetailsGanttChart';
+import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
+import { Property } from './pages/Property/Property';
+import { PropertyId } from './pages/Property/PropertyId';
+import { PropertyOutlet } from './pages/Property/PropertyOutlet';
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>

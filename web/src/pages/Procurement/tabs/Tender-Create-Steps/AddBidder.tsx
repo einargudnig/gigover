@@ -58,49 +58,51 @@ export const AddBidder = ({ tenderId }: InviteUserProps): JSX.Element => {
 	}, [inviteSuccess]);
 
 	return (
-		<Box>
-			<Flex justifyContent={'center'} marginBottom={4}>
-				<Heading size={'md'}>Invite bidder</Heading>
+		<Box backgroundColor={'white'} py={6} rounded={'md'}>
+			<Flex justifyContent={'center'}>
+				<Heading size={'md'}>Create Tender</Heading>
 			</Flex>
-			<FormControl
-				isRequired={true}
-				isInvalid={searchMutation.isError || inviteMutation.isError}
-				mb={4}
-			>
-				<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
-				<Input
-					placeholder={'Enter e-mail address of a Gigover user'}
-					name={'inviteEmail'}
-					value={searchMail}
-					onChange={(e) => setSearchMail(e.target.value)}
-				/>
-				{inviteSuccess ? (
-					<>
-						<Text mt={4} color={Theme.colors.green}>
-							User has been invited to the project
-						</Text>
-					</>
-				) : (
-					(searchMutation.isError || inviteMutation.isError) && (
-						<FormErrorMessage>
-							The user with email {searchMail} could not be found or has already been
-							invited.
-						</FormErrorMessage>
-					)
-				)}
-			</FormControl>
-			<Flex justifyContent={'flex-end'}>
-				<Button
-					variant={'outline'}
-					colorScheme={'gray'}
-					loadingText={'Inviting'}
-					isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-					disabled={searchMutation.isLoading || inviteMutation.isLoading}
-					onClick={search}
+			<Box px={10} py={4}>
+				<FormControl
+					isRequired={true}
+					isInvalid={searchMutation.isError || inviteMutation.isError}
+					mb={4}
 				>
-					Invite
-				</Button>
-			</Flex>
+					<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
+					<Input
+						placeholder={'Enter e-mail address of a Gigover user'}
+						name={'inviteEmail'}
+						value={searchMail}
+						onChange={(e) => setSearchMail(e.target.value)}
+					/>
+					{inviteSuccess ? (
+						<>
+							<Text mt={4} color={Theme.colors.green}>
+								User has been invited to the project
+							</Text>
+						</>
+					) : (
+						(searchMutation.isError || inviteMutation.isError) && (
+							<FormErrorMessage>
+								The user with email {searchMail} could not be found or has already
+								been invited.
+							</FormErrorMessage>
+						)
+					)}
+				</FormControl>
+				<Flex justifyContent={'flex-end'}>
+					<Button
+						variant={'outline'}
+						colorScheme={'gray'}
+						loadingText={'Inviting'}
+						isLoading={searchMutation.isLoading || inviteMutation.isLoading}
+						disabled={searchMutation.isLoading || inviteMutation.isLoading}
+						onClick={search}
+					>
+						Invite
+					</Button>
+				</Flex>
+			</Box>
 		</Box>
 	);
 };
