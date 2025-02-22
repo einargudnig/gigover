@@ -16,6 +16,7 @@ import { CreateTender } from './Tender-Create-Steps/CreateTender';
 import { AddItems } from './Tender-Create-Steps/AddItems';
 import { PublishTender } from './Tender-Create-Steps/PublishTender';
 import { AddBidder } from './Tender-Create-Steps/AddBidder';
+import { Tender } from '../../../models/Tender';
 
 const steps = [
 	{ title: 'Create tender', description: 'Create tender' },
@@ -25,11 +26,7 @@ const steps = [
 ];
 
 export function NewTenderCreate() {
-	// const { activeStep, setActiveStep } = useSteps({
-	// 	index: 1,
-	// 	count: steps.length
-	// });
-
+	const [tender, setTender] = useState<Tender | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
 
 	const nextStep = () => {
@@ -37,28 +34,55 @@ export function NewTenderCreate() {
 	};
 
 	const prevStep = () => {
-		setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
+		setActiveStep(function (prevStep) {
+			return Math.max(prevStep - 1, 0);
+		});
 	};
 
 	// Component to render for each step
 	const StepContent = ({ step }) => {
-		if (step === 0) {
-			return <CreateTender />;
+		switch (step) {
+			case 0:
+				return (
+					<CreateTender
+						onTenderCreate={(newTender) => {
+							setTender(newTender);
+							nextStep();
+						}}
+					/>
+				);
+			case 1:
+				return (
+					<AddItems
+						tender={tender}
+						onItemsAdded={(updatedTender) => {
+							setTender(updatedTender);
+							nextStep();
+						}}
+					/>
+				);
+			case 2:
+				return (
+					<PublishTender
+						tender={tender}
+						onPublish={(publishedTender) => {
+							setTender(publishedTender);
+							nextStep();
+						}}
+					/>
+				);
+			case 3:
+				return (
+					<AddBidder
+						tender={tender}
+						onBidderAdded={(finalTender) => {
+							setTender(finalTender);
+						}}
+					/>
+				);
+			default:
+				return null;
 		}
-
-		if (step === 1) {
-			return <AddItems tender={tender} />;
-		}
-
-		if (step === 2) {
-			return <PublishTender tender={tender} />;
-		}
-
-		if (step === 3) {
-			return <AddBidder tenderId={tender.tenderId} />;
-		}
-
-		return null;
 	};
 
 	return (

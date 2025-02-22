@@ -25,9 +25,13 @@ import { ApiService } from '../../../../services/ApiService';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { Task } from '../../../../models/Task';
 import { motion } from 'framer-motion';
-import { FormActions } from '../../../../components/FormActions';
+import { Tender } from '../../../../models/Tender';
 
-export function CreateTender() {
+interface CreateTenderProps {
+	onTenderCreate: (tender: Tender) => void;
+}
+
+export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	const queryClient = useQueryClient();
 	const { data } = useProjectList();
 	// I'm using the openProjects for the selecting of projects.
