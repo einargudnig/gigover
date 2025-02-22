@@ -18,8 +18,15 @@ import {
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TenderItem } from '../../../../models/Tender';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 
-export function PublishTender({ tender }) {
+interface PublishTenderProps {
+	tenderId: number;
+	onPublish: () => void;
+}
+
+export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
+	const { data: tender } = useGetTenderById(tenderId);
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';

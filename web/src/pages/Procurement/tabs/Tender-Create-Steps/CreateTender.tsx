@@ -28,7 +28,7 @@ import { motion } from 'framer-motion';
 import { TenderBase } from '../../../../models/Tender';
 
 interface CreateTenderProps {
-	onTenderCreate: (tender: TenderBase) => void;
+	onTenderCreate: (tenderId: number) => void;
 }
 
 export function CreateTender({ onTenderCreate }: CreateTenderProps) {
@@ -46,7 +46,10 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 
 	// Mutations
 	const { mutate, isLoading } = useAddTender({
-		onSuccess: () => {
+		onSuccess: (tenderId) => {
+			// Here you get the tender ID as a number
+			console.log('Created tender with ID:', tenderId);
+			onTenderCreate(tenderId);
 			queryClient.refetchQueries(ApiService.userTenders);
 			toast({
 				title: 'Tender created successfully',
@@ -55,10 +58,10 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 			});
 		},
 		onError: (error) => {
-			devError('Tender creation error:', error);
+			devError('Error creating tender:', error);
 			toast({
 				title: 'Error creating tender',
-				description: 'Please try again or contact support if the problem persists.',
+				description: 'Could not create tender. Please try again.',
 				status: 'error',
 				duration: 5000
 			});
@@ -126,8 +129,6 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 		};
 
 		mutate(tenderData);
-		// it would be nice to put this in the onSuccess of the mutation
-		onTenderCreate(tenderData);
 	});
 
 	// Derived state

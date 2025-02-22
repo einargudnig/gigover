@@ -15,11 +15,12 @@ import {
 } from '@chakra-ui/react';
 import { Theme } from '../../../../Theme';
 
-export interface InviteUserProps {
+export interface InviteBidderProps {
 	tenderId: number;
+	onBidderAdded: () => void;
 }
 
-export const AddBidder = ({ tenderId }: InviteUserProps): JSX.Element => {
+export const AddBidder = ({ tenderId, onBidderAdded }: InviteUserProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const inviteMutation = useInviteBidder();

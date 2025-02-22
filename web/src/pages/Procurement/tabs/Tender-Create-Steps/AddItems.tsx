@@ -17,7 +17,6 @@ import {
 	Tr
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
@@ -26,12 +25,18 @@ import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { TenderItem } from '../../../../models/Tender';
 import { useAddTenderItem } from '../../../../mutations/procurement/useAddTenderItem';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { useDeleteTenderItem } from '../../../../mutations/procurement/useDeleteTenderItem';
 import { useModifyTenderItem } from '../../../../mutations/procurement/useModifyTenderItem';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
-export const AddItems = ({ tender }): JSX.Element => {
-	const { tenderId } = useParams();
+interface AddItemsProps {
+	tenderId: number;
+	onItemsAdded: () => void;
+}
+
+export const AddItems = ({ tenderId, onItemsAdded }: AddItemsProps): JSX.Element => {
+	const { data: tender } = useGetTenderById(tenderId);
 
 	const defaultData: TenderItem = {
 		tenderId: Number(tenderId),
@@ -140,7 +145,7 @@ export const AddItems = ({ tender }): JSX.Element => {
 	return (
 		<Box backgroundColor={'white'} py={6} rounded={'md'}>
 			<Flex justifyContent={'center'}>
-				<Heading size={'md'}>Create Tender</Heading>
+				<Heading size={'md'}>Add items to Tender</Heading>
 			</Flex>
 			<Box px={10} py={4}>
 				<Table variant={'striped'}>

@@ -16,15 +16,6 @@ import { CreateTender } from './Tender-Create-Steps/CreateTender';
 import { AddItems } from './Tender-Create-Steps/AddItems';
 import { PublishTender } from './Tender-Create-Steps/PublishTender';
 import { AddBidder } from './Tender-Create-Steps/AddBidder';
-import {
-	CompleteTender,
-	Tender,
-	TenderBase,
-	TenderWithDocuments,
-	TenderWithItems,
-	hasTenderDocuments,
-	hasTenderItems
-} from '../../../models/Tender';
 
 const steps = [
 	{ title: 'Create tender', description: 'Create tender' },
@@ -34,9 +25,8 @@ const steps = [
 ];
 
 export function NewTenderCreate() {
-	const [tender, setTender] = useState<Tender | null>(null);
+	const [tenderId, setTenderId] = useState<number | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
-	console.log({ tender });
 
 	const nextStep = () => {
 		setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
@@ -52,38 +42,36 @@ export function NewTenderCreate() {
 			case 0:
 				return (
 					<CreateTender
-						onTenderCreate={(baseTender: TenderBase) => {
-							setTender(baseTender);
+						onTenderCreate={(newTenderId: number) => {
+							setTenderId(newTenderId);
 							nextStep();
 						}}
 					/>
 				);
 			case 1:
-				return tender ? (
+				return tenderId ? (
 					<AddItems
-						tender={tender}
-						onItemsAdded={(updatedTender: TenderWithItems) => {
-							setTender(updatedTender);
+						tenderId={tenderId}
+						onItemsAdded={() => {
 							nextStep();
 						}}
 					/>
 				) : null;
 			case 2:
-				return tender && hasTenderItems(tender) ? (
+				return tenderId ? (
 					<PublishTender
-						tender={tender}
-						onPublish={(publishedTender: TenderWithDocuments) => {
-							setTender(publishedTender);
+						tenderId={tenderId}
+						onPublish={() => {
 							nextStep();
 						}}
 					/>
 				) : null;
 			case 3:
-				return tender && hasTenderDocuments(tender) ? (
+				return tenderId ? (
 					<AddBidder
-						tender={tender}
-						onBidderAdded={(completeTender: CompleteTender) => {
-							setTender(completeTender);
+						tenderId={tenderId}
+						onBidderAdded={() => {
+							// Maybe navigate away or show success message
 						}}
 					/>
 				) : null;
@@ -132,7 +120,7 @@ export function NewTenderCreate() {
 				</Button>
 				<Button
 					onClick={nextStep}
-					isDisabled={activeStep === steps.length - 1 || !tender}
+					isDisabled={activeStep === steps.length - 1 || !tenderId}
 					variant="outline"
 					colorScheme="blackAlpha"
 				>
@@ -142,64 +130,3 @@ export function NewTenderCreate() {
 		</Box>
 	);
 }
-
-const tender = {
-	tenderId: 12345,
-	projectId: 789,
-	projectName: 'Office Building Renovation',
-	taskId: 456,
-	description: 'Complete renovation of 3rd floor office space',
-	terms: 'Payment within 30 days after completion',
-	finishDate: 1740374400000,
-	delivery: 90,
-	address: 'Laugavegur 123, 101 Reykjavík',
-	status: 1,
-	phoneNumber: '+354 555 1234',
-	offerNote: 'Please include detailed timeline',
-	bidStatus: 0,
-	email: 'project@company.is',
-	items: [
-		{
-			tenderId: 12345,
-			tenderItemId: 1,
-			nr: 101,
-			description: 'Wall painting',
-			volume: 250.5,
-			unit: 'm²',
-			cost: 1500000,
-			notes: 'Premium quality paint required'
-		},
-		{
-			tenderId: 12345,
-			tenderItemId: 2,
-			nr: 102,
-			description: 'Flooring installation',
-			volume: 180,
-			unit: 'm²',
-			cost: 2800000
-		}
-	],
-	bidders: [],
-	documents: [
-		{
-			id: 1,
-			offerId: 5001,
-			tenderId: 12345,
-			name: 'floor-plan.pdf',
-			type: 'DOCUMENT',
-			url: 'https://example.com/documents/floor-plan.pdf',
-			bytes: 2048576,
-			created: 1708272000000
-		},
-		{
-			id: 2,
-			offerId: 5001,
-			tenderId: 12345,
-			name: 'site-photo.jpg',
-			type: 'IMAGE',
-			url: 'https://example.com/documents/site-photo.jpg',
-			bytes: 1048576,
-			created: 1708272000000
-		}
-	]
-};
