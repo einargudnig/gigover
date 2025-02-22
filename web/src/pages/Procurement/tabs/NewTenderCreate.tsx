@@ -16,7 +16,15 @@ import { CreateTender } from './Tender-Create-Steps/CreateTender';
 import { AddItems } from './Tender-Create-Steps/AddItems';
 import { PublishTender } from './Tender-Create-Steps/PublishTender';
 import { AddBidder } from './Tender-Create-Steps/AddBidder';
-import { Tender } from '../../../models/Tender';
+import {
+	CompleteTender,
+	Tender,
+	TenderBase,
+	TenderWithDocuments,
+	TenderWithItems,
+	hasTenderDocuments,
+	hasTenderItems
+} from '../../../models/Tender';
 
 const steps = [
 	{ title: 'Create tender', description: 'Create tender' },
@@ -39,46 +47,46 @@ export function NewTenderCreate() {
 	};
 
 	// Component to render for each step
-	const StepContent = ({ step }) => {
+	const StepContent = ({ step }: { step: number }) => {
 		switch (step) {
 			case 0:
 				return (
 					<CreateTender
-						onTenderCreate={(newTender) => {
-							setTender(newTender);
+						onTenderCreate={(baseTender: TenderBase) => {
+							setTender(baseTender);
 							nextStep();
 						}}
 					/>
 				);
 			case 1:
-				return (
+				return tender ? (
 					<AddItems
 						tender={tender}
-						// onItemsAdded={(updatedTender) => {
-						// 	setTender(updatedTender);
-						// 	nextStep();
-						// }}
+						onItemsAdded={(updatedTender: TenderWithItems) => {
+							setTender(updatedTender);
+							nextStep();
+						}}
 					/>
-				);
+				) : null;
 			case 2:
-				return (
+				return tender && hasTenderItems(tender) ? (
 					<PublishTender
 						tender={tender}
-						// onPublish={(publishedTender) => {
-						// 	setTender(publishedTender);
-						// 	nextStep();
-						// }}
+						onPublish={(publishedTender: TenderWithDocuments) => {
+							setTender(publishedTender);
+							nextStep();
+						}}
 					/>
-				);
+				) : null;
 			case 3:
-				return (
+				return tender && hasTenderDocuments(tender) ? (
 					<AddBidder
-						tenderId={tender?.tenderId}
-						// onBidderAdded={(finalTender) => {
-						// 	setTender(finalTender);
-						// }}
+						tender={tender}
+						onBidderAdded={(completeTender: CompleteTender) => {
+							setTender(completeTender);
+						}}
 					/>
-				);
+				) : null;
 			default:
 				return null;
 		}
