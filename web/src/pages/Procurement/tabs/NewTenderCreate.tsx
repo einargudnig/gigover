@@ -28,15 +28,14 @@ const steps = [
 export function NewTenderCreate() {
 	const [tender, setTender] = useState<Tender | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
+	console.log({ tender });
 
 	const nextStep = () => {
 		setActiveStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
 	};
 
 	const prevStep = () => {
-		setActiveStep(function (prevStep) {
-			return Math.max(prevStep - 1, 0);
-		});
+		setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
 	};
 
 	// Component to render for each step
@@ -55,29 +54,29 @@ export function NewTenderCreate() {
 				return (
 					<AddItems
 						tender={tender}
-						onItemsAdded={(updatedTender) => {
-							setTender(updatedTender);
-							nextStep();
-						}}
+						// onItemsAdded={(updatedTender) => {
+						// 	setTender(updatedTender);
+						// 	nextStep();
+						// }}
 					/>
 				);
 			case 2:
 				return (
 					<PublishTender
 						tender={tender}
-						onPublish={(publishedTender) => {
-							setTender(publishedTender);
-							nextStep();
-						}}
+						// onPublish={(publishedTender) => {
+						// 	setTender(publishedTender);
+						// 	nextStep();
+						// }}
 					/>
 				);
 			case 3:
 				return (
 					<AddBidder
-						tender={tender}
-						onBidderAdded={(finalTender) => {
-							setTender(finalTender);
-						}}
+						tenderId={tender?.tenderId}
+						// onBidderAdded={(finalTender) => {
+						// 	setTender(finalTender);
+						// }}
 					/>
 				);
 			default:
@@ -125,7 +124,7 @@ export function NewTenderCreate() {
 				</Button>
 				<Button
 					onClick={nextStep}
-					isDisabled={activeStep === steps.length - 1}
+					isDisabled={activeStep === steps.length - 1 || !tender}
 					variant="outline"
 					colorScheme="blackAlpha"
 				>

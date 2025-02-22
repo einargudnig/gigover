@@ -25,10 +25,22 @@ import { ApiService } from '../../../../services/ApiService';
 import { devError } from '../../../../utils/ConsoleUtils';
 import { Task } from '../../../../models/Task';
 import { motion } from 'framer-motion';
-import { Tender } from '../../../../models/Tender';
+
+// Define a new type for tender creation
+interface CreateTenderDTO {
+	projectId: number | undefined;
+	projectName: string;
+	taskId: number;
+	description: string;
+	terms: string;
+	finishDate: number;
+	delivery: number;
+	address: string;
+	phoneNumber: string;
+}
 
 interface CreateTenderProps {
-	onTenderCreate: (tender: Tender) => void;
+	onTenderCreate: (tender: CreateTenderDTO) => void;
 }
 
 export function CreateTender({ onTenderCreate }: CreateTenderProps) {
@@ -40,8 +52,8 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	// This is so the user can select a project and then the tasks from the selected project.
 	// we want the procurement to be linked to a task and a project.
 	const [selectedProject, setSelectedProject] = useState<number | undefined>(undefined);
-	const [selectedProjectName, setSelectedProjectName] = useState<string | undefined>('');
-	const [selectedTask, setSelectedTask] = useState<number | undefined>(undefined);
+	const [selectedProjectName, setSelectedProjectName] = useState<string>('');
+	const [selectedTask, setSelectedTask] = useState<number>(0);
 
 	const { mutate: modify } = useAddTender();
 	const {
@@ -52,14 +64,14 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	} = useForm<TenderFormData>({
 		defaultValues: {
 			projectId: 1,
-			projectName: 'Default Name',
+			projectName: '',
 			taskId: 1,
-			description: 'Default Description',
-			terms: 'Default Terms',
-			finishDate: 1,
+			description: '',
+			terms: '',
+			finishDate: 0,
 			delivery: 0,
-			address: 'Default Address',
-			phoneNumber: 'Default Phone Number'
+			address: '',
+			phoneNumber: ''
 		},
 		mode: 'onBlur'
 	});
@@ -101,19 +113,30 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 				phoneNumber
 			);
 			try {
-				// const response = modify({
-				// 	projectId: selectedProject,
-				// 	projectName: selectedProjectName, // this should set the projectName to the mutation!
-				// 	taskId: selectedTask,
-				// 	description,
-				// 	terms,
-				// 	finishDate,
-				// 	delivery: isChecked,
-				// 	address,
-				// 	phoneNumber
-				// });
+				const response = modify({
+					projectId: selectedProject,
+					projectName: selectedProjectName, // this should set the projectName to the mutation!
+					taskId: selectedTask,
+					description,
+					terms,
+					finishDate,
+					delivery: isChecked,
+					address,
+					phoneNumber
+				});
 				console.log('success');
-				// console.log('response', response);
+				onTenderCreate({
+					projectId: selectedProject,
+					projectName: selectedProjectName, // this should set the projectName to the mutation!
+					taskId: selectedTask,
+					description,
+					terms,
+					finishDate,
+					delivery: isChecked,
+					address,
+					phoneNumber
+				});
+				console.log('response', response);
 
 				queryClient.refetchQueries(ApiService.userTenders);
 			} catch (e) {
@@ -139,7 +162,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 					<VStack mb={-6} align={'stretch'}>
 						{/* We should have everything conditionally rendered here, you cannot create a tender unless you have an open project! */}
 						{openProjects ? (
-							<Box>
+							<Box marginBottom={8}>
 								<FormControl id={'projectIds'} isInvalid={!!errors.projectId}>
 									<FormLabel>Select a project</FormLabel>
 									<Select
@@ -151,7 +174,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 												openProjects.find(
 													(project) =>
 														project.projectId === parseInt(projectId)
-												)?.name
+												)?.name || ''
 											);
 										}}
 									>
@@ -203,6 +226,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 								<FormControl id={'description'} isInvalid={!!errors.description}>
 									<FormLabel>Procurement Description</FormLabel>
 									<Input
+										placeholder={'Enter a description of the procurement'}
 										required={true}
 										{...register('description', {
 											required: 'Procurement description is required'
@@ -216,6 +240,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 								<FormControl id={'terms'} isInvalid={!!errors.terms}>
 									<FormLabel>Terms</FormLabel>
 									<Input
+										placeholder={'Enter the terms of the procurement'}
 										required={true}
 										{...register('terms', { required: 'Terms are required' })}
 									/>
@@ -236,20 +261,25 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 										name="finishDate"
 										control={control}
 										rules={{ required: 'Finish date is required' }}
-										render={({ field: { onChange, onBlur, value } }) => (
+										render={({ field }) => (
 											<HStack>
 												<DatePicker
-													onChange={(date) => {
+													selected={
+														field.value ? new Date(field.value) : null
+													}
+													onChange={(date: Date | null) => {
 														if (date) {
-															onChange((date as Date).getTime());
+															// Ensure we're setting the full timestamp
+															field.onChange(date.getTime());
 														} else {
-															onChange(null);
+															field.onChange(null);
 														}
 													}}
-													selected={value ? new Date(value) : null}
-													onBlur={onBlur}
+													onBlur={field.onBlur}
 													minDate={currentDate}
+													dateFormat="dd/MM/yyyy" // Add this to ensure proper date format display
 													required={true}
+													placeholderText="Select date" // Optional: adds placeholder text
 												/>
 												<CalendarIcon color={'black'} />
 											</HStack>
@@ -272,6 +302,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 								<FormControl id={'address'} isInvalid={!!errors.address}>
 									<FormLabel>Address - contact person on site</FormLabel>
 									<Input
+										placeholder={'Enter the address of the procurement'}
 										required={true}
 										{...register('address', {
 											required: 'Address is required'
@@ -285,6 +316,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 								<FormControl id={'phoneNumber'} isInvalid={!!errors.phoneNumber}>
 									<FormLabel>Phone Number</FormLabel>
 									<Input
+										placeholder={'Enter the phone number of the contact person'}
 										required={true}
 										{...register('phoneNumber', {
 											required: 'Phone number is required',
@@ -310,8 +342,8 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 							</>
 						)}
 					</VStack>
-					<Flex justifyContent={'end'}>
-						<Button>Create</Button>
+					<Flex justifyContent={'end'} marginTop={2}>
+						<Button type="submit">Create</Button>
 					</Flex>
 				</form>
 			</Box>
