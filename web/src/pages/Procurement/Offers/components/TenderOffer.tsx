@@ -20,7 +20,7 @@ import { useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Tender, TenderItem } from '../../../../models/Tender';
+import { TenderWithItems, TenderItem } from '../../../../models/Tender';
 import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
@@ -36,7 +36,7 @@ export const TenderOffer = (): JSX.Element => {
 	const { data: tenderData, isLoading: isTenderLoading } = useGetTenderById(Number(tenderId));
 	const { mutateAsync: publishOffer, isLoading: isPublishLoading } = usePublishOffer();
 	const { isOpen, onOpen, onClose } = useDisclosure(); // This is for the confirm dialog
-	const tender: Tender | undefined = tenderData?.tender;
+	const tender: TenderWithItems | undefined = tenderData?.tender;
 	// console.log('tender', tender);
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 

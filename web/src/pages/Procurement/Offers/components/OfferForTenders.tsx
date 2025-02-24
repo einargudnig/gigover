@@ -2,7 +2,7 @@ import { Center, Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Tender } from '../../../../models/Tender';
+import { TenderWithItems } from '../../../../models/Tender';
 import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
@@ -49,7 +49,7 @@ export const OfferForTenders = (): JSX.Element => {
 		);
 	};
 
-	const shouldDeliver = (tender: Tender) => {
+	const shouldDeliver = (tender: TenderWithItems) => {
 		if (tender.delivery === 1) {
 			return (
 				<HStack>
