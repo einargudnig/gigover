@@ -20,7 +20,7 @@ export interface InviteBidderProps {
 	onBidderAdded: () => void;
 }
 
-export const AddBidder = ({ tenderId, onBidderAdded }: InviteUserProps): JSX.Element => {
+export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const inviteMutation = useInviteBidder();

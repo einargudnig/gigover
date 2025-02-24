@@ -41,7 +41,6 @@ interface AddItemsProps {
 export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 	const { data } = useGetTenderById(tenderId);
 	const tender = data?.tender;
-	console.log('Tender:', tender);
 
 	const time = tender?.finishDate;
 	const date = new Date(time!);
