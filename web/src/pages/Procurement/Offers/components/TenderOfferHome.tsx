@@ -1,18 +1,14 @@
-import { Box, Button, Flex, Heading, Spacer, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer, Text, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Tender } from '../../../../models/Tender';
+import { TenderWithItems } from '../../../../models/Tender';
 import { useBidderReject } from '../../../../mutations/procurement/useBidderReject';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
-// import { UserContext } from '../../../../context/UserContext';
-
-import { EmptyState } from '../../../../components/empty/EmptyState';
-import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
 import { OpenOffer } from './OpenOffer';
 
 type TenderIdParams = {
@@ -23,8 +19,7 @@ export const TenderOfferHome = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
-	const tender: Tender | undefined = data?.tender;
-	const tenderDocuments = tender?.documents;
+	const tender: TenderWithItems | undefined = data?.tender;
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 	// we will store the bidder status in the localStorage.
 	const [hasAnswered, setHasAnswered] = useState(false);
@@ -111,36 +106,36 @@ export const TenderOfferHome = (): JSX.Element => {
 							</Text>
 						)}
 
-						<div>
-							{tenderDocuments!.length > 0 ? (
-								<VStack
-									style={{ width: '100%' }}
-									align={'stretch'}
-									spacing={4}
-									mt={4}
-								>
-									<Heading size={'md'}>Tender owner added these files</Heading>
-									{tenderDocuments!
-										.sort((a, b) =>
-											b.created && a.created ? b.created - a.created : -1
-										)
-										.map((p, pIndex) => (
-											<OtherGigoverFile
-												key={pIndex}
-												showDelete={false}
-												file={p}
-											/>
-										))}
-								</VStack>
-							) : (
-								<EmptyState
-									title={'No files uploaded'}
-									text={
-										'The Tender owner has not added any files to this tender.'
-									}
-								/>
-							)}
-						</div>
+						{/* <div> */}
+						{/* 	{tenderDocuments!.length > 0 ? ( */}
+						{/* 		<VStack */}
+						{/* 			style={{ width: '100%' }} */}
+						{/* 			align={'stretch'} */}
+						{/* 			spacing={4} */}
+						{/* 			mt={4} */}
+						{/* 		> */}
+						{/* 			<Heading size={'md'}>Tender owner added these files</Heading> */}
+						{/* 			{tenderDocuments! */}
+						{/* 				.sort((a, b) => */}
+						{/* 					b.created && a.created ? b.created - a.created : -1 */}
+						{/* 				) */}
+						{/* 				.map((p, pIndex) => ( */}
+						{/* 					<OtherGigoverFile */}
+						{/* 						key={pIndex} */}
+						{/* 						showDelete={false} */}
+						{/* 						file={p} */}
+						{/* 					/> */}
+						{/* 				))} */}
+						{/* 		</VStack> */}
+						{/* 	) : ( */}
+						{/* 		<EmptyState */}
+						{/* 			title={'No files uploaded'} */}
+						{/* 			text={ */}
+						{/* 				'The Tender owner has not added any files to this tender.' */}
+						{/* 			} */}
+						{/* 		/> */}
+						{/* 	)} */}
+						{/* </div> */}
 					</>
 				</>
 			)}

@@ -16,29 +16,29 @@ export interface TenderBase {
 export interface TenderWithItems extends TenderBase {
 	tenderId: number;
 	items: TenderItem[];
-}
-
-// After publishing (Step 3)
-export interface TenderWithDocuments extends TenderWithItems {
 	documents: Document[];
 }
 
+// After publishing (Step 3)
+// export interface TenderWithDocuments extends TenderWithItems {
+// }
+
 // Complete tender (Step 4)
-export interface CompleteTender extends TenderWithDocuments {
+export interface CompleteTender extends TenderWithItems {
 	bidders: Bidder[];
 }
 
 // Union type for all possible tender states
-export type Tender = TenderBase | TenderWithItems | TenderWithDocuments | CompleteTender;
+export type Tender = TenderBase | TenderWithItems | CompleteTender;
 
 // Type guard functions to check tender state
 export function hasTenderItems(tender: Tender): tender is TenderWithItems {
 	return 'items' in tender && Array.isArray((tender as TenderWithItems).items);
 }
 
-export function hasTenderDocuments(tender: Tender): tender is TenderWithDocuments {
-	return 'documents' in tender && Array.isArray((tender as TenderWithDocuments).documents);
-}
+// export function hasTenderDocuments(tender: Tender): tender is TenderWithDocuments {
+// 	return 'documents' in tender && Array.isArray((tender as TenderWithDocuments).documents);
+// }
 
 export function hasCompleteTender(tender: Tender): tender is CompleteTender {
 	return 'bidders' in tender && Array.isArray((tender as CompleteTender).bidders);
