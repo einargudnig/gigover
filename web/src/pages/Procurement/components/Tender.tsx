@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { EmptyState } from '../../../components/empty/EmptyState';
-import { Tender } from '../../../models/Tender';
+import { TenderWithItems } from '../../../models/Tender';
 import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { NewTenderItemTable } from './NewTenderItemTable';
@@ -14,7 +14,7 @@ import { PublishedTender } from './PublishedTender';
 export const TenderPage = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
-	const tender: Tender | undefined = data?.tender;
+	const tender: TenderWithItems | undefined = data?.tender;
 	// console.log('TenderPage tender: ', tender);
 	const tenderDocuments = tender?.documents;
 

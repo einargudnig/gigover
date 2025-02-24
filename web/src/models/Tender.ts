@@ -9,6 +9,7 @@ export interface TenderBase {
 	delivery: number;
 	address: string;
 	phoneNumber: string;
+	email?: string; // Is this the tender creator email?
 	status: TenderStatus;
 }
 
@@ -16,7 +17,7 @@ export interface TenderBase {
 export interface TenderWithItems extends TenderBase {
 	tenderId: number;
 	items: TenderItem[];
-	documents: Document[];
+	documents: TenderDocument[];
 }
 
 // After publishing (Step 3)
@@ -106,7 +107,7 @@ export interface GetTenderById {
 export interface Offer {
 	email: string;
 	name: string;
-	tender: Tender;
+	tender: CompleteTender;
 	offerId: number;
 	tenderId: number;
 	status: number;
