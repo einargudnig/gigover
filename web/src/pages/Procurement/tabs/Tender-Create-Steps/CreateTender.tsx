@@ -125,7 +125,8 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 			finishDate: formData.finishDate,
 			delivery: isChecked,
 			address: formData.address,
-			phoneNumber: formData.phoneNumber
+			phoneNumber: formData.phoneNumber,
+			status: 0 // I should take this away maybe?? It doesn't exist until the tender is created
 		};
 
 		mutate(tenderData);
