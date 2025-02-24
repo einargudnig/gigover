@@ -14,6 +14,7 @@ export interface TenderBase {
 
 // After items are added (Step 2)
 export interface TenderWithItems extends TenderBase {
+	tenderId: number;
 	items: TenderItem[];
 }
 

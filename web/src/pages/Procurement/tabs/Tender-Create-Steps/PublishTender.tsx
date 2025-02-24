@@ -19,6 +19,9 @@ import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TenderItem } from '../../../../models/Tender';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { DropZone } from '../../../../components/DropZone';
+import { usePublishTender } from '../../../../mutations/procurement/usePublishTender';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 interface PublishTenderProps {
 	tenderId: number;
@@ -26,21 +29,45 @@ interface PublishTenderProps {
 }
 
 export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
-	const { tender } = useGetTenderById(tenderId);
-	console.log('tender', { tender });
+	const { mutateAsync, isLoading: isPublishLoading, isError, error } = usePublishTender();
+
+	const { data } = useGetTenderById(tenderId);
+	const tender = data?.tender;
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
+	// publish the tender and navigate to next step!
+	const handlePublish = async () => {
+		const publishTenderBody = {
+			tenderId: Number(tenderId)
+		};
+		try {
+			await mutateAsync(publishTenderBody);
+
+			onPublish();
+		} catch (e) {
+			console.log('ERROR', { e });
+		}
+	};
+
 	return (
 		<Box backgroundColor={'white'} py={6} rounded={'md'}>
 			<Flex justifyContent={'center'}>
-				<Heading size={'md'}>Create Tender</Heading>
+				<Heading size={'md'}>Publish Tender</Heading>
 			</Flex>
+
 			<Box px={10} py={4}>
-				<VStack>
+				<Flex
+					justifyContent={'space-around'}
+					marginTop={3}
+					p={2}
+					border={'1px'}
+					borderColor={'gray.500'}
+					rounded={'md'}
+				>
 					<VStack mb={'4'}>
 						<HStack>
 							<Text fontWeight={'bold'} fontSize={'xl'}>
@@ -100,7 +127,7 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 							</HStack>
 						</VStack>
 					</HStack>
-				</VStack>
+				</Flex>
 
 				<Table variant={'striped'}>
 					<Thead>
@@ -160,13 +187,24 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 				</Table>
 			</Box>
 
+			<DropZone offerId={0} tenderId={tenderId} projectId={0} folderId={0} />
+			<Flex justify={'center'}>
+				<Text>Add files to the Tender before you publish it</Text>
+			</Flex>
+
+			{isError && (
+				<Box rounded={'md'} border={'1px'} borderColor={'red.200'} p={4}>
+					<Text color={'red.400'}>
+						{error.errorCode} - {error.errorText}
+					</Text>
+				</Box>
+			)}
+
 			<Box>
-				<Flex>
-					<Button variant={'outline'} colorScheme={'gray'}>
-						Upload files
+				<Flex justifyContent={'end'}>
+					<Button onClick={handlePublish} mr={'2'}>
+						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
 					</Button>
-					<Spacer />
-					<Button>Publish tender</Button>
 				</Flex>
 			</Box>
 		</Box>

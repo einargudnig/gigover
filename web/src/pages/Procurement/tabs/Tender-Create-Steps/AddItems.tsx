@@ -160,7 +160,14 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 				<Heading size={'md'}>Add items to Tender</Heading>
 			</Flex>
 
-			<VStack>
+			<Flex
+				justifyContent={'space-around'}
+				marginTop={3}
+				p={2}
+				border={'1px'}
+				borderColor={'gray.500'}
+				rounded={'md'}
+			>
 				<VStack mb={'4'}>
 					<HStack>
 						<Text fontWeight={'bold'} fontSize={'xl'}>
@@ -220,7 +227,7 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 						</HStack>
 					</VStack>
 				</HStack>
-			</VStack>
+			</Flex>
 
 			<Box px={10} py={4}>
 				<Table variant={'striped'}>
