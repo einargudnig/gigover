@@ -22,6 +22,7 @@ import { useGetTenderById } from '../../../../queries/procurement/useGetTenderBy
 import { DropZone } from '../../../../components/DropZone';
 import { usePublishTender } from '../../../../mutations/procurement/usePublishTender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
 
 interface PublishTenderProps {
 	tenderId: number;
@@ -38,6 +39,7 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
+	const tenderDocuments = tender?.documents;
 
 	// publish the tender and navigate to next step!
 	const handlePublish = async () => {
@@ -191,6 +193,14 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 			<Flex justify={'center'}>
 				<Text>Add files to the Tender before you publish it</Text>
 			</Flex>
+
+			<Box>
+				{tenderDocuments!
+					.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
+					.map((p, pIndex) => (
+						<OtherGigoverFile key={pIndex} showDelete={false} file={p} />
+					))}
+			</Box>
 
 			{isError && (
 				<Box rounded={'md'} border={'1px'} borderColor={'red.200'} p={4}>

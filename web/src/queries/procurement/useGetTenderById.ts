@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../../services/ApiService';
-import { TenderWithItems } from '../../models/Tender';
+import { TenderWithItems, CompleteTender } from '../../models/Tender';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
 interface TenderByIdResponse {
-	tender: TenderWithItems;
+	tender: CompleteTender;
 }
 
 export const useGetTenderById = (tenderId: number) => {
