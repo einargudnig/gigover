@@ -25,6 +25,7 @@ export interface TenderWithItems extends TenderBase {
 
 // Complete tender (Step 4)
 export interface CompleteTender extends TenderWithItems {
+	bidStatus: number;
 	bidders: Bidder[];
 }
 

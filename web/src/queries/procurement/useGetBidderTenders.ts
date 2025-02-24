@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../../services/ApiService';
-import { Tender } from '../../models/Tender';
+import { CompleteTender } from '../../models/Tender';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
 export interface BidderTendersResponse {
-	list: Tender[];
+	list: CompleteTender[];
 }
 
 export const useGetBidderTenders = () => {
@@ -14,7 +14,7 @@ export const useGetBidderTenders = () => {
 	>(ApiService.bidderTenders, {
 		refetchOnWindowFocus: true
 	});
-	const tenders: Tender[] = data?.list || [];
+	const tenders: CompleteTender[] = data?.list || [];
 
 	return {
 		data: tenders,
