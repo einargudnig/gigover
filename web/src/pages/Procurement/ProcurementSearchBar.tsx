@@ -11,10 +11,10 @@ import styled from '@emotion/styled';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { SearchIcon } from '../../components/icons/SearchIcon';
-import { Tender } from '../../models/Tender';
+import { TenderWithItems } from '../../models/Tender';
 
 interface SearchBarProps {
-	tenders: Tender[];
+	tenders: TenderWithItems[];
 }
 
 const SearchResults = styled.div`
@@ -56,7 +56,7 @@ export const ProcurementSearchBar = ({ tenders }: SearchBarProps): JSX.Element =
 		}
 	}, [searchValue, refInput]);
 
-	const searchResults = useMemo<Tender[]>(() => {
+	const searchResults = useMemo<TenderWithItems[]>(() => {
 		if (searchValue.length > 0) {
 			const results = tenders.filter((res) =>
 				JSON.stringify(res).toLowerCase().includes(searchValue.toLowerCase())
