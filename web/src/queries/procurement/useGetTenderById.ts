@@ -3,7 +3,7 @@ import { ApiService } from '../../services/ApiService';
 import { TenderWithItems } from '../../models/Tender';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
-export interface TenderByIdResponse {
+interface TenderByIdResponse {
 	tender: TenderWithItems;
 }
 
@@ -16,7 +16,7 @@ export const useGetTenderById = (tenderId: number) => {
 	);
 
 	return {
-		data,
+		data, // Now this is the TenderWithItems directly
 		isLoading,
 		isError,
 		error

@@ -7,6 +7,7 @@ import {
 	HStack,
 	Heading,
 	Input,
+	Spacer,
 	Table,
 	Tbody,
 	Td,
@@ -14,7 +15,8 @@ import {
 	Th,
 	Thead,
 	Tooltip,
-	Tr
+	Tr,
+	VStack
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
@@ -29,14 +31,21 @@ import { useGetTenderById } from '../../../../queries/procurement/useGetTenderBy
 import { useDeleteTenderItem } from '../../../../mutations/procurement/useDeleteTenderItem';
 import { useModifyTenderItem } from '../../../../mutations/procurement/useModifyTenderItem';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 interface AddItemsProps {
 	tenderId: number;
 	onItemsAdded: () => void;
 }
 
-export const AddItems = ({ tenderId, onItemsAdded }: AddItemsProps): JSX.Element => {
-	const { data: tender } = useGetTenderById(tenderId);
+export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
+	const { data } = useGetTenderById(tenderId);
+	const tender = data?.tender;
+	console.log('Tender:', tender);
+
+	const time = tender?.finishDate;
+	const date = new Date(time!);
+	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	const defaultData: TenderItem = {
 		tenderId: Number(tenderId),
@@ -142,11 +151,78 @@ export const AddItems = ({ tenderId, onItemsAdded }: AddItemsProps): JSX.Element
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	// const finishDateStatus = false;
 
+	if (!tender) {
+		return <p>No tender!</p>;
+	}
+
 	return (
 		<Box backgroundColor={'white'} py={6} rounded={'md'}>
 			<Flex justifyContent={'center'}>
 				<Heading size={'md'}>Add items to Tender</Heading>
 			</Flex>
+
+			<VStack>
+				<VStack mb={'4'}>
+					<HStack>
+						<Text fontWeight={'bold'} fontSize={'xl'}>
+							Description:
+						</Text>
+						<Text fontSize={'lg'}>{tender?.description}</Text>
+					</HStack>
+					<HStack>
+						<Text fontWeight={'bold'} fontSize={'xl'}>
+							Terms:
+						</Text>
+						<Text fontSize={'lg'}>{tender?.terms}</Text>
+					</HStack>
+					<HStack>
+						<Text fontWeight={'bold'} fontSize={'xl'}>
+							Status:
+						</Text>
+						<Text fontSize={'lg'}>
+							{tender?.status === 1 ? 'Published' : 'Not published'}
+						</Text>
+					</HStack>
+				</VStack>
+
+				<HStack mb={'4'}>
+					<VStack mr={'3'}>
+						<HStack>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Address:
+							</Text>
+							<Text fontSize={'lg'}>{tender?.address}</Text>
+						</HStack>
+						<HStack>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Delivery:
+							</Text>
+							<Text fontSize={'lg'}>{handleDelivery}</Text>
+						</HStack>
+					</VStack>
+					<Spacer />
+					<VStack ml={'3'}>
+						<Tooltip
+							hasArrow
+							label="You will not be able to answer offer until this date has passed"
+						>
+							<HStack>
+								<Text fontWeight={'bold'} fontSize={'xl'}>
+									Close Date:
+								</Text>
+								<Text fontSize={'lg'}>{formatDateWithoutTime(date)}*</Text>
+							</HStack>
+						</Tooltip>
+						<HStack>
+							<Text fontWeight={'bold'} fontSize={'xl'}>
+								Phone:
+							</Text>
+							<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
+						</HStack>
+					</VStack>
+				</HStack>
+			</VStack>
+
 			<Box px={10} py={4}>
 				<Table variant={'striped'}>
 					<Thead>

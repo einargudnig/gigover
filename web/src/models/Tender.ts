@@ -9,6 +9,7 @@ export interface TenderBase {
 	delivery: number;
 	address: string;
 	phoneNumber: string;
+	status: TenderStatus;
 }
 
 // After items are added (Step 2)
@@ -19,7 +20,6 @@ export interface TenderWithItems extends TenderBase {
 // After publishing (Step 3)
 export interface TenderWithDocuments extends TenderWithItems {
 	documents: Document[];
-	status: TenderStatus; // Published status
 }
 
 // Complete tender (Step 4)

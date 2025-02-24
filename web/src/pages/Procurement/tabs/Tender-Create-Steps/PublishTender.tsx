@@ -26,7 +26,8 @@ interface PublishTenderProps {
 }
 
 export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
-	const { data: tender } = useGetTenderById(tenderId);
+	const { tender } = useGetTenderById(tenderId);
+	console.log('tender', { tender });
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
