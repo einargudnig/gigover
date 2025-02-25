@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../../services/ApiService';
-import { TenderWithItems, CompleteTender } from '../../models/Tender';
+import { CompleteTender } from '../../models/Tender';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
 interface TenderByIdResponse {
