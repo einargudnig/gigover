@@ -66,23 +66,6 @@ export function NewTenderLayout() {
 											)}
 										</NavLink>
 
-										<NavLink to={'bidder-tenders'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'gray.600'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.300'
-													}}
-												>
-													Tender Invitations
-												</Box>
-											)}
-										</NavLink>
-
 										<NavLink to={'tender-offers'}>
 											{({ isActive }) => (
 												<Box
@@ -101,6 +84,23 @@ export function NewTenderLayout() {
 											)}
 										</NavLink>
 
+										<NavLink to={'bidder-tenders'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'gray.600'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.300'
+													}}
+												>
+													Tender Invitations
+												</Box>
+											)}
+										</NavLink>
+
 										<NavLink to={'bidder-offers'}>
 											{({ isActive }) => (
 												<Box
@@ -113,7 +113,7 @@ export function NewTenderLayout() {
 														borderColor: 'gray.300'
 													}}
 												>
-													Sumbitted Offers
+													Submitted Offers
 												</Box>
 											)}
 										</NavLink>
