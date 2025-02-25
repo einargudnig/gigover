@@ -111,27 +111,30 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 			{/* Offer sent in to tenders that user created*/}
 			<Route path={'tender-offers'} element={<OfferForTenders />} />
+			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
 
 			{/* User has been invited to add offers to these tenders */}
 			<Route path={'bidder-tenders'} element={<BidderTenders />} />
+			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
 
 			{/* Offers that you have submitted */}
 			<Route path={'bidder-offers'} element={<BidderOffers />} />
+			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
+
 			{/*  Creating bid without inviting many bidders*/}
 			<Route path={'create-bid'} element={<CreateBidOutlet />}>
 				<Route index element={<Bids />} />
 				<Route path={':bidId'} element={<BidId />} />
 			</Route>
+
 			{/* Answsers to the bids that you created */}
 			<Route path={'client-answer'} element={<ClientAnswerOutlet />}>
 				<Route index element={<ClientAnswers />} />
 				<Route path={':bidId'} element={<ClientAnswerId />} />
 			</Route>
-			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
-			{/* <Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} /> */}
-			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
+
+			{/* Single offer for the tende with this tenderId, might be unnessecary*/}
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
-			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />
 		</Route>
 
 		{/* 🛠️ Settings 🛠️ */}

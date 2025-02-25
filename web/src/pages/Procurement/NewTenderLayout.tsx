@@ -117,22 +117,7 @@ export function NewTenderLayout() {
 												</Box>
 											)}
 										</NavLink>
-										<NavLink to={'client-answer'}>
-											{({ isActive }) => (
-												<Box
-													as="button"
-													borderBottom={isActive ? '2px' : 'hidden	'}
-													borderColor={'gray.600'}
-													p={1}
-													_hover={{
-														borderBottom: '2px',
-														borderColor: 'gray.300'
-													}}
-												>
-													Bids Received
-												</Box>
-											)}
-										</NavLink>
+
 										<NavLink to={'create-bid'}>
 											{({ isActive }) => (
 												<Box
@@ -146,6 +131,22 @@ export function NewTenderLayout() {
 													}}
 												>
 													Create Bid
+												</Box>
+											)}
+										</NavLink>
+										<NavLink to={'client-answer'}>
+											{({ isActive }) => (
+												<Box
+													as="button"
+													borderBottom={isActive ? '2px' : 'hidden	'}
+													borderColor={'gray.600'}
+													p={1}
+													_hover={{
+														borderBottom: '2px',
+														borderColor: 'gray.300'
+													}}
+												>
+													Bids Received
 												</Box>
 											)}
 										</NavLink>
