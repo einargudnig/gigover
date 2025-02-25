@@ -1,4 +1,14 @@
-import { Center, Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
+import {
+	Box,
+	Center,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Heading,
+	Text,
+	Tooltip
+} from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -67,7 +77,10 @@ export const OfferForTenders = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>Offers sent to the tenders that you have created</Heading>
+			</Flex>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -118,6 +131,6 @@ export const OfferForTenders = (): JSX.Element => {
 						))}
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

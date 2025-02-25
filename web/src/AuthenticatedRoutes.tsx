@@ -33,8 +33,8 @@ import { OfferForTenders } from './pages/Procurement/Offers/components/OfferForT
 import { OfferPublished } from './pages/Procurement/Offers/components/OfferPublished';
 import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
 import { TenderOfferHome } from './pages/Procurement/Offers/components/TenderOfferHome';
-import { ProcurementHome } from './pages/Procurement/ProcurementHome';
 import { TenderPage } from './pages/Procurement/components/Tender';
+import { NewTenderList } from './pages/Procurement/tabs/NewTenderList';
 import { ProjectDetailsFiles } from './pages/ProjectDetails/ProjectDetailsFiles';
 import { ProjectDetailsGanttChart } from './pages/ProjectDetails/ProjectDetailsGanttChart';
 import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
@@ -105,22 +105,30 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 		{/* 💰 Tender/Offer  system 💰 */}
 		<Route path={'tender'} element={<NewTenderLayout />}>
-			<Route index element={<ProcurementHome />} />
+			{/*  list of tender that user has created*/}
+			<Route index element={<NewTenderList />} />
 			<Route path={':tenderId'} element={<TenderPage />} />
 
-			<Route path={'client-answer'} element={<ClientAnswerOutlet />}>
-				<Route index element={<ClientAnswers />} />
-				<Route path={':bidId'} element={<ClientAnswerId />} />
-			</Route>
+			{/* Offer sent in to tenders that user created*/}
+			<Route path={'tender-offers'} element={<OfferForTenders />} />
+
+			{/* User has been invited to add offers to these tenders */}
+			<Route path={'bidder-tenders'} element={<BidderTenders />} />
+
+			{/* Offers that you have submitted */}
+			<Route path={'bidder-offers'} element={<BidderOffers />} />
+			{/*  Creating bid without inviting many bidders*/}
 			<Route path={'create-bid'} element={<CreateBidOutlet />}>
 				<Route index element={<Bids />} />
 				<Route path={':bidId'} element={<BidId />} />
 			</Route>
-			<Route path={'tender-offers'} element={<OfferForTenders />} />
+			{/* Answsers to the bids that you created */}
+			<Route path={'client-answer'} element={<ClientAnswerOutlet />}>
+				<Route index element={<ClientAnswers />} />
+				<Route path={':bidId'} element={<ClientAnswerId />} />
+			</Route>
 			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
 			{/* <Route path={'tender-offer/:tenderId/:offerId'} element={<PublishedTender />} /> */}
-			<Route path={'bidder-offers'} element={<BidderOffers />} />
-			<Route path={'bidder-tenders'} element={<BidderTenders />} />
 			<Route path={'offers/:tenderId'} element={<TenderOfferHome />} />
 			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 			<Route path={'published-offer/:tenderId/:offerId'} element={<OfferPublished />} />

@@ -1,4 +1,14 @@
-import { Center, Flex, Grid, GridItem, HStack, Tooltip, Text } from '@chakra-ui/react';
+import {
+	Center,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Tooltip,
+	Text,
+	Box,
+	Heading
+} from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { NoProcurementFound } from '../../../components/empty/NoProcurementFound';
 import { Tender } from '../../../models/Tender';
@@ -66,7 +76,10 @@ export function NewTenderList() {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>Tenders that you have created</Heading>
+			</Flex>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -128,6 +141,6 @@ export function NewTenderList() {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
 }

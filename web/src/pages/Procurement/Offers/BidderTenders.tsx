@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text, Tooltip } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
@@ -115,16 +115,17 @@ export const BidderTenders = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>You have been invited to add offers to these tenders</Heading>
+			</Flex>
+
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
 				<>
-					<Text mb={'2'} fontSize={'xl'}>
-						Tenders that you have been invited to bid on
-					</Text>
 					{noTender ? (
 						<Center>
 							<Text my={'2'} fontSize={'xl'}>
@@ -219,6 +220,6 @@ export const BidderTenders = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
 };
