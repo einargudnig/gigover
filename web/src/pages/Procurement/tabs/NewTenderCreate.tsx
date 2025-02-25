@@ -24,7 +24,11 @@ const steps = [
 	{ title: 'Add bidder', description: 'Add bidders' }
 ];
 
-export function NewTenderCreate() {
+export function NewTenderCreate({
+	setShowCreateTender
+}: {
+	setShowCreateTender: (show: boolean) => void;
+}) {
 	const [tenderId, setTenderId] = useState<number | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
 
@@ -73,6 +77,7 @@ export function NewTenderCreate() {
 						tenderId={tenderId}
 						onBidderAdded={() => {
 							// Maybe navigate away or show success message
+							setShowCreateTender(false);
 						}}
 					/>
 				) : null;

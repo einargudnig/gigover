@@ -177,7 +177,7 @@ export function NewTenderLayout() {
 		>
 			<>
 				{showCreateTender ? (
-					<NewTenderCreate />
+					<NewTenderCreate setShowCreateTender={setShowCreateTender} />
 				) : (
 					<>
 						<Box>{<Outlet />}</Box>

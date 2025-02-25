@@ -16,7 +16,8 @@ import {
 	AccordionItem,
 	AccordionButton,
 	AccordionPanel,
-	AccordionIcon
+	AccordionIcon,
+	useToast
 } from '@chakra-ui/react';
 import { Theme } from '../../../../Theme';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
@@ -31,6 +32,8 @@ export interface InviteBidderProps {
 export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.Element => {
 	const { data } = useGetTenderById(tenderId);
 	const tender = data?.tender;
+
+	const toast = useToast();
 
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
@@ -49,6 +52,13 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 					if (res.errorCode === 'OK') {
 						setSearchMail('');
 						setInviteSuccess(true);
+						// TODO: Add a toast notification here
+						toast({
+							title: 'User invited to the project',
+							status: 'success',
+							duration: 3000,
+							isClosable: true
+						});
 					} else {
 						throw new Error('Could not invite user.');
 					}
@@ -132,6 +142,9 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 					</Button>
 				</Flex>
 			</Box>
+			<Flex justifyContent={'end'}>
+				<Button onClick={() => onBidderAdded()}>Finish invite bidder</Button>
+			</Flex>
 		</Box>
 	);
 };
