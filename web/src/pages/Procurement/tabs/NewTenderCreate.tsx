@@ -33,6 +33,7 @@ export function NewTenderCreate() {
 	};
 
 	const prevStep = () => {
+		// eslint-disable-next-line no-shadow
 		setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
 	};
 

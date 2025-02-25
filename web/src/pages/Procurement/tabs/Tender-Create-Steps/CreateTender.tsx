@@ -51,11 +51,6 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 			console.log('Created tender with ID:', tenderId);
 			onTenderCreate(tenderId);
 			queryClient.refetchQueries(ApiService.userTenders);
-			toast({
-				title: 'Tender created successfully',
-				status: 'success',
-				duration: 3000
-			});
 		},
 		onError: (error) => {
 			devError('Error creating tender:', error);
