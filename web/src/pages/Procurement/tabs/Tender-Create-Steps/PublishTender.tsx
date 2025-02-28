@@ -191,7 +191,9 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 				</Table>
 			</Box>
 
-			<DropZone offerId={0} tenderId={tenderId} projectId={0} folderId={0} />
+			<Box p={2}>
+				<DropZone offerId={0} tenderId={tenderId} projectId={0} folderId={0} />
+			</Box>
 			<Flex justify={'center'}>
 				<Text>Add files to the Tender before you publish it</Text>
 			</Flex>

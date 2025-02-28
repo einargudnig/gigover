@@ -115,7 +115,7 @@ export function NewTenderCreate({
 			<StepContent step={activeStep} />
 
 			{/* Navigation buttons */}
-			<Flex mt={8} justify="space-between">
+			<Flex mt={8} mb={14} justify="space-between">
 				<Button
 					onClick={prevStep}
 					isDisabled={activeStep === 0}

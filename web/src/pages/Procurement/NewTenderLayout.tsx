@@ -20,21 +20,25 @@ export function NewTenderLayout() {
 			contentPadding={false}
 			actions={
 				<DisabledComponent>
-					{showSearch ? (
-						<ProcurementSearchBar tenders={data} />
-					) : (
-						<Tooltip hasArrow label="Search tender">
-							<IconButton
-								variant={'outline'}
-								aria-label={'Search'}
-								colorScheme={'gray'}
-								icon={<SearchIcon color={'black'} />}
-								onClick={() => setShowSearch((v) => !v)}
-							/>
-						</Tooltip>
-					)}
+					<Flex>
+						{showSearch ? (
+							<ProcurementSearchBar tenders={data} />
+						) : (
+							<Tooltip hasArrow label="Search tender">
+								<IconButton
+									variant={'outline'}
+									aria-label={'Search'}
+									colorScheme={'gray'}
+									icon={<SearchIcon color={'black'} />}
+									onClick={() => setShowSearch((v) => !v)}
+								/>
+							</Tooltip>
+						)}
 
-					<Button onClick={() => setShowCreateTender(true)}>New Tender</Button>
+						<Button onClick={() => setShowCreateTender(true)} ml={1}>
+							New Tender
+						</Button>
+					</Flex>
 				</DisabledComponent>
 			}
 			extraNav={

@@ -32,6 +32,9 @@ export interface InviteBidderProps {
 export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.Element => {
 	const { data } = useGetTenderById(tenderId);
 	const tender = data?.tender;
+	const tenderStatus = tender?.status;
+	const tenderBidders = tender?.bidders;
+	const hasBidders = tenderBidders && tenderBidders.length > 0;
 
 	const toast = useToast();
 
@@ -130,20 +133,26 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 					)}
 				</FormControl>
 				<Flex justifyContent={'flex-end'}>
-					<Button
-						variant={'outline'}
-						colorScheme={'gray'}
-						loadingText={'Inviting'}
-						isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-						disabled={searchMutation.isLoading || inviteMutation.isLoading}
-						onClick={search}
-					>
-						Invite
-					</Button>
+					{tenderStatus === 1 && hasBidders ? (
+						<Button
+							variant={'outline'}
+							colorScheme={'gray'}
+							loadingText={'Inviting'}
+							isLoading={searchMutation.isLoading || inviteMutation.isLoading}
+							disabled={searchMutation.isLoading || inviteMutation.isLoading}
+							onClick={search}
+						>
+							Invite
+						</Button>
+					) : (
+						<Text>You have to publish the tender first!</Text>
+					)}
 				</Flex>
 			</Box>
-			<Flex justifyContent={'end'}>
-				<Button onClick={() => onBidderAdded()}>Finish invite bidder</Button>
+			<Flex mt={3} justifyContent={'end'}>
+				{tenderStatus === 1 && (
+					<Button onClick={() => onBidderAdded()}>Finish invite bidder</Button>
+				)}
 			</Flex>
 		</Box>
 	);

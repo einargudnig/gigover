@@ -128,7 +128,7 @@ export const BidderTenders = (): JSX.Element => {
 				<>
 					{noTender ? (
 						<Center>
-							<Text my={'2'} fontSize={'xl'}>
+							<Text fontSize={'xl'}>
 								You do not have any tenders yet. The Tender owner needs to add you
 								to the tender.
 							</Text>
