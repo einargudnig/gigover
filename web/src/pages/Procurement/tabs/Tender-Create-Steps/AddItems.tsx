@@ -377,6 +377,8 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 												) : (
 													<HStack>
 														<Button
+															variant={'outline'}
+															colorScheme={'black'}
 															aria-label={'Edit item'}
 															onClick={() => handleEdit(item)}
 														>
@@ -405,11 +407,12 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 															<Button
 																aria-label={'Delete item'}
 																colorScheme={'red'}
+																variant={'outline'}
 																isLoading={isDeleteLoading}
 																onClick={() => setDialogOpen(true)}
 															>
 																<TrashIcon
-																	color={'white'}
+																	color={'red'}
 																	size={20}
 																/>
 															</Button>
@@ -490,7 +493,11 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 												</FormControl>
 											</Td>
 											<Td width={'20%'}>
-												<Button onClick={handleAdd}>
+												<Button
+													onClick={handleAdd}
+													colorScheme={'black'}
+													variant={'outline'}
+												>
 													{isMutateLoading ? (
 														<LoadingSpinner />
 													) : (

@@ -124,14 +124,16 @@ export function NewTenderCreate({
 				>
 					Previous
 				</Button>
-				<Button
-					onClick={nextStep}
-					isDisabled={activeStep === steps.length - 1 || !tenderId}
-					variant="outline"
-					colorScheme="blackAlpha"
-				>
-					Next
-				</Button>
+				{activeStep <= 2 ? (
+					<Button
+						onClick={nextStep}
+						isDisabled={activeStep === steps.length - 1 || !tenderId}
+						variant="outline"
+						colorScheme="blackAlpha"
+					>
+						Next
+					</Button>
+				) : null}
 			</Flex>
 		</Box>
 	);

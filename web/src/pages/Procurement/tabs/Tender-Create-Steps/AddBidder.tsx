@@ -105,53 +105,76 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 			</Box>
 
 			<Box px={10} py={4} border={'1px'} borderColor={'gray.500'} rounded={'md'}>
-				<FormControl
-					isRequired={true}
-					isInvalid={searchMutation.isError || inviteMutation.isError}
-					mb={4}
-				>
-					<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
-					<Input
-						placeholder={'Enter e-mail address of a Gigover user'}
-						name={'inviteEmail'}
-						value={searchMail}
-						onChange={(e) => setSearchMail(e.target.value)}
-					/>
-					{inviteSuccess ? (
-						<>
-							<Text mt={4} color={Theme.colors.green}>
-								User has been invited to the project
-							</Text>
-						</>
-					) : (
-						(searchMutation.isError || inviteMutation.isError) && (
-							<FormErrorMessage>
-								The user with email {searchMail} could not be found or has already
-								been invited.
-							</FormErrorMessage>
-						)
-					)}
-				</FormControl>
-				<Flex justifyContent={'flex-end'}>
-					{tenderStatus === 1 && hasBidders ? (
-						<Button
-							variant={'outline'}
-							colorScheme={'gray'}
-							loadingText={'Inviting'}
-							isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-							disabled={searchMutation.isLoading || inviteMutation.isLoading}
-							onClick={search}
+				<Flex>
+					<Box>
+						<FormControl
+							isRequired={true}
+							isInvalid={searchMutation.isError || inviteMutation.isError}
+							mb={4}
 						>
-							Invite
-						</Button>
-					) : (
-						<Text>You have to publish the tender first!</Text>
-					)}
+							<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
+							<Input
+								placeholder={'Enter e-mail address of a Gigover user'}
+								name={'inviteEmail'}
+								value={searchMail}
+								onChange={(e) => setSearchMail(e.target.value)}
+							/>
+							{inviteSuccess ? (
+								<>
+									<Text mt={4} color={Theme.colors.green}>
+										User has been invited to the project
+									</Text>
+								</>
+							) : (
+								(searchMutation.isError || inviteMutation.isError) && (
+									<FormErrorMessage>
+										The user with email {searchMail} could not be found or has
+										already been invited.
+									</FormErrorMessage>
+								)
+							)}
+						</FormControl>
+						<Flex justifyContent={'flex-end'}>
+							{tenderStatus === 1 && hasBidders ? (
+								<Button
+									variant={'outline'}
+									colorScheme={'black'}
+									loadingText={'Inviting'}
+									isLoading={searchMutation.isLoading || inviteMutation.isLoading}
+									disabled={searchMutation.isLoading || inviteMutation.isLoading}
+									onClick={search}
+								>
+									Invite
+								</Button>
+							) : (
+								<Text>You have to publish the tender first!</Text>
+							)}
+						</Flex>
+					</Box>
+					<Box>
+						<Heading size={'sm'}>Invited bidders:</Heading>
+						{tenderBidders &&
+							tenderBidders.map((bidder) => (
+								<Text key={bidder.bidderId}>{bidder.email}</Text>
+							))}
+					</Box>
 				</Flex>
 			</Box>
 			<Flex mt={3} justifyContent={'end'}>
 				{tenderStatus === 1 && (
-					<Button onClick={() => onBidderAdded()}>Finish invite bidder</Button>
+					<>
+						{hasBidders ? (
+							<Button
+								variant={'outline'}
+								colorScheme={'black'}
+								onClick={() => onBidderAdded()}
+							>
+								Finish invite bidder
+							</Button>
+						) : (
+							<Text>Invite at least one bidder to finish</Text>
+						)}
+					</>
 				)}
 			</Flex>
 		</Box>

@@ -19,10 +19,11 @@ import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TenderItem } from '../../../../models/Tender';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { DropZone } from '../../../../components/DropZone';
+import { DropZone } from '../../Offers/components/UploadTenderDocuments';
 import { usePublishTender } from '../../../../mutations/procurement/usePublishTender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
+import { FileUploadType } from '../../../../models/FileUploadType';
 
 interface PublishTenderProps {
 	tenderId: number;
@@ -192,7 +193,13 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 			</Box>
 
 			<Box p={2}>
-				<DropZone offerId={0} tenderId={tenderId} projectId={0} folderId={0} />
+				<DropZone
+					propertyId={0}
+					offerId={0}
+					projectId={0}
+					uploadType={FileUploadType.Tender}
+					tenderId={tenderId}
+				/>
 			</Box>
 			<Flex justify={'center'}>
 				<Text>Add files to the Tender before you publish it</Text>
