@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Center } from '../../../components/Center';
@@ -28,7 +28,11 @@ export const BidderOffers = (): JSX.Element => {
 	const noOffers = offers?.length === 0;
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>Offers that you have submitted</Heading>
+			</Flex>
+
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -42,9 +46,6 @@ export const BidderOffers = (): JSX.Element => {
 						</Text>
 					) : (
 						<>
-							<Text mb={'2'} fontSize={'xl'}>
-								Offers that you have received
-							</Text>
 							{offers
 								?.slice()
 								.reverse()
@@ -118,6 +119,6 @@ export const BidderOffers = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

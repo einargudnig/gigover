@@ -1,5 +1,5 @@
-export interface Tender {
-	tenderId: number;
+// Base tender information (Step 1)
+export interface TenderBase {
 	projectId: number;
 	projectName: string;
 	taskId: number;
@@ -8,15 +8,67 @@ export interface Tender {
 	finishDate: number;
 	delivery: number;
 	address: string;
-	status?: number;
 	phoneNumber: string;
-	offerNote?: string;
-	bidStatus?: number;
-	email: string;
+	email?: string; // Is this the tender creator email?
+	status: TenderStatus;
+}
+
+// After items are added (Step 2)
+export interface TenderWithItems extends TenderBase {
+	tenderId: number;
 	items: TenderItem[];
-	bidders: Bidder[];
 	documents: TenderDocument[];
 }
+
+// After publishing (Step 3)
+// export interface TenderWithDocuments extends TenderWithItems {
+// }
+
+// Complete tender (Step 4)
+export interface CompleteTender extends TenderWithItems {
+	bidStatus: number;
+	bidders: Bidder[];
+}
+
+// Union type for all possible tender states
+export type Tender = TenderBase | TenderWithItems | CompleteTender;
+
+// Type guard functions to check tender state
+export function hasTenderItems(tender: Tender): tender is TenderWithItems {
+	return 'items' in tender && Array.isArray((tender as TenderWithItems).items);
+}
+
+// export function hasTenderDocuments(tender: Tender): tender is TenderWithDocuments {
+// 	return 'documents' in tender && Array.isArray((tender as TenderWithDocuments).documents);
+// }
+
+export function hasCompleteTender(tender: Tender): tender is CompleteTender {
+	return 'bidders' in tender && Array.isArray((tender as CompleteTender).bidders);
+}
+
+// export interface Tender {
+// 	tenderId: number;
+// 	projectId: number;
+// 	projectName: string;
+// 	taskId: number;
+// 	description: string;
+// 	terms: string;
+// 	finishDate: number;
+// 	delivery: number;
+// 	address: string;
+// 	status?: number;
+// 	phoneNumber: string;
+// 	offerNote?: string;
+// 	bidStatus?: number;
+// 	email: string;
+// 	items: TenderItem[];
+// 	bidders: Bidder[];
+// 	documents: TenderDocument[];
+// }
+
+// TODO: Add missing properties
+// 0 is unpublished, 1 is published
+type TenderStatus = 0 | 1 | 2;
 
 export interface TenderItem {
 	tenderId: number;
@@ -55,7 +107,7 @@ export interface GetTenderById {
 export interface Offer {
 	email: string;
 	name: string;
-	tender: Tender;
+	tender: CompleteTender;
 	offerId: number;
 	tenderId: number;
 	status: number;

@@ -1,10 +1,10 @@
-import { Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text, Tooltip } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { Tender } from '../../../models/Tender';
+import { CompleteTender } from '../../../models/Tender';
 import { useGetBidderTenders } from '../../../queries/procurement/useGetBidderTenders';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
@@ -31,7 +31,7 @@ export const BidderTenders = (): JSX.Element => {
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
-			const uniqueTenders: Tender[] = [];
+			const uniqueTenders: CompleteTender[] = [];
 
 			tenders.forEach((tender) => {
 				const existingTender = uniqueTenders.find((t) => t.tenderId === tender.tenderId);
@@ -68,7 +68,7 @@ export const BidderTenders = (): JSX.Element => {
 		);
 	};
 
-	const shouldDeliver = (tender: Tender) => {
+	const shouldDeliver = (tender: CompleteTender) => {
 		if (tender.delivery === 1) {
 			return (
 				<HStack>
@@ -85,7 +85,7 @@ export const BidderTenders = (): JSX.Element => {
 		);
 	};
 
-	const renderBidStatus = (tender: Tender) => {
+	const renderBidStatus = (tender: CompleteTender) => {
 		if (tender.bidStatus === 0) {
 			return <Text color={'red'}>Will not make an offer</Text>;
 		} else if (tender.bidStatus === 1) {
@@ -102,7 +102,7 @@ export const BidderTenders = (): JSX.Element => {
 	// and if he goes back to this page he can click the tender and be redirected to the bidder-offers page.
 	// If the bidder decides to not make an offer, he should be redirected this page and he cannot go anywhere else.
 	// If the bidder hasn't decided he can go to the offers page and answer offer.
-	const handleLinkFromStatus = (tender: Tender) => {
+	const handleLinkFromStatus = (tender: CompleteTender) => {
 		if (tender.bidStatus === 0) {
 			return '#';
 		} else if (tender.bidStatus === 1) {
@@ -115,19 +115,20 @@ export const BidderTenders = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>You have been invited to add offers to these tenders</Heading>
+			</Flex>
+
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
 				<>
-					<Text mb={'2'} fontSize={'xl'}>
-						Tenders that you have been invited to bid on
-					</Text>
 					{noTender ? (
 						<Center>
-							<Text my={'2'} fontSize={'xl'}>
+							<Text fontSize={'xl'}>
 								You do not have any tenders yet. The Tender owner needs to add you
 								to the tender.
 							</Text>
@@ -219,6 +220,6 @@ export const BidderTenders = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

@@ -94,7 +94,7 @@ interface DropZoneProps {
 	}): React.ReactNode;
 }
 
-const DropZone = ({
+export const DropZone = ({
 	propertyId = 0,
 	offerId = 0,
 	tenderId,
@@ -107,7 +107,6 @@ const DropZone = ({
 	const { fileService } = useFileService();
 	// const { mutateAsync } = useAddTenderDocument();
 	const { mutateAsync } = useAddTenderDocumentByTenderOwner();
-
 	const toast = useToast();
 
 	const onDrop = useCallback(

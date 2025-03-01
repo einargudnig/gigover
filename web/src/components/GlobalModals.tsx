@@ -9,8 +9,6 @@ import { AddBidModal } from './modals/AddBidModal';
 import { EditBidModal } from './modals/EditBidModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
-import { ModifyProcurementModal } from './modals/ModifyProcurementModal';
-import { ProcurementModal } from './modals/ProcurementModal';
 import { ProjectModal } from './modals/ProjectModal';
 import { AddPropertyModal } from './modals/PropertyModals/AddPropertyModal';
 import { AddUnitModal } from './modals/PropertyModals/AddUnitModal';
@@ -25,8 +23,6 @@ import { UseResourceModal } from './modals/UseResourceModal';
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
-	const { tender } = modalContext.addTender || {};
-	const { modifyTender } = modalContext.modifyTender || {};
 	const { bid } = modalContext.addBid || modalContext.editBid || {};
 	const { property } = modalContext.addProperty || modalContext.editProperty || {};
 
@@ -59,16 +55,6 @@ export const GlobalModals = (): JSX.Element => {
 			{modalContext.shareItem && (
 				<Modal open={true} title={'Share options'} onClose={() => setModalContext({})}>
 					<ShareItem shareItem={modalContext.shareItem} />
-				</Modal>
-			)}
-			{modalContext.addTender && (
-				<Modal open={true} title={'Create tender'}>
-					<ProcurementModal tender={tender} />
-				</Modal>
-			)}
-			{modalContext.modifyTender && (
-				<Modal open={true} title={'Edit tender'}>
-					<ModifyProcurementModal tender={modifyTender} />
 				</Modal>
 			)}
 			{modalContext.addBid && (

@@ -3,20 +3,21 @@ import { useParams } from 'react-router-dom';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { EmptyState } from '../../../components/empty/EmptyState';
-import { Tender } from '../../../models/Tender';
+import { TenderWithItems } from '../../../models/Tender';
 import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { NewTenderItemTable } from './NewTenderItemTable';
 import { ProcurementHeader } from './ProcurementHeader';
 import { PublishedTender } from './PublishedTender';
+import { TenderDocument } from '../../../models/TenderDocument';
 // import { TenderFile } from '../../Files/new/components/TenderFile';
 
 export const TenderPage = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
-	const tender: Tender | undefined = data?.tender;
+	const tender: TenderWithItems | undefined = data?.tender;
 	// console.log('TenderPage tender: ', tender);
-	const tenderDocuments = tender?.documents;
+	const tenderDocuments: TenderDocument[] | undefined = tender?.documents || [];
 
 	const isTenderPublished = tender?.status === 1;
 	// const isTenderPublished = false;
@@ -48,7 +49,7 @@ export const TenderPage = (): JSX.Element => {
 									I can either re-use the component or create a new one.
 							*/}
 							<div>
-								{tenderDocuments!.length > 0 ? (
+								{tenderDocuments?.length > 0 ? (
 									<VStack
 										style={{ width: '100%' }}
 										align={'stretch'}
@@ -58,17 +59,13 @@ export const TenderPage = (): JSX.Element => {
 										<Heading size={'md'}>
 											Files you added to this Tender
 										</Heading>
-										{tenderDocuments!
-											.sort((a, b) =>
-												b.created && a.created ? b.created - a.created : -1
-											)
-											.map((p, pIndex) => (
-												<OtherGigoverFile
-													key={pIndex}
-													showDelete={true}
-													file={p}
-												/>
-											))}
+										{tenderDocuments?.map((p, pIndex) => (
+											<OtherGigoverFile
+												key={pIndex}
+												showDelete={true}
+												file={p}
+											/>
+										))}
 									</VStack>
 								) : (
 									<EmptyState

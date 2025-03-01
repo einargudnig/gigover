@@ -3,17 +3,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Tender } from '../../../../models/Tender';
+import { TenderWithItems } from '../../../../models/Tender';
 import { useBidderReject } from '../../../../mutations/procurement/useBidderReject';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { OfferInformationHome } from './OfferInformationHome';
 import { OfferTableHome } from './OfferTableHome';
-// import { UserContext } from '../../../../context/UserContext';
-
+import { OpenOffer } from './OpenOffer';
 import { EmptyState } from '../../../../components/empty/EmptyState';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
-import { OpenOffer } from './OpenOffer';
 
 type TenderIdParams = {
 	tenderId: string;
@@ -23,7 +21,7 @@ export const TenderOfferHome = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
-	const tender: Tender | undefined = data?.tender;
+	const tender: TenderWithItems | undefined = data?.tender;
 	const tenderDocuments = tender?.documents;
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 	// we will store the bidder status in the localStorage.

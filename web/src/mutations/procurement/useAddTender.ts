@@ -1,14 +1,13 @@
-// import { Tender } from '../models/Tender';
 import axios, { AxiosError } from 'axios';
 import { ApiService } from '../../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, UseMutationOptions } from 'react-query';
 import { devError } from '../../utils/ConsoleUtils';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
 export interface TenderFormData {
-	projectId?: number;
-	projectName?: string;
-	taskId?: number;
+	projectId: number;
+	projectName: string;
+	taskId: number;
 	description: string;
 	terms: string;
 	finishDate: number;
@@ -17,24 +16,44 @@ export interface TenderFormData {
 	phoneNumber: string;
 }
 
-export const useAddTender = () => {
-	const client = useQueryClient();
+interface TenderCreateResponse {
+	id: number;
+	errorCode?: string;
+}
 
-	return useMutation<AxiosError, ErrorResponse, TenderFormData>(async (variables) => {
+export const useAddTender = (
+	options?: UseMutationOptions<number, ErrorResponse, TenderFormData>
+) => {
+	return useMutation<number, ErrorResponse, TenderFormData>(async (variables) => {
 		try {
-			const response = await axios.post(ApiService.addTender, variables, {
-				withCredentials: true
-			});
+			const response = await axios.post<TenderCreateResponse>(
+				ApiService.addTender,
+				variables,
+				{
+					withCredentials: true
+				}
+			);
 
-			if (response.data.errorCode === 'DATA_STORE_EXCEPTION') {
-				throw new Error(response.data?.errorCode);
+			if (response.data.errorCode) {
+				throw new Error(response.data.errorCode);
 			}
-			await client.refetchQueries(ApiService.userTenders);
 
-			return response.data;
-		} catch (e) {
-			devError(e);
-			throw new Error('Could not add tender');
+			return response.data.id;
+		} catch (error) {
+			if (error) {
+				const axiosError = error as AxiosError<ErrorResponse>;
+				devError('Axios error:', axiosError.response?.data);
+				throw {
+					message: 'Could not add tender',
+					errorCode: axiosError.response?.data?.errorCode || 'UNKNOWN_ERROR'
+				};
+			}
+
+			devError('Unknown error:', error);
+			throw {
+				message: 'An unexpected error occurred',
+				errorCode: 'UNKNOWN_ERROR'
+			};
 		}
-	});
+	}, options);
 };

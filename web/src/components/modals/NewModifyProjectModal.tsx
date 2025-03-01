@@ -101,11 +101,11 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 		}
 	}, [onClose]);
 
-	useEventListener('keydown', (event) => {
-		if (event.keyCode === 27) {
-			closeDrawer();
-		}
-	});
+	// useEventListener('keydown', (event) => {
+	// 	if (event.keyCode === 27) {
+	// 		closeDrawer();
+	// 	}
+	// });
 
 	// Property stuff
 	// const [selectedProperty] = useState<IProperties | undefined>();

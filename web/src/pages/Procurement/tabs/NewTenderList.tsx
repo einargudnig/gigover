@@ -1,13 +1,22 @@
-import { Flex, Grid, GridItem, HStack, Text, Tooltip } from '@chakra-ui/react';
+import {
+	Center,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Tooltip,
+	Text,
+	Box,
+	Heading
+} from '@chakra-ui/react';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { NoProcurementFound } from '../../../components/empty/NoProcurementFound';
+import { Tender } from '../../../models/Tender';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { useUserTenders } from '../../../queries/procurement/useUserTenders';
 import styled from 'styled-components';
-import { CardBaseLink } from '../../components/CardBase';
-import { Center } from '../../components/Center';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { NoProcurementFound } from '../../components/empty/NoProcurementFound';
-import { Tender } from '../../models/Tender';
-import { useUserTenders } from '../../queries/procurement/useUserTenders';
-import { handleFinishDate } from '../../utils/HandleFinishDate';
-import { formatDateWithoutTime } from '../../utils/StringUtils';
+import { CardBaseLink } from '../../../components/CardBase';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -25,7 +34,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const ProcurementHome = (): JSX.Element => {
+export function NewTenderList() {
 	const { data, isLoading } = useUserTenders();
 
 	const finishDateStatus = (finishDate: number) => {
@@ -67,7 +76,10 @@ export const ProcurementHome = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>Tenders that you have created</Heading>
+			</Flex>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -129,6 +141,6 @@ export const ProcurementHome = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
-};
+}

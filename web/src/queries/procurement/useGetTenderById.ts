@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 import { ApiService } from '../../services/ApiService';
-import { Tender } from '../../models/Tender';
+import { CompleteTender } from '../../models/Tender';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
-export interface TenderByIdResponse {
-	tender: Tender;
+interface TenderByIdResponse {
+	tender: CompleteTender;
 }
 
 export const useGetTenderById = (tenderId: number) => {
@@ -16,7 +16,7 @@ export const useGetTenderById = (tenderId: number) => {
 	);
 
 	return {
-		data,
+		data, // Now this is the TenderWithItems directly
 		isLoading,
 		isError,
 		error
