@@ -17,11 +17,13 @@ import {
 	AccordionButton,
 	AccordionPanel,
 	AccordionIcon,
-	useToast
+	useToast,
+	Tooltip
 } from '@chakra-ui/react';
 import { Theme } from '../../../../Theme';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { TenderInfo } from './TenderInfo';
+import { useNavigate } from 'react-router-dom';
 
 export interface InviteBidderProps {
 	tenderId: number;
@@ -37,6 +39,7 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 	const hasBidders = tenderBidders && tenderBidders.length > 0;
 
 	const toast = useToast();
+	const navigate = useNavigate();
 
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
@@ -164,13 +167,17 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 				{tenderStatus === 1 && (
 					<>
 						{hasBidders ? (
-							<Button
-								variant={'outline'}
-								colorScheme={'black'}
-								onClick={() => onBidderAdded()}
-							>
-								Finish invite bidder
-							</Button>
+							<Tooltip label="Finish invite bidders and go back to Tender list">
+								<Button
+									variant={'outline'}
+									colorScheme={'black'}
+									onClick={() => {
+										navigate('/tender');
+									}}
+								>
+									Finish
+								</Button>
+							</Tooltip>
 						) : (
 							<Text>Invite at least one bidder to finish</Text>
 						)}
