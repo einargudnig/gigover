@@ -14,8 +14,8 @@ export const TenderPage = (): JSX.Element => {
 	const tender: TenderWithItems | undefined = data?.tender;
 	// console.log('TenderPage tender: ', tender);
 
-	const isTenderPublished = tender?.status === 1;
-	// const isTenderPublished = false;
+	// const isTenderPublished = tender?.status === 1;
+	const isTenderPublished = false;
 	return (
 		<>
 			{isLoading ? (

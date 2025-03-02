@@ -195,6 +195,8 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 					<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
 						<HStack>
 							<Button
+								variant={'outline'}
+								colorScheme={'black'}
 								onClick={() =>
 									setModalContext({
 										modifyTender: { modifyTender: tender }
@@ -227,9 +229,10 @@ export const ProcurementHeader = ({ tender }): JSX.Element => {
 								>
 									<Button
 										aria-label={'Delete'}
+										variant={'outline'}
 										colorScheme={'red'}
 										isLoading={isLoadingDelete}
-										leftIcon={<TrashIcon color={'white'} size={20} />}
+										leftIcon={<TrashIcon color={'red'} size={20} />}
 										onClick={() => {
 											setDialogOpen(true);
 										}}

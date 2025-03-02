@@ -1,12 +1,9 @@
 import {
-	Box,
 	Button,
-	Flex,
 	FormControl,
 	FormHelperText,
 	HStack,
 	Input,
-	Spacer,
 	Table,
 	Tbody,
 	Td,
@@ -14,11 +11,10 @@ import {
 	Th,
 	Thead,
 	Tooltip,
-	Tr,
-	useToast
+	Tr
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../components/icons/CrossIcon';
@@ -29,10 +25,7 @@ import { TenderItem } from '../../../models/Tender';
 import { useAddTenderItem } from '../../../mutations/procurement/useAddTenderItem';
 import { useDeleteTenderItem } from '../../../mutations/procurement/useDeleteTenderItem';
 import { useModifyTenderItem } from '../../../mutations/procurement/useModifyTenderItem';
-import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { UploadTenderDocuments } from '../Offers/components/UploadTenderDocuments';
-import { InviteButton } from './InviteButton';
 
 export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
@@ -45,11 +38,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		unit: 'Unit'
 	};
 
-	const tenderDescForEmail = tender?.description;
-	const tenderStatus = tender?.status;
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-
-	const [upload, setUpload] = useState(false); // for the uploadModal
 
 	//! For now I'm only using this state variable for the updating of items. Since I had major issues with it I'm going to leave it like that!
 	//eslint-disable-next-line
@@ -84,9 +73,6 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	} = useAddTenderItem();
 	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
 	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
-	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
-
-	const toast = useToast();
 
 	// We only want the unit to be max 4 characters kg, m2, l, etc
 	const isInvalidUnit = formData.unit!.length > 5;
@@ -145,56 +131,11 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 		setEditingItem(null);
 	};
 
-	const handlePublish = async () => {
-		const publishTenderBody = {
-			tenderId: Number(tenderId)
-		};
-		if (tender !== undefined) {
-			try {
-				await publishTender(publishTenderBody);
-				toast({
-					title: 'Tender published',
-					description: 'Now you can invite people to send offers to your tender!',
-					status: 'success',
-					duration: 2000,
-					isClosable: true
-				});
-			} catch (error) {
-				// console.log('ERROR', { error });
-				toast({
-					title: 'Error',
-					description: 'Something went wrong when we tried to publish your tender.',
-					status: 'error',
-					duration: 3000,
-					isClosable: true
-				});
-			}
-		} else {
-			toast({
-				title: 'Error',
-				description: 'Something went wrong when we tried to publish your tender.',
-				status: 'error',
-				duration: 5000,
-				isClosable: true
-			});
-		}
-	};
-
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	// const finishDateStatus = false;
 
 	return (
 		<>
-			{upload && (
-				<UploadTenderDocuments
-					onClose={() => setUpload(false)}
-					onComplete={(status) => {
-						console.log('status', status);
-					}}
-					tenderId={Number(tenderId)}
-				/>
-			)}
-
 			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
@@ -303,12 +244,16 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									{editingItem === item ? (
 										<HStack>
 											<Button
+												variant={'outline'}
+												colorScheme={'black'}
 												aria-label={'Update item'}
 												onClick={() => handleUpdate(item)}
 											>
 												{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
 											</Button>
 											<Button
+												variant={'outline'}
+												colorScheme={'black'}
 												onClick={() => {
 													setFormData({
 														tenderId: Number(tenderId),
@@ -326,6 +271,8 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									) : (
 										<HStack>
 											<Button
+												variant={'outline'}
+												colorScheme={'black'}
 												aria-label={'Edit item'}
 												onClick={() => handleEdit(item)}
 											>
@@ -353,11 +300,12 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 											>
 												<Button
 													aria-label={'Delete item'}
+													variant={'outline'}
 													colorScheme={'red'}
 													isLoading={isDeleteLoading}
 													onClick={() => setDialogOpen(true)}
 												>
-													<TrashIcon color={'white'} size={20} />
+													<TrashIcon color={'red'} size={20} />
 												</Button>
 											</ConfirmDialog>
 										</HStack>
@@ -435,7 +383,11 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									</FormControl>
 								</Td>
 								<Td width={'20%'}>
-									<Button onClick={handleAdd}>
+									<Button
+										onClick={handleAdd}
+										variant={'outline'}
+										colorScheme={'black'}
+									>
 										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
 									</Button>
 								</Td>
@@ -450,61 +402,6 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 					) : null}
 				</Tbody>
 			</Table>
-
-			<br />
-
-			<Flex alignItems={'center'} justifyContent={'center'}>
-				<Flex alignItems={'center'} justifyContent={'center'}>
-					{!finishDateStatus ? (
-						<>
-							{tenderStatus === 0 ? (
-								<Button onClick={handlePublish} mr={'2'}>
-									{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
-								</Button>
-							) : (
-								<Text mr={'2'}>You have already published the Tender</Text>
-							)}
-							{tenderStatus === 1 ? (
-								<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
-							) : (
-								<Text>
-									You need to publish the tender before you can invite people
-								</Text>
-							)}
-						</>
-					) : (
-						<Flex alignItems={'center'} justifyContent={'center'}>
-							<Text>The finish date has passed, you can not publish the tender.</Text>
-						</Flex>
-					)}
-				</Flex>
-				<Spacer />
-				{/* This button is for the tenderOwner to go to the offerPage */}
-				<Flex>
-					<Box>
-						<Button ml={'1'}>
-							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
-								View files from offers
-							</Link>
-						</Button>
-					</Box>
-					<Spacer />
-
-					<Box>
-						<Button onClick={() => setUpload(true)} ml={'1'}>
-							Upload files
-						</Button>
-					</Box>
-					<Spacer />
-					<Box>
-						<Button ml={'1'}>
-							<Link to={`/tender/tender-offer/${Number(tenderId)}`}>
-								Published offers
-							</Link>
-						</Button>
-					</Box>
-				</Flex>
-			</Flex>
 		</>
 	);
 };

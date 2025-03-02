@@ -296,24 +296,14 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				</Box>
 				<Spacer />
 				<Flex>
-					<Box>
-						<Button
-							variant={'outline'}
-							colorScheme={'black'}
-							onClick={() => setUpload(true)}
-							ml={'1'}
-						>
-							Upload files
-						</Button>
-					</Box>
-					<Spacer />
-					<Box>
-						<Button ml={'1'} variant={'outline'} colorScheme={'black'}>
-							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
-								View files from offers
-							</Link>
-						</Button>
-					</Box>
+					<Button
+						variant={'outline'}
+						colorScheme={'black'}
+						onClick={() => setUpload(true)}
+						ml={'1'}
+					>
+						Upload files
+					</Button>
 				</Flex>
 			</Flex>
 
