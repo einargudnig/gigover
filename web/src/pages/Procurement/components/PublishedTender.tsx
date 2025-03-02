@@ -61,7 +61,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
 	return (
-		<>
+		<Box p={6}>
 			{upload && (
 				<UploadTenderDocuments
 					onClose={() => setUpload(false)}
@@ -72,7 +72,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				/>
 			)}
 
-			<div style={{ width: '100%' }}>
+			<Box p={2}>
 				<Flex direction={'column'}>
 					<Box
 						mb={1}
@@ -228,7 +228,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				<Flex justifyContent={'flex-end'} marginTop={'3'} marginBottom={'3'}>
 					<Text as={'b'}>Published Tender</Text>
 				</Flex>
-			</div>
+			</Box>
 
 			<Table variant={'striped'}>
 				<Thead>
@@ -297,21 +297,18 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 				<Spacer />
 				<Flex>
 					<Box>
-						<Button onClick={() => setUpload(true)} ml={'1'}>
+						<Button
+							variant={'outline'}
+							colorScheme={'black'}
+							onClick={() => setUpload(true)}
+							ml={'1'}
+						>
 							Upload files
 						</Button>
 					</Box>
 					<Spacer />
 					<Box>
-						<Button ml={'1'}>
-							<Link to={`/tender/tender-offer/${Number(tenderId)}`}>
-								Published offers
-							</Link>
-						</Button>
-					</Box>
-					<Spacer />
-					<Box>
-						<Button ml={'1'}>
+						<Button ml={'1'} variant={'outline'} colorScheme={'black'}>
 							<Link to={`../../files/tender/tenders/${Number(tenderId)}`}>
 								View files from offers
 							</Link>
@@ -337,6 +334,6 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 					/>
 				)}
 			</div>
-		</>
+		</Box>
 	);
 };

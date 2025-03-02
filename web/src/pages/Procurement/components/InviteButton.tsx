@@ -149,7 +149,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
 	return (
 		<>
-			<Button ml={'1'} onClick={handleOpenDialog}>
+			<Button variant={'outline'} colorScheme={'black'} ml={'1'} onClick={handleOpenDialog}>
 				Invite Bidder
 			</Button>
 

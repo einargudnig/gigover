@@ -1,15 +1,11 @@
-import { Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { EmptyState } from '../../../components/empty/EmptyState';
 import { TenderWithItems } from '../../../models/Tender';
 import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
-import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
-import { NewTenderItemTable } from './NewTenderItemTable';
-import { ProcurementHeader } from './ProcurementHeader';
 import { PublishedTender } from './PublishedTender';
-import { TenderDocument } from '../../../models/TenderDocument';
+import { UnpublishedTender } from './UnPublishedTender';
 // import { TenderFile } from '../../Files/new/components/TenderFile';
 
 export const TenderPage = (): JSX.Element => {
@@ -17,7 +13,6 @@ export const TenderPage = (): JSX.Element => {
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: TenderWithItems | undefined = data?.tender;
 	// console.log('TenderPage tender: ', tender);
-	const tenderDocuments: TenderDocument[] | undefined = tender?.documents || [];
 
 	const isTenderPublished = tender?.status === 1;
 	// const isTenderPublished = false;
@@ -32,53 +27,13 @@ export const TenderPage = (): JSX.Element => {
 					{error?.errorCode} went wrong - {error?.errorCode}
 				</Text>
 			) : (
-				<div>
+				<Box>
 					{isTenderPublished ? (
-						<>
-							<PublishedTender tender={tender} />
-						</>
+						<PublishedTender tender={tender} />
 					) : (
-						<>
-							<ProcurementHeader tender={tender} />
-							<NewTenderItemTable tender={tender} />
-							{/*
-									Files for this Tender
-									I will need to change this a bit!
-									This is TenderFiles from Bidders on this tender.
-									I want to get them from Tender Owner for this Tender
-									I can either re-use the component or create a new one.
-							*/}
-							<div>
-								{tenderDocuments?.length > 0 ? (
-									<VStack
-										style={{ width: '100%' }}
-										align={'stretch'}
-										spacing={4}
-										mt={4}
-									>
-										<Heading size={'md'}>
-											Files you added to this Tender
-										</Heading>
-										{tenderDocuments?.map((p, pIndex) => (
-											<OtherGigoverFile
-												key={pIndex}
-												showDelete={true}
-												file={p}
-											/>
-										))}
-									</VStack>
-								) : (
-									<EmptyState
-										title={'No files uploaded'}
-										text={
-											'You have not added any files to this tender. You can add files by clicking the Upload files button'
-										}
-									/>
-								)}
-							</div>
-						</>
+						<UnpublishedTender tender={tender} />
 					)}
-				</div>
+				</Box>
 			)}
 		</>
 	);
