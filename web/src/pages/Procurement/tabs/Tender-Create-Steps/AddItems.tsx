@@ -350,6 +350,8 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 												{editingItem === item ? (
 													<HStack>
 														<Button
+															variant={'outline'}
+															colorScheme={'black'}
 															aria-label={'Update item'}
 															onClick={() => handleUpdate(item)}
 														>
@@ -360,6 +362,8 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 															)}
 														</Button>
 														<Button
+															variant={'outline'}
+															colorScheme={'black'}
 															onClick={() => {
 																setFormData({
 																	tenderId: Number(tenderId),

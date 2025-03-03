@@ -1,18 +1,17 @@
-import React, { useState, useCallback } from 'react';
-import { Text, VStack, Progress, useToast } from '@chakra-ui/react';
+import { Progress, Text, VStack, useToast } from '@chakra-ui/react';
+import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Modal } from '../../../../components/Modal';
 import { FormActions } from '../../../../components/FormActions';
+import { Modal } from '../../../../components/Modal';
 import { TenderDocument } from '../../../../models/TenderDocument';
 // import { useAddTenderDocument } from '../../../../mutations/useAddTenderDocument';
-import { useAddTenderDocumentByTenderOwner } from '../../../../mutations/procurement/useAddTenderDocumentByTenderOwner';
-import { devError } from '../../../../utils/ConsoleUtils';
-import { FileUploadType } from '../../../../models/FileUploadType';
-import { FilterIcon } from '../../../../components/icons/FilterIcon';
 import { useDropzone } from 'react-dropzone';
+import { FilterIcon } from '../../../../components/icons/FilterIcon';
 import { useFileService } from '../../../../hooks/useFileService';
+import { FileUploadType } from '../../../../models/FileUploadType';
+import { useAddTenderDocument } from '../../../../mutations/procurement/useAddTenderDocument';
 import { DocumentInput } from '../../../../mutations/useAddDocument';
-
+import { devError } from '../../../../utils/ConsoleUtils';
 interface UploadModalProps {
 	onClose: () => void;
 	onComplete: (status: boolean) => void;
@@ -105,8 +104,8 @@ export const DropZone = ({
 	children
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
-	// const { mutateAsync } = useAddTenderDocument();
-	const { mutateAsync } = useAddTenderDocumentByTenderOwner();
+	const { mutateAsync } = useAddTenderDocument();
+	// const { mutateAsync } = useAddTenderDocumentByTenderOwner();
 	const toast = useToast();
 
 	const onDrop = useCallback(

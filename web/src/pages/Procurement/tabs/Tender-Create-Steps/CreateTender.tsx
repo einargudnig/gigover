@@ -302,8 +302,8 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 						<Flex justify="flex-end" mt={4}>
 							<Button
 								type="submit"
-								colorScheme="blackAlpha"
-								variant="outline"
+								colorScheme={'black'}
+								variant={'outline'}
 								isLoading={isLoading}
 								loadingText="Creating..."
 							>

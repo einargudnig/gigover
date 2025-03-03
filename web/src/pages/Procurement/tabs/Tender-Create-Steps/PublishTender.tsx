@@ -223,7 +223,12 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 
 			<Box>
 				<Flex justifyContent={'end'}>
-					<Button onClick={handlePublish} mr={'2'}>
+					<Button
+						variant={'outline'}
+						colorScheme={'black'}
+						onClick={handlePublish}
+						mr={'2'}
+					>
 						{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
 					</Button>
 				</Flex>

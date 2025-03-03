@@ -5,7 +5,7 @@ import { devError } from '../../utils/ConsoleUtils';
 import { TenderDocument } from '../../models/TenderDocument';
 
 export interface DocumentInput
-	extends Pick<TenderDocument, 'offerId' | 'name' | 'type' | 'url' | 'bytes'> {}
+	extends Pick<TenderDocument, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
 
 export const useAddTenderDocument = () => {
 	const client = useQueryClient();
@@ -20,7 +20,7 @@ export const useAddTenderDocument = () => {
 						withCredentials: true
 					}
 				);
-				await client.refetchQueries(ApiService.getTenderById(variables.offerId));
+				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
 
 				return response.data;
 			} catch (e) {
