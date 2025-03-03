@@ -1,6 +1,5 @@
 import {
 	Box,
-	Button,
 	Flex,
 	Grid,
 	GridItem,
@@ -17,20 +16,20 @@ import {
 	Tr,
 	VStack
 } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { Bidder, TenderItem } from '../../../models/Tender';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
-import { UploadTenderDocuments } from '../Offers/components/UploadTenderDocuments';
+import { DropZone } from '../Offers/components/UploadTenderDocuments';
 import { InviteButton } from './InviteButton';
+import { FileUploadType } from '../../../models/FileUploadType';
 
 export const PublishedTender = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
-	const [upload, setUpload] = useState(false);
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 	const time = tender?.finishDate;
 	const date = new Date(time!);
@@ -62,16 +61,6 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 
 	return (
 		<Box p={6}>
-			{upload && (
-				<UploadTenderDocuments
-					onClose={() => setUpload(false)}
-					onComplete={(status) => {
-						console.log('status', status);
-					}}
-					tenderId={Number(tenderId)}
-				/>
-			)}
-
 			<Box p={2}>
 				<Flex direction={'column'}>
 					<Box
@@ -294,20 +283,18 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						<InviteButton tenderId={tenderId} tenderDesc={tenderDescForEmail} />
 					)}
 				</Box>
-				<Spacer />
-				<Flex>
-					<Button
-						variant={'outline'}
-						colorScheme={'black'}
-						onClick={() => setUpload(true)}
-						ml={'1'}
-					>
-						Upload files
-					</Button>
-				</Flex>
 			</Flex>
 
-			<div>
+			<Box>
+				<Box p={2}>
+					<DropZone
+						propertyId={0}
+						offerId={0}
+						projectId={0}
+						uploadType={FileUploadType.Tender}
+						tenderId={Number(tenderId)}
+					/>
+				</Box>
 				{tenderDocuments!.length > 0 ? (
 					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
 						<Heading size={'md'}>Files you added to this Tender</Heading>
@@ -323,7 +310,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						text={'Upload files to this tender to share them with the bidders'}
 					/>
 				)}
-			</div>
+			</Box>
 		</Box>
 	);
 };
