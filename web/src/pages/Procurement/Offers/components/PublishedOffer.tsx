@@ -187,7 +187,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 				</Center>
 			) : (
 				<>
-					<div ref={ref} id={'published-offer'}>
+					<div ref={ref} id={'my-offer'}>
 						<div style={{ width: '100%' }}>
 							<Flex direction={'column'}>
 								<Box

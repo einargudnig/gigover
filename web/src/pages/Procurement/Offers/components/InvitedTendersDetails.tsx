@@ -17,7 +17,7 @@ type TenderIdParams = {
 	tenderId: string;
 };
 
-export const TenderOfferHome = (): JSX.Element => {
+export const InvitedTendersDetails = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
@@ -92,7 +92,11 @@ export const TenderOfferHome = (): JSX.Element => {
 
 										<Spacer />
 										<Box>
-											<Button onClick={handleReject}>
+											<Button
+												onClick={handleReject}
+												variant={'outline'}
+												colorScheme={'black'}
+											>
 												{isBidderRejectLoading ? (
 													<LoadingSpinner />
 												) : (

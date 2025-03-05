@@ -14,7 +14,7 @@ import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
 
-export const BidId = (): JSX.Element => {
+export const BidDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
 	const [, setModalContext] = useContext(ModalContext);
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -107,7 +107,7 @@ export const BidId = (): JSX.Element => {
 															});
 														} else {
 															await deleteBidAsync(bid);
-															navigate('/tender/create-bid');
+															navigate('/tender/bids');
 														}
 														setDialogOpen(false);
 													}}
@@ -158,7 +158,12 @@ export const BidId = (): JSX.Element => {
 									{clientBidStatus === 0 ? (
 										<Flex>
 											<Box>
-												<Button onClick={handlePublish} mr={'2'}>
+												<Button
+													onClick={handlePublish}
+													mr={'2'}
+													variant={'outline'}
+													colorScheme={'black'}
+												>
 													{isPublishLoading ? (
 														<LoadingSpinner />
 													) : (

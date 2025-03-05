@@ -36,7 +36,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const OfferForTenders = (): JSX.Element => {
+export const TenderOffersList = (): JSX.Element => {
 	const { data: userTenders, isLoading } = useUserTenders();
 	const finishDateStatus = (finishDate: number) => {
 		const res = handleFinishDate(finishDate);

@@ -50,7 +50,7 @@ export const OpenOffer = (): JSX.Element => {
 			const offerId = response;
 
 			if (offerId !== 0) {
-				navigate(`/tender/offers/${Number(tenderId)}/${offerId}`);
+				navigate(`/tender/tender-offer/${Number(tenderId)}/${offerId}`);
 				console.log('Offer opened! With id: ', offerId);
 				toast({
 					title: 'Offer opened!',

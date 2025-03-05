@@ -30,7 +30,7 @@ const Container = styled.div`
 	overflow-y: auto;
 `;
 
-export const OfferForTender = (): JSX.Element => {
+export const TenderOfferDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
@@ -75,7 +75,7 @@ export const OfferForTender = (): JSX.Element => {
 										return (
 											<OfferCardStyled
 												key={o.offerId}
-												to={`/tender/offers/${o.tenderId}/${o.offerId}`}
+												to={`/tender/tender-offer/${o.tenderId}/${o.offerId}`}
 											>
 												<Flex>
 													<Box>

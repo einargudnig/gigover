@@ -4,7 +4,7 @@ import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOffe
 import { OfferFile } from '../../../Files/new/components/OfferFile';
 import { PublishedOffer } from './PublishedOffer';
 
-export const OfferPublished = (): JSX.Element => {
+export const MyOffersDetails = (): JSX.Element => {
 	// ! This is the page where the bidder can see his published offer
 	const { offerId } = useParams();
 	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));

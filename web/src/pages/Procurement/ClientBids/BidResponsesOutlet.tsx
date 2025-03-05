@@ -9,7 +9,7 @@ const Container = styled.div`
 	overflow-y: auto;
 `;
 
-export const CreateBidOutlet = (): JSX.Element => {
+export const BidResponsesOutlet = (): JSX.Element => {
 	return (
 		<>
 			<Flex justifyContent={'start'} alignItems={'center'} mb={'2'}>
@@ -17,7 +17,6 @@ export const CreateBidOutlet = (): JSX.Element => {
 					<Text>🚧 this feature is still in development! 🚧</Text>
 				</Box>
 			</Flex>
-
 			<VStack style={{ height: '100%' }}>
 				<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 					<Container>

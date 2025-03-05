@@ -57,7 +57,7 @@ export const TenderOffer = (): JSX.Element => {
 			isClosable: true
 		});
 		// navigate to the new page -> this should be the bidder view of the published offer, *not* with the handling buttons
-		navigate(`/tender/published-offer/${tenderId}/${offerId}`);
+		navigate(`/tender/my-offer/${tenderId}/${offerId}`);
 	};
 
 	const handleOpenDialog: ButtonProps['onClick'] = (event) => {
@@ -96,7 +96,12 @@ export const TenderOffer = (): JSX.Element => {
 						<Flex align={'center'}>
 							<Box>
 								{!finishDateStatus ? (
-									<Button onClick={handleOpenDialog} mt={'4'}>
+									<Button
+										variant={'outline'}
+										colorScheme={'black'}
+										onClick={handleOpenDialog}
+										mt={'4'}
+									>
 										{isPublishLoading ? <LoadingSpinner /> : 'Publish Offer'}
 									</Button>
 								) : (
@@ -118,7 +123,7 @@ export const TenderOffer = (): JSX.Element => {
 									</Tooltip>
 									<Spacer />
 									<Button>
-										<Link to={`/files/tender/offers/${offerId}`}>
+										<Link to={`/files/tender/tender-offer/${offerId}`}>
 											View files
 										</Link>
 									</Button>

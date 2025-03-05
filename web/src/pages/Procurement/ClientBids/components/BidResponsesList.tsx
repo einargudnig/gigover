@@ -22,7 +22,7 @@ const PropertyCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const ClientAnswers = (): JSX.Element => {
+export const BidResponsesList = (): JSX.Element => {
 	const { data, isLoading } = useGetClientBids();
 
 	const shouldDeliver = (bid: Bid) => {
@@ -83,7 +83,7 @@ export const ClientAnswers = (): JSX.Element => {
 								return (
 									<PropertyCardStyled
 										key={bid.bidId}
-										to={`/tender/client-answer/${bid.bidId}`}
+										to={`/tender/bid-responses/${bid.bidId}`}
 									>
 										<Flex direction={'column'}>
 											<Grid templateColumns="repeat(4, 1fr)" gap={1}>

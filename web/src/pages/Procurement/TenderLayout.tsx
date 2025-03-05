@@ -8,7 +8,7 @@ import { useUserTenders } from '../../queries/procurement/useUserTenders';
 import { ProcurementSearchBar } from './ProcurementSearchBar';
 import { NewTenderCreate } from './tabs/NewTenderCreate';
 
-export function NewTenderLayout() {
+export function TenderLayout() {
 	const [showSearch, setShowSearch] = useState(false);
 	const [showCreateTender, setShowCreateTender] = useState(false);
 
@@ -88,7 +88,7 @@ export function NewTenderLayout() {
 											)}
 										</NavLink>
 
-										<NavLink to={'bidder-tenders'}>
+										<NavLink to={'invitations'}>
 											{({ isActive }) => (
 												<Box
 													as="button"
@@ -105,7 +105,7 @@ export function NewTenderLayout() {
 											)}
 										</NavLink>
 
-										<NavLink to={'bidder-offers'}>
+										<NavLink to={'my-offers'}>
 											{({ isActive }) => (
 												<Box
 													as="button"
@@ -122,7 +122,7 @@ export function NewTenderLayout() {
 											)}
 										</NavLink>
 
-										<NavLink to={'create-bid'}>
+										<NavLink to={'bids'}>
 											{({ isActive }) => (
 												<Box
 													as="button"
@@ -138,7 +138,7 @@ export function NewTenderLayout() {
 												</Box>
 											)}
 										</NavLink>
-										<NavLink to={'client-answer'}>
+										<NavLink to={'bid-responses'}>
 											{({ isActive }) => (
 												<Box
 													as="button"

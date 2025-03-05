@@ -22,7 +22,7 @@ const PropertyCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const Bids = (): JSX.Element => {
+export const BidsList = (): JSX.Element => {
 	const { data, isLoading } = useGetBids();
 
 	const shouldDeliver = (bid: Bid) => {
@@ -74,7 +74,7 @@ export const Bids = (): JSX.Element => {
 								return (
 									<PropertyCardStyled
 										key={bid.bidId}
-										to={`/tender/create-bid/${bid.bidId}`}
+										to={`/tender/bids/${bid.bidId}`}
 									>
 										<Flex direction={'column'}>
 											<Grid templateColumns="repeat(6, 1fr)" gap={1}>

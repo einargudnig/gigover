@@ -8,7 +8,7 @@ import { PublishedTender } from './PublishedTender';
 import { UnpublishedTender } from './UnPublishedTender';
 // import { TenderFile } from '../../Files/new/components/TenderFile';
 
-export const TenderPage = (): JSX.Element => {
+export const TenderDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: TenderWithItems | undefined = data?.tender;

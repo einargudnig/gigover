@@ -34,7 +34,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export function NewTenderList() {
+export function MyTendersList() {
 	const { data, isLoading } = useUserTenders();
 
 	const finishDateStatus = (finishDate: number) => {

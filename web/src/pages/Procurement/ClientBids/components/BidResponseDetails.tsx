@@ -31,7 +31,7 @@ interface HandledTextProps {
 	status?: number;
 }
 
-export const ClientAnswerId = (): JSX.Element => {
+export const BidResponseDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
 	const { mutateAsync: acceptBid, isLoading: isAcceptBidLoading } = useAcceptBid();
 	const { mutateAsync: rejectBid, isLoading: isRejectBidLoading } = useRejectBid();

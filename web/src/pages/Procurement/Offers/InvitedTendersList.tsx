@@ -26,7 +26,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 	}
 `;
 
-export const BidderTenders = (): JSX.Element => {
+export const InvitedTendersList = (): JSX.Element => {
 	const { data: tenders, isLoading } = useGetBidderTenders();
 
 	const getUniqueTenders = useMemo(() => {
@@ -106,9 +106,9 @@ export const BidderTenders = (): JSX.Element => {
 		if (tender.bidStatus === 0) {
 			return '#';
 		} else if (tender.bidStatus === 1) {
-			return '/tender/bidder-offers'; // I should send you to the offer, but I don't have the offer id. -> should I build a context (again) to access it.
+			return '/tender/my-offers'; // I should send you to the offer, but I don't have the offer id. -> should I build a context (again) to access it.
 		} else if (tender.bidStatus === 2) {
-			return `/tender/offers/${tender.tenderId}`;
+			return `/tender/invitations/${tender.tenderId}`;
 		} else {
 			return null;
 		}
