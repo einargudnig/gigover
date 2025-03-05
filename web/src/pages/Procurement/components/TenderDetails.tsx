@@ -6,7 +6,6 @@ import { TenderWithItems } from '../../../models/Tender';
 import { useGetTenderById } from '../../../queries/procurement/useGetTenderById';
 import { PublishedTender } from './PublishedTender';
 import { UnpublishedTender } from './UnPublishedTender';
-// import { TenderFile } from '../../Files/new/components/TenderFile';
 
 export const TenderDetails = (): JSX.Element => {
 	const { tenderId } = useParams();

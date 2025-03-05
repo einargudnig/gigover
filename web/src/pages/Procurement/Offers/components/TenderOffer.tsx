@@ -9,18 +9,17 @@ import {
 	Button,
 	ButtonProps,
 	Flex,
-	HStack,
-	Spacer,
 	Text,
 	Tooltip,
 	useDisclosure,
-	useToast
+	useToast,
+	Spacer
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { TenderWithItems, TenderItem } from '../../../../models/Tender';
+import { TenderItem, TenderWithItems } from '../../../../models/Tender';
 import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
@@ -70,7 +69,7 @@ export const TenderOffer = (): JSX.Element => {
 	// const finishDateStatus = false;
 
 	return (
-		<>
+		<Box p={4}>
 			{upload && (
 				<UploadCertifications
 					onClose={() => {
@@ -111,24 +110,18 @@ export const TenderOffer = (): JSX.Element => {
 								)}
 							</Box>
 							<Spacer />
-							<Box>
-								<HStack>
-									<Tooltip
-										hasArrow
-										label="We recommend you save your changes before uploading files."
-									>
-										<Button onClick={() => setUpload(true)}>
-											Upload files
-										</Button>
-									</Tooltip>
-									<Spacer />
-									<Button>
-										<Link to={`/files/tender/tender-offer/${offerId}`}>
-											View files
-										</Link>
-									</Button>
-								</HStack>
-							</Box>
+							<Tooltip
+								hasArrow
+								label="We recommend you save your changes before uploading files."
+							>
+								<Button
+									variant={'outline'}
+									colorScheme={'black'}
+									onClick={() => setUpload(true)}
+								>
+									Upload files
+								</Button>
+							</Tooltip>
 						</Flex>
 					</Flex>
 
@@ -171,6 +164,6 @@ export const TenderOffer = (): JSX.Element => {
 					</AlertDialog>
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

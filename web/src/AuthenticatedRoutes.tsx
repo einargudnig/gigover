@@ -132,24 +132,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route index element={<BidResponsesList />} />
 				<Route path={':bidId'} element={<BidResponseDetails />} />
 			</Route>
-
-			{/* Single offer for the tende with this tenderId, might be unnessecary*/}
 		</Route>
-
-		{/*     {/* 💰 Tender/Offer system 💰 */}
-		{/* <Route path={'tenders'} element={<TenderLayout />}> */}
-		{/*   {/* Tenders created by the user */}
-		{/*   <Route index element={<MyTendersList />} /> */}
-		{/*   <Route path={':tenderId'} element={<TenderDetails />} /> */}
-		{/*   <Route path={':tenderId/offers'} element={<TenderOffersList />} /> */}
-		{/*   <Route path={':tenderId/offers/:offerId'} element={<TenderOfferDetails />} /> */}
-		{/**/}
-		{/*   {/* Responses to user's bids */}
-		{/*   <Route path={'bid-responses'} element={<BidResponsesOutlet />}> */}
-		{/*     <Route index element={<BidResponsesList />} /> */}
-		{/*     <Route path={':bidId'} element={<BidResponseDetails />} /> */}
-		{/*   </Route> */}
-		{/* </Route> */}
 
 		{/* 🛠️ Settings 🛠️ */}
 		<Route path={'settings'} element={<Settings />} />

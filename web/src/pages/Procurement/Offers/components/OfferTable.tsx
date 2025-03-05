@@ -161,10 +161,11 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 									)}
 								</Td>
 								<Td>
-									<Button onClick={() => handleUpdateClick(index)}>
-										{/* Decided to change this. Instead of having *all* loading spinners showing when adding items I have the toast for the UI/UX */}
-										{/* It would be very cool to be able to only make one of the loading spinners spin */}
-										{/* {addOfferItemsLoading ? <LoadingSpinner /> : 'Update'} */}
+									<Button
+										variant={'outline'}
+										colorScheme={'black'}
+										onClick={() => handleUpdateClick(index)}
+									>
 										Update
 									</Button>
 								</Td>

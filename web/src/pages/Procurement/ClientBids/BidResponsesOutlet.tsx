@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, VStack } from '@chakra-ui/react';
 import styled from 'styled-components';
 
 import { Outlet } from 'react-router-dom';
@@ -11,12 +11,7 @@ const Container = styled.div`
 
 export const BidResponsesOutlet = (): JSX.Element => {
 	return (
-		<>
-			<Flex justifyContent={'start'} alignItems={'center'} mb={'2'}>
-				<Box>
-					<Text>🚧 this feature is still in development! 🚧</Text>
-				</Box>
-			</Flex>
+		<Box p={2}>
 			<VStack style={{ height: '100%' }}>
 				<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 					<Container>
@@ -24,6 +19,6 @@ export const BidResponsesOutlet = (): JSX.Element => {
 					</Container>
 				</HStack>
 			</VStack>
-		</>
+		</Box>
 	);
 };
