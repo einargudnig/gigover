@@ -62,7 +62,7 @@ export const TenderOfferHome = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -142,6 +142,6 @@ export const TenderOfferHome = (): JSX.Element => {
 					</>
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

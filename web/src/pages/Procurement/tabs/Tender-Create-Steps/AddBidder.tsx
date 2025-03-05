@@ -138,7 +138,7 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 							)}
 						</FormControl>
 						<Flex justifyContent={'flex-end'}>
-							{tenderStatus === 1 && hasBidders ? (
+							{tenderStatus === 1 ? (
 								<Button
 									variant={'outline'}
 									colorScheme={'black'}

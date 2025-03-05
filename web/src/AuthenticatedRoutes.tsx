@@ -112,6 +112,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			{/* Offer sent in to tenders that user created*/}
 			<Route path={'tender-offers'} element={<OfferForTenders />} />
 			<Route path={'tender-offer/:tenderId'} element={<OfferForTender />} />
+			{/* Unpublished offer for tender */}
+			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 
 			{/* User has been invited to add offers to these tenders */}
 			<Route path={'bidder-tenders'} element={<BidderTenders />} />
@@ -134,7 +136,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			</Route>
 
 			{/* Single offer for the tende with this tenderId, might be unnessecary*/}
-			<Route path={'offers/:tenderId/:offerId'} element={<TenderOffer />} />
 		</Route>
 
 		{/* 🛠️ Settings 🛠️ */}

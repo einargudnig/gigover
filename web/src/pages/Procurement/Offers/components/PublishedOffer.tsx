@@ -321,7 +321,12 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 								}
 							>
 								{({ toPdf }) => (
-									<Button mr={'1'} onClick={toPdf}>
+									<Button
+										variant={'outline'}
+										colorScheme={'black'}
+										mr={'1'}
+										onClick={toPdf}
+									>
 										Download as PDF
 									</Button>
 								)}

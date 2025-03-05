@@ -38,7 +38,7 @@ export const OfferForTender = (): JSX.Element => {
 	const noOffers = offer?.length === 0;
 
 	return (
-		<>
+		<Box p={4}>
 			<Container>
 				{isLoading ? (
 					<Center>
@@ -75,7 +75,7 @@ export const OfferForTender = (): JSX.Element => {
 										return (
 											<OfferCardStyled
 												key={o.offerId}
-												to={`/tender/tender-offer/${o.tenderId}/${o.offerId}`}
+												to={`/tender/offers/${o.tenderId}/${o.offerId}`}
 											>
 												<Flex>
 													<Box>
@@ -113,6 +113,6 @@ export const OfferForTender = (): JSX.Element => {
 					</>
 				)}
 			</Container>
-		</>
+		</Box>
 	);
 };
