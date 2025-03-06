@@ -28,7 +28,7 @@ import { useGetTenderById } from '../../../../queries/procurement/useGetTenderBy
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 
-export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }): JSX.Element => {
+export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { tenderId, offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
@@ -38,6 +38,8 @@ export const PublishedOffer = ({ offerData, isOfferLoading, showResultsButtons }
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
 	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
+
+	const showResultsButtons = false;
 
 	const toast = useToast();
 

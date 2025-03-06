@@ -57,6 +57,9 @@ export const MyOffersList = (): JSX.Element => {
 										offerStatus = 'Unpublished';
 										url = `/tender/tender-offer/${o.tenderId}/${o.offerId}`;
 									} else if (o.status === 1) {
+										{
+											/* This shoul be the same component as the answered */
+										}
 										offerStatus = 'Published';
 										url = `/tender/my-offer/${o.tenderId}/${o.offerId}`;
 									} else if (o.status === 2) {

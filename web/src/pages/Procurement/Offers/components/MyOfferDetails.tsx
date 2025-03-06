@@ -11,11 +11,7 @@ export const MyOffersDetails = (): JSX.Element => {
 
 	return (
 		<Box p={4}>
-			<PublishedOffer
-				offerData={offerData}
-				isOfferLoading={isLoading}
-				showResultsButtons={false}
-			/>
+			<PublishedOffer offerData={offerData} isOfferLoading={isLoading} />
 			<Box marginTop={'2'}>
 				<OfferFile />
 			</Box>

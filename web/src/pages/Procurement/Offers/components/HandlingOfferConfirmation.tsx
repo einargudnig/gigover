@@ -85,7 +85,7 @@ export const HandlingOfferConfirmation = ({
 
 	return (
 		<>
-			<Button onClick={handleOpenDialog} mt={'4'}>
+			<Button variant={'outline'} colorScheme={'black'} onClick={handleOpenDialog} mt={'4'}>
 				{mutationLoading ? <LoadingSpinner /> : statusText}
 			</Button>
 
@@ -111,6 +111,8 @@ export const HandlingOfferConfirmation = ({
 								Cancel
 							</Button>
 							<Button
+								variant={'outline'}
+								colorScheme={'black'}
 								onClick={() => {
 									// the mutations are defined in PublishOffers, but invoked here.
 									// This makes it so we can re-use this component for both accept and reject.
