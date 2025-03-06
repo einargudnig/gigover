@@ -31,7 +31,7 @@ import { InvitedTendersList } from './pages/Procurement/Offers/InvitedTendersLis
 import { TenderOfferDetails } from './pages/Procurement/Offers/components/TenderOfferDetails';
 import { TenderOffersList } from './pages/Procurement/Offers/components/TendersOffersList';
 import { MyOffersDetails } from './pages/Procurement/Offers/components/MyOfferDetails';
-import { TenderOffer } from './pages/Procurement/Offers/components/TenderOffer';
+import { TenderOfferAnswer } from './pages/Procurement/Offers/components/TenderOfferAnswer';
 import { InvitedTendersDetails } from './pages/Procurement/Offers/components/InvitedTendersDetails';
 import { TenderDetails } from './pages/Procurement/components/TenderDetails';
 import { MyTendersList } from './pages/Procurement/tabs/MyTendersList';
@@ -111,7 +111,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'tender-offers'} element={<TenderOffersList />} />
 			<Route path={'tender-offer/:tenderId'} element={<TenderOfferDetails />} />
 			{/* Submitted offer to my tenders, here I can answer them!*/}
-			<Route path={'tender-offer/:tenderId/:offerId'} element={<TenderOffer />} />
+			<Route path={'tender-offer/:tenderId/:offerId'} element={<TenderOfferAnswer />} />
 
 			{/* User has been invited to add offers to these tenders */}
 			<Route path={'invitations'} element={<InvitedTendersList />} />
