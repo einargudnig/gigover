@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
 import { PublishedOffer } from './PublishedOffer';
+import { UnpublishedOffer } from './UnpublishedOffer';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Center } from '../../../../components/Center';
 
 export const MyOffersDetails = (): JSX.Element => {
-	const { offerId } = useParams();
+	const { tenderId, offerId } = useParams();
 	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
 
 	const offerDocuments = offerData?.offer?.documents;
@@ -24,7 +25,7 @@ export const MyOffersDetails = (): JSX.Element => {
 			) : (
 				<>
 					{isUnpublished ? (
-						<p>unpublished</p>
+						<UnpublishedOffer tenderId={Number(tenderId)} offerData={offerData} />
 					) : (
 						<PublishedOffer offerData={offerData} isOfferLoading={isLoading} />
 					)}

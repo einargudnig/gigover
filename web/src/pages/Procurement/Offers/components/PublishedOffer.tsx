@@ -13,8 +13,7 @@ import {
 	Thead,
 	Tooltip,
 	Tr,
-	VStack,
-	useToast
+	VStack
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';

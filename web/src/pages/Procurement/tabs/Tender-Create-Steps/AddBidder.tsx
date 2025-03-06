@@ -1,36 +1,35 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useInviteBidder } from '../../../../mutations/procurement/useInviteBidder';
-import { useGetUserByEmail } from '../../../../queries/useGetUserByEmail';
-import { devError, devInfo } from '../../../../utils/ConsoleUtils';
 import {
+	Accordion,
+	AccordionButton,
+	AccordionIcon,
+	AccordionItem,
+	AccordionPanel,
 	Box,
 	Button,
 	Flex,
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
-	Heading,
-	Input,
+	Spacer,
 	Text,
-	Accordion,
-	AccordionItem,
-	AccordionButton,
-	AccordionPanel,
-	AccordionIcon,
+	Tooltip,
+	Heading,
 	useToast,
-	Tooltip
+	Input
 } from '@chakra-ui/react';
+import { useCallback, useEffect, useState } from 'react';
 import { Theme } from '../../../../Theme';
+import { useInviteBidder } from '../../../../mutations/procurement/useInviteBidder';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { useGetUserByEmail } from '../../../../queries/useGetUserByEmail';
+import { devError, devInfo } from '../../../../utils/ConsoleUtils';
 import { TenderInfo } from './TenderInfo';
-import { useNavigate } from 'react-router-dom';
 
 export interface InviteBidderProps {
 	tenderId: number;
 	onBidderAdded: () => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.Element => {
 	const { data } = useGetTenderById(tenderId);
 	const tender = data?.tender;
@@ -39,7 +38,6 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 	const hasBidders = tenderBidders && tenderBidders.length > 0;
 
 	const toast = useToast();
-	const navigate = useNavigate();
 
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
@@ -108,8 +106,8 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 			</Box>
 
 			<Box px={10} py={4} border={'1px'} borderColor={'gray.500'} rounded={'md'}>
-				<Flex>
-					<Box>
+				<Flex justifyContent={'space-between'} gap={6}>
+					<Box w="50%">
 						<FormControl
 							isRequired={true}
 							isInvalid={searchMutation.isError || inviteMutation.isError}
@@ -154,11 +152,12 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 							)}
 						</Flex>
 					</Box>
-					<Box>
+					<Spacer />
+					<Box w="50%">
 						<Heading size={'sm'}>Invited bidders:</Heading>
 						{tenderBidders &&
 							tenderBidders.map((bidder) => (
-								<Text key={bidder.bidderId}>{bidder.email}</Text>
+								<Text key={bidder.bidderId}>• {bidder.email}</Text>
 							))}
 					</Box>
 				</Flex>
@@ -172,7 +171,7 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 									variant={'outline'}
 									colorScheme={'black'}
 									onClick={() => {
-										navigate('/tender');
+										onBidderAdded();
 									}}
 								>
 									Finish
