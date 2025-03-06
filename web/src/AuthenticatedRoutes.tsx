@@ -6,7 +6,7 @@ import { FolderFolder } from './pages/Files/new/FolderFolder';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
 import { TenderFolder } from './pages/Files/new/TenderFolder';
 import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
-import { OfferFile } from './pages/Files/new/components/OfferFile';
+import { OfferFiles } from './pages/Files/new/components/OfferFiles';
 import { OffersFolder } from './pages/Files/new/components/OffersFolder';
 import { TenderFile } from './pages/Files/new/components/TenderFile';
 import { TendersFolder } from './pages/Files/new/components/TendersFolder';
@@ -86,8 +86,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route path={'tenders/:tenderId'} element={<TenderFile />} />
 				{/* <Route path={'tenders/:tenderId/:fileId'} element={<TenderFile />} /> */}
 				<Route path={'offers'} element={<OffersFolder />} />
-				<Route path={'offers/:offerId'} element={<OfferFile />} />
-				<Route path={'offers/:offerId/:fileId'} element={<OfferFile />} />
+				<Route path={'offers/:offerId'} element={<OfferFiles />} />
+				<Route path={'offers/:offerId/:fileId'} element={<OfferFiles />} />
 			</Route>
 		</Route>
 

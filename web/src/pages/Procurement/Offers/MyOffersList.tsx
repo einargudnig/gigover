@@ -51,31 +51,26 @@ export const MyOffersList = (): JSX.Element => {
 								.reverse()
 								.map((o) => {
 									let offerStatus;
-									let url;
 									let statusColor;
 									if (o.status === 0) {
 										offerStatus = 'Unpublished';
-										url = `/tender/tender-offer/${o.tenderId}/${o.offerId}`;
 									} else if (o.status === 1) {
-										{
-											/* This shoul be the same component as the answered */
-										}
 										offerStatus = 'Published';
-										url = `/tender/my-offer/${o.tenderId}/${o.offerId}`;
 									} else if (o.status === 2) {
 										offerStatus = 'Accepted';
-										url = `/tender/my-offer/${o.tenderId}/${o.offerId}`;
 										statusColor = 'green';
 									} else if (o.status === 3) {
 										offerStatus = 'Rejected';
-										url = `/tender/my-offer/${o.tenderId}/${o.offerId}`;
 										statusColor = 'red';
 									} else {
 										offerStatus = 'Unknown';
 									}
 
 									return (
-										<OfferCardStyled to={url} key={o.offerId}>
+										<OfferCardStyled
+											to={`/tender/my-offer/${o.tenderId}/${o.offerId}`}
+											key={o.offerId}
+										>
 											<Flex direction={'column'}>
 												<Grid templateColumns="repeat(4, 1fr)" gap={1}>
 													<GridItem colSpan={2}>

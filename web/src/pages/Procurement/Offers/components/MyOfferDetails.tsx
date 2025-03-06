@@ -3,18 +3,36 @@ import { useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
 import { PublishedOffer } from './PublishedOffer';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { Center } from '../../../../components/Center';
 
 export const MyOffersDetails = (): JSX.Element => {
-	// ! This is the page where the bidder can see his published offer
 	const { offerId } = useParams();
 	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
 
+	const offerDocuments = offerData?.offer?.documents;
+
+	const isUnpublished = offerData?.offer?.status === 0;
+	console.log('isUnpublished', isUnpublished);
+
 	return (
 		<Box p={4}>
-			<PublishedOffer offerData={offerData} isOfferLoading={isLoading} />
-			<Box marginTop={'2'}>
-				<OfferFile />
-			</Box>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<>
+					{isUnpublished ? (
+						<p>unpublished</p>
+					) : (
+						<PublishedOffer offerData={offerData} isOfferLoading={isLoading} />
+					)}
+					<Box marginTop={'2'}>
+						<OfferFile offerDocuments={offerDocuments} />
+					</Box>
+				</>
+			)}
 		</Box>
 	);
 };

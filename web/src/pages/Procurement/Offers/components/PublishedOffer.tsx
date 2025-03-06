@@ -22,82 +22,13 @@ import ReactToPdf from 'react-to-pdf';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { GetOfferItem } from '../../../../models/Tender';
-import { useAcceptOffer } from '../../../../mutations/procurement/useAcceptOffer';
-import { useRejectOffer } from '../../../../mutations/procurement/useRejectOffer';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 
 export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
-	const { tenderId, offerId } = useParams();
+	const { offerId } = useParams();
 	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
-	const { data: tenderData } = useGetTenderById(Number(tenderId));
-	const tender = tenderData?.tender;
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
-	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
-	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
-
-	const showResultsButtons = false;
-
-	const toast = useToast();
-
-	const time = tender?.finishDate; // ! we don't have the offer finishdate so we use the tender finishdate instead, 'luckily' we have it in the URL
-	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date;
-	// const finishDateStatus = true;
-
-	const handleAccept = () => {
-		const offerIdBody = {
-			offerId: offerIdNumber
-		};
-		try {
-			console.log('Accept offer with this body:', offerIdBody);
-			acceptOffer(offerIdBody);
-			toast({
-				title: 'Offer accepted',
-				description: 'You have accepted this offer!',
-				status: 'info',
-				duration: 3000,
-				isClosable: true
-			});
-		} catch (error) {
-			console.log(error);
-			toast({
-				title: 'Error',
-				description: 'There was an error in accepting the offer.',
-				status: 'error',
-				duration: 2000,
-				isClosable: true
-			});
-		}
-	};
-
-	const handleReject = () => {
-		const offerIdBody = {
-			offerId: offerIdNumber
-		};
-		console.log('Reject offer with this body:', offerIdBody);
-		try {
-			rejectOffer(offerIdBody);
-			toast({
-				title: 'Offer rejected',
-				description: 'You have rejected this offer!',
-				status: 'info',
-				duration: 3000,
-				isClosable: true
-			});
-		} catch (error) {
-			console.log(error);
-			toast({
-				title: 'Error',
-				description: 'There was an error in rejecting the offer.',
-				status: 'error',
-				duration: 2000,
-				isClosable: true
-			});
-		}
-	};
 
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -135,7 +66,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 		return 'Unknown';
 	};
 
-	const removeButtonsIfHandled = () => {
+	const answeredTest = () => {
 		if (offer?.status === 2) {
 			return (
 				<Text fontSize={'xl'} color={'green'}>
@@ -149,35 +80,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 				</Text>
 			);
 		} else {
-			return (
-				<Flex>
-					<Box mr={'1'}>
-						<HandlingOfferConfirmation
-							mutationLoading={isAcceptLoading}
-							mutation={() => handleAccept()}
-							statusText={'Accept Offer'}
-							status={'accept'}
-							buttonText={'Accept'}
-							offerId={offerIdNumber}
-							email={offer?.email}
-							name={offer?.name}
-						/>
-					</Box>
-					<Spacer />
-					<Box ml={'1'}>
-						<HandlingOfferConfirmation
-							mutationLoading={isRejectLoading}
-							mutation={() => handleReject()}
-							statusText={'Reject Offer'}
-							status={'reject'}
-							buttonText={'Reject'}
-							offerId={offerIdNumber}
-							email={offer?.email}
-							name={offer?.name}
-						/>
-					</Box>
-				</Flex>
-			);
+			return null;
 		}
 	};
 
@@ -337,18 +240,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 
 						<Spacer />
 						<Box>
-							{showResultsButtons ? (
-								<>
-									{!finishDateStatus ? (
-										<Text>
-											You cannot answer offers until the finish date has
-											passed.
-										</Text>
-									) : (
-										<>{removeButtonsIfHandled()}</>
-									)}
-								</>
-							) : null}
+							<>{answeredTest()}</>
 						</Box>
 					</Flex>
 				</>
