@@ -26,7 +26,7 @@ export const TenderDetails = (): JSX.Element => {
 			) : (
 				<Box>
 					{isTenderPublished ? (
-						<PublishedTender tender={tender} />
+						<PublishedTender tender={tender} getTenderLoading={isLoading} />
 					) : (
 						<UnpublishedTender tender={tender} getTenderLoading={isLoading} />
 					)}
