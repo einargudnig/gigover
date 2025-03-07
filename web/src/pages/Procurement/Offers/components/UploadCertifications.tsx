@@ -93,7 +93,7 @@ interface DropZoneProps {
 	}): React.ReactNode;
 }
 
-const DropZone = ({
+export const DropZone = ({
 	propertyId = 0,
 	offerId = 0,
 	tenderId = 0,
