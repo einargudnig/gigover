@@ -1,11 +1,11 @@
 import { Box } from '@chakra-ui/react';
-import { TenderTable } from './OfferTable';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { OfferInformation } from './OfferInformation';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { OfferInformation } from './OfferInformation';
+import { TenderTable } from './OfferTable';
 
-export function UnpublishedOffer({ tenderId, offerData }) {
+export function UnpublishedOffer({ tenderId }) {
 	// We need the tender information to show on the offer.
 	const { data, isLoading } = useGetTenderById(tenderId);
 	console.log('We here', { data });

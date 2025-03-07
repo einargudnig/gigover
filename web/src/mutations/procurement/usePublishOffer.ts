@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { OfferId } from '../../models/Tender';
+import { ApiService } from '../../services/ApiService';
 
 // Note that this interface is the true response from the API.
 // Due to the flow of the client I need to refetch the offer after publishing it.
@@ -21,6 +21,8 @@ export const usePublishOffer = () => {
 		},
 		{
 			onSuccess: async (variables) => {
+				await client.refetchQueries(ApiService.userOffers);
+				await client.refetchQueries(ApiService.offer(variables.offerId));
 				await client.refetchQueries(ApiService.offer(variables.offerId));
 			}
 		}

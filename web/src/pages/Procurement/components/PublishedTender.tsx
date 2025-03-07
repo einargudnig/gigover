@@ -20,13 +20,13 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
+import { FileUploadType } from '../../../models/FileUploadType';
 import { Bidder, TenderItem } from '../../../models/Tender';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { DropZone } from '../Offers/components/UploadTenderDocuments';
 import { InviteButton } from './InviteButton';
-import { FileUploadType } from '../../../models/FileUploadType';
 
 export const PublishedTender = ({ tender }): JSX.Element => {
 	const { tenderId } = useParams();
@@ -301,7 +301,7 @@ export const PublishedTender = ({ tender }): JSX.Element => {
 						{tenderDocuments!
 							.sort((a, b) => (b.created && a.created ? b.created - a.created : -1))
 							.map((p, pIndex) => (
-								<OtherGigoverFile key={pIndex} showDelete={true} file={p} />
+								<OtherGigoverFile key={pIndex} showDelete={false} file={p} />
 							))}
 					</VStack>
 				) : (

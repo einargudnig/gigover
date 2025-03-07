@@ -1,14 +1,14 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { FileUploadType } from '../../../../models/FileUploadType';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
+import { PublishOfferButton } from './PublishOfferButton';
 import { PublishedOffer } from './PublishedOffer';
 import { UnpublishedOffer } from './UnpublishedOffer';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Center } from '../../../../components/Center';
 import { DropZone } from './UploadCertifications';
-import { FileUploadType } from '../../../../models/FileUploadType';
-import { PublishOfferButton } from './PublishOfferButton';
 
 export const MyOffersDetails = (): JSX.Element => {
 	const { tenderId, offerId } = useParams();
@@ -29,7 +29,7 @@ export const MyOffersDetails = (): JSX.Element => {
 				<>
 					{isUnpublished ? (
 						<>
-							<UnpublishedOffer tenderId={Number(tenderId)} offerData={offerData} />
+							<UnpublishedOffer tenderId={Number(tenderId)} />
 							<Flex justifyContent={'flex-end'}>
 								<PublishOfferButton
 									tenderId={Number(tenderId)}
