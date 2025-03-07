@@ -4,7 +4,6 @@ import {
 	Flex,
 	HStack,
 	Heading,
-	Spacer,
 	Table,
 	Tbody,
 	Td,
@@ -12,18 +11,17 @@ import {
 	Th,
 	Thead,
 	Tooltip,
-	Tr,
-	VStack
+	Tr
 } from '@chakra-ui/react';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { TenderItem } from '../../../../models/Tender';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { DropZone } from '../../Offers/components/UploadTenderDocuments';
-import { usePublishTender } from '../../../../mutations/procurement/usePublishTender';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
+import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { FileUploadType } from '../../../../models/FileUploadType';
+import { TenderItem } from '../../../../models/Tender';
+import { usePublishTender } from '../../../../mutations/procurement/usePublishTender';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
+import { DropZone } from '../../Offers/components/UploadTenderDocuments';
+import { TenderHead } from './TenderHead';
 
 interface PublishTenderProps {
 	tenderId: number;
@@ -35,9 +33,6 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 
 	const { data } = useGetTenderById(tenderId);
 	const tender = data?.tender;
-	const time = tender?.finishDate;
-	const date = new Date(time!);
-	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 	// TODO: tender documents not displayng after being added with dropzone
@@ -65,75 +60,7 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 			</Flex>
 
 			<Box px={10} py={4}>
-				<Flex
-					justifyContent={'space-around'}
-					marginTop={3}
-					p={2}
-					border={'1px'}
-					borderColor={'gray.500'}
-					rounded={'md'}
-				>
-					<VStack mb={'4'}>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Description:
-							</Text>
-							<Text fontSize={'lg'}>{tender?.description}</Text>
-						</HStack>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Terms:
-							</Text>
-							<Text fontSize={'lg'}>{tender?.terms}</Text>
-						</HStack>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Status:
-							</Text>
-							<Text fontSize={'lg'}>
-								{tender?.status === 1 ? 'Published' : 'Not published'}
-							</Text>
-						</HStack>
-					</VStack>
-
-					<HStack mb={'4'}>
-						<VStack mr={'3'}>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Address:
-								</Text>
-								<Text fontSize={'lg'}>{tender?.address}</Text>
-							</HStack>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Delivery:
-								</Text>
-								<Text fontSize={'lg'}>{handleDelivery}</Text>
-							</HStack>
-						</VStack>
-						<Spacer />
-						<VStack ml={'3'}>
-							<Tooltip
-								hasArrow
-								label="You will not be able to answer offer until this date has passed"
-							>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Close Date:
-									</Text>
-									<Text fontSize={'lg'}>{formatDateWithoutTime(date)}*</Text>
-								</HStack>
-							</Tooltip>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Phone:
-								</Text>
-								<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
-							</HStack>
-						</VStack>
-					</HStack>
-				</Flex>
-
+				<TenderHead tender={tender} />
 				<Table variant={'striped'}>
 					<Thead>
 						<Tr>

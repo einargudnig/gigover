@@ -1,16 +1,16 @@
-import { Box, Button, Flex, Heading, Spacer, VStack, Text, useToast } from '@chakra-ui/react';
-import { ProcurementHeader } from './ProcurementHeader';
-import { NewTenderItemTable } from './NewTenderItemTable';
-import { TenderDocument } from '../../../models/TenderDocument';
-import { EmptyState } from '../../../components/empty/EmptyState';
-import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { InviteButton } from './InviteButton';
+import { Box, Button, Flex, Heading, Spacer, Text, VStack, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
+import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { EmptyState } from '../../../components/empty/EmptyState';
+import { FileUploadType } from '../../../models/FileUploadType';
+import { TenderDocument } from '../../../models/TenderDocument';
 import { usePublishTender } from '../../../mutations/procurement/usePublishTender';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { DropZone } from '../Offers/components/UploadTenderDocuments';
-import { FileUploadType } from '../../../models/FileUploadType';
+import { TenderHead } from '../tabs/Tender-Create-Steps/TenderHead';
+import { InviteButton } from './InviteButton';
+import { NewTenderItemTable } from './NewTenderItemTable';
 
 export function UnpublishedTender({ tender }): JSX.Element {
 	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
@@ -60,7 +60,8 @@ export function UnpublishedTender({ tender }): JSX.Element {
 
 	return (
 		<Box p={4}>
-			<ProcurementHeader tender={tender} />
+			{/* <ProcurementHeader tender={tender} /> */}
+			<TenderHead tender={tender} />
 			<NewTenderItemTable tender={tender} />
 			<Box>
 				<Flex alignItems={'center'} justifyContent={'center'}>

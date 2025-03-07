@@ -67,8 +67,8 @@ export function hasCompleteTender(tender: Tender): tender is CompleteTender {
 // }
 
 // TODO: Add missing properties
-// 0 is unpublished, 1 is published
-type TenderStatus = 0 | 1 | 2;
+// 0 is unpublished, 1 is published, 2 is accepted, 3 is rejected
+export type TenderStatus = 0 | 1 | 2 | 3;
 
 export interface TenderItem {
 	tenderId: number;
