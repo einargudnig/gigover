@@ -11,10 +11,8 @@ export const TenderDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: TenderWithItems | undefined = data?.tender;
-	// console.log('TenderPage tender: ', tender);
 
 	const isTenderPublished = tender?.status === 1;
-	// const isTenderPublished = false;
 	return (
 		<>
 			{isLoading ? (
@@ -30,7 +28,7 @@ export const TenderDetails = (): JSX.Element => {
 					{isTenderPublished ? (
 						<PublishedTender tender={tender} />
 					) : (
-						<UnpublishedTender tender={tender} />
+						<UnpublishedTender tender={tender} getTenderLoading={isLoading} />
 					)}
 				</Box>
 			)}

@@ -12,7 +12,7 @@ import { TenderHead } from '../tabs/Tender-Create-Steps/TenderHead';
 import { InviteButton } from './InviteButton';
 import { NewTenderItemTable } from './NewTenderItemTable';
 
-export function UnpublishedTender({ tender }): JSX.Element {
+export function UnpublishedTender({ tender, getTenderLoading }): JSX.Element {
 	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 	const tenderDocuments: TenderDocument[] | undefined = tender?.documents || [];
 	const { tenderId } = useParams();
@@ -61,7 +61,7 @@ export function UnpublishedTender({ tender }): JSX.Element {
 	return (
 		<Box p={4}>
 			{/* <ProcurementHeader tender={tender} /> */}
-			<TenderHead tender={tender} />
+			<TenderHead tender={tender} getTenderLoading={getTenderLoading} />
 			<NewTenderItemTable tender={tender} />
 			<Box>
 				<Flex alignItems={'center'} justifyContent={'center'}>

@@ -7,20 +7,21 @@ import {
 	FormLabel,
 	HStack,
 	Input,
-	Spacer,
 	Text,
 	Tooltip,
 	VStack
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { DatePicker } from '../../../../components/forms/DatePicker';
 import { CalendarIcon } from '../../../../components/icons/Calendar';
 import { TenderFormData } from '../../../../mutations/procurement/useAddTender';
 import { useModifyTender } from '../../../../mutations/procurement/useModifyTender';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
-export function TenderHead({ tender }) {
+export function TenderHead({ tender, getTenderLoading }) {
 	const [isEditing, setIsEditing] = useState(false);
 
 	return (
@@ -36,7 +37,7 @@ export function TenderHead({ tender }) {
 			{isEditing ? (
 				<EditTenderForm tender={tender} setIsEditing={setIsEditing} />
 			) : (
-				<TenderInfo tender={tender} />
+				<TenderInfo tender={tender} getTenderLoading={getTenderLoading} />
 			)}
 			<Button
 				variant={'outline'}
@@ -53,73 +54,139 @@ export function TenderHead({ tender }) {
 	);
 }
 
-function TenderInfo({ tender }) {
+function TenderInfo({ tender, getTenderLoading }) {
 	const time = tender?.finishDate;
 	const date = new Date(time!);
 	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	return (
-		<Flex justifyContent={'space-around'}>
-			<VStack mb={'4'}>
-				<HStack>
-					<Text fontWeight={'bold'} fontSize={'xl'}>
-						Description:
-					</Text>
-					<Text fontSize={'lg'}>{tender?.description}</Text>
-				</HStack>
-				<HStack>
-					<Text fontWeight={'bold'} fontSize={'xl'}>
-						Terms:
-					</Text>
-					<Text fontSize={'lg'}>{tender?.terms}</Text>
-				</HStack>
-				<HStack>
-					<Text fontWeight={'bold'} fontSize={'xl'}>
-						Status:
-					</Text>
-					<Text fontSize={'lg'}>
-						{tender?.status === 1 ? 'Published' : 'Not published'}
-					</Text>
-				</HStack>
-			</VStack>
+		<>
+			{getTenderLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<Box width="100%" position="relative" pt="10px">
+					<Flex justifyContent={'space-around'}>
+						<VStack width={'45%'} align="stretch" spacing={4}>
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Description
+								</Text>
+								<Box
+									p={2}
+									bg="gray.50"
+									border="1px"
+									borderColor="gray.200"
+									borderRadius="md"
+									minHeight="40px"
+								>
+									<Text>{tender?.description}</Text>
+								</Box>
+							</Box>
 
-			<HStack mb={'4'}>
-				<VStack mr={'3'}>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Address:
-						</Text>
-						<Text fontSize={'lg'}>{tender?.address}</Text>
-					</HStack>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Delivery:
-						</Text>
-						<Text fontSize={'lg'}>{handleDelivery}</Text>
-					</HStack>
-				</VStack>
-				<Spacer />
-				<VStack ml={'3'}>
-					<Tooltip
-						hasArrow
-						label="You will not be able to answer offer until this date has passed"
-					>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Close Date:
-							</Text>
-							<Text fontSize={'lg'}>{formatDateWithoutTime(date)}*</Text>
-						</HStack>
-					</Tooltip>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Phone:
-						</Text>
-						<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
-					</HStack>
-				</VStack>
-			</HStack>
-		</Flex>
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Terms
+								</Text>
+								<Box
+									p={2}
+									bg="gray.50"
+									border="1px"
+									borderColor="gray.200"
+									borderRadius="md"
+									minHeight="40px"
+								>
+									<Text>{tender?.terms}</Text>
+								</Box>
+							</Box>
+
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Status
+								</Text>
+								<Box
+									p={2}
+									bg="gray.50"
+									border="1px"
+									borderColor="gray.200"
+									borderRadius="md"
+									minHeight="40px"
+								>
+									<Text>
+										{tender?.status === 1 ? 'Published' : 'Not published'}
+									</Text>
+								</Box>
+							</Box>
+
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Address
+								</Text>
+								<Box
+									p={2}
+									bg="gray.50"
+									border="1px"
+									borderColor="gray.200"
+									borderRadius="md"
+									minHeight="40px"
+								>
+									<Text>{tender?.address}</Text>
+								</Box>
+							</Box>
+						</VStack>
+
+						<VStack width={'45%'} align="stretch" spacing={4}>
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Delivery
+								</Text>
+								<Box p={2} minHeight="40px">
+									<Checkbox isChecked={tender?.delivery === 1} />
+								</Box>
+							</Box>
+
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Close Date
+								</Text>
+								<Tooltip
+									hasArrow
+									label="You will not be able to answer offer until this date has passed"
+								>
+									<Box
+										p={2}
+										bg="gray.50"
+										border="1px"
+										borderColor="gray.200"
+										borderRadius="md"
+										minHeight="40px"
+									>
+										<Text>{formatDateWithoutTime(date)}</Text>
+									</Box>
+								</Tooltip>
+							</Box>
+
+							<Box>
+								<Text fontWeight="bold" mb={1} color={'gray.700'}>
+									Phone Number
+								</Text>
+								<Box
+									p={2}
+									bg="gray.50"
+									border="1px"
+									borderColor="gray.200"
+									borderRadius="md"
+									minHeight="40px"
+								>
+									<Text>{tender?.phoneNumber}</Text>
+								</Box>
+							</Box>
+						</VStack>
+					</Flex>
+				</Box>
+			)}
+		</>
 	);
 }
 
@@ -167,12 +234,12 @@ function EditTenderForm({ tender, setIsEditing }) {
 			status: tender.status || 0
 		};
 
-		// modifyTender(tenderData);
+		modifyTender(tenderData);
 		setIsEditing(false);
 	});
 
 	return (
-		<Box width="100%" position="relative" pb="60px">
+		<Box width="100%" position="relative">
 			<form onSubmit={onSubmit}>
 				<Flex justifyContent={'space-around'} paddingTop={'10px'}>
 					<VStack width={'45%'}>

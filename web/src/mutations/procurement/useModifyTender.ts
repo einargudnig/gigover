@@ -30,6 +30,8 @@ export const useModifyTender = () => {
 				withCredentials: true
 			});
 
+			console.log(response);
+
 			if (response.status === 200) {
 				await queryClient.refetchQueries([ApiService.getTenderById(Number(tenderId))]);
 				await queryClient.refetchQueries([ApiService.userTenders]);
