@@ -24,24 +24,31 @@ export function TenderHead({ tender }) {
 	const [isEditing, setIsEditing] = useState(false);
 
 	return (
-		<Box marginTop={3} p={2} border={'1px'} borderColor={'gray.500'} rounded={'md'}>
-			<Flex justifyContent={'space-around'}>
-				{isEditing ? (
-					<EditTenderForm tender={tender} setIsEditing={setIsEditing} />
-				) : (
-					<TenderInfo tender={tender} />
-				)}
-				<Box>
-					<Button
-						variant={'outline'}
-						colorScheme={'black'}
-						onClick={() => setIsEditing(!isEditing)}
-						hidden={isEditing === true}
-					>
-						Edit tender
-					</Button>
-				</Box>
-			</Flex>
+		<Box
+			marginTop={3}
+			p={2}
+			border={'1px'}
+			borderColor={'gray.500'}
+			rounded={'md'}
+			position="relative"
+			minHeight="200px"
+		>
+			{isEditing ? (
+				<EditTenderForm tender={tender} setIsEditing={setIsEditing} />
+			) : (
+				<TenderInfo tender={tender} />
+			)}
+			<Button
+				variant={'outline'}
+				colorScheme={'black'}
+				onClick={() => setIsEditing(!isEditing)}
+				hidden={isEditing === true}
+				position="absolute"
+				bottom="4"
+				right="4"
+			>
+				Edit tender
+			</Button>
 		</Box>
 	);
 }
@@ -160,15 +167,15 @@ function EditTenderForm({ tender, setIsEditing }) {
 			status: tender.status || 0
 		};
 
-		modifyTender(tenderData);
+		// modifyTender(tenderData);
 		setIsEditing(false);
 	});
 
 	return (
-		<Flex justifyContent={'space-between'}>
+		<Box width="100%" position="relative" pb="60px">
 			<form onSubmit={onSubmit}>
-				<HStack>
-					<VStack>
+				<Flex justifyContent={'space-around'} paddingTop={'10px'}>
+					<VStack width={'45%'}>
 						<FormControl id={'description'} isInvalid={!!errors.description}>
 							<FormLabel>Description</FormLabel>
 							<Input
@@ -191,17 +198,16 @@ function EditTenderForm({ tender, setIsEditing }) {
 							{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
 						</FormControl>
 
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Status:
-							</Text>
-							<Text fontSize={'lg'}>
-								{tender?.status === 1 ? 'Published' : 'Not published'}
-							</Text>
-						</HStack>
-					</VStack>
+						<FormControl id={'status'}>
+							<FormLabel>Status</FormLabel>
+							<Input
+								value={tender?.status === 1 ? 'Published' : 'Not published'}
+								isReadOnly
+								_disabled={{ opacity: 1, cursor: 'default' }}
+								disabled
+							/>
+						</FormControl>
 
-					<VStack>
 						<FormControl id={'address'} isInvalid={!!errors.address}>
 							<FormLabel>Address - contact person on site</FormLabel>
 							<Input
@@ -214,6 +220,9 @@ function EditTenderForm({ tender, setIsEditing }) {
 								<Text color="red.500">{errors.address.message}</Text>
 							)}
 						</FormControl>
+					</VStack>
+
+					<VStack width={'45%'}>
 						<FormControl id={'delivery'}>
 							<FormLabel>Delivery</FormLabel>
 							<Checkbox
@@ -277,9 +286,9 @@ function EditTenderForm({ tender, setIsEditing }) {
 							)}
 						</FormControl>
 					</VStack>
-				</HStack>
+				</Flex>
 
-				<Flex justify="flex-end" mt={4}>
+				<Box position="absolute" bottom="0" right="4">
 					<Button
 						type="submit"
 						colorScheme={'black'}
@@ -289,8 +298,8 @@ function EditTenderForm({ tender, setIsEditing }) {
 					>
 						Update Tender
 					</Button>
-				</Flex>
+				</Box>
 			</form>
-		</Flex>
+		</Box>
 	);
 }
