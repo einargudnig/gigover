@@ -95,7 +95,7 @@ export const InvitedTendersDetails = (): JSX.Element => {
 											<Button
 												onClick={handleReject}
 												variant={'outline'}
-												colorScheme={'black'}
+												colorScheme={'gray'}
 											>
 												{isBidderRejectLoading ? (
 													<LoadingSpinner />

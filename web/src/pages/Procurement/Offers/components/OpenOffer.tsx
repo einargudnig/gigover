@@ -50,7 +50,7 @@ export const OpenOffer = (): JSX.Element => {
 			const offerId = response;
 
 			if (offerId !== 0) {
-				navigate(`/tender/tender-offer/${Number(tenderId)}/${offerId}`);
+				navigate(`/tender/my-offer/${Number(tenderId)}/${offerId}`);
 				console.log('Offer opened! With id: ', offerId);
 				toast({
 					title: 'Offer opened!',
@@ -93,7 +93,9 @@ export const OpenOffer = (): JSX.Element => {
 	const cancelRef = useRef<HTMLButtonElement>(null);
 	return (
 		<>
-			<Button onClick={handleOpenDialog}>Open Offer</Button>
+			<Button variant={'outline'} colorScheme={'black'} onClick={handleOpenDialog}>
+				Open Offer
+			</Button>
 
 			<AlertDialog
 				isOpen={isOpen}
@@ -126,14 +128,14 @@ export const OpenOffer = (): JSX.Element => {
 							<AlertDialogFooter>
 								<Button
 									variant={'outline'}
-									colorScheme={'black'}
+									colorScheme={'gray'}
 									ref={cancelRef}
 									onClick={onClose}
 								>
 									Cancel
 								</Button>
 								<Spacer />
-								<Button type="submit">
+								<Button type="submit" variant={'outline'} colorScheme={'black'}>
 									{isLoading ? <LoadingSpinner /> : 'Open offer'}
 								</Button>
 							</AlertDialogFooter>

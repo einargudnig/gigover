@@ -1,10 +1,10 @@
-import { Box, Button, Input, Table, Tbody, Td, Th, Thead, Tr, useToast } from '@chakra-ui/react';
+import { Box, Button, Input, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 // import { GetOfferItem } from '../../../../models/Tender';
-// import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 
 interface TenderItem {
 	description: string;
@@ -23,14 +23,12 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 
 	const {
 		mutateAsync: addOfferItems,
-		// isLoading: addOfferItemsLoading
+		isLoading: addOfferItemsLoading,
 		// isError: isMutateError,
 		error: mutateError
 	} = useAddOfferItems();
 
 	const { data: offerData } = useGetOfferByOfferId(Number(offerId));
-
-	const toast = useToast();
 
 	const updateItem = (
 		index: number,
@@ -55,13 +53,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 		console.log('offerItemBody', offerItemBody);
 
 		addOfferItems(offerItemBody).then(() => console.log('Item updated!'));
-		toast({
-			title: 'Success',
-			description: 'Item added to offer.',
-			status: 'success',
-			duration: 2000,
-			isClosable: true
-		});
 	};
 
 	const formatNumber = (num: number) => {
@@ -179,7 +170,9 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						<Td>
 							<strong>Total cost:</strong>
 						</Td>
-						<Td>{formatNumber(totalCost())}</Td>
+						<Td>
+							{addOfferItemsLoading ? <LoadingSpinner /> : formatNumber(totalCost())}
+						</Td>
 						<Td></Td>
 					</Tr>
 				</Tbody>
