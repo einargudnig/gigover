@@ -23,6 +23,7 @@ export type ConfirmDialogProps = {
 	offerId: number;
 	email: string;
 	name: string;
+	disabled?: boolean;
 };
 
 // function to find the tender name and email from the tenderId
@@ -36,7 +37,8 @@ export const HandlingOfferConfirmation = ({
 	statusText,
 	offerId,
 	email,
-	name
+	name,
+	disabled
 }: ConfirmDialogProps): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
@@ -85,7 +87,13 @@ export const HandlingOfferConfirmation = ({
 
 	return (
 		<>
-			<Button variant={'outline'} colorScheme={'black'} onClick={handleOpenDialog} mt={'4'}>
+			<Button
+				variant={'outline'}
+				colorScheme={'black'}
+				onClick={handleOpenDialog}
+				mt={'4'}
+				isDisabled={disabled}
+			>
 				{mutationLoading ? <LoadingSpinner /> : statusText}
 			</Button>
 

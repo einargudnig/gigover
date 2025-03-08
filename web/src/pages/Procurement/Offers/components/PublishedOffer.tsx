@@ -65,7 +65,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 		return 'Unknown';
 	};
 
-	const answeredTest = () => {
+	const answeredText = () => {
 		if (offer?.status === 2) {
 			return (
 				<Text fontSize={'xl'} color={'green'}>
@@ -239,7 +239,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 
 						<Spacer />
 						<Box>
-							<>{answeredTest()}</>
+							<>{answeredText()}</>
 						</Box>
 					</Flex>
 				</>
