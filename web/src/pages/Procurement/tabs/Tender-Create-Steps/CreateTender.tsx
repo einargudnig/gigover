@@ -10,6 +10,7 @@ import {
 	Heading,
 	Input,
 	Select,
+	Skeleton,
 	Text,
 	VStack,
 	useToast
@@ -140,7 +141,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 		);
 	}, [selectedProject, data]);
 
-	if (!openProjects?.length) {
+	if (!data) {
 		return (
 			<Box p={6} textAlign="center">
 				<Heading size="md">No Projects Available</Heading>
@@ -155,164 +156,246 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 				<Heading size="md">Create Tender</Heading>
 			</Flex>
 
-			<Box px={10} py={4}>
-				<form onSubmit={onSubmit}>
-					<VStack spacing={6} align="stretch">
-						<FormControl isInvalid={!!errors.projectId}>
-							<FormLabel>Select a Project</FormLabel>
-							<Select
-								placeholder="Select a project"
-								onChange={handleProjectSelect}
-								value={selectedProject ?? ''}
-							>
-								{openProjects.map((project) => (
-									<option key={project.projectId} value={project.projectId}>
-										{project.name}
-									</option>
-								))}
-							</Select>
-						</FormControl>
+			{isLoadingProjects ? (
+				<LoadingSkeleton />
+			) : (
+				<Box px={10} py={4}>
+					<form onSubmit={onSubmit}>
+						<VStack spacing={6} align="stretch">
+							<FormControl isInvalid={!!errors.projectId}>
+								<FormLabel>Select a Project</FormLabel>
+								<Select
+									placeholder="Select a project"
+									onChange={handleProjectSelect}
+									value={selectedProject ?? ''}
+								>
+									{openProjects.map((project) => (
+										<option key={project.projectId} value={project.projectId}>
+											{project.name}
+										</option>
+									))}
+								</Select>
+							</FormControl>
 
-						{selectedProject && (
-							<motion.div
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								transition={{ duration: 0.3 }}
-							>
-								<FormControl>
-									<FormLabel>Select a Task</FormLabel>
-									<Select
-										placeholder="Select a task"
-										onChange={handleTaskSelect}
-										value={selectedTask ?? ''}
-									>
-										{tasksFromSelectedProject.map((task) => (
-											<option key={task.taskId} value={task.taskId}>
-												{task.subject}
-											</option>
-										))}
-									</Select>
-								</FormControl>
-							</motion.div>
-						)}
-
-						<Box mb={3} />
-						<FormControl id={'description'} isInvalid={!!errors.description}>
-							<FormLabel>Procurement Description</FormLabel>
-							<Input
-								placeholder={'Enter a description of the procurement'}
-								required={true}
-								{...register('description', {
-									required: 'Procurement description is required'
-								})}
-							/>
-							{errors.description && (
-								<Text color="red.500">{errors.description.message}</Text>
+							{selectedProject && (
+								<motion.div
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									transition={{ duration: 0.3 }}
+								>
+									<FormControl>
+										<FormLabel>Select a Task</FormLabel>
+										<Select
+											placeholder="Select a task"
+											onChange={handleTaskSelect}
+											value={selectedTask ?? ''}
+										>
+											{tasksFromSelectedProject.map((task) => (
+												<option key={task.taskId} value={task.taskId}>
+													{task.subject}
+												</option>
+											))}
+										</Select>
+									</FormControl>
+								</motion.div>
 							)}
-						</FormControl>
-						<Box mb={3} />
-						<FormControl id={'terms'} isInvalid={!!errors.terms}>
-							<FormLabel>Terms</FormLabel>
-							<Input
-								placeholder={'Enter the terms of the procurement'}
-								required={true}
-								{...register('terms', { required: 'Terms are required' })}
-							/>
-							{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
-						</FormControl>
-						<Box mb={3} />
-						<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
-							<Flex>
-								<FormLabel>Close Date - </FormLabel>
-								<Text>
-									You will not be able to answer offers until this date has passed
-								</Text>
-							</Flex>
-							<Controller
-								name="finishDate"
-								control={control}
-								rules={{ required: 'Finish date is required' }}
-								render={({ field }) => (
-									<HStack>
-										<DatePicker
-											selected={field.value ? new Date(field.value) : null}
-											onChange={(date: Date | null) => {
-												if (date) {
-													// Ensure we're setting the full timestamp
-													field.onChange(date.getTime());
-												} else {
-													field.onChange(null);
-												}
-											}}
-											onBlur={field.onBlur}
-											minDate={currentDate}
-											dateFormat="dd/MM/yyyy" // Add this to ensure proper date format display
-											required={true}
-											placeholderText="Select date" // Optional: adds placeholder text
-										/>
-										<CalendarIcon color={'black'} />
-									</HStack>
+
+							<Box mb={3} />
+							<FormControl id={'description'} isInvalid={!!errors.description}>
+								<FormLabel>Procurement Description</FormLabel>
+								<Input
+									placeholder={'Enter a description of the procurement'}
+									required={true}
+									{...register('description', {
+										required: 'Procurement description is required'
+									})}
+								/>
+								{errors.description && (
+									<Text color="red.500">{errors.description.message}</Text>
 								)}
-							/>
-							{errors.finishDate && (
-								<Text color="red.500">{errors.finishDate.message}</Text>
-							)}
-						</FormControl>
-						<Box mb={3} />
-						<FormControl id={'delivery'}>
-							<FormLabel>Delivery</FormLabel>
-							<Checkbox
-								name="delivery"
-								isChecked={isChecked === 1}
-								onChange={handleChangeCheckbox}
-							/>
-						</FormControl>
-						<Box mb={3} />
-						<FormControl id={'address'} isInvalid={!!errors.address}>
-							<FormLabel>Address - contact person on site</FormLabel>
-							<Input
-								placeholder={'Enter the address of the procurement'}
-								required={true}
-								{...register('address', {
-									required: 'Address is required'
-								})}
-							/>
-							{errors.address && (
-								<Text color="red.500">{errors.address.message}</Text>
-							)}
-						</FormControl>
-						<Box mb={3} />
-						<FormControl id={'phoneNumber'} isInvalid={!!errors.phoneNumber}>
-							<FormLabel>Phone Number</FormLabel>
-							<Input
-								placeholder={'Enter the phone number of the contact person'}
-								required={true}
-								{...register('phoneNumber', {
-									required: 'Phone number is required',
-									maxLength: {
-										value: 10,
-										message: 'Phone number cannot be more than 10 digits'
-									}
-								})}
-							/>
-							{errors.phoneNumber && (
-								<Text color="red.500">{errors.phoneNumber.message}</Text>
-							)}
-						</FormControl>
-						<Flex justify="flex-end" mt={4}>
-							<Button
-								type="submit"
-								colorScheme={'black'}
-								variant={'outline'}
-								isLoading={isLoading}
-								loadingText="Creating..."
-							>
-								Create Tender
-							</Button>
-						</Flex>
-					</VStack>
-				</form>
-			</Box>
+							</FormControl>
+							<Box mb={3} />
+							<FormControl id={'terms'} isInvalid={!!errors.terms}>
+								<FormLabel>Terms</FormLabel>
+								<Input
+									placeholder={'Enter the terms of the procurement'}
+									required={true}
+									{...register('terms', { required: 'Terms are required' })}
+								/>
+								{errors.terms && (
+									<Text color="red.500">{errors.terms.message}</Text>
+								)}
+							</FormControl>
+							<Box mb={3} />
+							<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
+								<Flex>
+									<FormLabel>Close Date - </FormLabel>
+									<Text>
+										You will not be able to answer offers until this date has
+										passed
+									</Text>
+								</Flex>
+								<Controller
+									name="finishDate"
+									control={control}
+									rules={{ required: 'Finish date is required' }}
+									render={({ field }) => (
+										<HStack>
+											<DatePicker
+												selected={
+													field.value ? new Date(field.value) : null
+												}
+												onChange={(date: Date | null) => {
+													if (date) {
+														// Ensure we're setting the full timestamp
+														field.onChange(date.getTime());
+													} else {
+														field.onChange(null);
+													}
+												}}
+												onBlur={field.onBlur}
+												minDate={currentDate}
+												dateFormat="dd/MM/yyyy" // Add this to ensure proper date format display
+												required={true}
+												placeholderText="Select date" // Optional: adds placeholder text
+											/>
+											<CalendarIcon color={'black'} />
+										</HStack>
+									)}
+								/>
+								{errors.finishDate && (
+									<Text color="red.500">{errors.finishDate.message}</Text>
+								)}
+							</FormControl>
+							<Box mb={3} />
+							<FormControl id={'delivery'}>
+								<FormLabel>Delivery</FormLabel>
+								<Checkbox
+									name="delivery"
+									isChecked={isChecked === 1}
+									onChange={handleChangeCheckbox}
+								/>
+							</FormControl>
+							<Box mb={3} />
+							<FormControl id={'address'} isInvalid={!!errors.address}>
+								<FormLabel>Address - contact person on site</FormLabel>
+								<Input
+									placeholder={'Enter the address of the procurement'}
+									required={true}
+									{...register('address', {
+										required: 'Address is required'
+									})}
+								/>
+								{errors.address && (
+									<Text color="red.500">{errors.address.message}</Text>
+								)}
+							</FormControl>
+							<Box mb={3} />
+							<FormControl id={'phoneNumber'} isInvalid={!!errors.phoneNumber}>
+								<FormLabel>Phone Number</FormLabel>
+								<Input
+									placeholder={'Enter the phone number of the contact person'}
+									required={true}
+									{...register('phoneNumber', {
+										required: 'Phone number is required',
+										maxLength: {
+											value: 10,
+											message: 'Phone number cannot be more than 10 digits'
+										}
+									})}
+								/>
+								{errors.phoneNumber && (
+									<Text color="red.500">{errors.phoneNumber.message}</Text>
+								)}
+							</FormControl>
+							<Flex justify="flex-end" mt={4}>
+								<Button
+									type="submit"
+									colorScheme={'black'}
+									variant={'outline'}
+									isLoading={isLoading}
+									loadingText="Creating..."
+								>
+									Create Tender
+								</Button>
+							</Flex>
+						</VStack>
+					</form>
+				</Box>
+			)}
+		</Box>
+	);
+}
+
+function LoadingSkeleton() {
+	return (
+		<Box px={10} py={4}>
+			<VStack spacing={6} align="stretch">
+				{/* Project Select */}
+				<Box>
+					<Skeleton height="20px" width="120px" mb={2} />
+					<Skeleton height="40px" width="100%" />
+				</Box>
+
+				{/* Task Select */}
+				<Box>
+					<Skeleton height="20px" width="100px" mb={2} />
+					<Skeleton height="40px" width="100%" />
+				</Box>
+
+				<Box mb={3} />
+
+				{/* Description */}
+				<Box>
+					<Skeleton height="20px" width="180px" mb={2} />
+					<Skeleton height="40px" width="100%" />
+				</Box>
+
+				<Box mb={3} />
+
+				{/* Terms */}
+				<Box>
+					<Skeleton height="20px" width="60px" mb={2} />
+					<Skeleton height="40px" width="100%" />
+				</Box>
+
+				<Box mb={3} />
+
+				{/* Finish Date */}
+				<Box>
+					<Skeleton height="20px" width="200px" mb={2} />
+					<Skeleton height="40px" width="200px" />
+				</Box>
+
+				<Box mb={3} />
+
+				{/* Delivery */}
+				<Box>
+					<Skeleton height="20px" width="80px" mb={2} />
+					<Skeleton height="20px" width="20px" />
+				</Box>
+
+				<Box mb={3} />
+
+				{/* Address */}
+				<Box>
+					<Skeleton height="20px" width="180px" mb={2} />
+					<Skeleton height="40px" width="100%" />
+				</Box>
+
+				<Box mb={3} />
+
+				{/* Phone Number */}
+				<Box>
+					<Skeleton height="20px" width="120px" mb={2} />
+					<Skeleton height="40px" width="100%" />
+				</Box>
+
+				{/* Submit Button */}
+				<Flex justify="flex-end" mt={4}>
+					<Skeleton height="40px" width="150px" />
+				</Flex>
+			</VStack>
 		</Box>
 	);
 }
