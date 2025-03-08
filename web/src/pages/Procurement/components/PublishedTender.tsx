@@ -34,7 +34,6 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 
 	const time = tender?.finishDate;
 	const finishDateStatus = handleFinishDate(time); // we use this to update the UI based on the finish date
-	// const finishDateStatus = false;
 	const bidders = tender?.bidders;
 	const tenderDocuments = tender?.documents;
 

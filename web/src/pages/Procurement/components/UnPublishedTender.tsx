@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Spacer, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text, VStack, useToast } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { EmptyState } from '../../../components/empty/EmptyState';
@@ -14,19 +14,30 @@ import { NewTenderItemTable } from './NewTenderItemTable';
 
 export function UnpublishedTender({ tender, getTenderLoading }): JSX.Element {
 	console.log('tender', tender);
-	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 	const tenderDocuments: TenderDocument[] | undefined = tender?.documents || [];
 	const { tenderId } = useParams();
 
-	const toast = useToast();
+	return (
+		<Box p={4}>
+			<TenderHead tender={tender} getTenderLoading={getTenderLoading} />
+			<NewTenderItemTable tender={tender} />
+			<HandleTender tender={tender} />
+			<TenderDocuments tenderId={tenderId} tenderDocuments={tenderDocuments} />
+		</Box>
+	);
+}
 
+function HandleTender({ tender }) {
+	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender();
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 
+	const toast = useToast();
+
 	const handlePublish = async () => {
 		const publishTenderBody = {
-			tenderId: Number(tenderId)
+			tenderId: Number(tender.tenderId)
 		};
 		if (tender !== undefined) {
 			try {
@@ -60,75 +71,73 @@ export function UnpublishedTender({ tender, getTenderLoading }): JSX.Element {
 	};
 
 	return (
-		<Box p={4}>
-			{/* <ProcurementHeader tender={tender} /> */}
-			<TenderHead tender={tender} getTenderLoading={getTenderLoading} />
-			<NewTenderItemTable tender={tender} />
-			<Box>
+		<Flex alignItems={'center'} justifyContent={'center'}>
+			{!finishDateStatus ? (
+				<>
+					{tenderStatus === 0 ? (
+						<Button
+							onClick={handlePublish}
+							mr={'2'}
+							variant={'outline'}
+							colorScheme={'black'}
+						>
+							{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
+						</Button>
+					) : (
+						<Text mr={'2'}>You have already published the Tender</Text>
+					)}
+					{tenderStatus === 1 ? (
+						<InviteButton tenderId={tender.tenderId} tenderDesc={tenderDescForEmail} />
+					) : (
+						<Text>You need to publish the tender before you can invite people</Text>
+					)}
+				</>
+			) : (
 				<Flex alignItems={'center'} justifyContent={'center'}>
-					<Flex alignItems={'center'} justifyContent={'center'}>
-						{!finishDateStatus ? (
-							<>
-								{tenderStatus === 0 ? (
-									<Button
-										onClick={handlePublish}
-										mr={'2'}
-										variant={'outline'}
-										colorScheme={'black'}
-									>
-										{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
-									</Button>
-								) : (
-									<Text mr={'2'}>You have already published the Tender</Text>
-								)}
-								{tenderStatus === 1 ? (
-									<InviteButton
-										tenderId={tenderId}
-										tenderDesc={tenderDescForEmail}
-									/>
-								) : (
-									<Text>
-										You need to publish the tender before you can invite people
-									</Text>
-								)}
-							</>
-						) : (
-							<Flex alignItems={'center'} justifyContent={'center'}>
-								<Text>
-									The finish date has passed, you can not publish the tender.
-								</Text>
-							</Flex>
-						)}
-					</Flex>
-					<Spacer />
+					<Text>The finish date has passed, you can not publish the tender.</Text>
 				</Flex>
+			)}
+		</Flex>
+	);
+}
+
+function TenderDocuments({
+	tenderId,
+	tenderDocuments
+}: {
+	tenderId: string | undefined;
+	tenderDocuments: TenderDocument[] | undefined;
+}) {
+	if (!tenderId) {
+		return null;
+	}
+
+	return (
+		<Box>
+			<Box p={4}>
+				<DropZone
+					propertyId={0}
+					offerId={0}
+					projectId={0}
+					uploadType={FileUploadType.Tender}
+					tenderId={Number(tenderId)}
+				/>
 			</Box>
-			<Box>
-				<Box p={4}>
-					<DropZone
-						propertyId={0}
-						offerId={0}
-						projectId={0}
-						uploadType={FileUploadType.Tender}
-						tenderId={Number(tenderId)}
-					/>
-				</Box>
-				{tenderDocuments!.length > 0 ? (
-					<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
-						<Heading size={'md'}>Files you added to this Tender</Heading>
-						{tenderDocuments?.map((p, pIndex) => (
-							<OtherGigoverFile key={pIndex} showDelete={true} file={p} />
-						))}
-					</VStack>
-				) : (
-					<EmptyState
-						title={'No files uploaded'}
-						text={
-							'You have not added any files to this tender. You can add files by dropping them in the box above.'
-						}
-					/>
-				)}
-			</Box>
+			<Heading size={'md'}>Files you added to this Tender</Heading>
+			{!tenderDocuments || tenderDocuments.length === 0 ? (
+				<EmptyState
+					title={'No files uploaded'}
+					text={
+						'You have not added any files to this tender. You can add files by dropping them in the box above.'
+					}
+				/>
+			) : (
+				<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
+					{tenderDocuments.map((p, pIndex) => (
+						<OtherGigoverFile key={pIndex} showDelete={true} file={p} />
+					))}
+				</VStack>
+			)}
 		</Box>
 	);
 }

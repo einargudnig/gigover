@@ -275,6 +275,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 												colorScheme={'black'}
 												aria-label={'Edit item'}
 												onClick={() => handleEdit(item)}
+												disabled={finishDateStatus}
 											>
 												<Edit size={20} />
 											</Button>
@@ -304,6 +305,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 													colorScheme={'red'}
 													isLoading={isDeleteLoading}
 													onClick={() => setDialogOpen(true)}
+													disabled={finishDateStatus}
 												>
 													<TrashIcon color={'red'} size={20} />
 												</Button>
@@ -315,85 +317,79 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						))}
 					</>
 
-					{/* //! Maybe I'll add the status here instead? So I can make sure the Tender owner cannot add items after publishing */}
-					{finishDateStatus ? (
+					<>
 						<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-							The finish date has passed, you cannot add more items to the Tender
+							Enter details below to add items to tender
 						</Text>
-					) : (
-						<>
-							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-								Enter details below to add items to tender
-							</Text>
 
-							<Tr>
-								<Td width={'20%'}>
-									<FormControl id="nr">
-										<Input
-											width={'200px'}
-											id="nr"
-											name="nr"
-											type="text"
-											value={formData.nr}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="description">
-										<Input
-											htmlSize={4}
-											id="description"
-											name="description"
-											type="text"
-											value={formData.description}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<FormControl id="volume">
-										<Input
-											htmlSize={4}
-											id="volume"
-											name="volume"
-											type="text"
-											value={formData.volume}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td>
-									{/* We only want the unit to be max 4 characters kg, m2, l, etc */}
-									<FormControl id="unit" isInvalid={isInvalidUnit}>
-										<Input
-											htmlSize={4}
-											id="unit"
-											name="unit"
-											type="text"
-											value={formData.unit}
-											onChange={handleChange}
-										/>
-										{isInvalidUnit ? (
-											<FormHelperText>
-												The measurement of unit should be in a short format:
-												kg, m, m2
-											</FormHelperText>
-										) : null}
-									</FormControl>
-								</Td>
-								<Td width={'20%'}>
-									<Button
-										onClick={handleAdd}
-										variant={'outline'}
-										colorScheme={'black'}
-									>
-										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-									</Button>
-								</Td>
-							</Tr>
-						</>
-					)}
+						<Tr>
+							<Td width={'20%'}>
+								<FormControl id="nr">
+									<Input
+										width={'200px'}
+										id="nr"
+										name="nr"
+										type="text"
+										value={formData.nr}
+										onChange={handleChange}
+									/>
+								</FormControl>
+							</Td>
+							<Td width={'20%'}>
+								<FormControl id="description">
+									<Input
+										htmlSize={4}
+										id="description"
+										name="description"
+										type="text"
+										value={formData.description}
+										onChange={handleChange}
+									/>
+								</FormControl>
+							</Td>
+							<Td width={'20%'}>
+								<FormControl id="volume">
+									<Input
+										htmlSize={4}
+										id="volume"
+										name="volume"
+										type="text"
+										value={formData.volume}
+										onChange={handleChange}
+									/>
+								</FormControl>
+							</Td>
+							<Td>
+								{/* We only want the unit to be max 4 characters kg, m2, l, etc */}
+								<FormControl id="unit" isInvalid={isInvalidUnit}>
+									<Input
+										htmlSize={4}
+										id="unit"
+										name="unit"
+										type="text"
+										value={formData.unit}
+										onChange={handleChange}
+									/>
+									{isInvalidUnit ? (
+										<FormHelperText>
+											The measurement of unit should be in a short format: kg,
+											m, m2
+										</FormHelperText>
+									) : null}
+								</FormControl>
+							</Td>
+							<Td width={'20%'}>
+								<Button
+									onClick={handleAdd}
+									variant={'outline'}
+									colorScheme={'black'}
+									disabled={finishDateStatus}
+								>
+									{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+								</Button>
+							</Td>
+						</Tr>
+					</>
 
 					{isMutateError ? (
 						<Td>

@@ -13,6 +13,7 @@ export const TenderDetails = (): JSX.Element => {
 	const tender: TenderWithItems | undefined = data?.tender;
 
 	const isTenderPublished = tender?.status === 1;
+
 	return (
 		<>
 			{isLoading ? (

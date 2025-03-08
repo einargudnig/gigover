@@ -19,10 +19,13 @@ import { DatePicker } from '../../../../components/forms/DatePicker';
 import { CalendarIcon } from '../../../../components/icons/Calendar';
 import { TenderFormData } from '../../../../mutations/procurement/useAddTender';
 import { useModifyTender } from '../../../../mutations/procurement/useModifyTender';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export function TenderHead({ tender, getTenderLoading }) {
 	const [isEditing, setIsEditing] = useState(false);
+
+	const disableButtons = handleFinishDate(tender?.finishDate);
 
 	return (
 		<Box
@@ -39,17 +42,21 @@ export function TenderHead({ tender, getTenderLoading }) {
 			) : (
 				<TenderInfo tender={tender} getTenderLoading={getTenderLoading} />
 			)}
-			<Button
-				variant={'outline'}
-				colorScheme={'black'}
-				onClick={() => setIsEditing(!isEditing)}
-				hidden={isEditing === true}
-				position="absolute"
-				bottom="4"
-				right="4"
-			>
-				Edit tender
-			</Button>
+			<Flex position="absolute" bottom="4" right="4">
+				{disableButtons ? (
+					<Text>You cannot edit the tender until the close date has passed</Text>
+				) : (
+					<Button
+						variant={'outline'}
+						colorScheme={'black'}
+						onClick={() => setIsEditing(!isEditing)}
+						disabled={disableButtons}
+						hidden={isEditing === true}
+					>
+						Edit tender
+					</Button>
+				)}
+			</Flex>
 		</Box>
 	);
 }
