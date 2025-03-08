@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
-import { ApiService } from '../../services/ApiService';
 import { useMutation, useQueryClient } from 'react-query';
-import { devError } from '../../utils/ConsoleUtils';
 import { TenderDocument } from '../../models/TenderDocument';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 export interface DocumentInput
 	extends Pick<TenderDocument, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
@@ -12,15 +12,18 @@ export const useAddTenderDocument = () => {
 
 	return useMutation<{ tenderDocument: TenderDocument }, AxiosError, DocumentInput>(
 		async (variables) => {
+			console.log('variables', variables);
 			try {
 				const response = await axios.post<{ tenderDocument: TenderDocument }>(
 					ApiService.addTenderDocument,
-					variables,
-					{
-						withCredentials: true
-					}
+					variables
+					// {
+					// 	withCredentials: true
+					// }
 				);
-				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
+
+				await client.refetchQueries([ApiService.getTenderById(variables.tenderId)]);
+				console.log('Document upload successful, response:', response.data);
 
 				return response.data;
 			} catch (e) {

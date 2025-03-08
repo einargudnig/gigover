@@ -57,7 +57,6 @@ export function TenderHead({ tender, getTenderLoading }) {
 function TenderInfo({ tender, getTenderLoading }) {
 	const time = tender?.finishDate;
 	const date = new Date(time!);
-	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	return (
 		<>

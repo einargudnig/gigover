@@ -13,6 +13,7 @@ import { InviteButton } from './InviteButton';
 import { NewTenderItemTable } from './NewTenderItemTable';
 
 export function UnpublishedTender({ tender, getTenderLoading }): JSX.Element {
+	console.log('tender', tender);
 	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender(); // Publishing a tender
 	const tenderDocuments: TenderDocument[] | undefined = tender?.documents || [];
 	const { tenderId } = useParams();
