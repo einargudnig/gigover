@@ -12,7 +12,7 @@ import { DropZone } from './UploadCertifications';
 
 export const MyOffersDetails = (): JSX.Element => {
 	const { tenderId, offerId } = useParams();
-	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
+	const { data: offerData, isLoading, isFetching } = useGetOfferByOfferId(Number(offerId));
 
 	const offerDocuments = offerData?.offer?.documents;
 
@@ -50,7 +50,7 @@ export const MyOffersDetails = (): JSX.Element => {
 								uploadType={FileUploadType.Offer}
 							/>
 						</Box>
-						<OfferFile offerDocuments={offerDocuments} />
+						<OfferFile offerDocuments={offerDocuments ?? []} isFetching={isFetching} />
 					</Box>
 				</>
 			)}

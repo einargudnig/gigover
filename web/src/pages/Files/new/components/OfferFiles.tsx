@@ -1,14 +1,14 @@
 import { Box } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { OfferFile } from './OfferFile';
-import { useParams } from 'react-router-dom';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
+import { OfferFile } from './OfferFile';
 
 export function OfferFiles() {
 	const params = useParams();
 	const offerId = params.offerId ? params.offerId : -1;
-	const { data, isLoading, isError, error } = useGetOfferByOfferId(Number(offerId));
+	const { data, isLoading, isError, error, isFetching } = useGetOfferByOfferId(Number(offerId));
 	const offerDocuments = data?.offer.documents;
 
 	if (isError && error) {
@@ -27,7 +27,7 @@ export function OfferFiles() {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<OfferFile offerDocuments={offerDocuments} />
+				<OfferFile offerDocuments={offerDocuments ?? []} isFetching={isFetching} />
 			)}
 		</Box>
 	);

@@ -16,13 +16,13 @@ export const useAddTenderDocument = () => {
 			try {
 				const response = await axios.post<{ tenderDocument: TenderDocument }>(
 					ApiService.addTenderDocument,
-					variables
-					// {
-					// 	withCredentials: true
-					// }
+					variables,
+					{
+						withCredentials: true
+					}
 				);
 
-				await client.refetchQueries([ApiService.getTenderById(variables.tenderId)]);
+				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
 				console.log('Document upload successful, response:', response.data);
 
 				return response.data;

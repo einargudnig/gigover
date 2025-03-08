@@ -1,11 +1,24 @@
 import { Heading, VStack } from '@chakra-ui/react';
+import { Center } from '../../../../components/Center';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { EmptyState } from '../../../../components/empty/EmptyState';
+import { TenderDocument } from '../../../../models/Tender';
 import { OtherGigoverFile } from './OtherFile';
 
-export const OfferFile = ({ offerDocuments }): JSX.Element => {
+export const OfferFile = ({
+	offerDocuments,
+	isFetching
+}: {
+	offerDocuments: TenderDocument[];
+	isFetching?: boolean;
+}): JSX.Element => {
 	return (
 		<>
-			{offerDocuments!.length > 0 ? (
+			{isFetching ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : offerDocuments!.length > 0 ? (
 				<VStack style={{ width: '100%' }} align={'stretch'} spacing={4} mt={4}>
 					<Heading size={'md'}>Files for your offer</Heading>
 					{offerDocuments!
