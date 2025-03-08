@@ -37,7 +37,6 @@ export const InviteStakeholder = ({
 	const addStakeholder = useAddStakeHolder();
 	const searchMutation = useGetUserByEmail();
 	const toast = useToast();
-	console.log('name for email', propertyName);
 	const search = useCallback(async () => {
 		try {
 			const response = await searchMutation.mutateAsync({

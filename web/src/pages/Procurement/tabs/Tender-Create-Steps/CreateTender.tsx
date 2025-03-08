@@ -1,3 +1,4 @@
+import { CalendarIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
@@ -13,19 +14,18 @@ import {
 	VStack,
 	useToast
 } from '@chakra-ui/react';
-import { TenderFormData, useAddTender } from '../../../../mutations/procurement/useAddTender';
-import { Controller, useForm } from 'react-hook-form';
-import { CalendarIcon } from '@chakra-ui/icons';
-import { DatePicker } from '../../../../components/forms/DatePicker';
+import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
+import { DatePicker } from '../../../../components/forms/DatePicker';
 import { useOpenProjects } from '../../../../hooks/useAvailableProjects';
+import { Task } from '../../../../models/Task';
+import { TenderBase } from '../../../../models/Tender';
+import { TenderFormData, useAddTender } from '../../../../mutations/procurement/useAddTender';
 import { useProjectList } from '../../../../queries/useProjectList';
 import { ApiService } from '../../../../services/ApiService';
 import { devError } from '../../../../utils/ConsoleUtils';
-import { Task } from '../../../../models/Task';
-import { motion } from 'framer-motion';
-import { TenderBase } from '../../../../models/Tender';
 
 interface CreateTenderProps {
 	onTenderCreate: (tenderId: number) => void;
@@ -33,7 +33,7 @@ interface CreateTenderProps {
 
 export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	const queryClient = useQueryClient();
-	const { data } = useProjectList();
+	const { data, isLoading: isLoadingProjects } = useProjectList();
 	const openProjects = useOpenProjects(data);
 	const toast = useToast();
 	const currentDate = new Date();

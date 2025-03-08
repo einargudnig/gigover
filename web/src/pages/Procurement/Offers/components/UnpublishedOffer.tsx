@@ -8,7 +8,6 @@ import { TenderTable } from './OfferTable';
 export function UnpublishedOffer({ tenderId }) {
 	// We need the tender information to show on the offer.
 	const { data, isLoading } = useGetTenderById(tenderId);
-	console.log('We here', { data });
 
 	const tender = data?.tender;
 	const tenderItems = tender?.items;

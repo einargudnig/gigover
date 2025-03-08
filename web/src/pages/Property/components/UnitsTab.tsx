@@ -1,10 +1,10 @@
 import { Box, Button, Flex, Heading, Input, Spacer, Text } from '@chakra-ui/react';
-import { Units } from './Units';
-import { IPropertyUnit } from '../../../models/Property';
 import { ChangeEvent, useContext, useMemo, useState } from 'react';
-import { ModalContext } from '../../../context/ModalContext';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ModalContext } from '../../../context/ModalContext';
+import { IPropertyUnit } from '../../../models/Property';
+import { Units } from './Units';
 
 export function UnitTab({
 	propertyId,

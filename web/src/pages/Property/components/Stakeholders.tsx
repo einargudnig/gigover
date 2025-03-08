@@ -1,18 +1,18 @@
+import { CopyIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Grid,
 	GridItem,
+	Icon,
+	IconButton,
 	Text,
 	useClipboard,
-	useToast,
-	Icon,
-	IconButton
+	useToast
 } from '@chakra-ui/react';
-import { TrashIcon } from '../../../components/icons/TrashIcon';
-import { CopyIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { IStakeholder } from '../../../models/Property';
 import { useRemoveStakeHolder } from '../../../mutations/properties/useRemoveStakeHolder';
 

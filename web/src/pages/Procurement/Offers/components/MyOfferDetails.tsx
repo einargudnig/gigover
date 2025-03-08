@@ -17,7 +17,6 @@ export const MyOffersDetails = (): JSX.Element => {
 	const offerDocuments = offerData?.offer?.documents;
 
 	const isUnpublished = offerData?.offer?.status === 0;
-	console.log('isUnpublished', isUnpublished);
 
 	return (
 		<Box p={4}>
@@ -42,7 +41,7 @@ export const MyOffersDetails = (): JSX.Element => {
 					)}
 					<Box marginTop={'2'}>
 						<Box p={4}>
-							{/* Maybe we'll move this into the same place as the Unpublishde component */}
+							{/* Maybe we'll move this into the same place as the Unpublished component */}
 							<DropZone
 								propertyId={0}
 								offerId={Number(offerId)}

@@ -1,21 +1,21 @@
 import {
 	Box,
-	Flex,
-	Heading,
-	Spacer,
 	Button,
-	Text,
-	Input,
+	Flex,
 	Grid,
 	GridItem,
+	Heading,
+	Input,
+	Spacer,
+	Text,
 	useClipboard,
 	useToast
 } from '@chakra-ui/react';
-import { Stakeholders } from './Stakeholders';
-import { IPropertyUnit, IStakeholder } from '../../../models/Property';
-import { useState, useMemo, ChangeEvent } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { Center } from '../../../components/Center';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { IPropertyUnit, IStakeholder } from '../../../models/Property';
+import { Stakeholders } from './Stakeholders';
 
 export function StakeholdersTab({
 	stakeHolders,
@@ -46,7 +46,8 @@ export function StakeholdersTab({
 					...stakeholder,
 					unitName: unit?.name || 'No unit assigned'
 				};
-			});
+			})
+			.sort((a, b) => a.unitId - b.unitId); // Sort by unitId, might update later!
 	}, [stakeHolders, searchTerm, units]); // Don't forget to add units to the dependency array
 
 	const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
