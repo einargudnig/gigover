@@ -5,14 +5,13 @@ import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
 export interface DocumentInput
-	extends Pick<TenderDocument, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
+	extends Pick<TenderDocument, 'offerId' | 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> {}
 
 export const useAddTenderDocument = () => {
 	const client = useQueryClient();
 
 	return useMutation<{ tenderDocument: TenderDocument }, AxiosError, DocumentInput>(
 		async (variables) => {
-			console.log('variables', variables);
 			try {
 				const response = await axios.post<{ tenderDocument: TenderDocument }>(
 					ApiService.addTenderDocument,
@@ -22,7 +21,11 @@ export const useAddTenderDocument = () => {
 					}
 				);
 
-				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
+				await client.refetchQueries([
+					ApiService.getTenderById(variables.tenderId),
+					ApiService.offer(variables.offerId)
+				]);
+				console.log('triggering refetch', variables.tenderId, variables.offerId);
 				console.log('Document upload successful, response:', response.data);
 
 				return response.data;

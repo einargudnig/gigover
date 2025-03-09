@@ -15,6 +15,7 @@ export const MyOffersDetails = (): JSX.Element => {
 	const { data: offerData, isLoading, isFetching } = useGetOfferByOfferId(Number(offerId));
 
 	const offerDocuments = offerData?.offer?.documents;
+	console.log('offerDocuments', offerDocuments);
 
 	const isUnpublished = offerData?.offer?.status === 0;
 

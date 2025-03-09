@@ -1,9 +1,9 @@
 import { Box, Button, Input, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 // import { GetOfferItem } from '../../../../models/Tender';
 
 interface TenderItem {
@@ -126,6 +126,8 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 									) : (
 										<Input
 											htmlSize={6}
+											borderColor={'gray.400'}
+											placeholder="cost"
 											width={'auto'}
 											type="text"
 											value={item.cost ? formatNumber(item.cost) : ''}
@@ -143,6 +145,8 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 									{offerItem?.note || (
 										<Input
 											htmlSize={10}
+											borderColor={'gray.400'}
+											placeholder="note"
 											width={'auto'}
 											value={item.note || ''}
 											onChange={(e) =>

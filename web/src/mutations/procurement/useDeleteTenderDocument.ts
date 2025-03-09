@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../../utils/ConsoleUtils';
-import { ApiService } from '../../services/ApiService';
+import { useMutation, useQueryClient } from 'react-query';
 import { TenderDocumentByTenderOwner } from '../../models/TenderDocument';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 // export interface DocumentInput extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> { }
 
@@ -25,7 +25,10 @@ export const useDeleteTenderDocument = () => {
 					}
 				);
 
-				await client.refetchQueries(ApiService.getTenderById(variables.tenderId));
+				await client.refetchQueries([
+					ApiService.getTenderById(variables.tenderId),
+					ApiService.offer(variables.offerId)
+				]);
 
 				return response.data;
 			} catch (e) {

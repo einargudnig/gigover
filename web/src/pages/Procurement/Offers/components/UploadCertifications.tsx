@@ -127,8 +127,8 @@ export const DropZone = ({
 							file,
 							propertyId,
 							offerId,
-							projectId,
 							tenderId,
+							projectId,
 							createdFolder ?? 0,
 							uploadType!,
 							(status: number) => {
