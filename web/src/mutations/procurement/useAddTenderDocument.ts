@@ -21,11 +21,7 @@ export const useAddTenderDocument = () => {
 					}
 				);
 
-				await client.refetchQueries([
-					ApiService.getTenderById(variables.tenderId),
-					ApiService.offer(variables.offerId)
-				]);
-				console.log('triggering refetch', variables.tenderId, variables.offerId);
+				await client.refetchQueries(ApiService.offer(variables.offerId));
 				console.log('Document upload successful, response:', response.data);
 
 				return response.data;
