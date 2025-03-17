@@ -1,4 +1,5 @@
-import { Box, Button, Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
@@ -6,6 +7,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid } from '../../../../models/Tender';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { CreateBidStepper } from './new/CreateBidStepper';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -130,14 +132,26 @@ export const BidsList = (): JSX.Element => {
 };
 
 function BidLayout({ children }) {
+	const [showCreateBid, setShowCreateBid] = useState(false);
+
 	return (
 		<Box>
-			<Flex justify={'end'} mb={2}>
-				<Button variant="outline" colorScheme="black">
-					Create bid
-				</Button>
+			<Flex justify={'space-between'} align={'center'} mb={2}>
+				<Box>
+					<Heading size={'md'}>Create bid and send to a single bidder</Heading>
+				</Box>
+
+				<Box>
+					<Button
+						variant="outline"
+						colorScheme="black"
+						onClick={() => setShowCreateBid(true)}
+					>
+						Create bid
+					</Button>
+				</Box>
 			</Flex>
-			{children}
+			{showCreateBid ? <CreateBidStepper setShowCreateBid={setShowCreateBid} /> : children}
 		</Box>
 	);
 }
