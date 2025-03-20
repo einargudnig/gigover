@@ -8,7 +8,7 @@ import { useGetUserByEmail } from '../../../../../queries/useGetUserByEmail';
 import { devError } from '../../../../../utils/ConsoleUtils';
 
 interface AddSingleBidderProps {
-	onClientInvite: () => void;
+	onClientInvite: (clientUId: string) => void;
 }
 
 export function AddSingleBidder({ onClientInvite }: AddSingleBidderProps) {
@@ -31,7 +31,7 @@ export function AddSingleBidder({ onClientInvite }: AddSingleBidderProps) {
 
 			if (response.uId) {
 				console.log('Found user with uId:', response.uId);
-				onClientInvite();
+				onClientInvite(response.uId);
 			} else {
 				setShowMessage(true);
 				sendEmailNoAccount(searchMail);

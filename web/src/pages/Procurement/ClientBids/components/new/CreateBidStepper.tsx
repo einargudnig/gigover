@@ -29,6 +29,7 @@ export function CreateBidStepper({
 }: {
 	setShowCreateBid: (show: boolean) => void;
 }) {
+	const [clientUid, setClientUid] = useState<string | null>(null);
 	const [bidId, setBidId] = useState<number | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
 
@@ -47,7 +48,8 @@ export function CreateBidStepper({
 			case 0:
 				return (
 					<AddSingleBidder
-						onClientInvite={() => {
+						onClientInvite={(newClientId) => {
+							setClientUid(newClientId);
 							nextStep();
 						}}
 					/>
@@ -55,14 +57,22 @@ export function CreateBidStepper({
 			case 1:
 				return (
 					<CreateBidSingleBidder
-						onTenderCreate={(newBidId: number) => {
+						clientUid={clientUid}
+						onBidCreate={(newBidId: number) => {
 							setBidId(newBidId);
 							nextStep();
 						}}
 					/>
 				);
 			case 2:
-				return bidId ? <AddItemsSingleBid /> : null;
+				return bidId ? (
+					<AddItemsSingleBid
+						bidId={bidId}
+						onItemsAdded={() => {
+							nextStep();
+						}}
+					/>
+				) : null;
 			case 3:
 				return bidId ? <PublishSingleBid /> : null;
 			default:

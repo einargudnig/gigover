@@ -1,25 +1,16 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { UseMutationOptions, useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../../../services/ApiService';
 import { devError } from '../../../utils/ConsoleUtils';
-import { Bid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
 export interface SingleTenderFormData {
-	bidId: number;
 	description: string;
 	terms: string;
 	address: string;
 	delivery: number;
 	finishDate: number;
-	status: number;
-	clientUId: string;
-	clientEmail: string;
-	bidderUId: string;
-	bidderName: string;
-	bidderEmail: string;
-	notes: string;
-	items: [];
+	notes?: string;
 }
 
 interface TenderCreateResponse {

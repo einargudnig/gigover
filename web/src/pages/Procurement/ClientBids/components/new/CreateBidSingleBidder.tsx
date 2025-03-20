@@ -21,10 +21,11 @@ import { devError } from '../../../../../utils/ConsoleUtils';
 import { useQueryClient } from 'react-query';
 
 interface CreateBidSingleBidderProps {
+	clientUid: string | null;
 	onBidCreate: (bidId: number) => void;
 }
 
-export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProps) {
+export function CreateBidSingleBidder({ clientUid, onBidCreate }: CreateBidSingleBidderProps) {
 	const [isChecked, setIsChecked] = useState<number>(0);
 
 	const queryClient = useQueryClient();
@@ -55,20 +56,12 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 		formState: { errors }
 	} = useForm<Bid>({
 		defaultValues: {
-			bidId: 0,
 			description: '',
 			terms: '',
 			address: '',
 			delivery: 0,
 			finishDate: 0,
-			status: 0,
-			clientUId: '',
-			clientEmail: '',
-			bidderUId: '',
-			bidderName: '',
-			bidderEmail: '',
-			notes: '',
-			items: []
+			notes: ''
 		},
 		mode: 'onBlur'
 	});
@@ -80,7 +73,17 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 
 	// Form submission
 	const onSubmit = handleSubmit((formData) => {
-		const tenderData = {};
+		console.log('Client UId:', clientUid);
+		console.log('Form data:', formData);
+		const tenderData = {
+			clientUid,
+			description: formData.description,
+			terms: formData.terms,
+			address: formData.address,
+			delivery: isChecked,
+			finishDate: formData.finishDate,
+			notes: formData.notes
+		};
 
 		mutate(tenderData);
 	});
@@ -117,6 +120,7 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 
 					{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
 				</FormControl>
+				<Box mb={4} />
 				<FormControl id={'address'} isInvalid={!!errors.address}>
 					<FormLabel>Address</FormLabel>
 					<Input
