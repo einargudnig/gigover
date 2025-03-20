@@ -35,7 +35,6 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 	const tender = data?.tender;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
-	// TODO: tender documents not displayng after being added with dropzone
 	const tenderDocuments = tender?.documents;
 	console.log('tenderDocuments', tenderDocuments);
 

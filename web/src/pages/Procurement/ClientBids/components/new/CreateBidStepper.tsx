@@ -45,9 +45,22 @@ export function CreateBidStepper({
 	const StepContent = ({ step }: { step: number }) => {
 		switch (step) {
 			case 0:
-				return <AddSingleBidder />;
+				return (
+					<AddSingleBidder
+						onClientInvite={() => {
+							nextStep();
+						}}
+					/>
+				);
 			case 1:
-				return <CreateBidSingleBidder />;
+				return (
+					<CreateBidSingleBidder
+						onTenderCreate={(newBidId: number) => {
+							setBidId(newBidId);
+							nextStep();
+						}}
+					/>
+				);
 			case 2:
 				return bidId ? <AddItemsSingleBid /> : null;
 			case 3:
@@ -98,7 +111,7 @@ export function CreateBidStepper({
 				{activeStep <= 2 ? (
 					<Button
 						onClick={nextStep}
-						isDisabled={activeStep === steps.length - 1 || !bidId}
+						isDisabled={activeStep === steps.length - 1 || activeStep === 1 || !bidId}
 						variant="outline"
 						colorScheme="blackAlpha"
 					>

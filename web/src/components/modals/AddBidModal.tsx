@@ -1,27 +1,27 @@
-import React, { useCallback, useState } from 'react';
-import { Bid } from '../../models/Tender';
 import {
 	Box,
+	Button,
 	Checkbox,
+	Flex,
 	FormControl,
 	FormLabel,
 	HStack,
 	Input,
-	VStack,
 	Text,
-	useToast,
-	Button,
-	Flex
+	VStack,
+	useToast
 } from '@chakra-ui/react';
-import { Theme } from '../../Theme';
-import { FormActions } from '../FormActions';
-import { useCloseModal } from '../../hooks/useCloseModal';
-import { Controller, useForm } from 'react-hook-form';
-import { DatePicker } from '../forms/DatePicker';
-import { useAddBid } from '../../mutations/procurement/client-bids/useAddBid';
-import { devError } from '../../utils/ConsoleUtils';
-import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import emailjs from '@emailjs/browser';
+import React, { useCallback, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Theme } from '../../Theme';
+import { useCloseModal } from '../../hooks/useCloseModal';
+import { Bid } from '../../models/Tender';
+import { useAddBid } from '../../mutations/procurement/client-bids/useAddBid';
+import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
+import { devError } from '../../utils/ConsoleUtils';
+import { FormActions } from '../FormActions';
+import { DatePicker } from '../forms/DatePicker';
 
 interface BidModalProps {
 	bid?: Bid;
