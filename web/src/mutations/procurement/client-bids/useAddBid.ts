@@ -5,6 +5,7 @@ import { devError } from '../../../utils/ConsoleUtils';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
 export interface SingleTenderFormData {
+	clientUId: string | null;
 	description: string;
 	terms: string;
 	address: string;

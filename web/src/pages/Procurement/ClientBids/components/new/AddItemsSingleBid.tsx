@@ -16,8 +16,8 @@ export function AddItemsSingleBid({ bidId, onItemsAdded }: AddItemsProps) {
 	return (
 		<Box>
 			<Heading size={'md'}>Add Items</Heading>
-			<BidIdHeader bid={bid} />
-			<BidIdTable bid={bid} />
+			{/* <BidIdHeader bid={bid} /> */}
+			{/* <BidIdTable bid={bid} /> */}
 		</Box>
 	);
 }

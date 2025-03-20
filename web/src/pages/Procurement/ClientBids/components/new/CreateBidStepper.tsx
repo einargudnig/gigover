@@ -18,6 +18,7 @@ import { CreateBidSingleBidder } from './CreateBidSingleBidder';
 import { PublishSingleBid } from './PublishSingleBid';
 
 const steps = [
+	{ title: 'Invite client', description: 'Invite client' },
 	{ title: 'Create bid', description: 'Create bid' },
 	{ title: 'Add items', description: 'Add items' },
 	{ title: 'Publish bid', description: 'Publish bid' },
@@ -57,7 +58,7 @@ export function CreateBidStepper({
 			case 1:
 				return (
 					<CreateBidSingleBidder
-						clientUid={clientUid}
+						clientUId={clientUid}
 						onBidCreate={(newBidId: number) => {
 							setBidId(newBidId);
 							nextStep();

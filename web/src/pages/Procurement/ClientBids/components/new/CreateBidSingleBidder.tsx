@@ -21,25 +21,25 @@ import { devError } from '../../../../../utils/ConsoleUtils';
 import { useQueryClient } from 'react-query';
 
 interface CreateBidSingleBidderProps {
-	clientUid: string | null;
+	clientUId: string | null;
 	onBidCreate: (bidId: number) => void;
 }
 
-export function CreateBidSingleBidder({ clientUid, onBidCreate }: CreateBidSingleBidderProps) {
+export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingleBidderProps) {
 	const [isChecked, setIsChecked] = useState<number>(0);
 
 	const queryClient = useQueryClient();
 	const toast = useToast();
 
 	const { mutate, isLoading } = useAddBid({
-		onSuccess: (tenderId) => {
+		onSuccess: (bidId) => {
 			// Here you get the tender ID as a number
-			console.log('Created tender with ID:', tenderId);
-			onBidCreate(tenderId);
-			queryClient.refetchQueries(ApiService.userTenders);
+			console.log('Created tender for a single client with ID:', bidId);
+			onBidCreate(bidId);
+			queryClient.refetchQueries(ApiService.getBids);
 		},
 		onError: (error) => {
-			devError('Error creating tender:', error);
+			devError('Error creating tender for a single client:', error);
 			toast({
 				title: 'Error creating tender',
 				description: 'Could not create tender. Please try again.',
@@ -73,10 +73,10 @@ export function CreateBidSingleBidder({ clientUid, onBidCreate }: CreateBidSingl
 
 	// Form submission
 	const onSubmit = handleSubmit((formData) => {
-		console.log('Client UId:', clientUid);
+		console.log('Client UId:', clientUId);
 		console.log('Form data:', formData);
 		const tenderData = {
-			clientUid,
+			clientUId,
 			description: formData.description,
 			terms: formData.terms,
 			address: formData.address,
