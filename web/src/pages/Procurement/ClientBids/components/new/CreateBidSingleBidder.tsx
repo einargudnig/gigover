@@ -7,6 +7,7 @@ import {
 	FormLabel,
 	HStack,
 	Input,
+	Text,
 	useToast
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -87,7 +88,7 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 	return (
 		<Box>
 			<form onSubmit={onSubmit}>
-				<FormControl id={'description'}>
+				<FormControl id={'description'} isInvalid={!!errors.description}>
 					<FormLabel>Description</FormLabel>
 					<Input
 						required={true}
@@ -97,9 +98,13 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 						placeholder={'Enter a description'}
 						borderColor={'gray.300'}
 					/>
+
+					{errors.description && (
+						<Text color="red.500">{errors.description.message}</Text>
+					)}
 				</FormControl>
 				<Box mb={4} />
-				<FormControl id={'terms'}>
+				<FormControl id={'terms'} isInvalid={!!errors.terms}>
 					<FormLabel>Terms</FormLabel>
 					<Input
 						required={true}
@@ -109,8 +114,10 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 						placeholder={'Enter terms'}
 						borderColor={'gray.300'}
 					/>
+
+					{errors.terms && <Text color="red.500">{errors.terms.message}</Text>}
 				</FormControl>
-				<FormControl id={'address'}>
+				<FormControl id={'address'} isInvalid={!!errors.address}>
 					<FormLabel>Address</FormLabel>
 					<Input
 						required={true}
@@ -120,6 +127,8 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 						placeholder={'Enter an address'}
 						borderColor={'gray.300'}
 					/>
+
+					{errors.address && <Text color="red.500">{errors.address.message}</Text>}
 				</FormControl>
 				<Box mb={4} />
 				<FormControl id={'delivery'}>
@@ -132,7 +141,7 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 					/>
 				</FormControl>
 				<Box mb={4} />
-				<FormControl id={'finishDate'}>
+				<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
 					<FormLabel>Bid valid through</FormLabel>
 					<Controller
 						name="finishDate"
@@ -156,6 +165,8 @@ export function CreateBidSingleBidder({ onBidCreate }: CreateBidSingleBidderProp
 							</HStack>
 						)}
 					/>
+
+					{errors.finishDate && <Text color="red.500">{errors.finishDate.message}</Text>}
 				</FormControl>
 				<Box mb={4} />
 				<FormControl>
