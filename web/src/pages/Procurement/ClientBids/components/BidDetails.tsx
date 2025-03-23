@@ -4,8 +4,7 @@ import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid } from '../../../../models/Tender';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
-import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { BidHeaderActions, BidIdHeader } from './BidIdHeader';
+import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
 
 export const BidDetails = (): JSX.Element => {
@@ -13,10 +12,6 @@ export const BidDetails = (): JSX.Element => {
 
 	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
-
-	const finishDateStatus = handleFinishDate(bid?.finishDate);
-
-	const clientBidStatus = bid?.status;
 
 	return (
 		<>
@@ -29,7 +24,6 @@ export const BidDetails = (): JSX.Element => {
 					<Flex direction={'column'}>
 						<BidIdHeader bid={bid} />
 						<BidIdTable bid={bid} />
-						<BidHeaderActions bid={bid!} />
 					</Flex>
 				</div>
 			)}
