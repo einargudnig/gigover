@@ -74,7 +74,14 @@ export function CreateBidStepper({
 					/>
 				) : null;
 			case 3:
-				return bidId ? <PublishSingleBid bidId={bidId} /> : null;
+				return bidId ? (
+					<PublishSingleBid
+						bidId={bidId}
+						onPublishBid={() => {
+							setShowCreateBid(false);
+						}}
+					/>
+				) : null;
 			default:
 				return null;
 		}

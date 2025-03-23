@@ -1,5 +1,6 @@
 import { Box, Grid, GridItem, HStack, Text, VStack } from '@chakra-ui/react';
 import { Bid } from '../../../../../models/Tender';
+import { formatDateWithoutTime } from '../../../../../utils/StringUtils';
 
 export function BidInfo({ bid }: { bid: Bid }) {
 	const status = () => {
@@ -9,6 +10,9 @@ export function BidInfo({ bid }: { bid: Bid }) {
 	const handleDelivery = () => {
 		return bid.delivery;
 	};
+
+	const time = bid?.finishDate;
+	const date = new Date(time!);
 
 	return (
 		<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
@@ -57,9 +61,7 @@ export function BidInfo({ bid }: { bid: Bid }) {
 										<Text fontWeight={'bold'} fontSize={'xl'}>
 											Close Date:
 										</Text>
-										{/* <Text fontSize={'lg'}>
-											{formatDateWithoutTime(bid.finishDate)}
-										</Text> */}
+										<Text fontSize={'lg'}>{formatDateWithoutTime(date)}</Text>
 									</HStack>
 								</VStack>
 							</HStack>
