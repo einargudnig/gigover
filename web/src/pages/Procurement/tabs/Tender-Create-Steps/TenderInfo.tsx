@@ -6,16 +6,16 @@ import {
 	Table,
 	Tbody,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tooltip,
 	Tr,
-	Text,
 	VStack
 } from '@chakra-ui/react';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { TenderItem } from '../../../../models/Tender';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export function TenderInfo({ tender }) {
 	const time = tender?.finishDate;

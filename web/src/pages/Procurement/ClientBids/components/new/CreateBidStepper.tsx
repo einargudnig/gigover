@@ -21,8 +21,7 @@ const steps = [
 	{ title: 'Invite client', description: 'Invite client' },
 	{ title: 'Create bid', description: 'Create bid' },
 	{ title: 'Add items', description: 'Add items' },
-	{ title: 'Publish bid', description: 'Publish bid' },
-	{ title: 'Add bidder', description: 'Add bidders' }
+	{ title: 'Publish bid', description: 'Publish bid' }
 ];
 
 export function CreateBidStepper({
@@ -32,7 +31,6 @@ export function CreateBidStepper({
 }) {
 	const [clientUid, setClientUid] = useState<string | null>(null);
 	const [bidId, setBidId] = useState<number | null>(null);
-	console.log('bidId', bidId);
 	const [activeStep, setActiveStep] = useState(0);
 
 	const nextStep = () => {
@@ -76,7 +74,7 @@ export function CreateBidStepper({
 					/>
 				) : null;
 			case 3:
-				return bidId ? <PublishSingleBid /> : null;
+				return bidId ? <PublishSingleBid bidId={bidId} /> : null;
 			default:
 				return null;
 		}
