@@ -142,13 +142,25 @@ function BidLayout({ children }) {
 				</Box>
 
 				<Box>
-					<Button
-						variant="outline"
-						colorScheme="black"
-						onClick={() => setShowCreateBid(true)}
-					>
-						Create bid
-					</Button>
+					<Flex>
+						{showCreateBid && (
+							<Button
+								variant={'link'}
+								colorScheme={'gray'}
+								mr={4}
+								onClick={() => setShowCreateBid(false)}
+							>
+								Bid list
+							</Button>
+						)}
+						<Button
+							variant="outline"
+							colorScheme="black"
+							onClick={() => setShowCreateBid(true)}
+						>
+							Create bid
+						</Button>
+					</Flex>
 				</Box>
 			</Flex>
 			{showCreateBid ? <CreateBidStepper setShowCreateBid={setShowCreateBid} /> : children}

@@ -15,7 +15,6 @@ import {
 	Tr
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
@@ -29,15 +28,14 @@ import { useEditBidItem } from '../../../../mutations/procurement/client-bids/us
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const BidIdTable = ({ bid }): JSX.Element => {
-	const { bidId } = useParams();
-
+	const bidId = bid?.bidId;
 	const clientBidStatus = bid?.status;
 
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 	const bidItems = bid?.items;
 
 	const defaultData: BidItem = {
-		bidId: Number(bidId),
+		bidId,
 		nr: '0',
 		description: 'Description',
 		volume: 0,
@@ -51,7 +49,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	const [editingItem, setEditingItem] = useState<BidItem | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [formData, setFormData] = useState<BidItem>({
-		bidId: Number(bidId),
+		bidId,
 		description: 'Description',
 		nr: '0',
 		volume: 0,
@@ -60,7 +58,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	});
 	// eslint-disable-next-line
 	const [updateFormData, setUpdateFormData] = useState<BidItem>({
-		bidId: Number(bidId),
+		bidId,
 		description: 'Description',
 		nr: '0',
 		volume: 0,
@@ -110,7 +108,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
-			bidId: Number(bidId),
+			bidId,
 			nr: formData.nr,
 			description: formData.description,
 			volume: formData.volume,
@@ -283,13 +281,15 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 												aria-label={'Update item'}
 												isLoading={isUpdateLoading}
 												onClick={() => handleUpdate(item)}
+												variant={'outline'}
+												colorScheme={'black'}
 											>
 												Update
 											</Button>
 											<Button
 												onClick={() => {
 													setFormData({
-														bidId: Number(bidId),
+														bidId,
 														description: '',
 														nr: '0',
 														volume: 0,
@@ -310,6 +310,8 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 												isDisabled={
 													clientBidStatus === 1 || finishDateStatus
 												}
+												variant={'outline'}
+												colorScheme={'black'}
 											>
 												<Edit size={20} />
 											</Button>
@@ -324,7 +326,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 
 													setDialogOpen(false);
 													setFormData({
-														bidId: Number(bidId),
+														bidId,
 														description: '',
 														nr: '0',
 														volume: 0,
@@ -337,13 +339,14 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 												<Button
 													aria-label={'Delete item'}
 													colorScheme={'red'}
+													variant={'outline'}
 													isLoading={isDeleteLoading}
 													onClick={() => setDialogOpen(true)}
 													isDisabled={
 														clientBidStatus === 1 || finishDateStatus
 													}
 												>
-													<TrashIcon color={'white'} size={20} />
+													<TrashIcon color={'red'} size={20} />
 												</Button>
 											</ConfirmDialog>
 										</HStack>
@@ -430,7 +433,11 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 											</FormControl>
 										</Td>
 										<Td width={'20%'}>
-											<Button onClick={handleAdd}>
+											<Button
+												onClick={handleAdd}
+												variant={'outline'}
+												colorScheme={'black'}
+											>
 												{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
 											</Button>
 										</Td>

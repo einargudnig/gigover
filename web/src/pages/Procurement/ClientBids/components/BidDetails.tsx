@@ -83,6 +83,8 @@ export const BidDetails = (): JSX.Element => {
 									{clientBidStatus === 0 ? (
 										<HStack>
 											<Button
+												variant={'outline'}
+												colorScheme={'black'}
 												onClick={() =>
 													setModalContext({
 														editBid: { bid: bid }
@@ -116,9 +118,10 @@ export const BidDetails = (): JSX.Element => {
 													<Button
 														aria-label={'Delete'}
 														colorScheme={'red'}
+														variant={'outline'}
 														isLoading={isLoadingDelete}
 														leftIcon={
-															<TrashIcon color={'white'} size={20} />
+															<TrashIcon color={'red'} size={20} />
 														}
 														onClick={() => {
 															setDialogOpen(true);
@@ -140,18 +143,6 @@ export const BidDetails = (): JSX.Element => {
 							)}
 						</Flex>
 						<BidIdTable bid={bid} />
-						<Box marginTop={12}>
-							{/* <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-								<GridItem colSpan={2}>
-									<BidIdText />
-								</GridItem>
-								<GridItem colSpan={1}>
-									<Flex alignItems={'center'}>
-										<Button>Upload files</Button>
-									</Flex>
-								</GridItem>
-							</Grid> */}
-						</Box>
 						<Flex justifyContent={'flex-end'} alignItems={'center'} marginTop={'4'}>
 							{!finishDateStatus ? (
 								<>

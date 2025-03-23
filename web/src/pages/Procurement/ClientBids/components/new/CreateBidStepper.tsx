@@ -32,6 +32,7 @@ export function CreateBidStepper({
 }) {
 	const [clientUid, setClientUid] = useState<string | null>(null);
 	const [bidId, setBidId] = useState<number | null>(null);
+	console.log('bidId', bidId);
 	const [activeStep, setActiveStep] = useState(0);
 
 	const nextStep = () => {
