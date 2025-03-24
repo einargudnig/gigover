@@ -58,10 +58,6 @@ export function BidItemList({ bid }: { bid: Bid }) {
 								</HStack>
 							</Tooltip>
 						</Th>
-
-						<Th width={'20%'}>
-							<Text>Actions</Text>
-						</Th>
 					</Tr>
 				</Thead>
 				<Tbody>

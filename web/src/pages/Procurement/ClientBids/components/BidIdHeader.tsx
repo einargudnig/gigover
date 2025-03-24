@@ -6,8 +6,6 @@ import {
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
-	Grid,
-	GridItem,
 	HStack,
 	Input,
 	Text,
@@ -15,12 +13,15 @@ import {
 	useToast
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
+import { DatePicker } from '../../../../components/forms/DatePicker';
+import { CalendarIcon } from '../../../../components/icons/Calendar';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { Bid } from '../../../../models/Tender';
 import { useDeleteBid } from '../../../../mutations/procurement/client-bids/useDeleteBid';
+import { useEditBid } from '../../../../mutations/procurement/client-bids/useEditBid';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
@@ -28,7 +29,15 @@ export const BidIdHeader = ({ bid }): JSX.Element => {
 	const [isEditing, setIsEditing] = useState(false);
 
 	return (
-		<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
+		<Box
+			marginTop={3}
+			p={4}
+			border={'1px'}
+			borderColor={'gray.500'}
+			rounded={'md'}
+			position="relative"
+			minHeight="220px"
+		>
 			{isEditing ? (
 				<EditBidForm bid={bid} setIsEditing={setIsEditing} />
 			) : (
@@ -46,15 +55,7 @@ function EditBidForm({
 	bid: Bid;
 	setIsEditing: (isEditing: boolean) => void;
 }) {
-	const [formData, setFormData] = useState({
-		description: bid.description || '',
-		terms: bid.terms || '',
-		address: bid.address || '',
-		delivery: bid.delivery || false,
-		notes: bid.notes || '',
-		clientEmail: bid.clientEmail || '',
-		finishDate: bid.finishDate ? new Date(bid.finishDate) : new Date()
-	});
+	const { mutateAsync: editBidAsync, isLoading } = useEditBid();
 
 	// Form setup
 	const {
@@ -68,7 +69,9 @@ function EditBidForm({
 			terms: bid.terms || '',
 			finishDate: bid.finishDate || 0,
 			delivery: bid.delivery || 0,
-			address: bid.address || ''
+			address: bid.address || '',
+			notes: bid.notes || '',
+			clientEmail: bid.clientEmail
 		},
 		mode: 'onBlur'
 	});
@@ -79,42 +82,24 @@ function EditBidForm({
 		setIsChecked(e.target.checked ? 1 : 0);
 	};
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value, type } = e.target;
-		if (type === 'checkbox') {
-			setFormData({
-				...formData,
-				[name]: (e.target as HTMLInputElement).checked
-			});
-		} else {
-			setFormData({
-				...formData,
-				[name]: value
-			});
-		}
-	};
-
-	const handleDateChange = (date: Date) => {
-		setFormData({
-			...formData,
-			finishDate: date
-		});
-	};
+	const currentDate = new Date();
 
 	// Form submission
-	const onSubmit = handleSubmit((formData) => {
+	const onSubmit = handleSubmit(async (formData) => {
 		const tenderData = {
-			tenderId: bid.bidId,
+			bidId: bid.bidId,
 			description: formData.description,
 			terms: formData.terms,
 			finishDate: formData.finishDate,
 			delivery: isChecked,
 			address: formData.address,
 			notes: formData.notes,
-			status: bid.status || 0
+			status: bid.status || 0,
+			clientUId: bid.clientUId,
+			clientEmail: formData.clientEmail
 		};
 
-		// modifyTender(tenderData);
+		await editBidAsync(tenderData);
 		setIsEditing(false);
 	});
 
@@ -126,7 +111,6 @@ function EditBidForm({
 						<FormControl id={'description'} isInvalid={!!errors.description}>
 							<FormLabel>Description</FormLabel>
 							<Input
-								required={true}
 								{...register('description', {
 									required: 'Procurement description is required'
 								})}
@@ -138,10 +122,7 @@ function EditBidForm({
 						<FormControl id={'terms'} isInvalid={!!errors.terms}>
 							<FormLabel>Terms</FormLabel>
 							<Input
-								required={true}
-								{...register('terms', {
-									required: 'Terms are required'
-								})}
+								{...register('terms')}
 								borderColor={'gray.300'}
 								borderRadius={'md'}
 							/>
@@ -162,15 +143,30 @@ function EditBidForm({
 
 						<FormControl id={'finishDate'} isInvalid={!!errors.finishDate}>
 							<FormLabel>Close Date</FormLabel>
-							<Input
-								type="date"
-								{...register('finishDate', {
-									required: 'Close date is required'
-								})}
-								value={formData.finishDate.toISOString().split('T')[0]}
-								onChange={(e) => handleDateChange(new Date(e.target.value))}
-								borderColor={'gray.300'}
-								borderRadius={'md'}
+							<Controller
+								name="finishDate"
+								control={control}
+								rules={{ required: 'Finish date is required' }}
+								render={({ field }) => (
+									<HStack>
+										<DatePicker
+											selected={field.value ? new Date(field.value) : null}
+											onChange={(date: Date | null) => {
+												if (date) {
+													// Ensure we're setting the full timestamp
+													field.onChange(date.getTime());
+												} else {
+													field.onChange(null);
+												}
+											}}
+											onBlur={field.onBlur}
+											minDate={currentDate}
+											dateFormat="dd/MM/yyyy"
+											required={true}
+										/>
+										<CalendarIcon color={'black'} />
+									</HStack>
+								)}
 							/>
 							<FormErrorMessage>{errors.finishDate?.message}</FormErrorMessage>
 						</FormControl>
@@ -179,23 +175,12 @@ function EditBidForm({
 					<VStack width={'45%'}>
 						<FormControl id={'status'} isInvalid={!!errors.status}>
 							<FormLabel>Status</FormLabel>
-							<Text fontSize={'lg'}>
-								{bid.status === 0 ? (
-									<Text color={'gray'}>Unpublished</Text>
-								) : bid.status === 1 ? (
-									<Text>Published</Text>
-								) : bid.status === 2 ? (
-									<Text fontSize={'lg'} color={'red'}>
-										Rejected
-									</Text>
-								) : bid.status === 3 ? (
-									<Text fontSize={'lg'} color={'green'}>
-										Accepted
-									</Text>
-								) : (
-									'Unknown'
-								)}
-							</Text>
+							<Input
+								value={bid?.status === 1 ? 'Published' : 'Not published'}
+								isReadOnly
+								_disabled={{ opacity: 1, cursor: 'default' }}
+								disabled
+							/>
 						</FormControl>
 						<FormControl id={'delivery'} isInvalid={!!errors.delivery}>
 							<FormLabel>Delivery</FormLabel>
@@ -212,8 +197,6 @@ function EditBidForm({
 							<FormLabel>Notes</FormLabel>
 							<Input
 								{...register('notes')}
-								value={formData.notes}
-								onChange={handleChange}
 								borderColor={'gray.300'}
 								borderRadius={'md'}
 							/>
@@ -225,22 +208,25 @@ function EditBidForm({
 								{...register('clientEmail', {
 									required: 'Client email is required'
 								})}
-								value={formData.clientEmail}
-								onChange={handleChange}
-								type="email"
+								disabled
+								width={'65%'}
 								borderColor={'gray.300'}
 								borderRadius={'md'}
-								disabled
 							/>
 							<FormErrorMessage>{errors.clientEmail?.message}</FormErrorMessage>
 						</FormControl>
 					</VStack>
 
-					<Flex position="absolute" bottom="0" right="4">
-						<Button variant={'outline'} colorScheme={'black'} mr={3} type="submit">
+					<Box position="absolute" bottom="0" right="4">
+						<Button
+							variant={'outline'}
+							colorScheme={'black'}
+							type="submit"
+							isLoading={isLoading}
+						>
 							Save Changes
 						</Button>
-					</Flex>
+					</Box>
 				</Flex>
 			</form>
 		</Box>
@@ -248,102 +234,104 @@ function EditBidForm({
 }
 
 function BidInfo({ bid }: { bid: Bid }) {
-	const handleDelivery = bid?.delivery ? 'Yes' : 'No';
 	const time = bid?.finishDate;
 	const date = new Date(time!);
 
-	const status = () => {
-		if (bid?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (bid?.status === 1) {
-			return <Text>Published</Text>;
-		} else if (bid?.status === 2) {
-			return (
-				<Text fontSize={'lg'} color={'red'}>
-					Rejected
-				</Text>
-			);
-		} else if (bid?.status === 3) {
-			return (
-				<Text fontSize={'lg'} color={'green'}>
-					Accepted
-				</Text>
-			);
-		}
-		return 'Unknown';
-	};
 	return (
-		<Grid templateColumns="repeat(4, 1fr)" gap={4}>
-			<GridItem colSpan={2}>
-				<Box>
-					<VStack>
-						<VStack mb={'4'}>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Description:
-								</Text>
-								<Text fontSize={'lg'}>{bid.description}</Text>
-							</HStack>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Terms:
-								</Text>
-								<Text fontSize={'lg'}>{bid.terms}</Text>
-							</HStack>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Status:
-								</Text>
-								<Text fontSize={'lg'}>{status()}</Text>
-							</HStack>
-						</VStack>
+		<Box width="100%" position="relative">
+			<Flex justifyContent={'space-around'} paddingTop={'10px'}>
+				<VStack width={'45%'}>
+					<FormControl>
+						<FormLabel>Description</FormLabel>
+						<Input
+							value={bid.description}
+							isReadOnly
+							_disabled={{ opacity: 1, cursor: 'default' }}
+							disabled
+							borderColor={'gray.300'}
+							borderRadius={'md'}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormLabel>Terms</FormLabel>
+						<Input
+							value={bid.terms}
+							isReadOnly
+							_disabled={{ opacity: 1, cursor: 'default' }}
+							disabled
+							borderColor={'gray.300'}
+							borderRadius={'md'}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormLabel>Address</FormLabel>
+						<Input
+							value={bid.address}
+							isReadOnly
+							_disabled={{ opacity: 1, cursor: 'default' }}
+							disabled
+							borderColor={'gray.300'}
+							borderRadius={'md'}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormLabel>Close Date</FormLabel>
+						<HStack>
+							<Input
+								value={formatDateWithoutTime(date)}
+								isReadOnly
+								_disabled={{ opacity: 1, cursor: 'default' }}
+								disabled
+								borderColor={'gray.300'}
+								borderRadius={'md'}
+							/>
+							<CalendarIcon color={'black'} />
+						</HStack>
+					</FormControl>
+				</VStack>
 
-						<HStack mb={'4'}>
-							<VStack mr={'3'}>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Address:
-									</Text>
-									<Text fontSize={'lg'}>{bid.address}</Text>
-								</HStack>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Delivery:
-									</Text>
-									<Text fontSize={'lg'}>{handleDelivery}</Text>
-								</HStack>
-							</VStack>
-							<VStack ml={'3'}>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Close Date:
-									</Text>
-									<Text fontSize={'lg'}>{formatDateWithoutTime(date)}</Text>
-								</HStack>
-							</VStack>
-						</HStack>
-					</VStack>
-				</Box>
-			</GridItem>
-			<GridItem colSpan={2}>
-				<Box marginRight={'6'}>
-					<VStack ml={'3'}>
-						<HStack ml={'3'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Notes:
-							</Text>
-							<Text fontSize={'lg'}>{bid.notes}</Text>
-						</HStack>
-						<HStack ml={'3'}>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Client email:
-							</Text>
-							<Text fontSize={'lg'}>{bid.clientEmail}</Text>
-						</HStack>
-					</VStack>
-				</Box>
-			</GridItem>
-		</Grid>
+				<VStack width={'45%'}>
+					<FormControl>
+						<FormLabel>Status</FormLabel>
+						<Input
+							value={'Not published'}
+							isReadOnly
+							_disabled={{ opacity: 1, cursor: 'default' }}
+							disabled
+							borderColor={'gray.300'}
+							borderRadius={'md'}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormLabel>Delivery</FormLabel>
+						<Checkbox isChecked={bid.delivery === 1} isDisabled={true} />
+					</FormControl>
+					<FormControl>
+						<FormLabel>Notes</FormLabel>
+						<Input
+							value={bid.notes}
+							isReadOnly
+							_disabled={{ opacity: 1, cursor: 'default' }}
+							disabled
+							borderColor={'gray.300'}
+							borderRadius={'md'}
+						/>
+					</FormControl>
+					<FormControl>
+						<FormLabel>Client email</FormLabel>
+						<Input
+							value={bid.clientEmail}
+							isReadOnly
+							_disabled={{ opacity: 1, cursor: 'default' }}
+							disabled
+							width={'65%'}
+							borderColor={'gray.300'}
+							borderRadius={'md'}
+						/>
+					</FormControl>
+				</VStack>
+			</Flex>
+		</Box>
 	);
 }
 
