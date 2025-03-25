@@ -127,7 +127,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route path={':bidId'} element={<BidDetails />} />
 			</Route>
 
-			{/* Answsers to the bids that you created */}
+			{/* Answers to the bids that you created */}
 			<Route path={'bid-responses'} element={<BidResponsesOutlet />}>
 				<Route index element={<BidResponsesList />} />
 				<Route path={':bidId'} element={<BidResponseDetails />} />
