@@ -65,14 +65,7 @@ export function CreateBidStepper({
 					/>
 				);
 			case 2:
-				return bidId ? (
-					<AddItemsSingleBid
-						bidId={bidId}
-						onItemsAdded={() => {
-							nextStep();
-						}}
-					/>
-				) : null;
+				return bidId ? <AddItemsSingleBid bidId={bidId} /> : null;
 			case 3:
 				return bidId ? (
 					<PublishSingleBid

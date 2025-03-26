@@ -1,5 +1,6 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid } from '../../../../models/Tender';
@@ -11,7 +12,7 @@ import { BidItemList } from './new/BidItemList';
 
 export const BidDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
-
+	const navigate = useNavigate();
 	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
 
@@ -24,7 +25,15 @@ export const BidDetails = (): JSX.Element => {
 					<LoadingSpinner />
 				</Center>
 			) : (
-				<Box>
+				<Box p={4}>
+					<Button
+						onClick={() => navigate(-1)}
+						variant={'link'}
+						colorScheme={'gray'}
+						fontSize={'lg'}
+					>
+						<ArrowBackIcon />
+					</Button>
 					{isBidPublished ? <PublishedBid bid={bid} /> : <UnpublishedBid bid={bid!} />}
 				</Box>
 			)}

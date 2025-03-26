@@ -1,5 +1,7 @@
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
 	Box,
+	Button,
 	Divider,
 	Flex,
 	HStack,
@@ -16,7 +18,7 @@ import {
 	VStack,
 	useToast
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { EmptyState } from '../../../../components/empty/EmptyState';
@@ -31,7 +33,7 @@ import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 
 export const TenderOfferAnswer = (): JSX.Element => {
 	const { offerId } = useParams();
-
+	const navigate = useNavigate();
 	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
 
 	const offer = offerData?.offer;
@@ -41,6 +43,14 @@ export const TenderOfferAnswer = (): JSX.Element => {
 
 	return (
 		<Box p={4}>
+			<Button
+				onClick={() => navigate(-1)}
+				variant={'link'}
+				colorScheme={'gray'}
+				fontSize={'lg'}
+			>
+				<ArrowBackIcon />
+			</Button>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />

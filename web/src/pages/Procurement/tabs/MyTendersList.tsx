@@ -1,22 +1,12 @@
-import {
-	Box,
-	Center,
-	Flex,
-	Grid,
-	GridItem,
-	HStack,
-	Heading,
-	Text,
-	Tooltip
-} from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text, Tooltip } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { NoProcurementFound } from '../../../components/empty/NoProcurementFound';
 import { Tender } from '../../../models/Tender';
 import { useUserTenders } from '../../../queries/procurement/useUserTenders';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { ProcurementListSkeleton } from '../ProcurementListSkeleton';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -82,9 +72,7 @@ export function MyTendersList() {
 				<Heading size={'md'}>Tenders that you have created</Heading>
 			</Flex>
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<>
 					{!data || data.length <= 0 ? (

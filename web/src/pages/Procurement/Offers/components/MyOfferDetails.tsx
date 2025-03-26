@@ -1,5 +1,6 @@
-import { Box, Flex } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { FileUploadType } from '../../../../models/FileUploadType';
@@ -13,7 +14,7 @@ import { DropZone } from './UploadCertifications';
 export const MyOffersDetails = (): JSX.Element => {
 	const { tenderId, offerId } = useParams();
 	const { data: offerData, isLoading, isFetching } = useGetOfferByOfferId(Number(offerId));
-
+	const navigate = useNavigate();
 	const offerDocuments = offerData?.offer?.documents;
 	console.log('offerDocuments', offerDocuments);
 
@@ -27,6 +28,14 @@ export const MyOffersDetails = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
+					<Button
+						onClick={() => navigate(-1)}
+						variant={'link'}
+						colorScheme={'gray'}
+						fontSize={'lg'}
+					>
+						<ArrowBackIcon />
+					</Button>
 					{isUnpublished ? (
 						<>
 							<UnpublishedOffer tenderId={Number(tenderId)} />

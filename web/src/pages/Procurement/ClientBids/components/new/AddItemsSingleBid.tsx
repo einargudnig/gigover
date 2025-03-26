@@ -7,14 +7,11 @@ import { BidIdTable } from '../BidIdTable';
 
 interface AddItemsProps {
 	bidId: number;
-	onItemsAdded: () => void;
 }
 
-export function AddItemsSingleBid({ bidId, onItemsAdded }: AddItemsProps) {
-	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
+export function AddItemsSingleBid({ bidId }: AddItemsProps) {
+	const { data, isLoading } = useGetBidById(Number(bidId));
 	const bid: Bid | undefined = data?.bid;
-
-	console.log('bid', bid);
 
 	return (
 		<Box>

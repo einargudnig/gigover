@@ -1,5 +1,6 @@
-import { Box, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
@@ -34,11 +35,20 @@ export const TenderOfferDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
+	const navigate = useNavigate();
 
 	const noOffers = offer?.length === 0;
 
 	return (
 		<Box p={4}>
+			<Button
+				onClick={() => navigate(-1)}
+				variant={'link'}
+				colorScheme={'gray'}
+				fontSize={'lg'}
+			>
+				<ArrowBackIcon />
+			</Button>
 			<Container>
 				{isLoading ? (
 					<Center>

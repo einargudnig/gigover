@@ -3,9 +3,9 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { ProcurementListSkeleton } from '../../ProcurementListSkeleton';
 import { CreateBidStepper } from './new/CreateBidStepper';
 
 const PropertyCardStyled = styled(CardBaseLink)`
@@ -31,9 +31,7 @@ export const BidsList = (): JSX.Element => {
 	return (
 		<Box p={4}>
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<BidLayout>
 					{!data || data.length === 0 ? (

@@ -1,10 +1,9 @@
 import { Box, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
-import { Center } from '../../../components/Center';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Offer } from '../../../models/Tender';
 import { useGetUserOffers } from '../../../queries/procurement/useGetUserOffers';
+import { ProcurementListSkeleton } from '../ProcurementListSkeleton';
 
 const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -35,9 +34,7 @@ export const MyOffersList = (): JSX.Element => {
 			</Flex>
 
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<>
 					{noOffers ? (

@@ -2,10 +2,10 @@ import { Box, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/rea
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid } from '../../../../models/Tender';
 import { useGetClientBids } from '../../../../queries/procurement/client-bids/useGetClientBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { ProcurementListSkeleton } from '../../ProcurementListSkeleton';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
@@ -53,9 +53,7 @@ export const BidResponsesList = (): JSX.Element => {
 			</Flex>
 
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<>
 					{!data || data.length === 0 ? (

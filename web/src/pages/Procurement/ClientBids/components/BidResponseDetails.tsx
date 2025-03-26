@@ -1,5 +1,7 @@
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
 	Box,
+	Button,
 	Flex,
 	HStack,
 	Spacer,
@@ -14,7 +16,7 @@ import {
 	VStack,
 	useToast
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
@@ -34,6 +36,7 @@ export const BidResponseDetails = (): JSX.Element => {
 	const { mutateAsync: acceptBid, isLoading: isAcceptBidLoading } = useAcceptBid();
 	const { mutateAsync: rejectBid, isLoading: isRejectBidLoading } = useRejectBid();
 	const { data, isLoading } = useClientGetBidById(Number(bidId)); // TODO add error handling
+	const navigate = useNavigate();
 
 	const bid: Bid | undefined = data?.bid;
 	const bidItems = bid?.items;
@@ -135,6 +138,14 @@ export const BidResponseDetails = (): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
+						<Button
+							onClick={() => navigate(-1)}
+							variant={'link'}
+							colorScheme={'gray'}
+							fontSize={'lg'}
+						>
+							<ArrowBackIcon />
+						</Button>
 						<Flex justify={'space-between'}>
 							<Box w={'45%'}>
 								<VStack>
