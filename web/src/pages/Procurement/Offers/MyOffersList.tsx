@@ -11,6 +11,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 	max-width: 100%;
 	height: auto;
 	margin-bottom: 8px;
+	margin-top: 8px;
 
 	h3 {
 		margin-bottom: 16px;

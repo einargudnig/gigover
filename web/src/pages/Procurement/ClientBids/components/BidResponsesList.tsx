@@ -1,4 +1,4 @@
-import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
@@ -11,6 +11,8 @@ const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
+	margin-top: 8px;
+	margin-bottom: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -64,7 +66,11 @@ export const BidResponsesList = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>Bids that you have answered</Heading>
+			</Flex>
+
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -128,6 +134,6 @@ export const BidResponsesList = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

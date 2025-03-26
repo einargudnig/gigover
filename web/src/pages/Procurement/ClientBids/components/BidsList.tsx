@@ -13,6 +13,8 @@ const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
+	margin-top: 8px;
+	margin-bottom: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -45,7 +47,7 @@ export const BidsList = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -127,7 +129,7 @@ export const BidsList = (): JSX.Element => {
 					)}
 				</BidLayout>
 			)}
-		</>
+		</Box>
 	);
 };
 

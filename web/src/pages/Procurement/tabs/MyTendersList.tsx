@@ -1,28 +1,29 @@
 import {
+	Box,
 	Center,
 	Flex,
 	Grid,
 	GridItem,
 	HStack,
-	Tooltip,
+	Heading,
 	Text,
-	Box,
-	Heading
+	Tooltip
 } from '@chakra-ui/react';
+import styled from 'styled-components';
+import { CardBaseLink } from '../../../components/CardBase';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { NoProcurementFound } from '../../../components/empty/NoProcurementFound';
 import { Tender } from '../../../models/Tender';
+import { useUserTenders } from '../../../queries/procurement/useUserTenders';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { useUserTenders } from '../../../queries/procurement/useUserTenders';
-import styled from 'styled-components';
-import { CardBaseLink } from '../../../components/CardBase';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
 	margin-bottom: 8px;
+	margin-top: 8px;
 
 	h3 {
 		margin-bottom: 16px;

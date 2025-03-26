@@ -124,7 +124,7 @@ export const BidResponseDetails = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
@@ -303,6 +303,8 @@ export const BidResponseDetails = (): JSX.Element => {
 							buttonText="Accept bid"
 							status="accept"
 							statusText="Accept"
+							buttonHoverColor="green.500"
+							buttonHoverTextColor="white"
 						/>
 					</Box>
 					<Spacer />
@@ -313,11 +315,13 @@ export const BidResponseDetails = (): JSX.Element => {
 							buttonText="Reject bid"
 							status="reject"
 							statusText="Reject"
+							buttonHoverColor="red.500"
+							buttonHoverTextColor="white"
 						/>
 					</Box>
 				</Flex>
 			)}
-		</>
+		</Box>
 	);
 };
 

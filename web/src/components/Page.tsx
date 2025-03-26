@@ -281,7 +281,7 @@ export const Page = ({
 									<Avatar size={'sm'} name={user.email} src={user.avatar} />
 								</MenuButton>
 								<MenuList>
-									<MenuGroup title="Profile">
+									<MenuGroup title={user.name}>
 										{/* <NavLink to={'/settings'}>
 											<MenuItem>Settings</MenuItem>
 										</NavLink> */}

@@ -19,8 +19,6 @@ import { Settings } from './pages/Settings';
 import { TimeTracker } from './pages/TimeTracker/TimeTracker';
 import { Users } from './pages/Users';
 // Procurement/Tenders/Offers
-import { BidResponsesOutlet } from './pages/Procurement/ClientBids/BidResponsesOutlet';
-import { BidsOutlet } from './pages/Procurement/ClientBids/BidsOutlet';
 import { BidDetails } from './pages/Procurement/ClientBids/components/BidDetails';
 import { BidResponseDetails } from './pages/Procurement/ClientBids/components/BidResponseDetails';
 import { BidResponsesList } from './pages/Procurement/ClientBids/components/BidResponsesList';
@@ -122,16 +120,12 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'my-offer/:tenderId/:offerId'} element={<MyOffersDetails />} />
 
 			{/*  Creating bid without inviting many bidders*/}
-			<Route path={'bids'} element={<BidsOutlet />}>
-				<Route index element={<BidsList />} />
-				<Route path={':bidId'} element={<BidDetails />} />
-			</Route>
+			<Route path={'bids'} element={<BidsList />} />
+			<Route path={'bids/:bidId'} element={<BidDetails />} />
 
 			{/* Answers to the bids that you created */}
-			<Route path={'bid-responses'} element={<BidResponsesOutlet />}>
-				<Route index element={<BidResponsesList />} />
-				<Route path={':bidId'} element={<BidResponseDetails />} />
-			</Route>
+			<Route path={'bid-responses'} element={<BidResponsesList />} />
+			<Route path={'bid-responses/:bidId'} element={<BidResponseDetails />} />
 		</Route>
 
 		{/* 🛠️ Settings 🛠️ */}
