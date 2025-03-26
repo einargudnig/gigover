@@ -27,28 +27,9 @@ const PropertyCardStyled = styled(CardBaseLink)`
 export const BidResponsesList = (): JSX.Element => {
 	const { data, isLoading } = useGetClientBids();
 
-	const shouldDeliver = (bid: Bid) => {
-		if (bid.delivery === 1) {
-			return (
-				<HStack>
-					<Text as={'b'}>Deliver to:</Text>
-					<Text color={'black'}>{bid.address}</Text>
-				</HStack>
-			);
-		}
-		return (
-			<HStack>
-				<Text as={'b'}>Address:</Text>
-				<Text color={'black'}>{bid.address}</Text>
-			</HStack>
-		);
-	};
-
 	const status = (bid: Bid) => {
-		if (bid?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (bid?.status === 1) {
-			return <Text>Published</Text>;
+		if (bid?.status === 0 || bid?.status === 1) {
+			return <Text color={'gray'}>Unanswered</Text>;
 		} else if (bid?.status === 2) {
 			return (
 				<Text fontSize={'lg'} color={'red'}>
@@ -112,7 +93,10 @@ export const BidResponsesList = (): JSX.Element => {
 													</HStack>
 												</GridItem>
 												<GridItem colSpan={2}>
-													{shouldDeliver(bid)}
+													<HStack>
+														<Text color={'black'}>Deliver:</Text>
+														<Text>{bid.delivery ? 'Yes' : 'No'}</Text>
+													</HStack>
 													<HStack>
 														<Text color={'black'}>Close Date: </Text>
 														<Text>

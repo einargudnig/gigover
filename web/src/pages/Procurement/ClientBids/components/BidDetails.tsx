@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
@@ -34,16 +34,21 @@ export const BidDetails = (): JSX.Element => {
 
 function PublishedBid({ bid }: { bid: Bid }) {
 	return (
-		<Box>
+		<Box p={4}>
 			<BidInfo bid={bid!} />
 			<BidItemList bid={bid!} />
+			<Flex justify={'end'} pr={2} pt={2}>
+				<Text color={'gray.500'}>
+					Bid has been published, waiting answer from: {bid.clientEmail}
+				</Text>
+			</Flex>
 		</Box>
 	);
 }
 
 function UnpublishedBid({ bid }: { bid: Bid }) {
 	return (
-		<Box>
+		<Box p={4}>
 			<BidIdHeader bid={bid} />
 			<BidIdTable bid={bid} />
 		</Box>

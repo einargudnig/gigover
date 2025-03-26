@@ -1,8 +1,6 @@
 import {
 	Box,
 	Flex,
-	Grid,
-	GridItem,
 	HStack,
 	Spacer,
 	Table,
@@ -103,10 +101,8 @@ export const BidResponseDetails = (): JSX.Element => {
 	};
 
 	const status = () => {
-		if (bid?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (bid?.status === 1) {
-			return <Text>Published</Text>;
+		if (bid?.status === 0 || bid?.status === 1) {
+			return <Text color={'gray'}>Unanswered</Text>;
 		} else if (bid?.status === 2) {
 			return (
 				<Text fontSize={'lg'} color={'red'}>
@@ -139,88 +135,75 @@ export const BidResponseDetails = (): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<Grid templateColumns="repeat(4, 1fr)" gap={4}>
-							<GridItem colSpan={2}>
-								<Box>
-									<VStack>
-										<VStack mb={'4'}>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Description:
-												</Text>
-												<Text fontSize={'lg'}>{bid?.description}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Terms:
-												</Text>
-												<Text fontSize={'lg'}>{bid?.terms}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Status:
-												</Text>
-												<Text fontSize={'lg'}>{status()}</Text>
-											</HStack>
-										</VStack>
+						<Flex justify={'space-between'}>
+							<Box w={'45%'}>
+								<VStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Description:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.description}</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Terms:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.terms}</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Status:
+										</Text>
+										<Text fontSize={'lg'}>{status()}</Text>
+									</HStack>
 
-										<HStack mb={'4'}>
-											<VStack mr={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Address:
-													</Text>
-													<Text fontSize={'lg'}>{bid?.address}</Text>
-												</HStack>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Delivery:
-													</Text>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Address:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.address}</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Delivery:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.delivery ? 'Yes' : 'No'}</Text>
+									</HStack>
+								</VStack>
+							</Box>
 
-													<Text fontSize={'lg'}>delivery</Text>
-												</HStack>
-											</VStack>
-											<VStack ml={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Close Date:
-													</Text>
-													<Text fontSize={'lg'}>
-														{formatDateWithoutTime(
-															new Date(bid!.finishDate)
-														)}
-													</Text>
-												</HStack>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Notes:
-													</Text>
-													<Text fontSize={'lg'}>{bid?.notes}</Text>
-												</HStack>
-											</VStack>
-										</HStack>
-									</VStack>
-								</Box>
-							</GridItem>
-							<GridItem colSpan={2}>
-								<Box marginRight={'6'}>
-									<VStack ml={'3'}>
-										<HStack ml={'3'}>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Email:
-											</Text>
-											<Text fontSize={'lg'}>{bid?.bidderEmail}</Text>
-										</HStack>
-										<HStack ml={'3'}>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Name:
-											</Text>
-											<Text fontSize={'lg'}>{bid?.bidderName}</Text>
-										</HStack>
-									</VStack>
-								</Box>
-							</GridItem>
-						</Grid>
+							<Box w={'45%'}>
+								<VStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Close Date:
+										</Text>
+										<Text fontSize={'lg'}>
+											{formatDateWithoutTime(new Date(bid!.finishDate))}
+										</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Email:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.bidderEmail}</Text>
+									</HStack>
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Name:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.bidderName}</Text>
+									</HStack>
+
+									<HStack>
+										<Text fontWeight={'bold'} fontSize={'xl'}>
+											Notes:
+										</Text>
+										<Text fontSize={'lg'}>{bid?.notes}</Text>
+									</HStack>
+								</VStack>
+							</Box>
+						</Flex>
 					</Box>
 
 					<Table variant={'striped'}>
@@ -293,7 +276,9 @@ export const BidResponseDetails = (): JSX.Element => {
 			)}
 
 			{hasBidAnswer ? (
-				<HandledText status={bid?.status} />
+				<Flex justify={'end'}>
+					<HandledText status={bid?.status} />
+				</Flex>
 			) : (
 				<Flex>
 					<Box>

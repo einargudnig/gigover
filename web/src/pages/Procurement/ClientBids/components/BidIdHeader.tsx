@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { DatePicker } from '../../../../components/forms/DatePicker';
 import { CalendarIcon } from '../../../../components/icons/Calendar';
@@ -27,6 +27,8 @@ import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export const BidIdHeader = ({ bid }): JSX.Element => {
 	const [isEditing, setIsEditing] = useState(false);
+	const location = useLocation();
+	const isBidPage = location.pathname === '/tender/bids';
 
 	return (
 		<Box
@@ -43,7 +45,7 @@ export const BidIdHeader = ({ bid }): JSX.Element => {
 			) : (
 				<BidInfo bid={bid} />
 			)}
-			{!isEditing && <BidHeaderActions bid={bid} setIsEditing={setIsEditing} />}
+			{!isEditing && !isBidPage && <BidHeaderActions bid={bid} setIsEditing={setIsEditing} />}
 		</Box>
 	);
 };

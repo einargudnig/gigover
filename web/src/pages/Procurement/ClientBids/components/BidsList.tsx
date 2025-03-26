@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Bid } from '../../../../models/Tender';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { CreateBidStepper } from './new/CreateBidStepper';
@@ -29,23 +28,6 @@ const PropertyCardStyled = styled(CardBaseLink)`
 export const BidsList = (): JSX.Element => {
 	const { data, isLoading } = useGetBids();
 
-	const shouldDeliver = (bid: Bid) => {
-		if (bid.delivery === 1) {
-			return (
-				<HStack>
-					<Text as={'b'}>Deliver to:</Text>
-					<Text color={'black'}>{bid.address}</Text>
-				</HStack>
-			);
-		}
-		return (
-			<HStack>
-				<Text as={'b'}>Address:</Text>
-				<Text color={'black'}>{bid.address}</Text>
-			</HStack>
-		);
-	};
-
 	return (
 		<Box p={4}>
 			{isLoading ? (
@@ -64,14 +46,18 @@ export const BidsList = (): JSX.Element => {
 							.reverse()
 							.map((bid) => {
 								let bidStatus;
+								let bidColor;
 								if (bid.status === 0) {
 									bidStatus = 'Unpublished';
+									bidColor = 'gray';
 								} else if (bid.status === 1) {
 									bidStatus = 'Published';
 								} else if (bid.status === 2) {
 									bidStatus = 'Rejected';
+									bidColor = 'red';
 								} else if (bid.status === 3) {
 									bidStatus = 'Accepted';
+									bidColor = 'green';
 								} else {
 									bidStatus = 'Unknown';
 								}
@@ -92,23 +78,26 @@ export const BidsList = (): JSX.Element => {
 														<Text>{bid.terms}</Text>
 													</HStack>
 													<HStack>
-														<Text color={'black'}>Address: </Text>
-														<Text>{bid.address}</Text>
-													</HStack>
-												</GridItem>
-												<GridItem colSpan={2}>
-													<HStack>
-														<Text color={'black'}>Status:</Text>
-														<Text>{bidStatus}</Text>
-													</HStack>
-													{shouldDeliver(bid)}
-													<HStack>
 														<Text color={'black'}>Close date: </Text>
 														<Text>
 															{formatDateWithoutTime(
 																new Date(bid.finishDate)
 															)}
 														</Text>
+													</HStack>
+												</GridItem>
+												<GridItem colSpan={2}>
+													<HStack>
+														<Text color={'black'}>Status:</Text>
+														<Text color={bidColor}>{bidStatus}</Text>
+													</HStack>
+													<HStack>
+														<Text color={'black'}>Delivery: </Text>
+														<Text>{bid.delivery ? 'Yes' : 'No'}</Text>
+													</HStack>
+													<HStack>
+														<Text color={'black'}>Address: </Text>
+														<Text>{bid.address}</Text>
 													</HStack>
 												</GridItem>
 												<GridItem colSpan={2}>
