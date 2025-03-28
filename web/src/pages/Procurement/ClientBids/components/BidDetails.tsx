@@ -6,6 +6,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid } from '../../../../models/Tender';
 import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
 import { BidInfo } from './new/BidInfo';
@@ -70,6 +71,8 @@ function HandleBid({ bid }: { bid: Bid }) {
 	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
 	const toast = useToast();
 
+	const finishDateStatus = handleFinishDate(bid?.finishDate);
+
 	const handlePublish = async () => {
 		const publishBidBody = {
 			bidId: Number(bid.bidId)
@@ -112,6 +115,7 @@ function HandleBid({ bid }: { bid: Bid }) {
 				variant={'outline'}
 				onClick={handlePublish}
 				isLoading={isPublishLoading}
+				isDisabled={finishDateStatus}
 			>
 				Publish Bid
 			</Button>
