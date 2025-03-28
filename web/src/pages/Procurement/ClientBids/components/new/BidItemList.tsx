@@ -9,6 +9,14 @@ export function BidItemList({ bid }: { bid: Bid }) {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 	};
 
+	const totalCost = () => {
+		let total = 0;
+		bidItems?.forEach((item) => {
+			total = total + (item.cost ?? 0) * (item.volume ?? 0);
+		});
+		return total;
+	};
+
 	return (
 		<Box>
 			<Table variant={'striped'}>
@@ -70,6 +78,16 @@ export function BidItemList({ bid }: { bid: Bid }) {
 							<Td width={'20%'}>{formatNumber(item.cost!)}</Td>
 						</Tr>
 					))}
+					<Tr>
+						<Td></Td>
+						<Td></Td>
+						<Td></Td>
+						<Td>
+							<strong>Total cost:</strong>
+						</Td>
+						<Td>{formatNumber(totalCost())}</Td>
+						<Td></Td>
+					</Tr>
 				</Tbody>
 			</Table>
 		</Box>
