@@ -122,6 +122,14 @@ export const BidResponseDetails = (): JSX.Element => {
 		return 'Unknown';
 	};
 
+	const totalCost = () => {
+		let total = 0;
+		bidItems?.forEach((item) => {
+			total = total + (item.cost ?? 0) * (item.volume ?? 0);
+		});
+		return total;
+	};
+
 	return (
 		<Box p={4}>
 			{isLoading ? (
@@ -281,6 +289,16 @@ export const BidResponseDetails = (): JSX.Element => {
 									</Tr>
 								))}
 							</>
+							<Tr>
+								<Td></Td>
+								<Td></Td>
+								<Td></Td>
+								<Td>
+									<strong>Total cost:</strong>
+								</Td>
+								<Td>{formatNumber(totalCost())}</Td>
+								<Td></Td>
+							</Tr>
 						</Tbody>
 					</Table>
 				</>
