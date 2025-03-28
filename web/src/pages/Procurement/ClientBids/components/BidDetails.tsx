@@ -63,6 +63,7 @@ function UnpublishedBid({ bid }: { bid: Bid }) {
 			<BidIdHeader bid={bid} />
 			<BidIdTable bid={bid} />
 			<HandleBid bid={bid} />
+			{/* TODO: Upload file */}
 		</Box>
 	);
 }

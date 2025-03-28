@@ -51,6 +51,7 @@ export function PublishSingleBid({
 							Publish
 						</Button>
 					</Flex>
+					{/* TODO: Upload file */}
 				</>
 			)}
 		</Box>
