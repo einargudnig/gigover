@@ -1,9 +1,7 @@
 import {
 	Box,
 	Button,
-	Divider,
 	Flex,
-	HStack,
 	Spacer,
 	Table,
 	Tbody,
@@ -12,8 +10,7 @@ import {
 	Th,
 	Thead,
 	Tooltip,
-	Tr,
-	VStack
+	Tr
 } from '@chakra-ui/react';
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
@@ -21,11 +18,11 @@ import ReactToPdf from 'react-to-pdf';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { GetOfferItem } from '../../../../models/Tender';
+import { Info } from '../../components/Info';
 
 export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { offerId } = useParams();
-	const offerIdNumber = Number(offerId); // cast it here instead of in multiple places
 	const offer = offerData?.offer;
 	const offerItems: GetOfferItem[] | undefined = offerData?.offer.items;
 
@@ -41,28 +38,6 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 			total += item.cost * item.volume;
 		});
 		return total;
-	};
-
-	// function that takes the status and returns published if the status is 1, accepted if status is 2 and rejected if status is 3
-	const status = () => {
-		if (offer?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (offer?.status === 1) {
-			return <Text>Published</Text>;
-		} else if (offer?.status === 2) {
-			return (
-				<Text fontSize={'lg'} color={'green'}>
-					Accepted
-				</Text>
-			);
-		} else if (offer?.status === 3) {
-			return (
-				<Text fontSize={'lg'} color={'red'}>
-					Rejected
-				</Text>
-			);
-		}
-		return 'Unknown';
 	};
 
 	const answeredText = () => {
@@ -83,6 +58,24 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 		}
 	};
 
+	const status = () => {
+		if (offer?.status === 1) {
+			return 'Published';
+		} else if (offer?.status === 2) {
+			return 'Accepted';
+		} else if (offer?.status === 3) {
+			return 'Rejected';
+		}
+		return 'Unknown';
+	};
+
+	const offerFields = [
+		{ label: 'Bidder email', value: offer?.email },
+		{ label: 'Bidder name', value: offer?.name },
+		{ label: 'Offer status', value: status() },
+		{ label: 'Notes', value: offer?.notes }
+	];
+
 	return (
 		<>
 			{isOfferLoading ? (
@@ -92,53 +85,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 			) : (
 				<>
 					<div ref={ref} id={'my-offer'}>
-						<div style={{ width: '100%' }}>
-							<Flex direction={'column'}>
-								<Box
-									mb={2}
-									p={4}
-									borderRadius={8}
-									borderColor={'#EFEFEE'}
-									bg={'#EFEFEE'}
-									w="100%"
-								>
-									<VStack pos={'relative'}>
-										<VStack mb={'4'}>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Bidder Email:
-												</Text>
-												<Text fontSize={'lg'}>{offer?.email}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Bidder Name:
-												</Text>
-												<Text fontSize={'lg'}>{offer?.name}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Offer status:
-												</Text>
-												<Text fontSize={'lg'}>{status()}</Text>
-											</HStack>
-										</VStack>
-
-										<HStack mb={'4'}>
-											<VStack mr={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Notes:
-													</Text>
-													<Text fontSize={'lg'}>{offer?.notes}</Text>
-												</HStack>
-											</VStack>
-										</HStack>
-										<Divider />
-									</VStack>
-								</Box>
-							</Flex>
-						</div>
+						<Info fields={offerFields} />
 
 						<Table>
 							<Thead>
@@ -211,7 +158,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 						<Box>
 							<ReactToPdf
 								targetRef={ref}
-								filename={`Gigover-published-offer-${offerIdNumber}.pdf`}
+								filename={`Gigover-published-offer-${Number(offerId)}.pdf`}
 								options={
 									ref.current && {
 										orientation: 'landscape',

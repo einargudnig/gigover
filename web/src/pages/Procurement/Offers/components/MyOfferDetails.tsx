@@ -5,7 +5,9 @@ import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { FileUploadType } from '../../../../models/FileUploadType';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
+import { Info } from '../../components/Info';
 import { PublishOfferButton } from './PublishOfferButton';
 import { PublishedOffer } from './PublishedOffer';
 import { UnpublishedOffer } from './UnpublishedOffer';
@@ -14,11 +16,22 @@ import { DropZone } from './UploadCertifications';
 export const MyOffersDetails = (): JSX.Element => {
 	const { tenderId, offerId } = useParams();
 	const { data: offerData, isLoading, isFetching } = useGetOfferByOfferId(Number(offerId));
+	const { data: tenderData } = useGetTenderById(Number(tenderId));
+	const tender = tenderData?.tender;
 	const navigate = useNavigate();
 	const offerDocuments = offerData?.offer?.documents;
 	console.log('offerDocuments', offerDocuments);
 
 	const isUnpublished = offerData?.offer?.status === 0;
+
+	const tenderFields = [
+		{ label: 'Description', value: tender?.description },
+		{ label: 'Terms', value: tender?.terms },
+		{ label: 'Address', value: tender?.address },
+		{ label: 'Delivery', value: tender?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: tender?.finishDate },
+		{ label: 'Phone', value: tender?.phoneNumber }
+	];
 
 	return (
 		<Box p={4}>
@@ -38,6 +51,7 @@ export const MyOffersDetails = (): JSX.Element => {
 					</Button>
 					{isUnpublished ? (
 						<>
+							<Info fields={tenderFields} />
 							<UnpublishedOffer tenderId={Number(tenderId)} />
 							<Flex justifyContent={'flex-end'}>
 								<PublishOfferButton

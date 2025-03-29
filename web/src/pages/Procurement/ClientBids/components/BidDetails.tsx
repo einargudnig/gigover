@@ -7,9 +7,9 @@ import { Bid } from '../../../../models/Tender';
 import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { Info } from '../../components/Info';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
-import { BidInfo } from './new/BidInfo';
 import { BidItemList } from './new/BidItemList';
 
 export const BidDetails = (): JSX.Element => {
@@ -44,9 +44,21 @@ export const BidDetails = (): JSX.Element => {
 };
 
 function PublishedBid({ bid }: { bid: Bid }) {
+	const bidFields = [
+		{ label: 'Description', value: bid.description },
+		{ label: 'Terms', value: bid.terms },
+		{ label: 'Status', value: bid.status === 1 ? 'Published' : 'Not Published' },
+		{ label: 'Address', value: bid.address },
+		{ label: 'Delivery', value: bid.delivery ? 'Yes' : 'No' },
+		{ label: 'Valid Through', value: bid.finishDate },
+		{ label: 'Client Email', value: bid.clientEmail },
+		{ label: 'Notes', value: bid.notes }
+	];
+
 	return (
 		<Box p={4}>
-			<BidInfo bid={bid!} />
+			{/* <BidInfo bid={bid!} /> */}
+			<Info fields={bidFields} />
 			<BidItemList bid={bid!} />
 			<Flex justify={'end'} pr={2} pt={2}>
 				<Text color={'gray.500'}>

@@ -3,7 +3,7 @@ import { LoadingSpinner } from '../../../../../components/LoadingSpinner';
 import { Bid } from '../../../../../models/Tender';
 import { usePublishBid } from '../../../../../mutations/procurement/client-bids/usePublishBid';
 import { useGetBidById } from '../../../../../queries/procurement/client-bids/useGetBidById';
-import { BidInfo } from './BidInfo';
+import { Info } from '../../../components/Info';
 import { BidItemList } from './BidItemList';
 
 export function PublishSingleBid({
@@ -33,13 +33,24 @@ export function PublishSingleBid({
 		onPublishBid();
 	};
 
+	const bidFields = [
+		{ label: 'Description', value: bid?.description },
+		{ label: 'Terms', value: bid?.terms },
+		{ label: 'Status', value: bid?.status === 1 ? 'Published' : 'Not Published' },
+		{ label: 'Address', value: bid?.address },
+		{ label: 'Delivery', value: bid?.delivery ? 'Yes' : 'No' },
+		{ label: 'Valid Through', value: bid?.finishDate },
+		{ label: 'Client Email', value: bid?.clientEmail },
+		{ label: 'Notes', value: bid?.notes }
+	];
+
 	return (
 		<Box>
 			{isLoading ? (
 				<LoadingSpinner />
 			) : (
 				<>
-					<BidInfo bid={bid!} />
+					<Info fields={bidFields} />
 					<BidItemList bid={bid!} />
 					<Flex marginTop={5} justifyContent={'end'}>
 						<Button

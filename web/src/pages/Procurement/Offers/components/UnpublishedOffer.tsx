@@ -2,7 +2,6 @@ import { Box } from '@chakra-ui/react';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
-import { OfferInformation } from './OfferInformation';
 import { TenderTable } from './OfferTable';
 
 export function UnpublishedOffer({ tenderId }) {
@@ -20,7 +19,7 @@ export function UnpublishedOffer({ tenderId }) {
 				</Center>
 			) : (
 				<>
-					<OfferInformation tender={tender} />
+					{/* <OfferInformation tender={tender} /> */}
 					<TenderTable tenderItems={tenderItems} />
 				</>
 			)}

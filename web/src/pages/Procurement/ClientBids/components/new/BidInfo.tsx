@@ -4,7 +4,7 @@ import { formatDateWithoutTime } from '../../../../../utils/StringUtils';
 
 export function BidInfo({ bid }: { bid: Bid }) {
 	const status = () => {
-		return bid.status === 1 ? 'Open' : 'Closed';
+		return bid.status === 1 ? 'Published' : 'Not Published';
 	};
 
 	const handleDelivery = () => {

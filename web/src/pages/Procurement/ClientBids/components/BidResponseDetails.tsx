@@ -13,7 +13,6 @@ import {
 	Thead,
 	Tooltip,
 	Tr,
-	VStack,
 	useToast
 } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,9 +23,8 @@ import { Bid } from '../../../../models/Tender';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
 import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { Info } from '../../components/Info';
 import { AnswerBid } from './AnswerBid';
-
 interface HandledTextProps {
 	status?: number;
 }
@@ -105,19 +103,11 @@ export const BidResponseDetails = (): JSX.Element => {
 
 	const status = () => {
 		if (bid?.status === 0 || bid?.status === 1) {
-			return <Text color={'gray'}>Unanswered</Text>;
+			return 'Unanswered';
 		} else if (bid?.status === 2) {
-			return (
-				<Text fontSize={'lg'} color={'red'}>
-					Rejected
-				</Text>
-			);
+			return 'Rejected';
 		} else if (bid?.status === 3) {
-			return (
-				<Text fontSize={'lg'} color={'green'}>
-					Accepted
-				</Text>
-			);
+			return 'Accepted';
 		}
 		return 'Unknown';
 	};
@@ -129,6 +119,18 @@ export const BidResponseDetails = (): JSX.Element => {
 		});
 		return total;
 	};
+
+	const bidFields = [
+		{ label: 'Description', value: bid?.description },
+		{ label: 'Terms', value: bid?.terms },
+		{ label: 'Status', value: status() },
+		{ label: 'Address', value: bid?.address },
+		{ label: 'Delivery', value: bid?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: bid?.finishDate },
+		{ label: 'Email', value: bid?.bidderEmail },
+		{ label: 'Name', value: bid?.bidderName },
+		{ label: 'Notes', value: bid?.notes }
+	];
 
 	return (
 		<Box p={4}>
@@ -154,75 +156,7 @@ export const BidResponseDetails = (): JSX.Element => {
 						>
 							<ArrowBackIcon />
 						</Button>
-						<Flex justify={'space-between'}>
-							<Box w={'45%'}>
-								<VStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Description:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.description}</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Terms:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.terms}</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Status:
-										</Text>
-										<Text fontSize={'lg'}>{status()}</Text>
-									</HStack>
-
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Address:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.address}</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Delivery:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.delivery ? 'Yes' : 'No'}</Text>
-									</HStack>
-								</VStack>
-							</Box>
-
-							<Box w={'45%'}>
-								<VStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Close Date:
-										</Text>
-										<Text fontSize={'lg'}>
-											{formatDateWithoutTime(new Date(bid!.finishDate))}
-										</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Email:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.bidderEmail}</Text>
-									</HStack>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Name:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.bidderName}</Text>
-									</HStack>
-
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Notes:
-										</Text>
-										<Text fontSize={'lg'}>{bid?.notes}</Text>
-									</HStack>
-								</VStack>
-							</Box>
-						</Flex>
+						<Info fields={bidFields} />
 					</Box>
 
 					<Table variant={'striped'}>

@@ -5,7 +5,6 @@ import {
 	GridItem,
 	HStack,
 	Heading,
-	Spacer,
 	Table,
 	Tbody,
 	Td,
@@ -22,11 +21,11 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { FileUploadType } from '../../../models/FileUploadType';
-import { Bidder, Tender, TenderDocument, TenderItem } from '../../../models/Tender';
+import { Bidder, TenderDocument, TenderItem } from '../../../models/Tender';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { DropZone } from '../Offers/components/UploadTenderDocuments';
+import { Info } from '../components/Info';
 import { InviteButton } from './InviteButton';
 
 export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
@@ -58,6 +57,16 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
+	const tenderFields = [
+		{ label: 'Description', value: tender?.description },
+		{ label: 'Terms', value: tender?.terms },
+		{ label: 'Status', value: tender?.status === 1 ? 'Published' : 'Not published' },
+		{ label: 'Address', value: tender?.address },
+		{ label: 'Delivery', value: tender?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: tender?.finishDate },
+		{ label: 'Phone', value: tender?.phoneNumber }
+	];
+
 	return (
 		<Box p={6}>
 			<Box p={2}>
@@ -72,7 +81,7 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 					>
 						<Grid templateColumns="repeat(2, 1fr)" gap={4}>
 							<GridItem colSpan={1}>
-								<TenderInfo tender={tender} />
+								<Info fields={tenderFields} />
 							</GridItem>
 							<GridItem colSpan={1}>
 								<Bidders
@@ -103,78 +112,6 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 		</Box>
 	);
 };
-
-function TenderInfo({ tender }: { tender: Tender }) {
-	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
-	const time = tender?.finishDate;
-	const date = new Date(time!);
-
-	return (
-		<Box>
-			<VStack>
-				<VStack mb={'4'}>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Description:
-						</Text>
-						<Text fontSize={'lg'}>{tender?.description}</Text>
-					</HStack>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Terms:
-						</Text>
-						<Text fontSize={'lg'}>{tender?.terms}</Text>
-					</HStack>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Status:
-						</Text>
-						<Text fontSize={'lg'}>
-							{tender?.status === 1 ? 'Published' : 'Not published'}
-						</Text>
-					</HStack>
-				</VStack>
-
-				<HStack mb={'4'}>
-					<VStack mr={'3'}>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Address:
-							</Text>
-							<Text fontSize={'lg'}>{tender?.address}</Text>
-						</HStack>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Delivery:
-							</Text>
-							<Text fontSize={'lg'}>{handleDelivery}</Text>
-						</HStack>
-					</VStack>
-					<Spacer />
-					<VStack ml={'3'}>
-						<Tooltip
-							hasArrow
-							label="You will not be able to answer offer until this date has passed"
-						>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Close Date:
-								</Text>
-								<Text fontSize={'lg'}>{formatDateWithoutTime(date)}*</Text>
-							</HStack>
-						</Tooltip>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Phone:
-							</Text>
-							<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
-						</HStack>
-					</VStack>
-				</HStack>
-			</VStack>
-		</Box>
-	);
-}
 
 function Bidders({
 	uniqueBidders,

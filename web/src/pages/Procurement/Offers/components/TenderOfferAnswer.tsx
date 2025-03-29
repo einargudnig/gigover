@@ -2,9 +2,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
-	Divider,
 	Flex,
-	HStack,
 	Heading,
 	Spacer,
 	Table,
@@ -22,15 +20,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { EmptyState } from '../../../../components/empty/EmptyState';
-import { GetOffer, GetOfferItem, TenderDocument } from '../../../../models/Tender';
+import { GetOfferItem, TenderDocument } from '../../../../models/Tender';
 import { useAcceptOffer } from '../../../../mutations/procurement/useAcceptOffer';
 import { useRejectOffer } from '../../../../mutations/procurement/useRejectOffer';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
+import { Info } from '../../components/Info';
 import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
-
 export const TenderOfferAnswer = (): JSX.Element => {
 	const { offerId } = useParams();
 	const navigate = useNavigate();
@@ -40,6 +38,22 @@ export const TenderOfferAnswer = (): JSX.Element => {
 	const offerItems = offerData?.offer.items;
 
 	const offerDocuments = offerData?.offer.documents;
+
+	const status = () => {
+		if (offer?.status === 0) {
+			return 'Unpublished';
+		} else if (offer?.status === 1) {
+			return 'Published';
+		}
+		return 'Unknown';
+	};
+
+	const offerFields = [
+		{ label: 'Bidder Email', value: offer?.email },
+		{ label: 'Bidder Name', value: offer?.name },
+		{ label: 'Offer status', value: status() },
+		{ label: 'Notes', value: offer?.notes }
+	];
 
 	return (
 		<Box p={4}>
@@ -57,7 +71,7 @@ export const TenderOfferAnswer = (): JSX.Element => {
 				</Center>
 			) : (
 				<Box>
-					<OfferHeader offer={offer!} />
+					<Info fields={offerFields} />
 					<OfferItems offerItems={offerItems ?? []} />
 					<HandleOfferButtons offerId={Number(offerId)} offer={offer} />
 					<OfferDocuments offerDocuments={offerDocuments ?? []} />
@@ -66,59 +80,6 @@ export const TenderOfferAnswer = (): JSX.Element => {
 		</Box>
 	);
 };
-
-function OfferHeader({ offer }: { offer: GetOffer }) {
-	// function that takes the status and returns published if the status is 1, accepted if status is 2 and rejected if status is 3
-	const status = () => {
-		if (offer?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (offer?.status === 1) {
-			return <Text>Published</Text>;
-		}
-		return 'Unknown';
-	};
-
-	return (
-		<Flex direction={'column'}>
-			<Box mb={2} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
-				<VStack pos={'relative'}>
-					<VStack mb={'4'}>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Bidder Email:
-							</Text>
-							<Text fontSize={'lg'}>{offer?.email}</Text>
-						</HStack>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Bidder Name:
-							</Text>
-							<Text fontSize={'lg'}>{offer?.name}</Text>
-						</HStack>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Offer status:
-							</Text>
-							<Text fontSize={'lg'}>{status()}</Text>
-						</HStack>
-					</VStack>
-
-					<HStack mb={'4'}>
-						<VStack mr={'3'}>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Notes:
-								</Text>
-								<Text fontSize={'lg'}>{offer?.notes}</Text>
-							</HStack>
-						</VStack>
-					</HStack>
-					<Divider />
-				</VStack>
-			</Box>
-		</Flex>
-	);
-}
 
 function OfferItems({ offerItems }: { offerItems: GetOfferItem[] }) {
 	const formatNumber = (num: number) => {
