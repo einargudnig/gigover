@@ -9,7 +9,6 @@ import {
 	Tbody,
 	Td,
 	Text,
-	Th,
 	Thead,
 	Tooltip,
 	Tr,
@@ -26,6 +25,7 @@ import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { DropZone } from '../Offers/components/UploadTenderDocuments';
 import { Info } from '../components/Info';
+import { DataTable } from '../components/Table';
 import { InviteButton } from './InviteButton';
 
 export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
@@ -67,6 +67,23 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 		{ label: 'Phone', value: tender?.phoneNumber }
 	];
 
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		}
+	];
+
 	return (
 		<Box p={6}>
 			<Box p={2}>
@@ -94,7 +111,7 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 				</Flex>
 			</Box>
 
-			{tenderItems && <TenderItemTable tenderItems={tenderItems} />}
+			{tenderItems && <DataTable columns={columns} data={tenderItems} />}
 
 			<Flex alignItems={'center'} mt={'6'}>
 				<Box>
@@ -187,64 +204,6 @@ function Bidders({
 				</VStack>
 			</VStack>
 		</Box>
-	);
-}
-
-function TenderItemTable({ tenderItems }: { tenderItems: TenderItem[] }) {
-	return (
-		<Table variant={'striped'}>
-			<Thead>
-				<Tr>
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Cost code">
-							<HStack>
-								<Text>Number</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Description of a item">
-							<HStack>
-								<Text>Description</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Volume">
-							<HStack>
-								<Text color={'black'}>Volume</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-							<HStack>
-								<Text>Unit</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-				</Tr>
-			</Thead>
-			<Tbody>
-				<>
-					{tenderItems?.map((item) => (
-						<Tr key={item.tenderItemId}>
-							<Td width={'20%'}>{item.nr}</Td>
-							<Td width={'20%'}>{item.description}</Td>
-							<Td width={'20%'}>{item.volume}</Td>
-							<Td width={'20%'}>{item.unit}</Td>
-						</Tr>
-					))}
-				</>
-			</Tbody>
-		</Table>
 	);
 }
 
