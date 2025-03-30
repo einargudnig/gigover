@@ -1,9 +1,7 @@
-import { useMutation } from 'react-query';
+import axios, { AxiosError } from 'axios';
+import { useMutation, useQueryClient } from 'react-query';
 import { BidItem } from '../../../models/Tender';
 import { ApiService } from '../../../services/ApiService';
-import { AxiosError } from 'axios';
-import axios from 'axios';
-import { useQueryClient } from 'react-query';
 
 interface ClientBidItemDeleteResponse {
 	errorText: 'OK';
@@ -21,7 +19,7 @@ export const useDeleteBidItem = () => {
 			// So that the new tender item is displayed in the list.
 			// I need to refetch the getTenderById query, since that is the one that fetches the tenderItems
 			const bidId = variables?.bidId || 0;
-			if (response.status === 200) {
+			if (response.data.errorText === 'OK' || response.status === 200) {
 				await queryClient.refetchQueries(ApiService.getBidById(bidId));
 			}
 

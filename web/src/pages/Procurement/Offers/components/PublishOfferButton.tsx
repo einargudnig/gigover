@@ -12,10 +12,10 @@ import {
 	useDisclosure,
 	useToast
 } from '@chakra-ui/react';
-import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
+import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
 
 export function PublishOfferButton({ tenderId, offerId }) {
 	const { mutateAsync: publishOffer, isLoading } = usePublishOffer();

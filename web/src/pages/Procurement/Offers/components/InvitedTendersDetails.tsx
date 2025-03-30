@@ -10,9 +10,9 @@ import { useBidderReject } from '../../../../mutations/procurement/useBidderReje
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
-import { OfferInformationHome } from './OfferInformationHome';
+import { Info } from '../../components/Info';
+import { TenderTable } from './OfferTable';
 import { OpenOffer } from './OpenOffer';
-
 type TenderIdParams = {
 	tenderId: string;
 };
@@ -22,6 +22,7 @@ export const InvitedTendersDetails = (): JSX.Element => {
 
 	const { data, isLoading } = useGetTenderById(Number(tenderId));
 	const tender: TenderWithItems | undefined = data?.tender;
+	const tenderItems = tender?.items;
 	const tenderDocuments = tender?.documents;
 	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
 	// we will store the bidder status in the localStorage.
@@ -61,6 +62,14 @@ export const InvitedTendersDetails = (): JSX.Element => {
 		navigate('/bidder-tenders', { replace: true });
 	};
 
+	const tenderFields = [
+		{ label: 'Description', value: tender?.description },
+		{ label: 'Terms', value: tender?.terms },
+		{ label: 'Address', value: tender?.address },
+		{ label: 'Delivery', value: tender?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: tender?.finishDate }
+	];
+
 	return (
 		<Box p={4}>
 			{isLoading ? (
@@ -77,7 +86,8 @@ export const InvitedTendersDetails = (): JSX.Element => {
 					>
 						<ArrowBackIcon />
 					</Button>
-					<OfferInformationHome tender={tender} />
+					<Info fields={tenderFields} />
+					<TenderTable tenderItems={tenderItems} />
 					{!finishDateStatus ? (
 						<>
 							{hasAnswered ? (

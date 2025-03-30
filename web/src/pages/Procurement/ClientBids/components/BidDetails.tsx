@@ -3,14 +3,14 @@ import { Box, Button, Flex, Text, useToast } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { Bid } from '../../../../models/Tender';
+import { Bid, BidItem } from '../../../../models/Tender';
 import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { Info } from '../../components/Info';
+import { DataTable } from '../../components/Table';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
-import { BidInfo } from './new/BidInfo';
-import { BidItemList } from './new/BidItemList';
 
 export const BidDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
@@ -44,11 +44,47 @@ export const BidDetails = (): JSX.Element => {
 };
 
 function PublishedBid({ bid }: { bid: Bid }) {
+	const bidItems = bid?.items;
+	const bidFields = [
+		{ label: 'Description', value: bid.description },
+		{ label: 'Terms', value: bid.terms },
+		{ label: 'Status', value: bid.status === 1 ? 'Published' : 'Not Published' },
+		{ label: 'Address', value: bid.address },
+		{ label: 'Delivery', value: bid.delivery ? 'Yes' : 'No' },
+		{ label: 'Valid Through', value: bid.finishDate },
+		{ label: 'Client Email', value: bid.clientEmail },
+		{ label: 'Notes', value: bid.notes }
+	];
+
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		},
+		{
+			header: 'Cost',
+			accessor: 'cost',
+			tooltip: 'Cost of single item',
+			width: '20%',
+			isNumber: true
+		}
+	];
+
 	return (
 		<Box p={4}>
-			<BidInfo bid={bid!} />
-			<BidItemList bid={bid!} />
-			<Flex justify={'end'} pr={2} pt={2}>
+			<Info fields={bidFields} />
+			<DataTable<BidItem> columns={columns} data={bidItems || []} />
+			<Flex justify={'end'} pr={2} pt={4}>
 				<Text color={'gray.500'}>
 					Bid has been published, waiting answer from: {bid.clientEmail}
 				</Text>
