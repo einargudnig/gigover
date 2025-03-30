@@ -1,10 +1,10 @@
 import { Box, Button, Flex, useToast } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../../../components/LoadingSpinner';
-import { Bid } from '../../../../../models/Tender';
+import { Bid, BidItem } from '../../../../../models/Tender';
 import { usePublishBid } from '../../../../../mutations/procurement/client-bids/usePublishBid';
 import { useGetBidById } from '../../../../../queries/procurement/client-bids/useGetBidById';
 import { Info } from '../../../components/Info';
-import { BidItemList } from './BidItemList';
+import { DataTable } from '../../../components/Table';
 
 export function PublishSingleBid({
 	bidId,
@@ -17,6 +17,7 @@ export function PublishSingleBid({
 	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
 	const toast = useToast();
 	const bid: Bid | undefined = data?.bid;
+	const bidItems: BidItem[] | undefined = bid?.items;
 
 	const handlePublish = async () => {
 		const publishBidBody = {
@@ -44,6 +45,24 @@ export function PublishSingleBid({
 		{ label: 'Notes', value: bid?.notes }
 	];
 
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		},
+		{ header: 'Cost', accessor: 'cost', tooltip: 'Cost', width: '20%', isNumber: true }
+	];
+
 	return (
 		<Box>
 			{isLoading ? (
@@ -51,7 +70,7 @@ export function PublishSingleBid({
 			) : (
 				<>
 					<Info fields={bidFields} />
-					<BidItemList bid={bid!} />
+					<DataTable columns={columns} data={bidItems ?? []} />
 					<Flex marginTop={5} justifyContent={'end'}>
 						<Button
 							variant={'outline'}

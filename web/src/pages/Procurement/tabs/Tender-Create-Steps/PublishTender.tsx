@@ -1,26 +1,12 @@
-import {
-	Box,
-	Button,
-	Flex,
-	HStack,
-	Heading,
-	Table,
-	Tbody,
-	Td,
-	Text,
-	Th,
-	Thead,
-	Tooltip,
-	Tr
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { FileUploadType } from '../../../../models/FileUploadType';
 import { TenderItem } from '../../../../models/Tender';
 import { usePublishTender } from '../../../../mutations/procurement/usePublishTender';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { OtherGigoverFile } from '../../../Files/new/components/OtherFile';
 import { DropZone } from '../../Offers/components/UploadTenderDocuments';
+import { DataTable } from '../../components/Table';
 import { TenderHead } from './TenderHead';
 
 interface PublishTenderProps {
@@ -52,6 +38,23 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 		}
 	};
 
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		}
+	];
+
 	return (
 		<Box backgroundColor={'white'} py={6} rounded={'md'}>
 			<Flex justifyContent={'center'}>
@@ -60,62 +63,7 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 
 			<Box px={10} py={4}>
 				<TenderHead tender={tender} getTenderLoading={isLoading} />
-				<Table variant={'striped'}>
-					<Thead>
-						<Tr>
-							<Th width={'20%'}>
-								<Tooltip hasArrow label="Cost code">
-									<HStack>
-										<Text>Number</Text>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Tooltip>
-							</Th>
-
-							<Th width={'20%'}>
-								<Tooltip hasArrow label="Description of a item">
-									<HStack>
-										<Text>Description</Text>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Tooltip>
-							</Th>
-
-							<Th width={'20%'}>
-								<Tooltip hasArrow label="Volume">
-									<HStack>
-										<Text color={'black'}>Volume</Text>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Tooltip>
-							</Th>
-
-							<Th width={'20%'}>
-								<Tooltip
-									hasArrow
-									label="Unit of measurement. For example: m2, kg, t"
-								>
-									<HStack>
-										<Text>Unit</Text>
-										<ImportantIcon size={20} />
-									</HStack>
-								</Tooltip>
-							</Th>
-						</Tr>
-					</Thead>
-					<Tbody>
-						<>
-							{tenderItems?.map((item) => (
-								<Tr key={item.tenderItemId}>
-									<Td width={'20%'}>{item.nr}</Td>
-									<Td width={'20%'}>{item.description}</Td>
-									<Td width={'20%'}>{item.volume}</Td>
-									<Td width={'20%'}>{item.unit}</Td>
-								</Tr>
-							))}
-						</>
-					</Tbody>
-				</Table>
+				<DataTable columns={columns} data={tenderItems || []} />
 			</Box>
 
 			<Box p={2}>
