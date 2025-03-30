@@ -80,9 +80,9 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 			isNumber: true
 		},
 		{
-			header: 'Notes/Certifications',
+			header: 'Notes/Certifications/GWP',
 			accessor: 'note',
-			tooltip: 'Notes/certifications for the items.',
+			tooltip: 'Notes/certifications/gwp for the items.',
 			width: '20%'
 		}
 	];

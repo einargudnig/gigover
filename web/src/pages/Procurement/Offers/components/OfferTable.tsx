@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
-// import { GetOfferItem } from '../../../../models/Tender';
 
 interface TenderItem {
 	description: string;
@@ -90,7 +89,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						<Th>Volume</Th>
 						{/* <Th>Product Number</Th> */}
 						<Th>Cost pr item</Th>
-						<Th>Notes/Certifications</Th>
+						<Th>Notes/Certifications/GWP</Th>
 						<Th>Action</Th>
 					</Tr>
 				</Thead>
