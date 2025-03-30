@@ -1,30 +1,16 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import {
-	Box,
-	Button,
-	Flex,
-	HStack,
-	Spacer,
-	Table,
-	Tbody,
-	Td,
-	Text,
-	Th,
-	Thead,
-	Tooltip,
-	Tr,
-	useToast
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Spacer, Text, useToast } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { Bid } from '../../../../models/Tender';
+import { Bid, BidItem } from '../../../../models/Tender';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
 import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
 import { Info } from '../../components/Info';
+import { DataTable } from '../../components/Table';
 import { AnswerBid } from './AnswerBid';
+
 interface HandledTextProps {
 	status?: number;
 }
@@ -97,10 +83,6 @@ export const BidResponseDetails = (): JSX.Element => {
 		}
 	};
 
-	const formatNumber = (num: number) => {
-		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-	};
-
 	const status = () => {
 		if (bid?.status === 0 || bid?.status === 1) {
 			return 'Unanswered';
@@ -110,14 +92,6 @@ export const BidResponseDetails = (): JSX.Element => {
 			return 'Accepted';
 		}
 		return 'Unknown';
-	};
-
-	const totalCost = () => {
-		let total = 0;
-		bidItems?.forEach((item) => {
-			total = total + (item.cost ?? 0) * (item.volume ?? 0);
-		});
-		return total;
 	};
 
 	const bidFields = [
@@ -132,6 +106,30 @@ export const BidResponseDetails = (): JSX.Element => {
 		{ label: 'Notes', value: bid?.notes }
 	];
 
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		},
+		{
+			header: 'Cost',
+			accessor: 'cost',
+			tooltip: 'Cost of single item',
+			width: '20%',
+			isNumber: true
+		}
+	];
+
 	return (
 		<Box p={4}>
 			{isLoading ? (
@@ -140,6 +138,14 @@ export const BidResponseDetails = (): JSX.Element => {
 				</Center>
 			) : (
 				<>
+					<Button
+						onClick={() => navigate(-1)}
+						variant={'link'}
+						colorScheme={'gray'}
+						fontSize={'lg'}
+					>
+						<ArrowBackIcon />
+					</Button>
 					<Box
 						mb={1}
 						p={4}
@@ -148,93 +154,11 @@ export const BidResponseDetails = (): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<Button
-							onClick={() => navigate(-1)}
-							variant={'link'}
-							colorScheme={'gray'}
-							fontSize={'lg'}
-						>
-							<ArrowBackIcon />
-						</Button>
 						<Info fields={bidFields} />
 					</Box>
-
-					<Table variant={'striped'}>
-						<Thead>
-							<Tr>
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Cost code">
-										<HStack>
-											<Text>Number</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Description of a item">
-										<HStack>
-											<Text>Description</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Volume">
-										<HStack>
-											<Text color={'black'}>Volume</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip
-										hasArrow
-										label="Unit of measurement. For example: m2, kg, t"
-									>
-										<HStack>
-											<Text>Unit</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Cost of single item">
-										<HStack>
-											<Text>Cost</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-							</Tr>
-						</Thead>
-						<Tbody>
-							<>
-								{bidItems?.map((item) => (
-									<Tr key={item.bidItemId}>
-										<Td width={'20%'}>{item.nr}</Td>
-										<Td width={'20%'}>{item.description}</Td>
-										<Td width={'20%'}>{item.volume}</Td>
-										<Td width={'20%'}>{item.unit}</Td>
-										<Td width={'20%'}>{formatNumber(item.cost!)}</Td>
-									</Tr>
-								))}
-							</>
-							<Tr>
-								<Td></Td>
-								<Td></Td>
-								<Td></Td>
-								<Td>
-									<strong>Total cost:</strong>
-								</Td>
-								<Td>{formatNumber(totalCost())}</Td>
-								<Td></Td>
-							</Tr>
-						</Tbody>
-					</Table>
+					<Box mb={1} p={4} borderRadius={8}>
+						<DataTable<BidItem> columns={columns} data={bidItems || []} />
+					</Box>
 				</>
 			)}
 
