@@ -94,7 +94,7 @@ function PublishedBid({ bid }: { bid: Bid }) {
 	return (
 		<Box p={4}>
 			<Info fields={bidFields} />
-			<DataTable<BidItem> columns={columns} data={bidItems || []} />
+			<DataTable<BidItem> columns={columns} data={bidItems || []} showTotalCost={true} />
 			<Flex justify={'end'} pr={2} pt={4}>
 				<Text color={'gray.500'}>
 					Bid has been published, waiting answer from: {bid.clientEmail}

@@ -51,39 +51,39 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 	];
 
 	const columns = [
-		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '16%' },
 		{
 			header: 'Description',
 			accessor: 'description',
 			tooltip: 'Description of a item',
-			width: '20%'
+			width: '16%'
 		},
-		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '16%' },
 		{
 			header: 'Unit',
 			accessor: 'unit',
 			tooltip: 'Unit of measurement. For example: m2, kg, t',
-			width: '20%'
+			width: '16%'
 		},
 		{
 			header: 'Cost',
 			accessor: 'cost',
 			tooltip: 'Cost of single item',
-			width: '20%',
+			width: '16%',
 			isNumber: true
 		},
 		{
 			header: 'Total cost',
 			accessor: 'totalCost',
 			tooltip: 'Total cost of the item. Volume, multiplied with cost per item',
-			width: '20%',
+			width: '16%',
 			isNumber: true
 		},
 		{
 			header: 'Notes/Certifications/GWP',
 			accessor: 'note',
 			tooltip: 'Notes/certifications/gwp for the items.',
-			width: '20%'
+			width: '16%'
 		}
 	];
 
@@ -97,7 +97,7 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 				<>
 					<div ref={ref} id={'my-offer'}>
 						<Info fields={offerFields} />
-						<DataTable columns={columns} data={offerItems || []} />
+						<DataTable columns={columns} data={offerItems || []} showTotalCost={true} />
 					</div>
 
 					<Flex alignItems={'center'} justifyContent={'center'} marginTop={'3'}>

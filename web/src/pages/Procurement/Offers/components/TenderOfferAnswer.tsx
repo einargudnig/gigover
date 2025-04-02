@@ -48,34 +48,34 @@ export const TenderOfferAnswer = (): JSX.Element => {
 			header: 'Description',
 			accessor: 'description',
 			tooltip: 'Description of a item',
-			width: '20%'
+			width: '16%'
 		},
 		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
 		{
 			header: 'Unit',
 			accessor: 'unit',
 			tooltip: 'Unit of measurement. For example: m2, kg, t',
-			width: '20%'
+			width: '16%'
 		},
 		{
 			header: 'Cost',
 			accessor: 'cost',
 			tooltip: 'Cost of single item',
-			width: '20%',
+			width: '16%',
 			isNumber: true
 		},
 		{
 			header: 'Total cost',
 			accessor: 'totalCost',
 			tooltip: 'Total cost of the item. Volume, multiplied with cost per item',
-			width: '20%',
+			width: '16%',
 			isNumber: true
 		},
 		{
 			header: 'Notes/Certifications/GWP',
 			accessor: 'note',
 			tooltip: 'Notes/certifications/gwp for the items.',
-			width: '20%'
+			width: '16%'
 		}
 	];
 
@@ -96,7 +96,11 @@ export const TenderOfferAnswer = (): JSX.Element => {
 			) : (
 				<Box>
 					<Info fields={offerFields} />
-					<DataTable<GetOfferItem> columns={columns} data={offerItems ?? []} />
+					<DataTable<GetOfferItem>
+						columns={columns}
+						data={offerItems ?? []}
+						showTotalCost={true}
+					/>
 					<HandleOfferButtons offerId={Number(offerId)} offer={offer} />
 					<OfferDocuments offerDocuments={offerDocuments ?? []} />
 				</Box>
