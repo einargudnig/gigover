@@ -17,7 +17,10 @@ export function PublishSingleBid({
 	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
 	const toast = useToast();
 	const bid: Bid | undefined = data?.bid;
-	const bidItems: BidItem[] | undefined = bid?.items;
+	const bidItems: BidItem[] | undefined = bid?.items?.map((item) => ({
+		...item,
+		totalCost: item?.cost ? item?.cost * (item?.volume || 0) : 0
+	}));
 
 	const handlePublish = async () => {
 		const publishBidBody = {
@@ -46,21 +49,28 @@ export function PublishSingleBid({
 	];
 
 	const columns = [
-		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '16%' },
 		{
 			header: 'Description',
 			accessor: 'description',
 			tooltip: 'Description of a item',
-			width: '20%'
+			width: '16%'
 		},
-		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '16%' },
 		{
 			header: 'Unit',
 			accessor: 'unit',
 			tooltip: 'Unit of measurement. For example: m2, kg, t',
-			width: '20%'
+			width: '16%'
 		},
-		{ header: 'Cost', accessor: 'cost', tooltip: 'Cost', width: '20%', isNumber: true }
+		{ header: 'Cost', accessor: 'cost', tooltip: 'Cost', width: '16%', isNumber: true },
+		{
+			header: 'Total Cost',
+			accessor: 'totalCost',
+			tooltip: 'Total cost (Cost × Volume)',
+			width: '20%',
+			isNumber: true
+		}
 	];
 
 	return (

@@ -44,25 +44,29 @@ export const BidDetails = (): JSX.Element => {
 };
 
 function PublishedBid({ bid }: { bid: Bid }) {
-	const bidItems = bid?.items;
+	const bidItems = bid?.items?.map((item) => ({
+		...item,
+		totalCost: item?.cost ? item?.cost * (item?.volume || 0) : 0
+	}));
+
 	const bidFields = [
-		{ label: 'Description', value: bid.description },
-		{ label: 'Terms', value: bid.terms },
-		{ label: 'Status', value: bid.status === 1 ? 'Published' : 'Not Published' },
-		{ label: 'Address', value: bid.address },
-		{ label: 'Delivery', value: bid.delivery ? 'Yes' : 'No' },
-		{ label: 'Valid Through', value: bid.finishDate },
-		{ label: 'Client Email', value: bid.clientEmail },
-		{ label: 'Notes', value: bid.notes }
+		{ label: 'Description', value: bid?.description },
+		{ label: 'Terms', value: bid?.terms },
+		{ label: 'Status', value: bid?.status === 1 ? 'Published' : 'Not Published' },
+		{ label: 'Address', value: bid?.address },
+		{ label: 'Delivery', value: bid?.delivery ? 'Yes' : 'No' },
+		{ label: 'Valid Through', value: bid?.finishDate },
+		{ label: 'Client Email', value: bid?.clientEmail },
+		{ label: 'Notes', value: bid?.notes }
 	];
 
 	const columns = [
-		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '16%' },
 		{
 			header: 'Description',
 			accessor: 'description',
 			tooltip: 'Description of a item',
-			width: '20%'
+			width: '16%'
 		},
 		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
 		{
@@ -75,6 +79,13 @@ function PublishedBid({ bid }: { bid: Bid }) {
 			header: 'Cost',
 			accessor: 'cost',
 			tooltip: 'Cost of single item',
+			width: '16%',
+			isNumber: true
+		},
+		{
+			header: 'Total Cost',
+			accessor: 'totalCost',
+			tooltip: 'Total cost (Cost × Volume)',
 			width: '20%',
 			isNumber: true
 		}

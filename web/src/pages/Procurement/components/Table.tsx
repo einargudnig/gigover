@@ -5,6 +5,7 @@ import {
 	Tbody,
 	Td,
 	Text,
+	Tfoot,
 	Th,
 	Thead,
 	Tooltip,
@@ -25,13 +26,15 @@ interface TableProps<T> {
 	data: T[];
 	variant?: 'simple' | 'striped' | 'unstyled';
 	emptyStateMessage?: string;
+	showTotalCost?: boolean;
 }
 
 export function DataTable<T extends object>({
 	columns,
 	data,
 	variant = 'striped',
-	emptyStateMessage = 'No data available'
+	emptyStateMessage = 'No data available',
+	showTotalCost = false
 }: TableProps<T>): JSX.Element {
 	const formatNumber = (num: number) => {
 		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -43,6 +46,18 @@ export function DataTable<T extends object>({
 		}
 		return value as string | number;
 	};
+
+	const calculateTotalCost = () => {
+		if (!showTotalCost) {
+			return null;
+		}
+		return data.reduce((sum, item) => {
+			const totalCost = (item as any).totalCost;
+			return sum + (typeof totalCost === 'number' ? totalCost : 0);
+		}, 0);
+	};
+
+	const totalCost = calculateTotalCost();
 
 	return (
 		<Box overflowX="auto" w="100%">
@@ -87,6 +102,19 @@ export function DataTable<T extends object>({
 						))
 					)}
 				</Tbody>
+				{showTotalCost && totalCost !== null && (
+					<Tfoot>
+						<Tr>
+							{columns.map((column, index) => (
+								<Td key={index} fontWeight="bold">
+									{column.accessor === 'totalCost' ? (
+										<>Total Cost: {formatNumber(totalCost)}</>
+									) : null}
+								</Td>
+							))}
+						</Tr>
+					</Tfoot>
+				)}
 			</ChakraTable>
 		</Box>
 	);

@@ -23,7 +23,12 @@ export const BidResponseDetails = (): JSX.Element => {
 	const navigate = useNavigate();
 
 	const bid: Bid | undefined = data?.bid;
-	const bidItems = bid?.items;
+	// We want to show total cost on all cost tables!
+	// TODO: make sure this comes from the API like it does in the tender offers!
+	const bidItems = bid?.items?.map((item) => ({
+		...item,
+		totalCost: item?.cost ? item?.cost * (item?.volume || 0) : 0
+	}));
 
 	const toast = useToast();
 
@@ -107,28 +112,37 @@ export const BidResponseDetails = (): JSX.Element => {
 	];
 
 	const columns = [
-		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '16%' },
 		{
 			header: 'Description',
 			accessor: 'description',
 			tooltip: 'Description of a item',
-			width: '20%'
+			width: '16%'
 		},
-		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '16%' },
 		{
 			header: 'Unit',
 			accessor: 'unit',
 			tooltip: 'Unit of measurement. For example: m2, kg, t',
-			width: '20%'
+			width: '16%'
 		},
 		{
 			header: 'Cost',
 			accessor: 'cost',
 			tooltip: 'Cost of single item',
+			width: '16%',
+			isNumber: true
+		},
+		{
+			header: 'Total Cost',
+			accessor: 'totalCost',
+			tooltip: 'Total cost (Cost × Volume)',
 			width: '20%',
 			isNumber: true
 		}
 	];
+
+	console.log('bid2', bid);
 
 	return (
 		<Box p={4}>
@@ -157,7 +171,11 @@ export const BidResponseDetails = (): JSX.Element => {
 						<Info fields={bidFields} />
 					</Box>
 					<Box mb={1} p={4} borderRadius={8}>
-						<DataTable<BidItem> columns={columns} data={bidItems || []} />
+						<DataTable<BidItem>
+							columns={columns}
+							data={bidItems || []}
+							showTotalCost={true}
+						/>
 					</Box>
 				</>
 			)}

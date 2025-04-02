@@ -28,7 +28,8 @@ export function Info({ fields }: InfoProps): JSX.Element {
 						<Tooltip hasArrow label={field.tooltip}>
 							<Text fontSize="lg">
 								{typeof field.value === 'number' &&
-								field.label.toLowerCase().includes('date')
+								(field.label.toLowerCase().includes('date') ||
+									field.label.toLowerCase().includes('through'))
 									? formatDateWithoutTime(new Date(field.value))
 									: field.value?.toString()}
 							</Text>
@@ -36,7 +37,8 @@ export function Info({ fields }: InfoProps): JSX.Element {
 					) : (
 						<Text fontSize="lg">
 							{typeof field.value === 'number' &&
-							field.label.toLowerCase().includes('date')
+							(field.label.toLowerCase().includes('date') ||
+								field.label.toLowerCase().includes('through'))
 								? formatDateWithoutTime(new Date(field.value))
 								: field.value?.toString()}
 						</Text>

@@ -22,6 +22,7 @@ export const TenderOfferAnswer = (): JSX.Element => {
 
 	const offer = offerData?.offer;
 	const offerItems = offerData?.offer.items;
+	console.log('offerItems', offerItems);
 
 	const offerDocuments = offerData?.offer.documents;
 
