@@ -188,7 +188,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 						</Th>
 
 						<Th width={'15%'}>
-							<Tooltip hasArrow label="Cost">
+							<Tooltip hasArrow label="Cost per item">
 								<HStack>
 									<Text>Cost</Text>
 									<ImportantIcon size={20} />
@@ -197,7 +197,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 						</Th>
 
 						<Th width={'15%'}>
-							<Tooltip hasArrow label="Total cost">
+							<Tooltip hasArrow label="Total cost → cost * volume">
 								<HStack>
 									<Text>Total Cost</Text>
 									<ImportantIcon size={20} />
@@ -228,7 +228,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 					<>
 						{bidItems?.map((item) => (
 							<Tr key={item.bidItemId}>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="nr"
@@ -239,7 +239,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.nr
 									)}
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="description"
@@ -250,7 +250,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.description
 									)}
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="volume"
@@ -261,7 +261,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.volume
 									)}
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="unit"
@@ -272,7 +272,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.unit
 									)}
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="cost"
@@ -364,6 +364,19 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 								</Td>
 							</Tr>
 						))}
+						<Tr>
+							<Td colSpan={5} textAlign={'right'}>
+								<Text fontWeight={'bold'}>Total cost:</Text>
+							</Td>
+							<Td>
+								{formatNumber(
+									bidItems?.reduce(
+										(sum, item) => sum + (item.cost || 0) * (item.volume || 0),
+										0
+									)
+								)}
+							</Td>
+						</Tr>
 					</>
 
 					<>
@@ -436,6 +449,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										) : null}
 									</FormControl>
 								</Td>
+								<Td width={'15%'}>{/* Empty so it all lines up 💅🏼 */}</Td>
 								<Td width={'15%'}>
 									<Button
 										onClick={handleAdd}

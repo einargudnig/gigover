@@ -1,4 +1,4 @@
-import { Box, Button, Input, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Input, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
@@ -71,6 +71,10 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 	const calculateTotalCost = (item: TenderItem) => {
 		return item.cost ? formatNumber(item.cost * item.volume) : 0;
 	};
+
+	const totalCost = items.reduce((sum, item) => {
+		return sum + (item.cost ? item.cost * item.volume : 0);
+	}, 0);
 
 	return (
 		<Box w="100%" p={4}>
@@ -150,6 +154,14 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						);
 					})}
 				</Tbody>
+				<Tfoot>
+					<Tr>
+						<Td colSpan={5} textAlign={'right'}>
+							<Text fontWeight={'bold'}>Total cost:</Text>
+						</Td>
+						<Td>{formatNumber(totalCost)}</Td>
+					</Tr>
+				</Tfoot>
 			</Table>
 			{mutateError && <p>{mutateError.message}</p>}
 		</Box>
