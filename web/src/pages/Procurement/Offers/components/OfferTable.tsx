@@ -12,6 +12,7 @@ interface TenderItem {
 	volume: number;
 	productNumber?: string;
 	cost?: number;
+	totalCost?: number;
 	note?: string;
 }
 
@@ -67,6 +68,10 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 			: false;
 	};
 
+	const calculateTotalCost = (item: TenderItem) => {
+		return item.cost ? formatNumber(item.cost * item.volume) : 0;
+	};
+
 	return (
 		<Box w="100%" p={4}>
 			<Table>
@@ -76,8 +81,8 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						<Th>Description</Th>
 						<Th>Unit</Th>
 						<Th>Volume</Th>
-						{/* <Th>Product Number</Th> */}
 						<Th>Cost pr item</Th>
+						<Th>Total Cost</Th>
 						<Th>Notes/Certifications/GWP</Th>
 						<Th>Action</Th>
 					</Tr>
@@ -117,6 +122,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 										/>
 									)}
 								</Td>
+								<Td>{calculateTotalCost(item)}</Td>
 								<Td>
 									{offerItem?.note || (
 										<Input

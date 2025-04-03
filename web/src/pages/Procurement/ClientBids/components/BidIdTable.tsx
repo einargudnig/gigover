@@ -151,7 +151,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Number">
 								<HStack>
 									<Text>Number</Text>
@@ -160,7 +160,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
@@ -169,7 +169,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Volume">
 								<HStack>
 									<Text>Volume</Text>
@@ -178,7 +178,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Unit</Text>
@@ -187,7 +187,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Cost">
 								<HStack>
 									<Text>Cost</Text>
@@ -196,7 +196,16 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
+							<Tooltip hasArrow label="Total cost">
+								<HStack>
+									<Text>Total Cost</Text>
+									<ImportantIcon size={20} />
+								</HStack>
+							</Tooltip>
+						</Th>
+
+						<Th width={'15%'}>
 							<Text>Actions</Text>
 						</Th>
 					</Tr>
@@ -274,8 +283,9 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										formatNumber(item.cost)
 									)}
 								</Td>
+								<Td width={'15%'}>{formatNumber(item.cost * item.volume)}</Td>
 								{/* Action buttons */}
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<HStack>
 											<Button
@@ -359,7 +369,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 					<>
 						<>
 							<Tr>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									<FormControl id="nr">
 										<Input
 											id="nr"
@@ -370,7 +380,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										/>
 									</FormControl>
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									<FormControl id="description">
 										<Input
 											id="description"
@@ -381,7 +391,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										/>
 									</FormControl>
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									<FormControl id="volume">
 										<Input
 											id="volume"
@@ -392,7 +402,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										/>
 									</FormControl>
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									<FormControl id="unit" isInvalid={isInvalidUnit}>
 										<Input
 											id="unit"
@@ -409,7 +419,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										) : null}
 									</FormControl>
 								</Td>
-								<Td>
+								<Td width={'15%'}>
 									<FormControl id="cost" isInvalid={isInvalidCost}>
 										<Input
 											id="cost"
@@ -426,7 +436,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										) : null}
 									</FormControl>
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									<Button
 										onClick={handleAdd}
 										variant={'outline'}
