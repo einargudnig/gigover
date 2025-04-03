@@ -146,16 +146,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	// eslint-disable-next-line
 	const isInvalidCost = formData.cost! >= 100000;
 
-	// function that adds the total cost of all items in the offer
-	const totalCost = () => {
-		let total = 0;
-		bidItems?.forEach((item) => {
-			// eslint-disable-next-line
-			total += item.cost * item.volume;
-		});
-		return total;
-	};
-
 	return (
 		<Box>
 			<Table variant={'striped'}>
@@ -364,18 +354,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 								</Td>
 							</Tr>
 						))}
-						<Tr>
-							<Td></Td>
-							<Td></Td>
-							<Td></Td>
-							<Td>
-								<strong>Total cost:</strong>
-							</Td>
-							<Td>
-								{isMutateLoading ? <LoadingSpinner /> : formatNumber(totalCost())}
-							</Td>
-							<Td></Td>
-						</Tr>
 					</>
 
 					<>

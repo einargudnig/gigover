@@ -39,7 +39,7 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 	};
 
 	const columns = [
-		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{ header: 'Number', accessor: 'nr', tooltip: 'Code', width: '20%' },
 		{
 			header: 'Description',
 			accessor: 'description',

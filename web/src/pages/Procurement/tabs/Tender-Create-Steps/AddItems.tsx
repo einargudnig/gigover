@@ -179,7 +179,7 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 							<Thead>
 								<Tr>
 									<Th width={'20%'}>
-										<Tooltip hasArrow label="Cost Code">
+										<Tooltip hasArrow label="Code">
 											<HStack>
 												<Text>Number</Text>
 												<ImportantIcon size={20} />

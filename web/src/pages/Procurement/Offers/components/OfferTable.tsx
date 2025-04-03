@@ -1,7 +1,6 @@
 import { Box, Button, Input, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 
@@ -22,7 +21,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 
 	const {
 		mutateAsync: addOfferItems,
-		isLoading: addOfferItemsLoading,
+		// isLoading: addOfferItemsLoading,
 		// isError: isMutateError,
 		error: mutateError
 	} = useAddOfferItems();
@@ -62,16 +61,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 		return Number(str.replace(/\./g, ''));
 	};
 
-	// function that adds the total cost of all items in the offer
-	const totalCost = () => {
-		let total = 0;
-		offerData?.offer.items.forEach((item) => {
-			// eslint-disable-next-line
-			total += item.cost * item.volume;
-		});
-		return total;
-	};
-
 	const isItemInOffer = (tenderItemId: number) => {
 		return offerData && offerData.offer && offerData.offer.items
 			? offerData.offer.items.some((item) => item.tenderItemId === tenderItemId)
@@ -107,18 +96,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 								<Td>{item.description}</Td>
 								<Td>{item.unit}</Td>
 								<Td>{item.volume}</Td>
-								{/* <Td>
-									{offerItem?.productNumber || (
-										<Input
-											htmlSize={6}
-											width={'auto'}
-											value={item.productNumber || ''}
-											onChange={(e) =>
-												updateItem(index, 'productNumber', e.target.value)
-											}
-										/>
-									)}
-								</Td> */}
 								<Td>
 									{offerItem?.cost ? (
 										formatNumber(offerItem.cost)
@@ -166,18 +143,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 							</Tr>
 						);
 					})}
-					<Tr>
-						<Td></Td>
-						<Td></Td>
-						<Td></Td>
-						<Td>
-							<strong>Total cost:</strong>
-						</Td>
-						<Td>
-							{addOfferItemsLoading ? <LoadingSpinner /> : formatNumber(totalCost())}
-						</Td>
-						<Td></Td>
-					</Tr>
 				</Tbody>
 			</Table>
 			{mutateError && <p>{mutateError.message}</p>}

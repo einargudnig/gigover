@@ -99,7 +99,7 @@ export function TenderInfo({ tender }) {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<Tooltip hasArrow label="Cost code">
+							<Tooltip hasArrow label="Code">
 								<HStack>
 									<Text>Number</Text>
 									<ImportantIcon size={20} />
