@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
 
-export function PublishOfferButton({ tenderId, offerId }) {
+export function PublishOfferButton({ tenderId, offerId, finishDateStatus }) {
 	const { mutateAsync: publishOffer, isLoading } = usePublishOffer();
 	const toast = useToast();
 	const navigate = useNavigate();
@@ -53,7 +53,12 @@ export function PublishOfferButton({ tenderId, offerId }) {
 
 	return (
 		<>
-			<Button variant={'outline'} colorScheme={'black'} onClick={handleOpenDialog}>
+			<Button
+				variant={'outline'}
+				colorScheme={'black'}
+				onClick={handleOpenDialog}
+				isDisabled={finishDateStatus}
+			>
 				Publish offer
 			</Button>
 

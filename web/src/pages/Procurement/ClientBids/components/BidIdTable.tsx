@@ -158,25 +158,19 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 
 						<Th width={'15%'}>
 							<Tooltip hasArrow label="Description of a item">
-								<HStack>
-									<Text>Description</Text>
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'15%'}>
-							<Tooltip hasArrow label="Volume">
-								<HStack>
-									<Text>Volume</Text>
-								</HStack>
+								<Text>Description</Text>
 							</Tooltip>
 						</Th>
 
 						<Th width={'15%'}>
 							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-								<HStack>
-									<Text>Unit</Text>
-								</HStack>
+								<Text>Unit</Text>
+							</Tooltip>
+						</Th>
+
+						<Th width={'15%'}>
+							<Tooltip hasArrow label="Volume">
+								<Text>Volume</Text>
 							</Tooltip>
 						</Th>
 
@@ -240,23 +234,23 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
-											name="volume"
-											value={updateFormData.volume}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.volume
-									)}
-								</Td>
-								<Td width={'15%'}>
-									{editingItem === item ? (
-										<Input
 											name="unit"
 											value={updateFormData.unit}
 											onChange={handleUpdateChange}
 										/>
 									) : (
 										item.unit
+									)}
+								</Td>
+								<Td width={'15%'}>
+									{editingItem === item ? (
+										<Input
+											name="volume"
+											value={updateFormData.volume}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.volume
 									)}
 								</Td>
 								<Td width={'15%'}>

@@ -87,7 +87,7 @@ export const InvitedTendersDetails = (): JSX.Element => {
 						<ArrowBackIcon />
 					</Button>
 					<Info fields={tenderFields} />
-					<TenderTable tenderItems={tenderItems} />
+					<TenderTable tenderItems={tenderItems} finishDateStatus={finishDateStatus} />
 					{!finishDateStatus ? (
 						<>
 							{hasAnswered ? (

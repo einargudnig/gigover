@@ -6,6 +6,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { FileUploadType } from '../../../../models/FileUploadType';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
 import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
+import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 import { OfferFile } from '../../../Files/new/components/OfferFile';
 import { Info } from '../../components/Info';
 import { PublishOfferButton } from './PublishOfferButton';
@@ -18,10 +19,10 @@ export const MyOffersDetails = (): JSX.Element => {
 	const { data: offerData, isLoading, isFetching } = useGetOfferByOfferId(Number(offerId));
 	const { data: tenderData } = useGetTenderById(Number(tenderId));
 	const tender = tenderData?.tender;
+	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	const navigate = useNavigate();
-	const offerDocuments = offerData?.offer?.documents;
-	console.log('offerDocuments', offerDocuments);
 
+	const offerDocuments = offerData?.offer?.documents;
 	const isUnpublished = offerData?.offer?.status === 0;
 
 	const tenderFields = [
@@ -57,6 +58,7 @@ export const MyOffersDetails = (): JSX.Element => {
 								<PublishOfferButton
 									tenderId={Number(tenderId)}
 									offerId={Number(offerId)}
+									finishDateStatus={finishDateStatus}
 								/>
 							</Flex>
 						</>

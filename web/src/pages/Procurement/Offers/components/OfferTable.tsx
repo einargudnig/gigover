@@ -16,7 +16,7 @@ interface TenderItem {
 	note?: string;
 }
 
-export const TenderTable = ({ tenderItems }): JSX.Element => {
+export const TenderTable = ({ tenderItems, finishDateStatus }): JSX.Element => {
 	const { offerId } = useParams();
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);
 
@@ -146,6 +146,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 										variant={'outline'}
 										colorScheme={'black'}
 										onClick={() => handleUpdateClick(index)}
+										isDisabled={finishDateStatus}
 									>
 										Update
 									</Button>

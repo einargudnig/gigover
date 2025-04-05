@@ -151,14 +151,14 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip hasArrow label="Volume">
-								<Text>Volume</Text>
+							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
+								<Text>Unit</Text>
 							</Tooltip>
 						</Th>
 
 						<Th width={'20%'}>
-							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-								<Text>Unit</Text>
+							<Tooltip hasArrow label="Volume">
+								<Text>Volume</Text>
 							</Tooltip>
 						</Th>
 
@@ -207,23 +207,23 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 								<Td width={'20%'}>
 									{editingItem === item ? (
 										<Input
-											name="volume"
-											value={updateFormData.volume}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.volume
-									)}
-								</Td>
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<Input
 											name="unit"
 											value={updateFormData.unit}
 											onChange={handleUpdateChange}
 										/>
 									) : (
 										item.unit
+									)}
+								</Td>
+								<Td width={'20%'}>
+									{editingItem === item ? (
+										<Input
+											name="volume"
+											value={updateFormData.volume}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.volume
 									)}
 								</Td>
 								{/* Action buttons */}
