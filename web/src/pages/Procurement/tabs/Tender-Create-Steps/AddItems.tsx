@@ -22,7 +22,6 @@ import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { Edit } from '../../../../components/icons/Edit';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { TenderItem } from '../../../../models/Tender';
 import { useAddTenderItem } from '../../../../mutations/procurement/useAddTenderItem';
@@ -180,28 +179,19 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 								<Tr>
 									<Th width={'20%'}>
 										<Tooltip hasArrow label="Code">
-											<HStack>
-												<Text>Number</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Number</Text>
 										</Tooltip>
 									</Th>
 
 									<Th width={'20%'}>
 										<Tooltip hasArrow label="Description of a item">
-											<HStack>
-												<Text>Description</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Description</Text>
 										</Tooltip>
 									</Th>
 
 									<Th width={'20%'}>
 										<Tooltip hasArrow label="Volume">
-											<HStack>
-												<Text>Volume</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Volume</Text>
 										</Tooltip>
 									</Th>
 
@@ -210,10 +200,7 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 											hasArrow
 											label="Unit of measurement. For example: m2, kg, t"
 										>
-											<HStack>
-												<Text>Unit</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Unit</Text>
 										</Tooltip>
 									</Th>
 

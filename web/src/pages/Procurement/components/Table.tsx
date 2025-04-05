@@ -1,7 +1,6 @@
 import {
 	Box,
 	Table as ChakraTable,
-	HStack,
 	Tbody,
 	Td,
 	Text,
@@ -11,7 +10,6 @@ import {
 	Tooltip,
 	Tr
 } from '@chakra-ui/react';
-import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 
 interface TableColumn {
 	header: string;
@@ -68,10 +66,7 @@ export function DataTable<T extends object>({
 							<Th key={index} width={column.width || 'auto'}>
 								{column.tooltip ? (
 									<Tooltip hasArrow label={column.tooltip}>
-										<HStack>
-											<Text>{column.header}</Text>
-											<ImportantIcon size={20} />
-										</HStack>
+										<Text>{column.header}</Text>
 									</Tooltip>
 								) : (
 									<Text>{column.header}</Text>

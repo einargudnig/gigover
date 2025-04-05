@@ -20,7 +20,6 @@ import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { Edit } from '../../../../components/icons/Edit';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { BidItem } from '../../../../models/Tender';
 import { useAddBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
@@ -153,10 +152,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 					<Tr>
 						<Th width={'15%'}>
 							<Tooltip hasArrow label="Number">
-								<HStack>
-									<Text>Number</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text>Number</Text>
 							</Tooltip>
 						</Th>
 
@@ -164,7 +160,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							<Tooltip hasArrow label="Description of a item">
 								<HStack>
 									<Text>Description</Text>
-									<ImportantIcon size={20} />
 								</HStack>
 							</Tooltip>
 						</Th>
@@ -173,7 +168,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							<Tooltip hasArrow label="Volume">
 								<HStack>
 									<Text>Volume</Text>
-									<ImportantIcon size={20} />
 								</HStack>
 							</Tooltip>
 						</Th>
@@ -182,26 +176,19 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
 								<HStack>
 									<Text>Unit</Text>
-									<ImportantIcon size={20} />
 								</HStack>
 							</Tooltip>
 						</Th>
 
 						<Th width={'15%'}>
-							<Tooltip hasArrow label="Cost per item">
-								<HStack>
-									<Text>Cost</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+							<Tooltip hasArrow label="Cost of single item">
+								<Text>Cost</Text>
 							</Tooltip>
 						</Th>
 
 						<Th width={'15%'}>
-							<Tooltip hasArrow label="Total cost → cost * volume">
-								<HStack>
-									<Text>Total Cost</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+							<Tooltip hasArrow label="Total cost (cost * volume)">
+								<Text>Total Cost</Text>
 							</Tooltip>
 						</Th>
 
