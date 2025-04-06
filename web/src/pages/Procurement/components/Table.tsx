@@ -50,7 +50,7 @@ export function DataTable<T extends object>({
 			return null;
 		}
 		return data.reduce((sum, item) => {
-			const totalCost = (item as any).totalCost;
+			const totalCost = (item as Record<string, unknown>).totalCost;
 			return sum + (typeof totalCost === 'number' ? totalCost : 0);
 		}, 0);
 	};

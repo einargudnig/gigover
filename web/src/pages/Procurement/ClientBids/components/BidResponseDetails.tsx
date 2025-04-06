@@ -119,13 +119,13 @@ export const BidResponseDetails = (): JSX.Element => {
 			tooltip: 'Description of a item',
 			width: '16%'
 		},
-		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '16%' },
 		{
 			header: 'Unit',
 			accessor: 'unit',
 			tooltip: 'Unit of measurement. For example: m2, kg, t',
 			width: '16%'
 		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '16%' },
 		{
 			header: 'Cost',
 			accessor: 'cost',

@@ -68,13 +68,13 @@ function PublishedBid({ bid }: { bid: Bid }) {
 			tooltip: 'Description of a item',
 			width: '16%'
 		},
-		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
 		{
 			header: 'Unit',
 			accessor: 'unit',
 			tooltip: 'Unit of measurement. For example: m2, kg, t',
 			width: '20%'
 		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
 		{
 			header: 'Cost',
 			accessor: 'cost',

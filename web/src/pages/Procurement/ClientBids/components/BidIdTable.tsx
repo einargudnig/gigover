@@ -386,17 +386,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 									</FormControl>
 								</Td>
 								<Td width={'15%'}>
-									<FormControl id="volume">
-										<Input
-											id="volume"
-											name="volume"
-											type="number"
-											value={formData.volume}
-											onChange={handleChange}
-										/>
-									</FormControl>
-								</Td>
-								<Td width={'15%'}>
 									<FormControl id="unit" isInvalid={isInvalidUnit}>
 										<Input
 											id="unit"
@@ -411,6 +400,17 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 												kg, m, m2
 											</FormHelperText>
 										) : null}
+									</FormControl>
+								</Td>
+								<Td width={'15%'}>
+									<FormControl id="volume">
+										<Input
+											id="volume"
+											name="volume"
+											type="number"
+											value={formData.volume}
+											onChange={handleChange}
+										/>
 									</FormControl>
 								</Td>
 								<Td width={'15%'}>
