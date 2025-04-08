@@ -12,13 +12,13 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
 import { DatePicker } from '../../../../../components/forms/DatePicker';
-import { Bid } from '../../../../../models/Tender';
 import { CalendarIcon } from '../../../../../components/icons/Calendar';
+import { Bid } from '../../../../../models/Tender';
 import { useAddBid } from '../../../../../mutations/procurement/client-bids/useAddBid';
 import { ApiService } from '../../../../../services/ApiService';
 import { devError } from '../../../../../utils/ConsoleUtils';
-import { useQueryClient } from 'react-query';
 
 interface CreateBidSingleBidderProps {
 	clientUId: string | null;
@@ -189,7 +189,7 @@ export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingl
 						isLoading={isLoading}
 						loadingText="Creating..."
 					>
-						Create Tender
+						Create Bid
 					</Button>
 				</Flex>
 			</form>
