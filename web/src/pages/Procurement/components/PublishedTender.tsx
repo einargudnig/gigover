@@ -5,12 +5,10 @@ import {
 	GridItem,
 	HStack,
 	Heading,
-	Spacer,
 	Table,
 	Tbody,
 	Td,
 	Text,
-	Th,
 	Thead,
 	Tooltip,
 	Tr,
@@ -22,11 +20,12 @@ import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { ImportantIcon } from '../../../components/icons/ImportantIcon';
 import { FileUploadType } from '../../../models/FileUploadType';
-import { Bidder, Tender, TenderDocument, TenderItem } from '../../../models/Tender';
+import { Bidder, TenderDocument, TenderItem } from '../../../models/Tender';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
 import { OtherGigoverFile } from '../../Files/new/components/OtherFile';
 import { DropZone } from '../Offers/components/UploadTenderDocuments';
+import { Info } from '../components/Info';
+import { DataTable } from '../components/Table';
 import { InviteButton } from './InviteButton';
 
 export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
@@ -58,6 +57,33 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
 
+	const tenderFields = [
+		{ label: 'Description', value: tender?.description },
+		{ label: 'Terms', value: tender?.terms },
+		{ label: 'Status', value: tender?.status === 1 ? 'Published' : 'Not published' },
+		{ label: 'Address', value: tender?.address },
+		{ label: 'Delivery', value: tender?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: tender?.finishDate },
+		{ label: 'Phone', value: tender?.phoneNumber }
+	];
+
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '20%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		}
+	];
+
 	return (
 		<Box p={6}>
 			<Box p={2}>
@@ -72,7 +98,7 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 					>
 						<Grid templateColumns="repeat(2, 1fr)" gap={4}>
 							<GridItem colSpan={1}>
-								<TenderInfo tender={tender} />
+								<Info fields={tenderFields} />
 							</GridItem>
 							<GridItem colSpan={1}>
 								<Bidders
@@ -85,7 +111,7 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 				</Flex>
 			</Box>
 
-			{tenderItems && <TenderItemTable tenderItems={tenderItems} />}
+			{tenderItems && <DataTable columns={columns} data={tenderItems} />}
 
 			<Flex alignItems={'center'} mt={'6'}>
 				<Box>
@@ -103,78 +129,6 @@ export const PublishedTender = ({ tender, getTenderLoading }): JSX.Element => {
 		</Box>
 	);
 };
-
-function TenderInfo({ tender }: { tender: Tender }) {
-	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
-	const time = tender?.finishDate;
-	const date = new Date(time!);
-
-	return (
-		<Box>
-			<VStack>
-				<VStack mb={'4'}>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Description:
-						</Text>
-						<Text fontSize={'lg'}>{tender?.description}</Text>
-					</HStack>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Terms:
-						</Text>
-						<Text fontSize={'lg'}>{tender?.terms}</Text>
-					</HStack>
-					<HStack>
-						<Text fontWeight={'bold'} fontSize={'xl'}>
-							Status:
-						</Text>
-						<Text fontSize={'lg'}>
-							{tender?.status === 1 ? 'Published' : 'Not published'}
-						</Text>
-					</HStack>
-				</VStack>
-
-				<HStack mb={'4'}>
-					<VStack mr={'3'}>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Address:
-							</Text>
-							<Text fontSize={'lg'}>{tender?.address}</Text>
-						</HStack>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Delivery:
-							</Text>
-							<Text fontSize={'lg'}>{handleDelivery}</Text>
-						</HStack>
-					</VStack>
-					<Spacer />
-					<VStack ml={'3'}>
-						<Tooltip
-							hasArrow
-							label="You will not be able to answer offer until this date has passed"
-						>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Close Date:
-								</Text>
-								<Text fontSize={'lg'}>{formatDateWithoutTime(date)}*</Text>
-							</HStack>
-						</Tooltip>
-						<HStack>
-							<Text fontWeight={'bold'} fontSize={'xl'}>
-								Phone:
-							</Text>
-							<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
-						</HStack>
-					</VStack>
-				</HStack>
-			</VStack>
-		</Box>
-	);
-}
 
 function Bidders({
 	uniqueBidders,
@@ -250,64 +204,6 @@ function Bidders({
 				</VStack>
 			</VStack>
 		</Box>
-	);
-}
-
-function TenderItemTable({ tenderItems }: { tenderItems: TenderItem[] }) {
-	return (
-		<Table variant={'striped'}>
-			<Thead>
-				<Tr>
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Cost code">
-							<HStack>
-								<Text>Number</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Description of a item">
-							<HStack>
-								<Text>Description</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Volume">
-							<HStack>
-								<Text color={'black'}>Volume</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-
-					<Th width={'20%'}>
-						<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-							<HStack>
-								<Text>Unit</Text>
-								<ImportantIcon size={20} />
-							</HStack>
-						</Tooltip>
-					</Th>
-				</Tr>
-			</Thead>
-			<Tbody>
-				<>
-					{tenderItems?.map((item) => (
-						<Tr key={item.tenderItemId}>
-							<Td width={'20%'}>{item.nr}</Td>
-							<Td width={'20%'}>{item.description}</Td>
-							<Td width={'20%'}>{item.volume}</Td>
-							<Td width={'20%'}>{item.unit}</Td>
-						</Tr>
-					))}
-				</>
-			</Tbody>
-		</Table>
 	);
 }
 

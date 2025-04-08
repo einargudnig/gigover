@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Text, Textarea } from '@chakra-ui/react';
 
 export const BidIdText = (): JSX.Element => {

@@ -1,13 +1,13 @@
-import React, { useRef } from 'react';
 import {
-	Button,
 	AlertDialog,
 	AlertDialogBody,
+	AlertDialogContent,
 	AlertDialogFooter,
 	AlertDialogHeader,
-	AlertDialogContent,
-	AlertDialogOverlay
+	AlertDialogOverlay,
+	Button
 } from '@chakra-ui/react';
+import React, { useRef } from 'react';
 
 export const ConfirmDialog = ({
 	isOpen,
@@ -46,7 +46,11 @@ export const ConfirmDialog = ({
 						</AlertDialogBody>
 
 						<AlertDialogFooter>
-							<Button ref={cancelRef} onClick={() => callback(false)}>
+							<Button
+								ref={cancelRef}
+								colorScheme={'gray'}
+								onClick={() => callback(false)}
+							>
 								Cancel
 							</Button>
 							<Button colorScheme="red" onClick={() => callback(true)} ml={3}>

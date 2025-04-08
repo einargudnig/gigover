@@ -12,24 +12,25 @@ import {
 	Stepper
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { AddBidder } from './Tender-Create-Steps/AddBidder';
-import { AddItems } from './Tender-Create-Steps/AddItems';
-import { CreateTender } from './Tender-Create-Steps/CreateTender';
-import { PublishTender } from './Tender-Create-Steps/PublishTender';
+import { AddItemsSingleBid } from './AddItemsSingleBid';
+import { AddSingleBidder } from './AddSingleBidder';
+import { CreateBidSingleBidder } from './CreateBidSingleBidder';
+import { PublishSingleBid } from './PublishSingleBid';
 
 const steps = [
-	{ title: 'Create tender', description: 'Create tender' },
+	{ title: 'Invite client', description: 'Invite client' },
+	{ title: 'Create bid', description: 'Create bid' },
 	{ title: 'Add items', description: 'Add items' },
-	{ title: 'Publish tender', description: 'Publish tender' },
-	{ title: 'Add bidder', description: 'Add bidders' }
+	{ title: 'Publish bid', description: 'Publish bid' }
 ];
 
-export function NewTenderCreate({
-	setShowCreateTender
+export function CreateBidStepper({
+	setShowCreateBid
 }: {
-	setShowCreateTender: (show: boolean) => void;
+	setShowCreateBid: (show: boolean) => void;
 }) {
-	const [tenderId, setTenderId] = useState<number | null>(null);
+	const [clientUid, setClientUid] = useState<string | null>(null);
+	const [bidId, setBidId] = useState<number | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
 
 	const nextStep = () => {
@@ -46,38 +47,31 @@ export function NewTenderCreate({
 		switch (step) {
 			case 0:
 				return (
-					<CreateTender
-						onTenderCreate={(newTenderId: number) => {
-							setTenderId(newTenderId);
+					<AddSingleBidder
+						onClientInvite={(newClientId) => {
+							setClientUid(newClientId);
 							nextStep();
 						}}
 					/>
 				);
 			case 1:
-				return tenderId ? (
-					<AddItems
-						tenderId={tenderId}
-						onItemsAdded={() => {
+				return (
+					<CreateBidSingleBidder
+						clientUId={clientUid}
+						onBidCreate={(newBidId: number) => {
+							setBidId(newBidId);
 							nextStep();
 						}}
 					/>
-				) : null;
+				);
 			case 2:
-				return tenderId ? (
-					<PublishTender
-						tenderId={tenderId}
-						onPublish={() => {
-							nextStep();
-						}}
-					/>
-				) : null;
+				return bidId ? <AddItemsSingleBid bidId={bidId} /> : null;
 			case 3:
-				return tenderId ? (
-					<AddBidder
-						tenderId={tenderId}
-						onBidderAdded={() => {
-							// Maybe navigate away or show success message
-							setShowCreateTender(false);
+				return bidId ? (
+					<PublishSingleBid
+						bidId={bidId}
+						onPublishBid={() => {
+							setShowCreateBid(false);
 						}}
 					/>
 				) : null;
@@ -127,7 +121,7 @@ export function NewTenderCreate({
 				{activeStep <= 2 ? (
 					<Button
 						onClick={nextStep}
-						isDisabled={activeStep === steps.length - 1 || !tenderId}
+						isDisabled={activeStep === steps.length - 1 || activeStep === 1 || !bidId}
 						variant="outline"
 						colorScheme="blackAlpha"
 					>

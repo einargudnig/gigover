@@ -6,16 +6,15 @@ import {
 	Table,
 	Tbody,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tooltip,
 	Tr,
-	Text,
 	VStack
 } from '@chakra-ui/react';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { TenderItem } from '../../../../models/Tender';
+import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 
 export function TenderInfo({ tender }) {
 	const time = tender?.finishDate;
@@ -99,38 +98,26 @@ export function TenderInfo({ tender }) {
 				<Thead>
 					<Tr>
 						<Th width={'20%'}>
-							<Tooltip hasArrow label="Cost code">
-								<HStack>
-									<Text>Number</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+							<Tooltip hasArrow label="Code">
+								<Text>Number</Text>
 							</Tooltip>
 						</Th>
 
 						<Th width={'20%'}>
 							<Tooltip hasArrow label="Description of a item">
-								<HStack>
-									<Text>Description</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text>Description</Text>
 							</Tooltip>
 						</Th>
 
 						<Th width={'20%'}>
 							<Tooltip hasArrow label="Volume">
-								<HStack>
-									<Text color={'black'}>Volume</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text color={'black'}>Volume</Text>
 							</Tooltip>
 						</Th>
 
 						<Th width={'20%'}>
 							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-								<HStack>
-									<Text>Unit</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text>Unit</Text>
 							</Tooltip>
 						</Th>
 					</Tr>

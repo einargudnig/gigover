@@ -1,16 +1,32 @@
-import axios, { AxiosError } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
+import axios from 'axios';
+import { UseMutationOptions, useMutation, useQueryClient } from 'react-query';
 import { ApiService } from '../../../services/ApiService';
 import { devError } from '../../../utils/ConsoleUtils';
-import { Bid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 
-export const useAddBid = () => {
+export interface SingleTenderFormData {
+	clientUId: string | null;
+	description: string;
+	terms: string;
+	address: string;
+	delivery: number;
+	finishDate: number;
+	notes?: string;
+}
+
+interface TenderCreateResponse {
+	id: number;
+	errorCode?: string;
+}
+
+export const useAddBid = (
+	options?: UseMutationOptions<number, ErrorResponse, SingleTenderFormData>
+) => {
 	const client = useQueryClient();
 
-	return useMutation<AxiosError, ErrorResponse, Bid>(async (variables) => {
+	return useMutation<number, ErrorResponse, SingleTenderFormData>(async (variables) => {
 		try {
-			const response = await axios.post(ApiService.addBid, variables, {
+			const response = await axios.post<TenderCreateResponse>(ApiService.addBid, variables, {
 				withCredentials: true
 			});
 
@@ -19,10 +35,10 @@ export const useAddBid = () => {
 			}
 			await client.refetchQueries(ApiService.getBids);
 
-			return response.data;
+			return response.data.id;
 		} catch (e) {
 			devError(e);
 			throw new Error('Could not add client bid');
 		}
-	});
+	}, options);
 };

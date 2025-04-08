@@ -20,12 +20,16 @@ export type ConfirmDialogProps = {
 	buttonText: string;
 	status: string;
 	statusText?: string;
+	buttonHoverColor?: string;
+	buttonHoverTextColor?: string;
 };
 
 export const AnswerBid = ({
 	mutationLoading,
 	mutation,
 	buttonText,
+	buttonHoverColor,
+	buttonHoverTextColor,
 	status,
 	statusText
 }: ConfirmDialogProps): JSX.Element => {
@@ -39,7 +43,13 @@ export const AnswerBid = ({
 
 	return (
 		<>
-			<Button onClick={handleOpenDialog} mt={'4'}>
+			<Button
+				onClick={handleOpenDialog}
+				variant={'outline'}
+				colorScheme={'black'}
+				_hover={{ backgroundColor: buttonHoverColor, color: buttonHoverTextColor }}
+				mt={'4'}
+			>
 				{mutationLoading ? <LoadingSpinner /> : statusText}
 			</Button>
 
@@ -65,6 +75,12 @@ export const AnswerBid = ({
 								Cancel
 							</Button>
 							<Button
+								variant={'outline'}
+								colorScheme={'black'}
+								_hover={{
+									backgroundColor: buttonHoverColor,
+									color: buttonHoverTextColor
+								}}
 								onClick={() => {
 									// the mutations are defined in ClientAnswerId, but invoked here.
 									// This makes it so we can re-use this component for both accept and reject.

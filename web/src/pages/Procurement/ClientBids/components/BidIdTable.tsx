@@ -1,4 +1,5 @@
 import {
+	Box,
 	Button,
 	Flex,
 	FormControl,
@@ -15,12 +16,10 @@ import {
 	Tr
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { Edit } from '../../../../components/icons/Edit';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { BidItem } from '../../../../models/Tender';
 import { useAddBidItem } from '../../../../mutations/procurement/client-bids/useAddBidItem';
@@ -29,15 +28,14 @@ import { useEditBidItem } from '../../../../mutations/procurement/client-bids/us
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
 
 export const BidIdTable = ({ bid }): JSX.Element => {
-	const { bidId } = useParams();
-
+	const bidId = bid?.bidId;
 	const clientBidStatus = bid?.status;
 
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 	const bidItems = bid?.items;
 
 	const defaultData: BidItem = {
-		bidId: Number(bidId),
+		bidId,
 		nr: '0',
 		description: 'Description',
 		volume: 0,
@@ -51,7 +49,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	const [editingItem, setEditingItem] = useState<BidItem | null>(null);
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [formData, setFormData] = useState<BidItem>({
-		bidId: Number(bidId),
+		bidId,
 		description: 'Description',
 		nr: '0',
 		volume: 0,
@@ -60,7 +58,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	});
 	// eslint-disable-next-line
 	const [updateFormData, setUpdateFormData] = useState<BidItem>({
-		bidId: Number(bidId),
+		bidId,
 		description: 'Description',
 		nr: '0',
 		volume: 0,
@@ -110,7 +108,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	const handleAdd = () => {
 		// setItems([...[items], formData]); //! I think this is not needed
 		setFormData({
-			bidId: Number(bidId),
+			bidId,
 			nr: formData.nr,
 			description: formData.description,
 			volume: formData.volume,
@@ -148,56 +146,47 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	const isInvalidCost = formData.cost! >= 100000;
 
 	return (
-		<>
+		<Box>
 			<Table variant={'striped'}>
 				<Thead>
 					<Tr>
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Number">
-								<HStack>
-									<Text>Number</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text>Number</Text>
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Description of a item">
-								<HStack>
-									<Text>Description</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text>Description</Text>
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
-							<Tooltip hasArrow label="Volume">
-								<HStack>
-									<Text>Volume</Text>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'20%'}>
-							<Tooltip hasArrow label="Unit">
-								<HStack>
-									<Text>Unit</Text>
-									<ImportantIcon size={20} />
-								</HStack>
-							</Tooltip>
-						</Th>
-
-						<Th width={'20%'}>
+						<Th width={'15%'}>
 							<Tooltip hasArrow label="Unit of measurement. For example: m2, kg, t">
-								<HStack>
-									<Text>Cost</Text>
-									<ImportantIcon size={20} />
-								</HStack>
+								<Text>Unit</Text>
 							</Tooltip>
 						</Th>
 
-						<Th width={'20%'}>
+						<Th width={'15%'}>
+							<Tooltip hasArrow label="Volume">
+								<Text>Volume</Text>
+							</Tooltip>
+						</Th>
+
+						<Th width={'15%'}>
+							<Tooltip hasArrow label="Cost of single item">
+								<Text>Cost</Text>
+							</Tooltip>
+						</Th>
+
+						<Th width={'15%'}>
+							<Tooltip hasArrow label="Total cost (cost * volume)">
+								<Text>Total Cost</Text>
+							</Tooltip>
+						</Th>
+
+						<Th width={'15%'}>
 							<Text>Actions</Text>
 						</Th>
 					</Tr>
@@ -220,7 +209,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 					<>
 						{bidItems?.map((item) => (
 							<Tr key={item.bidItemId}>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="nr"
@@ -231,7 +220,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.nr
 									)}
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="description"
@@ -242,18 +231,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.description
 									)}
 								</Td>
-								<Td width={'20%'}>
-									{editingItem === item ? (
-										<Input
-											name="volume"
-											value={updateFormData.volume}
-											onChange={handleUpdateChange}
-										/>
-									) : (
-										item.volume
-									)}
-								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="unit"
@@ -264,7 +242,18 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										item.unit
 									)}
 								</Td>
-								<Td width={'20%'}>
+								<Td width={'15%'}>
+									{editingItem === item ? (
+										<Input
+											name="volume"
+											value={updateFormData.volume}
+											onChange={handleUpdateChange}
+										/>
+									) : (
+										item.volume
+									)}
+								</Td>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<Input
 											name="cost"
@@ -275,21 +264,24 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										formatNumber(item.cost)
 									)}
 								</Td>
+								<Td width={'15%'}>{formatNumber(item.cost * item.volume)}</Td>
 								{/* Action buttons */}
-								<Td width={'20%'}>
+								<Td width={'15%'}>
 									{editingItem === item ? (
 										<HStack>
 											<Button
 												aria-label={'Update item'}
 												isLoading={isUpdateLoading}
 												onClick={() => handleUpdate(item)}
+												variant={'outline'}
+												colorScheme={'black'}
 											>
 												Update
 											</Button>
 											<Button
 												onClick={() => {
 													setFormData({
-														bidId: Number(bidId),
+														bidId,
 														description: '',
 														nr: '0',
 														volume: 0,
@@ -310,6 +302,8 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 												isDisabled={
 													clientBidStatus === 1 || finishDateStatus
 												}
+												variant={'outline'}
+												colorScheme={'black'}
 											>
 												<Edit size={20} />
 											</Button>
@@ -321,10 +315,9 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 														await deleteClientBidItem(item);
 														console.log('Deleting item:', item); // Good for debugging
 													}
-
 													setDialogOpen(false);
 													setFormData({
-														bidId: Number(bidId),
+														bidId,
 														description: '',
 														nr: '0',
 														volume: 0,
@@ -337,13 +330,14 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 												<Button
 													aria-label={'Delete item'}
 													colorScheme={'red'}
+													variant={'outline'}
 													isLoading={isDeleteLoading}
 													onClick={() => setDialogOpen(true)}
 													isDisabled={
 														clientBidStatus === 1 || finishDateStatus
 													}
 												>
-													<TrashIcon color={'white'} size={20} />
+													<TrashIcon color={'red'} size={20} />
 												</Button>
 											</ConfirmDialog>
 										</HStack>
@@ -351,108 +345,121 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 								</Td>
 							</Tr>
 						))}
+						<Tr>
+							<Td colSpan={5} textAlign={'right'}>
+								<Text fontWeight={'bold'}>Total cost:</Text>
+							</Td>
+							<Td>
+								{formatNumber(
+									bidItems?.reduce(
+										(sum, item) => sum + (item.cost || 0) * (item.volume || 0),
+										0
+									)
+								)}
+							</Td>
+						</Tr>
 					</>
 
-					{!finishDateStatus ? (
+					<>
 						<>
-							{clientBidStatus === 0 ? (
-								<>
-									<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-										Enter details below to add items to bid
-									</Text>
-
-									<Tr>
-										<Td width={'20%'}>
-											<FormControl id="nr">
-												<Input
-													id="nr"
-													name="nr"
-													type="text"
-													value={formData.nr}
-													onChange={handleChange}
-												/>
-											</FormControl>
-										</Td>
-										<Td width={'20%'}>
-											<FormControl id="description">
-												<Input
-													id="description"
-													name="description"
-													type="text"
-													value={formData.description}
-													onChange={handleChange}
-												/>
-											</FormControl>
-										</Td>
-										<Td width={'20%'}>
-											<FormControl id="volume">
-												<Input
-													id="volume"
-													name="volume"
-													type="number"
-													value={formData.volume}
-													onChange={handleChange}
-												/>
-											</FormControl>
-										</Td>
-										<Td width={'20%'}>
-											<FormControl id="unit" isInvalid={isInvalidUnit}>
-												<Input
-													id="unit"
-													name="unit"
-													type="text"
-													value={formData.unit}
-													onChange={handleChange}
-												/>
-												{isInvalidUnit ? (
-													<FormHelperText>
-														The measurement of unit should be in a short
-														format: kg, m, m2
-													</FormHelperText>
-												) : null}
-											</FormControl>
-										</Td>
-										<Td>
-											<FormControl id="cost" isInvalid={isInvalidCost}>
-												<Input
-													id="cost"
-													name="cost"
-													type="number"
-													value={formData.cost}
-													onChange={handleChange}
-												/>
-												{isInvalidCost ? (
-													<FormHelperText>
-														This will be update soon, now the cost has
-														to be lower than 100.000
-													</FormHelperText>
-												) : null}
-											</FormControl>
-										</Td>
-										<Td width={'20%'}>
-											<Button onClick={handleAdd}>
-												{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
-											</Button>
-										</Td>
-									</Tr>
-								</>
-							) : null}
+							<Tr>
+								<Td width={'15%'}>
+									<FormControl id="nr">
+										<Input
+											id="nr"
+											name="nr"
+											type="text"
+											value={formData.nr}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td width={'15%'}>
+									<FormControl id="description">
+										<Input
+											id="description"
+											name="description"
+											type="text"
+											value={formData.description}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td width={'15%'}>
+									<FormControl id="unit" isInvalid={isInvalidUnit}>
+										<Input
+											id="unit"
+											name="unit"
+											type="text"
+											value={formData.unit}
+											onChange={handleChange}
+										/>
+										{isInvalidUnit ? (
+											<FormHelperText>
+												The measurement of unit should be in a short format:
+												kg, m, m2
+											</FormHelperText>
+										) : null}
+									</FormControl>
+								</Td>
+								<Td width={'15%'}>
+									<FormControl id="volume">
+										<Input
+											id="volume"
+											name="volume"
+											type="number"
+											value={formData.volume}
+											onChange={handleChange}
+										/>
+									</FormControl>
+								</Td>
+								<Td width={'15%'}>
+									<FormControl id="cost" isInvalid={isInvalidCost}>
+										<Input
+											id="cost"
+											name="cost"
+											type="number"
+											value={formData.cost}
+											onChange={handleChange}
+										/>
+										{isInvalidCost ? (
+											<FormHelperText>
+												This will be update soon, now the cost has to be
+												lower than 100.000
+											</FormHelperText>
+										) : null}
+									</FormControl>
+								</Td>
+								<Td width={'15%'}>{/* Empty so it all lines up 💅🏼 */}</Td>
+								<Td width={'15%'}>
+									<Button
+										onClick={handleAdd}
+										variant={'outline'}
+										colorScheme={'black'}
+										isDisabled={clientBidStatus === 1 || finishDateStatus}
+									>
+										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+									</Button>
+								</Td>
+							</Tr>
 						</>
-					) : (
-						<Flex alignItems={'center'} justifyContent={'center'}>
-							<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
-								The finish date has passed, you cannot add more items to the Bid
-							</Text>
-						</Flex>
-					)}
-
-					{isMutateError ? (
-						<Td>
-							<Text>Something went wrong - {mutateError?.code}</Text>
-						</Td>
-					) : null}
+					</>
 				</Tbody>
 			</Table>
-		</>
+
+			{isMutateError ? (
+				<Td>
+					<Text>Something went wrong - {mutateError?.code}</Text>
+				</Td>
+			) : null}
+
+			{finishDateStatus && (
+				<Flex alignItems={'center'} justifyContent={'center'}>
+					<Text marginTop={'2'} marginBottom={'2'} color={'gray.500'}>
+						The finish date has passed, you cannot add more items to the Bid
+					</Text>
+				</Flex>
+			)}
+		</Box>
 	);
 };

@@ -1,16 +1,18 @@
-import { Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid } from '../../../../models/Tender';
 import { useGetClientBids } from '../../../../queries/procurement/client-bids/useGetClientBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { ProcurementListSkeleton } from '../../ProcurementListSkeleton';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
+	margin-top: 8px;
+	margin-bottom: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -25,28 +27,9 @@ const PropertyCardStyled = styled(CardBaseLink)`
 export const BidResponsesList = (): JSX.Element => {
 	const { data, isLoading } = useGetClientBids();
 
-	const shouldDeliver = (bid: Bid) => {
-		if (bid.delivery === 1) {
-			return (
-				<HStack>
-					<Text as={'b'}>Deliver to:</Text>
-					<Text color={'black'}>{bid.address}</Text>
-				</HStack>
-			);
-		}
-		return (
-			<HStack>
-				<Text as={'b'}>Address:</Text>
-				<Text color={'black'}>{bid.address}</Text>
-			</HStack>
-		);
-	};
-
 	const status = (bid: Bid) => {
-		if (bid?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (bid?.status === 1) {
-			return <Text>Published</Text>;
+		if (bid?.status === 0 || bid?.status === 1) {
+			return <Text color={'gray'}>Unanswered</Text>;
 		} else if (bid?.status === 2) {
 			return (
 				<Text fontSize={'lg'} color={'red'}>
@@ -64,11 +47,13 @@ export const BidResponsesList = (): JSX.Element => {
 	};
 
 	return (
-		<>
+		<Box p={4}>
+			<Flex justify={'start'}>
+				<Heading size={'md'}>Bids that you have answered</Heading>
+			</Flex>
+
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<>
 					{!data || data.length === 0 ? (
@@ -106,7 +91,10 @@ export const BidResponsesList = (): JSX.Element => {
 													</HStack>
 												</GridItem>
 												<GridItem colSpan={2}>
-													{shouldDeliver(bid)}
+													<HStack>
+														<Text color={'black'}>Deliver:</Text>
+														<Text>{bid.delivery ? 'Yes' : 'No'}</Text>
+													</HStack>
 													<HStack>
 														<Text color={'black'}>Close Date: </Text>
 														<Text>
@@ -128,6 +116,6 @@ export const BidResponsesList = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</Box>
 	);
 };

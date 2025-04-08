@@ -1,10 +1,8 @@
-import { Box, Button, Input, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Input, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { useAddOfferItems } from '../../../../mutations/procurement/useAddOfferItems';
 import { useGetOfferByOfferId } from '../../../../queries/procurement/useGetOfferByOfferId';
-// import { GetOfferItem } from '../../../../models/Tender';
 
 interface TenderItem {
 	description: string;
@@ -14,16 +12,17 @@ interface TenderItem {
 	volume: number;
 	productNumber?: string;
 	cost?: number;
+	totalCost?: number;
 	note?: string;
 }
 
-export const TenderTable = ({ tenderItems }): JSX.Element => {
+export const TenderTable = ({ tenderItems, finishDateStatus }): JSX.Element => {
 	const { offerId } = useParams();
 	const [items, setItems] = useState<TenderItem[]>(tenderItems);
 
 	const {
 		mutateAsync: addOfferItems,
-		isLoading: addOfferItemsLoading,
+		// isLoading: addOfferItemsLoading,
 		// isError: isMutateError,
 		error: mutateError
 	} = useAddOfferItems();
@@ -63,21 +62,19 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 		return Number(str.replace(/\./g, ''));
 	};
 
-	// function that adds the total cost of all items in the offer
-	const totalCost = () => {
-		let total = 0;
-		offerData?.offer.items.forEach((item) => {
-			// eslint-disable-next-line
-			total += item.cost * item.volume;
-		});
-		return total;
-	};
-
 	const isItemInOffer = (tenderItemId: number) => {
 		return offerData && offerData.offer && offerData.offer.items
 			? offerData.offer.items.some((item) => item.tenderItemId === tenderItemId)
 			: false;
 	};
+
+	const calculateTotalCost = (item: TenderItem) => {
+		return item.cost ? formatNumber(item.cost * item.volume) : 0;
+	};
+
+	const totalCost = items.reduce((sum, item) => {
+		return sum + (item.cost ? item.cost * item.volume : 0);
+	}, 0);
 
 	return (
 		<Box w="100%" p={4}>
@@ -88,9 +85,9 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 						<Th>Description</Th>
 						<Th>Unit</Th>
 						<Th>Volume</Th>
-						{/* <Th>Product Number</Th> */}
 						<Th>Cost pr item</Th>
-						<Th>Notes/Certifications</Th>
+						<Th>Total Cost</Th>
+						<Th>Notes/Certifications/GWP</Th>
 						<Th>Action</Th>
 					</Tr>
 				</Thead>
@@ -108,18 +105,6 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 								<Td>{item.description}</Td>
 								<Td>{item.unit}</Td>
 								<Td>{item.volume}</Td>
-								{/* <Td>
-									{offerItem?.productNumber || (
-										<Input
-											htmlSize={6}
-											width={'auto'}
-											value={item.productNumber || ''}
-											onChange={(e) =>
-												updateItem(index, 'productNumber', e.target.value)
-											}
-										/>
-									)}
-								</Td> */}
 								<Td>
 									{offerItem?.cost ? (
 										formatNumber(offerItem.cost)
@@ -141,6 +126,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 										/>
 									)}
 								</Td>
+								<Td>{calculateTotalCost(item)}</Td>
 								<Td>
 									{offerItem?.note || (
 										<Input
@@ -160,6 +146,7 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 										variant={'outline'}
 										colorScheme={'black'}
 										onClick={() => handleUpdateClick(index)}
+										isDisabled={finishDateStatus}
 									>
 										Update
 									</Button>
@@ -167,19 +154,15 @@ export const TenderTable = ({ tenderItems }): JSX.Element => {
 							</Tr>
 						);
 					})}
-					<Tr>
-						<Td></Td>
-						<Td></Td>
-						<Td></Td>
-						<Td>
-							<strong>Total cost:</strong>
-						</Td>
-						<Td>
-							{addOfferItemsLoading ? <LoadingSpinner /> : formatNumber(totalCost())}
-						</Td>
-						<Td></Td>
-					</Tr>
 				</Tbody>
+				<Tfoot>
+					<Tr>
+						<Td colSpan={5} textAlign={'right'}>
+							<Text fontWeight={'bold'}>Total cost:</Text>
+						</Td>
+						<Td>{formatNumber(totalCost)}</Td>
+					</Tr>
+				</Tfoot>
 			</Table>
 			{mutateError && <p>{mutateError.message}</p>}
 		</Box>

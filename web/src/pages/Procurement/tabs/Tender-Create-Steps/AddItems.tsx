@@ -7,7 +7,6 @@ import {
 	HStack,
 	Heading,
 	Input,
-	Spacer,
 	Table,
 	Tbody,
 	Td,
@@ -15,24 +14,22 @@ import {
 	Th,
 	Thead,
 	Tooltip,
-	Tr,
-	VStack
+	Tr
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { Center } from '../../../../components/Center';
 import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { CrossIcon } from '../../../../components/icons/CrossIcon';
 import { Edit } from '../../../../components/icons/Edit';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
 import { TrashIcon } from '../../../../components/icons/TrashIcon';
 import { TenderItem } from '../../../../models/Tender';
 import { useAddTenderItem } from '../../../../mutations/procurement/useAddTenderItem';
-import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { useDeleteTenderItem } from '../../../../mutations/procurement/useDeleteTenderItem';
 import { useModifyTenderItem } from '../../../../mutations/procurement/useModifyTenderItem';
+import { useGetTenderById } from '../../../../queries/procurement/useGetTenderById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { Center } from '../../../../components/Center';
+import { Info } from '../../components/Info';
 
 interface AddItemsProps {
 	tenderId: number;
@@ -42,10 +39,6 @@ interface AddItemsProps {
 export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 	const { data, isLoading } = useGetTenderById(tenderId);
 	const tender = data?.tender;
-
-	const time = tender?.finishDate;
-	const date = new Date(time!);
-	const handleDelivery = tender?.delivery ? 'Yes' : 'No';
 
 	const defaultData: TenderItem = {
 		tenderId: Number(tenderId),
@@ -155,6 +148,15 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 		return <p>No tender!</p>;
 	}
 
+	const tenderFields = [
+		{ label: 'Description', value: tender?.description },
+		{ label: 'Terms', value: tender?.terms },
+		{ label: 'Status', value: tender?.status === 1 ? 'Published' : 'Not Published' },
+		{ label: 'Address', value: tender?.address },
+		{ label: 'Delivery', value: tender?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: tender?.finishDate }
+	];
+
 	return (
 		<Box backgroundColor={'white'} py={6} rounded={'md'}>
 			<Flex justifyContent={'center'}>
@@ -169,103 +171,27 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 				</Box>
 			) : (
 				<>
-					<Flex
-						justifyContent={'space-around'}
-						marginTop={3}
-						p={2}
-						border={'1px'}
-						borderColor={'gray.500'}
-						rounded={'md'}
-					>
-						<VStack mb={'4'}>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Description:
-								</Text>
-								<Text fontSize={'lg'}>{tender?.description}</Text>
-							</HStack>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Terms:
-								</Text>
-								<Text fontSize={'lg'}>{tender?.terms}</Text>
-							</HStack>
-							<HStack>
-								<Text fontWeight={'bold'} fontSize={'xl'}>
-									Status:
-								</Text>
-								<Text fontSize={'lg'}>
-									{tender?.status === 1 ? 'Published' : 'Not published'}
-								</Text>
-							</HStack>
-						</VStack>
-
-						<HStack mb={'4'}>
-							<VStack mr={'3'}>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Address:
-									</Text>
-									<Text fontSize={'lg'}>{tender?.address}</Text>
-								</HStack>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Delivery:
-									</Text>
-									<Text fontSize={'lg'}>{handleDelivery}</Text>
-								</HStack>
-							</VStack>
-							<Spacer />
-							<VStack ml={'3'}>
-								<Tooltip
-									hasArrow
-									label="You will not be able to answer offer until this date has passed"
-								>
-									<HStack>
-										<Text fontWeight={'bold'} fontSize={'xl'}>
-											Close Date:
-										</Text>
-										<Text fontSize={'lg'}>{formatDateWithoutTime(date)}*</Text>
-									</HStack>
-								</Tooltip>
-								<HStack>
-									<Text fontWeight={'bold'} fontSize={'xl'}>
-										Phone:
-									</Text>
-									<Text fontSize={'lg'}>{tender?.phoneNumber}</Text>
-								</HStack>
-							</VStack>
-						</HStack>
-					</Flex>
+					<Info fields={tenderFields} />
 
 					<Box px={10} py={4}>
 						<Table variant={'striped'}>
 							<Thead>
 								<Tr>
 									<Th width={'20%'}>
-										<Tooltip hasArrow label="Cost Code">
-											<HStack>
-												<Text>Number</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+										<Tooltip hasArrow label="Code">
+											<Text>Number</Text>
 										</Tooltip>
 									</Th>
 
 									<Th width={'20%'}>
 										<Tooltip hasArrow label="Description of a item">
-											<HStack>
-												<Text>Description</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Description</Text>
 										</Tooltip>
 									</Th>
 
 									<Th width={'20%'}>
 										<Tooltip hasArrow label="Volume">
-											<HStack>
-												<Text>Volume</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Volume</Text>
 										</Tooltip>
 									</Th>
 
@@ -274,10 +200,7 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 											hasArrow
 											label="Unit of measurement. For example: m2, kg, t"
 										>
-											<HStack>
-												<Text>Unit</Text>
-												<ImportantIcon size={20} />
-											</HStack>
+											<Text>Unit</Text>
 										</Tooltip>
 									</Th>
 

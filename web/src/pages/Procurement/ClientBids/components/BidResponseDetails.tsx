@@ -1,30 +1,14 @@
-import {
-	Box,
-	Flex,
-	Grid,
-	GridItem,
-	HStack,
-	Spacer,
-	Table,
-	Tbody,
-	Td,
-	Text,
-	Th,
-	Thead,
-	Tooltip,
-	Tr,
-	VStack,
-	useToast
-} from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Spacer, Text, useToast } from '@chakra-ui/react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { ImportantIcon } from '../../../../components/icons/ImportantIcon';
-import { Bid } from '../../../../models/Tender';
+import { Bid, BidItem } from '../../../../models/Tender';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
 import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
-import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { Info } from '../../components/Info';
+import { DataTable } from '../../components/Table';
 import { AnswerBid } from './AnswerBid';
 
 interface HandledTextProps {
@@ -36,9 +20,15 @@ export const BidResponseDetails = (): JSX.Element => {
 	const { mutateAsync: acceptBid, isLoading: isAcceptBidLoading } = useAcceptBid();
 	const { mutateAsync: rejectBid, isLoading: isRejectBidLoading } = useRejectBid();
 	const { data, isLoading } = useClientGetBidById(Number(bidId)); // TODO add error handling
+	const navigate = useNavigate();
 
 	const bid: Bid | undefined = data?.bid;
-	const bidItems = bid?.items;
+	// We want to show total cost on all cost tables!
+	// TODO: make sure this comes from the API like it does in the tender offers!
+	const bidItems = bid?.items?.map((item) => ({
+		...item,
+		totalCost: item?.cost ? item?.cost * (item?.volume || 0) : 0
+	}));
 
 	const toast = useToast();
 
@@ -98,39 +88,78 @@ export const BidResponseDetails = (): JSX.Element => {
 		}
 	};
 
-	const formatNumber = (num: number) => {
-		return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-	};
-
 	const status = () => {
-		if (bid?.status === 0) {
-			return <Text color={'gray'}>Unpublished</Text>;
-		} else if (bid?.status === 1) {
-			return <Text>Published</Text>;
+		if (bid?.status === 0 || bid?.status === 1) {
+			return 'Unanswered';
 		} else if (bid?.status === 2) {
-			return (
-				<Text fontSize={'lg'} color={'red'}>
-					Rejected
-				</Text>
-			);
+			return 'Rejected';
 		} else if (bid?.status === 3) {
-			return (
-				<Text fontSize={'lg'} color={'green'}>
-					Accepted
-				</Text>
-			);
+			return 'Accepted';
 		}
 		return 'Unknown';
 	};
 
+	const bidFields = [
+		{ label: 'Description', value: bid?.description },
+		{ label: 'Terms', value: bid?.terms },
+		{ label: 'Status', value: status() },
+		{ label: 'Address', value: bid?.address },
+		{ label: 'Delivery', value: bid?.delivery ? 'Yes' : 'No' },
+		{ label: 'Close date', value: bid?.finishDate },
+		{ label: 'Email', value: bid?.bidderEmail },
+		{ label: 'Name', value: bid?.bidderName },
+		{ label: 'Notes', value: bid?.notes }
+	];
+
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '16%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '16%'
+		},
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '16%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '16%' },
+		{
+			header: 'Cost',
+			accessor: 'cost',
+			tooltip: 'Cost of single item',
+			width: '16%',
+			isNumber: true
+		},
+		{
+			header: 'Total Cost',
+			accessor: 'totalCost',
+			tooltip: 'Total cost (Cost × Volume)',
+			width: '20%',
+			isNumber: true
+		}
+	];
+
+	console.log('bid2', bid);
+
 	return (
-		<>
+		<Box p={4}>
 			{isLoading ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
 			) : (
 				<>
+					<Button
+						onClick={() => navigate(-1)}
+						variant={'link'}
+						colorScheme={'gray'}
+						fontSize={'lg'}
+					>
+						<ArrowBackIcon />
+					</Button>
 					<Box
 						mb={1}
 						p={4}
@@ -139,161 +168,22 @@ export const BidResponseDetails = (): JSX.Element => {
 						bg={'#EFEFEE'}
 						w="100%"
 					>
-						<Grid templateColumns="repeat(4, 1fr)" gap={4}>
-							<GridItem colSpan={2}>
-								<Box>
-									<VStack>
-										<VStack mb={'4'}>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Description:
-												</Text>
-												<Text fontSize={'lg'}>{bid?.description}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Terms:
-												</Text>
-												<Text fontSize={'lg'}>{bid?.terms}</Text>
-											</HStack>
-											<HStack>
-												<Text fontWeight={'bold'} fontSize={'xl'}>
-													Status:
-												</Text>
-												<Text fontSize={'lg'}>{status()}</Text>
-											</HStack>
-										</VStack>
-
-										<HStack mb={'4'}>
-											<VStack mr={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Address:
-													</Text>
-													<Text fontSize={'lg'}>{bid?.address}</Text>
-												</HStack>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Delivery:
-													</Text>
-
-													<Text fontSize={'lg'}>delivery</Text>
-												</HStack>
-											</VStack>
-											<VStack ml={'3'}>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Close Date:
-													</Text>
-													<Text fontSize={'lg'}>
-														{formatDateWithoutTime(
-															new Date(bid!.finishDate)
-														)}
-													</Text>
-												</HStack>
-												<HStack>
-													<Text fontWeight={'bold'} fontSize={'xl'}>
-														Notes:
-													</Text>
-													<Text fontSize={'lg'}>{bid?.notes}</Text>
-												</HStack>
-											</VStack>
-										</HStack>
-									</VStack>
-								</Box>
-							</GridItem>
-							<GridItem colSpan={2}>
-								<Box marginRight={'6'}>
-									<VStack ml={'3'}>
-										<HStack ml={'3'}>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Email:
-											</Text>
-											<Text fontSize={'lg'}>{bid?.bidderEmail}</Text>
-										</HStack>
-										<HStack ml={'3'}>
-											<Text fontWeight={'bold'} fontSize={'xl'}>
-												Name:
-											</Text>
-											<Text fontSize={'lg'}>{bid?.bidderName}</Text>
-										</HStack>
-									</VStack>
-								</Box>
-							</GridItem>
-						</Grid>
+						<Info fields={bidFields} />
 					</Box>
-
-					<Table variant={'striped'}>
-						<Thead>
-							<Tr>
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Cost code">
-										<HStack>
-											<Text>Number</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Description of a item">
-										<HStack>
-											<Text>Description</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Volume">
-										<HStack>
-											<Text color={'black'}>Volume</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip
-										hasArrow
-										label="Unit of measurement. For example: m2, kg, t"
-									>
-										<HStack>
-											<Text>Unit</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-
-								<Th width={'20%'}>
-									<Tooltip hasArrow label="Cost of single item">
-										<HStack>
-											<Text>Cost</Text>
-											<ImportantIcon size={20} />
-										</HStack>
-									</Tooltip>
-								</Th>
-							</Tr>
-						</Thead>
-						<Tbody>
-							<>
-								{bidItems?.map((item) => (
-									<Tr key={item.bidItemId}>
-										<Td width={'20%'}>{item.nr}</Td>
-										<Td width={'20%'}>{item.description}</Td>
-										<Td width={'20%'}>{item.volume}</Td>
-										<Td width={'20%'}>{item.unit}</Td>
-										<Td width={'20%'}>{formatNumber(item.cost!)}</Td>
-									</Tr>
-								))}
-							</>
-						</Tbody>
-					</Table>
+					<Box mb={1} p={4} borderRadius={8}>
+						<DataTable<BidItem>
+							columns={columns}
+							data={bidItems || []}
+							showTotalCost={true}
+						/>
+					</Box>
 				</>
 			)}
 
 			{hasBidAnswer ? (
-				<HandledText status={bid?.status} />
+				<Flex justify={'end'}>
+					<HandledText status={bid?.status} />
+				</Flex>
 			) : (
 				<Flex>
 					<Box>
@@ -303,6 +193,8 @@ export const BidResponseDetails = (): JSX.Element => {
 							buttonText="Accept bid"
 							status="accept"
 							statusText="Accept"
+							buttonHoverColor="green.500"
+							buttonHoverTextColor="white"
 						/>
 					</Box>
 					<Spacer />
@@ -313,11 +205,13 @@ export const BidResponseDetails = (): JSX.Element => {
 							buttonText="Reject bid"
 							status="reject"
 							statusText="Reject"
+							buttonHoverColor="red.500"
+							buttonHoverTextColor="white"
 						/>
 					</Box>
 				</Flex>
 			)}
-		</>
+		</Box>
 	);
 };
 

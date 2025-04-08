@@ -1,53 +1,142 @@
-import { Box, Button, Flex, HStack, Text, useToast } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { Box, Button, Flex, Text, useToast } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Center } from '../../../../components/Center';
-import { ConfirmDialog } from '../../../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { TrashIcon } from '../../../../components/icons/TrashIcon';
-import { ModalContext } from '../../../../context/ModalContext';
-import { Bid } from '../../../../models/Tender';
-import { useDeleteBid } from '../../../../mutations/procurement/client-bids/useDeleteBid';
+import { Bid, BidItem } from '../../../../models/Tender';
 import { usePublishBid } from '../../../../mutations/procurement/client-bids/usePublishBid';
 import { useGetBidById } from '../../../../queries/procurement/client-bids/useGetBidById';
 import { handleFinishDate } from '../../../../utils/HandleFinishDate';
+import { Info } from '../../components/Info';
+import { DataTable } from '../../components/Table';
 import { BidIdHeader } from './BidIdHeader';
 import { BidIdTable } from './BidIdTable';
 
 export const BidDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
-	const [, setModalContext] = useContext(ModalContext);
-	const [dialogOpen, setDialogOpen] = useState(false);
 	const navigate = useNavigate();
 	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
 
+	const isBidPublished = bid?.status === 1;
+
+	return (
+		<>
+			{isLoading ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : (
+				<Box p={4}>
+					<Button
+						onClick={() => navigate(-1)}
+						variant={'link'}
+						colorScheme={'gray'}
+						fontSize={'lg'}
+					>
+						<ArrowBackIcon />
+					</Button>
+					{isBidPublished ? <PublishedBid bid={bid} /> : <UnpublishedBid bid={bid!} />}
+				</Box>
+			)}
+		</>
+	);
+};
+
+function PublishedBid({ bid }: { bid: Bid }) {
+	const bidItems = bid?.items?.map((item) => ({
+		...item,
+		totalCost: item?.cost ? item?.cost * (item?.volume || 0) : 0
+	}));
+
+	const bidFields = [
+		{ label: 'Description', value: bid?.description },
+		{ label: 'Terms', value: bid?.terms },
+		{ label: 'Status', value: bid?.status === 1 ? 'Published' : 'Not Published' },
+		{ label: 'Address', value: bid?.address },
+		{ label: 'Delivery', value: bid?.delivery ? 'Yes' : 'No' },
+		{ label: 'Valid Through', value: bid?.finishDate },
+		{ label: 'Client Email', value: bid?.clientEmail },
+		{ label: 'Notes', value: bid?.notes }
+	];
+
+	const columns = [
+		{ header: 'Number', accessor: 'nr', tooltip: 'Cost code', width: '16%' },
+		{
+			header: 'Description',
+			accessor: 'description',
+			tooltip: 'Description of a item',
+			width: '16%'
+		},
+		{
+			header: 'Unit',
+			accessor: 'unit',
+			tooltip: 'Unit of measurement. For example: m2, kg, t',
+			width: '20%'
+		},
+		{ header: 'Volume', accessor: 'volume', tooltip: 'Volume', width: '20%' },
+		{
+			header: 'Cost',
+			accessor: 'cost',
+			tooltip: 'Cost of single item',
+			width: '16%',
+			isNumber: true
+		},
+		{
+			header: 'Total Cost',
+			accessor: 'totalCost',
+			tooltip: 'Total cost (Cost × Volume)',
+			width: '20%',
+			isNumber: true
+		}
+	];
+
+	return (
+		<Box p={4}>
+			<Info fields={bidFields} />
+			<DataTable<BidItem> columns={columns} data={bidItems || []} showTotalCost={true} />
+			<Flex justify={'end'} pr={2} pt={4}>
+				<Text color={'gray.500'}>
+					Bid has been published, waiting answer from: {bid.clientEmail}
+				</Text>
+			</Flex>
+		</Box>
+	);
+}
+
+function UnpublishedBid({ bid }: { bid: Bid }) {
+	return (
+		<Box p={4}>
+			<BidIdHeader bid={bid} />
+			<BidIdTable bid={bid} />
+			<HandleBid bid={bid} />
+			{/* TODO: Upload file */}
+		</Box>
+	);
+}
+
+function HandleBid({ bid }: { bid: Bid }) {
+	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
 	const toast = useToast();
 
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 
-	const clientBidStatus = bid?.status;
-
-	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
-	const { mutateAsync: deleteBidAsync, isLoading: isLoadingDelete } = useDeleteBid();
-
 	const handlePublish = async () => {
 		const publishBidBody = {
-			bidId: Number(bidId)
+			bidId: Number(bid.bidId)
 		};
-
-		if (data !== undefined) {
+		if (bid !== undefined) {
 			try {
 				await publishBid(publishBidBody);
 				toast({
 					title: 'Bid published',
-					description: 'Bid has been published!',
+					description: 'Now you can invite people to send offers to your bid!',
 					status: 'success',
 					duration: 2000,
 					isClosable: true
 				});
 			} catch (error) {
-				console.log('ERROR', { error });
+				// console.log('ERROR', { error });
 				toast({
 					title: 'Error',
 					description: 'Something went wrong when we tried to publish your bid.',
@@ -68,128 +157,16 @@ export const BidDetails = (): JSX.Element => {
 	};
 
 	return (
-		<>
-			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
-			) : (
-				<div style={{ width: '100%' }}>
-					<Flex direction={'column'}>
-						<BidIdHeader bid={bid} />
-						<Flex justifyContent={'flex-end'} marginTop={'1'} marginBottom={'2'}>
-							{!finishDateStatus ? (
-								<>
-									{clientBidStatus === 0 ? (
-										<HStack>
-											<Button
-												onClick={() =>
-													setModalContext({
-														editBid: { bid: bid }
-													})
-												}
-											>
-												Edit Bid
-											</Button>
-											{bid === undefined ? null : (
-												<ConfirmDialog
-													header={'Delete bid'}
-													setIsOpen={setDialogOpen}
-													callback={async () => {
-														if (bid?.status === 1) {
-															toast({
-																title: 'Cannot delete published bid',
-																description:
-																	'This bid has been published and cannot be deleted',
-																status: 'error',
-																duration: 2000,
-																isClosable: true
-															});
-														} else {
-															await deleteBidAsync(bid);
-															navigate('/tender/bids');
-														}
-														setDialogOpen(false);
-													}}
-													isOpen={dialogOpen}
-												>
-													<Button
-														aria-label={'Delete'}
-														colorScheme={'red'}
-														isLoading={isLoadingDelete}
-														leftIcon={
-															<TrashIcon color={'white'} size={20} />
-														}
-														onClick={() => {
-															setDialogOpen(true);
-														}}
-													>
-														Delete bid
-													</Button>
-												</ConfirmDialog>
-											)}
-										</HStack>
-									) : (
-										<Text>You cannot edit or delete a published bid</Text>
-									)}
-								</>
-							) : (
-								<Text as="b" color={'black'}>
-									You cannot edit or delete when the finish date has passsed!
-								</Text>
-							)}
-						</Flex>
-						<BidIdTable bid={bid} />
-						<Box marginTop={12}>
-							{/* <Grid templateColumns="repeat(3, 1fr)" gap={2}>
-								<GridItem colSpan={2}>
-									<BidIdText />
-								</GridItem>
-								<GridItem colSpan={1}>
-									<Flex alignItems={'center'}>
-										<Button>Upload files</Button>
-									</Flex>
-								</GridItem>
-							</Grid> */}
-						</Box>
-						<Flex justifyContent={'flex-end'} alignItems={'center'} marginTop={'4'}>
-							{!finishDateStatus ? (
-								<>
-									{clientBidStatus === 0 ? (
-										<Flex>
-											<Box>
-												<Button
-													onClick={handlePublish}
-													mr={'2'}
-													variant={'outline'}
-													colorScheme={'black'}
-												>
-													{isPublishLoading ? (
-														<LoadingSpinner />
-													) : (
-														'Publish Bid'
-													)}
-												</Button>
-											</Box>
-										</Flex>
-									) : (
-										<Text mr={'2'} as="b">
-											Bid sent
-										</Text>
-									)}
-								</>
-							) : (
-								<Flex alignItems={'center'} justifyContent={'center'}>
-									<Text>
-										The finish date has passed, you cannot publish or delete the
-										bid.
-									</Text>
-								</Flex>
-							)}
-						</Flex>
-					</Flex>
-				</div>
-			)}
-		</>
+		<Flex justify={'end'} pr={2} pt={2}>
+			<Button
+				colorScheme={'black'}
+				variant={'outline'}
+				onClick={handlePublish}
+				isLoading={isPublishLoading}
+				isDisabled={finishDateStatus}
+			>
+				Publish Bid
+			</Button>
+		</Flex>
 	);
-};
+}

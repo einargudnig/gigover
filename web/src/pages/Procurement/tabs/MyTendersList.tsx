@@ -1,28 +1,19 @@
-import {
-	Center,
-	Flex,
-	Grid,
-	GridItem,
-	HStack,
-	Tooltip,
-	Text,
-	Box,
-	Heading
-} from '@chakra-ui/react';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
-import { NoProcurementFound } from '../../../components/empty/NoProcurementFound';
-import { Tender } from '../../../models/Tender';
-import { handleFinishDate } from '../../../utils/HandleFinishDate';
-import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { useUserTenders } from '../../../queries/procurement/useUserTenders';
+import { Box, Flex, Grid, GridItem, HStack, Heading, Text, Tooltip } from '@chakra-ui/react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
+import { NoProcurementFound } from '../../../components/empty/NoProcurementFound';
+import { Tender } from '../../../models/Tender';
+import { useUserTenders } from '../../../queries/procurement/useUserTenders';
+import { handleFinishDate } from '../../../utils/HandleFinishDate';
+import { formatDateWithoutTime } from '../../../utils/StringUtils';
+import { ProcurementListSkeleton } from '../ProcurementListSkeleton';
 
 const ProcurementCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
 	margin-bottom: 8px;
+	margin-top: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -81,9 +72,7 @@ export function MyTendersList() {
 				<Heading size={'md'}>Tenders that you have created</Heading>
 			</Flex>
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<>
 					{!data || data.length <= 0 ? (

@@ -1,18 +1,19 @@
-import { Box, Button, Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { Box, Button, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
-import { ModalContext } from '../../../../context/ModalContext';
-import { Bid } from '../../../../models/Tender';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
+import { ProcurementListSkeleton } from '../../ProcurementListSkeleton';
+import { CreateBidStepper } from './new/CreateBidStepper';
 
 const PropertyCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
 	height: auto;
+	margin-top: 8px;
+	margin-bottom: 8px;
 
 	h3 {
 		margin-bottom: 16px;
@@ -27,29 +28,10 @@ const PropertyCardStyled = styled(CardBaseLink)`
 export const BidsList = (): JSX.Element => {
 	const { data, isLoading } = useGetBids();
 
-	const shouldDeliver = (bid: Bid) => {
-		if (bid.delivery === 1) {
-			return (
-				<HStack>
-					<Text as={'b'}>Deliver to:</Text>
-					<Text color={'black'}>{bid.address}</Text>
-				</HStack>
-			);
-		}
-		return (
-			<HStack>
-				<Text as={'b'}>Address:</Text>
-				<Text color={'black'}>{bid.address}</Text>
-			</HStack>
-		);
-	};
-
 	return (
-		<>
+		<Box p={4}>
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<BidLayout>
 					{!data || data.length === 0 ? (
@@ -62,14 +44,18 @@ export const BidsList = (): JSX.Element => {
 							.reverse()
 							.map((bid) => {
 								let bidStatus;
+								let bidColor;
 								if (bid.status === 0) {
 									bidStatus = 'Unpublished';
+									bidColor = 'gray';
 								} else if (bid.status === 1) {
 									bidStatus = 'Published';
 								} else if (bid.status === 2) {
 									bidStatus = 'Rejected';
+									bidColor = 'red';
 								} else if (bid.status === 3) {
 									bidStatus = 'Accepted';
+									bidColor = 'green';
 								} else {
 									bidStatus = 'Unknown';
 								}
@@ -90,23 +76,26 @@ export const BidsList = (): JSX.Element => {
 														<Text>{bid.terms}</Text>
 													</HStack>
 													<HStack>
-														<Text color={'black'}>Address: </Text>
-														<Text>{bid.address}</Text>
-													</HStack>
-												</GridItem>
-												<GridItem colSpan={2}>
-													<HStack>
-														<Text color={'black'}>Status:</Text>
-														<Text>{bidStatus}</Text>
-													</HStack>
-													{shouldDeliver(bid)}
-													<HStack>
 														<Text color={'black'}>Close date: </Text>
 														<Text>
 															{formatDateWithoutTime(
 																new Date(bid.finishDate)
 															)}
 														</Text>
+													</HStack>
+												</GridItem>
+												<GridItem colSpan={2}>
+													<HStack>
+														<Text color={'black'}>Status:</Text>
+														<Text color={bidColor}>{bidStatus}</Text>
+													</HStack>
+													<HStack>
+														<Text color={'black'}>Delivery: </Text>
+														<Text>{bid.delivery ? 'Yes' : 'No'}</Text>
+													</HStack>
+													<HStack>
+														<Text color={'black'}>Address: </Text>
+														<Text>{bid.address}</Text>
 													</HStack>
 												</GridItem>
 												<GridItem colSpan={2}>
@@ -127,28 +116,43 @@ export const BidsList = (): JSX.Element => {
 					)}
 				</BidLayout>
 			)}
-		</>
+		</Box>
 	);
 };
 
 function BidLayout({ children }) {
-	const [, setModalContext] = useContext(ModalContext);
+	const [showCreateBid, setShowCreateBid] = useState(false);
+
 	return (
 		<Box>
-			<Flex justify={'end'} mb={2}>
-				<Button
-					variant="outline"
-					colorScheme="black"
-					onClick={() =>
-						setModalContext({
-							addBid: { bid: undefined }
-						})
-					}
-				>
-					Create bid
-				</Button>
+			<Flex justify={'space-between'} align={'center'} mb={2}>
+				<Box>
+					<Heading size={'md'}>Create bid and send to a single bidder</Heading>
+				</Box>
+
+				<Box>
+					<Flex>
+						{showCreateBid && (
+							<Button
+								variant={'link'}
+								colorScheme={'gray'}
+								mr={4}
+								onClick={() => setShowCreateBid(false)}
+							>
+								Bid list
+							</Button>
+						)}
+						<Button
+							variant="outline"
+							colorScheme="black"
+							onClick={() => setShowCreateBid(true)}
+						>
+							Create bid
+						</Button>
+					</Flex>
+				</Box>
 			</Flex>
-			{children}
+			{showCreateBid ? <CreateBidStepper setShowCreateBid={setShowCreateBid} /> : children}
 		</Box>
 	);
 }

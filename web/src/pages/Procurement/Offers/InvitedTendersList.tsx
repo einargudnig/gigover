@@ -3,12 +3,11 @@ import { useMemo } from 'react';
 import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Center } from '../../../components/Center';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { CompleteTender } from '../../../models/Tender';
 import { useGetBidderTenders } from '../../../queries/procurement/useGetBidderTenders';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
-
+import { ProcurementListSkeleton } from '../ProcurementListSkeleton';
 const OfferCardStyled = styled(CardBaseLink)`
 	width: 100%;
 	max-width: 100%;
@@ -121,9 +120,7 @@ export const InvitedTendersList = (): JSX.Element => {
 			</Flex>
 
 			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
+				<ProcurementListSkeleton />
 			) : (
 				<>
 					{noTender ? (

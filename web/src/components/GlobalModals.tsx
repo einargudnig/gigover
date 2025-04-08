@@ -5,8 +5,6 @@ import ShareItem from '../pages/Files/components/ShareItem';
 import { Modal } from './Modal';
 // import { PropertyIcon } from './icons/PropertyIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
-import { AddBidModal } from './modals/AddBidModal';
-import { EditBidModal } from './modals/EditBidModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
 import { ProjectModal } from './modals/ProjectModal';
@@ -23,7 +21,6 @@ import { UseResourceModal } from './modals/UseResourceModal';
 export const GlobalModals = (): JSX.Element => {
 	const [modalContext, setModalContext] = useContext(ModalContext);
 	const { project } = modalContext.modifyProject || {};
-	const { bid } = modalContext.addBid || modalContext.editBid || {};
 	const { property } = modalContext.addProperty || modalContext.editProperty || {};
 
 	return (
@@ -55,16 +52,6 @@ export const GlobalModals = (): JSX.Element => {
 			{modalContext.shareItem && (
 				<Modal open={true} title={'Share options'} onClose={() => setModalContext({})}>
 					<ShareItem shareItem={modalContext.shareItem} />
-				</Modal>
-			)}
-			{modalContext.addBid && (
-				<Modal open={true} title={'Create bid'}>
-					<AddBidModal bid={bid} />
-				</Modal>
-			)}
-			{modalContext.editBid && (
-				<Modal open={true} title={'Edit bid'}>
-					<EditBidModal bid={bid} />
 				</Modal>
 			)}
 			{modalContext.addProperty && (
