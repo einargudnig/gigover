@@ -100,7 +100,7 @@ const LoginForm = ({ onForgotPassword, onOrganisationLogin }): JSX.Element => {
 		try {
 			setLoginError(null);
 			setLoading(true);
-			await firebase.auth.signInWithEmailAndPassword(email, password);
+			await firebase.signInWithEmailAndPassword(email, password);
 			setLoading(false);
 		} catch (e) {
 			console.error(e);
@@ -320,7 +320,7 @@ const SignUpForm = () => {
 		try {
 			setRegisterError(null);
 			setLoading(true);
-			await firebase.auth.createUserWithEmailAndPassword(email, password);
+			await firebase.createUserWithEmailAndPassword(email, password);
 			setLoading(false);
 		} catch (e) {
 			console.error(e);
@@ -439,7 +439,7 @@ const OrganisationSignUpForm = ({ onBackToLogin }) => {
 			setRegisterError(null);
 			setLoading(true);
 			// start with dummy login!
-			await firebase.auth.signInWithEmailAndPassword(username, password);
+			await firebase.signInWithEmailAndPassword(username, password);
 			setLoading(false);
 		} catch (e) {
 			console.error(e);

@@ -14,7 +14,7 @@
 		"core-js": "^3.12.1",
 		"date-fns": "^2.16.1",
 		"email-js": "^2.0.2",
-		"firebase": "^7.21.0",
+		"firebase": "^10.12.2",
 		"framer-motion": "^3.10.2",
 		"history": "^5.0.0",
 		"install": "^0.13.0",

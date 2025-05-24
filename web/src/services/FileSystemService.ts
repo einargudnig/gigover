@@ -1,10 +1,34 @@
-import firebase from 'firebase';
+import {
+	DataSnapshot,
+	DatabaseReference,
+	Query,
+	child as databaseChild,
+	get as databaseGet,
+	limitToFirst as databaseLimitToFirst,
+	onValue as databaseOnValue,
+	orderByChild as databaseOrderByChild,
+	query as databaseQuery,
+	ref as databaseRef,
+	set as databaseSet,
+	getDatabase
+} from 'firebase/database';
+import {
+	StorageReference,
+	TaskState,
+	UploadTaskSnapshot,
+	getDownloadURL,
+	getStorage,
+	ref as storageRef,
+	uploadBytesResumable
+} from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
+import { app } from '../firebase/firebase'; // Import the initialized Firebase app
 import { FileUploadType } from '../models/FileUploadType';
-import { devError } from '../utils/ConsoleUtils';
 import { Project } from '../models/Project';
 import { FileType } from '../models/ProjectFile';
+import { DocumentTypes } from '../models/ProjectImage';
 import { DocumentInput } from '../mutations/useAddDocument';
+import { devError } from '../utils/ConsoleUtils';
 
 export interface FileDocument {
 	created: number;
@@ -27,55 +51,64 @@ export interface FolderResult {
 	files: FileDocument[];
 }
 
+const db = getDatabase(app);
+const storage = getStorage(app, 'gs://gigover-fileystem');
+
 export class FileSystemService {
-	private dbRef: firebase.database.Reference;
-	private fileSystem: firebase.storage.Storage;
-	private ref: firebase.storage.Reference;
+	private dbRootRef: DatabaseReference;
+	private storageRootRef: StorageReference;
 
 	constructor() {
-		this.fileSystem = firebase.app().storage('gs://gigover-fileystem');
-		this.ref = this.fileSystem.ref();
-		this.dbRef = firebase.database().ref();
+		this.dbRootRef = databaseRef(db);
+		this.storageRootRef = storageRef(storage);
 	}
 
 	assertProjectAccess(projects: Project[], projectId: number) {
 		const foundProject = projects.find((p) => p.projectId === projectId);
-
 		if (!foundProject) {
 			throw new Error('Unauthorized access to project');
 		}
 	}
 
-	getProjectChild(projectId: number) {
-		return this.ref.child(`${projectId}`);
+	getProjectStorageChild(projectId: number): StorageReference {
+		return storageRef(this.storageRootRef, `${projectId}`);
 	}
 
-	getDbProjectChild(projectId: number) {
-		return this.dbRef.child(`${projectId}`);
+	getDbProjectChild(projectId: number): DatabaseReference {
+		return databaseChild(this.dbRootRef, `${projectId}`);
 	}
 
-	getProjectFilesQuery(projectId: number, limit?: number) {
-		const query = this.getDbProjectChild(projectId).orderByChild('created');
-
+	getProjectFilesQuery(projectId: number, limit?: number): Query {
+		const projectDbRef = this.getDbProjectChild(projectId);
 		if (limit) {
-			query.limitToFirst(limit);
+			return databaseQuery(
+				projectDbRef,
+				databaseOrderByChild('created'),
+				databaseLimitToFirst(limit)
+			);
 		}
-
-		return query;
+		return databaseQuery(projectDbRef, databaseOrderByChild('created'));
 	}
 
 	getProjectFilesDb(
 		projectId: number,
-		callback: (snapshot: firebase.database.DataSnapshot) => void,
+		callback: (snapshot: DataSnapshot) => void,
 		limit?: number
-	) {
-		return this.getProjectFilesQuery(projectId, limit).on('value', callback);
+	): () => void {
+		// Returns an unsubscribe function
+		const query = this.getProjectFilesQuery(projectId, limit);
+		return databaseOnValue(query, callback);
 	}
 
-	async getProjectFile(projectId: number, fileId: string) {
+	async getProjectFile(projectId: number, fileId: string): Promise<FileDocument | null> {
 		try {
-			const res = await this.getDbProjectChild(projectId).child(fileId).once('value');
-			return res.val() as FileDocument;
+			const snapshot = await databaseGet(
+				databaseChild(this.getDbProjectChild(projectId), fileId)
+			);
+			if (snapshot.exists()) {
+				return snapshot.val() as FileDocument;
+			}
+			return null;
 		} catch (e) {
 			devError(e);
 			throw new Error('Could not find file');
@@ -95,10 +128,11 @@ export class FileSystemService {
 		uploadType: FileUploadType,
 		bytes: number,
 		externalId: number | null
-	) {
+	): Promise<void> {
 		const fileType: FileType = this.getFileTypeForFile(file);
+		const docRef = databaseChild(this.getDbProjectChild(projectId), fileId);
 
-		return this.getDbProjectChild(projectId).child(fileId).set({
+		return databaseSet(docRef, {
 			type: uploadType,
 			fileId: fileId,
 			projectId: projectId,
@@ -118,92 +152,90 @@ export class FileSystemService {
 	async uploadFile(
 		file: File,
 		propertyId: number,
-		offerId: number, // why null?
+		offerId: number,
 		tenderId: number,
 		projectId: number,
 		folderId: number,
 		uploadType = FileUploadType.Project,
-		status: (progress: number, state: firebase.storage.TaskState) => void,
+		statusCallback: (progress: number, state: TaskState) => void,
 		externalId?: number
 	): Promise<DocumentInput> {
-		// devInfo('Gigover File Upload initiated');
 		console.log('Gigover File Upload initiated');
 
-		const fileName = uuid();
+		const generatedFileId = uuid();
 		const originalFileName = file.name;
 		const extension = originalFileName.split('.').pop();
-		const filePath =
-			fileName + (extension && extension !== originalFileName ? '.' + extension : '');
+		const storageFilePath =
+			`${generatedFileId}` +
+			(extension && extension !== originalFileName ? `.${extension}` : '');
+
+		const projectStorageRef = this.getProjectStorageChild(projectId);
+		const fileRef = storageRef(projectStorageRef, storageFilePath);
+		const uploadTask = uploadBytesResumable(fileRef, file);
 
 		return new Promise<DocumentInput>((resolve, reject) => {
-			const uploadTask = this.getProjectChild(projectId).child(filePath).put(file);
-
 			uploadTask.on(
 				'state_changed',
-				(snapshot) => {
-					// Observe state change events such as progress, pause, and resume
-					// Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+				(snapshot: UploadTaskSnapshot) => {
 					const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-					status(progress, snapshot.state);
+					statusCallback(progress, snapshot.state);
 				},
 				(error) => {
 					devError('File upload error', error);
 					reject(error.message);
 				},
 				async () => {
-					const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+					try {
+						const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
-					await this.updateDoc(
-						file,
-						propertyId,
-						offerId,
-						tenderId,
-						projectId,
-						fileName,
-						originalFileName,
-						filePath,
-						downloadURL,
-						uploadType,
-						file.size,
-						externalId || null
-					);
+						await this.updateDoc(
+							file,
+							propertyId,
+							offerId,
+							tenderId,
+							projectId,
+							generatedFileId,
+							originalFileName,
+							storageFilePath,
+							downloadURL,
+							uploadType,
+							file.size,
+							externalId || null
+						);
 
-					const currentFileType = this.getFileTypeForFile(file);
-					console.log('CurrentfileType', currentFileType);
-					const fileType = this.getDocumentTypeForFileType(currentFileType);
-					console.log('fileType', fileType);
+						const currentFileType = this.getFileTypeForFile(file);
+						const docType = this.getDocumentTypeForFileType(currentFileType);
 
-					const image: DocumentInput = {
-						projectId,
-						folderId,
-						name: originalFileName,
-						type: fileType,
-						url: downloadURL,
-						bytes: file.size,
-						taskId: externalId ?? undefined,
-						propertyId: propertyId,
-						offerId: offerId,
-						tenderId: tenderId
-					};
-					console.log('image', image);
-
-					// devInfo('File uploaded');
-					console.log('File uploaded');
-					resolve(image);
+						const documentInput: DocumentInput = {
+							projectId,
+							folderId,
+							name: originalFileName,
+							type: docType,
+							url: downloadURL,
+							bytes: file.size,
+							taskId: externalId ?? undefined,
+							propertyId: propertyId,
+							offerId: offerId,
+							tenderId: tenderId
+						};
+						console.log('File uploaded, DocumentInput:', documentInput);
+						resolve(documentInput);
+					} catch (error) {
+						devError('Error in upload completion (updateDoc or getDownloadURL)', error);
+						reject(error);
+					}
 				}
 			);
 		});
 	}
 
-	private getDocumentTypeForFileType(fileType: FileType) {
+	private getDocumentTypeForFileType(fileType: FileType): DocumentTypes {
 		if (['document', 'pdf', 'other'].includes(fileType)) {
 			return 2;
 		}
-
 		if (fileType === 'video') {
 			return 1;
 		}
-
 		return 0;
 	}
 
@@ -211,15 +243,12 @@ export class FileSystemService {
 		if (file.type.startsWith('text/')) {
 			return 'txt';
 		}
-
 		if (file.type.startsWith('video/')) {
 			return 'video';
 		}
-
 		if (file.type.startsWith('image/')) {
 			return 'picture';
 		}
-
 		switch (file.type) {
 			case 'application/msword':
 				return 'document';

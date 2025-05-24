@@ -1,3 +1,3 @@
-import firebase from 'firebase';
+import type { User as FirebaseUserType } from 'firebase/auth';
 
-export type FirebaseUser = firebase.User;
+export type FirebaseUser = FirebaseUserType;
