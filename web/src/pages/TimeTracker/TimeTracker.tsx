@@ -1,9 +1,7 @@
-import { Button } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, Divider, Flex, Heading } from '@chakra-ui/react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Timer from 'react-compound-timer';
-import styled from 'styled-components';
 import { Theme } from '../../Theme';
-import { CardBase } from '../../components/CardBase';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
 import { Table } from '../../components/Table';
@@ -19,74 +17,6 @@ import { secondsToString } from '../../utils/NumberUtils';
 import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
-import { TimeTrackerReport } from './TimeTrackerReport';
-
-const TitleContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: ${(props) => props.theme.padding(3)};
-`;
-
-export const TimerWrapper = styled.div`
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-
-	button {
-		border: none;
-		height: 100%;
-		border-radius: 6px;
-		padding: 12px 16px;
-		font-size: 24px;
-		margin-left: 12px;
-
-		&:active,
-		&:focus {
-			outline: none;
-			border: none;
-		}
-	}
-`;
-
-export const TimerContainer = styled.div`
-	display: inline-block;
-	font-size: 24px;
-	font-weight: 300;
-	border: 1px solid #e5e5e5;
-	padding: 12px;
-	margin: 12px 0;
-	border-radius: 6px;
-	user-select: none;
-`;
-
-const TimeTrackerTotalReport = styled(CardBase)`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-
-	> div {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-	}
-
-	h3 {
-		font-weight: normal;
-		padding-top: 24px;
-	}
-
-	.separator {
-		height: 100px;
-		width: 1px;
-		background-color: ${(props) => props.theme.colors.border};
-	}
-`;
-
-const ActiveTimeTrackers = styled(CardBase)`
-	margin: 24px 0;
-`;
 
 export const TimeTracker = (): JSX.Element => {
 	const [now, setNow] = useState(new Date());
@@ -176,8 +106,8 @@ export const TimeTracker = (): JSX.Element => {
 	const hasWorkers = (data?.data.workers && data?.data.workers.length > 0) ?? false;
 
 	useEffect(() => {
-		activeTrackers({});
-		getReport({});
+		activeTrackers();
+		getReport();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refetch]);
 
@@ -185,126 +115,219 @@ export const TimeTracker = (): JSX.Element => {
 		<>
 			<Page title={'Time tracker'}>
 				<DisabledPage>
-					<TimeTrackerTotalReport>
-						<div />
-						<div>
-							<h3>Timesheets</h3>
+					<Card
+						borderRadius="12px"
+						background="#fff"
+						boxShadow={Theme.boxShadow()}
+						p={6}
+						display="flex"
+						justifyContent="space-between"
+						alignItems="center"
+					>
+						<Box />
+						<Box
+							display="flex"
+							justifyContent="center"
+							alignItems="center"
+							flexDirection="column"
+						>
+							<Heading as="h3" size="md" fontWeight="normal" paddingTop={6} pb={2}>
+								Timesheets
+							</Heading>
 							{reportDataLoading ? (
-								<h1>
+								<Heading as="h1" size="xl">
 									<LoadingSpinner />
-								</h1>
+								</Heading>
 							) : (
-								<h1>{totalTimesheets}</h1>
+								<Heading as="h1" size="xl">
+									{totalTimesheets}
+								</Heading>
 							)}
-						</div>
-						<div className={'separator'} />
-						<div>
-							<h3>Minutes tracked</h3>
+						</Box>
+						<Divider
+							orientation="vertical"
+							height="100px"
+							borderColor={Theme.colors.border}
+						/>
+						<Box
+							display="flex"
+							justifyContent="center"
+							alignItems="center"
+							flexDirection="column"
+						>
+							<Heading as="h3" size="md" fontWeight="normal" paddingTop={6} pb={2}>
+								Minutes tracked
+							</Heading>
 							{reportDataLoading ? (
-								<h1>
+								<Heading as="h1" size="xl">
 									<LoadingSpinner />
-								</h1>
+								</Heading>
 							) : (
-								<h1>{secondsToString(totalMinutes * 60)}</h1>
+								<Heading as="h1" size="xl">
+									{secondsToString(totalMinutes * 60)}
+								</Heading>
 							)}
-						</div>
-						<div className={'separator'} />
-						<div>
-							<h3>Workers</h3>
+						</Box>
+						<Divider
+							orientation="vertical"
+							height="100px"
+							borderColor={Theme.colors.border}
+						/>
+						<Box
+							display="flex"
+							justifyContent="center"
+							alignItems="center"
+							flexDirection="column"
+						>
+							<Heading as="h3" size="md" fontWeight="normal" paddingTop={6} pb={2}>
+								Workers
+							</Heading>
 							{reportDataLoading ? (
-								<h1>
+								<Heading as="h1" size="xl">
 									<LoadingSpinner />
-								</h1>
+								</Heading>
 							) : (
-								<h1>{reportData?.data.report?.length || 0}</h1>
+								<Heading as="h1" size="xl">
+									{reportData?.data.report?.length || 0}
+								</Heading>
 							)}
-						</div>
-						<div />
-					</TimeTrackerTotalReport>
-					<ActiveTimeTrackers>
-						<TitleContainer>
-							<h3>Active timers</h3>
-							<StartTrackingAction />
-						</TitleContainer>
-						<div>
-							{!hasWorkers ? (
-								<div style={{ marginTop: 24 }}>
-									<EmptyState
-										title={'No current active workers'}
-										text={'Start tracking to see active timers'}
-										action={<StartTrackingAction />}
-									/>
-								</div>
-							) : (
-								<Table>
-									<thead>
-										<tr>
-											<th>Project</th>
-											<th>Worker</th>
-											<th align={'center'} style={{ width: 200 }}>
-												Timer
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										{data?.data?.workers?.map((worker) =>
-											worker.timeSheets.map((timeSheet, timeSheetIndex) => (
-												<tr key={`${worker.uId}_${timeSheetIndex}`}>
-													<td>
-														{getActiveTrackerHeader(
-															timeSheet.projectId,
-															timeSheet.taskId
-														)}
-													</td>
-													<td>{worker.name}</td>
-													<td>
-														<TimerWrapper>
-															<TimerContainer>
-																<Timer
-																	formatValue={(value) =>
-																		value < 10
-																			? `0${value}`
-																			: value.toString()
-																	}
-																	initialTime={
-																		now.getTime() -
-																		timeSheet.start
-																	}
-																	lastUnit={'h'}
+						</Box>
+						<Box />
+					</Card>
+					<Card
+						borderRadius="12px"
+						background="#fff"
+						boxShadow={Theme.boxShadow()}
+						p={6}
+						my={6}
+					>
+						<CardBody p={0}>
+							<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
+								<Heading as="h3" size="md">
+									Active timers
+								</Heading>
+								<StartTrackingAction />
+							</Flex>
+							<Box>
+								{!hasWorkers ? (
+									<Box mt={6}>
+										<EmptyState
+											title={'No current active workers'}
+											text={'Start tracking to see active timers'}
+											action={<StartTrackingAction />}
+										/>
+									</Box>
+								) : (
+									<Table>
+										<thead>
+											<tr>
+												<th>Project</th>
+												<th>Worker</th>
+												<th style={{ width: 200, textAlign: 'center' }}>
+													Timer
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											{data?.data?.workers?.map((worker) =>
+												worker.timeSheets.map(
+													(timeSheet, timeSheetIndex) => (
+														<tr key={`${worker.uId}_${timeSheetIndex}`}>
+															<td>
+																{getActiveTrackerHeader(
+																	timeSheet.projectId,
+																	timeSheet.taskId
+																)}
+															</td>
+															<td>{worker.name}</td>
+															<td>
+																<Flex
+																	justify="flex-end"
+																	align="center"
 																>
-																	<Timer.Hours />:
-																	<Timer.Minutes />:
-																	<Timer.Seconds />
-																</Timer>
-															</TimerContainer>
-															<Button
-																onClick={() =>
-																	setStopConfirmationModal({
-																		projectId:
-																			timeSheet.projectId,
-																		taskId: timeSheet.taskId,
-																		uId: worker.uId
-																	})
-																}
-															>
-																|&nbsp;|
-															</Button>
-														</TimerWrapper>
-													</td>
-												</tr>
-											))
-										)}
-									</tbody>
-								</Table>
-							)}
-						</div>
-					</ActiveTimeTrackers>
-					<ActiveTimeTrackers>
-						<TitleContainer>
-							<h3>Reports</h3>
-						</TitleContainer>
-						<TimeTrackerReport refetch={[refetch, setRefetch]} />
-					</ActiveTimeTrackers>
+																	<Box
+																		fontSize="2xl"
+																		fontWeight="light"
+																		border="1px solid #e5e5e5"
+																		padding={3}
+																		marginRight={3}
+																		borderRadius="md"
+																		userSelect="none"
+																	>
+																		<Timer
+																			formatValue={(value) =>
+																				value < 10
+																					? `0${value}`
+																					: value.toString()
+																			}
+																			initialTime={
+																				now.getTime() -
+																				timeSheet.start
+																			}
+																			lastUnit={'h'}
+																		>
+																			<Timer.Hours />:
+																			<Timer.Minutes />:
+																			<Timer.Seconds />
+																		</Timer>
+																	</Box>
+																	<Button
+																		variant="outline"
+																		borderColor="transparent"
+																		height="100%"
+																		borderRadius="md"
+																		paddingY={3}
+																		paddingX={4}
+																		fontSize="2xl"
+																		_active={{
+																			outline: 'none',
+																			border: 'none'
+																		}}
+																		_focus={{
+																			outline: 'none',
+																			border: 'none'
+																		}}
+																		onClick={() =>
+																			setStopConfirmationModal(
+																				{
+																					projectId:
+																						timeSheet.projectId,
+																					taskId: timeSheet.taskId,
+																					uId: worker.uId
+																				}
+																			)
+																		}
+																	>
+																		|&nbsp;|
+																	</Button>
+																</Flex>
+															</td>
+														</tr>
+													)
+												)
+											)}
+										</tbody>
+									</Table>
+								)}
+							</Box>
+						</CardBody>
+					</Card>
+					<Card
+						borderRadius="12px"
+						background="#fff"
+						boxShadow={Theme.boxShadow()}
+						p={6}
+						my={6}
+					>
+						<CardBody p={0}>
+							<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
+								<Heading as="h3" size="md">
+									Reports
+								</Heading>
+							</Flex>
+							{/* <TimeTrackerReport refetch={[refetch, setRefetch]} /> */}
+						</CardBody>
+					</Card>
 				</DisabledPage>
 			</Page>
 			{stopConfirmationModal && (
@@ -312,7 +335,7 @@ export const TimeTracker = (): JSX.Element => {
 					onClose={() => setStopConfirmationModal(undefined)}
 					onComplete={async () => {
 						setStopConfirmationModal(undefined);
-						await activeTrackers({});
+						await activeTrackers();
 					}}
 					projectId={stopConfirmationModal.projectId}
 					taskId={stopConfirmationModal.taskId}

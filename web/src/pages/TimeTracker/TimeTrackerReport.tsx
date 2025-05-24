@@ -1,15 +1,14 @@
-import { Button } from '@chakra-ui/react';
+import { Box, Button, Flex } from '@chakra-ui/react';
 import moment from 'moment';
-import { darken } from 'polished';
 import React, { useCallback, useContext, useState } from 'react';
 import Timer from 'react-compound-timer';
-import { DateRangePicker } from 'react-dates';
-import styled from 'styled-components';
+import { Theme } from '../../Theme';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Table } from '../../components/Table';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { EmptyState } from '../../components/empty/EmptyState';
+import { DatePicker } from '../../components/forms/DatePicker';
 import { Edit } from '../../components/icons/Edit';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { ModalContext } from '../../context/ModalContext';
@@ -20,59 +19,7 @@ import { Timesheet } from '../../queries/useTrackerReport';
 import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { showTimeSheetRange } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
-import { TimerContainer, TimerWrapper } from './TimeTracker';
 import { useTimeTrackerReport } from './useTimeTrackerReport';
-
-const TimeTrackerReportFilter = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin: ${(props) => props.theme.padding(2)} 0;
-
-	> div:last-child {
-		display: flex;
-
-		> *:not(:last-child) {
-			margin-right: ${(props) => props.theme.padding(2)};
-		}
-	}
-`;
-
-export const DatePickerWrapper = styled.div`
-	.SingleDatePicker,
-	.SingleDatePicker_1,
-	.SingleDatePickerInput {
-		width: 100%;
-		height: 100%;
-
-		.DateInput_input {
-			line-height: 54px;
-		}
-	}
-
-	.DateRangePickerInput__withBorder {
-		padding: 12px;
-		border-radius: 8px;
-	}
-
-	.DateInput_input__focused {
-		border-bottom-color: ${(props) => props.theme.colors.green};
-	}
-
-	.CalendarDay__selected {
-		background: ${(props) => props.theme.colors.darkGreen};
-	}
-
-	.CalendarDay__selected_span {
-		background: ${(props) => props.theme.colors.green};
-		border: 1px double ${(props) => darken(0.05, props.theme.colors.green)};
-		color: #fff;
-	}
-
-	.DayPickerKeyboardShortcuts_show__bottomRight::before {
-		border-right-color: ${(props) => props.theme.colors.darkGreen};
-	}
-`;
 
 interface TimeTrackerReportProps {
 	refetch: [number, React.Dispatch<React.SetStateAction<number>>];
@@ -85,14 +32,13 @@ export const TimeTrackerReport = ({
 	const [selectedUser, setSelectedUser] = useState<string | undefined>();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
-	const [startDate, setStartDate] = useState(moment().subtract(14, 'days'));
-	const [endDate, setEndDate] = useState(moment());
-	const [focusedInput, setFocusedInput] = useState<'startDate' | 'endDate' | null>(null);
+	const [startDate, setStartDate] = useState<moment.Moment | null>(moment().subtract(14, 'days'));
+	const [endDate, setEndDate] = useState<moment.Moment | null>(moment());
 	const reportToCSV = useReportToCSV();
 	const deleteTimeRecord = useDeleteTimeRecord();
 	const { projectList, results, isLoading, totalTracked, users } = useTimeTrackerReport(
-		startDate,
-		endDate,
+		startDate || moment().subtract(14, 'days'),
+		endDate || moment(),
 		refetchValue,
 		selectedUser,
 		selectedProject,
@@ -150,30 +96,24 @@ export const TimeTrackerReport = ({
 	};
 
 	return (
-		<div>
-			<TimeTrackerReportFilter>
-				<div style={{ display: 'flex', flex: 1 }}>
-					<DatePickerWrapper>
-						<DateRangePicker
-							displayFormat={MomentDateFormat}
-							isOutsideRange={() => false}
-							startDate={startDate}
-							startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
-							endDate={endDate} // momentPropTypes.momentObj or null,
-							endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
-							onDatesChange={({ startDate: sDate, endDate: eDate }) => {
-								if (sDate !== null) {
-									setStartDate(sDate);
-								}
-								if (eDate !== null) {
-									setEndDate(eDate);
-								}
-							}} // PropTypes.func.isRequired,
-							focusedInput={focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
-							onFocusChange={(fInput) => setFocusedInput(fInput)} // PropTypes.func.isRequired,
-						/>
-					</DatePickerWrapper>
-					<div style={{ width: 8 }} />
+		<Box>
+			<Flex alignItems="center" justifyContent="space-between" my={Theme.padding(2)}>
+				<Flex flex={1} mr={Theme.padding(2)} alignItems="center">
+					<DatePicker
+						startDate={startDate ? startDate.toDate() : null}
+						endDate={endDate ? endDate.toDate() : null}
+						onChange={(update: [Date | null, Date | null] | Date | null) => {
+							if (Array.isArray(update)) {
+								const [start, end] = update;
+								setStartDate(start ? moment(start) : null);
+								setEndDate(end ? moment(end) : null);
+							}
+						}}
+						selectsRange
+						dateFormat={MomentDateFormat}
+						isClearable
+					/>
+					<Box style={{ width: 8 }} />
 					<TrackerSelect
 						minWidth={200}
 						title={'Select project'}
@@ -233,22 +173,21 @@ export const TimeTrackerReport = ({
 						}}
 						margin={0}
 					/>
-				</div>
-				<div>
+				</Flex>
+				<Flex>
 					<Button
 						disabled={!selectedProject}
 						onClick={() => exportToCsv()}
 						height={'100%'}
-						lineHeight="72px"
 						ml={4}
 						variant={'outline'}
 						colorScheme="gray"
 					>
 						Export CSV
 					</Button>
-				</div>
-			</TimeTrackerReportFilter>
-			<div style={{ marginTop: 24 }}>
+				</Flex>
+			</Flex>
+			<Box style={{ marginTop: 24 }}>
 				{isLoading ? (
 					<Center>
 						<LoadingSpinner size={32} />
@@ -283,8 +222,17 @@ export const TimeTrackerReport = ({
 									</td>
 									<td />
 									<td>
-										<TimerWrapper>
-											<TimerContainer>
+										<Flex justify="flex-end" align="center">
+											<Box
+												fontSize="2xl"
+												fontWeight="light"
+												border="1px solid"
+												borderColor="gray.200"
+												padding={3}
+												marginRight={3}
+												borderRadius="md"
+												userSelect="none"
+											>
 												<Timer
 													startImmediately={false}
 													formatValue={(value) =>
@@ -300,8 +248,10 @@ export const TimeTrackerReport = ({
 													<Timer.Minutes />:
 													<Timer.Seconds />
 												</Timer>
-											</TimerContainer>
+											</Box>
 											<Button
+												ml={2}
+												colorScheme="blue"
 												onClick={() => {
 													setModalContext({
 														editTimeTracker: {
@@ -316,6 +266,7 @@ export const TimeTrackerReport = ({
 												<Edit size={26} color={'#fff'} />
 											</Button>
 											<Button
+												ml={2}
 												colorScheme={'red'}
 												onClick={() => {
 													if (
@@ -330,7 +281,7 @@ export const TimeTrackerReport = ({
 											>
 												<TrashIcon size={26} color={'#fff'} />
 											</Button>
-										</TimerWrapper>
+										</Flex>
 									</td>
 								</tr>
 							))}
@@ -347,12 +298,12 @@ export const TimeTrackerReport = ({
 				) : (
 					<EmptyState
 						title={'No report available'}
-						text={`We could not find any timesheets between ${startDate.format(
+						text={`We could not find any timesheets between ${startDate?.format(
 							'D MMM YYYY'
-						)} and ${endDate.format('D MMM YYYY')}`}
+						)} and ${endDate?.format('D MMM YYYY')}`}
 					/>
 				)}
-			</div>
-		</div>
+			</Box>
+		</Box>
 	);
 };
