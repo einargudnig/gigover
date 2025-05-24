@@ -4,8 +4,30 @@ import { ICommentChord } from '../components/modals/EditPhotoModal';
 import { ApiService } from '../services/ApiService';
 // import { devInfo } from '../utils/ConsoleUtils';
 
+export interface DotCommentResponse {
+	dotId: number;
+	comment: string;
+	commentId: number;
+	created: string;
+	uId: string;
+	userName: string;
+}
+
+export interface ImageDotResponse {
+	dotId: number;
+	imageId: string;
+	status: number;
+	// Assuming comments might be part of the response, but can be simplified if not.
+	// comments: DotCommentResponse[]; // Or a simpler type if comments are not returned here.
+	coordinateX: number;
+	coordinateY: number;
+	height: number;
+	width: number;
+	pageNumber?: number;
+}
+
 export const useAddImageDotComment = () => {
-	return useMutation<unknown, AxiosError, DotComment>({
+	return useMutation<DotCommentResponse, AxiosError, DotComment>({
 		mutationFn: async (dotComment: DotComment) => {
 			// devInfo(dotComment, 'dot');
 			console.log(dotComment, 'dot');
@@ -20,7 +42,11 @@ export const useAddImageDotComment = () => {
 };
 
 export const useChangeImageDotStatus = () => {
-	return useMutation<unknown, AxiosError, { dotId: number; status: number }>({
+	return useMutation<
+		{ dotId: number; status: number },
+		AxiosError,
+		{ dotId: number; status: number }
+	>({
 		mutationFn: async ({ dotId, status }: { dotId: number; status: number }) => {
 			const response = await axios.post(
 				ApiService.updateDotStatus,
@@ -33,7 +59,7 @@ export const useChangeImageDotStatus = () => {
 };
 
 export const useRemoveDotComment = () => {
-	return useMutation<unknown, AxiosError, DotComment>({
+	return useMutation<DotComment, AxiosError, DotComment>({
 		mutationFn: async (dotComment: DotComment) => {
 			const response = await axios.post(
 				ApiService.removeDotComment,
@@ -46,7 +72,7 @@ export const useRemoveDotComment = () => {
 };
 
 export const useEditDotComment = () => {
-	return useMutation<unknown, AxiosError, DotComment>({
+	return useMutation<DotCommentResponse, AxiosError, DotComment>({
 		mutationFn: async (dotComment: DotComment) => {
 			const response = await axios.post(
 				ApiService.editDotComment,
@@ -67,7 +93,7 @@ export interface AddDotInput {
 	imageId?: number | string;
 }
 export const useAddImageDot = () => {
-	return useMutation<unknown, AxiosError, AddDotInput>({
+	return useMutation<{ id: number }, AxiosError, AddDotInput>({
 		mutationFn: async (dotChord: AddDotInput) => {
 			const response = await axios.post(
 				ApiService.addImageDot,
@@ -79,7 +105,7 @@ export const useAddImageDot = () => {
 	});
 };
 export const useRemoveImageDot = () => {
-	return useMutation<unknown, AxiosError, ICommentChord>({
+	return useMutation<ICommentChord, AxiosError, ICommentChord>({
 		mutationFn: async (dotChord: ICommentChord) => {
 			const response = await axios.post(
 				ApiService.removeImageDot,

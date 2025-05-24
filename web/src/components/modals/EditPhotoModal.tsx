@@ -1,24 +1,17 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Modal } from '../Modal';
 import {
 	Box,
 	Divider,
 	Flex,
-	Heading,
 	HStack,
+	Heading,
 	IconButton,
 	Spacer,
 	Tag,
 	Text,
 	VStack
 } from '@chakra-ui/react';
-import { humanFileSize } from '../../utils/FileSizeUtils';
-import { DownloadIcon } from '../icons/DownloadIcon';
-import { TrashIcon } from '../icons/TrashIcon';
-import { ImageDot } from '../ImageEditor/ImageDot';
-import { formatDate } from '../../utils/StringUtils';
-import { ImportantIcon } from '../icons/ImportantIcon';
-import { useImageDots } from '../../queries/useImageDots';
+import React, { useContext, useEffect, useState } from 'react';
+import { ProjectImage } from '../../models/ProjectImage';
 import {
 	useAddImageDot,
 	useAddImageDotComment,
@@ -26,20 +19,27 @@ import {
 	useRemoveDotComment,
 	useRemoveImageDot
 } from '../../mutations/useImageDot';
-import { ProjectImage } from '../../models/ProjectImage';
 import { GigoverFileIconForType } from '../../pages/Files/components/File';
+import { useImageDots } from '../../queries/useImageDots';
+import { humanFileSize } from '../../utils/FileSizeUtils';
+import { formatDate } from '../../utils/StringUtils';
+import { ImageDot } from '../ImageEditor/ImageDot';
+import { Modal } from '../Modal';
+import { DownloadIcon } from '../icons/DownloadIcon';
+import { ImportantIcon } from '../icons/ImportantIcon';
+import { TrashIcon } from '../icons/TrashIcon';
 // import { devInfo } from '../../utils/ConsoleUtils';
-import { ConfirmDialog } from '../ConfirmDialog';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDeleteDocument } from '../../mutations/useDeleteDocument';
-import { ModalContext } from '../../context/ModalContext';
-import { ShareIcon } from '../icons/ShareIcon';
 import moment from 'moment';
-import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
-import { useProjectList } from '../../queries/useProjectList';
+import { useNavigate, useParams } from 'react-router-dom';
+import ScrollIntoView from 'react-scroll-into-view';
+import { ModalContext } from '../../context/ModalContext';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { Project } from '../../models/Project';
-import ScrollIntoView from 'react-scroll-into-view';
+import { useDeleteDocument } from '../../mutations/useDeleteDocument';
+import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
+import { useProjectList } from '../../queries/useProjectList';
+import { ConfirmDialog } from '../ConfirmDialog';
+import { ShareIcon } from '../icons/ShareIcon';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -114,10 +114,10 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 		const response = await addImgageDot({ ...comment.chord, imageId: file.imageId });
 
 		//TODO new comment on that dot
-		await addImageDotComment({ dotId: response.data.id, comment: comment.comment });
+		await addImageDotComment({ dotId: response.id, comment: comment.comment });
 		refetchImageDots();
 
-		setActivePoint(response.data.id);
+		setActivePoint(response.id);
 	};
 
 	const editComment = async (comment: { comment: string; id: number }) => {
