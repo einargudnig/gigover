@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { CompleteTender } from '../../models/Tender';
 import { ApiService } from '../../services/ApiService';
@@ -8,18 +9,24 @@ export interface BidderTendersResponse {
 }
 
 export const useGetBidderTenders = () => {
-	const { data, isLoading, isSuccess, isError, error } = useQuery<
+	const { data, isPending, isSuccess, isError, error } = useQuery<
 		BidderTendersResponse,
 		ErrorResponse
 	>({
 		queryKey: [ApiService.bidderTenders],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.bidderTenders, {
+				withCredentials: true
+			});
+			return response.data;
+		},
 		refetchOnWindowFocus: true
 	});
 	const tenders: CompleteTender[] = data?.list || [];
 
 	return {
 		data: tenders,
-		isLoading,
+		isPending,
 		isError,
 		isSuccess,
 		error

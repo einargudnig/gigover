@@ -9,7 +9,7 @@ export interface ClientBidResponse {
 }
 
 export const useGetBids = () => {
-	const { data, isLoading, isSuccess, isError, error } = useQuery<
+	const { data, isPending, isSuccess, isError, error } = useQuery<
 		ClientBidResponse,
 		ErrorResponse
 	>({
@@ -26,7 +26,7 @@ export const useGetBids = () => {
 
 	return {
 		data: bids,
-		isLoading,
+		isPending,
 		isError,
 		isSuccess,
 		error

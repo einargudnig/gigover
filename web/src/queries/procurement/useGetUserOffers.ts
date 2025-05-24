@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { Offer } from '../../models/Tender';
 import { ApiService } from '../../services/ApiService';
@@ -8,11 +9,17 @@ export interface UserOfferResponse {
 }
 
 export const useGetUserOffers = () => {
-	const { data, isLoading, isSuccess, isError, error } = useQuery<
+	const { data, isPending, isSuccess, isError, error } = useQuery<
 		UserOfferResponse,
 		ErrorResponse
 	>({
 		queryKey: [ApiService.userOffers],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.userOffers, {
+				withCredentials: true
+			});
+			return response.data;
+		},
 		refetchOnWindowFocus: true
 		// withCredentials: true
 	});
@@ -20,7 +27,7 @@ export const useGetUserOffers = () => {
 
 	return {
 		data: offers,
-		isLoading,
+		isPending,
 		isError,
 		isSuccess,
 		error

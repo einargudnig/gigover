@@ -11,11 +11,11 @@ import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
 export const FilesHome = (): JSX.Element => {
-	const { data, isLoading } = useProjectList();
+	const { data, isPending } = useProjectList();
 
 	const projects = useOpenProjects(data);
 
-	if (isLoading) {
+	if (isPending) {
 		return <LoadingSpinner />;
 	}
 

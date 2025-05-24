@@ -26,7 +26,7 @@ export const useGetUserInfo = () => {
 		authenticated: false
 	};
 
-	const { data, isLoading, isError, error } = useQuery<IUserInfo, ErrorResponse>({
+	const { data, isPending, isError, error } = useQuery<IUserInfo, ErrorResponse>({
 		queryKey: [ApiService.getUserInfo],
 		queryFn: async () => {
 			const response = await axios.get(ApiService.getUserInfo, {
@@ -40,7 +40,7 @@ export const useGetUserInfo = () => {
 
 	return {
 		data: userInfo,
-		isLoading,
+		isPending,
 		isError,
 		error
 	};

@@ -8,10 +8,10 @@ import { Project } from '../../models/Project';
 import { useProjectList } from '../../queries/useProjectList';
 import { UploadModal } from './UploadModal';
 // import { devInfo } from '../../utils/ConsoleUtils';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -21,7 +21,7 @@ const Container = styled.div`
 `;
 
 export const Files = (): JSX.Element => {
-	const { data, isLoading } = useProjectList();
+	const { data, isPending } = useProjectList();
 	const params = useParams();
 	const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
@@ -93,7 +93,7 @@ export const Files = (): JSX.Element => {
 			>
 				<DisabledPage>
 					<VStack style={{ height: '100%' }}>
-						{isLoading ? (
+						{isPending ? (
 							<LoadingSpinner />
 						) : (
 							<HStack style={{ flex: 1, height: '100%', width: '100%' }}>

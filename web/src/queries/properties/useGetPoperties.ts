@@ -9,7 +9,7 @@ export interface PropertiesResponse {
 }
 
 export const useGetProperties = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		PropertiesResponse,
 		ErrorResponse
 	>({
@@ -24,7 +24,7 @@ export const useGetProperties = () => {
 
 	return {
 		data: properties,
-		isLoading,
+		isPending,
 		isFetching,
 		isError,
 		error
