@@ -14,16 +14,16 @@ import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Page } from '../../components/Page';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { FileHouseIcon } from '../../components/icons/FileTypes/FileHouseIcon';
 import { FilterIcon } from '../../components/icons/FilterIcon';
 import { SearchIcon } from '../../components/icons/SearchIcon';
 import { ManageProjectWorkers } from '../../components/modals/ManageProjectWorkers';
+import { ProjectToPropertyModal } from '../../components/modals/PropertyModals/ProjectToProperty';
 import { Project } from '../../models/Project';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useProjectDocuments } from '../../queries/useProjectDocuments';
 import { SearchBar } from '../Files/components/SearchBar';
-import { FileHouseIcon } from '../../components/icons/FileTypes/FileHouseIcon';
-import { ProjectToPropertyModal } from '../../components/modals/PropertyModals/ProjectToProperty';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const Container = styled.div`
 	flex: 1 0;
@@ -43,7 +43,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 
 	const [showSearch, setShowSearch] = useState(false);
 
-	const { data, isLoading, isError, error } = useProjectDetails(projectId);
+	const { data, isPending: isLoading, isError, error } = useProjectDetails(projectId);
 	const project: Project | undefined = data && data.project;
 
 	const { data: projectDocuments } = useProjectDocuments(projectId);

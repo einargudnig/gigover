@@ -32,7 +32,7 @@ export const Onboarding = (): JSX.Element => {
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
 	const [registrationError, setRegistrationError] = useState('');
-	const { mutateAsync: registerFn, data, isLoading, isError, error } = useRegister();
+	const { mutateAsync: registerFn, data, isPending: isLoading, isError, error } = useRegister();
 	const navigate = useNavigate();
 
 	// If the user already is registered, redirect to the dashboard

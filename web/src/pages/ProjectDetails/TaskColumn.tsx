@@ -1,17 +1,17 @@
+import { Button, Heading } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { TaskCard } from '../../components/TaskCard';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { InputWrapper } from '../../components/forms/Input';
+import { PlusIcon } from '../../components/icons/PlusIcon';
+import { useEventListener } from '../../hooks/useEventListener';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
 import { useAddTask } from '../../queries/useAddTask';
-import { PlusIcon } from '../../components/icons/PlusIcon';
-import { TaskCard } from '../../components/TaskCard';
-import { InputWrapper } from '../../components/forms/Input';
-import { useEventListener } from '../../hooks/useEventListener';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { devError } from '../../utils/ConsoleUtils';
-import { Button, Heading } from '@chakra-ui/react';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
-import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 interface TaskColumnProps {
 	project: Project;
@@ -28,7 +28,7 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [taskError, setTaskError] = useState<string>();
 	const { privileges } = useGetUserPrivileges();
-	const { mutateAsync: addTask, isLoading } = useAddTask();
+	const { mutateAsync: addTask, isPending: isLoading } = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
 
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'subject'>) => {

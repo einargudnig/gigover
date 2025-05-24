@@ -26,7 +26,7 @@ const PropertyCardStyled = styled(CardBaseLink)`
 `;
 
 export const BidsList = (): JSX.Element => {
-	const { data, isLoading } = useGetBids();
+	const { data, isPending: isLoading } = useGetBids();
 
 	return (
 		<Box p={4}>

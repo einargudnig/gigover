@@ -2,19 +2,19 @@ import { Spacer, VStack } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { SimpleGrid } from '../../components/SimpleGrid';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { useProjectDocuments } from '../../queries/useProjectDocuments';
 import { useProjectFoldersQuery } from '../../queries/useProjectFoldersQuery';
 import { devError } from '../../utils/ConsoleUtils';
 import { CreateNewFolder } from '../Files/components/CreateNewFolder';
 import { ProjectFolderComponent } from '../Files/components/Folder';
 import { FilesUi } from '../Files/new/components/FilesUi';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
 
 export const ProjectDetailsFiles = (): JSX.Element => {
 	const params = useParams();
 	const projectId = params.projectId ? parseInt(params.projectId) : -1;
 
-	const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
+	const { data, isPending: isLoading, isError, error } = useProjectFoldersQuery(projectId);
 	const projectDocuments = useProjectDocuments(projectId);
 
 	if (isLoading) {
