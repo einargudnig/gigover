@@ -9,7 +9,7 @@ export interface ResourceResponse {
 }
 
 export const useResources = () => {
-	const { data, isLoading, isError, error, ...rest } = useQuery<ResourceResponse, ErrorResponse>({
+	const { data, isPending, isError, error, ...rest } = useQuery<ResourceResponse, ErrorResponse>({
 		queryKey: [ApiService.resources],
 		queryFn: async () => {
 			const response = await axios.get(ApiService.resources, {
@@ -21,7 +21,7 @@ export const useResources = () => {
 
 	return {
 		data: data?.resources || [],
-		isLoading,
+		isPending,
 		isError,
 		error,
 		...rest

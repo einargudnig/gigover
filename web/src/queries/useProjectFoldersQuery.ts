@@ -8,7 +8,7 @@ interface ProjectFolderResponse {
 }
 
 export const useProjectFoldersQuery = (projectId: number) => {
-	const { data, isLoading, isError, error } = useQuery<ProjectFolderResponse, AxiosError>({
+	const { data, isPending, isError, error } = useQuery<ProjectFolderResponse, AxiosError>({
 		queryKey: [ApiService.folderList(projectId)],
 		queryFn: async () => {
 			const response = await axios.get(ApiService.folderList(projectId), {
@@ -20,7 +20,7 @@ export const useProjectFoldersQuery = (projectId: number) => {
 
 	return {
 		data: (data && data.folders) || [],
-		isLoading,
+		isPending,
 		isError,
 		error
 	};

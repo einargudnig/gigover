@@ -15,7 +15,7 @@ interface OrganizationUsersResponse {
 }
 
 export const useGetOrganizationUsers = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		OrganizationUsersResponse,
 		ErrorResponse
 	>({
@@ -32,7 +32,7 @@ export const useGetOrganizationUsers = () => {
 
 	return {
 		data: { organizationUsers: users },
-		isLoading,
+		isPending,
 		isFetching,
 		isError,
 		error

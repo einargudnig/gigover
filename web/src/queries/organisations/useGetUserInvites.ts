@@ -9,7 +9,7 @@ interface UserInvitesResponse {
 }
 
 export const useGetUserInvites = () => {
-	const { data, isLoading, isError, error } = useQuery<UserInvitesResponse, ErrorResponse>({
+	const { data, isPending, isError, error } = useQuery<UserInvitesResponse, ErrorResponse>({
 		queryKey: [ApiService.getUserInvites],
 		queryFn: async () => {
 			const response = await axios.get(ApiService.getUserInvites, {
@@ -23,7 +23,7 @@ export const useGetUserInvites = () => {
 
 	return {
 		data: organizations,
-		isLoading,
+		isPending,
 		isError,
 		error
 	};

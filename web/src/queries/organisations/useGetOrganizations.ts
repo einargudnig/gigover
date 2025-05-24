@@ -9,7 +9,7 @@ interface OrganizationsResponse {
 }
 
 export const useGetOrganizations = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		OrganizationsResponse,
 		ErrorResponse
 	>({
@@ -26,7 +26,7 @@ export const useGetOrganizations = () => {
 
 	return {
 		data: organizations,
-		isLoading,
+		isPending,
 		isFetching,
 		isError,
 		error
