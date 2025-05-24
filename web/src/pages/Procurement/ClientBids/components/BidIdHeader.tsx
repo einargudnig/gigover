@@ -85,6 +85,7 @@ function EditBidForm({
 	};
 
 	const currentDate = new Date();
+	1;
 
 	// Form submission
 	const onSubmit = handleSubmit(async (formData) => {

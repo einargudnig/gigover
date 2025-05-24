@@ -76,13 +76,13 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 
 	const {
 		mutate: mutateAdd,
-		isLoading: isMutateLoading,
+		isPending: isAddPending,
 		isError: isMutateError,
 		error: mutateError
 	} = useAddBidItem();
 
-	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useEditBidItem(); // TODO make sure this works!
-	const { mutateAsync: deleteClientBidItem, isLoading: isDeleteLoading } = useDeleteBidItem();
+	const { mutate: mutateUpdate, isPending: isUpdatePending } = useEditBidItem();
+	const { mutateAsync: deleteClientBidItem, isPending: isDeletePending } = useDeleteBidItem();
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value, type } = event.target;
@@ -271,7 +271,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										<HStack>
 											<Button
 												aria-label={'Update item'}
-												isLoading={isUpdateLoading}
+												isLoading={isUpdatePending}
 												onClick={() => handleUpdate(item)}
 												variant={'outline'}
 												colorScheme={'black'}
@@ -331,7 +331,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 													aria-label={'Delete item'}
 													colorScheme={'red'}
 													variant={'outline'}
-													isLoading={isDeleteLoading}
+													isLoading={isDeletePending}
 													onClick={() => setDialogOpen(true)}
 													isDisabled={
 														clientBidStatus === 1 || finishDateStatus
@@ -438,7 +438,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										colorScheme={'black'}
 										isDisabled={clientBidStatus === 1 || finishDateStatus}
 									>
-										{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+										{isAddPending ? <LoadingSpinner /> : 'Add item'}
 									</Button>
 								</Td>
 							</Tr>

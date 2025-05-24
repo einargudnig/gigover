@@ -1,8 +1,8 @@
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text } from '@chakra-ui/react';
+import emailjs from '@emailjs/browser';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Bid } from '../../../../../models/Tender';
-import emailjs from '@emailjs/browser';
 
 import { useGetUserByEmail } from '../../../../../queries/useGetUserByEmail';
 import { devError } from '../../../../../utils/ConsoleUtils';
@@ -68,8 +68,8 @@ export function AddSingleBidder({ onClientInvite }: AddSingleBidderProps) {
 								variant={'outline'}
 								colorScheme={'black'}
 								onClick={search}
-								isLoading={searchMutation.isLoading}
-								isDisabled={searchMutation.isLoading || searchMutation.isError}
+								isLoading={searchMutation.isPending}
+								isDisabled={searchMutation.isPending || searchMutation.isError}
 							>
 								Invite
 							</Button>

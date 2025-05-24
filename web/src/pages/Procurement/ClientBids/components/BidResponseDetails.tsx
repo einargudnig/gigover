@@ -1,13 +1,12 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Spacer, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Spacer, Text, useToast } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Center } from '../../../../components/Center';
-import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid, BidItem } from '../../../../models/Tender';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
 import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
 import { Info } from '../../components/Info';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { DataTable } from '../../components/Table';
 import { AnswerBid } from './AnswerBid';
 
@@ -17,20 +16,19 @@ interface HandledTextProps {
 
 export const BidResponseDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
-	const { mutateAsync: acceptBid, isLoading: isAcceptBidLoading } = useAcceptBid();
-	const { mutateAsync: rejectBid, isLoading: isRejectBidLoading } = useRejectBid();
-	const { data, isLoading } = useClientGetBidById(Number(bidId)); // TODO add error handling
+	const toast = useToast();
+	const { mutateAsync: acceptBid, isPending: isAcceptBidPending } = useAcceptBid();
+	const { mutateAsync: rejectBid, isPending: isRejectBidPending } = useRejectBid();
+	const { data, isPending: getBidIsPending } = useClientGetBidById(Number(bidId)); // TODO add error handling
 	const navigate = useNavigate();
 
 	const bid: Bid | undefined = data?.bid;
 	// We want to show total cost on all cost tables!
 	// TODO: make sure this comes from the API like it does in the tender offers!
-	const bidItems = bid?.items?.map((item) => ({
+	const bidItems: BidItem[] | undefined = bid?.items?.map((item) => ({
 		...item,
 		totalCost: item?.cost ? item?.cost * (item?.volume || 0) : 0
 	}));
-
-	const toast = useToast();
 
 	const hasBidAnswer = bid?.status === 2 || bid?.status === 3;
 
@@ -144,41 +142,30 @@ export const BidResponseDetails = (): JSX.Element => {
 
 	console.log('bid2', bid);
 
+	if (getBidIsPending) {
+		return (
+			<Center minH="200px">
+				<LoadingSpinner />
+			</Center>
+		);
+	}
+
 	return (
 		<Box p={4}>
-			{isLoading ? (
-				<Center>
-					<LoadingSpinner />
-				</Center>
-			) : (
-				<>
-					<Button
-						onClick={() => navigate(-1)}
-						variant={'link'}
-						colorScheme={'gray'}
-						fontSize={'lg'}
-					>
-						<ArrowBackIcon />
-					</Button>
-					<Box
-						mb={1}
-						p={4}
-						borderRadius={8}
-						borderColor={'#EFEFEE'}
-						bg={'#EFEFEE'}
-						w="100%"
-					>
-						<Info fields={bidFields} />
-					</Box>
-					<Box mb={1} p={4} borderRadius={8}>
-						<DataTable<BidItem>
-							columns={columns}
-							data={bidItems || []}
-							showTotalCost={true}
-						/>
-					</Box>
-				</>
-			)}
+			<Button
+				onClick={() => navigate(-1)}
+				variant={'link'}
+				colorScheme={'gray'}
+				fontSize={'lg'}
+			>
+				<ArrowBackIcon />
+			</Button>
+			<Box mb={1} p={4} borderRadius={8} borderColor={'#EFEFEE'} bg={'#EFEFEE'} w="100%">
+				<Info fields={bidFields} />
+			</Box>
+			<Box mb={1} p={4} borderRadius={8}>
+				<DataTable<BidItem> columns={columns} data={bidItems || []} showTotalCost={true} />
+			</Box>
 
 			{hasBidAnswer ? (
 				<Flex justify={'end'}>
@@ -188,7 +175,7 @@ export const BidResponseDetails = (): JSX.Element => {
 				<Flex>
 					<Box>
 						<AnswerBid
-							mutationLoading={isAcceptBidLoading}
+							mutationLoading={isAcceptBidPending}
 							mutation={() => handleAcceptBid()}
 							buttonText="Accept bid"
 							status="accept"
@@ -200,7 +187,7 @@ export const BidResponseDetails = (): JSX.Element => {
 					<Spacer />
 					<Box>
 						<AnswerBid
-							mutationLoading={isRejectBidLoading}
+							mutationLoading={isRejectBidPending}
 							mutation={() => handleRejectBid()}
 							buttonText="Reject bid"
 							status="reject"
