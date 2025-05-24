@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
@@ -10,7 +11,6 @@ import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 import { TaskColumn } from './TaskColumn';
-import { Center } from '../../components/Center';
 
 const FeedBoard = styled.div`
 	display: flex;
@@ -52,7 +52,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 	const projectIdNumber = parseInt(projectId as string);
 	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
 
-	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
+	const { data, isPending: isLoading, isError, error } = useProjectDetails(projectIdNumber);
 	const project: Project | undefined = data && data.project;
 
 	const taskSorter = (a, b) => {

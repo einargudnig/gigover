@@ -67,7 +67,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 
 	const closeModal = useCloseModal();
 	const [taskTitle, setTaskTitle] = useState(task.subject);
-	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
+	const { data, isPending: isLoading, isError, error } = useTaskDetails(task.taskId);
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
 	const [dialogOpen, setDialogOpen] = useState(false);

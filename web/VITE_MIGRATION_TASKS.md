@@ -79,8 +79,8 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/queries/procurement/useGetUserOffers.ts`
             -   [x] `src/queries/useProgressStatusList.ts`
             -   [x] `src/queries/procurement/client-bids/useGetBids.ts`
-    -   [ ] Systematically review `useQuery` and `useMutation` calls for adherence to v5 patterns.
-        -   [ ] **Manual Review Required (from v5 codemod output - non-exhaustive list, check codemod logs for full list):**
+    -   [x] Systematically review `useQuery` and `useMutation` calls for adherence to v5 patterns.
+        -   [x] **Manual Review Required (from v5 codemod output - non-exhaustive list, check codemod logs for full list):**
             -   [x] `src/mutations/procurement/useInviteBidder.ts`
             -   [x] `src/mutations/procurement/useModifyTender.ts`
             -   [x] `src/mutations/procurement/useModifyTenderItem.ts`
@@ -173,7 +173,12 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/mutations/properties/useAddPropertyDocument.ts`
             -   [x] `src/pages/Procurement/tabs/Tender-Create-Steps/CreateTender.tsx`
             -   [x] `src/pages/Procurement/ClientBids/components/new/CreateBidSingleBidder.tsx`
-        -   [ ] Check `isLoading`, `isFetching`, `isPending`, `status` usage based on v5 definitions.
+        -   [x] Check `isLoading`, `isFetching`, `isPending`, `status` usage based on v5 definitions.
+            -   [x] `src/pages/Dashboard/Dashboard.tsx`
+            -   [x] `src/components/NewProjectOverview.tsx`
+            -   [x] `src/components/modals/TaskModal/TaskModal.tsx`
+            -   [x] `src/pages/Property/PropertyId.tsx`
+            -   [x] `src/pages/ProjectDetails/ProjectDetails.tsx`
     -   [ ] Test all data-fetching and caching functionality.
 -   [ ] **Stabilize React Router DOM (v6-beta to v6-latest stable)**
     -   [ ] Update `react-router-dom` in `package.json`.

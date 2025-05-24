@@ -14,6 +14,7 @@ import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NewProjectOverview } from '../../components/NewProjectOverview';
 import { Page } from '../../components/Page';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { NoProjectsFound } from '../../components/empty/NoProjectsFound';
 import { FilterIcon } from '../../components/icons/FilterIcon';
 import { SearchIcon } from '../../components/icons/SearchIcon';
@@ -24,23 +25,22 @@ import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
 import { ProjectSearchBar } from './ProjectSearchBar';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 export const Dashboard = (): JSX.Element => {
-	const { data: statuses, isLoading: isLoadingStatuses } = useProgressStatusList();
-	const { data, isLoading: isLoadingProjects, isFetching, isError, error } = useProjectList();
+	const { data: statuses, isPending: isPendingStatuses } = useProgressStatusList();
+	const { data, isPending: isPendingProjects, isFetching, isError, error } = useProjectList();
 	const [, setModalContext] = useContext(ModalContext);
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
 
-	const projects = useFilterProjectsBy(activeTab, data, isLoadingProjects);
+	const projects = useFilterProjectsBy(activeTab, data, isPendingProjects);
 
 	useEffect(() => {
-		if (!isLoadingProjects) {
+		if (!isPendingProjects) {
 			setCounter((v) => ++v);
 		}
-	}, [projects, activeTab, isLoadingProjects]);
+	}, [projects, activeTab, isPendingProjects]);
 
 	if (isError) {
 		return (
@@ -50,7 +50,7 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
-	const isLoading = isLoadingProjects || isLoadingStatuses || isFetching;
+	const isLoading = isPendingStatuses || isFetching;
 
 	return (
 		<Page
@@ -80,7 +80,7 @@ export const Dashboard = (): JSX.Element => {
 								icon={<FilterIcon color={'black'} />}
 							/>
 						</Tooltip>
-						{isLoadingStatuses ? (
+						{isPendingStatuses ? (
 							<LoadingSpinner />
 						) : (
 							<MenuList>

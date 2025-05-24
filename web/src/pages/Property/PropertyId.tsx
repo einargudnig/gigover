@@ -15,7 +15,7 @@ export const PropertyId = (): JSX.Element => {
 	const { propertyId } = useParams();
 	const [manageStakeholders, setManageStakeholders] = useState(false);
 
-	const { data, isLoading, isFetching } = useGetPropertyById(Number(propertyId));
+	const { data, isPending: isLoading, isFetching } = useGetPropertyById(Number(propertyId));
 	const property = data?.property;
 	const units = data?.property.units;
 	const stakeHolders = data?.property.stakeHolders;
