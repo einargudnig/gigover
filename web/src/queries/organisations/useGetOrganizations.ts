@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { Organization } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
@@ -11,7 +12,15 @@ export const useGetOrganizations = () => {
 	const { data, isLoading, isFetching, isError, error } = useQuery<
 		OrganizationsResponse,
 		ErrorResponse
-	>({ queryKey: [ApiService.getOrganizations] });
+	>({
+		queryKey: [ApiService.getOrganizations],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getOrganizations, {
+				withCredentials: true
+			});
+			return response.data;
+		}
+	});
 
 	const organizations: Organization[] = data?.organizations || [];
 

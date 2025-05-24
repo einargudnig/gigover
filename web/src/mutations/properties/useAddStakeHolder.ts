@@ -22,6 +22,7 @@ export const useAddStakeHolder = () => {
 	const client = useQueryClient();
 
 	return useMutation<StakeHolderResponse, ErrorResponse, StakeHolderFormData>({
+		mutationKey: [ApiService.addStakeholder],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.addStakeholder, variables, {
@@ -34,7 +35,7 @@ export const useAddStakeHolder = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
 		}

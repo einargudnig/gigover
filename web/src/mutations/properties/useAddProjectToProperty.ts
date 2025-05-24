@@ -29,8 +29,8 @@ export const useAddProjectToProperty = () => {
 				throw e; // Re-throw for TanStack Query
 			}
 		},
-		onSuccess: async (data, variables) => {
-			await client.refetchQueries({ queryKey: [ApiService.getProperties] });
+		onSuccess: async () => {
+			await client.invalidateQueries({ queryKey: [ApiService.getProperties] });
 		}
 	});
 };

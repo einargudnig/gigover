@@ -19,6 +19,7 @@ export const useEditProperty = () => {
 	const client = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, PropertyFormData>({
+		mutationKey: [ApiService.editProperty],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.editProperty, variables, {
@@ -31,7 +32,7 @@ export const useEditProperty = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
 		}

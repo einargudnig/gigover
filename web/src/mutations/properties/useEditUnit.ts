@@ -16,6 +16,7 @@ export const useEditUnit = () => {
 	const client = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, UnitFormData>({
+		mutationKey: [ApiService.editUnit],
 		mutationFn: async (variables) => {
 			console.log('variables', variables);
 			try {
@@ -29,7 +30,7 @@ export const useEditUnit = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
 		}

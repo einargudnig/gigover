@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { IProperties } from '../../models/Property';
 import { ApiService } from '../../services/ApiService';
@@ -11,7 +12,13 @@ export const useGetProperties = () => {
 	const { data, isLoading, isFetching, isError, error } = useQuery<
 		PropertiesResponse,
 		ErrorResponse
-	>({ queryKey: [ApiService.getProperties] });
+	>({
+		queryKey: [ApiService.getProperties],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getProperties, { withCredentials: true });
+			return response.data;
+		}
+	});
 
 	const properties: IProperties[] = data?.properties || [];
 
