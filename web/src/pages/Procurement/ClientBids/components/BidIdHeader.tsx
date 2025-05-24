@@ -85,7 +85,6 @@ function EditBidForm({
 	};
 
 	const currentDate = new Date();
-	1;
 
 	// Form submission
 	const onSubmit = handleSubmit(async (formData) => {
@@ -346,7 +345,7 @@ export function BidHeaderActions({
 	setIsEditing: (isEditing: boolean) => void;
 }) {
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const { mutateAsync: deleteBidAsync, isPending: isLoadingDelete } = useDeleteBid();
+	const { mutateAsync: deleteBidAsync, isPending: isPendingDelete } = useDeleteBid();
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 
 	const toast = useToast();
@@ -378,7 +377,7 @@ export function BidHeaderActions({
 										isClosable: true
 									});
 								} else {
-									await deleteBidAsync(bid);
+									await deleteBidAsync(bid?.bidId || 0);
 									navigate('/tender/bids');
 								}
 								setDialogOpen(false);
@@ -389,7 +388,7 @@ export function BidHeaderActions({
 								aria-label={'Delete'}
 								colorScheme={'red'}
 								variant={'outline'}
-								isLoading={isLoadingDelete}
+								isLoading={isPendingDelete}
 								leftIcon={<TrashIcon color={'red'} size={20} />}
 								onClick={() => {
 									setDialogOpen(true);
