@@ -12,10 +12,12 @@ export const useRemoveUser = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, RemoveWorkerInput>({
-		mutationFn: async (variables) =>
-			await axios.post(ApiService.removeUser, variables, {
+		mutationFn: async (variables) => {
+			const response = await axios.post(ApiService.removeUser, variables, {
 				withCredentials: true
-			}),
+			});
+			return response.data;
+		},
 		onSuccess: async (data, variables) => {
 			await queryClient.invalidateQueries({
 				queryKey: [ApiService.projectDetails(variables.projectId)]

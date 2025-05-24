@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
@@ -12,9 +12,10 @@ export const useRemoveInviteToOrganization = () => {
 	const queryClient = useQueryClient();
 	const mutationKey = ApiService.removeInviteToOrganization;
 
-	return useMutation<ErrorResponse, AxiosError, RemoveInviteToOrganizationInput>(
-		mutationKey,
-		async (variables) => {
+	return useMutation({
+        mutationKey: mutationKey,
+
+        mutationFn: async (variables) => {
 			try {
 				console.log('IN MUTATION', { variables });
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
@@ -35,5 +36,5 @@ export const useRemoveInviteToOrganization = () => {
 				throw e;
 			}
 		}
-	);
+    });
 };

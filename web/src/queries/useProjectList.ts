@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { Project } from '../models/Project';
 import { ApiService } from '../services/ApiService';
@@ -23,7 +24,15 @@ export const useProjectList = () => {
 		ProjectResponse,
 		ErrorResponse,
 		ProjectResponse
-	>({ queryKey: [ApiService.projectList] });
+	>({
+		queryKey: [ApiService.projectList],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.projectList, {
+				withCredentials: true
+			});
+			return response.data;
+		}
+	});
 
 	const projects: Project[] = data?.projects || [];
 

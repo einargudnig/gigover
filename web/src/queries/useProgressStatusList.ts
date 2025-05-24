@@ -1,5 +1,5 @@
 import { ProgressStatus } from '../models/ProgressStatus';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 

@@ -15,8 +15,8 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 	};
 
 	return (
-		<>
-			<Marker
+        <>
+            <Marker
 				position={position}
 				onClick={() => setIsOpen(!isOpen)}
 				icon={{
@@ -25,8 +25,8 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 					anchor: new google.maps.Point(16, 32)
 				}}
 			/>
-			{isOpen && (
-				<OverlayView
+            {isOpen && (
+				(<OverlayView
 					position={position}
 					mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
 					getPixelPositionOffset={(width, height) => ({
@@ -34,7 +34,7 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 						y: -height
 					})}
 				>
-					<div
+                    <div
 						style={{
 							backgroundColor: '#fff',
 							opacity: 1,
@@ -45,7 +45,7 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 					>
 						<div style={{ fontSize: '16px', color: '#08233B' }}>{resource.name}</div>
 					</div>
-				</OverlayView>
+                </OverlayView>)
 				// <InfoBox
 				// 	onCloseClick={() => setIsOpen(!isOpen)}
 				// 	options={{ closeBoxURL: '', enableEventPropagation: true }}
@@ -57,6 +57,6 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 				// 	</div>
 				// </InfoBox>
 			)}
-		</>
-	);
+        </>
+    );
 };

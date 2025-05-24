@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
 import axios from 'axios';
@@ -17,7 +17,7 @@ interface ActiveTimeTrackersResponse {
 }
 
 export const useActiveTimeTrackers = () =>
-	useMutation<ActiveTimeTrackersResponse, ErrorResponse, ActiveTimeTrackersInput>(
-		async (variables) =>
+	useMutation({
+        mutationFn: async (variables) =>
 			await axios.post(ApiService.activeWorkers, variables, { withCredentials: true })
-	);
+    });

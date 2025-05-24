@@ -1,7 +1,7 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../../services/ApiService';
-import { CompleteTender } from '../../models/Tender';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { CompleteTender } from '../../models/Tender';
+import { ApiService } from '../../services/ApiService';
 
 export interface BidderTendersResponse {
 	list: CompleteTender[];
@@ -11,7 +11,8 @@ export const useGetBidderTenders = () => {
 	const { data, isLoading, isSuccess, isError, error } = useQuery<
 		BidderTendersResponse,
 		ErrorResponse
-	>(ApiService.bidderTenders, {
+	>({
+		queryKey: [ApiService.bidderTenders],
 		refetchOnWindowFocus: true
 	});
 	const tenders: CompleteTender[] = data?.list || [];

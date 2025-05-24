@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { ApiService } from '../services/ApiService';
 import { ErrorResponse } from '../models/ErrorResponse';
 import moment from 'moment';
@@ -37,8 +37,8 @@ interface TrackerReportInput {
 }
 
 export const useTrackerReport = () => {
-	return useMutation<TrackerReportResponse, ErrorResponse, TrackerReportInput>(
-		async (variables = {}) => {
+	return useMutation({
+        mutationFn: async (variables = {}) => {
 			const startTime = moment(variables.from);
 			const endTime = moment(variables.to);
 
@@ -55,5 +55,5 @@ export const useTrackerReport = () => {
 				{ withCredentials: true }
 			);
 		}
-	);
+    });
 };

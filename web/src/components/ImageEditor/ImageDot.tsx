@@ -219,14 +219,14 @@ export const ImageDot = ({
 
 	const renderImage = () => {
 		return (
-			<Box
+            <Box
 				style={{
 					position: 'relative',
 					display: 'flex',
 					maxHeight: '100%'
 				}}
 			>
-				{(() => {
+                {(() => {
 					switch (documentType) {
 						case 2:
 						case 'DOCUMENT':
@@ -367,20 +367,20 @@ export const ImageDot = ({
 										fit={'contain'}
 									/>
 								</Zoom>*/
-								<ChakraImage
+								(<ChakraImage
 									ref={ref}
 									onMouseUp={addDot}
 									src={imageSrc}
 									maxHeight={'100%'}
 									maxWidth={'100%'}
 									fit={'contain'}
-								/>
+								/>)
 							);
 						default:
 							return <h1>INVALID FILE TYPE</h1>;
 					}
 				})()}
-				{dots &&
+                {dots &&
 					dots.map((s, i) => {
 						const chord = getPosition(s);
 
@@ -415,7 +415,7 @@ export const ImageDot = ({
 							/>
 						);
 					})}
-				{dot && (
+                {dot && (
 					<ImagePoint
 						status={0}
 						mode={'new'}
@@ -431,8 +431,8 @@ export const ImageDot = ({
 						}}
 					/>
 				)}
-			</Box>
-		);
+            </Box>
+        );
 	};
 	// @ts-ignore
 	return (

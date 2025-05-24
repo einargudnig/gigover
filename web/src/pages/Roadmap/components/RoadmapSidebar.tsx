@@ -42,8 +42,8 @@ export const RoadmapSidebar = (): JSX.Element => {
 	const isViewer = privileges?.includes('VIEWER');
 
 	return (
-		<>
-			{state.project && (
+        <>
+            {state.project && (
 				<GridItem colStart={1} rowStart={1}>
 					<DisabledComponent>
 						<Button
@@ -66,7 +66,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 					</DisabledComponent>
 				</GridItem>
 			)}
-			<GridItem colStart={1} rowStart={2}>
+            <GridItem colStart={1} rowStart={2}>
 				{state.milestones.map((m, mIndex) => (
 					<VStack spacing={0} key={mIndex} alignItems={'flex-start'}>
 						<Flex
@@ -179,19 +179,19 @@ export const RoadmapSidebar = (): JSX.Element => {
 				)}
 				{state.tasks.map((t, tIndex) => (
 					// {sortedItems?.map((t, tIndex) => (
-					<Flex
+					(<Flex
 						key={tIndex}
 						justifyContent={'space-between'}
 						alignItems={'center'}
 						width={'100%'}
 						height={GRID_ROW_HEIGHT}
 					>
-						<HStack maxWidth={`calc(${GRID_SIDEBAR_WIDTH} - 40px)`} spacing={4}>
+                        <HStack maxWidth={`calc(${GRID_SIDEBAR_WIDTH} - 40px)`} spacing={4}>
 							<Text isTruncated color={'black'} fontSize={'sm'}>
 								{displayTaskTitle(t)}
 							</Text>
 						</HStack>
-						{!isViewer ? (
+                        {!isViewer ? (
 							<IconButton
 								size={'xs'}
 								aria-label={'milestone-actions'}
@@ -208,7 +208,7 @@ export const RoadmapSidebar = (): JSX.Element => {
 								}}
 							/>
 						) : null}
-					</Flex>
+                    </Flex>)
 				))}
 				{state.tasks.length === 0 && state.milestones.length === 0 && (
 					<EmptyState
@@ -220,6 +220,6 @@ export const RoadmapSidebar = (): JSX.Element => {
 					/>
 				)}
 			</GridItem>
-		</>
-	);
+        </>
+    );
 };

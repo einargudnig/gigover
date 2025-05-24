@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ICommentChord } from '../components/modals/EditPhotoModal';
 import { ApiService } from '../services/ApiService';
 // import { devInfo } from '../utils/ConsoleUtils';
 
 export const useAddImageDotComment = () => {
-	return useMutation({
+	return useMutation<unknown, AxiosError, DotComment>({
 		mutationFn: async (dotComment: DotComment) => {
 			// devInfo(dotComment, 'dot');
 			console.log(dotComment, 'dot');
@@ -20,7 +20,7 @@ export const useAddImageDotComment = () => {
 };
 
 export const useChangeImageDotStatus = () => {
-	return useMutation({
+	return useMutation<unknown, AxiosError, { dotId: number; status: number }>({
 		mutationFn: async ({ dotId, status }: { dotId: number; status: number }) => {
 			const response = await axios.post(
 				ApiService.updateDotStatus,
@@ -33,7 +33,7 @@ export const useChangeImageDotStatus = () => {
 };
 
 export const useRemoveDotComment = () => {
-	return useMutation({
+	return useMutation<unknown, AxiosError, DotComment>({
 		mutationFn: async (dotComment: DotComment) => {
 			const response = await axios.post(
 				ApiService.removeDotComment,
@@ -46,7 +46,7 @@ export const useRemoveDotComment = () => {
 };
 
 export const useEditDotComment = () => {
-	return useMutation({
+	return useMutation<unknown, AxiosError, DotComment>({
 		mutationFn: async (dotComment: DotComment) => {
 			const response = await axios.post(
 				ApiService.editDotComment,
@@ -67,7 +67,7 @@ export interface AddDotInput {
 	imageId?: number | string;
 }
 export const useAddImageDot = () => {
-	return useMutation({
+	return useMutation<unknown, AxiosError, AddDotInput>({
 		mutationFn: async (dotChord: AddDotInput) => {
 			const response = await axios.post(
 				ApiService.addImageDot,
@@ -79,7 +79,7 @@ export const useAddImageDot = () => {
 	});
 };
 export const useRemoveImageDot = () => {
-	return useMutation({
+	return useMutation<unknown, AxiosError, ICommentChord>({
 		mutationFn: async (dotChord: ICommentChord) => {
 			const response = await axios.post(
 				ApiService.removeImageDot,

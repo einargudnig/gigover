@@ -103,7 +103,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 
 	const {
 		mutateAsync: updateTask,
-		isLoading: taskLoading,
+		isPending: taskLoading,
 		error: taskError
 	} = useUpdateTask(projectId);
 

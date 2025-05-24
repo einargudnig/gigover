@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
-import axios from 'axios';
 
 interface ResourceCommentInput {
 	resourceId: number;
@@ -11,15 +11,18 @@ interface ResourceCommentInput {
 export const useResourceComment = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<{ data: { id: number } }, ErrorResponse, ResourceCommentInput>(
-		async (variables) =>
-			await axios.post(ApiService.resourceComment, variables, { withCredentials: true }),
-		{
-			onSuccess: async (data, variables) => {
-				await queryClient.invalidateQueries(
-					ApiService.getResourceComments(variables.resourceId)
-				);
-			}
+	return useMutation<unknown, ErrorResponse, ResourceCommentInput>({
+		mutationFn: async (variables) => {
+			const response = await axios.post(ApiService.resourceComment, variables, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+
+		onSuccess: async (data, variables) => {
+			await queryClient.invalidateQueries({
+				queryKey: [ApiService.getResourceComments(variables.resourceId)]
+			});
 		}
-	);
+	});
 };

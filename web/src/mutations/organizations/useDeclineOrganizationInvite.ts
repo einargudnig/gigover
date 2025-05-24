@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { OrganizationId } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
@@ -7,19 +7,18 @@ import { ApiService } from '../../services/ApiService';
 export const useDeclineOrganizationInvite = () => {
 	const client = useQueryClient();
 
-	return useMutation<OrganizationId, ErrorResponse, OrganizationId>(
-		async (orgId) => {
+	return useMutation({
+        mutationFn: async (orgId) => {
 			await axios.post(ApiService.rejectOrganizationInvite, orgId, {
 				withCredentials: true
 			});
 			return orgId;
 		},
-		{
-			onSuccess: async () => {
-				await client.refetchQueries(ApiService.getUserInvites);
-				await client.refetchQueries(ApiService.getOrganizations);
-				await client.refetchQueries(ApiService.getUserInfo);
-			}
-		}
-	);
+
+        onSuccess: async () => {
+            await client.refetchQueries(ApiService.getUserInvites);
+            await client.refetchQueries(ApiService.getOrganizations);
+            await client.refetchQueries(ApiService.getUserInfo);
+        }
+    });
 };

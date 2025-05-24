@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../utils/ConsoleUtils';
-import { ApiService } from '../services/ApiService';
 import { ProjectFolder } from '../models/ProjectFolder';
+import { ApiService } from '../services/ApiService';
+import { devError } from '../utils/ConsoleUtils';
 
 interface FolderInput extends Pick<ProjectFolder, 'projectId' | 'name'> {
 	folderId?: number;
@@ -11,8 +11,8 @@ interface FolderInput extends Pick<ProjectFolder, 'projectId' | 'name'> {
 export const useAddFolder = () => {
 	const client = useQueryClient();
 
-	return useMutation<ProjectFolder & { id?: number }, AxiosError, FolderInput>(
-		async (variables) => {
+	return useMutation<ProjectFolder & { id?: number }, AxiosError, FolderInput>({
+		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<ProjectFolder & { id?: number }>(
 					ApiService.addFolder,
@@ -25,11 +25,15 @@ export const useAddFolder = () => {
 				if (response.status === 200) {
 					// Refetch the new folder list after creation
 					if (variables.folderId) {
-						await client.refetchQueries(
-							ApiService.folderFolders(variables.projectId, variables.folderId)
-						);
+						await client.refetchQueries({
+							queryKey: [
+								ApiService.folderFolders(variables.projectId, variables.folderId)
+							]
+						});
 					} else {
-						await client.refetchQueries(ApiService.folderList(variables.projectId));
+						await client.refetchQueries({
+							queryKey: [ApiService.folderList(variables.projectId)]
+						});
 					}
 				}
 
@@ -39,5 +43,5 @@ export const useAddFolder = () => {
 				throw new Error('Could not create folder');
 			}
 		}
-	);
+	});
 };

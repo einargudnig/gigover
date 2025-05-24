@@ -22,6 +22,7 @@ interface TenderCreateResponse {
 
 export const useAddTender = (options?: UseMutationOptions<number, Error, TenderFormData>) => {
 	return useMutation<number, Error, TenderFormData>({
+		mutationKey: ['addTender'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<TenderCreateResponse>(

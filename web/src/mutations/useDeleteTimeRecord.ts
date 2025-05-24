@@ -1,14 +1,14 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse, ErrorTypes } from '../models/ErrorResponse';
-import axios, { AxiosResponse } from 'axios';
 import { Timesheet } from '../queries/useTrackerReport';
+import { ApiService } from '../services/ApiService';
 
 export const useDeleteTimeRecord = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<AxiosResponse, ErrorResponse, Timesheet>(
-		async (variables) => {
+	return useMutation<ErrorResponse, Error, Partial<Timesheet>>({
+		mutationFn: async (variables) => {
 			const response = await axios.post(ApiService.workRemove, variables, {
 				withCredentials: true
 			});
@@ -19,12 +19,11 @@ export const useDeleteTimeRecord = () => {
 
 			return response.data;
 		},
-		{
-			onSuccess: async () => {
-				// await queryClient.invalidateQueries(ApiService.timerReport);
-				await queryClient.refetchQueries(ApiService.timerReport);
-				await queryClient.invalidateQueries(ApiService.activeWorkers);
-			}
+
+		onSuccess: async () => {
+			// await queryClient.invalidateQueries(ApiService.timerReport);
+			await queryClient.refetchQueries({ queryKey: [ApiService.timerReport] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
 		}
-	);
+	});
 };

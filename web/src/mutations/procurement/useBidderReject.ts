@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ApiService } from '../../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 
 interface BidderRejectResponse {
@@ -14,8 +14,8 @@ interface BidderRejectRequest {
 export const useBidderReject = () => {
 	const client = useQueryClient();
 
-	return useMutation<BidderRejectResponse, ErrorResponse, BidderRejectRequest>(
-		async (tenderId) => {
+	return useMutation({
+        mutationFn: async (tenderId) => {
 			try {
 				const response = await axios.post(ApiService.bidderReject, tenderId, {
 					withCredentials: true
@@ -30,5 +30,5 @@ export const useBidderReject = () => {
 				throw new Error('Could not reject offer');
 			}
 		}
-	);
+    });
 };

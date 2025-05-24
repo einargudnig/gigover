@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { CompleteTender } from '../../models/Tender';
 import { ApiService } from '../../services/ApiService';
@@ -11,8 +11,10 @@ export const useGetTenderById = (tenderId: number) => {
 	const { data, isLoading, isError, error, isFetching } = useQuery<
 		TenderByIdResponse,
 		ErrorResponse
-	>(ApiService.getTenderById(tenderId), {
-		refetchOnWindowFocus: true
+	>({
+		queryKey: [ApiService.getTenderById(tenderId)],
+		refetchOnWindowFocus: true,
+		enabled: !!tenderId
 	});
 
 	return {

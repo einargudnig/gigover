@@ -21,8 +21,12 @@ export const useUpdateTask = (projectId: number) => {
 	const queryClient = useQueryClient();
 
 	return useMutation<ProjectResponse, ErrorResponse, UpdateTaskFormData>({
-		mutationFn: async (variables) =>
-			await axios.post(ApiService.updateTask, variables, { withCredentials: true }),
+		mutationFn: async (variables) => {
+			const response = await axios.post(ApiService.updateTask, variables, {
+				withCredentials: true
+			});
+			return response.data;
+		},
 		onMutate: async (variables) => {
 			const cacheKeyArray = [ApiService.projectDetails(projectId)];
 			const projectDetails = queryClient.getQueryData<{ project: Project }>(cacheKeyArray);

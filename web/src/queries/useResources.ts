@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { Resource } from '../models/Resource';
 import { ApiService } from '../services/ApiService';
@@ -9,7 +10,13 @@ export interface ResourceResponse {
 
 export const useResources = () => {
 	const { data, isLoading, isError, error, ...rest } = useQuery<ResourceResponse, ErrorResponse>({
-		queryKey: [ApiService.resources]
+		queryKey: [ApiService.resources],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.resources, {
+				withCredentials: true
+			});
+			return response.data;
+		}
 	});
 
 	return {

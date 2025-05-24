@@ -177,7 +177,7 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 const NewProjectCard = ({ project }) => {
 	const [, setModalContext] = useContext(ModalContext);
 	const queryClient = useQueryClient();
-	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
+	const { mutateAsync: modify, isPending: isLoading, isError, error } = useModifyProject();
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const { privileges } = useGetUserPrivileges();
 	const isViewer = privileges.includes('VIEWER');

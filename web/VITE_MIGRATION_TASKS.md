@@ -50,56 +50,89 @@ This document outlines the tasks for migrating the React application from Create
         -   [x] `src/queries/useVerify.ts`
         -   [x] `src/mutations/useChangeUid.ts`
         -   [x] `src/mutations/useProjectFolders.ts`
-    -   [ ] Review TanStack Query v4 and v5 migration guides for breaking changes.
-    -   [ ] Test all data-fetching and caching functionality.
--   [ ] **Stabilize React Router DOM (v6-beta to v6-latest stable)**
-    -   [ ] Update `react-router-dom` in `package.json`.
-    -   [ ] Review React Router v6 stable release notes for breaking changes from the beta version.
-    -   [ ] Test all routing, navigation, and route-related hooks.
-
-## Phase 2: Update Other Important Dependencies
-
--   [ ] **Chakra UI (`@chakra-ui/react`)**
-    -   [ ] Update `@chakra-ui/react` (currently `^2.10.4`) and related packages (e.g., `@chakra-ui/icons`) to the latest `^2.x.x` or a suitable newer version.
-    -   [ ] Check changelogs for minor breaking changes or deprecated APIs and update UI components accordingly.
--   [ ] **General Dependencies & DevDependencies**
-    -   [ ] Review and update other packages (e.g., `axios`, `date-fns`, `moment`, `react-datepicker`, `react-hook-form`, etc.).
-    -   [ ] Update type definitions (`@types/*`).
-    -   [ ] Update ESLint, Prettier, and their plugins.
-    -   [ ] Consider if `moment` (currently `^2.29.1`) can be fully replaced by `date-fns` (currently `^2.16.1`) to reduce bundle size.
-    -   [ ] Update `typescript` (currently `5.0.4`) if necessary and compatible with other upgrades.
-
-## Phase 3: Vite Migration
-
--   [ ] **Install Vite and Core Plugins**
-    -   [ ] Add `vite` and `@vitejs/plugin-react` (or `@vitejs/plugin-react-swc`) to `devDependencies`.
--   [ ] **Remove Create React App**
-    -   [ ] Uninstall `react-scripts`.
--   [ ] **Update `package.json` Scripts**
-    -   [ ] Modify `start`, `build`, and other relevant scripts to use Vite commands (e.g., `vite` for dev, `vite build` for production).
-    -   [ ] Update the `deploy` script for the new build process.
--   [ ] **Handle `index.html`**
-    -   [ ] Move `public/index.html` to the project root.
-    -   [ ] Update the script tag in `index.html` to point to the main entry file (e.g., `<script type="module" src="/src/index.tsx"></script>`).
--   [ ] **Environment Variables**
-    -   [ ] Convert `REACT_APP_` prefixed environment variables to `VITE_`.
-    -   [ ] Update code to access them using `import.meta.env.VITE_YOUR_VAR`.
-    -   [ ] Ensure `.env` files are handled correctly by Vite.
--   [ ] **Create Vite Configuration (`vite.config.ts` or `vite.config.js`)**
-    -   [ ] Set up the React plugin.
-    -   [ ] Configure path aliases (if used in `tsconfig.json` or `jsconfig.json`).
-    -   [ ] Set up any necessary server proxies (e.g., for API requests).
-    -   [ ] Add other Vite plugins as needed (e.g., for SVGR if SVGs are imported as components, linters).
--   [ ] **Update TypeScript & ESLint Configurations**
-    -   [ ] Ensure `tsconfig.json` settings are compatible with Vite (e.g., `jsx: 'react-jsx'`, `isolatedModules: true`, `moduleResolution: 'bundler'` or `nodeNext`).
-    -   [ ] Update ESLint configuration: remove `eslint-config-react-app` and ensure it works with Vite's structure and build process.
-
-## Phase 4: Testing & Final Cleanup
-
--   [ ] **Thorough Application Testing (Post-Vite)**
-    -   [ ] Test all features, user flows, and edge cases in development and after a production build.
--   [ ] **Build and Deployment Testing (Post-Vite)**
-    -   [ ] Ensure production builds are working correctly.
-    -   [ ] Test the deployment process and the deployed application.
--   [ ] **Remove `styled-components`**
-    -   [ ] (As per user plan) Refactor components to remove `styled-components` and use an alternative styling solution (e.g., Chakra UI, CSS Modules, Tailwind CSS).
+    -   [x] Review TanStack Query v4 and v5 migration guides for breaking changes.
+        -   **v4 Breaking Changes Noted:**
+            -   Package name: `react-query` -> `@tanstack/react-query` (Already handled)
+            -   Query Keys: Must be an array. (Believed to be handled, confirm during testing)
+            -   `idle` State Removed: Use `fetchStatus: 'idle'`. `isInitialLoading` for first load. (Review usages of `isLoading`)
+            -   `useQueries` API: Accepts `{ queries: [...] }`. (Review if `useQueries` is used)
+            -   `undefined` as Cache Value: Query functions returning `undefined` are errors. (Low risk, but good to note)
+            -   Network Mode: Default is `online`. If `offlineFirst` is needed, configure in `QueryClient`. (Currently not set, defaults to `online`)
+            -   `onSuccess` with `setQueryData`: `onSuccess` no longer called from `setQueryData`. (No direct usage found)
+        -   **v5 Breaking Changes Noted:**
+            -   Single Signature: All hooks/methods use a single object argument. (Largely handled during initial refactor)
+            -   Callbacks removed from `useQuery` (`onSuccess`, `onError`, `onSettled`). (No direct usage found)
+            -   `cacheTime` renamed to `gcTime`. (`QueryClient` in `src/index.tsx` uses defaults, effectively `gcTime: 5 * 60 * 1000`).
+            -   `isLoading` is now `isPending`. Old `isLoading` (first load) is new `isLoading` (`isPending && isFetching`). `isInitialLoading` (v4) is deprecated. (Needs careful review of `isLoading`, `isFetching` etc.)
+            -   `keepPreviousData` removed. Use `placeholderData: keepPreviousData`. (No usage found)
+            -   Infinite Queries:
+                -   `initialPageParam` required. (Review infinite query usages)
+                -   `getNextPageParam` required, manual mode removed. (Review infinite query usages)
+            -   React Version: Requires React 18.0+. (Project is on React 18.2.0)
+            -   Hydration: `Hydrate` component is `HydrationBoundary`, `useHydrate` removed. (No usage found)
+    -   [x] Run TanStack Query codemods (v4 and v5) to catch any missed changes.
+        -   v4 `replace-import-specifier.cjs`: Ran successfully, 43 files modified.
+        -   v4 `key-transformation.cjs`: Ran with many errors/warnings. Seems mostly incompatible with already v5-like syntax. 1 file (`src/mutations/procurement/useAddTender.ts`) had a transformation error.
+        -   v5 `remove-overloads.cjs`: Ran, 33 files modified. Many files reported as needing manual transformation. Files with "unknown error": `src/queries/procurement/useGetBidderTenders.ts`, `src/queries/procurement/useGetTenderById.ts`, `src/queries/procurement/useGetUserOffers.ts`, `src/queries/useProgressStatusList.ts`, `src/queries/procurement/client-bids/useGetBids.ts`.
+    -   [ ] Systematically review `useQuery` and `useMutation` calls for adherence to v5 patterns.
+        -   [ ] **Manual Review Required (from v5 codemod output - non-exhaustive list, check codemod logs for full list):**
+            -   [x] `src/mutations/procurement/useInviteBidder.ts`
+            -   `src/mutations/procurement/useModifyTender.ts`
+            -   `src/mutations/procurement/useModifyTenderItem.ts`
+            -   `src/mutations/procurement/usePublishOffer.ts`
+            -   `src/mutations/procurement/client-bids/useRejectBid.ts`
+            -   `src/mutations/procurement/useDeleteTenderItem.ts`
+            -   `src/mutations/procurement/useRejectOffer.ts`
+            -   `src/mutations/procurement/usePublishTender.ts`
+            -   `src/queries/useAddFolder.ts`
+            -   `src/hooks/useNotifications.ts`
+            -   `src/queries/useAddTask.ts`
+            -   `src/mutations/useAddDocument.ts`
+            -   `src/mutations/useAddMilestone.ts`
+            -   `src/queries/useAddWorker.ts`
+            -   `src/queries/useGetUserByPhoneNumber.ts`
+            -   `src/mutations/useChangeUid.ts`
+            -   `src/mutations/useDeleteFolder.ts`
+            -   `src/queries/useFolderFolders.ts`
+            -   `src/mutations/useDeleteNotification.ts`
+            -   `src/mutations/useDeleteTimeRecord.ts`
+            -   `src/queries/useProjectDocuments.ts`
+            -   `src/queries/useProjectFoldersQuery.ts`
+            -   `src/mutations/useHoldResource.ts`
+            -   `src/queries/useProjectList.ts`
+            -   `src/mutations/useInviteUserToProject.ts`
+            -   `src/queries/useProjectUsers.ts`
+            -   `src/mutations/useImageDot.ts`
+            -   `src/mutations/useModifyProject.ts`
+            -   `src/queries/useRemoveWorker.ts`
+            -   `src/mutations/useLogout.ts`
+            -   `src/mutations/useModifyTimeRecord.ts`
+            -   `src/mutations/useReadNotification.ts`
+            -   `src/components/modals/TaskModal/NewTaskModal.tsx`
+            -   `src/queries/useRemoveUser.ts`
+            -   `src/mutations/useProjectFolders.ts`
+            -   `src/components/NewProjectOverview.tsx`
+            -   `src/mutations/useReleaseResource.ts`
+            -   `src/mutations/useRemoveProgressTab.ts`
+            -   `src/mutations/useModifyResource.ts`
+            -   `src/queries/useTrackerStart.ts`
+            -   `src/mutations/useResourceComment.ts`
+            -   `src/queries/useTrackerStop.ts`
+            -   `src/queries/useResources.ts`
+            -   `src/queries/useVerify.ts`
+            -   `src/queries/useWorkAdd.ts`
+            -   `src/queries/useUpdateTask.ts`
+            -   `src/queries/organisations/useGetOrganizationUsers.ts`
+            -   `src/queries/organisations/useGetUserInvites.ts`
+            -   `src/queries/useGetUserInfo.ts`
+            -   `src/mutations/useResourceDelete.ts`
+            -   `src/queries/useTaskComment.ts`
+            -   `src/components/modals/TaskModal/TaskModal.tsx`
+            -   `src/queries/organisations/useGetOrganizations.ts`
+            -   `src/mutations/organizations/useChangeOrganizations.ts`
+            -   `src/mutations/useDeleteDocument.ts`
+            -   `src/mutations/organizations/useDeclineOrganizationInvite.ts`
+            -   `src/queries/properties/useGetPoperties.ts`
+            -   `src/mutations/organizations/useAcceptOrganizationInvite.ts`
+            -   `src/mutations/organizations/useInviteUserToOrganization.ts`
+            -   `src/mutations/organizations/useCreateOrganization.ts`
