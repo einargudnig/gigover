@@ -167,12 +167,12 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/mutations/properties/useAddUnit.ts`
             -   [x] `src/components/modals/ProjectModal.tsx`
             -   [x] `src/mutations/procurement/client-bids/useEditBidItem.ts`
-            -   [ ] `src/mutations/procurement/useAddOfferItems.ts`
-            -   [ ] `src/mutations/procurement/client-bids/usePublishBid.ts`
-            -   [ ] `src/mutations/organizations/useRemoveInviteToOrganization.ts`
-            -   [ ] `src/mutations/properties/useAddPropertyDocument.ts`
-            -   [ ] `src/pages/Procurement/tabs/Tender-Create-Steps/CreateTender.tsx`
-            -   [ ] `src/pages/Procurement/ClientBids/components/new/CreateBidSingleBidder.tsx`
+            -   [x] `src/mutations/procurement/useAddOfferItems.ts`
+            -   [x] `src/mutations/procurement/client-bids/usePublishBid.ts`
+            -   [x] `src/mutations/organizations/useRemoveInviteToOrganization.ts`
+            -   [x] `src/mutations/properties/useAddPropertyDocument.ts`
+            -   [x] `src/pages/Procurement/tabs/Tender-Create-Steps/CreateTender.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/new/CreateBidSingleBidder.tsx`
         -   [ ] Check `isLoading`, `isFetching`, `isPending`, `status` usage based on v5 definitions.
     -   [ ] Test all data-fetching and caching functionality.
 -   [ ] **Stabilize React Router DOM (v6-beta to v6-latest stable)**

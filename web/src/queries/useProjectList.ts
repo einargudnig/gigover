@@ -20,7 +20,7 @@ export const projectSorter = (a: Project, b: Project) => {
 };
 
 export const useProjectList = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		ProjectResponse,
 		ErrorResponse,
 		ProjectResponse
@@ -42,7 +42,7 @@ export const useProjectList = () => {
 	return {
 		data: projects.sort(projectSorter),
 		// data: projects,
-		isLoading,
+		isPending,
 		isFetching,
 		isError,
 		error

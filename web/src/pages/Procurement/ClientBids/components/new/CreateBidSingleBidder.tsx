@@ -31,7 +31,7 @@ export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingl
 	const queryClient = useQueryClient();
 	const toast = useToast();
 
-	const { mutate, isLoading } = useAddBid({
+	const { mutate, isPending } = useAddBid({
 		onSuccess: (bidId) => {
 			// Here you get the tender ID as a number
 			console.log('Created tender for a single client with ID:', bidId);
@@ -186,7 +186,7 @@ export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingl
 						type="submit"
 						colorScheme={'black'}
 						variant={'outline'}
-						isLoading={isLoading}
+						isLoading={isPending}
 						loadingText="Creating..."
 					>
 						Create Bid

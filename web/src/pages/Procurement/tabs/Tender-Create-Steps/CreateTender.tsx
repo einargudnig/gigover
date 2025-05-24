@@ -34,7 +34,7 @@ interface CreateTenderProps {
 
 export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	const queryClient = useQueryClient();
-	const { data, isLoading: isLoadingProjects } = useProjectList();
+	const { data, isPending: isLoadingProjects } = useProjectList();
 	const openProjects = useOpenProjects(data);
 	const toast = useToast();
 	const currentDate = new Date();
@@ -46,7 +46,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	const [isChecked, setIsChecked] = useState<number>(0);
 
 	// Mutations
-	const { mutate, isLoading } = useAddTender({
+	const { mutate, isPending } = useAddTender({
 		onSuccess: (tenderId) => {
 			// Here you get the tender ID as a number
 			console.log('Created tender with ID:', tenderId);
@@ -313,7 +313,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 									type="submit"
 									colorScheme={'black'}
 									variant={'outline'}
-									isLoading={isLoading}
+									isLoading={isPending}
 									loadingText="Creating..."
 								>
 									Create Tender

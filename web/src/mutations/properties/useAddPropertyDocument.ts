@@ -11,6 +11,7 @@ export const useAddPropertyDocument = () => {
 	const client = useQueryClient();
 
 	return useMutation<{ propertyDocument: PropertyDocument }, AxiosError, DocumentInput>({
+		mutationKey: ['addPropertyDocument'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<{ propertyDocument: PropertyDocument }>(
