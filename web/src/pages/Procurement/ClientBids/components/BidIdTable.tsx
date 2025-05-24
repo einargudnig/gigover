@@ -449,7 +449,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 
 			{isMutateError ? (
 				<Td>
-					<Text>Something went wrong - {mutateError?.code}</Text>
+					<Text>Something went wrong - {mutateError?.message}</Text>
 				</Td>
 			) : null}
 

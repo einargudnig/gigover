@@ -83,8 +83,8 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						{isError && (
 							<>
 								{/* Server errors */}
-								<p>{error?.errorText}</p>
-								<small>{error?.errorCode}</small>
+								<p>{error?.message}</p>
+								<small>{error?.name}</small>
 							</>
 						)}
 					</div>

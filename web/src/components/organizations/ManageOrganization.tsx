@@ -22,9 +22,9 @@ import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
+import { DisabledComponent } from '../disabled/DisabledComponent';
 import { CreateOrganization } from './CreateOrganization';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
-import { DisabledComponent } from '../disabled/DisabledComponent';
 
 export const ManageOrganization = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -33,7 +33,7 @@ export const ManageOrganization = (): JSX.Element => {
 	const { data: org } = useGetUserInfo();
 	const activeOrg = org?.organization;
 
-	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
+	const { mutateAsync: loginOrg, isPending } = useLoginOrg();
 
 	const { register, handleSubmit, reset } = useForm<{ name: string; password: string }>({
 		defaultValues: {
@@ -144,7 +144,7 @@ export const ManageOrganization = (): JSX.Element => {
 																<Button
 																	type="submit"
 																	colorScheme="gray"
-																	isLoading={isLoading}
+																	isLoading={isPending}
 																>
 																	Login
 																</Button>
