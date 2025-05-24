@@ -11,6 +11,7 @@ export const useAddTenderDocumentByTenderOwner = () => {
 	const client = useQueryClient();
 
 	return useMutation<{ tenderDocument: TenderDocumentByTenderOwner }, AxiosError, DocumentInput>({
+		mutationKey: ['addTenderDocumentByTenderOwner'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<{ tenderDocument: TenderDocumentByTenderOwner }>(

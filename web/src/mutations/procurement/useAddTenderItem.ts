@@ -15,6 +15,7 @@ export const useAddTenderItem = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<unknown, AxiosError, TenderItems>({
+		mutationKey: ['addTenderItem'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.addTenderItem, variables, {

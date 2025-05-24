@@ -9,6 +9,7 @@ interface TenderDeleteResponse {
 
 export const useDeleteProcurement = () => {
 	return useMutation<TenderDeleteResponse, AxiosError, Tender>({
+		mutationKey: ['deleteProcurement'],
 		mutationFn: async (tender) => {
 			try {
 				const response = await axios.post(ApiService.deleteTender, tender, {

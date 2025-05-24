@@ -8,6 +8,7 @@ export const useAcceptBid = () => {
 	const client = useQueryClient();
 
 	return useMutation<BidId, ErrorResponse, BidId>({
+		mutationKey: ['acceptBid'],
 		mutationFn: async (bidId) => {
 			const response = await axios.post(ApiService.acceptBid, bidId, {
 				withCredentials: true

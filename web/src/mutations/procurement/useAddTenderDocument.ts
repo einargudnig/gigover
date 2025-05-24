@@ -11,6 +11,7 @@ export const useAddTenderDocument = () => {
 	const client = useQueryClient();
 
 	return useMutation<{ tenderDocument: TenderDocument }, AxiosError, DocumentInput>({
+		mutationKey: ['addTenderDocument'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<{ tenderDocument: TenderDocument }>(

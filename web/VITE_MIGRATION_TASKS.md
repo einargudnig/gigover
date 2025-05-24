@@ -152,14 +152,14 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/mutations/procurement/useAddOffer.ts`
             -   [x] `src/mutations/properties/useRemoveStakeHolder.ts`
             -   [x] `src/mutations/procurement/useAddTender.ts` (Also had v4 codemod error)
-            -   [ ] `src/mutations/procurement/client-bids/useAcceptBid.ts`
-            -   [ ] `src/mutations/procurement/useAddTenderDocument.ts`
-            -   [ ] `src/mutations/procurement/client-bids/useAddBidItem.ts`
-            -   [ ] `src/mutations/procurement/useBidderReject.ts`
-            -   [ ] `src/mutations/procurement/useAddTenderItem.ts`
-            -   [ ] `src/mutations/procurement/useAddTenderDocumentByTenderOwner.ts`
-            -   [ ] `src/mutations/procurement/client-bids/useAddBid.ts`
-            -   [ ] `src/mutations/procurement/useDeleteProcurement.ts`
+            -   [x] `src/mutations/procurement/client-bids/useAcceptBid.ts`
+            -   [x] `src/mutations/procurement/useAddTenderDocument.ts`
+            -   [x] `src/mutations/procurement/client-bids/useAddBidItem.ts`
+            -   [x] `src/mutations/procurement/useBidderReject.ts`
+            -   [x] `src/mutations/procurement/useAddTenderItem.ts`
+            -   [x] `src/mutations/procurement/useAddTenderDocumentByTenderOwner.ts`
+            -   [x] `src/mutations/procurement/client-bids/useAddBid.ts`
+            -   [x] `src/mutations/procurement/useDeleteProcurement.ts`
             -   [ ] `src/mutations/procurement/useAcceptOffer.ts`
             -   [ ] `src/mutations/procurement/client-bids/useDeleteBidItem.ts`
             -   [ ] `src/mutations/procurement/client-bids/useEditBid.ts`
