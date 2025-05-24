@@ -11,9 +11,9 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { CrossIcon } from '../../../components/icons/CrossIcon';
 import { IProperties } from '../../../models/Property';
 import { useGetProperties } from '../../../queries/properties/useGetPoperties';
-import { CrossIcon } from '../../../components/icons/CrossIcon';
 
 const SearchResults = styled.div`
 	position: absolute;
@@ -39,7 +39,7 @@ export const PropertySearchBar = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 
-	const { data, isLoading } = useGetProperties();
+	const { data, isPending } = useGetProperties();
 	const properties = data;
 
 	useOutsideClick({
@@ -75,7 +75,7 @@ export const PropertySearchBar = ({
 
 	return (
 		<>
-			{isLoading ? (
+			{isPending ? (
 				<Text>Loading...</Text>
 			) : (
 				<InputGroup>

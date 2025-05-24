@@ -18,7 +18,7 @@ import { HandlingOfferConfirmation } from './HandlingOfferConfirmation';
 export const TenderOfferAnswer = (): JSX.Element => {
 	const { offerId } = useParams();
 	const navigate = useNavigate();
-	const { data: offerData, isLoading } = useGetOfferByOfferId(Number(offerId));
+	const { data: offerData, isPending } = useGetOfferByOfferId(Number(offerId));
 
 	const offer = offerData?.offer;
 	const offerItems = offerData?.offer.items;
@@ -89,7 +89,7 @@ export const TenderOfferAnswer = (): JSX.Element => {
 			>
 				<ArrowBackIcon />
 			</Button>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
@@ -131,8 +131,8 @@ function OfferDocuments({ offerDocuments }: { offerDocuments: TenderDocument[] }
 
 function HandleOfferButtons({ offerId, offer }) {
 	const { tenderId } = useParams();
-	const { mutateAsync: acceptOffer, isLoading: isAcceptLoading } = useAcceptOffer();
-	const { mutateAsync: rejectOffer, isLoading: isRejectLoading } = useRejectOffer();
+	const { mutateAsync: acceptOffer, isPending: isAcceptLoading } = useAcceptOffer();
+	const { mutateAsync: rejectOffer, isPending: isRejectLoading } = useRejectOffer();
 
 	const { data: tenderData } = useGetTenderById(Number(tenderId));
 	const tender = tenderData?.tender;

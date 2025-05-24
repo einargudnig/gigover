@@ -15,9 +15,9 @@ interface PublishTenderProps {
 }
 
 export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
-	const { mutateAsync, isLoading: isPublishLoading, isError, error } = usePublishTender();
+	const { mutateAsync, isPending: isPublishLoading, isError, error } = usePublishTender();
 
-	const { data, isLoading } = useGetTenderById(tenderId);
+	const { data, isPending } = useGetTenderById(tenderId);
 	const tender = data?.tender;
 
 	const tenderItems: TenderItem[] | undefined = tender?.items;
@@ -62,7 +62,7 @@ export function PublishTender({ tenderId, onPublish }: PublishTenderProps) {
 			</Flex>
 
 			<Box px={10} py={4}>
-				<TenderHead tender={tender} getTenderLoading={isLoading} />
+				<TenderHead tender={tender} getTenderLoading={isPending} />
 				<DataTable columns={columns} data={tenderItems || []} />
 			</Box>
 

@@ -7,14 +7,14 @@ import { TenderTable } from './OfferTable';
 
 export function UnpublishedOffer({ tenderId }) {
 	// We need the tender information to show on the offer.
-	const { data, isLoading } = useGetTenderById(tenderId);
+	const { data, isPending } = useGetTenderById(tenderId);
 
 	const tender = data?.tender;
 	const tenderItems = tender?.items;
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
 	return (
 		<Box p={4}>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>

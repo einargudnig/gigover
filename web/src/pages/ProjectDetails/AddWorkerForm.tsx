@@ -19,8 +19,8 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 		formState: { errors },
 		reset
 	} = useForm<FormData>();
-	const { mutateAsync: getUserIdByPhoneNumber, isLoading: loading } = useGetUserByPhoneNumber();
-	const { mutateAsync: addWorker, isLoading, isError, error } = useAddWorker();
+	const { mutateAsync: getUserIdByPhoneNumber, isPending: loading } = useGetUserByPhoneNumber();
+	const { mutateAsync: addWorker, isPending, isError, error } = useAddWorker();
 
 	const onSubmit = handleSubmit(async (data) => {
 		const response = await getUserIdByPhoneNumber({ phoneNumber: data.phoneNumber });
@@ -63,9 +63,9 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 				</Box>
 				<Button
 					type={'submit'}
-					isLoading={loading || isLoading}
+					isLoading={loading || isPending}
 					loadingText={'Searching'}
-					disabled={loading || isLoading}
+					disabled={loading || isPending}
 				>
 					Add app user
 				</Button>

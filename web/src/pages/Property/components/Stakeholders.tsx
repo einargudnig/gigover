@@ -20,7 +20,7 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 	const { propertyId } = useParams();
 	const [dialogOpen, setDialogOpen] = useState(false);
 
-	const { mutate: removeStakeholder, isLoading } = useRemoveStakeHolder();
+	const { mutate: removeStakeholder, isPending } = useRemoveStakeHolder();
 
 	const handleRemove = async (stakeholder: IStakeholder) => {
 		console.log('stakeholder in REMOVE', stakeholder);
@@ -85,7 +85,7 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 								colorScheme={'red'}
 								variant={'outline'}
 								onClick={() => setDialogOpen(true)}
-								isLoading={isLoading}
+								isLoading={isPending}
 								icon={<TrashIcon color="red" />}
 							/>
 						</ConfirmDialog>

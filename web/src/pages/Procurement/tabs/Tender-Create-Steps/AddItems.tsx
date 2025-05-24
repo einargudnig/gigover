@@ -37,7 +37,7 @@ interface AddItemsProps {
 }
 
 export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
-	const { data, isLoading } = useGetTenderById(tenderId);
+	const { data, isPending } = useGetTenderById(tenderId);
 	const tender = data?.tender;
 
 	const defaultData: TenderItem = {
@@ -77,12 +77,12 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 
 	const {
 		mutate,
-		isLoading: isMutateLoading,
+		isPending: isMutateLoading,
 		isError: isMutateError,
 		error: mutateError
 	} = useAddTenderItem();
-	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
-	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
+	const { mutate: mutateUpdate, isPending: isUpdateLoading } = useModifyTenderItem();
+	const { mutateAsync: deleteTenderItem, isPending: isDeleteLoading } = useDeleteTenderItem();
 
 	// We only want the unit to be max 4 characters kg, m2, l, etc
 	const isInvalidUnit = formData.unit!.length > 5;
@@ -163,7 +163,7 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 				<Heading size={'md'}>Add items to Tender</Heading>
 			</Flex>
 
-			{isLoading ? (
+			{isPending ? (
 				<Box>
 					<Center>
 						<LoadingSpinner />

@@ -18,7 +18,7 @@ export const StopTrackerConfirmation = ({
 	onComplete
 }: StopTrackerConfirmationProps): JSX.Element => {
 	const [comment, setComment] = useState('');
-	const { mutateAsync: stopTask, isLoading } = useTrackerStop();
+	const { mutateAsync: stopTask, isPending } = useTrackerStop();
 
 	const onConfirm = useCallback(async () => {
 		await stopTask({
@@ -44,10 +44,10 @@ export const StopTrackerConfirmation = ({
 					placeholder={'Add comment'}
 				/>
 				<Flex mt={6} justifyContent={'space-between'}>
-					<Button onClick={onClose} colorScheme={'gray'} isLoading={isLoading}>
+					<Button onClick={onClose} colorScheme={'gray'} isLoading={isPending}>
 						Cancel
 					</Button>
-					<Button onClick={onConfirm} isLoading={isLoading}>
+					<Button onClick={onConfirm} isLoading={isPending}>
 						Stop timer
 					</Button>
 				</Flex>

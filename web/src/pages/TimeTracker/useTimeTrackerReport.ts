@@ -1,10 +1,10 @@
-import { useProjectList } from '../../queries/useProjectList';
-import { Project, WorkerItem } from '../../models/Project';
-import { useEffect, useMemo, useState } from 'react';
-import { Timesheet, useTrackerReport } from '../../queries/useTrackerReport';
 import { Moment } from 'moment';
-import { secondsToHHMMSS } from '../../utils/NumberUtils';
+import { useEffect, useMemo, useState } from 'react';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { Project, WorkerItem } from '../../models/Project';
+import { useProjectList } from '../../queries/useProjectList';
+import { Timesheet, useTrackerReport } from '../../queries/useTrackerReport';
+import { secondsToHHMMSS } from '../../utils/NumberUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 
 export type TimeTrackerReportResultItem = {
@@ -36,8 +36,8 @@ export const useTimeTrackerReport = (
 	const startDateTimestamp = startDate.unix() * 1000;
 	const endDateTimestamp = endDate.unix() * 1000;
 	const [totalTracked, setTotalTracked] = useState<string>(secondsToHHMMSS(0));
-	const { mutate: getReport, data, isLoading: isGetReportLoading } = useTrackerReport();
-	const { data: projects, isLoading: projectDataListLoading } = useProjectList();
+	const { mutate: getReport, data, isPending: isGetReportLoading } = useTrackerReport();
+	const { data: projects, isPending: projectDataListLoading } = useProjectList();
 
 	const openProjects = useOpenProjects(projects);
 
@@ -136,6 +136,7 @@ export const useTimeTrackerReport = (
 		users,
 		results,
 		totalTracked,
-		isLoading: projectDataListLoading || isGetReportLoading
+		isLoading: projectDataListLoading || isGetReportLoading,
+		refetch
 	};
 };

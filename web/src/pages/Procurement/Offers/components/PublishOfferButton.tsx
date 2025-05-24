@@ -18,7 +18,7 @@ import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { usePublishOffer } from '../../../../mutations/procurement/usePublishOffer';
 
 export function PublishOfferButton({ tenderId, offerId, finishDateStatus }) {
-	const { mutateAsync: publishOffer, isLoading } = usePublishOffer();
+	const { mutateAsync: publishOffer, isPending } = usePublishOffer();
 	const toast = useToast();
 	const navigate = useNavigate();
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -90,7 +90,7 @@ export function PublishOfferButton({ tenderId, offerId, finishDateStatus }) {
 								colorScheme={'black'}
 								onClick={handlePublishOffer}
 							>
-								{isLoading ? <LoadingSpinner /> : 'Publish offer'}
+								{isPending ? <LoadingSpinner /> : 'Publish offer'}
 							</Button>
 						</AlertDialogFooter>
 					</AlertDialogContent>

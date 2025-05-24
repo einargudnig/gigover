@@ -33,7 +33,7 @@ const Container = styled.div`
 
 export const TenderOfferDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
-	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
+	const { data, isPending } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
 	const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ export const TenderOfferDetails = (): JSX.Element => {
 				<ArrowBackIcon />
 			</Button>
 			<Container>
-				{isLoading ? (
+				{isPending ? (
 					<Center>
 						<LoadingSpinner />
 					</Center>

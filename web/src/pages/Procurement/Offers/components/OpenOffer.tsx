@@ -30,7 +30,7 @@ export const OpenOffer = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { register, handleSubmit } = useForm<OfferNote>();
-	const { mutateAsync: addOffer, isLoading } = useAddOffer();
+	const { mutateAsync: addOffer, isPending } = useAddOffer();
 
 	const navigate = useNavigate();
 	const toast = useToast();
@@ -136,7 +136,7 @@ export const OpenOffer = (): JSX.Element => {
 								</Button>
 								<Spacer />
 								<Button type="submit" variant={'outline'} colorScheme={'black'}>
-									{isLoading ? <LoadingSpinner /> : 'Open offer'}
+									{isPending ? <LoadingSpinner /> : 'Open offer'}
 								</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>

@@ -13,14 +13,14 @@ import { useLocation } from 'react-router-dom';
 import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
-import { CreateOrganization } from './CreateOrganization';
-import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { CreateOrganization } from './CreateOrganization';
 import { ManageOrganization } from './ManageOrganization';
+import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 
 export const OrganizationSwitcher = () => {
-	const { data, isLoading, isFetching } = useGetOrganizations();
-	const { data: userInfo, isLoading: userIsLoading } = useGetUserInfo();
+	const { data, isPending, isFetching } = useGetOrganizations();
+	const { data: userInfo, isPending: userIsPending } = useGetUserInfo();
 	const { mutate } = useChangeOrganizations();
 	const location = useLocation();
 
@@ -58,10 +58,10 @@ export const OrganizationSwitcher = () => {
 					rightIcon={<ChevronDownIcon />}
 					_active={{ bg: 'transparent' }}
 					_hover={{ textColor: 'gray.700' }}
-					isLoading={userIsLoading || isLoading || isFetching}
+					isLoading={userIsPending || isPending || isFetching}
 				>
 					<Flex>
-						{isLoading || isFetching ? <LoadingSpinner /> : null}
+						{isPending || isFetching ? <LoadingSpinner /> : null}
 						{currentOrganization?.name || 'Personal Space'} - {privMap}
 					</Flex>
 				</MenuButton>

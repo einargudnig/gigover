@@ -7,6 +7,7 @@ import { CardBase } from '../../components/CardBase';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
 import { Table } from '../../components/Table';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { EmptyState } from '../../components/empty/EmptyState';
 import { TimeIcon } from '../../components/icons/TimeIcon';
 import { ModalContext } from '../../context/ModalContext';
@@ -19,7 +20,6 @@ import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
 import { TimeTrackerReport } from './TimeTrackerReport';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
 
 const TitleContainer = styled.div`
 	display: flex;
@@ -99,12 +99,12 @@ export const TimeTracker = (): JSX.Element => {
 	const {
 		mutateAsync: getReport,
 		data: reportData,
-		isLoading: reportDataLoading
+		isPending: reportDataLoading
 	} = useTrackerReport();
 	const {
 		mutateAsync: activeTrackers,
 		data,
-		isLoading: activeTimerLoading
+		isPending: activeTimerLoading
 	} = useActiveTimeTrackers();
 
 	const totalTimesheets = useMemo(() => {

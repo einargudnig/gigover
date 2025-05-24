@@ -10,12 +10,12 @@ import {
 	FormControl,
 	FormErrorMessage,
 	FormLabel,
+	Heading,
+	Input,
 	Spacer,
 	Text,
 	Tooltip,
-	Heading,
-	useToast,
-	Input
+	useToast
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Theme } from '../../../../Theme';
@@ -141,8 +141,8 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 									variant={'outline'}
 									colorScheme={'black'}
 									loadingText={'Inviting'}
-									isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-									disabled={searchMutation.isLoading || inviteMutation.isLoading}
+									isLoading={searchMutation.isPending || inviteMutation.isPending}
+									disabled={searchMutation.isPending || inviteMutation.isPending}
 									onClick={search}
 								>
 									Invite

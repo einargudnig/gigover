@@ -20,11 +20,11 @@ type TenderIdParams = {
 export const InvitedTendersDetails = (): JSX.Element => {
 	const { tenderId } = useParams<keyof TenderIdParams>() as TenderIdParams;
 
-	const { data, isLoading } = useGetTenderById(Number(tenderId));
+	const { data, isPending } = useGetTenderById(Number(tenderId));
 	const tender: TenderWithItems | undefined = data?.tender;
 	const tenderItems = tender?.items;
 	const tenderDocuments = tender?.documents;
-	const { mutateAsync: bidderRejectAsync, isLoading: isBidderRejectLoading } = useBidderReject();
+	const { mutateAsync: bidderRejectAsync, isPending: isBidderRejectPending } = useBidderReject();
 	// we will store the bidder status in the localStorage.
 	const [hasAnswered, setHasAnswered] = useState(false);
 	// const user = useContext(UserContext); //! Maybe I need this one to figure out what the bidder answered
@@ -72,7 +72,7 @@ export const InvitedTendersDetails = (): JSX.Element => {
 
 	return (
 		<Box p={4}>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
@@ -113,7 +113,7 @@ export const InvitedTendersDetails = (): JSX.Element => {
 											variant={'outline'}
 											colorScheme={'gray'}
 										>
-											{isBidderRejectLoading ? (
+											{isBidderRejectPending ? (
 												<LoadingSpinner />
 											) : (
 												'Will not place an offer'

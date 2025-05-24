@@ -10,7 +10,7 @@ export const Projects = ({ project }): JSX.Element => {
 	const { propertyId } = useParams();
 	// console.log('projects in componet', project);
 
-	const { mutateAsync: removeProjectFromProperty, isLoading } = useRemoveProjectFromProperty();
+	const { mutateAsync: removeProjectFromProperty, isPending } = useRemoveProjectFromProperty();
 
 	return (
 		<>
@@ -73,7 +73,7 @@ export const Projects = ({ project }): JSX.Element => {
 									colorScheme={'red'}
 									variant={'outline'}
 									onClick={() => setDialogOpen(true)}
-									isLoading={isLoading}
+									isLoading={isPending}
 								>
 									Remove from property
 								</Button>

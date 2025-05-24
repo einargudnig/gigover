@@ -26,7 +26,7 @@ const ProcurementCardStyled = styled(CardBaseLink)`
 `;
 
 export function MyTendersList() {
-	const { data, isLoading } = useUserTenders();
+	const { data, isPending } = useUserTenders();
 
 	const finishDateStatus = (finishDate: number) => {
 		const res = handleFinishDate(finishDate);
@@ -71,7 +71,7 @@ export function MyTendersList() {
 			<Flex justify={'start'}>
 				<Heading size={'md'}>Tenders that you have created</Heading>
 			</Flex>
-			{isLoading ? (
+			{isPending ? (
 				<ProcurementListSkeleton />
 			) : (
 				<>

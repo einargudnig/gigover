@@ -7,7 +7,7 @@ export const useHoldResourceButton = () => {
 	const location = useGetLocation();
 
 	return {
-		isLoading: location.loading || holdResource.isPending,
+		isPending: location.loading || holdResource.isPending,
 		execute: async (resource: Resource, projectId?: number, taskId?: number) => {
 			let gps: GeolocationPosition | null = null;
 			try {
