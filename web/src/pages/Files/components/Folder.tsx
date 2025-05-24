@@ -96,7 +96,7 @@ export const ProjectFolderComponent = ({
 	folder,
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
-	const { data, isLoading } = useFolderDocuments(folder.folderId);
+	const { data, isPending } = useFolderDocuments(projectId, folder.folderId);
 	// const { data: folderData, isLoading: folderIsLoading } = useFolderFolders(
 	// 	projectId,
 	// 	folder.folderId
@@ -179,7 +179,7 @@ export const ProjectFolderComponent = ({
 								{folder.name}
 							</Heading>
 							<HStack justify={'space-between'}>
-								{isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
+								{isPending ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
 							</HStack>
 						</VStack>
 					</FolderCard>

@@ -29,7 +29,7 @@ export const CreateNewFolderButton = ({
 }) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
-	const { mutateAsync, isLoading, isError, error } = useAddFolder();
+	const { mutateAsync, isPending, isError, error } = useAddFolder();
 
 	const addFolder = useCallback(() => {
 		const folderName = inputRef.current?.value || '';
@@ -71,7 +71,7 @@ export const CreateNewFolderButton = ({
 					</FormControl>
 					<FormActions
 						submitText={'Create'}
-						submitLoading={isLoading}
+						submitLoading={isPending}
 						onSubmit={() => addFolder()}
 						cancelText={'Close'}
 						onCancel={() => setIsOpen(false)}

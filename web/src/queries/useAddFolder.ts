@@ -12,6 +12,7 @@ export const useAddFolder = () => {
 	const client = useQueryClient();
 
 	return useMutation<ProjectFolder & { id?: number }, AxiosError, FolderInput>({
+		mutationKey: ['addFolder'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<ProjectFolder & { id?: number }>(

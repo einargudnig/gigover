@@ -13,10 +13,10 @@ export const ProjectFolder = (): JSX.Element => {
 	const params = useParams();
 	const projectId = params.projectId ? parseInt(params.projectId) : -1;
 
-	const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
+	const { data, isPending, isError, error } = useProjectFoldersQuery(projectId);
 	const projectDocuments = useProjectDocuments(projectId);
 
-	if (isLoading) {
+	if (isPending) {
 		return <LoadingSpinner />;
 	}
 

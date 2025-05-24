@@ -7,7 +7,7 @@ interface FolderFilesResponse {
 	projectDocuments: ProjectFile[];
 }
 
-export const useFolderDocuments = (projectId: number, folderId: number) => {
+export const useFolderDocuments = (folderId: number) => {
 	const { data, isPending, isError, error } = useQuery<FolderFilesResponse, AxiosError>({
 		queryKey: [ApiService.folderFiles(folderId)],
 		queryFn: async () => {

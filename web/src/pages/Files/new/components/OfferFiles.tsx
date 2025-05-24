@@ -8,7 +8,7 @@ import { OfferFile } from './OfferFile';
 export function OfferFiles() {
 	const params = useParams();
 	const offerId = params.offerId ? params.offerId : -1;
-	const { data, isLoading, isError, error, isFetching } = useGetOfferByOfferId(Number(offerId));
+	const { data, isPending, isError, error, isFetching } = useGetOfferByOfferId(Number(offerId));
 	const offerDocuments = data?.offer.documents;
 
 	if (isError && error) {
@@ -22,7 +22,7 @@ export function OfferFiles() {
 
 	return (
 		<Box p={4}>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>

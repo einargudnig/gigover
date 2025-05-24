@@ -25,13 +25,13 @@ const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
 `;
 
 export const TendersFolder = (): JSX.Element => {
-	const { data, isLoading } = useUserTenders();
+	const { data, isPending } = useUserTenders();
 
 	return (
 		<VStack style={{ height: '100%' }}>
 			<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 				<Container>
-					{isLoading ? (
+					{isPending ? (
 						<Center>
 							<LoadingSpinner />
 						</Center>
