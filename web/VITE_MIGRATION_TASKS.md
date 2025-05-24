@@ -180,7 +180,7 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/pages/Property/PropertyId.tsx`
             -   [x] `src/pages/ProjectDetails/ProjectDetails.tsx`
             -   [x] `src/pages/Onboarding.tsx`
-        -   [ ] **Broader Check: Review remaining `isLoading` instances codebase-wide**
+        -   [x] **Broader Check: Review remaining `isLoading` instances codebase-wide**
             -   [x] `src/pages/Onboarding.tsx`
             -   [x] `src/pages/Dashboard/hooks/useFilterProjectsBy.ts`
             -   [x] `src/pages/ProjectDetails/ProjectDetailsOutlet.tsx`
@@ -188,6 +188,8 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/pages/ProjectDetails/ProjectDetailsGanttChart.tsx`
             -   [x] `src/pages/ProjectDetails/TaskColumn.tsx`
             -   [x] `src/pages/Procurement/ClientBids/components/BidsList.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/BidResponsesList.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/new/AddItemsSingleBid.tsx`
     -   [ ] Test all data-fetching and caching functionality.
 -   [ ] **Stabilize React Router DOM (v6-beta to v6-latest stable)**
     -   [ ] Update `react-router-dom` in `package.json`.
