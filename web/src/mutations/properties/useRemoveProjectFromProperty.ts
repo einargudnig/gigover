@@ -29,8 +29,8 @@ export const useRemoveProjectFromProperty = () => {
 				throw e; // Re-throw for TanStack Query
 			}
 		},
-		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+		onSuccess: async (_data, variables) => {
+			await client.invalidateQueries({
 				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
 		}

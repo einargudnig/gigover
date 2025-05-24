@@ -9,8 +9,8 @@ export interface TenderOffer {
 }
 
 export const useAddOffer = () => {
-	/* eslint-disable @typescript-eslint/no-explicit-any */
 	return useMutation<{ id: number }, AxiosError, TenderOffer>({
+		mutationKey: [ApiService.addOffer],
 		mutationFn: async (offer) => {
 			try {
 				const response = await axios.post<{ id: number }>(ApiService.addOffer, offer, {

@@ -22,7 +22,7 @@ interface TenderCreateResponse {
 
 export const useAddTender = (options?: UseMutationOptions<number, Error, TenderFormData>) => {
 	return useMutation<number, Error, TenderFormData>({
-		mutationKey: ['addTender'],
+		mutationKey: [ApiService.addTender],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<TenderCreateResponse>(
@@ -40,10 +40,7 @@ export const useAddTender = (options?: UseMutationOptions<number, Error, TenderF
 				return response.data.id;
 			} catch (error) {
 				devError('Error in useAddTender:', error);
-				if (error instanceof Error) {
-					throw error;
-				}
-				throw new Error(String(error));
+				throw error;
 			}
 		},
 		...(options || {})

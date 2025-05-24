@@ -146,12 +146,12 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/mutations/properties/useEditProperty.ts`
             -   [x] `src/mutations/properties/useEditUnit.ts`
             -   [x] `src/mutations/properties/useAddProjectToProperty.ts`
-            -   [ ] `src/mutations/properties/useAddProperty.ts`
-            -   [ ] `src/mutations/properties/useRemoveProjectFromProperty.ts`
-            -   [ ] `src/mutations/properties/useRemovePropertyDocument.ts`
-            -   [ ] `src/mutations/procurement/useAddOffer.ts`
-            -   [ ] `src/mutations/properties/useRemoveStakeHolder.ts`
-            -   [ ] `src/mutations/procurement/useAddTender.ts` (Also had v4 codemod error)
+            -   [x] `src/mutations/properties/useAddProperty.ts`
+            -   [x] `src/mutations/properties/useRemoveProjectFromProperty.ts`
+            -   [x] `src/mutations/properties/useRemovePropertyDocument.ts`
+            -   [x] `src/mutations/procurement/useAddOffer.ts`
+            -   [x] `src/mutations/properties/useRemoveStakeHolder.ts`
+            -   [x] `src/mutations/procurement/useAddTender.ts` (Also had v4 codemod error)
             -   [ ] `src/mutations/procurement/client-bids/useAcceptBid.ts`
             -   [ ] `src/mutations/procurement/useAddTenderDocument.ts`
             -   [ ] `src/mutations/procurement/client-bids/useAddBidItem.ts`
@@ -198,31 +198,4 @@ This document outlines the tasks for migrating the React application from Create
     -   [ ] Add `vite` and `@vitejs/plugin-react` (or `@vitejs/plugin-react-swc`) to `devDependencies`.
 -   [ ] **Remove Create React App**
     -   [ ] Uninstall `react-scripts`.
--   [ ] **Update `package.json` Scripts**
-    -   [ ] Modify `start`, `build`, and other relevant scripts to use Vite commands (e.g., `vite` for dev, `vite build` for production).
-    -   [ ] Update the `deploy` script for the new build process.
--   [ ] **Handle `index.html`**
-    -   [ ] Move `public/index.html` to the project root.
-    -   [ ] Update the script tag in `index.html` to point to the main entry file (e.g., `<script type="module" src="/src/index.tsx"></script>`).
--   [ ] **Environment Variables**
-    -   [ ] Convert `REACT_APP_` prefixed environment variables to `VITE_`.
-    -   [ ] Update code to access them using `import.meta.env.VITE_YOUR_VAR`.
-    -   [ ] Ensure `.env` files are handled correctly by Vite.
--   [ ] **Create Vite Configuration (`vite.config.ts` or `vite.config.js`)**
-    -   [ ] Set up the React plugin.
-    -   [ ] Configure path aliases (if used in `tsconfig.json` or `jsconfig.json`).
-    -   [ ] Set up any necessary server proxies (e.g., for API requests).
-    -   [ ] Add other Vite plugins as needed (e.g., for SVGR if SVGs are imported as components, linters).
--   [ ] **Update TypeScript & ESLint Configurations**
-    -   [ ] Ensure `tsconfig.json` settings are compatible with Vite (e.g., `jsx: 'react-jsx'`, `isolatedModules: true`, `moduleResolution: 'bundler'` or `nodeNext`).
-    -   [ ] Update ESLint configuration: remove `eslint-config-react-app` and ensure it works with Vite's structure and build process.
-
-## Phase 4: Testing & Final Cleanup
-
--   [ ] **Thorough Application Testing (Post-Vite)**
-    -   [ ] Test all features, user flows, and edge cases in development and after a production build.
--   [ ] **Build and Deployment Testing (Post-Vite)**
-    -   [ ] Ensure production builds are working correctly.
-    -   [ ] Test the deployment process and the deployed application.
--   [ ] **Remove `styled-components`**
-    -   [ ] (As per user plan) Refactor components to remove `styled-components` and use an alternative styling solution (e.g., Chakra UI, CSS Modules, Tailwind CSS).
+-   [ ] \*\*Update `package.json`

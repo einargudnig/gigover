@@ -18,6 +18,7 @@ export const useAddProperty = () => {
 	const client = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, PropertyFormData>({
+		mutationKey: [ApiService.addProperty],
 		mutationFn: async (variables) => {
 			console.log('variables in useAddProperty custom hook', variables);
 			try {
@@ -31,8 +32,8 @@ export const useAddProperty = () => {
 				throw e; // Re-throw for TanStack Query
 			}
 		},
-		onSuccess: async (data, variables) => {
-			await client.refetchQueries({ queryKey: [ApiService.getProperties] });
+		onSuccess: async () => {
+			await client.invalidateQueries({ queryKey: [ApiService.getProperties] });
 		}
 	});
 };

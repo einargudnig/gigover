@@ -19,6 +19,7 @@ export const useRemoveStakeHolder = () => {
 	const client = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, StakeHolderFormData>({
+		mutationKey: [ApiService.removeStakeholder],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.removeStakeholder, variables, {
@@ -27,14 +28,11 @@ export const useRemoveStakeHolder = () => {
 				return response.data;
 			} catch (e) {
 				devError(e);
-				if (e instanceof Error) {
-					throw e;
-				}
-				throw new Error('Could not remove stakeholder');
+				throw e;
 			}
 		},
-		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+		onSuccess: async (_data, variables) => {
+			await client.invalidateQueries({
 				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
 		}
