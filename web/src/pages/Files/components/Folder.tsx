@@ -96,11 +96,8 @@ export const ProjectFolderComponent = ({
 	folder,
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
-	const { data, isPending } = useFolderDocuments(projectId, folder.folderId);
-	// const { data: folderData, isLoading: folderIsLoading } = useFolderFolders(
-	// 	projectId,
-	// 	folder.folderId
-	// );
+	const { data, isPending } = useFolderDocuments(folder.folderId);
+
 	const isSelected = folder.folderId === selectedFolderId;
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
