@@ -20,7 +20,7 @@ import { devError } from '../../utils/ConsoleUtils';
 import { FormActions } from '../FormActions';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Modal } from '../Modal';
-import { CommentInput } from '../Resources/ResourceCommentInput';
+import { ResourceCommentInput } from '../Resources/ResourceCommentInput';
 import { ResourceComments } from '../Resources/ResourceComments';
 import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
 import { TrackerSelect } from '../TrackerSelect';
@@ -300,7 +300,9 @@ export const ResourceModal = (): JSX.Element => {
 										{isEditing && resources?.resource && (
 											<TabContent show={tab.value === 4}>
 												<ResourceComments resource={resources.resource} />
-												<CommentInput resourceId={resources.resource.id!} />
+												<ResourceCommentInput
+													resource={resources.resource}
+												/>
 											</TabContent>
 										)}
 									</>

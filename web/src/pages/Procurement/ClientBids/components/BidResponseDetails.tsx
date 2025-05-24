@@ -1,12 +1,12 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { Box, Button, Center, Flex, Spacer, Text, useToast } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Bid, BidItem } from '../../../../models/Tender';
 import { useAcceptBid } from '../../../../mutations/procurement/client-bids/useAcceptBid';
 import { useRejectBid } from '../../../../mutations/procurement/client-bids/useRejectBid';
 import { useClientGetBidById } from '../../../../queries/procurement/client-bids/useGetClientBidById';
 import { Info } from '../../components/Info';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { DataTable } from '../../components/Table';
 import { AnswerBid } from './AnswerBid';
 
