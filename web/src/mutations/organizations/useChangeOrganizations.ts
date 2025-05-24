@@ -4,14 +4,18 @@ import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
+interface ChangeOrganizationVariables {
+	id: number;
+}
+
 export const useChangeOrganizations = () => {
 	const queryClient = useQueryClient();
 	const mutationKey = ApiService.changeOrganizations;
 
-	return useMutation({
+	return useMutation<ErrorResponse, Error, ChangeOrganizationVariables>({
 		mutationKey: [mutationKey],
 
-		mutationFn: async (variables) => {
+		mutationFn: async (variables: ChangeOrganizationVariables) => {
 			try {
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
