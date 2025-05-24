@@ -1,93 +1,65 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Select, VStack } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
-import { useAvailableResources } from '../../../hooks/useAvailableResources';
-import { useHoldResourceButton } from '../../../hooks/useHoldResource';
+import { ResourceStatus } from '../../../models/Resource';
 import { Task } from '../../../models/Task';
+import { useHoldResource } from '../../../mutations/useHoldResource';
 import { useResources } from '../../../queries/useResources';
-import { devError } from '../../../utils/ConsoleUtils';
 import { LoadingSpinner } from '../../LoadingSpinner';
-import { TrackerSelect } from '../../TrackerSelect';
-import { ResourceOnTask } from './ResourceOnTask';
 
 export interface UseResourceOnTaskProps {
 	task: Task;
 }
 
 export const UseResourceOnTask = ({ task }: UseResourceOnTaskProps): JSX.Element => {
-	const { data: resourceList, isLoading } = useResources();
-	const [selectedResource, setSelectedResource] = useState<number | undefined>();
-	const holdResource = useHoldResourceButton();
-	const availableResources = useAvailableResources(resourceList ?? []);
+	const { data: resourceList, isPending } = useResources();
+	const [selectedResource, setSelectedResource] = useState<string>('');
+	const holdResource = useHoldResource();
 
-	const resourcesOnTask = useMemo(() => {
-		return resourceList.filter(
-			(r) => r.projectId === task.projectId && r.taskId === task.taskId
-		);
-	}, [resourceList, task]);
-
-	const hold = useCallback(async () => {
-		try {
-			if (!selectedResource || selectedResource === 0) {
-				alert('You have to select a resource first.');
-			} else {
-				const resource = resourceList.find((r) => r.id === selectedResource);
-				if (resource) {
-					await holdResource.execute(resource, task.projectId, task.taskId);
-				} else {
-					throw new Error('Invalid resource selection.');
-				}
+	const handleHoldResource = useCallback(async () => {
+		if (selectedResource) {
+			const resource = resourceList?.find((r) => r.id === Number(selectedResource));
+			if (resource) {
+				await holdResource.mutateAsync({
+					...resource,
+					projectId: task.projectId,
+					taskId: task.taskId
+				});
 			}
-		} catch (e) {
-			devError(e);
 		}
 	}, [selectedResource, resourceList, holdResource, task.projectId, task.taskId]);
 
-	return isLoading ? (
+	const availableResources = useMemo(() => {
+		if (!resourceList) {
+			return [];
+		}
+		return resourceList.filter((r) => r.status === ResourceStatus.Available && !r.taskId);
+	}, [resourceList]);
+
+	return isPending ? (
 		<LoadingSpinner />
 	) : (
-		<>
-			{resourcesOnTask.length > 0 ? (
-				<div style={{ width: '100%' }}>
-					{resourcesOnTask.map((rt, rtIndex) => (
-						<ResourceOnTask resource={rt} task={task} key={rtIndex} />
-					))}
-				</div>
-			) : (
-				<>
-					<div style={{ flex: 1 }}>
-						<TrackerSelect
-							title={'Select a resource'}
-							value={selectedResource}
-							placeholder={
-								availableResources.length === 0
-									? 'No available resources'
-									: 'Click to select'
-							}
-							options={availableResources.map((res) => ({
-								label: res.name,
-								value: res.id!
-							}))}
-							isNumber={true}
-							valueChanged={(newValue) => {
-								if (newValue === '' || !newValue) {
-									setSelectedResource(undefined);
-								} else {
-									setSelectedResource(newValue as number);
-								}
-							}}
-						/>
-					</div>
-					<Button
-						colorScheme={'gray'}
-						style={{ height: '78px' }}
-						onClick={hold}
-						isLoading={holdResource.isLoading}
-						disabled={availableResources.length === 0 || holdResource.isLoading}
-					>
-						Hold
-					</Button>
-				</>
-			)}
-		</>
+		<VStack>
+			<Select
+				placeholder="Select resource"
+				value={selectedResource}
+				onChange={(e) => setSelectedResource(e.target.value)}
+			>
+				{availableResources.map((r) => (
+					<option key={r.id} value={r.id}>
+						{r.name}
+					</option>
+				))}
+			</Select>
+			<Button
+				colorScheme="green"
+				onClick={handleHoldResource}
+				isLoading={holdResource.isPending}
+				disabled={
+					availableResources.length === 0 || holdResource.isPending || !selectedResource
+				}
+			>
+				Hold resource
+			</Button>
+		</VStack>
 	);
 };

@@ -130,7 +130,7 @@ const Notification = ({ data, onClick }: { data: NotificationType; onClick: () =
 				cursor={'pointer'}
 				onClick={openNotification}
 			>
-				{deleteNotificationMutation.isLoading ? (
+				{deleteNotificationMutation.isPending ? (
 					<Center>
 						<LoadingSpinner />
 					</Center>

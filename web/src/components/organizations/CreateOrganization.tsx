@@ -27,7 +27,7 @@ export const CreateOrganization = (): JSX.Element => {
 	const [successMessage, setSuccessMessage] = useState<string>('');
 	const {
 		mutateAsync: createOrg,
-		isLoading,
+		isPending,
 		isError,
 		error: mutateError
 	} = useCreateOrganization();
@@ -96,7 +96,7 @@ export const CreateOrganization = (): JSX.Element => {
 									variant={'outline'}
 									colorScheme="gray"
 								>
-									{isLoading || loading ? (
+									{isPending || loading ? (
 										<LoadingSpinner />
 									) : (
 										'Create organization'

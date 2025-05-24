@@ -51,14 +51,10 @@ export interface ResourceHistoryLogProps {
 }
 
 export const ResourceHistoryLog = ({ resource }: ResourceHistoryLogProps): JSX.Element => {
-	const { data, isLoading, isError, error } = useResourceHistory(resource);
+	const { data, isPending, isError, error } = useResourceHistory(resource);
 
-	if (isLoading) {
-		return (
-			<div>
-				<LoadingSpinner />
-			</div>
-		);
+	if (isPending) {
+		return <LoadingSpinner />;
 	}
 
 	if (isError) {

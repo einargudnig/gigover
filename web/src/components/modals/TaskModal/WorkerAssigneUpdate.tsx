@@ -16,7 +16,7 @@ export const WorkerAssigneUpdate = ({
 	projectId,
 	workers
 }: WorkerAssigneUpdateProps): JSX.Element => {
-	const { mutateAsync: updateTask, isLoading } = useUpdateTask(projectId);
+	const { mutateAsync: updateTask, isPending } = useUpdateTask(projectId);
 
 	const updateWorker = async (workerId: string) => {
 		await updateTask({
@@ -29,7 +29,7 @@ export const WorkerAssigneUpdate = ({
 		<div style={{ width: '100%' }}>
 			<HStack mb={4} spacing={4} justifyContent={'space-between'}>
 				<Tag>Worker assigne</Tag>
-				{isLoading && <LoadingSpinner />}
+				{isPending && <LoadingSpinner />}
 			</HStack>
 			<TrackerSelect
 				title={'Worker'}

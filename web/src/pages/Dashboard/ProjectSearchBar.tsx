@@ -1,32 +1,29 @@
 import { SearchIcon } from '@chakra-ui/icons';
 import {
+	Box,
+	Flex,
 	Input,
 	InputGroup,
-	InputRightElement,
-	Menu,
-	MenuItem,
-	MenuList,
+	InputLeftElement,
 	Text,
 	useOutsideClick
 } from '@chakra-ui/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
 import { useProjectList } from '../../queries/useProjectList';
 
 const SearchResults = styled.div`
 	position: absolute;
-	top: 100%;
-	top: calc(100% + 8px);
+	top: 50px;
+	left: 0px;
 	width: 100%;
-	left: 0;
-	right: 0;
-`;
-
-const StyledMenuList = styled(MenuList)`
-	width: 400px;
-	z-index: 1000;
+	background: white;
+	box-shadow: ${(props) => props.theme.shadows.lg};
+	border-radius: ${(props) => props.theme.radius(2)};
+	z-index: 99;
+	padding: ${(props) => props.theme.padding(2)};
 `;
 
 export const ProjectSearchBar = (): JSX.Element => {
@@ -35,81 +32,65 @@ export const ProjectSearchBar = (): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 
-	const { data, isLoading } = useProjectList();
+	const { data, isPending } = useProjectList();
 	const properties = data;
 
 	useOutsideClick({
 		ref: ref,
-		handler: () => setIsOpen(false)
-	});
-
-	useEffect(() => {
-		if (searchValue.length > 0) {
-			setIsOpen(true);
-
-			if (refInput.current) {
-				// Keep focus on the input element
-				setTimeout(() => {
-					refInput.current!.focus();
-				}, 0);
-			}
-		} else {
+		handler: () => {
 			setIsOpen(false);
 		}
-	}, [searchValue, refInput]);
+	});
 
-	const searchResults = useMemo<Project[]>(() => {
-		if (searchValue.length > 0) {
-			const results = properties.filter((res) =>
-				JSON.stringify(res).toLowerCase().includes(searchValue.toLowerCase())
+	const filterProjects = (searchStr: string): Project[] => {
+		if (properties) {
+			return properties.filter((f: Project) =>
+				f.name.toLowerCase().includes(searchStr.toLowerCase())
 			);
-			return results.slice(0, 4);
 		}
 
 		return [];
-	}, [properties, searchValue]);
+	};
 
 	return (
 		<>
-			{isLoading ? (
-				<Text>Loading...</Text>
+			{isPending ? (
+				<Flex my={12} justifyContent={'center'}>
+					<LoadingSpinner />
+				</Flex>
 			) : (
 				<InputGroup>
+					<InputLeftElement pointerEvents="none">
+						<SearchIcon color="gray.300" />
+					</InputLeftElement>
 					<Input
-						autoComplete={'off'}
-						autoCorrect={'off'}
-						name="property"
-						placeholder="Search for project.."
-						variant={'filled'}
-						style={{ minWidth: '400px' }}
-						value={searchValue}
 						ref={refInput}
-						onChange={(e) => {
-							setSearchValue(e.target.value);
-							e.target.focus(); // Keep the focus on the input
-						}}
+						placeholder="Search for projects"
+						onFocus={() => setIsOpen(true)}
+						value={searchValue}
+						onChange={(event) => setSearchValue(event.target.value)}
 					/>
-					<InputRightElement pointerEvents={'none'}>
-						<SearchIcon />
-					</InputRightElement>
-					<SearchResults ref={ref}>
-						<Menu isOpen={isOpen} autoSelect={false}>
-							<StyledMenuList>
-								{searchResults.length > 0 ? (
-									searchResults.map((r, key) => (
-										<NavLink key={key} to={`/project/${r.projectId}`}>
-											<MenuItem onClick={() => setSearchValue('')}>
-												{r.name}
-											</MenuItem>
-										</NavLink>
-									))
-								) : (
-									<MenuItem>No results found</MenuItem>
-								)}
-							</StyledMenuList>
-						</Menu>
-					</SearchResults>
 				</InputGroup>
+			)}
+			{isOpen && searchValue.length > 0 && (
+				<SearchResults ref={ref}>
+					{filterProjects(searchValue).map((project, i) => (
+						<Box
+							key={i}
+							cursor="pointer"
+							_hover={{ background: '#efefef' }}
+							borderRadius={6}
+							px={2}
+							py={1}
+							onClick={() => {
+								setSearchValue('');
+								setIsOpen(false);
+							}}
+						>
+							<Text>{project.name}</Text>
+						</Box>
+					))}
+				</SearchResults>
 			)}
 		</>
 	);

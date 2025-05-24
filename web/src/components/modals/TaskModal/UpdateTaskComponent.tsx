@@ -1,5 +1,5 @@
-import { Box, Button, Tag, Text, VStack } from '@chakra-ui/react';
-import { useCallback } from 'react';
+import { Button, HStack, Tag, Text, VStack } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
 import { Task } from '../../../models/Task';
 import { useUpdateTask } from '../../../queries/useUpdateTask';
 import { TaskCardInput } from '../../TaskCardInput';
@@ -7,10 +7,8 @@ import { TaskCardInput } from '../../TaskCardInput';
 interface UpdateTaskComponentProps {
 	task: Task;
 	projectId: number;
-
-	onChange(newValue: string): void;
-
-	onClose(closeModal: boolean): void;
+	onChange: (newValue: string) => void;
+	onClose: () => void;
 }
 
 export const UpdateTaskComponent = ({
@@ -19,48 +17,56 @@ export const UpdateTaskComponent = ({
 	onChange,
 	onClose
 }: UpdateTaskComponentProps): JSX.Element => {
-	const { mutateAsync: updateTask, isLoading, error } = useUpdateTask(projectId);
+	const { mutateAsync: updateTask, isPending, error } = useUpdateTask(projectId);
+
+	const [tempValue, setTempValue] = useState<string | undefined>(task.subject);
 
 	const submitChanges = useCallback(
-		async (newValue: Pick<Task, 'subject' | 'typeId'>) => {
+		async (taskValues: Pick<Task, 'subject' | 'typeId'>) => {
 			await updateTask({
 				...task,
-				typeId: newValue.typeId,
-				subject: newValue.subject
+				...taskValues
 			});
-
-			onClose(true);
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[task, updateTask]
 	);
 
+	const handleUpdate = useCallback(async () => {
+		if (tempValue !== task.subject) {
+			await submitChanges({
+				subject: tempValue as string,
+				typeId: task.typeId
+			});
+			onClose();
+		}
+	}, [tempValue, task.subject, submitChanges, onClose]);
+
 	return (
-		<VStack spacing={4} alignItems={'flex-start'}>
-			<div style={{ width: '100%' }}>
-				<Tag mb={4}>Task details</Tag>
-				<Box p={4} borderRadius={6} borderWidth="1px">
-					<TaskCardInput
-						task={task}
-						value={task.subject}
-						error={error?.errorText}
-						loading={isLoading}
-						onChange={(newValue: string) => onChange(newValue)}
-						onSubmit={(newValue: Pick<Task, 'subject' | 'typeId'>) =>
-							submitChanges(newValue)
-						}
-					/>
-				</Box>
-			</div>
+		<VStack w="100%" alignItems="flex-start">
+			<HStack mb={4} spacing={4} justifyContent={'space-between'}>
+				<Tag>Update task component</Tag>
+			</HStack>
+			<Text>Task Name</Text>
+			<TaskCardInput
+				task={task}
+				value={tempValue ?? ''}
+				error={error?.errorText}
+				loading={isPending}
+				onChange={(newValue: string) => {
+					setTempValue(newValue);
+					onChange(newValue);
+				}}
+				onSubmit={(newValue: Pick<Task, 'subject' | 'typeId'>) => submitChanges(newValue)}
+			/>
 			<div>
-				<Text>
-					You can edit the task name and type in the box above. Make sure you press save
-					after you have made the changes
-				</Text>
-			</div>
-			<div>
-				<Button onClick={() => onClose(false)} colorScheme={'gray'}>
-					Cancel & close
+				<Button
+					variant={'solid'}
+					colorScheme={'green'}
+					onClick={handleUpdate}
+					disabled={isPending || !tempValue}
+					isLoading={isPending}
+				>
+					Save
 				</Button>
 			</div>
 		</VStack>

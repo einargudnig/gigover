@@ -1,40 +1,30 @@
+import { Box, Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { Input } from '../forms/Input';
+import { Resource } from '../../models/Resource';
 import { useResourceComment } from '../../mutations/useResourceComment';
 
-interface CommentInputProps {
-	resourceId: number;
-}
-
-export const CommentInput = ({ resourceId }: CommentInputProps): JSX.Element => {
+export const ResourceCommentInput = ({ resource }: { resource: Resource }) => {
 	const [commentValue, setCommentValue] = useState('');
-	const { mutateAsync: addComment, isLoading } = useResourceComment();
+	const { mutateAsync: addComment, isPending } = useResourceComment();
 
-	const onKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === 'Enter' && !isLoading) {
-			e.stopPropagation();
+	const handleComment = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+		if (e.key === 'Enter' && !isPending && !e.shiftKey) {
 			e.preventDefault();
-
-			const response = await addComment({
-				comment: commentValue,
-				resourceId: resourceId
-			});
-
-			if (response?.data.id) {
-				setCommentValue('');
-			}
+			await addComment({ resourceId: resource.id!, comment: commentValue });
+			setCommentValue('');
 		}
 	};
 
 	return (
-		<div style={{ flex: '1 0 60px', position: 'sticky', bottom: 0 }}>
-			<Input
-				name={'comment'}
-				placeholder={'Write a comment.. (Press enter to send)'}
+		<Box pt={4}>
+			<Textarea
+				placeholder="Add a comment... (Press Enter to send, Shift+Enter for new line)"
 				value={commentValue}
 				onChange={(e) => setCommentValue(e.target.value)}
-				onKeyDown={onKeyPress}
+				onKeyDown={handleComment}
+				size="sm"
+				resize="none"
 			/>
-		</div>
+		</Box>
 	);
 };

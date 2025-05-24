@@ -29,20 +29,20 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const acceptInvite = useAcceptOrganizationInvite();
 	const declineInvite = useDeclineOrganizationInvite();
-	const { data, isLoading, isError, error } = useGetUserInvites();
+	const { data, isPending, isError, error } = useGetUserInvites();
 	const [answerOrgId, setAnswerOrgId] = useState<number | null>(null);
 	const [answerType, setAnswerType] = useState<'accept' | 'decline' | null>(null);
 
 	const acceptInvitation = (id: number) => {
 		setAnswerOrgId(id);
 		setAnswerType('accept');
-		acceptInvite.mutate({ id }, { onSettled: () => setAnswerOrgId(null) });
+		acceptInvite.mutate(id, { onSettled: () => setAnswerOrgId(null) });
 	};
 
 	const declineInvitation = (id: number) => {
 		setAnswerOrgId(id);
 		setAnswerType('decline');
-		declineInvite.mutate({ id }, { onSettled: () => setAnswerOrgId(null) });
+		declineInvite.mutate(id, { onSettled: () => setAnswerOrgId(null) });
 	};
 
 	return (
@@ -82,7 +82,7 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 										</Flex>
 									) : (
 										<>
-											{isLoading ? (
+											{isPending ? (
 												<Flex
 													justifyContent={'center'}
 													alignItems={'center'}

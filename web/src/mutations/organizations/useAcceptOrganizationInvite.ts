@@ -1,17 +1,20 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { ApiService } from '../../services/ApiService';
 
 export const useAcceptOrganizationInvite = () => {
 	const client = useQueryClient();
 
-	return useMutation({
+	return useMutation<void, AxiosError, number>({
 		mutationKey: [ApiService.acceptOrganizationInvite],
-		mutationFn: async (orgId) => {
-			await axios.post(ApiService.acceptOrganizationInvite, orgId, {
-				withCredentials: true
-			});
-			return orgId;
+		mutationFn: async (orgId: number) => {
+			await axios.post(
+				ApiService.acceptOrganizationInvite,
+				{ id: orgId },
+				{
+					withCredentials: true
+				}
+			);
 		},
 
 		onSuccess: async () => {

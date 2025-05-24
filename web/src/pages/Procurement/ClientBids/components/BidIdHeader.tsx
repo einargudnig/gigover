@@ -57,7 +57,7 @@ function EditBidForm({
 	bid: Bid;
 	setIsEditing: (isEditing: boolean) => void;
 }) {
-	const { mutateAsync: editBidAsync, isLoading } = useEditBid();
+	const { mutateAsync: editBidAsync, isPending } = useEditBid();
 
 	// Form setup
 	const {
@@ -224,7 +224,7 @@ function EditBidForm({
 							variant={'outline'}
 							colorScheme={'black'}
 							type="submit"
-							isLoading={isLoading}
+							isLoading={isPending}
 						>
 							Save Changes
 						</Button>
@@ -345,7 +345,7 @@ export function BidHeaderActions({
 	setIsEditing: (isEditing: boolean) => void;
 }) {
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const { mutateAsync: deleteBidAsync, isLoading: isLoadingDelete } = useDeleteBid();
+	const { mutateAsync: deleteBidAsync, isPending: isLoadingDelete } = useDeleteBid();
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 
 	const toast = useToast();

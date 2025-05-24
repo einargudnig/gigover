@@ -4,6 +4,8 @@ import { CellProps, Column } from 'react-table';
 import styled from 'styled-components';
 import { CardBase } from '../../components/CardBase';
 import { Page } from '../../components/Page';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { Table } from '../../components/table/Table';
 import { ModalContext } from '../../context/ModalContext';
@@ -14,8 +16,6 @@ import { useResources } from '../../queries/useResources';
 import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 const ResourceData = styled(CardBase)<{ color?: string }>`
 	padding: 12px 24px;
@@ -26,9 +26,9 @@ const ResourceData = styled(CardBase)<{ color?: string }>`
 
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const { data, isLoading } = useResources();
-	const { mutateAsync: deleteResourceAsync, isLoading: isLoadingDelete } = useResourceDelete();
 	const { data: resourceTypes } = useResourceTypes();
+	const { data, isPending } = useResources();
+	const { mutateAsync: deleteResourceAsync, isPending: isLoadingDelete } = useResourceDelete();
 
 	const columns: Array<Column<Resource>> = useMemo(
 		() => [
@@ -146,7 +146,7 @@ export const Resources = (): JSX.Element => {
 				</Flex>
 
 				<CardBase>
-					<Table loading={isLoading} variant={'striped'} columns={columns} data={data} />
+					<Table loading={isPending} variant={'striped'} columns={columns} data={data} />
 				</CardBase>
 
 				<CardBase mt={4}>

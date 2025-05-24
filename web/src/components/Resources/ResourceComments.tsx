@@ -8,9 +8,9 @@ export interface ResourceCommentsProps {
 }
 
 export const ResourceComments = ({ resource }: ResourceCommentsProps): JSX.Element => {
-	const { data, isError, isLoading } = useResourceComments(resource.id!);
+	const { data, isError, isPending } = useResourceComments(resource.id!);
 
-	if (isLoading) {
+	if (isPending) {
 		return <LoadingSpinner />;
 	}
 

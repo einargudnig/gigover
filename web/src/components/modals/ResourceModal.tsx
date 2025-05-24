@@ -43,7 +43,7 @@ const TabContent = styled.div<{ show: boolean }>`
 export const ResourceModal = (): JSX.Element => {
 	const closeModal = useCloseModal();
 	const [{ resources }] = useContext(ModalContext);
-	const { data: resourceTypes, isPending: isLoadingResourceTypes } = useResourceTypes();
+	const { data: resourceTypes, isPending: isPendingResourceTypes } = useResourceTypes();
 	const { mutateAsync, isPending, isError, error } = useModifyResource();
 	const {
 		register,
@@ -134,7 +134,7 @@ export const ResourceModal = (): JSX.Element => {
 							<Box mb={6} />
 							<HStack mb={4} spacing={4} justifyContent={'space-between'}>
 								<Tag>Resource Type</Tag>
-								{isLoadingResourceTypes && <LoadingSpinner />}
+								{isPendingResourceTypes && <LoadingSpinner />}
 							</HStack>
 							<Controller
 								name={'type'}
