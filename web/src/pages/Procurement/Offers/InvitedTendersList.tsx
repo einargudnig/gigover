@@ -26,7 +26,7 @@ const OfferCardStyled = styled(CardBaseLink)`
 `;
 
 export const InvitedTendersList = (): JSX.Element => {
-	const { data: tenders, isLoading } = useGetBidderTenders();
+	const { data: tenders, isPending } = useGetBidderTenders();
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -119,7 +119,7 @@ export const InvitedTendersList = (): JSX.Element => {
 				<Heading size={'md'}>You have been invited to add offers to these tenders</Heading>
 			</Flex>
 
-			{isLoading ? (
+			{isPending ? (
 				<ProcurementListSkeleton />
 			) : (
 				<>

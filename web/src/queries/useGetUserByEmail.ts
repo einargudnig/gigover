@@ -12,20 +12,20 @@ interface UserIdByEmailVariables {
 }
 
 export const useGetUserByEmail = () =>
-	useMutation({
-        mutationFn: async (variables) => {
-            try {
-                const response = await axios.post<UserIdByEmail>(
-                    ApiService.getUserIdByEmail,
-                    variables,
-                    {
-                        withCredentials: false
-                    }
-                );
-                return response.data;
-            } catch (e) {
-                devError(e);
-                throw e;
-            }
-        }
-    });
+	useMutation<UserIdByEmail, Error, UserIdByEmailVariables>({
+		mutationFn: async (variables: UserIdByEmailVariables) => {
+			try {
+				const response = await axios.post<UserIdByEmail>(
+					ApiService.getUserIdByEmail,
+					variables,
+					{
+						withCredentials: false
+					}
+				);
+				return response.data;
+			} catch (e) {
+				devError(e);
+				throw e;
+			}
+		}
+	});
