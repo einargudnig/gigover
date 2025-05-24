@@ -7,10 +7,15 @@ interface MilestoneFormInput extends Omit<MilestoneForm, 'milestoneId'> {
 	milestoneId?: number;
 }
 
+interface AddMilestoneResponse {
+	id: number;
+	// Add other properties if the backend returns more than just the id
+}
+
 export const useAddMilestone = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<unknown, Error, MilestoneFormInput>({
+	return useMutation<AddMilestoneResponse, Error, MilestoneFormInput>({
 		mutationFn: async (variables) => {
 			const response = await axios.post(ApiService.addMilestone, variables, {
 				withCredentials: true
