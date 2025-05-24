@@ -136,7 +136,6 @@ export const useTimeTrackerReport = (
 		users,
 		results,
 		totalTracked,
-		isLoading: projectDataListLoading || isGetReportLoading,
-		refetch
+		isLoading: projectDataListLoading || isGetReportLoading
 	};
 };
