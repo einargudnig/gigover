@@ -1,11 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
-import { IUserProfile } from '../models/UserProfile';
+import { ContractorType, WorkerType } from '../models/UserProfile';
 import { ApiService } from '../services/ApiService';
 
 interface MutationResponse {
-	data: IUserProfile;
+	registered: boolean;
+	type: ContractorType | WorkerType;
+	email: string;
+	authenticated: boolean;
+	avatar: string;
+	name: string;
+	phoneNumber: string;
+	userName?: string;
 }
 
 export const useVerify = () =>

@@ -46,10 +46,10 @@ export const AppPreloader = (): JSX.Element => {
 
 	useEffect(() => {
 		const userProperties = {
-			name: data?.data.name, // Full name
-			email: data?.data?.userName, // Email address
+			name: data?.name, // Full name
+			email: data?.userName, // Email address
 			user_id: authUser?.uid,
-			phone_number: data?.data.phoneNumber
+			phone_number: data?.phoneNumber
 		};
 
 		window.Intercom('boot', {
@@ -74,6 +74,19 @@ export const AppPreloader = (): JSX.Element => {
 		return <FullscreenLoader />;
 	}
 
+	const user = {
+		registered: data?.registered ?? false,
+		type: data?.type ?? 0,
+		email: data?.email ?? '',
+		authenticated: data?.authenticated ?? false,
+		avatar: data?.avatar ?? '',
+		name: data?.name ?? '',
+		userName: data?.userName ?? '',
+		phoneNumber: data?.phoneNumber ?? ''
+	};
+
+	console.log('USER', user);
+
 	if (hasError) {
 		return (
 			<Flex justifyContent={'center'} alignItems={'center'}>
@@ -82,7 +95,7 @@ export const AppPreloader = (): JSX.Element => {
 		);
 	}
 
-	return <App userProfile={data?.data} authUser={authUser} />;
+	return <App userProfile={user} authUser={authUser} />;
 };
 
 const App = ({
@@ -92,6 +105,7 @@ const App = ({
 	userProfile?: IUserProfile;
 	authUser: FirebaseUser | null;
 }): JSX.Element => {
+	console.log('userProfile', userProfile);
 	// set up filesystem
 	const fileSystem = useMemo(() => new FileSystemService(), []);
 
