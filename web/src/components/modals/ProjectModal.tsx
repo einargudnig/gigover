@@ -45,7 +45,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			  }
 			: undefined
 	);
-	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
+	const { mutateAsync: modify, isPending, isError, error } = useModifyProject();
 	const {
 		register,
 		handleSubmit,
@@ -225,8 +225,8 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 
 				<FormActions
 					submitText={project ? 'Update project' : 'Create a project'}
-					submitLoading={isLoading}
-					submitDisabled={isLoading}
+					submitLoading={isPending}
+					submitDisabled={isPending}
 					cancelText={'Discard changes'}
 					onCancel={() => closeModal()}
 				/>

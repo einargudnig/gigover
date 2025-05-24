@@ -30,6 +30,7 @@ export const useModifyProject = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<ProjectResponse, ErrorResponse, ProjectFormData | CloseProjectData>({
+		mutationKey: ['modifyProject'],
 		mutationFn: async (project) => {
 			const response = await axios.post(ApiService.modifyProject, project, {
 				withCredentials: true

@@ -8,6 +8,7 @@ export const useAcceptOffer = () => {
 	const client = useQueryClient();
 
 	return useMutation<OfferId, ErrorResponse, OfferId>({
+		mutationKey: ['acceptOffer'],
 		mutationFn: async (offerId) => {
 			const response = await axios.post(ApiService.acceptOffer, offerId, {
 				withCredentials: true

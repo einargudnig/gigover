@@ -15,6 +15,7 @@ export const useAddUnit = () => {
 	const client = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, UnitFormData>({
+		mutationKey: ['addUnit'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.addUnit, variables, {

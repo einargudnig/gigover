@@ -9,6 +9,7 @@ export const useEditBid = () => {
 	const client = useQueryClient();
 
 	return useMutation<unknown, ErrorResponse, Bid>({
+		mutationKey: ['editBid'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.editBid, variables, {

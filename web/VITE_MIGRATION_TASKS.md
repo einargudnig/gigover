@@ -160,13 +160,13 @@ This document outlines the tasks for migrating the React application from Create
             -   [x] `src/mutations/procurement/useAddTenderDocumentByTenderOwner.ts`
             -   [x] `src/mutations/procurement/client-bids/useAddBid.ts`
             -   [x] `src/mutations/procurement/useDeleteProcurement.ts`
-            -   [ ] `src/mutations/procurement/useAcceptOffer.ts`
-            -   [ ] `src/mutations/procurement/client-bids/useDeleteBidItem.ts`
-            -   [ ] `src/mutations/procurement/client-bids/useEditBid.ts`
-            -   [ ] `src/queries/organisations/useGetUserOrgInvites.ts`
-            -   [ ] `src/mutations/properties/useAddUnit.ts`
-            -   [ ] `src/components/modals/ProjectModal.tsx`
-            -   [ ] `src/mutations/procurement/client-bids/useEditBidItem.ts`
+            -   [x] `src/mutations/procurement/useAcceptOffer.ts`
+            -   [x] `src/mutations/procurement/client-bids/useDeleteBidItem.ts`
+            -   [x] `src/mutations/procurement/client-bids/useEditBid.ts`
+            -   [x] `src/queries/organisations/useGetUserOrgInvites.ts`
+            -   [x] `src/mutations/properties/useAddUnit.ts`
+            -   [x] `src/components/modals/ProjectModal.tsx`
+            -   [x] `src/mutations/procurement/client-bids/useEditBidItem.ts`
             -   [ ] `src/mutations/procurement/useAddOfferItems.ts`
             -   [ ] `src/mutations/procurement/client-bids/usePublishBid.ts`
             -   [ ] `src/mutations/organizations/useRemoveInviteToOrganization.ts`

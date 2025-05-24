@@ -15,6 +15,7 @@ export const useEditBidItem = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<BidItemResponse, AxiosError, BidItemResponse>({
+		mutationKey: ['editBidItem'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.editBidItem, variables, {
@@ -28,7 +29,7 @@ export const useEditBidItem = () => {
 				throw new Error('Could not edit bid item');
 			}
 		},
-		onSuccess: async (data, variables) => {
+		onSuccess: async (_data, _variables) => {
 			await queryClient.refetchQueries({ queryKey: [ApiService.getBidById(Number(bidId))] });
 		}
 	});

@@ -11,6 +11,7 @@ export const useDeleteBidItem = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation<ClientBidItemDeleteResponse, AxiosError, BidItem>({
+		mutationKey: ['deleteBidItem'],
 		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.deleteBidItem, variables, {

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { OrganizationInvites } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
@@ -8,16 +9,24 @@ interface OrgInvitesResponse {
 }
 
 export const useGetUserOrgInvites = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		OrgInvitesResponse,
 		ErrorResponse
-	>({ queryKey: [ApiService.getUserOrgInvites] });
+	>({
+		queryKey: [ApiService.getUserOrgInvites],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getUserOrgInvites, {
+				withCredentials: true
+			});
+			return response.data;
+		}
+	});
 
 	const invites: OrganizationInvites[] = data?.invites || [];
 
 	return {
 		data: invites,
-		isLoading,
+		isPending,
 		isFetching,
 		isError,
 		error
