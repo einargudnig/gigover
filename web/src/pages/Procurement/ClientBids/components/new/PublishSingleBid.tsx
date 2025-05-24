@@ -1,5 +1,4 @@
 import { Box, Button, Center, Flex, Heading, Text, useToast, VStack } from '@chakra-ui/react';
-import { useNavigate, useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../../../../components/LoadingSpinner';
 import { Bid, BidItem } from '../../../../../models/Tender';
 import { usePublishBid } from '../../../../../mutations/procurement/client-bids/usePublishBid';
@@ -7,12 +6,14 @@ import { useGetBidById } from '../../../../../queries/procurement/client-bids/us
 import { Info } from '../../../components/Info';
 import { DataTable } from '../../../components/Table';
 
-export function PublishSingleBid() {
-	const { bidId: bidIdString } = useParams<{ bidId: string }>();
+export function PublishSingleBid({
+	bidId,
+	onPublishBid
+}: {
+	bidId: number;
+	onPublishBid: () => void;
+}) {
 	const toast = useToast();
-	const navigate = useNavigate();
-
-	const bidId = Number(bidIdString);
 
 	const { data, isPending: getBidIsPending } = useGetBidById(bidId);
 	const { mutateAsync: publishBid, isPending: publishBidIsPending } = usePublishBid();
@@ -79,7 +80,7 @@ export function PublishSingleBid() {
 				duration: 5000,
 				isClosable: true
 			});
-			navigate(`/procurement/client-bids/${bid.bidId}`);
+			onPublishBid();
 		} catch (error) {
 			toast({
 				title: 'Error Publishing Bid',
