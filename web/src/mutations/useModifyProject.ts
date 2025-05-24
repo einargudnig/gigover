@@ -1,9 +1,9 @@
-import { Project, ProjectStatus } from '../models/Project';
-import { useMutation, useQueryClient } from 'react-query';
-import { ProjectResponse } from '../queries/useProjectList';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { ErrorResponse } from '../models/ErrorResponse';
+import { Project, ProjectStatus } from '../models/Project';
+import { ProjectResponse } from '../queries/useProjectList';
+import { ApiService } from '../services/ApiService';
 
 interface OptionalProjectId {
 	projectId?: number;
@@ -29,20 +29,22 @@ export interface CloseProjectData extends Pick<Project, 'projectId'> {
 export const useModifyProject = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ProjectResponse, ErrorResponse, ProjectFormData | CloseProjectData>(
-		async (project) =>
-			await axios.post(ApiService.modifyProject, project, { withCredentials: true }),
-		{
-			onSuccess: async (data, variables) => {
-				await queryClient.invalidateQueries(ApiService.projectList);
-				await queryClient.refetchQueries(ApiService.projectList);
+	return useMutation<ProjectResponse, ErrorResponse, ProjectFormData | CloseProjectData>({
+		mutationFn: async (project) => {
+			const response = await axios.post(ApiService.modifyProject, project, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		onSuccess: async (data, variables) => {
+			await queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
+			await queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
 
-				if (variables.projectId) {
-					await queryClient.invalidateQueries(
-						ApiService.projectDetails(variables.projectId)
-					);
-				}
+			if (variables.projectId) {
+				await queryClient.invalidateQueries({
+					queryKey: [ApiService.projectDetails(variables.projectId)]
+				});
 			}
 		}
-	);
+	});
 };

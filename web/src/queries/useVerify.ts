@@ -1,21 +1,23 @@
-import { useMutation } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { IUserProfile } from '../models/UserProfile';
 import { ErrorResponse } from '../models/ErrorResponse';
+import { IUserProfile } from '../models/UserProfile';
+import { ApiService } from '../services/ApiService';
 
 interface MutationResponse {
 	data: IUserProfile;
 }
 
 export const useVerify = () =>
-	useMutation<MutationResponse, ErrorResponse, string>(
-		async (token) =>
-			await axios.post(
+	useMutation<MutationResponse, ErrorResponse, string>({
+		mutationFn: async (token) => {
+			const response = await axios.post<MutationResponse>(
 				ApiService.verify,
 				{ token },
 				{
 					withCredentials: true
 				}
-			)
-	);
+			);
+			return response.data;
+		}
+	});

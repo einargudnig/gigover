@@ -1,9 +1,8 @@
-import { useQueryClient, useMutation } from 'react-query';
-import { ErrorResponse } from '../../../models/ErrorResponse';
-import { ApiService } from '../../../services/ApiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { useParams } from 'react-router-dom';
 import { BidItem } from '../../../models/Tender';
+import { ApiService } from '../../../services/ApiService';
 
 export interface BidItemResponse
 	extends Pick<
@@ -15,18 +14,22 @@ export const useEditBidItem = () => {
 	const { bidId } = useParams();
 	const queryClient = useQueryClient();
 
-	return useMutation<ErrorResponse, AxiosError, BidItemResponse>(async (variables) => {
-		try {
-			const response = await axios.post(ApiService.editBidItem, variables, {
-				withCredentials: true
-			});
-
-			if (response.status === 200) {
-				await queryClient.refetchQueries(ApiService.getBidById(Number(bidId)));
+	return useMutation<BidItemResponse, AxiosError, BidItemResponse>({
+		mutationFn: async (variables) => {
+			try {
+				const response = await axios.post(ApiService.editBidItem, variables, {
+					withCredentials: true
+				});
+				return response.data;
+			} catch (e) {
+				if (e instanceof Error) {
+					throw e;
+				}
+				throw new Error('Could not edit bid item');
 			}
-			return response.data;
-		} catch (e) {
-			throw new Error('Could not edit bid item');
+		},
+		onSuccess: async (data, variables) => {
+			await queryClient.refetchQueries({ queryKey: [ApiService.getBidById(Number(bidId))] });
 		}
 	});
 };

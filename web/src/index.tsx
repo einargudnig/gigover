@@ -1,9 +1,9 @@
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'core-js/stable';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import * as ReactDOMClient from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import 'react-tippy/dist/tippy.css';
 import { ThemeProvider } from 'styled-components';
 import { AppPreloader } from './App';

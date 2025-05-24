@@ -31,10 +31,11 @@ import {
 	VStack,
 	useDisclosure
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { useEventListener } from '../../../hooks/useEventListener';
+import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 import { FileUploadType } from '../../../models/FileUploadType';
 import { Project } from '../../../models/Project';
 import { Task, TaskStatus } from '../../../models/Task';
@@ -50,6 +51,7 @@ import { DropZone } from '../../DropZone';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { TrackerSelect } from '../../TrackerSelect';
 import { User } from '../../User';
+import { DisabledComponent } from '../../disabled/DisabledComponent';
 import { DatePicker } from '../../forms/DatePicker';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
@@ -57,8 +59,6 @@ import { VerticalDots } from '../../icons/VerticalDots';
 import { CommentInput } from './CommentInput';
 import { UseResourceOnTask } from './UseResourceOnTask';
 import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
-import { DisabledComponent } from '../../disabled/DisabledComponent';
-import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 
 export interface TaskModalProps {
 	open: boolean;
@@ -606,9 +606,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 										uploadType={FileUploadType.Task}
 										externalId={task.taskId}
 										callback={() => {
-											queryClient.invalidateQueries(
-												ApiService.taskDetails(task.taskId)
-											);
+											queryClient.invalidateQueries({
+												queryKey: [ApiService.taskDetails(task.taskId)]
+											});
 										}}
 									>
 										{({ isDragActive, open }) => (

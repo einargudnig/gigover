@@ -1,7 +1,7 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
-import axios, { AxiosResponse } from 'axios';
 
 interface ReportToCSVVariables {
 	name: 'workReport';
@@ -22,15 +22,18 @@ const saveBlob = (blob: Blob, fileName: string) => {
 };
 
 export const useReportToCSV = () => {
-	return useMutation<AxiosResponse, ErrorResponse, ReportToCSVVariables>(
-		async (project) => await axios.post(ApiService.report, project, { withCredentials: true }),
-		{
-			onSuccess: async (response) => {
-				const blob = new Blob([response.data], {
-					type: 'text/csv;charset=utf8;'
-				});
-				saveBlob(blob, 'GigoverReport.csv');
-			}
+	return useMutation<string, ErrorResponse, ReportToCSVVariables>({
+		mutationFn: async (project) => {
+			const response = await axios.post(ApiService.report, project, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		onSuccess: async (data) => {
+			const blob = new Blob([data], {
+				type: 'text/csv;charset=utf8;'
+			});
+			saveBlob(blob, 'GigoverReport.csv');
 		}
-	);
+	});
 };

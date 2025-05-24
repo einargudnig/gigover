@@ -1,5 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { OfferId } from '../../models/Tender';
 import { ApiService } from '../../services/ApiService';
@@ -14,17 +14,17 @@ import { ApiService } from '../../services/ApiService';
 export const usePublishOffer = () => {
 	const client = useQueryClient();
 
-	return useMutation<OfferId, ErrorResponse, OfferId>(
-		async (offerId) => {
-			await axios.post(ApiService.publishOffer, offerId, { withCredentials: true });
-			return offerId;
+	return useMutation<OfferId, ErrorResponse, OfferId>({
+		mutationFn: async (offerId) => {
+			const response = await axios.post(ApiService.publishOffer, offerId, {
+				withCredentials: true
+			});
+			return response.data; // Assuming response.data is compatible with OfferId
 		},
-		{
-			onSuccess: async (variables) => {
-				await client.refetchQueries(ApiService.userOffers);
-				await client.refetchQueries(ApiService.offer(variables.offerId));
-				await client.refetchQueries(ApiService.offer(variables.offerId));
-			}
+		onSuccess: async (data, offerIdVariables) => {
+			// data is response.data, offerIdVariables is the input offerId
+			await client.refetchQueries({ queryKey: [ApiService.userOffers] });
+			await client.refetchQueries({ queryKey: [ApiService.offer(offerIdVariables.offerId)] });
 		}
-	);
+	});
 };

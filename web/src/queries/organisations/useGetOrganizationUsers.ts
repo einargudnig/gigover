@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 
@@ -17,17 +17,12 @@ export const useGetOrganizationUsers = () => {
 	const { data, isLoading, isFetching, isError, error } = useQuery<
 		OrganizationUsersResponse,
 		ErrorResponse
-	>(ApiService.getOrganizationUsers, {
-		refetchOnWindowFocus: true
-	});
+	>({ queryKey: [ApiService.getOrganizationUsers] });
 
-	// Ensure the object structure matches OrganizationUsersResponse
-	const organizationUsers: OrganizationUsersResponse = {
-		organizationUsers: data?.organizationUsers || []
-	};
+	const users: OrgUsers[] = data?.organizationUsers || [];
 
 	return {
-		data: organizationUsers,
+		data: { organizationUsers: users },
 		isLoading,
 		isFetching,
 		isError,

@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useQuery } from 'react-query';
 import { ApiService } from '../services/ApiService';
 // import { ProjectImage } from '../models/ProjectImage';
 import { ProjectFile } from '../models/ProjectFile';
@@ -9,9 +9,9 @@ interface FolderFilesResponse {
 }
 
 export const useProjectDocuments = (projectId: number) => {
-	const { data, isLoading, isError, error } = useQuery<FolderFilesResponse, AxiosError>(
-		ApiService.projectFiles(projectId)
-	);
+	const { data, isLoading, isError, error } = useQuery<FolderFilesResponse, AxiosError>({
+		queryKey: [ApiService.projectFiles(projectId)]
+	});
 
 	return {
 		data: (data && data.projectDocuments) || [],

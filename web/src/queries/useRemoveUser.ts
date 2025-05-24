@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { ErrorResponse } from '../models/ErrorResponse';
+import { ApiService } from '../services/ApiService';
 
 interface RemoveWorkerInput {
 	projectId: number;
@@ -11,15 +11,15 @@ interface RemoveWorkerInput {
 export const useRemoveUser = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<unknown, ErrorResponse, RemoveWorkerInput>(
-		async (variables) =>
+	return useMutation<unknown, ErrorResponse, RemoveWorkerInput>({
+		mutationFn: async (variables) =>
 			await axios.post(ApiService.removeUser, variables, {
 				withCredentials: true
 			}),
-		{
-			onSuccess: async (data, variables) => {
-				await queryClient.invalidateQueries(ApiService.projectDetails(variables.projectId));
-			}
+		onSuccess: async (data, variables) => {
+			await queryClient.invalidateQueries({
+				queryKey: [ApiService.projectDetails(variables.projectId)]
+			});
 		}
-	);
+	});
 };

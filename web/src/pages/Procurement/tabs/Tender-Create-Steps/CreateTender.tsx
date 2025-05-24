@@ -15,10 +15,10 @@ import {
 	VStack,
 	useToast
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { DatePicker } from '../../../../components/forms/DatePicker';
 import { useOpenProjects } from '../../../../hooks/useAvailableProjects';
 import { Task } from '../../../../models/Task';
@@ -51,7 +51,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 			// Here you get the tender ID as a number
 			console.log('Created tender with ID:', tenderId);
 			onTenderCreate(tenderId);
-			queryClient.refetchQueries(ApiService.userTenders);
+			queryClient.refetchQueries({ queryKey: [ApiService.userTenders] });
 		},
 		onError: (error) => {
 			devError('Error creating tender:', error);

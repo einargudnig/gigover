@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { UserInvites } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
@@ -8,13 +8,9 @@ interface UserInvitesResponse {
 }
 
 export const useGetUserInvites = () => {
-	const { data, isLoading, isError, error } = useQuery<UserInvitesResponse, ErrorResponse>(
-		ApiService.getUserInvites,
-		{
-			refetchOnWindowFocus: true
-			// withCredentials: true
-		}
-	);
+	const { data, isLoading, isError, error } = useQuery<UserInvitesResponse, ErrorResponse>({
+		queryKey: [ApiService.getUserInvites]
+	});
 
 	const organizations: UserInvites[] = data?.organizations || [];
 

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
 
@@ -14,6 +14,8 @@ export interface ResourceCommentsResponse {
 }
 
 export const useResourceComments = (resourceId: number) =>
-	useQuery<ResourceCommentsResponse, ErrorResponse>(ApiService.getResourceComments(resourceId), {
-		refetchOnWindowFocus: true
+	useQuery<ResourceCommentsResponse, ErrorResponse>({
+		queryKey: [ApiService.getResourceComments(resourceId)],
+		enabled: !!resourceId,
+		refetchOnWindowFocus: false
 	});

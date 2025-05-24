@@ -1,7 +1,7 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../../services/ApiService';
-import { Offer } from '../../models/Tender';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { Offer } from '../../models/Tender';
+import { ApiService } from '../../services/ApiService';
 
 export interface OfferForTenderResponse {
 	list: Offer[];
@@ -11,7 +11,8 @@ export const useGetOfferForTender = (tenderId: number) => {
 	const { data, isLoading, isSuccess, isError, error } = useQuery<
 		OfferForTenderResponse,
 		ErrorResponse
-	>(ApiService.tenderOffers(tenderId), {
+	>({
+		queryKey: [ApiService.tenderOffers(tenderId)],
 		refetchOnWindowFocus: true
 		// withCredentials: true
 	});

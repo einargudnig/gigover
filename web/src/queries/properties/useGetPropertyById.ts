@@ -1,7 +1,7 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../../services/ApiService';
-import { IProperty } from '../../models/Property';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { IProperty } from '../../models/Property';
+import { ApiService } from '../../services/ApiService';
 
 export interface PropertyResponse {
 	property: IProperty;
@@ -11,8 +11,10 @@ export const useGetPropertyById = (propertyId: number) => {
 	const { data, isLoading, isError, error, isFetching } = useQuery<
 		PropertyResponse,
 		ErrorResponse
-	>(ApiService.getPropertyById(propertyId), {
-		refetchOnWindowFocus: true
+	>({
+		queryKey: [ApiService.getPropertyById(propertyId)],
+		refetchOnWindowFocus: true,
+		enabled: !!propertyId
 	});
 
 	return {

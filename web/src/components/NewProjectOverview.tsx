@@ -11,11 +11,12 @@ import {
 	Text,
 	useDisclosure
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useContext, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { ModalContext } from '../context/ModalContext';
+import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
 import { Project, ProjectStatus } from '../models/Project';
 import { useModifyProject } from '../mutations/useModifyProject';
 import { ApiService } from '../services/ApiService';
@@ -26,7 +27,6 @@ import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
-import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
 
 interface SortableGridProps {
 	list: Project[];
@@ -190,8 +190,8 @@ const NewProjectCard = ({ project }) => {
 					projectId,
 					status
 				});
-				queryClient.refetchQueries(ApiService.projectList);
-				queryClient.refetchQueries(ApiService.getProgressStatusList);
+				queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
+				queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
 			}
 		} catch (e) {
 			devError('Error', e);

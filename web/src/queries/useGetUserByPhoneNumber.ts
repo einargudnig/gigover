@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { ApiService } from '../services/ApiService';
 
@@ -13,9 +13,9 @@ interface UserIdByPhoneNumberVariables {
 }
 
 export const useGetUserByPhoneNumber = () =>
-	useMutation<UserIdByPhoneNumberResponse, string, UserIdByPhoneNumberVariables>(
-		async ({ phoneNumber }) =>
-			await axios.post<unknown, UserIdByPhoneNumberResponse>(
+	useMutation<UserIdByPhoneNumberResponse, string, UserIdByPhoneNumberVariables>({
+		mutationFn: async ({ phoneNumber }) => {
+			const response = await axios.post<UserIdByPhoneNumberResponse>(
 				ApiService.getUserIdByPhoneNumber,
 				{
 					msisdn: phoneNumber
@@ -23,5 +23,7 @@ export const useGetUserByPhoneNumber = () =>
 				{
 					withCredentials: false
 				}
-			)
-	);
+			);
+			return response.data;
+		}
+	});

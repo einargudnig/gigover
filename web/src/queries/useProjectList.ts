@@ -1,7 +1,7 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import { Project } from '../models/Project';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
+import { Project } from '../models/Project';
+import { ApiService } from '../services/ApiService';
 
 export interface ProjectResponse {
 	projects: Project[];
@@ -23,7 +23,7 @@ export const useProjectList = () => {
 		ProjectResponse,
 		ErrorResponse,
 		ProjectResponse
-	>(ApiService.projectList);
+	>({ queryKey: [ApiService.projectList] });
 
 	const projects: Project[] = data?.projects || [];
 

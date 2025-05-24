@@ -1,6 +1,6 @@
 import { Button, Center, HStack, Tag, VStack } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
 import styled, { css } from 'styled-components';
 import { Theme } from '../../../Theme';
 import { useCloseModal } from '../../../hooks/useCloseModal';
@@ -194,9 +194,9 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 								uploadType={FileUploadType.Task}
 								externalId={task.taskId}
 								callback={() => {
-									queryClient.invalidateQueries(
-										ApiService.taskDetails(task.taskId)
-									);
+									queryClient.invalidateQueries({
+										queryKey: [ApiService.taskDetails(task.taskId)]
+									});
 								}}
 							>
 								{({ isDragActive, open }) => (

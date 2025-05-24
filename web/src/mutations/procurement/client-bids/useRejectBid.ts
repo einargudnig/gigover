@@ -1,21 +1,23 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { ApiService } from '../../../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 import { BidId } from '../../../models/Tender';
+import { ApiService } from '../../../services/ApiService';
 
 export const useRejectBid = () => {
 	const client = useQueryClient();
 
-	return useMutation<BidId, ErrorResponse, BidId>(
-		async (bidId) => {
-			await axios.post(ApiService.rejectBid, bidId, { withCredentials: true });
-			return bidId;
+	return useMutation<BidId, ErrorResponse, BidId>({
+		mutationFn: async (bidId) => {
+			const response = await axios.post(ApiService.rejectBid, bidId, {
+				withCredentials: true
+			});
+			return response.data; // Assuming response.data is compatible with BidId
 		},
-		{
-			onSuccess: async (variables) => {
-				await client.refetchQueries(ApiService.getClientBidById(variables.bidId));
-			}
+		onSuccess: async (data, bidIdVariables) => {
+			await client.refetchQueries({
+				queryKey: [ApiService.getClientBidById(bidIdVariables.bidId)]
+			});
 		}
-	);
+	});
 };

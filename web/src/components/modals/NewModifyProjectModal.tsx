@@ -28,12 +28,11 @@ import {
 	Tabs,
 	Text,
 	VStack,
-	useDisclosure,
-	useEventListener
+	useDisclosure
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { Project } from '../../models/Project';
 import { ProjectFormData, useModifyProject } from '../../mutations/useModifyProject';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
@@ -126,8 +125,8 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 				progressStatus: progressStatus?.name ?? null
 			});
 
-			queryClient.refetchQueries(ApiService.projectList);
-			queryClient.refetchQueries(ApiService.getProgressStatusList);
+			queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
+			queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
 			closeDrawer();
 		} catch (e) {
 			devError('Error', e);

@@ -1,7 +1,7 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { ApiService } from '../../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
 
 interface PublishTenderResponse {
 	errorText: 'OK';
@@ -14,21 +14,25 @@ interface PublishTenderRequest {
 export const usePublishTender = () => {
 	const client = useQueryClient();
 
-	return useMutation<PublishTenderResponse, ErrorResponse, PublishTenderRequest>(
-		async (tenderId) => {
+	return useMutation<PublishTenderResponse, ErrorResponse, PublishTenderRequest>({
+		mutationFn: async (tenderIdRequest) => {
 			try {
-				const response = await axios.post(ApiService.publishTender, tenderId, {
+				const response = await axios.post(ApiService.publishTender, tenderIdRequest, {
 					withCredentials: true
 				});
-
-				if (response.status === 200) {
-					await client.refetchQueries(ApiService.getTenderById(tenderId.tenderId));
-					await client.refetchQueries(ApiService.userTenders);
-				}
 				return response.data;
 			} catch (e) {
+				if (e instanceof Error) {
+					throw e;
+				}
 				throw new Error('Could not publish tender');
 			}
+		},
+		onSuccess: async (data, tenderIdRequest) => {
+			await client.refetchQueries({
+				queryKey: [ApiService.getTenderById(tenderIdRequest.tenderId)]
+			});
+			await client.refetchQueries({ queryKey: [ApiService.userTenders] });
 		}
-	);
+	});
 };

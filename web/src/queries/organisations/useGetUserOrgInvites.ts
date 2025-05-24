@@ -1,25 +1,22 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { OrganizationInvites } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
 
-interface OrganizationsResponse {
-	organizationUsers: OrganizationInvites[];
+interface OrgInvitesResponse {
+	invites: OrganizationInvites[];
 }
 
 export const useGetUserOrgInvites = () => {
 	const { data, isLoading, isFetching, isError, error } = useQuery<
-		OrganizationsResponse,
+		OrgInvitesResponse,
 		ErrorResponse
-	>(ApiService.getUserOrgInvites, {
-		refetchOnWindowFocus: true
-		// withCredentials: true
-	});
+	>({ queryKey: [ApiService.getUserOrgInvites] });
 
-	const organizationsInvites: OrganizationInvites[] = data?.organizationUsers || [];
+	const invites: OrganizationInvites[] = data?.invites || [];
 
 	return {
-		data: organizationsInvites,
+		data: invites,
 		isLoading,
 		isFetching,
 		isError,

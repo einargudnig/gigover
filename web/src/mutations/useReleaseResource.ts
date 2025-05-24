@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { ErrorResponse } from '../models/ErrorResponse';
 import { Resource } from '../models/Resource';
+import { ApiService } from '../services/ApiService';
 
 interface ReleaseResourceResponse {
 	errorText: 'OK';
@@ -11,13 +11,15 @@ interface ReleaseResourceResponse {
 export const useReleaseResource = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ReleaseResourceResponse, ErrorResponse, Resource>(
-		async (resource) =>
-			await axios.post(ApiService.releaseResource, resource, { withCredentials: true }),
-		{
-			onSuccess: async () => {
-				await queryClient.invalidateQueries(ApiService.resources);
-			}
+	return useMutation<ReleaseResourceResponse, ErrorResponse, Resource>({
+		mutationFn: async (resource) => {
+			const response = await axios.post(ApiService.releaseResource, resource, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: [ApiService.resources] });
 		}
-	);
+	});
 };

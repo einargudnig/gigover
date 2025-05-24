@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
-import { ApiService } from '../../../services/ApiService';
-import { Bid } from '../../../models/Tender';
 import { ErrorResponse } from '../../../models/ErrorResponse';
+import { Bid } from '../../../models/Tender';
+import { ApiService } from '../../../services/ApiService';
 
 export interface ClientBidResponse {
 	list: Bid[];

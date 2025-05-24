@@ -1,19 +1,15 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
 import { Resource } from '../models/Resource';
+import { ApiService } from '../services/ApiService';
 
 export interface ResourceResponse {
 	resources: Resource[];
 }
 
 export const useResources = () => {
-	const { data, isLoading, isError, error, ...rest } = useQuery<
-		ResourceResponse,
-		ErrorResponse,
-		ResourceResponse
-	>(ApiService.resources, {
-		refetchOnWindowFocus: true
+	const { data, isLoading, isError, error, ...rest } = useQuery<ResourceResponse, ErrorResponse>({
+		queryKey: [ApiService.resources]
 	});
 
 	return {

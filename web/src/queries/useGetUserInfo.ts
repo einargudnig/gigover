@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { IUserInfo } from '../models/UserProfile';
 import { ApiService } from '../services/ApiService';
@@ -25,12 +25,9 @@ export const useGetUserInfo = () => {
 		authenticated: false
 	};
 
-	const { data, isLoading, isError, error } = useQuery<IUserInfo, ErrorResponse>(
-		ApiService.getUserInfo,
-		{
-			refetchOnWindowFocus: true
-		}
-	);
+	const { data, isLoading, isError, error } = useQuery<IUserInfo, ErrorResponse>({
+		queryKey: [ApiService.getUserInfo]
+	});
 
 	const userInfo: IUserInfo = data || defaultUserInfo;
 

@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ApiService } from '../services/ApiService';
-import axios from 'axios';
 
 interface TaskCommentData {
 	projectId: number;
@@ -13,13 +13,13 @@ interface TaskCommentData {
 export const useTaskComment = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<{ data: ErrorResponse }, ErrorResponse, TaskCommentData>(
-		async (variables) =>
+	return useMutation<{ data: ErrorResponse }, ErrorResponse, TaskCommentData>({
+		mutationFn: async (variables) =>
 			await axios.post(ApiService.addComment, variables, { withCredentials: true }),
-		{
-			onSuccess: async (data, variables) => {
-				await queryClient.invalidateQueries(ApiService.taskDetails(variables.taskId));
-			}
+		onSuccess: async (data, variables) => {
+			await queryClient.invalidateQueries({
+				queryKey: [ApiService.taskDetails(variables.taskId)]
+			});
 		}
-	);
+	});
 };

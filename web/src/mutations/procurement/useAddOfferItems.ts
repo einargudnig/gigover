@@ -1,9 +1,6 @@
-import { useMutation } from 'react-query';
-import { ErrorResponse } from '../../models/ErrorResponse';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import { ApiService } from '../../services/ApiService';
-import { AxiosError } from 'axios';
-import axios from 'axios';
-import { useQueryClient } from 'react-query';
 
 export interface TenderItemsOffer {
 	itemId: number;
@@ -19,17 +16,24 @@ export interface TenderItemsOffer {
 export const useAddOfferItems = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ErrorResponse, AxiosError, TenderItemsOffer>(async (variables) => {
-		try {
-			const response = await axios.post(ApiService.addOfferItem, variables, {
-				withCredentials: true
-			});
+	return useMutation<unknown, AxiosError, TenderItemsOffer>({
+		mutationFn: async (variables) => {
+			try {
+				const response = await axios.post(ApiService.addOfferItem, variables, {
+					withCredentials: true
+				});
+				return response.data;
+			} catch (e) {
+				// Consider re-throwing e directly if AxiosError is expected
+				if (e instanceof Error) {
+					throw e;
+				}
+				throw new Error('Could not add offer item'); // Fallback
+			}
+		},
+		onSuccess: async (data, variables) => {
 			// Do I need to refetch any queries after I add a new offer to an item?
-			await queryClient.refetchQueries(ApiService.offer(variables.offerId));
-
-			return response.data;
-		} catch (e) {
-			throw new Error('Could not add tender item');
+			await queryClient.refetchQueries({ queryKey: [ApiService.offer(variables.offerId)] });
 		}
 	});
 };
