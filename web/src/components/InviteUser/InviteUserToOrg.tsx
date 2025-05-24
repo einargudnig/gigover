@@ -184,8 +184,8 @@ export const InviteUserToOrg = ({
 							{extraInfo}
 						</Text>
 						<Button
-							isLoading={inviteMutation.isLoading}
-							disabled={inviteMutation.isLoading}
+							isLoading={inviteMutation.isPending}
+							disabled={inviteMutation.isPending}
 							onClick={addMemberToOrganization}
 							width={'full'}
 							variant={'outline'}
@@ -214,8 +214,8 @@ export const InviteUserToOrg = ({
 				{!inviteSuccess ? (
 					<Button
 						loadingText={'Searching...'}
-						isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-						disabled={searchMutation.isLoading || inviteMutation.isLoading}
+						isLoading={searchMutation.isPending || inviteMutation.isPending}
+						disabled={searchMutation.isPending || inviteMutation.isPending}
 						onClick={search}
 						width={'full'}
 						variant={'outline'}

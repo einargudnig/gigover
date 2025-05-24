@@ -29,7 +29,7 @@ interface MilestoneModalProps {
 
 export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element => {
 	const { projectId, milestone, callback } = context;
-	const { data, isLoading: isLoadingProject } = useProjectDetails(projectId);
+	const { data, isPending: isLoadingProject } = useProjectDetails(projectId);
 	const closeModal = useCloseModal(callback);
 	const {
 		register,
@@ -42,7 +42,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 		mode: 'onChange',
 		reValidateMode: 'onBlur'
 	});
-	const { mutateAsync: addMilestone, isLoading, isError, error } = useAddMilestone();
+	const { mutateAsync: addMilestone, isPending, isError, error } = useAddMilestone();
 	const tasks = data?.project?.tasks.filter((t) => t.status !== TaskStatus.Archived) ?? [];
 
 	const onSubmit = handleSubmit(async (values) => {
@@ -207,9 +207,9 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						<FormActions
 							submitText={'Save'}
 							onSubmit={onSubmit}
-							submitLoading={isLoading}
-							submitDisabled={isLoading}
-							cancelDisabled={isLoading}
+							submitLoading={isPending}
+							submitDisabled={isPending}
+							cancelDisabled={isPending}
 							cancelText={'Cancel'}
 							onCancel={() => closeModal()}
 						/>

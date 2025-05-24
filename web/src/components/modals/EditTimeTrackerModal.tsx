@@ -48,7 +48,7 @@ export const EditTimeTrackerModal = ({
 	});
 
 	const closeModal = useCloseModal(callback);
-	const { mutateAsync: modifyTimeRecord, isLoading, isError, error } = useModifyTimeRecord();
+	const { mutateAsync: modifyTimeRecord, isPending, isError, error } = useModifyTimeRecord();
 
 	const [focusedStart, setFocusedStart] = useState<boolean>(false);
 	const [focusedEnd, setFocusedEnd] = useState<boolean>(false);
@@ -94,7 +94,7 @@ export const EditTimeTrackerModal = ({
 				<>
 					<TimeIcon color={Theme.colors.green} />
 					<div>Edit Time Record</div>
-					{isLoading && <LoadingSpinner />}
+					{isPending && <LoadingSpinner />}
 				</>
 			}
 			open={true}

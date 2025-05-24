@@ -13,8 +13,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IProperties, PropertyToProject } from '../../../models/Property';
 import { useAddProjectToProperty } from '../../../mutations/properties/useAddProjectToProperty';
-import { TrackerSelect } from '../../TrackerSelect';
 import { useGetProperties } from '../../../queries/properties/useGetPoperties';
+import { TrackerSelect } from '../../TrackerSelect';
 
 interface PropertyToProjectModalProps {
 	isOpen: boolean;
@@ -29,7 +29,7 @@ export const ProjectToPropertyModal = ({
 }: PropertyToProjectModalProps): JSX.Element => {
 	const [selectedProperty, setSelectedProperty] = useState<IProperties | undefined>();
 	const { data: properties } = useGetProperties();
-	const { mutateAsync: addProjectToProperty, isLoading } = useAddProjectToProperty();
+	const { mutateAsync: addProjectToProperty, isPending } = useAddProjectToProperty();
 
 	const addProject = () => {
 		console.log(
@@ -91,7 +91,7 @@ export const ProjectToPropertyModal = ({
 								variant="outline"
 								colorScheme="gray"
 								onClick={addProject}
-								isLoading={isLoading}
+								isLoading={isPending}
 							>
 								Add Property to Project
 							</Button>

@@ -192,7 +192,7 @@ export const InviteStakeholder = ({
 								<Button
 									mt={4}
 									onClick={addStakeholderToProperty}
-									isLoading={addStakeholder.isLoading}
+									isLoading={addStakeholder.isPending}
 								>
 									Add Stake holder to property
 								</Button>
@@ -237,7 +237,7 @@ export const InviteStakeholder = ({
 									<FormActions
 										submitText={'Add Stake holder to unit'}
 										onSubmit={addStakeholderToUnit}
-										submitLoading={addStakeholder.isLoading}
+										submitLoading={addStakeholder.isPending}
 									/>
 								)}
 							</>
@@ -255,8 +255,8 @@ export const InviteStakeholder = ({
 			{!inviteSuccess ? (
 				<Button
 					loadingText={'Inviting'}
-					isLoading={searchMutation.isLoading || addStakeholder.isLoading}
-					disabled={searchMutation.isLoading || addStakeholder.isLoading}
+					isLoading={searchMutation.isPending || addStakeholder.isPending}
+					disabled={searchMutation.isPending || addStakeholder.isPending}
 					onClick={search}
 				>
 					Invite

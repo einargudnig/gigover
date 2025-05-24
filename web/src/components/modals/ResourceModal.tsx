@@ -43,8 +43,8 @@ const TabContent = styled.div<{ show: boolean }>`
 export const ResourceModal = (): JSX.Element => {
 	const closeModal = useCloseModal();
 	const [{ resources }] = useContext(ModalContext);
-	const { data: resourceTypes, isLoading: isLoadingResourceTypes } = useResourceTypes();
-	const { mutateAsync, isLoading, isError, error } = useModifyResource();
+	const { data: resourceTypes, isPending: isLoadingResourceTypes } = useResourceTypes();
+	const { mutateAsync, isPending, isError, error } = useModifyResource();
 	const {
 		register,
 		handleSubmit,
@@ -311,8 +311,8 @@ export const ResourceModal = (): JSX.Element => {
 							submitText={
 								resources?.resource ? 'Update resource' : 'Create a resource'
 							}
-							submitLoading={isLoading}
-							submitDisabled={isLoading}
+							submitLoading={isPending}
+							submitDisabled={isPending}
 							cancelText={'Discard changes'}
 							onCancel={() => closeModal()}
 						/>

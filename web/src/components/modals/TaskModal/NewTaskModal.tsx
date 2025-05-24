@@ -76,7 +76,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 	task
 }) => {
 	const queryClient = useQueryClient();
-	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
+	const { data, isPending, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
 	const { data: projectData } = useProjectDetails(projectId);
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -217,7 +217,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 									{taskError && (
 										<Text color={'red.500'}>{taskError.errorText}</Text>
 									)}
-									{isLoading ? (
+									{isPending ? (
 										<>
 											<Box marginTop={4}>
 												<SkeletonCircle size="8" />
@@ -543,7 +543,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Comments panel */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>
@@ -555,7 +555,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 									) : null}
 									<Box height={'650px'}>
 										<HStack spacing={4} justifyContent={'space-between'} mb={4}>
-											{isLoading && <LoadingSpinner />}
+											{isPending && <LoadingSpinner />}
 										</HStack>
 										<Flex direction={'column'} height={'100%'}>
 											<Box flex={'1'} overflowY={'auto'}>
@@ -589,7 +589,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Files for task */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>
@@ -674,7 +674,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Workers for task */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>
@@ -697,7 +697,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Resources for task */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>

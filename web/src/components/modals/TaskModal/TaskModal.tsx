@@ -67,7 +67,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 
 	const closeModal = useCloseModal();
 	const [taskTitle, setTaskTitle] = useState(task.subject);
-	const { data, isPending: isLoading, isError, error } = useTaskDetails(task.taskId);
+	const { data, isPending: isPending, isError, error } = useTaskDetails(task.taskId);
 	const [editing, setEditing] = useState(false);
 	const projectTask = data?.projectTask;
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -99,7 +99,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 			onClose={closeModal}
 			maxWidth={600}
 		>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
@@ -233,7 +233,7 @@ export const TaskModal = ({ task, projectId }: TaskModalProps): JSX.Element => {
 						<div style={{ width: '100%' }}>
 							<HStack spacing={4} justifyContent={'space-between'} mb={4}>
 								<Tag mb={4}>Comments</Tag>
-								{isLoading && <LoadingSpinner />}
+								{isPending && <LoadingSpinner />}
 							</HStack>
 							<div>
 								{projectTask?.comments && projectTask.comments.length > 0 ? (

@@ -73,7 +73,7 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 	);
 	const {
 		mutateAsync: modify,
-		isLoading: projectLoading,
+		isPending: projectLoading,
 		isError: isProjectError,
 		error: projectError
 	} = useModifyProject();

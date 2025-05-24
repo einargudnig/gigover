@@ -18,7 +18,7 @@ interface TaskDateChangerProps {
 }
 
 export const TaskDateChanger = ({ task }: TaskDateChangerProps): JSX.Element => {
-	const { mutateAsync: updateTask, isLoading } = useUpdateTask(task.project.projectId);
+	const { mutateAsync: updateTask, isPending: isLoading } = useUpdateTask(task.project.projectId);
 	const {
 		getValues,
 		control,

@@ -1,9 +1,9 @@
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
+import { Theme } from '../../Theme';
 import { useInviteBidder } from '../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../utils/ConsoleUtils';
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
-import { Theme } from '../../Theme';
 
 export interface InviteUserProps {
 	tenderId: number;
@@ -78,8 +78,8 @@ export const InviteBidder = ({ tenderId }: InviteUserProps): JSX.Element => {
 			</FormControl>
 			<Button
 				loadingText={'Inviting'}
-				isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-				disabled={searchMutation.isLoading || inviteMutation.isLoading}
+				isLoading={searchMutation.isPending || inviteMutation.isPending}
+				disabled={searchMutation.isPending || inviteMutation.isPending}
 				onClick={search}
 			>
 				Invite

@@ -23,8 +23,8 @@ export const CommentInput = ({ projectId, taskId, workers }: CommentInputProps):
 		[ProjectImage, File | undefined] | undefined
 	>();
 	const [commentValue, setCommentValue] = useState('');
-	const { mutateAsync: addComment, isLoading } = useTaskComment();
-	const { mutateAsync: deleteDocument, isLoading: isDeleting } = useDeleteDocument();
+	const { mutateAsync: addComment, isPending: isLoading } = useTaskComment();
+	const { mutateAsync: deleteDocument, isPending: isDeleting } = useDeleteDocument();
 
 	// map over the workers object and add '(mobile app)' to the end of the name if the worker type is 0
 	const workersWithMobileApp = workers.map((worker) => {

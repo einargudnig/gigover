@@ -79,8 +79,8 @@ export const InviteUser = ({ projectId }: InviteUserProps): JSX.Element => {
 			</FormControl>
 			<Button
 				loadingText={'Inviting'}
-				isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-				disabled={searchMutation.isLoading || inviteMutation.isLoading}
+				isLoading={searchMutation.isPending || inviteMutation.isPending}
+				disabled={searchMutation.isPending || inviteMutation.isPending}
 				onClick={search}
 			>
 				Invite

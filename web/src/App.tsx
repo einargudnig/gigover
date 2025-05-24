@@ -31,7 +31,7 @@ export const AppPreloader = (): JSX.Element => {
 	const firebase: Firebase = useContext(FirebaseContext);
 	const [hasError, setHasError] = useState(false);
 	const { authUser, loading: isLoadingFirebase } = useFirebaseAuth(firebase.auth);
-	const { mutateAsync: verify, data, isLoading: loading, error } = useVerify();
+	const { mutateAsync: verify, data, isPending: loading, error } = useVerify();
 
 	// Load Project Types
 	useProjectTypes();

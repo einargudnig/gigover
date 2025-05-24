@@ -168,9 +168,9 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 									/>
 									<Button
 										onClick={search}
-										isLoading={searchMutation.isLoading}
+										isLoading={searchMutation.isPending}
 										isDisabled={
-											searchMutation.isLoading || searchMutation.isError
+											searchMutation.isPending || searchMutation.isError
 										}
 									>
 										Invite
@@ -256,7 +256,7 @@ export const AddBidModal = ({ bid }: BidModalProps): JSX.Element => {
 					</Flex>
 
 					<FormActions
-						submitDisabled={searchMutation.isLoading || searchMutation.isError}
+						submitDisabled={searchMutation.isPending || searchMutation.isError}
 						cancelText={'Cancel'}
 						onCancel={closeModal}
 						submitText={'Create'}
