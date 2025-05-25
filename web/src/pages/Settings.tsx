@@ -1,6 +1,5 @@
-import { Button } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import { useContext } from 'react';
-import { CardBase } from '../components/CardBase';
 import { Page } from '../components/Page';
 import { InputWrapper } from '../components/forms/Input';
 import { FirebaseContext } from '../firebase/FirebaseContext';
@@ -10,7 +9,7 @@ export const Settings = (): JSX.Element => {
 	return (
 		<Page title={'Settings'}>
 			<div>
-				<CardBase style={{ marginBottom: 24 }}>Gigover Project Manager v1.5</CardBase>
+				<Box marginBottom={4}>Gigover Project Manager v1.5</Box>
 				<InputWrapper>
 					<Button onClick={() => firebase.signOut()}>Sign out</Button>
 				</InputWrapper>
