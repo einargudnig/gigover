@@ -85,8 +85,6 @@ export const AppPreloader = (): JSX.Element => {
 		phoneNumber: data?.phoneNumber ?? ''
 	};
 
-	console.log('USER', user);
-
 	if (hasError) {
 		return (
 			<Flex justifyContent={'center'} alignItems={'center'}>
@@ -105,7 +103,6 @@ const App = ({
 	userProfile?: IUserProfile;
 	authUser: FirebaseUser | null;
 }): JSX.Element => {
-	console.log('userProfile', userProfile);
 	// set up filesystem
 	const fileSystem = useMemo(() => new FileSystemService(), []);
 
