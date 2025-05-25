@@ -1,6 +1,5 @@
 import { HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import moment from 'moment';
-import styled from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
 import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
@@ -37,8 +36,6 @@ export const GigoverFileIconForType = (fileType: DocumentTypes) => {
 	}
 };
 
-const FileStyled = styled(CardBaseLink)``;
-
 // @deprecated
 export const FileIconForType = (fileType: FileType) => {
 	switch (fileType) {
@@ -65,7 +62,7 @@ export const File = ({ file }: FileProps): JSX.Element => {
 	const Icon = FileIconForType(file.type);
 
 	return (
-		<FileStyled to={`/files/${file.projectId}/file/${file.imageId}`}>
+		<CardBaseLink to={`/files/${file.projectId}/file/${file.imageId}`}>
 			<HStack spacing={8}>
 				<Icon />
 				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>
@@ -77,7 +74,7 @@ export const File = ({ file }: FileProps): JSX.Element => {
 				<Text m={0}>{humanFileSize(file.bytes)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
-		</FileStyled>
+		</CardBaseLink>
 	);
 };
 
@@ -100,7 +97,7 @@ export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 	const href = GetFileLink(file);
 
 	return (
-		<FileStyled to={href}>
+		<CardBaseLink to={href}>
 			<HStack spacing={8}>
 				{(file.type === 0 || file.type === 'IMAGE') && file.previewImage ? (
 					GigoverThumbnail(file)
@@ -116,6 +113,6 @@ export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
 				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
 			</HStack>
-		</FileStyled>
+		</CardBaseLink>
 	);
 };
