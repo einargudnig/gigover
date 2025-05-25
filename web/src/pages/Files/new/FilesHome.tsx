@@ -5,7 +5,6 @@ import { useProjectList } from '../../../queries/useProjectList';
 import { Folder } from '../components/Folder';
 
 // For the Tender Folder
-import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
@@ -33,28 +32,36 @@ export const FilesHome = (): JSX.Element => {
 	);
 };
 
-const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`};
-	${(props) =>
-		props.selected &&
-		css`
-			background: #000;
-			color: #fff !important;
-			box-shadow: none;
-		`};
-`;
-
-export const TenderFolder = (): JSX.Element => {
+export const TenderFolder = ({ selected }: { selected?: boolean }): JSX.Element => {
 	return (
-		<FolderCard to={'/files/tender'}>
+		<CardBaseLink
+			to={'/files/tender'}
+			sx={{
+				...(selected && {
+					bg: 'black',
+					color: '#fff !important',
+					boxShadow: 'none',
+					_hover: {
+						bg: 'black', // Keep background black on hover when selected
+						color: '#fff !important' // Keep text white on hover when selected
+					}
+				})
+			}}
+		>
 			<VStack align={'stretch'} spacing={4}>
 				<HStack justify={'space-between'} align={'center'}>
-					<FolderIcon size={38} color={'gray'} />
+					<FolderIcon size={38} color={selected ? 'white' : 'gray'} />
 				</HStack>
-				<Heading as={'h4'} size={'sm'} fontWeight={'normal'}>
+				<Heading
+					as={'h4'}
+					size={'sm'}
+					fontWeight={'normal'}
+					color={selected ? 'white' : 'inherit'}
+				>
 					Tender & Offers
 				</Heading>
 				<HStack justify={'space-between'}></HStack>
 			</VStack>
-		</FolderCard>
+		</CardBaseLink>
 	);
 };
