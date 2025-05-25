@@ -26,10 +26,6 @@ const SearchResults = styled.div`
 	right: 0;
 `;
 
-const StyledMenuList = styled(MenuList)`
-	width: 400px;
-`;
-
 export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const refInput = useRef<HTMLInputElement | null>(null);
@@ -88,7 +84,7 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 			</InputRightElement>
 			<SearchResults ref={ref}>
 				<Menu isOpen={isOpen} autoSelect={false}>
-					<StyledMenuList>
+					<MenuList width={'400px'}>
 						{searchResults.length > 0 ? (
 							searchResults.map((r, key) => (
 								<NavLink key={key} to={`/files/${r.projectId}/file/${r.imageId}`}>
@@ -98,7 +94,7 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 						) : (
 							<MenuItem>No results found</MenuItem>
 						)}
-					</StyledMenuList>
+					</MenuList>
 				</Menu>
 			</SearchResults>
 		</InputGroup>

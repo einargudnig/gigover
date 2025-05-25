@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { Page } from '../../components/Page';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { FileHouseIcon } from '../../components/icons/FileTypes/FileHouseIcon';
@@ -24,12 +23,6 @@ import { Project } from '../../models/Project';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useProjectDocuments } from '../../queries/useProjectDocuments';
 import { SearchBar } from '../Files/components/SearchBar';
-
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	overflow-y: auto;
-`;
 
 export const ProjectDetailsOutlet = (): JSX.Element => {
 	const params = useParams();
@@ -138,53 +131,57 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 						</Box>
 						<Spacer />
 						<Box>
-							{showSearchIcon ? (
-								<>
-									{showSearch ? (
-										<SearchBar files={projectDocuments} />
-									) : (
-										<Tooltip hasArrow label="Search project files">
-											<IconButton
-												variant={'outline'}
-												aria-label={'Search'}
-												colorScheme={'gray'}
-												icon={<SearchIcon color={'black'} />}
-												onClick={() => setShowSearch((v) => !v)}
-											/>
-										</Tooltip>
-									)}
-								</>
-							) : null}
-							{showFilterIcon ? (
-								<IconButton
-									variant={'outline'}
-									colorScheme={'gray'}
-									aria-label={'Filter'}
-									icon={<FilterIcon color={'black'} />}
-									marginLeft={3}
-								/>
-							) : null}
-							<DisabledComponent>
-								<Tooltip hasArrow label="Connect to property">
+							<Flex>
+								{showSearchIcon ? (
+									<>
+										{showSearch ? (
+											<SearchBar files={projectDocuments} />
+										) : (
+											<Tooltip hasArrow label="Search project files">
+												<IconButton
+													variant={'outline'}
+													aria-label={'Search'}
+													colorScheme={'gray'}
+													icon={<SearchIcon color={'black'} />}
+													onClick={() => setShowSearch((v) => !v)}
+												/>
+											</Tooltip>
+										)}
+									</>
+								) : null}
+								{showFilterIcon ? (
 									<IconButton
 										variant={'outline'}
 										colorScheme={'gray'}
-										aria-label={'Connect to property'}
-										icon={<FileHouseIcon color={'black'} />}
+										aria-label={'Filter'}
+										icon={<FilterIcon color={'black'} />}
 										marginLeft={3}
-										onClick={onOpen}
 									/>
-								</Tooltip>
-							</DisabledComponent>
+								) : null}
+								<DisabledComponent>
+									<Tooltip hasArrow label="Connect to property">
+										<IconButton
+											variant={'outline'}
+											colorScheme={'gray'}
+											aria-label={'Connect to property'}
+											icon={<FileHouseIcon color={'black'} />}
+											marginLeft={3}
+											onClick={onOpen}
+										/>
+									</Tooltip>
+								</DisabledComponent>
+							</Flex>
 						</Box>
 					</Flex>
 				}
 			>
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-						<Container>
-							<Outlet />
-						</Container>
+						<Flex flex="1 0 auto">
+							<Box overflowY={'auto'} height={'100%'} width={'100%'} marginTop={10}>
+								<Outlet />
+							</Box>
+						</Flex>
 					</HStack>
 				</VStack>
 			</Page>
