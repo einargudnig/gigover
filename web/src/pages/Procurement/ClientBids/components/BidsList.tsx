@@ -1,29 +1,22 @@
-import { Box, Button, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Heading,
+	LinkBox,
+	LinkOverlay,
+	Text
+} from '@chakra-ui/react';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
 import { useGetBids } from '../../../../queries/procurement/client-bids/useGetBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
 import { ProcurementListSkeleton } from '../../ProcurementListSkeleton';
 import { CreateBidStepper } from './new/CreateBidStepper';
-
-const PropertyCardStyled = styled(CardBaseLink)`
-	width: 100%;
-	max-width: 100%;
-	height: auto;
-	margin-top: 8px;
-	margin-bottom: 8px;
-
-	h3 {
-		margin-bottom: 16px;
-		color: #000;
-	}
-
-	@media screen and (max-width: 768px) {
-		width: 100%;
-	}
-`;
 
 export const BidsList = (): JSX.Element => {
 	const { data, isPending: isLoading } = useGetBids();
@@ -60,57 +53,84 @@ export const BidsList = (): JSX.Element => {
 									bidStatus = 'Unknown';
 								}
 								return (
-									<PropertyCardStyled
+									<LinkBox
+										as={CardBaseLink}
 										key={bid.bidId}
 										to={`/tender/bids/${bid.bidId}`}
+										w="100%"
+										maxW="100%"
+										h="auto"
+										mt="8px"
+										mb="8px"
+										sx={{
+											h3: {
+												marginBottom: '16px',
+												color: '#000'
+											},
+											'@media screen and (max-width: 768px)': {
+												width: '100%'
+											}
+										}}
 									>
-										<Flex direction={'column'}>
-											<Grid templateColumns="repeat(6, 1fr)" gap={1}>
-												<GridItem colSpan={2}>
-													<HStack>
-														<Text color={'black'}>Description:</Text>
-														<Text>{bid.description}</Text>
-													</HStack>
-													<HStack>
-														<Text color={'black'}>Terms: </Text>
-														<Text>{bid.terms}</Text>
-													</HStack>
-													<HStack>
-														<Text color={'black'}>Close date: </Text>
-														<Text>
-															{formatDateWithoutTime(
-																new Date(bid.finishDate)
-															)}
-														</Text>
-													</HStack>
-												</GridItem>
-												<GridItem colSpan={2}>
-													<HStack>
-														<Text color={'black'}>Status:</Text>
-														<Text color={bidColor}>{bidStatus}</Text>
-													</HStack>
-													<HStack>
-														<Text color={'black'}>Delivery: </Text>
-														<Text>{bid.delivery ? 'Yes' : 'No'}</Text>
-													</HStack>
-													<HStack>
-														<Text color={'black'}>Address: </Text>
-														<Text>{bid.address}</Text>
-													</HStack>
-												</GridItem>
-												<GridItem colSpan={2}>
-													<HStack>
-														<Text color={'black'}>Client Email:</Text>
-														<Text>{bid.clientEmail}</Text>
-													</HStack>
-													<HStack>
-														<Text color={'black'}>Notes:</Text>
-														<Text>{bid.notes}</Text>
-													</HStack>
-												</GridItem>
-											</Grid>
-										</Flex>
-									</PropertyCardStyled>
+										<LinkOverlay href={`/tender/bids/${bid.bidId}`}>
+											<Flex direction={'column'}>
+												<Grid templateColumns="repeat(6, 1fr)" gap={1}>
+													<GridItem colSpan={2}>
+														<HStack>
+															<Text color={'black'}>
+																Description:
+															</Text>
+															<Text>{bid.description}</Text>
+														</HStack>
+														<HStack>
+															<Text color={'black'}>Terms: </Text>
+															<Text>{bid.terms}</Text>
+														</HStack>
+														<HStack>
+															<Text color={'black'}>
+																Close date:{' '}
+															</Text>
+															<Text>
+																{formatDateWithoutTime(
+																	new Date(bid.finishDate)
+																)}
+															</Text>
+														</HStack>
+													</GridItem>
+													<GridItem colSpan={2}>
+														<HStack>
+															<Text color={'black'}>Status:</Text>
+															<Text color={bidColor}>
+																{bidStatus}
+															</Text>
+														</HStack>
+														<HStack>
+															<Text color={'black'}>Delivery: </Text>
+															<Text>
+																{bid.delivery ? 'Yes' : 'No'}
+															</Text>
+														</HStack>
+														<HStack>
+															<Text color={'black'}>Address: </Text>
+															<Text>{bid.address}</Text>
+														</HStack>
+													</GridItem>
+													<GridItem colSpan={2}>
+														<HStack>
+															<Text color={'black'}>
+																Client Email:
+															</Text>
+															<Text>{bid.clientEmail}</Text>
+														</HStack>
+														<HStack>
+															<Text color={'black'}>Notes:</Text>
+															<Text>{bid.notes}</Text>
+														</HStack>
+													</GridItem>
+												</Grid>
+											</Flex>
+										</LinkOverlay>
+									</LinkBox>
 								);
 							})
 					)}
