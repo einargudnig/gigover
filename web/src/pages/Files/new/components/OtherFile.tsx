@@ -2,8 +2,7 @@ import { HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
 import moment from 'moment';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { CardBase } from '../../../../components/CardBase';
+import { CardBaseLink } from '../../../../components/CardBase';
 import { DownloadIcon } from '../../../../components/icons/DownloadIcon';
 import { FileHouseIcon } from '../../../../components/icons/FileTypes/FileHouseIcon';
 import { FileImgIcon } from '../../../../components/icons/FileTypes/FileImgIcon';
@@ -40,9 +39,6 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 	}
 };
 
-// const FileStyled = styled(CardBaseLink)``;
-const FileStyledNoLink = styled(CardBase)``;
-
 export const GetFileLink = (file: TenderDocument) => {
 	const { offerId, tenderId } = useParams();
 	const location = useLocation();
@@ -75,10 +71,10 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 	const Icon = OtherFileIconForType(file.type);
 	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
 	const { mutateAsync: deleteTenderDocumentAsync } = useDeleteTenderDocument(); // for delete file on Tender
-	// const href = GetFileLink(file);
+	const href = GetFileLink(file);
 
 	return (
-		<FileStyledNoLink>
+		<CardBaseLink to={href}>
 			<HStack spacing={8}>
 				<Icon />
 
@@ -133,6 +129,6 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					</VStack>
 				) : null}
 			</HStack>
-		</FileStyledNoLink>
+		</CardBaseLink>
 	);
 };
