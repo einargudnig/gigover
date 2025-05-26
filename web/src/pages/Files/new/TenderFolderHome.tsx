@@ -1,24 +1,18 @@
 import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import styled, { css } from 'styled-components';
+// import { Link as RouterLink } from 'react-router-dom'; // No longer needed here, CardBaseLink handles it
 import { CardBaseLink } from '../../../components/CardBase';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 
-const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
-	${(props) =>
-		props.selected &&
-		css`
-			background: #000;
-			color: #fff !important;
-			box-shadow: none;
-		`};
-`;
-
 export const TenderFolderHome = (): JSX.Element => {
 	const isUploading = false;
+
 	return (
 		<>
-			<FolderCard to={'/files/tender/tenders'}>
+			<CardBaseLink
+				to={'/files/tender/tenders'}
+				// sx={selected ? { background: '#000', color: '#fff !important', boxShadow: 'none' } : {}}
+			>
 				<VStack align={'stretch'} spacing={4}>
 					<HStack justify={'space-between'} align={'center'}>
 						<FolderIcon size={38} color={'blue'} />
@@ -32,9 +26,12 @@ export const TenderFolderHome = (): JSX.Element => {
 						<Text>Files for your tender</Text>
 					</HStack>
 				</VStack>
-			</FolderCard>
+			</CardBaseLink>
 
-			<FolderCard to={'/files/tender/offers'}>
+			<CardBaseLink
+				to={'/files/tender/offers'}
+				// sx={selected ? { background: '#000', color: '#fff !important', boxShadow: 'none' } : {}}
+			>
 				<VStack align={'stretch'} spacing={4}>
 					<HStack justify={'space-between'} align={'center'}>
 						<FolderIcon size={38} color={'green'} />
@@ -48,7 +45,7 @@ export const TenderFolderHome = (): JSX.Element => {
 						<Text>Files from your offers</Text>
 					</HStack>
 				</VStack>
-			</FolderCard>
+			</CardBaseLink>
 		</>
 	);
 };
