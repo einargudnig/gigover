@@ -1,36 +1,18 @@
-import { Center, HStack, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Flex, Heading, Text } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
-import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { FolderIcon } from '../../../../components/icons/FolderIcon';
 import { colorGenerator } from '../../../../hooks/colorGenerator';
 import { useUserTenders } from '../../../../queries/procurement/useUserTenders';
 
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	padding: ${(props) => props.theme.padding(3)};
-	overflow-y: auto;
-`;
-
-const FolderCard = styled(CardBaseLink)<{ selected?: boolean }>`
-	${(props) =>
-		props.selected &&
-		css`
-			background: #000;
-			color: #fff !important;
-			box-shadow: none;
-		`};
-`;
-
 export const TendersFolder = (): JSX.Element => {
 	const { data, isPending } = useUserTenders();
 
 	return (
-		<VStack style={{ height: '100%' }}>
-			<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-				<Container>
+		<Flex direction="column" height="100%">
+			<Flex flex={1} height="100%" width="100%">
+				<Box flex="1 0 auto" height="100%" p={3} overflowY="auto">
 					{isPending ? (
 						<Center>
 							<LoadingSpinner />
@@ -50,12 +32,15 @@ export const TendersFolder = (): JSX.Element => {
 								<>
 									<Heading size={'md'}>Tenders</Heading>
 									{data.map((t) => (
-										<FolderCard
+										<CardBaseLink
 											to={`/files/tender/tenders/${t.tenderId}`}
 											key={t.tenderId}
 										>
-											<VStack align={'stretch'} spacing={4}>
-												<HStack justify={'space-between'} align={'center'}>
+											<Flex direction="column" alignItems={'stretch'} gap={4}>
+												<Flex
+													justifyContent={'space-between'}
+													alignItems={'center'}
+												>
 													<FolderIcon
 														color={
 															colorGenerator(
@@ -67,8 +52,8 @@ export const TendersFolder = (): JSX.Element => {
 														size={32}
 													/>
 													{/* <Text>{o.tender.description}</Text> */}
-												</HStack>
-												<HStack>
+												</Flex>
+												<Flex gap={1}>
 													<Heading
 														as={'h4'}
 														size={'sm'}
@@ -83,24 +68,24 @@ export const TendersFolder = (): JSX.Element => {
 													>
 														{t.description}
 													</Heading>
-												</HStack>
-												<HStack>
+												</Flex>
+												<Flex gap={1}>
 													<Text as={'b'}>Tender Id:</Text>
 													<Text>{t.tenderId}</Text>
-												</HStack>
-												{/* <HStack>
-										<Text as={'b'}>Number of files:</Text>
-										<Text>{t.documents.length()}</Text>
-									</HStack> */}
-											</VStack>
-										</FolderCard>
+												</Flex>
+												{/* <Flex>
+													<Text as={'b'}>Number of files:</Text>
+													<Text>{t.documents.length()}</Text>
+												</Flex> */}
+											</Flex>
+										</CardBaseLink>
 									))}
 								</>
 							)}
 						</>
 					)}
-				</Container>
-			</HStack>
-		</VStack>
+				</Box>
+			</Flex>
+		</Flex>
 	);
 };
