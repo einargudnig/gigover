@@ -5,10 +5,9 @@ import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import * as ReactDOMClient from 'react-dom/client';
 import 'react-tippy/dist/tippy.css';
-import { ThemeProvider } from 'styled-components';
 import { AppPreloader } from './App';
 import ErrorBoundary from './ErrorBoundary';
-import { ChakraThemeColors, Theme } from './Theme';
+import { ChakraThemeColors } from './Theme';
 import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
@@ -78,14 +77,12 @@ const root = ReactDOMClient.createRoot(container);
 
 root.render(
 	<ErrorBoundary>
-		<ThemeProvider theme={Theme}>
-			<ChakraProvider theme={ChakraTheme}>
-				<FirebaseContext.Provider value={firebaseApp}>
-					<QueryClientProvider client={queryClient}>
-						<AppPreloader />
-					</QueryClientProvider>
-				</FirebaseContext.Provider>
-			</ChakraProvider>
-		</ThemeProvider>
+		<ChakraProvider theme={ChakraTheme}>
+			<FirebaseContext.Provider value={firebaseApp}>
+				<QueryClientProvider client={queryClient}>
+					<AppPreloader />
+				</QueryClientProvider>
+			</FirebaseContext.Provider>
+		</ChakraProvider>
 	</ErrorBoundary>
 );
