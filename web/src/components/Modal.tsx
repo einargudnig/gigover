@@ -1,49 +1,33 @@
-import { IconButton } from '@chakra-ui/react';
-import React, { FC, ReactElement, useCallback, useLayoutEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { useEventListener } from '../hooks/useEventListener';
 import {
-	CenterModalWrapper,
-	ModalCloseCross,
-	ModalContainerStyles,
-	ModalContentContainer,
-	ModalHeader,
-	ModalOverlay,
-	ModalTitleContainer,
-	ModalWrapper
-} from './ModalStyles';
-import { CrossIcon } from './icons/CrossIcon';
+	Drawer,
+	DrawerBody,
+	DrawerCloseButton,
+	DrawerContent,
+	DrawerHeader,
+	DrawerOverlay
+} from '@chakra-ui/react';
+import React, { FC, useCallback } from 'react';
 
-const modalRoot = document.createElement('div');
-
-const ModalRenderer = ({ children }: { children: React.ReactNode }) =>
-	ReactDOM.createPortal(children as ReactElement, modalRoot);
-
-export interface IModalContainerProps extends IWithFlexContainer {
+export interface IModalContainerProps {
 	open: boolean;
 	title?: string | React.ReactNode;
 	children: React.ReactNode;
 	onClose?: () => void;
 	closeIcon?: boolean;
 	centerModal?: boolean;
-	maxWidth?: number;
-}
-
-export interface IWithFlexContainer {
-	/* If you want to flex the container it will fill the remaining space (used in mobile) */
+	maxWidth?: number | string;
 	flexContainer?: boolean;
-	maxWidth?: number;
 }
 
 export const Modal: FC<IModalContainerProps> = ({
 	open,
-	flexContainer,
 	title,
 	onClose,
 	children,
 	centerModal = false,
 	closeIcon = true,
-	maxWidth
+	maxWidth: propMaxWidth,
+	flexContainer
 }: IModalContainerProps) => {
 	const closeModal = useCallback(() => {
 		if (onClose) {
@@ -51,47 +35,43 @@ export const Modal: FC<IModalContainerProps> = ({
 		}
 	}, [onClose]);
 
-	useEventListener('keydown', (event) => {
-		if (event.keyCode === 27) {
-			closeModal();
-		}
-	});
-
-	useLayoutEffect(() => {
-		modalRoot.className = 'gigover-modal-container';
-		document.body.appendChild(modalRoot);
-	}, []);
-
-	const Wrapper = centerModal ? CenterModalWrapper : ModalWrapper;
+	const finalMaxWidth = typeof propMaxWidth === 'number' ? `${propMaxWidth}px` : propMaxWidth;
 
 	return open ? (
-		<ModalRenderer>
-			<ModalContainerStyles />
-			<ModalOverlay>
-				<Wrapper flexContainer={flexContainer}>
-					<ModalHeader flexContainer={flexContainer}>
-						<ModalTitleContainer maxWidth={maxWidth}>
-							<span>{title}</span>
-						</ModalTitleContainer>
+		<Drawer isOpen={open} onClose={closeModal} size={'lg'}>
+			<DrawerOverlay bg="rgba(0, 0, 0, 0.3)" />
+			<DrawerContent
+				bg="#fff"
+				boxShadow="0 5px 25px rgba(0,0,0,0.1)"
+				maxWidth={finalMaxWidth}
+			>
+				{onClose && closeIcon && <DrawerCloseButton top="24px" right="24px" />}
 
-						{onClose && closeIcon && (
-							<ModalCloseCross>
-								<IconButton
-									aria-label={'Close modal'}
-									colorScheme={'gray'}
-									icon={<CrossIcon />}
-									onClick={() => {
-										closeModal();
-									}}
-								/>
-							</ModalCloseCross>
-						)}
-					</ModalHeader>
-					<ModalContentContainer flexContainer={flexContainer} maxWidth={maxWidth}>
-						{children}
-					</ModalContentContainer>
-				</Wrapper>
-			</ModalOverlay>
-		</ModalRenderer>
+				{title && (
+					<DrawerHeader
+						pt="32px"
+						px="24px"
+						pb="16px"
+						fontSize="24px"
+						fontWeight="bold"
+						userSelect="none"
+					>
+						{title}
+					</DrawerHeader>
+				)}
+
+				<DrawerBody
+					px="24px"
+					pt={title ? '24px' : '32px'}
+					pb="24px"
+					display={flexContainer ? 'flex' : 'block'}
+					flexDirection={flexContainer ? 'column' : undefined}
+					flexGrow={flexContainer ? 1 : undefined}
+					justifyContent={flexContainer && children ? 'space-between' : undefined}
+				>
+					{children}
+				</DrawerBody>
+			</DrawerContent>
+		</Drawer>
 	) : null;
 };
