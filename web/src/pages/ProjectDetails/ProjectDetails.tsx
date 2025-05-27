@@ -1,8 +1,7 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
@@ -11,41 +10,6 @@ import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 import { TaskColumn } from './TaskColumn';
-
-const FeedBoard = styled.div`
-	display: flex;
-	flex-direction: row;
-	margin-left: -8px;
-	margin-right: -8px;
-`;
-
-const KanbanBoard = styled.div`
-	flex: 1;
-	user-select: none;
-`;
-
-const FeedColumn = styled.div`
-	margin: 0 ${(props): string => props.theme.padding(1.5)};
-	height: 100%;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	padding: 16px;
-
-	> div {
-		flex: 1;
-		border-radius: 3px;
-	}
-
-	@media screen and (max-width: 1024px) {
-		margin: 0 ${(props): string => props.theme.padding(1)};
-		padding: 12px;
-
-		&:not(:last-child) {
-			margin-right: ${(props): string => props.theme.padding(1)};
-		}
-	}
-`;
 
 export const ProjectDetails = (): JSX.Element | null => {
 	const { projectId } = useParams();
@@ -136,23 +100,42 @@ export const ProjectDetails = (): JSX.Element | null => {
 						Code: {error?.errorCode}
 					</p>
 				) : (
-					<KanbanBoard>
+					<Box flex={1} userSelect="none">
 						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
-							<FeedBoard>
+							<Flex flexDirection="row" marginLeft="-8px" marginRight="-8px">
 								{Object.values(TaskStatus)
 									.filter((status) => status !== TaskStatus.Archived)
 									.map((taskStatus, tIndex) => (
-										<FeedColumn key={tIndex}>
+										<Box
+											key={tIndex}
+											marginX={{ base: 1, md: 1.5 }}
+											height="100%"
+											flex={1}
+											display="flex"
+											flexDirection="column"
+											padding={{ base: '12px', md: '16px' }}
+											sx={{
+												'> div': {
+													flex: 1,
+													borderRadius: '3px'
+												},
+												'@media screen and (max-width: 1024px)': {
+													'&:not(:last-child)': {
+														marginRight: 1
+													}
+												}
+											}}
+										>
 											<TaskColumn
 												project={project!}
 												status={taskStatus}
 												tasks={tasks[taskStatus]}
 											/>
-										</FeedColumn>
+										</Box>
 									))}
-							</FeedBoard>
+							</Flex>
 						</DragDropContext>
-					</KanbanBoard>
+					</Box>
 				)}
 			</Box>
 		</>

@@ -1,36 +1,10 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import Countdown from 'react-countdown';
-import styled, { css } from 'styled-components';
 import { Resource } from '../../models/Resource';
 import { ResourceHistoryItem } from '../../models/ResourceHistoryItem';
 import { LocationPinIcon } from '../icons/LocationPinIcon';
 import { ResourceTimeRenderer } from './ResourceTimeRenderer';
-
-const TimeslotContainer = styled.div<{ inUse: boolean }>`
-	padding: ${(props) => props.theme.padding(1.5)};
-	background: #fff;
-	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
-	border-radius: ${(props) => props.theme.borderRadius};
-	color: #000;
-	width: 100%;
-	height: 70px;
-	font-size: 14px;
-
-	${(props) =>
-		props.inUse &&
-		css`
-			background: #ffedec;
-			color: #9b4633;
-			display: flex;
-			align-items: center;
-			font-weight: bold;
-		`};
-
-	p {
-		margin: 0;
-	}
-`;
 
 export interface ResourceHistoryTimeSlotProps {
 	inUse: boolean;
@@ -50,7 +24,24 @@ export const ResourceHistoryTimeSlot = ({
 	const dateInUse = isHold ? startDate : endDate;
 
 	return (
-		<TimeslotContainer inUse={inUse}>
+		<Box
+			padding={1.5}
+			background={inUse ? '#ffedec' : '#fff'}
+			boxShadow="0 5px 15px rgba(0, 0, 0, 0.04)"
+			borderRadius="md"
+			color={inUse ? '#9b4633' : '#000'}
+			width="100%"
+			height="70px"
+			fontSize="14px"
+			display={inUse ? 'flex' : 'block'}
+			alignItems={inUse ? 'center' : 'initial'}
+			fontWeight={inUse ? 'bold' : 'initial'}
+			sx={{
+				p: {
+					margin: 0
+				}
+			}}
+		>
 			{inUse ? (
 				<Flex direction="column" align="flex-start">
 					<div style={{ fontWeight: 'normal' }}>Resource is still in use</div>
@@ -84,6 +75,6 @@ export const ResourceHistoryTimeSlot = ({
 					</Flex>
 				</>
 			)}
-		</TimeslotContainer>
+		</Box>
 	);
 };

@@ -1,12 +1,9 @@
-// import styled from 'styled-components'; // Removed styled-components
 import { Box, Progress as ChakraProgress, Text } from '@chakra-ui/react'; // Added Chakra components
 
 interface ProgressBarProps {
 	percent: number; // Represents the "done" part
 	secondaryProgress?: number; // Represents the "in progress" part, additional to "done"
 }
-
-// const ProgressBarStyled = styled.div<ProgressBarProps>` ... ` // Removed styled-component
 
 export const ProgressBar = ({ percent, secondaryProgress = 0 }: ProgressBarProps): JSX.Element => {
 	const totalProgress = percent + secondaryProgress;
@@ -23,7 +20,6 @@ export const ProgressBar = ({ percent, secondaryProgress = 0 }: ProgressBarProps
 						{clampedSecondaryProgress.toFixed(0)}% In progress{' '}
 						<Text as="span" color="#f9dc97">
 							{' '}
-							{/* Directly using the color from original .in-progress */}
 							&bull;
 						</Text>{' '}
 					</>
@@ -38,7 +34,6 @@ export const ProgressBar = ({ percent, secondaryProgress = 0 }: ProgressBarProps
 				overflow="hidden"
 				position="relative"
 			>
-				{/* Base layer for total progress (done + in progress), effectively the in-progress part if secondary exists */}
 				<ChakraProgress
 					value={clampedTotalProgress}
 					colorScheme="yellow" // Corresponds to #f9dc97 for .in-progress
