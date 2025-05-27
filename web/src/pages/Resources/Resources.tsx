@@ -1,12 +1,13 @@
 import { Button, Flex, HStack, Heading } from '@chakra-ui/react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import { CellContext, ColumnDef } from '@tanstack/react-table'; // ColumnDef might be used from here, CellContext not
 import { useContext, useMemo } from 'react';
-import { CellProps, Column } from 'react-table';
 import { CardBase } from '../../components/CardBase';
 import { Page } from '../../components/Page';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { TrashIcon } from '../../components/icons/TrashIcon';
-import { Table } from '../../components/table/Table';
+import { SimpleColumnDef, Table } from '../../components/table/Table'; // Import SimpleColumnDef
 import { ModalContext } from '../../context/ModalContext';
 import { Resource, ResourceStatus } from '../../models/Resource';
 import { useResourceDelete } from '../../mutations/useResourceDelete';
@@ -22,29 +23,30 @@ export const Resources = (): JSX.Element => {
 	const { data, isPending } = useResources();
 	const { mutateAsync: deleteResourceAsync, isPending: isLoadingDelete } = useResourceDelete();
 
-	const columns: Array<Column<Resource>> = useMemo(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const columns: Array<SimpleColumnDef<Resource, any>> = useMemo(
 		() => [
 			{
-				Header: 'Id',
-				accessor: 'serialNr',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
+				accessorKey: 'serialNr',
+				header: 'Id',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
 			{
-				Header: 'Resource',
-				accessor: 'name',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
+				accessorKey: 'name',
+				header: 'Resource',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
 			{
-				Header: 'Type',
-				accessor: 'type',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, number>): JSX.Element => {
+				accessorKey: 'type',
+				header: 'Type',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					if (resourceTypes) {
 						const type = resourceTypes?.areas?.find((t) => t.type === value);
 
@@ -57,25 +59,29 @@ export const Resources = (): JSX.Element => {
 				}
 			},
 			// {
-			// 	Header: 'Last update',
-			// 	accessor: 'year',
+			// 	header: 'Last update',
+			// 	accessorKey: 'year',
 			// 	// eslint-disable-next-line react/display-name
-			// 	Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
-			// 		return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
+			// 	cell: ({ value }: CellContext<Resource, string>): JSX.Element => {
+			// 		return <Text fontStyle={'italic'}>{moment(getValue()).format('YYYY-MM-DD')}</Text>;
 			// 	}
 			// },
 			{
-				Header: 'Status',
-				accessor: 'status',
+				accessorKey: 'status',
+				header: 'Status',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, ResourceStatus>): JSX.Element => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					return <ResourceStatusLabel status={value} />;
 				}
 			},
 			{
-				Header: 'Actions',
+				// id: 'actions', // accessorKey is needed for the new Table component
+				accessorKey: 'id', // Assuming 'id' or some unique key exists on Resource for actions
+				header: 'Actions',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ row }: CellProps<Resource, string>): JSX.Element => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ row }): JSX.Element => {
 					return (
 						<HStack spacing={4}>
 							{/*<Button*/}
@@ -87,13 +93,11 @@ export const Resources = (): JSX.Element => {
 							{/*>*/}
 							{/*	View log*/}
 							{/*</Button>*/}
-							<HoldResource resource={row.original} />
+							<HoldResource resource={row} />
 							<Button
 								variant={'outline'}
 								colorScheme={'black'}
-								onClick={() =>
-									setModalContext({ resources: { resource: row.original } })
-								}
+								onClick={() => setModalContext({ resources: { resource: row } })}
 							>
 								Edit
 							</Button>
@@ -101,7 +105,7 @@ export const Resources = (): JSX.Element => {
 								variant={'outline'}
 								colorScheme={'black'}
 								isLoading={isLoadingDelete}
-								onClick={async () => await deleteResourceAsync(row.original)}
+								onClick={async () => await deleteResourceAsync(row)}
 							>
 								<TrashIcon />
 							</Button>
@@ -140,7 +144,12 @@ export const Resources = (): JSX.Element => {
 				</Flex>
 
 				<CardBase>
-					<Table loading={isPending} variant={'striped'} columns={columns} data={data} />
+					<Table<Resource>
+						loading={isPending}
+						variant={'striped'}
+						columns={columns}
+						data={data ?? []}
+					/>
 				</CardBase>
 
 				<CardBase mt={4}>
@@ -149,17 +158,6 @@ export const Resources = (): JSX.Element => {
 					</Heading>
 				</CardBase>
 				<CardBase mt={4}>
-					{/* <GigoverMaps
-					resources={data ?? []}
-					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8"
-					loadingElement={
-						<div>
-							<LoadingSpinner />
-						</div>
-					}
-					containerElement={<div style={{ height: '400px' }} />}
-					mapElement={<div style={{ height: '100%' }} />}
-				/> */}
 					<GigoverMaps resources={data ?? []} />
 				</CardBase>
 			</DisabledPage>
