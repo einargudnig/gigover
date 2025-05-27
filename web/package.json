@@ -7,6 +7,7 @@
 		"@chakra-ui/react": "^2.10.4",
 		"@emailjs/browser": "^3.10.0",
 		"@emotion/react": "^11.1.5",
+		"@emotion/styled": "^11.1.5",
 		"@hookform/error-message": "^2.0.0",
 		"@react-google-maps/api": "^2.18.1",
 		"@tanstack/react-query": "^5.77.0",

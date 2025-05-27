@@ -33,8 +33,8 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 	);
 	console.log(errors, 'rerrrrrr');
 	return (
-        <div>
-            <Flex mb={4} direction={'column'}>
+		<div>
+			<Flex mb={4} direction={'column'}>
 				<Heading mb={4}>Share with other users</Heading>
 				<form onSubmit={onSubmit}>
 					<FormControl isInvalid={!!errors.email}>
@@ -81,8 +81,8 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 					</Flex>
 				))}
 			</Flex>
-            <Heading mb={4}>Get Link</Heading>
-            <Flex justifyContent={'space-between'}>
+			<Heading mb={4}>Get Link</Heading>
+			<Flex justifyContent={'space-between'}>
 				<Box>
 					<Text>
 						<b>Restricted </b>
@@ -93,8 +93,8 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 					Copy link
 				</Button>
 			</Flex>
-        </div>
-    );
+		</div>
+	);
 };
 
 export default ShareItem;
