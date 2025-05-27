@@ -1,5 +1,5 @@
+import { SimpleGrid as ChakraSimpleGrid } from '@chakra-ui/react'; // Imported Chakra's SimpleGrid
 import React from 'react';
-import styled from 'styled-components';
 import { Theme } from '../Theme';
 
 interface SimpleGridProps {
@@ -8,21 +8,14 @@ interface SimpleGridProps {
 	children: React.ReactNode;
 }
 
-const SimpleGridStyled = styled.div<Omit<SimpleGridProps, 'children'>>`
-	display: grid;
-	width: 100%;
-	grid-gap: ${(props) => props.spacing};
-	grid-template-columns: repeat(auto-fit, minmax(${(props) => `${props.itemWidth}px`}, auto));
-`;
-
 export const SimpleGrid = ({
-	spacing = Theme.padding(3),
+	spacing = Theme.padding(3), // Assuming Theme.padding(3) resolves to a Chakra theme-compatible spacing value (e.g., '12px' or 3 for theme scale)
 	itemWidth,
 	children
 }: SimpleGridProps): JSX.Element => {
 	return (
-		<SimpleGridStyled itemWidth={itemWidth} spacing={spacing}>
+		<ChakraSimpleGrid minChildWidth={`${itemWidth}px`} spacing={spacing} width="100%">
 			{children}
-		</SimpleGridStyled>
+		</ChakraSimpleGrid>
 	);
 };

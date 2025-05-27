@@ -1,12 +1,7 @@
 import { Box, Button, FormLabel, Input } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import { useAddWorker } from '../../queries/useAddWorker';
 import { useGetUserByPhoneNumber } from '../../queries/useGetUserByPhoneNumber';
-
-const AddWorkerFormStyled = styled.div`
-	flex: 0 0 360px;
-`;
 
 interface FormData {
 	phoneNumber: string;
@@ -38,7 +33,7 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 	});
 
 	return (
-		<AddWorkerFormStyled>
+		<Box flexBasis="360px" flexShrink={0}>
 			{isError && (
 				<>
 					{/* Server errors */}
@@ -70,6 +65,6 @@ export const AddWorkerForm = ({ projectId }: { projectId: number }): JSX.Element
 					Add app user
 				</Button>
 			</form>
-		</AddWorkerFormStyled>
+		</Box>
 	);
 };

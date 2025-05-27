@@ -1,4 +1,5 @@
 import {
+	Box,
 	Input,
 	InputGroup,
 	InputRightElement,
@@ -7,7 +8,6 @@ import {
 	MenuList,
 	useOutsideClick
 } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { SearchIcon } from '../../../components/icons/SearchIcon';
@@ -16,15 +16,6 @@ import { ProjectFile } from '../../../models/ProjectFile';
 interface SearchBarProps {
 	files: ProjectFile[];
 }
-
-const SearchResults = styled.div`
-	position: absolute;
-	top: 100%;
-	top: calc(100% + 8px);
-	width: 100%;
-	left: 0;
-	right: 0;
-`;
 
 export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
@@ -82,7 +73,15 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 			<InputRightElement pointerEvents={'none'}>
 				<SearchIcon />
 			</InputRightElement>
-			<SearchResults ref={ref}>
+			<Box
+				ref={ref}
+				position="absolute"
+				top="calc(100% + 8px)"
+				width="100%"
+				left="0"
+				right="0"
+				zIndex="dropdown"
+			>
 				<Menu isOpen={isOpen} autoSelect={false}>
 					<MenuList width={'400px'}>
 						{searchResults.length > 0 ? (
@@ -96,7 +95,7 @@ export const SearchBar = ({ files }: SearchBarProps): JSX.Element => {
 						)}
 					</MenuList>
 				</Menu>
-			</SearchResults>
+			</Box>
 		</InputGroup>
 	);
 };

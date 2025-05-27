@@ -10,7 +10,6 @@ import {
 	Text,
 	useDisclosure
 } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import { useEffect, useState } from 'react';
 import { Notification as NotificationType, useNotifications } from '../../hooks/useNotifications';
 import { useDeleteNotification } from '../../mutations/useDeleteNotification';
@@ -72,26 +71,6 @@ export const Notifications = (): JSX.Element => {
 	);
 };
 
-const StyledFlex = styled.div`
-	position: relative;
-
-	.delete-notification-icon {
-		position: absolute;
-		top: 28px;
-		right: -6px;
-		padding: 6px;
-		cursor: pointer;
-		display: none;
-		transition: all 0.2s linear;
-	}
-
-	&:hover {
-		.delete-notification-icon {
-			display: block;
-		}
-	}
-`;
-
 const Notification = ({ data, onClick }: { data: NotificationType; onClick: () => void }) => {
 	const [openTask, setOpenTask] = useState(false);
 	const readNotificationMutation = useReadNotification();
@@ -108,7 +87,8 @@ const Notification = ({ data, onClick }: { data: NotificationType; onClick: () =
 		}
 	};
 
-	const deleteNotification = async () => {
+	const deleteNotification = async (e: React.MouseEvent) => {
+		e.stopPropagation(); // Prevent openNotification from firing
 		await deleteNotificationMutation.mutateAsync(data);
 	};
 
@@ -122,13 +102,14 @@ const Notification = ({ data, onClick }: { data: NotificationType; onClick: () =
 	return (
 		<>
 			<Flex
-				as={StyledFlex}
 				my={1}
 				borderTop={'2px solid #f3f3f3'}
 				py={2}
 				align={'center'}
 				cursor={'pointer'}
 				onClick={openNotification}
+				position="relative"
+				_hover={{ '.delete-notification-icon': { display: 'block' } }}
 			>
 				{deleteNotificationMutation.isPending ? (
 					<Center>
@@ -144,17 +125,26 @@ const Notification = ({ data, onClick }: { data: NotificationType; onClick: () =
 							>
 								{data.subject ?? 'Unknown name'}
 							</Text>
-							<div>
+							<Box position="relative">
 								<Text fontSize={'12px'} color={'gray.400'}>
 									{timeSince(new Date(data.created))}
 								</Text>
-								<div
+								<IconButton
+									aria-label="Delete notification"
+									icon={<CrossIcon size={16} />}
+									size="xs"
 									className={'delete-notification-icon'}
-									onClick={() => deleteNotification()}
-								>
-									<CrossIcon size={16} />
-								</div>
-							</div>
+									position="absolute"
+									top="-2px"
+									right="-28px"
+									p={1}
+									cursor="pointer"
+									display="none"
+									transition="all 0.2s linear"
+									onClick={deleteNotification}
+									variant="ghost"
+								/>
+							</Box>
 						</Flex>
 						<Text fontSize={'14px'}>{data.text ?? 'Unknown content'}</Text>
 					</Box>

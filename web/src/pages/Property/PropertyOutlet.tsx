@@ -1,19 +1,12 @@
 import { SearchIcon } from '@chakra-ui/icons';
-import { Button, Flex, HStack, IconButton, Tooltip, VStack } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import styled from 'styled-components';
 import { Page } from '../../components/Page';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { ModalContext } from '../../context/ModalContext';
 import { PropertySearchBar } from './components/PropertySearchBar';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
-
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	overflow-y: auto;
-`;
 
 export const PropertyOutlet = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -52,9 +45,9 @@ export const PropertyOutlet = (): JSX.Element => {
 			<DisabledPage>
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-						<Container>
+						<Box flex="1 0 auto" height="100%" overflowY="auto">
 							<Outlet />
-						</Container>
+						</Box>
 					</HStack>
 				</VStack>
 			</DisabledPage>

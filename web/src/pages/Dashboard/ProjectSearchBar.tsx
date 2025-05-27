@@ -9,22 +9,9 @@ import {
 	useOutsideClick
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import styled from 'styled-components';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Project } from '../../models/Project';
 import { useProjectList } from '../../queries/useProjectList';
-
-const SearchResults = styled.div`
-	position: absolute;
-	top: 50px;
-	left: 0px;
-	width: 100%;
-	background: white;
-	box-shadow: ${(props) => props.theme.shadows.lg};
-	border-radius: ${(props) => props.theme.radius(2)};
-	z-index: 99;
-	padding: ${(props) => props.theme.padding(2)};
-`;
 
 export const ProjectSearchBar = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
@@ -73,13 +60,25 @@ export const ProjectSearchBar = (): JSX.Element => {
 				</InputGroup>
 			)}
 			{isOpen && searchValue.length > 0 && (
-				<SearchResults ref={ref}>
+				// Replaced SearchResults with Box and Chakra style props
+				<Box
+					ref={ref}
+					position="absolute"
+					top="50px"
+					left="0px"
+					width="100%"
+					bg="white"
+					boxShadow="lg" // Assuming theme.shadows.lg maps to 'lg'
+					borderRadius="2xl" // Assuming theme.radius(2) maps to '2xl' or a similar large radius
+					zIndex={99}
+					p={2} // Assuming theme.padding(2) maps to p={2}
+				>
 					{filterProjects(searchValue).map((project, i) => (
 						<Box
 							key={i}
 							cursor="pointer"
 							_hover={{ background: '#efefef' }}
-							borderRadius={6}
+							borderRadius={6} // This was px={2} py={1} before, now it is a direct number, might need adjustment.
 							px={2}
 							py={1}
 							onClick={() => {
@@ -90,7 +89,7 @@ export const ProjectSearchBar = (): JSX.Element => {
 							<Text>{project.name}</Text>
 						</Box>
 					))}
-				</SearchResults>
+				</Box>
 			)}
 		</>
 	);

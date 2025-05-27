@@ -1,7 +1,6 @@
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
 import { Project } from '../../models/Project';
@@ -12,13 +11,6 @@ import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
-
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	padding: ${(props) => props.theme.padding(3)};
-	overflow-y: auto;
-`;
 
 export const Files = (): JSX.Element => {
 	const { data, isPending } = useProjectList();
@@ -97,9 +89,9 @@ export const Files = (): JSX.Element => {
 							<LoadingSpinner />
 						) : (
 							<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-								<Container>
+								<Box flex="1 0 auto" height="100%" p={3} overflowY="auto">
 									<Outlet />
-								</Container>
+								</Box>
 							</HStack>
 						)}
 					</VStack>

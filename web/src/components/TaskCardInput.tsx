@@ -1,23 +1,8 @@
-import { Button, Flex } from '@chakra-ui/react';
+import { Button, Flex, Textarea } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import { Task } from '../models/Task';
-
-const TaskInput = styled.textarea`
-	background: transparent;
-	border: none;
-	outline: none;
-	box-shadow: none;
-	padding: 0;
-	margin-bottom: ${(props) => props.theme.padding(2)};
-	word-wrap: break-word;
-	word-break: break-all;
-	width: 100%;
-	resize: none;
-	display: block;
-`;
 
 interface TaskCardInputProps {
 	task?: Task;
@@ -35,10 +20,23 @@ export const TaskCardInput = ({
 	onChange,
 	onSubmit
 }: TaskCardInputProps): JSX.Element => {
-	const textInputRef = useRef<HTMLTextAreaElement>();
+	const textInputRef = useRef<HTMLTextAreaElement | null>(null);
 	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
+
+	const onChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+		if (textInputRef.current) {
+			setTextAreaHeight('auto');
+			setParentHeight(`${textInputRef.current!.scrollHeight}px`);
+		}
+		setText(event.target.value);
+
+		if (onChange) {
+			onChange(event.target.value);
+		}
+	};
+
 	const {
 		register,
 		handleSubmit,
@@ -47,6 +45,11 @@ export const TaskCardInput = ({
 		defaultValues: {
 			subject: value
 		}
+	});
+
+	const { ref: registerRef, ...subjectRegister } = register('subject', {
+		required: true,
+		onChange: onChangeHandler
 	});
 
 	const submit = handleSubmit(async (values) => {
@@ -66,35 +69,41 @@ export const TaskCardInput = ({
 			setParentHeight(`${textInputRef.current!.scrollHeight}px`);
 			setTextAreaHeight(`${textInputRef.current!.scrollHeight}px`);
 		}
-	}, [text]);
+	}, [text, textInputRef.current]);
 
 	useEffect(() => {
 		if (textInputRef.current) {
 			textInputRef.current.focus();
 		}
-	}, []);
-
-	const onChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setTextAreaHeight('auto');
-		setParentHeight(`${textInputRef.current!.scrollHeight}px`);
-		setText(event.target.value);
-
-		if (onChange) {
-			onChange(event.target.value);
-		}
-	};
+	}, [textInputRef.current]);
 
 	return (
 		<form onSubmit={submit}>
 			{error && <div style={{ color: 'red' }}>{error}</div>}
 			<div style={{ minHeight: parentHeight }}>
 				<ErrorMessage errors={errors} name="subject" />
-				<TaskInput
+				<Textarea
+					{...subjectRegister}
+					ref={(e) => {
+						registerRef(e);
+						textInputRef.current = e;
+					}}
 					maxLength={599}
 					required={true}
 					placeholder={'Add task name'}
+					bg="transparent"
+					border="none"
+					outline="none"
+					_focus={{ boxShadow: 'none', border: 'none' }}
+					_hover={{ border: 'none' }}
+					boxShadow="none"
+					p={0}
+					mb={2}
+					wordBreak="break-all"
+					width="100%"
+					resize="none"
+					display="block"
 					style={{ height: textAreaHeight }}
-					{...register('subject', { required: true, onChange: onChangeHandler })}
 				/>
 			</div>
 			<Flex justifyContent={'end'}>

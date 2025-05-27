@@ -1,14 +1,12 @@
-import styled from 'styled-components';
+import { Box } from '@chakra-ui/react';
 import { Page } from '../components/Page';
-
-const OrganizeStyled = styled.div``;
 
 export const Organize = (): JSX.Element => {
 	return (
 		<Page title={'Organize'}>
-			<OrganizeStyled>
+			<Box>
 				<h1>Organize</h1>
-			</OrganizeStyled>
+			</Box>
 		</Page>
 	);
 };
