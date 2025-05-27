@@ -1,4 +1,4 @@
-import { Flex, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Text } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import Countdown from 'react-countdown';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { useCloseModal } from '../../../hooks/useCloseModal';
 import { Resource } from '../../../models/Resource';
 import { Task } from '../../../models/Task';
 import { useResourceHistory } from '../../../queries/useResourceHistory';
-import { BorderDiv } from '../../BorderDiv';
 import { ResourceTimeRenderer } from '../../Resources/ResourceTimeRenderer';
 import { ToolsIcon } from '../../icons/ToolsIcon';
 
@@ -31,7 +30,13 @@ export const ResourceOnTask = ({ resource }: ResourceOnTaskProps): JSX.Element |
 
 	return (
 		<Link to="/resources" onClick={() => closeModal()}>
-			<BorderDiv style={{ marginBottom: 16 }}>
+			<Box
+				borderWidth="1px"
+				borderStyle="solid"
+				borderColor="gray.200"
+				borderRadius="md"
+				style={{ marginBottom: 16 }}
+			>
 				<HStack width={'100%'} justify="space-between" align="center" py={2} px={4}>
 					<ToolsIcon />
 					<Text>{resource.name} is being used on this task</Text>
@@ -45,7 +50,7 @@ export const ResourceOnTask = ({ resource }: ResourceOnTaskProps): JSX.Element |
 						/>
 					</Flex>
 				</HStack>
-			</BorderDiv>
+			</Box>
 		</Link>
 	);
 };

@@ -24,7 +24,6 @@ export const Modal: FC<IModalContainerProps> = ({
 	title,
 	onClose,
 	children,
-	centerModal = false,
 	closeIcon = true,
 	maxWidth: propMaxWidth,
 	flexContainer

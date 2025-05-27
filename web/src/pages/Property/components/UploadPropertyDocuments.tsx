@@ -1,16 +1,15 @@
+import { Box, Progress, Text, VStack, useToast } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import { VStack, Text, useToast, Progress } from '@chakra-ui/react';
-import styled, { css } from 'styled-components';
+import { useDropzone } from 'react-dropzone';
 import { FormActions } from '../../../components/FormActions';
 import { Modal } from '../../../components/Modal';
-import { FileUploadType } from '../../../models/FileUploadType';
-import { useFileService } from '../../../hooks/useFileService';
-import { useAddPropertyDocument } from '../../../mutations/properties/useAddPropertyDocument';
-import { devError } from '../../../utils/ConsoleUtils';
-import { useDropzone } from 'react-dropzone';
 import { FilterIcon } from '../../../components/icons/FilterIcon';
+import { useFileService } from '../../../hooks/useFileService';
+import { FileUploadType } from '../../../models/FileUploadType';
 import { PropertyDocument } from '../../../models/Property';
+import { useAddPropertyDocument } from '../../../mutations/properties/useAddPropertyDocument';
 import { DocumentInput } from '../../../mutations/useAddDocument';
+import { devError } from '../../../utils/ConsoleUtils';
 
 interface UploadModalProps {
 	onClose: () => void;
@@ -18,16 +17,10 @@ interface UploadModalProps {
 	propertyId: number;
 }
 
-const UploadModalStyled = styled.div`
-	@media screen and (max-width: 500px) {
-		width: 500px;
-	}
-`;
-
 export const UploadPropertyDocuments = ({ onClose, propertyId }: UploadModalProps): JSX.Element => {
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for property'}>
-			<UploadModalStyled>
+			<Box w={{ base: '100%', sm: '500px' }}>
 				<Text marginBottom={4}>
 					You can upload any file you file necessary, this file will be linked to this
 					property.
@@ -50,30 +43,10 @@ export const UploadPropertyDocuments = ({ onClose, propertyId }: UploadModalProp
 						}}
 					/>
 				</VStack>
-			</UploadModalStyled>
+			</Box>
 		</Modal>
 	);
 };
-
-const DropZoneContainer = styled.div<{
-	isDraggingOver: boolean;
-}>`
-	padding: ${(props) => props.theme.padding(6, 0)};
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	flex: 1;
-	background: #f6f6f6;
-	border-radius: ${(props) => props.theme.borderRadius};
-	cursor: pointer;
-
-	${(props) =>
-		props.isDraggingOver &&
-		css`
-			background: ${props.theme.colors.green};
-		`};
-`;
 
 interface DropZoneProps {
 	propertyId: number;
@@ -199,7 +172,19 @@ const DropZone = ({
 			{children({ isDragActive, isUploading, open })}
 		</div>
 	) : (
-		<DropZoneContainer {...getRootProps()} isDraggingOver={isDragActive}>
+		<Box
+			{...getRootProps()}
+			py={6}
+			px={0}
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			flexDirection="column"
+			flex={1}
+			bg={isDragActive ? 'green.500' : '#f6f6f6'}
+			borderRadius="md"
+			cursor="pointer"
+		>
 			<input {...getInputProps()} />
 			<FilterIcon size={64} color={'#838894'} />
 			{isUploading ? (
@@ -216,6 +201,6 @@ const DropZone = ({
 					</Text>
 				</div>
 			)}
-		</DropZoneContainer>
+		</Box>
 	);
 };
