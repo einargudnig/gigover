@@ -1,7 +1,6 @@
 import { Button, Flex, HStack, Heading } from '@chakra-ui/react';
 import { useContext, useMemo } from 'react';
 import { CellProps, Column } from 'react-table';
-import styled from 'styled-components';
 import { CardBase } from '../../components/CardBase';
 import { Page } from '../../components/Page';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
@@ -16,13 +15,6 @@ import { useResources } from '../../queries/useResources';
 import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
-
-const ResourceData = styled(CardBase)<{ color?: string }>`
-	padding: 12px 24px;
-	margin-right: 16px;
-	color: ${(props) => props.color || 'black'};
-	font-weight: bold;
-`;
 
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
@@ -134,15 +126,17 @@ export const Resources = (): JSX.Element => {
 		>
 			<DisabledPage>
 				<Flex mb={4}>
-					<ResourceData>Total resources: {data?.length}</ResourceData>
-					<ResourceData color={'#1FDF83'}>
+					<CardBase px="24px" py="12px" mr="16px" fontWeight="bold" color="black">
+						Total resources: {data?.length}
+					</CardBase>
+					<CardBase px="24px" py="12px" mr="16px" fontWeight="bold" color="#1FDF83">
 						Available:{' '}
 						{data?.filter((r) => r.status === ResourceStatus.Available)?.length ?? 0}
-					</ResourceData>
-					<ResourceData color={'#EA4335'}>
+					</CardBase>
+					<CardBase px="24px" py="12px" mr="16px" fontWeight="bold" color="#EA4335">
 						In use:{' '}
 						{data?.filter((r) => r.status === ResourceStatus.InUse)?.length ?? 0}
-					</ResourceData>
+					</CardBase>
 				</Flex>
 
 				<CardBase>
