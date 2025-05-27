@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Table as ChakraTable, Flex, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Table as ChakraTable, Flex, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import {
 	CellPropGetter,
 	Column,
@@ -10,7 +10,6 @@ import {
 	useSortBy,
 	useTable
 } from 'react-table';
-import styled from 'styled-components';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -27,27 +26,6 @@ interface TableProps<T extends object = {}, C extends object = {}> {
 }
 
 const defaultPropGetter = () => ({});
-
-const StyledTh = styled.th`
-	border-bottom: 1px solid #e5e5e5 !important;
-	color: black !important;
-
-	&:first-child {
-		position: sticky;
-		left: 0;
-		background: #fbfbfb;
-		z-index: 2;
-	}
-`;
-
-const StyledTd = styled.td`
-	&:first-child {
-		position: sticky;
-		left: 0;
-		background: #fbfbfb;
-		z-index: 2;
-	}
-`;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export function Table<T extends object = {}, C extends object = {}>({
@@ -76,7 +54,7 @@ export function Table<T extends object = {}, C extends object = {}>({
 
 	// Render the UI for your table
 	return (
-		<div style={{ maxWidth: '100%', overflowX: 'auto' }}>
+		<Box maxWidth="100%" overflowX="auto">
 			<ChakraTable variant={variant} colorScheme={colorScheme} {...getTableProps()}>
 				<Thead>
 					{headerGroups.map((headerGroup, rowIndex) => (
@@ -84,7 +62,16 @@ export function Table<T extends object = {}, C extends object = {}>({
 							{headerGroup.headers.map((column, colIndex) => {
 								return (
 									<Th
-										as={StyledTh}
+										borderBottom="1px solid #e5e5e5 !important"
+										color="black !important"
+										sx={{
+											'&:first-child': {
+												position: 'sticky',
+												left: 0,
+												background: '#fbfbfb',
+												zIndex: 2
+											}
+										}}
 										{...column.getHeaderProps([
 											getColumnProps(column),
 											getHeaderProps(column)
@@ -93,18 +80,18 @@ export function Table<T extends object = {}, C extends object = {}>({
 										key={colIndex}
 									>
 										<Flex justify="space-between" align="center">
-											<div>
+											<Box>
 												{column.render('Header')}
-												<span>
+												<Text as="span">
 													{column.isSorted
 														? column.isSortedDesc
 															? ' 🔽'
 															: ' 🔼'
 														: ''}
-												</span>
-											</div>
+												</Text>
+											</Box>
 											{column.canSort && (
-												<div>
+												<Box>
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														width={22}
@@ -124,7 +111,7 @@ export function Table<T extends object = {}, C extends object = {}>({
 															fill="currentColor"
 														/>
 													</svg>
-												</div>
+												</Box>
 											)}
 										</Flex>
 									</Th>
@@ -141,7 +128,16 @@ export function Table<T extends object = {}, C extends object = {}>({
 								{row.cells.map((cell, cellI) => {
 									return (
 										<Td
-											as={StyledTd}
+											borderBottom="1px solid #e5e5e5 !important"
+											color="black !important"
+											sx={{
+												'&:first-child': {
+													position: 'sticky',
+													left: 0,
+													background: '#fbfbfb',
+													zIndex: 2
+												}
+											}}
 											{...cell.getCellProps([
 												getColumnProps(cell.column),
 												getCellProps(cell)
@@ -157,6 +153,6 @@ export function Table<T extends object = {}, C extends object = {}>({
 					})}
 				</Tbody>
 			</ChakraTable>
-		</div>
+		</Box>
 	);
 }

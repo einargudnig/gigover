@@ -1,34 +1,13 @@
+import { Box, Progress, Text, useTheme } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import styled, { css } from 'styled-components';
-import { FilterIcon } from './icons/FilterIcon';
-import { Progress, Text } from '@chakra-ui/react';
-import { FileUploadType } from '../models/FileUploadType';
-import { useFileService } from '../hooks/useFileService';
 import { useDropzone } from 'react-dropzone';
-import { useAddDocument } from '../mutations/useAddDocument';
-import { devError } from '../utils/ConsoleUtils';
+import { useFileService } from '../hooks/useFileService';
+import { FileUploadType } from '../models/FileUploadType';
 import { ProjectImage } from '../models/ProjectImage';
+import { useAddDocument } from '../mutations/useAddDocument';
 import { useAddFolder } from '../queries/useAddFolder';
-
-const DropZoneContainer = styled.div<{
-	isDraggingOver: boolean;
-}>`
-	padding: ${(props) => props.theme.padding(6, 0)};
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	flex: 1;
-	background: #f6f6f6;
-	border-radius: ${(props) => props.theme.borderRadius};
-	cursor: pointer;
-
-	${(props) =>
-		props.isDraggingOver &&
-		css`
-			background: ${props.theme.colors.green};
-		`};
-`;
+import { devError } from '../utils/ConsoleUtils';
+import { FilterIcon } from './icons/FilterIcon';
 
 interface DropZoneProps {
 	propertyId?: number;
@@ -64,6 +43,7 @@ export const DropZone = ({
 	const { fileService } = useFileService();
 	const folder = useAddFolder();
 	const mutate = useAddDocument();
+	const theme = useTheme();
 
 	const createFolder = async (folderName: string) => {
 		try {
@@ -149,39 +129,51 @@ export const DropZone = ({
 	const [isUploading, setIsUploading] = useState(false);
 
 	return children ? (
-		<div
+		<Box
 			{...getRootProps({
 				onClick: (event) => event.stopPropagation()
 			})}
-			style={{ width: '100%' }}
+			width="100%"
 		>
 			<input {...getInputProps()} />
 			{isUploading ? (
-				<div style={{ width: '100%', textAlign: 'center', marginBottom: '6px' }}>
+				<Box width="100%" textAlign="center" marginBottom="6px">
 					<Text>Uploading ({fileUploadProgress}%)</Text>
 					<Progress colorScheme="green" size="sm" value={fileUploadProgress || 0} />
-				</div>
+				</Box>
 			) : null}
 			{children({ isDragActive, isUploading, open })}
-		</div>
+		</Box>
 	) : (
-		<DropZoneContainer {...getRootProps()} isDraggingOver={isDragActive}>
+		<Box
+			{...getRootProps()}
+			paddingY={6}
+			paddingX={0}
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			flexDirection="column"
+			flex={1}
+			background={isDragActive ? theme.colors.green[500] : '#f6f6f6'} // Use theme color
+			borderRadius="md" // Or your theme's border radius
+			cursor="pointer"
+		>
 			<input {...getInputProps()} />
 			<FilterIcon size={64} color={'#838894'} />
 			{isUploading ? (
-				<div style={{ width: '100%', textAlign: 'center' }}>
+				<Box width="100%" textAlign="center">
 					<Text>Uploading ({fileUploadProgress}%)</Text>
 					<Progress colorScheme="green" size="sm" value={fileUploadProgress || 0} />
-				</div>
+				</Box>
 			) : (
-				<div>
+				<Box>
 					<Text>
 						{isDragActive
 							? 'Drop files here'
 							: 'Drag and drop files here or click to select a file'}
 					</Text>
-				</div>
+				</Box>
 			)}
-		</DropZoneContainer>
+		</Box>
 	);
 };
