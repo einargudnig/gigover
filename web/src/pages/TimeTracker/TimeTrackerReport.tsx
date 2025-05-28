@@ -1,5 +1,5 @@
 import { Box, Button, Flex } from '@chakra-ui/react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useState } from 'react';
 import Timer from 'react-compound-timer';
 import { Theme } from '../../Theme';
@@ -16,7 +16,7 @@ import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { useDeleteTimeRecord } from '../../mutations/useDeleteTimeRecord';
 import { useReportToCSV } from '../../mutations/useReportToCSV';
 import { Timesheet } from '../../queries/useTrackerReport';
-import { MomentDateFormat } from '../../utils/MomentDateFormat';
+import { APP_DATE_FORMAT } from '../../utils/AppDateFormat';
 import { showTimeSheetRange } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { useTimeTrackerReport } from './useTimeTrackerReport';
@@ -32,13 +32,13 @@ export const TimeTrackerReport = ({
 	const [selectedUser, setSelectedUser] = useState<string | undefined>();
 	const [selectedProject, setSelectedProject] = useState<number | undefined>();
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
-	const [startDate, setStartDate] = useState<moment.Moment | null>(moment().subtract(14, 'days'));
-	const [endDate, setEndDate] = useState<moment.Moment | null>(moment());
+	const [startDate, setStartDate] = useState<DateTime | null>(DateTime.now().minus({ days: 14 }));
+	const [endDate, setEndDate] = useState<DateTime | null>(DateTime.now());
 	const reportToCSV = useReportToCSV();
 	const deleteTimeRecord = useDeleteTimeRecord();
 	const { projectList, results, isLoading, totalTracked, users } = useTimeTrackerReport(
-		startDate || moment().subtract(14, 'days'),
-		endDate || moment(),
+		startDate || DateTime.now().minus({ days: 14 }),
+		endDate || DateTime.now(),
 		refetchValue,
 		selectedUser,
 		selectedProject,
@@ -63,12 +63,12 @@ export const TimeTrackerReport = ({
 
 			if (startDate) {
 				parameterString.push(
-					`from=${startDate.startOf('day').format('YYYY-MM-DD HH:mm:ss')}`
+					`from=${startDate.startOf('day').toFormat('yyyy-MM-dd HH:mm:ss')}`
 				);
 			}
 
 			if (endDate) {
-				parameterString.push(`to=${endDate.endOf('day').format('YYYY-MM-DD HH:mm:ss')}`);
+				parameterString.push(`to=${endDate.endOf('day').toFormat('yyyy-MM-dd HH:mm:ss')}`);
 			}
 
 			await reportToCSV.mutateAsync({
@@ -100,17 +100,17 @@ export const TimeTrackerReport = ({
 			<Flex alignItems="center" justifyContent="space-between" my={Theme.padding(2)}>
 				<Flex flex={1} mr={Theme.padding(2)} alignItems="center">
 					<DatePicker
-						startDate={startDate ? startDate.toDate() : null}
-						endDate={endDate ? endDate.toDate() : null}
+						startDate={startDate ? startDate.toJSDate() : null}
+						endDate={endDate ? endDate.toJSDate() : null}
 						onChange={(update: [Date | null, Date | null] | Date | null) => {
 							if (Array.isArray(update)) {
 								const [start, end] = update;
-								setStartDate(start ? moment(start) : null);
-								setEndDate(end ? moment(end) : null);
+								setStartDate(start ? DateTime.fromJSDate(start) : null);
+								setEndDate(end ? DateTime.fromJSDate(end) : null);
 							}
 						}}
 						selectsRange
-						dateFormat={MomentDateFormat}
+						dateFormat={APP_DATE_FORMAT}
 						isClearable
 					/>
 					<Box style={{ width: 8 }} />
@@ -298,9 +298,9 @@ export const TimeTrackerReport = ({
 				) : (
 					<EmptyState
 						title={'No report available'}
-						text={`We could not find any timesheets between ${startDate?.format(
+						text={`We could not find any timesheets between ${startDate?.toFormat(
 							'D MMM YYYY'
-						)} and ${endDate?.format('D MMM YYYY')}`}
+						)} and ${endDate?.toFormat('D MMM YYYY')}`}
 					/>
 				)}
 			</Box>

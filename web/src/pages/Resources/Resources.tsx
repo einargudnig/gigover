@@ -1,6 +1,4 @@
 import { Button, Flex, HStack, Heading } from '@chakra-ui/react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// import { CellContext, ColumnDef } from '@tanstack/react-table'; // ColumnDef might be used from here, CellContext not
 import { useContext, useMemo } from 'react';
 import { CardBase } from '../../components/CardBase';
 import { Page } from '../../components/Page';
@@ -58,14 +56,6 @@ export const Resources = (): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
-			// {
-			// 	header: 'Last update',
-			// 	accessorKey: 'year',
-			// 	// eslint-disable-next-line react/display-name
-			// 	cell: ({ value }: CellContext<Resource, string>): JSX.Element => {
-			// 		return <Text fontStyle={'italic'}>{moment(getValue()).format('YYYY-MM-DD')}</Text>;
-			// 	}
-			// },
 			{
 				accessorKey: 'status',
 				header: 'Status',

@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Modal } from '../../../components/Modal';
-import { useTimeTrackerReport } from '../useTimeTrackerReport';
-import { Moment } from 'moment';
+import { Button, Flex } from '@chakra-ui/react';
+import { DateTime } from 'luxon';
+import { useState } from 'react';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { Modal } from '../../../components/Modal';
 import { TrackerSelect } from '../../../components/TrackerSelect';
 import { Project, WorkerItem } from '../../../models/Project';
 import { Task } from '../../../models/Task';
-import { Button, Flex } from '@chakra-ui/react';
 import { displayTaskTitle } from '../../../utils/TaskUtils';
+import { useTimeTrackerReport } from '../useTimeTrackerReport';
 
 export interface CsvReportModalProps {
-	startDate: Moment;
-	endDate: Moment;
+	startDate: DateTime;
+	endDate: DateTime;
 	onClose: () => void;
 }
 

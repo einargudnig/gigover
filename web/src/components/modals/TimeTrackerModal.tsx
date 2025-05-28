@@ -10,8 +10,8 @@ import { Task } from '../../models/Task';
 import { useProjectList } from '../../queries/useProjectList';
 import { useTrackerStart } from '../../queries/useTrackerStart';
 import { useWorkAdd } from '../../queries/useWorkAdd';
+import { APP_DATE_FORMAT } from '../../utils/AppDateFormat';
 import { range } from '../../utils/ArrayUtils';
-import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { addZeroBefore } from '../../utils/NumberUtils';
 import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
@@ -216,7 +216,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 												onChange={(date: Date | null) =>
 													setStartTime(date ?? startTime)
 												}
-												dateFormat={MomentDateFormat}
+												dateFormat={APP_DATE_FORMAT}
 												showTimeSelect
 												timeIntervals={15}
 												timeCaption="Time"
@@ -268,7 +268,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 												onChange={(date: Date | null) =>
 													setEndTime(date ?? endTime)
 												}
-												dateFormat={MomentDateFormat}
+												dateFormat={APP_DATE_FORMAT}
 												showTimeSelect
 												timeIntervals={15}
 												timeCaption="Time"

@@ -1,7 +1,7 @@
+import { DateTime, Duration, DurationLikeObject } from 'luxon';
 import { Dispatch, useReducer } from 'react';
-import { Project } from '../../../models/Project';
-import moment, { DurationInputArg2 } from 'moment';
 import { Milestone } from '../../../models/Milestone';
+import { Project } from '../../../models/Project';
 import { TaskItem } from '../../../models/Task';
 
 export const GRID_SIDEBAR_WIDTH = '300px';
@@ -58,9 +58,16 @@ const reducer = (state: GantChartState, action: GantChartReducerAction) => {
 		case 'IncreaseOffset': {
 			const addition = action.type === 'DecreaseOffset' ? -1 : 1;
 			const newOffset = state.dateOffset + addition;
-			const newDate = moment(state.initialDate)
-				.add(newOffset * state.segments, state.type.toLowerCase() as DurationInputArg2)
-				.toDate();
+			const lowerCaseType = state.type.toLowerCase();
+			// Ensure the unit is plural (e.g., 'days', 'weeks', 'months')
+			const durationUnit = lowerCaseType.endsWith('s') ? lowerCaseType : `${lowerCaseType}s`;
+			const newDate = DateTime.fromJSDate(state.initialDate)
+				.plus(
+					Duration.fromObject({
+						[durationUnit]: newOffset * state.segments
+					} as DurationLikeObject)
+				)
+				.toJSDate();
 
 			return {
 				...state,

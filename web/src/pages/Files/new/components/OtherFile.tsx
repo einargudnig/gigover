@@ -1,5 +1,5 @@
 import { HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { CardBaseLink } from '../../../../components/CardBase';
@@ -85,7 +85,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					<Text m={0}>File from file storage</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
-				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+				<Text m={0}>{DateTime.fromMillis(file.created).toFormat(GANT_CHART_FORMAT)}</Text>
 				<VStack justify={'center'} align={'center'}>
 					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 						<IconButton

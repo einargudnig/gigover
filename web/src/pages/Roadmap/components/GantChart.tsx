@@ -1,4 +1,5 @@
 import { Box, Grid, GridItem, IconButton, Text } from '@chakra-ui/react';
+import { DateTime } from 'luxon';
 import { Dispatch, SetStateAction, useContext, useMemo } from 'react';
 import { Chevron } from '../../../components/icons/Chevron';
 import { IModalContext, ModalContext } from '../../../context/ModalContext';
@@ -217,8 +218,8 @@ export const GantChart = (): JSX.Element => {
 					position="relative"
 				>
 					{columns.map((s, index) => {
-						const isToday = Array.from(dates.dates.values())[index].moment.isSame(
-							new Date(),
+						const isToday = Array.from(dates.dates.values())[index].dateTime.hasSame(
+							DateTime.now(),
 							'day'
 						);
 						return (

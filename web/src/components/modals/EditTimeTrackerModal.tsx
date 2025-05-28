@@ -7,8 +7,8 @@ import { Project } from '../../models/Project';
 import { Task } from '../../models/Task';
 import { useModifyTimeRecord } from '../../mutations/useModifyTimeRecord';
 import { useProjectList } from '../../queries/useProjectList';
+import { APP_DATE_FORMAT } from '../../utils/AppDateFormat';
 import { range } from '../../utils/ArrayUtils';
-import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { addZeroBefore } from '../../utils/NumberUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { FormActions } from '../FormActions';
@@ -145,7 +145,7 @@ export const EditTimeTrackerModal = ({
 						<DatePicker
 							selected={startTime}
 							onChange={(date: Date | null) => setStartTime(date ?? startTime)}
-							dateFormat={MomentDateFormat}
+							dateFormat={APP_DATE_FORMAT}
 							showTimeSelect
 							timeIntervals={15}
 							timeCaption="Time"
@@ -192,7 +192,7 @@ export const EditTimeTrackerModal = ({
 						<DatePicker
 							selected={endTime}
 							onChange={(date: Date | null) => setEndTime(date ?? endTime)}
-							dateFormat={MomentDateFormat}
+							dateFormat={APP_DATE_FORMAT}
 							showTimeSelect
 							timeIntervals={15}
 							timeCaption="Time"

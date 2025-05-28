@@ -1,6 +1,6 @@
+import { DateTime } from 'luxon';
 import { DateSegment, GANT_CHART_FORMAT, GantChartDates } from '../pages/Roadmap/GantChartDates';
 import { CalendarType } from '../pages/Roadmap/hooks/useGantChart';
-import moment from 'moment';
 
 type NullableTimestamp = number | null;
 
@@ -82,8 +82,11 @@ export class GantChartItem {
 		start: Date,
 		end: Date
 	): [number, number] | false {
-		const startIndex = dates.get(moment(this.startDate).format(GANT_CHART_FORMAT))?.column || 0;
-		const endIndex = dates.get(moment(this.endDate).format(GANT_CHART_FORMAT))?.column || 0;
+		const startIndex =
+			dates.get(DateTime.fromMillis(this.startDate!).toFormat(GANT_CHART_FORMAT))?.column ||
+			0;
+		const endIndex =
+			dates.get(DateTime.fromMillis(this.endDate!).toFormat(GANT_CHART_FORMAT))?.column || 0;
 
 		if (this.isInDateRange(start, end)) {
 			return [startIndex, endIndex];
@@ -97,14 +100,14 @@ export class GantChartItem {
 	}
 
 	getMonColPositions(gcd: GantChartDates): [number, number] | false {
-		const startIndex = gcd.monthColumn(moment(this.startDate));
-		const endIndex = gcd.monthColumn(moment(this.endDate));
+		const startIndex = gcd.monthColumn(DateTime.fromMillis(this.startDate!));
+		const endIndex = gcd.monthColumn(DateTime.fromMillis(this.endDate!));
 		return this.getWeekAndColPositions(gcd.dates.size, startIndex, endIndex);
 	}
 
 	getWeekColPositions(gcd: GantChartDates): [number, number] | false {
-		const startIndex = gcd.weekColumn(moment(this.startDate));
-		const endIndex = gcd.weekColumn(moment(this.endDate));
+		const startIndex = gcd.weekColumn(DateTime.fromMillis(this.startDate!));
+		const endIndex = gcd.weekColumn(DateTime.fromMillis(this.endDate!));
 		return this.getWeekAndColPositions(gcd.dates.size, startIndex, endIndex);
 	}
 

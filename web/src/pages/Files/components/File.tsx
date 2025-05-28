@@ -1,5 +1,5 @@
 import { HStack, Heading, Text, VStack } from '@chakra-ui/react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { CardBaseLink } from '../../../components/CardBase';
 import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
 import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
@@ -72,7 +72,9 @@ export const File = ({ file }: FileProps): JSX.Element => {
 					<Text m={0}>Project file</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes)}</Text>
-				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+				<Text m={0}>
+					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
+				</Text>
 			</HStack>
 		</CardBaseLink>
 	);
@@ -111,7 +113,9 @@ export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 					<Text m={0}>Project file</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
-				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+				<Text m={0}>
+					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
+				</Text>
 			</HStack>
 		</CardBaseLink>
 	);

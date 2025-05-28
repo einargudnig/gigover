@@ -2687,18 +2687,6 @@
   dependencies:
     "@tanstack/query-core" "5.77.2"
 
-"@tanstack/react-table@^8.21.3":
-  version "8.21.3"
-  resolved "https://registry.npmjs.org/@tanstack/react-table/-/react-table-8.21.3.tgz"
-  integrity sha512-5nNMTSETP4ykGegmVkhjcS8tTLW6Vl4axfEGQN3v0zdHYbK4UfoqfPChclTrJ4EoK9QynqAu9oUf8VEmrpZ5Ww==
-  dependencies:
-    "@tanstack/table-core" "8.21.3"
-
-"@tanstack/table-core@8.21.3":
-  version "8.21.3"
-  resolved "https://registry.npmjs.org/@tanstack/table-core/-/table-core-8.21.3.tgz"
-  integrity sha512-ldZXEhOBb8Is7xLs01fR3YEc3DERiz5silj8tnGkFZytt1abEvl/GhUmCE0PMLaMPTa3Jk4HbKmRlHmu+gCftg==
-
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
@@ -2901,6 +2889,11 @@
   version "4.17.15"
   resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.17.15.tgz"
   integrity sha512-w/P33JFeySuhN6JLkysYUK2gEmy9kHHFN7E8ro0tkfmlDOgxBDzWEZ/J8cWA+fHqFevpswDTFZnDx+R9lbL6xw==
+
+"@types/luxon@^3.6.2":
+  version "3.6.2"
+  resolved "https://registry.npmjs.org/@types/luxon/-/luxon-3.6.2.tgz"
+  integrity sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==
 
 "@types/mime@*":
   version "3.0.1"
@@ -8438,6 +8431,11 @@ lru-cache@^6.0.0:
 lru-cache@^7.4.4, lru-cache@^7.5.1, lru-cache@^7.7.1:
   version "7.13.2"
 
+luxon@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.npmjs.org/luxon/-/luxon-3.6.1.tgz"
+  integrity sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==
+
 magic-string@^0.25.0, magic-string@^0.25.7:
   version "0.25.9"
   resolved "https://registry.npmjs.org/magic-string/-/magic-string-0.25.9.tgz"
@@ -8710,7 +8708,7 @@ mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.6"
 
-moment@*, moment@^2.26.0, moment@^2.29.1, moment@>=1.6.0:
+moment@*, moment@^2.26.0, moment@>=1.6.0:
   version "2.29.4"
   resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==

@@ -12,7 +12,7 @@ import {
 	TagLabel,
 	TagLeftIcon
 } from '@chakra-ui/react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { useContext } from 'react';
 import { ProjectTimeStatus } from '../../../components/ProjectTimeStatus';
 import { Chevron } from '../../../components/icons/Chevron';
@@ -45,7 +45,7 @@ export const RoadmapHeader = (): JSX.Element => {
 			<Flex flex="1 1 0px" justifyContent="center">
 				<Center>
 					<Heading as={'h4'} size={'md'}>
-						{moment(state.date).format('MMMM yyyy')}
+						{DateTime.fromJSDate(state.date).toFormat('MMMM yyyy')}
 					</Heading>
 				</Center>
 			</Flex>

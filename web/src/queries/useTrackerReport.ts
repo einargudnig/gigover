@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { ApiService } from '../services/ApiService';
 
 export interface Timesheet {
@@ -42,14 +42,14 @@ export const useTrackerReport = () => {
 			const fromTime =
 				variables && variables.from
 					? variables.from
-					: moment().subtract(14, 'days').valueOf();
-			const toTime = variables && variables.to ? variables.to : moment().valueOf();
+					: DateTime.now().minus({ days: 14 }).toMillis();
+			const toTime = variables && variables.to ? variables.to : DateTime.now().toMillis();
 
-			const startTime = moment(fromTime);
-			const endTime = moment(toTime);
+			const startTime = DateTime.fromMillis(fromTime);
+			const endTime = DateTime.fromMillis(toTime);
 
-			const startOfDay = moment(startTime).startOf('day');
-			const endOfDay = moment(endTime).endOf('day');
+			const startOfDay = startTime.startOf('day');
+			const endOfDay = endTime.endOf('day');
 
 			const payload: TrackerReportMutationVariables = {};
 			if (variables?.projectId) {
@@ -58,8 +58,8 @@ export const useTrackerReport = () => {
 			if (variables?.taskId) {
 				payload.taskId = variables.taskId;
 			}
-			payload.from = startOfDay.toDate().getTime();
-			payload.to = endOfDay.toDate().getTime();
+			payload.from = startOfDay.toMillis();
+			payload.to = endOfDay.toMillis();
 
 			return axios.post(ApiService.timerReport, payload, { withCredentials: true });
 		}

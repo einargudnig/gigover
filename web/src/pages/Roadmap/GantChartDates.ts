@@ -1,10 +1,10 @@
+import { DateTime, Duration, DurationLikeObject } from 'luxon';
 import { CalendarType } from './hooks/useGantChart';
-import moment, { DurationInputArg2 } from 'moment';
 
-export const GANT_CHART_FORMAT = 'YYYY-MM-DD';
+export const GANT_CHART_FORMAT = 'yyyy-MM-dd';
 
 export interface DateSegment {
-	moment: moment.Moment;
+	dateTime: DateTime;
 	title: string;
 	subtitle: string;
 	column: number;
@@ -13,8 +13,8 @@ export interface DateSegment {
 export class GantChartDates {
 	private _startDate: Date = new Date();
 	private _endDate: Date = new Date();
-	private _startDateMoment?: moment.Moment;
-	private _endDateMoment?: moment.Moment;
+	private _startDateTime?: DateTime;
+	private _endDateTime?: DateTime;
 
 	segments: number;
 	type: CalendarType;
@@ -29,32 +29,32 @@ export class GantChartDates {
 		this.generateDates();
 	}
 
-	getTitle = (m: moment.Moment) => {
+	getTitle = (dt: DateTime) => {
 		switch (this.type) {
 			case 'Days': {
-				return m.format('D');
+				return dt.toFormat('d');
 			}
 			case 'Weeks': {
-				return m.format('W');
+				return dt.toFormat('W');
 			}
 			case 'Months': {
-				return m.format('MMM');
+				return dt.toFormat('MMM');
 			}
 			default:
 				throw new Error(`Invalid type '${this.type}' in useGantChart.getTitle`);
 		}
 	};
 
-	getSubtitle = (m: moment.Moment) => {
+	getSubtitle = (dt: DateTime) => {
 		switch (this.type) {
 			case 'Days': {
-				return m.format('ddd');
+				return dt.toFormat('ccc');
 			}
 			case 'Weeks': {
-				return m.format('MMM');
+				return dt.toFormat('MMM');
 			}
 			case 'Months': {
-				return m.format('YYYY');
+				return dt.toFormat('yyyy');
 			}
 			default:
 				throw new Error(`Invalid type '${this.type}' in useGantChart.getTitle`);
@@ -63,28 +63,39 @@ export class GantChartDates {
 
 	generateDates() {
 		const mid = Math.ceil(this.segments / 2);
-		const durationAddition = this.type as DurationInputArg2;
-		const firstDate = moment(this.initDate).add(-(this.segments - mid), durationAddition);
+		const durationAddition: DurationLikeObject = {};
+		if (this.type === 'Days') {
+			durationAddition.days = 1;
+		}
+		if (this.type === 'Weeks') {
+			durationAddition.weeks = 1;
+		}
+		if (this.type === 'Months') {
+			durationAddition.months = 1;
+		}
+
+		const firstDate = DateTime.fromJSDate(this.initDate).minus(
+			Duration.fromObject(durationAddition).mapUnits((v) => v * (this.segments - mid))
+		);
 
 		// Set start date
-		this._startDateMoment = firstDate;
-		this._startDate = firstDate.toDate();
+		this._startDateTime = firstDate;
+		this._startDate = firstDate.toJSDate();
 
 		for (let i = 0; i < this.segments; i++) {
-			// Clone the firstDate by wrapping moment so it won't add to it.
-			const m = moment(firstDate).add(i, durationAddition);
+			const dt = firstDate.plus(Duration.fromObject(durationAddition).mapUnits((v) => v * i));
 
-			this.dates.set(m.format(GANT_CHART_FORMAT), {
-				moment: m,
-				title: this.getTitle(m),
-				subtitle: this.getSubtitle(m),
+			this.dates.set(dt.toFormat(GANT_CHART_FORMAT), {
+				dateTime: dt,
+				title: this.getTitle(dt),
+				subtitle: this.getSubtitle(dt),
 				column: i + 1
 			});
 
 			if (i + 1 === this.segments) {
 				// Set end date
-				this._endDateMoment = m;
-				this._endDate = m.toDate();
+				this._endDateTime = dt;
+				this._endDate = dt.toJSDate();
 			}
 		}
 	}
@@ -97,10 +108,10 @@ export class GantChartDates {
 		return this._endDate;
 	}
 
-	weekColumn(date: moment.Moment): number {
+	weekColumn(date: DateTime): number {
 		let col = 0;
 		this.dates.forEach((value) => {
-			if (date.isSame(value.moment, 'week')) {
+			if (date.hasSame(value.dateTime, 'week')) {
 				col = value.column;
 				return;
 			}
@@ -109,12 +120,12 @@ export class GantChartDates {
 		return col;
 	}
 
-	monthColumn(date: moment.Moment): number {
+	monthColumn(date: DateTime): number {
 		let col = 0;
 		this.dates.forEach((value) => {
-			if (date.isSame(value.moment, 'month')) {
+			if (date.hasSame(value.dateTime, 'month')) {
 				// eslint-disable-next-line no-console
-				console.log('Date', date, 'is in same month as ', value.moment);
+				console.log('Date', date, 'is in same month as ', value.dateTime);
 				col = value.column;
 				return;
 			}

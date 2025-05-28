@@ -29,7 +29,7 @@ import { DownloadIcon } from '../icons/DownloadIcon';
 import { ImportantIcon } from '../icons/ImportantIcon';
 import { TrashIcon } from '../icons/TrashIcon';
 // import { devInfo } from '../../utils/ConsoleUtils';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { useNavigate, useParams } from 'react-router-dom';
 import ScrollIntoView from 'react-scroll-into-view';
 import { ModalContext } from '../../context/ModalContext';
@@ -313,7 +313,9 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 							</HStack>
 							<HStack justify={'space-between'} align={'center'}>
 								<Heading size={'md'}>Created</Heading>
-								<Text>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+								<Text>
+									{DateTime.fromMillis(file.created).toFormat(GANT_CHART_FORMAT)}
+								</Text>
 							</HStack>
 							<div style={{ height: 2 }} />
 						</VStack>
