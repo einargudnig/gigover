@@ -33,7 +33,6 @@
 		"react-dates": "^21.8.0",
 		"react-dom": "^18.2.0",
 		"react-dropzone": "^11.3.2",
-		"react-google-maps": "^9.4.5",
 		"react-hook-form": "7.43.9",
 		"react-image-annotation": "^0.9.10",
 		"react-medium-image-zoom": "^4.3.5",
