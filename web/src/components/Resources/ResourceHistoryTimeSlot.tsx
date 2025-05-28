@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { format } from 'date-fns';
+import { DateTime } from 'luxon';
 import Countdown from 'react-countdown';
 import { Resource } from '../../models/Resource';
 import { ResourceHistoryItem } from '../../models/ResourceHistoryItem';
@@ -62,7 +62,7 @@ export const ResourceHistoryTimeSlot = ({
 							{isHold ? 'Holding' : 'Releasing'} resource [{resource.name}]
 						</p>
 						<Text fontWeight={'bold'} color={'#000'}>
-							{format(dateInUse, 'HH:mm')}
+							{DateTime.fromJSDate(dateInUse).toFormat('HH:mm')}
 						</Text>
 					</Flex>
 					<Flex justify={'space-between'} align={'center'}>
@@ -70,7 +70,7 @@ export const ResourceHistoryTimeSlot = ({
 							<LocationPinIcon /> <p style={{ margin: 0 }}>View location</p>
 						</Flex>
 						<Text fontWeight={'bold'} color={'#000'}>
-							{format(dateInUse, 'dd. MMM yyyy')}
+							{DateTime.fromJSDate(dateInUse).toFormat('dd. MMM yyyy')}
 						</Text>
 					</Flex>
 				</>

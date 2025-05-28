@@ -4,7 +4,6 @@ import 'core-js/stable';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import * as ReactDOMClient from 'react-dom/client';
-import 'react-tippy/dist/tippy.css';
 import { AppPreloader } from './App';
 import ErrorBoundary from './ErrorBoundary';
 import { ChakraThemeColors } from './Theme';

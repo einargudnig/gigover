@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { DateTime } from 'luxon';
 
 export const SubstringText = (text: string, maxLength: number) => {
 	const addition = '..';
@@ -10,10 +10,13 @@ export const SubstringText = (text: string, maxLength: number) => {
 	return text;
 };
 
-export const formatDate = (date: Date): string => format(date, 'dd. MMM yyyy kk:mm');
-export const formatDateWithoutTime = (date: Date): string => format(date, 'dd. MMM yyyy');
-export const formatDateWithoutYear = (date: Date): string => format(date, 'dd. MMM');
-export const formatHours = (date: Date): string => format(date, 'kk:mm');
+export const formatDate = (date: Date): string =>
+	DateTime.fromJSDate(date).toFormat('dd. MMM yyyy HH:mm');
+export const formatDateWithoutTime = (date: Date): string =>
+	DateTime.fromJSDate(date).toFormat('dd. MMM yyyy');
+export const formatDateWithoutYear = (date: Date): string =>
+	DateTime.fromJSDate(date).toFormat('dd. MMM');
+export const formatHours = (date: Date): string => DateTime.fromJSDate(date).toFormat('HH:mm');
 
 export const validateEmail = (email: string): boolean => {
 	const re =
