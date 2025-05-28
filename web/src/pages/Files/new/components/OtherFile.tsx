@@ -85,7 +85,9 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					<Text m={0}>File from file storage</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
-				<Text m={0}>{DateTime.fromMillis(file.created).toFormat(GANT_CHART_FORMAT)}</Text>
+				<Text m={0}>
+					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
+				</Text>
 				<VStack justify={'center'} align={'center'}>
 					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 						<IconButton

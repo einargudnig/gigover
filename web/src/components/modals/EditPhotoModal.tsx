@@ -314,7 +314,9 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 							<HStack justify={'space-between'} align={'center'}>
 								<Heading size={'md'}>Created</Heading>
 								<Text>
-									{DateTime.fromMillis(file.created).toFormat(GANT_CHART_FORMAT)}
+									{DateTime.fromMillis(file.created || 0).toFormat(
+										GANT_CHART_FORMAT
+									)}
 								</Text>
 							</HStack>
 							<div style={{ height: 2 }} />
