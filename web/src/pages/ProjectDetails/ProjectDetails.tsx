@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { useMemo } from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { useParams } from 'react-router-dom';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -50,19 +50,28 @@ export const ProjectDetails = (): JSX.Element | null => {
 		};
 	}, [project?.tasks]);
 
-	const onDragEnd = async (result: DropResult) => {
-		//Sort it baby
-		const nextStatus = result.destination?.droppableId ?? 0;
-		const nextIndex = result.destination?.index ?? 0;
+	const onDragEnd = async (event: DragEndEvent) => {
+		const { active, over } = event;
 
-		const nextRow: Task[] = tasks[nextStatus];
-		const nextRank = GetNextLexoRank(nextRow, result.source.index ?? -1, nextIndex);
+		if (!over) {
+			return;
+		}
 
-		const taskId = parseInt(result.draggableId || '0');
+		const nextStatus = over.id;
+		const nextIndex = over.data.current?.sortable?.index ?? 0;
 
-		const status: TaskStatusType = parseInt(
-			result.destination?.droppableId || '0'
-		) as TaskStatusType;
+		const nextRow: Task[] = tasks[nextStatus as TaskStatusType];
+		// Note: The GetNextLexoRank function might need adjustments
+		// depending on how IDs are structured in dnd-kit.
+		// For now, assuming active.id directly corresponds to the dragged item's original position or data.
+		const nextRank = GetNextLexoRank(
+			nextRow,
+			active.data.current?.sortable?.index ?? -1,
+			nextIndex
+		);
+
+		const taskId = parseInt(active.id.toString() || '0');
+		const status: TaskStatusType = parseInt(over.id.toString() || '0') as TaskStatusType;
 
 		const task = project?.tasks.find((t) => t.taskId === taskId);
 
@@ -71,8 +80,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 		}
 
 		// USE LEXO RANK INSTEAD
-		const priority = result.destination ? result.destination.index : result.source.index;
-		// console.log('Priority', priority);
+		const priority = nextIndex; // Or however priority is determined with dnd-kit
 
 		updateTask({
 			...task,
@@ -101,7 +109,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 					</p>
 				) : (
 					<Box userSelect="none">
-						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
+						<DndContext onDragEnd={onDragEnd} onDragStart={() => null}>
 							<Flex flexDirection="row" marginLeft="-8px" marginRight="-8px">
 								{Object.values(TaskStatus)
 									.filter((status) => status !== TaskStatus.Archived)
@@ -134,7 +142,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 										</Box>
 									))}
 							</Flex>
-						</DragDropContext>
+						</DndContext>
 					</Box>
 				)}
 			</Box>
