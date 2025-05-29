@@ -1,7 +1,6 @@
+import { Marker, OverlayView } from '@react-google-maps/api';
 import { useState } from 'react';
-import { Marker, OverlayView } from 'react-google-maps';
 import { Resource } from '../../../models/Resource';
-// import InfoBox from 'react-google-maps/lib/components/addons/InfoBox';
 
 export interface GigoverPinProps {
 	resource: Resource;
@@ -46,16 +45,6 @@ export const GigoverPin = ({ resource }: GigoverPinProps): JSX.Element => {
 						<div style={{ fontSize: '16px', color: '#08233B' }}>{resource.name}</div>
 					</div>
 				</OverlayView>
-				// <InfoBox
-				// 	onCloseClick={() => setIsOpen(!isOpen)}
-				// 	options={{ closeBoxURL: '', enableEventPropagation: true }}
-				// >
-				// 	<div style={{ backgroundColor: '#fff', opacity: 1, padding: '12px' }}>
-				// 		<div style={{ fontSize: '16px', color: '#08233B' }}>
-				// 			{resource.name}
-				// 		</div>
-				// 	</div>
-				// </InfoBox>
 			)}
 		</>
 	);

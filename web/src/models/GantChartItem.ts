@@ -14,6 +14,8 @@ export class GantChartItem {
 	}
 
 	/**
+	const start = DateTime.fromMillis(project.startDate || 0);
+	const start = DateTime.fromMillis(project.startDate || 0);
 	 * Used to determine if the milestone should not be shown
 	 * @param start
 	 * @param end
