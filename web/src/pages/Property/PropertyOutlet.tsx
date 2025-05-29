@@ -45,7 +45,7 @@ export const PropertyOutlet = (): JSX.Element => {
 			<DisabledPage>
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-						<Box flex="1 0 auto" height="100%" overflowY="auto">
+						<Box overflowY={'auto'} height={'100%'} width={'100%'}>
 							<Outlet />
 						</Box>
 					</HStack>

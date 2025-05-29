@@ -89,7 +89,7 @@ export const Files = (): JSX.Element => {
 							<LoadingSpinner />
 						) : (
 							<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-								<Box flex="1 0 auto" height="100%" p={3} overflowY="auto">
+								<Box p={3} overflowY="auto" height={'100%'} width={'100%'}>
 									<Outlet />
 								</Box>
 							</HStack>

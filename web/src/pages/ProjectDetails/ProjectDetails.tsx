@@ -100,7 +100,7 @@ export const ProjectDetails = (): JSX.Element | null => {
 						Code: {error?.errorCode}
 					</p>
 				) : (
-					<Box flex={1} userSelect="none">
+					<Box userSelect="none">
 						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
 							<Flex flexDirection="row" marginLeft="-8px" marginRight="-8px">
 								{Object.values(TaskStatus)
