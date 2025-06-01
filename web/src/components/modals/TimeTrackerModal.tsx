@@ -7,6 +7,7 @@ import { useCloseModal } from '../../hooks/useCloseModal';
 import { useProjectTasks } from '../../hooks/useProjectTasks';
 import { WorkerItem } from '../../models/Project';
 import { Task } from '../../models/Task';
+import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useProjectList } from '../../queries/useProjectList';
 import { useTrackerStart } from '../../queries/useTrackerStart';
 import { useWorkAdd } from '../../queries/useWorkAdd';
@@ -42,6 +43,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
 	const { mutateAsync: startTask } = useTrackerStart();
 	const openProjects = useOpenProjects(data);
+
 	const isEmpty = !data || openProjects.length <= 0;
 
 	const currentProject = useMemo(() => {
@@ -52,23 +54,22 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 		return null;
 	}, [data, selectedProject]);
 
+	const { data: projectData } = useProjectDetails(currentProject?.projectId ?? 0);
+
 	useEffect(() => {
 		setSelectedWorker(undefined);
 		setSelectedTask(undefined);
 	}, [selectedProject]);
 
 	const workers: WorkerItem[] = useMemo(() => {
-		if (currentProject) {
-			return currentProject ? currentProject.workers : [];
+		if (projectData?.project) {
+			return projectData.project.workers;
 		} else {
 			return [];
 		}
-	}, [currentProject]);
+	}, [projectData]);
 
-	// console.log('currentProject', currentProject);
-	// console.log('workers', workers);
-
-	const tasks: Task[] = useProjectTasks(currentProject);
+	const tasks: Task[] = useProjectTasks(projectData?.project ?? null);
 
 	const isSubmitDisabled = useMemo(() => {
 		return !(selectedProject && selectedTask && selectedWorker);
@@ -168,10 +169,12 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 						<TrackerSelect
 							title={'Select a worker'}
 							value={selectedWorker}
-							options={workers.map((worker) => ({
-								label: worker.name,
-								value: worker.uId
-							}))}
+							options={
+								workers.map((worker) => ({
+									label: worker.name,
+									value: worker.uId
+								})) || []
+							}
 							isNumber={false}
 							valueChanged={(newValue) => {
 								if (newValue === '') {

@@ -36,7 +36,6 @@ export const TimeTracker = (): JSX.Element => {
 		data,
 		isPending: activeTimerLoading
 	} = useActiveTimeTrackers();
-	console.log('data', { data });
 
 	const totalTimesheets = useMemo(() => {
 		if (reportData?.data.report) {
