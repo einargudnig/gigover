@@ -1,5 +1,5 @@
 import { Box, HStack, Text } from '@chakra-ui/react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Theme } from '../../Theme';
 import { ITimeTrackerModalContext } from '../../context/ModalContext';
 import { useOpenProjects } from '../../hooks/useAvailableProjects';
@@ -45,15 +45,17 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 	const isEmpty = !data || openProjects.length <= 0;
 
 	const currentProject = useMemo(() => {
-		setSelectedWorker(undefined);
-		setSelectedTask(undefined);
-
 		if (data && data.length > 0) {
 			return data.find((p) => p.projectId === selectedProject);
 		}
 
 		return null;
 	}, [data, selectedProject]);
+
+	useEffect(() => {
+		setSelectedWorker(undefined);
+		setSelectedTask(undefined);
+	}, [selectedProject]);
 
 	const workers: WorkerItem[] = useMemo(() => {
 		if (currentProject) {
@@ -62,6 +64,9 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 			return [];
 		}
 	}, [currentProject]);
+
+	// console.log('currentProject', currentProject);
+	// console.log('workers', workers);
 
 	const tasks: Task[] = useProjectTasks(currentProject);
 
@@ -126,10 +131,10 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 	return (
 		<Modal
 			title={
-				<>
-					<TimeIcon size={32} color={Theme.colors.yellow} type={'solid'} />
+				<HStack>
+					<TimeIcon size={32} color={Theme.colors.black} type={'medium'} />
 					<div>Time tracker</div>
-				</>
+				</HStack>
 			}
 			open={true}
 			closeIcon={false}

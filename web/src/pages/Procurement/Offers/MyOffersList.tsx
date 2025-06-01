@@ -59,6 +59,7 @@ export const MyOffersList = (): JSX.Element => {
 									return (
 										<LinkBox
 											as={CardBaseLink}
+											to={`/tender/my-offer/${o.tenderId}/${o.offerId}`}
 											key={o.offerId}
 											w="100%"
 											maxW="100%"

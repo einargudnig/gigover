@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { ApiService } from '../services/ApiService';
-import { ErrorResponse } from '../models/ErrorResponse';
 import axios from 'axios';
+import { ApiService } from '../services/ApiService';
 import { TrackerReportItem } from './useTrackerReport';
 
 interface ActiveTimeTrackersInput {
@@ -10,14 +9,26 @@ interface ActiveTimeTrackersInput {
 	projectId?: number;
 }
 
-interface ActiveTimeTrackersResponse {
+// This interface describes the raw response from the API
+interface ActiveTimeTrackersApiResponse {
 	data: {
 		workers: TrackerReportItem[];
 	};
 }
 
+// This interface describes the data structure the mutation will resolve to
+interface ActiveWorkersPayload {
+	workers: TrackerReportItem[];
+}
+
 export const useActiveTimeTrackers = () =>
-	useMutation({
-        mutationFn: async (variables) =>
-			await axios.post(ApiService.activeWorkers, variables, { withCredentials: true })
-    });
+	useMutation<ActiveWorkersPayload, Error, ActiveTimeTrackersInput>({
+		mutationFn: async (variables: ActiveTimeTrackersInput) => {
+			const response = await axios.post<ActiveTimeTrackersApiResponse>(
+				ApiService.activeWorkers,
+				variables,
+				{ withCredentials: true }
+			);
+			return response.data.data; // Extract the nested 'data' object
+		}
+	});

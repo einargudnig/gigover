@@ -18,7 +18,7 @@ export const EmptyState = ({ title, text, icon, action }: EmptyStateProps): JSX.
 			spacing={4} /* Corresponds to margin: 16px 0 */
 		>
 			{icon && icon}
-			<Heading as="h2" size="lg">
+			<Heading as="h2" size="md">
 				{title}
 			</Heading>
 			<Text>{text}</Text>

@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, Divider, Flex, Heading } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, Divider, Flex, Heading, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Timer from 'react-compound-timer';
 import { Theme } from '../../Theme';
@@ -36,6 +36,7 @@ export const TimeTracker = (): JSX.Element => {
 		data,
 		isPending: activeTimerLoading
 	} = useActiveTimeTrackers();
+	console.log('data', { data });
 
 	const totalTimesheets = useMemo(() => {
 		if (reportData?.data.report) {
@@ -103,10 +104,10 @@ export const TimeTracker = (): JSX.Element => {
 		</Button>
 	);
 
-	const hasWorkers = (data?.data.workers && data?.data.workers.length > 0) ?? false;
+	const hasWorkers = (data?.workers && data.workers.length > 0) ?? false;
 
 	useEffect(() => {
-		activeTrackers();
+		activeTrackers({});
 		getReport();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refetch]);
@@ -124,74 +125,84 @@ export const TimeTracker = (): JSX.Element => {
 						justifyContent="space-between"
 						alignItems="center"
 					>
-						<Box />
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							flexDirection="column"
-						>
-							<Heading as="h3" size="md" fontWeight="normal" paddingTop={6} pb={2}>
-								Timesheets
-							</Heading>
-							{reportDataLoading ? (
-								<Heading as="h1" size="xl">
-									<LoadingSpinner />
-								</Heading>
-							) : (
-								<Heading as="h1" size="xl">
-									{totalTimesheets}
-								</Heading>
-							)}
-						</Box>
-						<Divider
-							orientation="vertical"
-							height="100px"
-							borderColor={Theme.colors.border}
-						/>
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							flexDirection="column"
-						>
-							<Heading as="h3" size="md" fontWeight="normal" paddingTop={6} pb={2}>
-								Minutes tracked
-							</Heading>
-							{reportDataLoading ? (
-								<Heading as="h1" size="xl">
-									<LoadingSpinner />
-								</Heading>
-							) : (
-								<Heading as="h1" size="xl">
-									{secondsToString(totalMinutes * 60)}
-								</Heading>
-							)}
-						</Box>
-						<Divider
-							orientation="vertical"
-							height="100px"
-							borderColor={Theme.colors.border}
-						/>
-						<Box
-							display="flex"
-							justifyContent="center"
-							alignItems="center"
-							flexDirection="column"
-						>
-							<Heading as="h3" size="md" fontWeight="normal" paddingTop={6} pb={2}>
-								Workers
-							</Heading>
-							{reportDataLoading ? (
-								<Heading as="h1" size="xl">
-									<LoadingSpinner />
-								</Heading>
-							) : (
-								<Heading as="h1" size="xl">
-									{reportData?.data.report?.length || 0}
-								</Heading>
-							)}
-						</Box>
+						<Flex justifyContent="space-around" alignItems="center" w="100%">
+							<Box>
+								<VStack>
+									<Heading
+										as="h3"
+										size="md"
+										fontWeight="normal"
+										paddingTop={6}
+										pb={2}
+									>
+										Timesheets
+									</Heading>
+									{reportDataLoading ? (
+										<Heading as="h1" size="xl">
+											<LoadingSpinner />
+										</Heading>
+									) : (
+										<Heading as="h1" size="xl">
+											{totalTimesheets}
+										</Heading>
+									)}
+								</VStack>
+							</Box>
+							<Divider
+								orientation="vertical"
+								height="100px"
+								borderColor={Theme.colors.border}
+							/>
+							<Box>
+								<VStack>
+									<Heading
+										as="h3"
+										size="md"
+										fontWeight="normal"
+										paddingTop={6}
+										pb={2}
+									>
+										Minutes tracked
+									</Heading>
+									{reportDataLoading ? (
+										<Heading as="h1" size="xl">
+											<LoadingSpinner />
+										</Heading>
+									) : (
+										<Heading as="h1" size="md">
+											{secondsToString(totalMinutes * 60)}
+										</Heading>
+									)}
+								</VStack>
+							</Box>
+							<Divider
+								orientation="vertical"
+								height="100px"
+								borderColor={Theme.colors.border}
+							/>
+							<Box>
+								<VStack>
+									<Heading
+										as="h3"
+										size="md"
+										fontWeight="normal"
+										paddingTop={6}
+										pb={2}
+									>
+										Workers
+									</Heading>
+									{reportDataLoading ? (
+										<Heading as="h1" size="xl">
+											<LoadingSpinner />
+										</Heading>
+									) : (
+										<Heading as="h1" size="xl">
+											{reportData?.data.report?.length || 0}
+										</Heading>
+									)}
+								</VStack>
+							</Box>
+						</Flex>
 						<Box />
 					</Card>
 					<Card
@@ -203,7 +214,7 @@ export const TimeTracker = (): JSX.Element => {
 					>
 						<CardBody p={0}>
 							<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
-								<Heading as="h3" size="md">
+								<Heading as="h3" size="sm">
 									Active timers
 								</Heading>
 								<StartTrackingAction />
@@ -229,7 +240,7 @@ export const TimeTracker = (): JSX.Element => {
 											</tr>
 										</thead>
 										<tbody>
-											{data?.data?.workers?.map((worker) =>
+											{data?.workers?.map((worker) =>
 												worker.timeSheets.map(
 													(timeSheet, timeSheetIndex) => (
 														<tr key={`${worker.uId}_${timeSheetIndex}`}>
@@ -321,7 +332,7 @@ export const TimeTracker = (): JSX.Element => {
 					>
 						<CardBody p={0}>
 							<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
-								<Heading as="h3" size="md">
+								<Heading as="h3" size="sm">
 									Reports
 								</Heading>
 							</Flex>
@@ -335,7 +346,7 @@ export const TimeTracker = (): JSX.Element => {
 					onClose={() => setStopConfirmationModal(undefined)}
 					onComplete={async () => {
 						setStopConfirmationModal(undefined);
-						await activeTrackers();
+						await activeTrackers({});
 					}}
 					projectId={stopConfirmationModal.projectId}
 					taskId={stopConfirmationModal.taskId}
