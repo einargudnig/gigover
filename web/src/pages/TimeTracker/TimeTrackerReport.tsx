@@ -1,11 +1,10 @@
-import { Box, Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useState } from 'react';
 import Timer from 'react-compound-timer';
 import { Theme } from '../../Theme';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Table } from '../../components/Table';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { EmptyState } from '../../components/empty/EmptyState';
 import { DatePicker } from '../../components/forms/DatePicker';
@@ -193,38 +192,38 @@ export const TimeTrackerReport = ({
 						<LoadingSpinner size={32} />
 					</Center>
 				) : results.length > 0 ? (
-					<Table>
-						<thead>
-							<tr>
-								<th>Project</th>
-								<th>Worker</th>
-								<th>Time</th>
-								<th />
-								<th align={'center'} style={{ width: 200 }}>
+					<Table variant="simple">
+						<Thead>
+							<Tr>
+								<Th>Project</Th>
+								<Th>Worker</Th>
+								<Th>Time</Th>
+								<Th />
+								<Th align={'center'} style={{ width: 200 }}>
 									Timer
-								</th>
-							</tr>
-						</thead>
-						<tbody>
+								</Th>
+							</Tr>
+						</Thead>
+						<Tbody>
 							{results.map((result, resultIndex) => (
-								<tr key={`${resultIndex}`}>
-									<td>
+								<Tr key={`${resultIndex}`}>
+									<Td>
 										<strong>{result.projectName}</strong>
 										<br />
 										<p>{result.taskName}</p>
-									</td>
-									<td>{result.worker.name}</td>
-									<td>
+									</Td>
+									<Td>{result.worker.name}</Td>
+									<Td>
 										{showTimeSheetRange(
 											new Date(result.timesheet.start),
 											new Date(result.timesheet.stop)
 										)}
-									</td>
-									<td />
-									<td>
+									</Td>
+									<Td />
+									<Td>
 										<Flex justify="flex-end" align="center">
 											<Box
-												fontSize="2xl"
+												fontSize="lg"
 												fontWeight="light"
 												border="1px solid"
 												borderColor="gray.200"
@@ -251,7 +250,8 @@ export const TimeTrackerReport = ({
 											</Box>
 											<Button
 												ml={2}
-												colorScheme="blue"
+												variant={'outline'}
+												colorScheme="black"
 												onClick={() => {
 													setModalContext({
 														editTimeTracker: {
@@ -263,10 +263,11 @@ export const TimeTrackerReport = ({
 													});
 												}}
 											>
-												<Edit size={26} color={'#fff'} />
+												<Edit size={26} color={'#000'} />
 											</Button>
 											<Button
 												ml={2}
+												variant={'outline'}
 												colorScheme={'red'}
 												onClick={() => {
 													if (
@@ -279,21 +280,25 @@ export const TimeTrackerReport = ({
 													}
 												}}
 											>
-												<TrashIcon size={26} color={'#fff'} />
+												<TrashIcon size={26} color={'red'} />
 											</Button>
 										</Flex>
-									</td>
-								</tr>
+									</Td>
+								</Tr>
 							))}
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colSpan={4} align={'right'}>
+						</Tbody>
+						<Tfoot marginTop={4}>
+							<Tr>
+								<Td colSpan={4} align={'right'}>
 									<strong>Total:</strong>
-								</td>
-								<td>{totalTracked}</td>
-							</tr>
-						</tfoot>
+								</Td>
+								<Td>
+									<Text fontSize="xl" color="black">
+										{totalTracked}
+									</Text>
+								</Td>
+							</Tr>
+						</Tfoot>
 					</Table>
 				) : (
 					<EmptyState

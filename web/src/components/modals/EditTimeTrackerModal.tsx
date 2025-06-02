@@ -86,11 +86,11 @@ export const EditTimeTrackerModal = ({
 	return (
 		<Modal
 			title={
-				<>
+				<HStack>
 					<TimeIcon color={Theme.colors.green} />
 					<div>Edit Time Record</div>
 					{isPending && <LoadingSpinner />}
-				</>
+				</HStack>
 			}
 			open={true}
 			centerModal={false}

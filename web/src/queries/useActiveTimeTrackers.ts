@@ -11,9 +11,7 @@ interface ActiveTimeTrackersInput {
 
 // This interface describes the raw response from the API
 interface ActiveTimeTrackersApiResponse {
-	data: {
-		workers: TrackerReportItem[];
-	};
+	workers: TrackerReportItem[];
 }
 
 // This interface describes the data structure the mutation will resolve to
@@ -29,6 +27,6 @@ export const useActiveTimeTrackers = () =>
 				variables,
 				{ withCredentials: true }
 			);
-			return response.data.data; // Extract the nested 'data' object
+			return response.data;
 		}
 	});

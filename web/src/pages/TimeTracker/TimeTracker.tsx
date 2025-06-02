@@ -17,6 +17,7 @@ import { secondsToString } from '../../utils/NumberUtils';
 import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
+import { TimeTrackerReport } from './TimeTrackerReport';
 
 export const TimeTracker = (): JSX.Element => {
 	const [now, setNow] = useState(new Date());
@@ -31,6 +32,7 @@ export const TimeTracker = (): JSX.Element => {
 		data: reportData,
 		isPending: reportDataLoading
 	} = useTrackerReport();
+
 	const {
 		mutateAsync: activeTrackers,
 		data,
@@ -335,7 +337,7 @@ export const TimeTracker = (): JSX.Element => {
 									Reports
 								</Heading>
 							</Flex>
-							{/* <TimeTrackerReport refetch={[refetch, setRefetch]} /> */}
+							<TimeTrackerReport refetch={[refetch, setRefetch]} />
 						</CardBody>
 					</Card>
 				</DisabledPage>
