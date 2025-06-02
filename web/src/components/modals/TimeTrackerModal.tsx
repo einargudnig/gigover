@@ -166,6 +166,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 								}
 							}}
 						/>
+						<Box h={4} />
 						<TrackerSelect
 							title={'Select a worker'}
 							value={selectedWorker}
@@ -184,6 +185,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 								}
 							}}
 						/>
+						<Box h={4} />
 						<TrackerSelect
 							title={'Select a task'}
 							value={selectedTask}
@@ -199,6 +201,7 @@ export const TimeTrackerModal = ({ context }: TimeTrackerModalProps): JSX.Elemen
 								}
 							}}
 						/>
+						<Box h={4} />
 						<div>
 							<Text
 								mt={2}

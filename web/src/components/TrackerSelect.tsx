@@ -25,13 +25,11 @@ export const TrackerSelect = ({
 	valueChanged,
 	minWidth,
 	disabled = false,
-	isNumber = true,
-	margin = 1
+	isNumber = true
 }: TrackerSelectProps): JSX.Element => {
 	return (
 		<Box
 			cursor="pointer"
-			paddingTop={8}
 			userSelect="none"
 			transition="all 0.2s linear"
 			borderRadius="6px"

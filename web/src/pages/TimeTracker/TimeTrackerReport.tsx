@@ -1,8 +1,20 @@
-import { Box, Button, Flex, Table, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	Spacer,
+	Table,
+	Tbody,
+	Td,
+	Text,
+	Tfoot,
+	Th,
+	Thead,
+	Tr
+} from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useState } from 'react';
 import Timer from 'react-compound-timer';
-import { Theme } from '../../Theme';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrackerSelect } from '../../components/TrackerSelect';
@@ -96,95 +108,100 @@ export const TimeTrackerReport = ({
 
 	return (
 		<Box>
-			<Flex alignItems="center" justifyContent="space-between" my={Theme.padding(2)}>
-				<Flex flex={1} mr={Theme.padding(2)} alignItems="center">
-					<DatePicker
-						startDate={startDate ? startDate.toJSDate() : null}
-						endDate={endDate ? endDate.toJSDate() : null}
-						onChange={(update: [Date | null, Date | null] | Date | null) => {
-							if (Array.isArray(update)) {
-								const [start, end] = update;
-								setStartDate(start ? DateTime.fromJSDate(start) : null);
-								setEndDate(end ? DateTime.fromJSDate(end) : null);
-							}
-						}}
-						selectsRange
-						dateFormat={APP_DATE_FORMAT}
-						isClearable
-					/>
-					<Box style={{ width: 8 }} />
-					<TrackerSelect
-						minWidth={200}
-						title={'Select project'}
-						placeholder={'All projects'}
-						isNumber={true}
-						value={selectedProject}
-						options={projectList.map((p) => ({
-							label: p.name,
-							value: p.projectId
-						}))}
-						valueChanged={(newValue) => {
-							const v = newValue as number;
-							if (v > 0) {
-								setSelectedProject(newValue as number);
-							} else {
-								setSelectedProject(undefined);
-							}
-						}}
-						margin={0}
-					/>
-					<div style={{ width: 8 }} />
-					<TrackerSelect
-						minWidth={200}
-						title={'Select task'}
-						placeholder={'All tasks'}
-						isNumber={true}
-						value={selectedTask}
-						options={projectTasks.map((p) => ({
-							label: displayTaskTitle(p),
-							value: p.taskId
-						}))}
-						valueChanged={(newValue) => {
-							const v = newValue as number;
-							if (v > 0) {
-								setSelectedTask(newValue as number);
-							} else {
-								setSelectedTask(undefined);
-							}
-						}}
-						margin={0}
-					/>
-					<div style={{ width: 8 }} />
-					<TrackerSelect
-						minWidth={200}
-						title={'Select user'}
-						placeholder={'All users'}
-						isNumber={false}
-						value={selectedUser}
-						options={users.map((u) => ({ value: u.userId, label: u.name }))}
-						valueChanged={(newValue) => {
-							const v = newValue.toString();
-							if (v.length > 0) {
-								setSelectedUser(newValue as string);
-							} else {
-								setSelectedUser(undefined);
-							}
-						}}
-						margin={0}
-					/>
-				</Flex>
-				<Flex>
+			<Flex alignItems={'flex-end'} justifyContent="space-between">
+				<Box w="100%">
+					<Flex w="100%" alignItems="flex-end" justifyContent="space-between">
+						<Box w="100%" marginRight={6}>
+							<DatePicker
+								startDate={startDate ? startDate.toJSDate() : null}
+								endDate={endDate ? endDate.toJSDate() : null}
+								onChange={(update: [Date | null, Date | null] | Date | null) => {
+									if (Array.isArray(update)) {
+										const [start, end] = update;
+										setStartDate(start ? DateTime.fromJSDate(start) : null);
+										setEndDate(end ? DateTime.fromJSDate(end) : null);
+									}
+								}}
+								selectsRange
+								dateFormat={APP_DATE_FORMAT}
+								isClearable
+							/>
+						</Box>
+						<Spacer />
+						<Box>
+							<Flex alignItems={'center'}>
+								<TrackerSelect
+									minWidth={200}
+									title={'Select project'}
+									placeholder={'All projects'}
+									isNumber={true}
+									value={selectedProject}
+									options={projectList.map((p) => ({
+										label: p.name,
+										value: p.projectId
+									}))}
+									valueChanged={(newValue) => {
+										const v = newValue as number;
+										if (v > 0) {
+											setSelectedProject(newValue as number);
+										} else {
+											setSelectedProject(undefined);
+										}
+									}}
+								/>
+								<Box w={2} />
+								<TrackerSelect
+									minWidth={200}
+									title={'Select task'}
+									placeholder={'All tasks'}
+									isNumber={true}
+									value={selectedTask}
+									options={projectTasks.map((p) => ({
+										label: displayTaskTitle(p),
+										value: p.taskId
+									}))}
+									valueChanged={(newValue) => {
+										const v = newValue as number;
+										if (v > 0) {
+											setSelectedTask(newValue as number);
+										} else {
+											setSelectedTask(undefined);
+										}
+									}}
+								/>
+								<Box w={2} />
+								<TrackerSelect
+									minWidth={200}
+									title={'Select user'}
+									placeholder={'All users'}
+									isNumber={false}
+									value={selectedUser}
+									options={users.map((u) => ({ value: u.userId, label: u.name }))}
+									valueChanged={(newValue) => {
+										const v = newValue.toString();
+										if (v.length > 0) {
+											setSelectedUser(newValue as string);
+										} else {
+											setSelectedUser(undefined);
+										}
+									}}
+								/>
+							</Flex>
+						</Box>
+					</Flex>
+				</Box>
+
+				<Box>
 					<Button
 						disabled={!selectedProject}
 						onClick={() => exportToCsv()}
-						height={'100%'}
 						ml={4}
 						variant={'outline'}
-						colorScheme="gray"
+						colorScheme="black"
 					>
 						Export CSV
 					</Button>
-				</Flex>
+				</Box>
 			</Flex>
 			<Box style={{ marginTop: 24 }}>
 				{isLoading ? (
