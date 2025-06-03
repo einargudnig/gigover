@@ -1,5 +1,4 @@
 import { Flex, Text } from '@chakra-ui/react';
-import 'normalize.css';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
