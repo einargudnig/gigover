@@ -1,4 +1,18 @@
-import { Box, Button, Card, CardBody, Divider, Flex, Heading, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Card,
+	CardBody,
+	Divider,
+	Flex,
+	Heading,
+	Tbody,
+	Td,
+	Th,
+	Thead,
+	Tr,
+	VStack
+} from '@chakra-ui/react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Timer from 'react-compound-timer';
 import { Theme } from '../../Theme';
@@ -231,34 +245,34 @@ export const TimeTracker = (): JSX.Element => {
 									</Box>
 								) : (
 									<Table>
-										<thead>
-											<tr>
-												<th>Project</th>
-												<th>Worker</th>
-												<th style={{ width: 200, textAlign: 'center' }}>
+										<Thead>
+											<Tr>
+												<Th>Project</Th>
+												<Th>Worker</Th>
+												<Th style={{ width: 200, textAlign: 'center' }}>
 													Timer
-												</th>
-											</tr>
-										</thead>
-										<tbody>
+												</Th>
+											</Tr>
+										</Thead>
+										<Tbody>
 											{data?.workers?.map((worker) =>
 												worker.timeSheets.map(
 													(timeSheet, timeSheetIndex) => (
-														<tr key={`${worker.uId}_${timeSheetIndex}`}>
-															<td>
+														<Tr key={`${worker.uId}_${timeSheetIndex}`}>
+															<Td>
 																{getActiveTrackerHeader(
 																	timeSheet.projectId,
 																	timeSheet.taskId
 																)}
-															</td>
-															<td>{worker.name}</td>
-															<td>
+															</Td>
+															<Td>{worker.name}</Td>
+															<Td>
 																<Flex
 																	justify="flex-end"
 																	align="center"
 																>
 																	<Box
-																		fontSize="2xl"
+																		fontSize="lg"
 																		fontWeight="light"
 																		border="1px solid #e5e5e5"
 																		padding={3}
@@ -285,12 +299,13 @@ export const TimeTracker = (): JSX.Element => {
 																	</Box>
 																	<Button
 																		variant="outline"
-																		borderColor="transparent"
+																		aria-label="Stop timer"
+																		colorScheme="black"
 																		height="100%"
 																		borderRadius="md"
 																		paddingY={3}
 																		paddingX={4}
-																		fontSize="2xl"
+																		fontSize="lg"
 																		_active={{
 																			outline: 'none',
 																			border: 'none'
@@ -313,12 +328,12 @@ export const TimeTracker = (): JSX.Element => {
 																		|&nbsp;|
 																	</Button>
 																</Flex>
-															</td>
-														</tr>
+															</Td>
+														</Tr>
 													)
 												)
 											)}
-										</tbody>
+										</Tbody>
 									</Table>
 								)}
 							</Box>

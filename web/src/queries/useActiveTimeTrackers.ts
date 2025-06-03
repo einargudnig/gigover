@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { ApiService } from '../services/ApiService';
 import { TrackerReportItem } from './useTrackerReport';
@@ -19,8 +19,10 @@ interface ActiveWorkersPayload {
 	workers: TrackerReportItem[];
 }
 
-export const useActiveTimeTrackers = () =>
-	useMutation<ActiveWorkersPayload, Error, ActiveTimeTrackersInput>({
+export const useActiveTimeTrackers = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation<ActiveWorkersPayload, Error, ActiveTimeTrackersInput>({
 		mutationFn: async (variables: ActiveTimeTrackersInput) => {
 			const response = await axios.post<ActiveTimeTrackersApiResponse>(
 				ApiService.activeWorkers,
@@ -28,5 +30,10 @@ export const useActiveTimeTrackers = () =>
 				{ withCredentials: true }
 			);
 			return response.data;
+		},
+		onSuccess: async () => {
+			await queryClient.refetchQueries({ queryKey: [ApiService.timerReport] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
 		}
 	});
+};

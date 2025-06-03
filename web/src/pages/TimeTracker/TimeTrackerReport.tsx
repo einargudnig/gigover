@@ -16,6 +16,7 @@ import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useState } from 'react';
 import Timer from 'react-compound-timer';
 import { Center } from '../../components/Center';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrackerSelect } from '../../components/TrackerSelect';
 import { EmptyState } from '../../components/empty/EmptyState';
@@ -45,6 +46,7 @@ export const TimeTrackerReport = ({
 	const [selectedTask, setSelectedTask] = useState<number | undefined>();
 	const [startDate, setStartDate] = useState<DateTime | null>(DateTime.now().minus({ days: 14 }));
 	const [endDate, setEndDate] = useState<DateTime | null>(DateTime.now());
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const reportToCSV = useReportToCSV();
 	const deleteTimeRecord = useDeleteTimeRecord();
 	const { projectList, results, isLoading, totalTracked, users } = useTimeTrackerReport(
@@ -282,23 +284,32 @@ export const TimeTrackerReport = ({
 											>
 												<Edit size={26} color={'#000'} />
 											</Button>
-											<Button
-												ml={2}
-												variant={'outline'}
-												colorScheme={'red'}
-												onClick={() => {
-													if (
-														confirm(
-															'Are you sure you want to delete this report?'
-														)
-													) {
+
+											<ConfirmDialog
+												header={'Delete time record'}
+												setIsOpen={setDialogOpen}
+												callback={(b) => {
+													if (b) {
 														// @ts-ignore
 														deleteRecord(result.timesheet);
 													}
+
+													setDialogOpen(false);
 												}}
+												isOpen={dialogOpen}
 											>
-												<TrashIcon size={26} color={'red'} />
-											</Button>
+												<Button
+													aria-label={'Delete time record'}
+													colorScheme={'red'}
+													variant={'outline'}
+													isLoading={deleteTimeRecord.isPending}
+													onClick={() => setDialogOpen(true)}
+													disabled={deleteTimeRecord.isPending}
+													ml={2}
+												>
+													<TrashIcon size={26} color={'red'} />
+												</Button>
+											</ConfirmDialog>
 										</Flex>
 									</Td>
 								</Tr>

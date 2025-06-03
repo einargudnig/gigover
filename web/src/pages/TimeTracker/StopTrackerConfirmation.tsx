@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { Modal } from '../../components/Modal';
 import { Input } from '../../components/forms/Input';
@@ -34,7 +34,7 @@ export const StopTrackerConfirmation = ({
 
 	return (
 		<Modal open={true} centerModal={true} title={'Stop time tracking'} onClose={onClose}>
-			<div>
+			<Box>
 				<Text mt={-2} mb={4}>
 					Do you want to stop this timer?
 				</Text>
@@ -51,7 +51,7 @@ export const StopTrackerConfirmation = ({
 						Stop timer
 					</Button>
 				</Flex>
-			</div>
+			</Box>
 		</Modal>
 	);
 };

@@ -21,7 +21,6 @@ export const useDeleteTimeRecord = () => {
 		},
 
 		onSuccess: async () => {
-			// await queryClient.invalidateQueries(ApiService.timerReport);
 			await queryClient.refetchQueries({ queryKey: [ApiService.timerReport] });
 			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
 		}

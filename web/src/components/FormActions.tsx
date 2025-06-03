@@ -40,7 +40,7 @@ export const FormActions = ({
 		{onCancel ? (
 			<Button
 				variant={'outline'}
-				colorScheme={'black'}
+				colorScheme={'gray'}
 				onClick={onCancel}
 				disabled={cancelDisabled}
 			>
