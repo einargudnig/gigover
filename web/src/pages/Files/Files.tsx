@@ -79,7 +79,10 @@ export const Files = (): JSX.Element => {
 				actions={
 					<DisabledComponent>
 						{project && <CreateNewFolderButton projectId={project.projectId} />}
-						<Button onClick={() => setUpload(true)}>Upload</Button>
+
+						<Button ml={2} onClick={() => setUpload(true)}>
+							Upload
+						</Button>
 					</DisabledComponent>
 				}
 			>

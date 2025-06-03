@@ -7,14 +7,10 @@ import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
 import { FileStarIcon } from '../../../components/icons/FileTypes/FileStarIcon';
 import { FileTextIcon } from '../../../components/icons/FileTypes/FileTextIcon';
 import { FileVideoIcon } from '../../../components/icons/FileTypes/FileVideoIcon';
-import { FileType, ProjectFile } from '../../../models/ProjectFile';
+import { FileType } from '../../../models/ProjectFile';
 import { DocumentTypes, ProjectImage } from '../../../models/ProjectImage';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
 import { GANT_CHART_FORMAT } from '../../Roadmap/GantChartDates';
-
-interface FileProps {
-	file: ProjectFile;
-}
 
 interface GigoverFileProps {
 	file: ProjectImage;
@@ -55,29 +51,6 @@ export const FileIconForType = (fileType: FileType) => {
 		case 'document':
 			return FileTextIcon;
 	}
-};
-
-// @deprecated
-export const File = ({ file }: FileProps): JSX.Element => {
-	const Icon = FileIconForType(file.type);
-
-	return (
-		<CardBaseLink to={`/files/${file.projectId}/file/${file.imageId}`}>
-			<HStack spacing={8}>
-				<Icon />
-				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>
-					<Heading m={0} mb={0} as={'h4'} size={'sm'}>
-						{file.name}
-					</Heading>
-					<Text m={0}>Project file</Text>
-				</VStack>
-				<Text m={0}>{humanFileSize(file.bytes)}</Text>
-				<Text m={0}>
-					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
-				</Text>
-			</HStack>
-		</CardBaseLink>
-	);
 };
 
 const GigoverThumbnail = (file: ProjectImage) => {

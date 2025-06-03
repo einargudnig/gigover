@@ -4,8 +4,8 @@ import { Files } from './pages/Files/Files';
 import { FilesHome } from './pages/Files/new/FilesHome';
 import { FolderFolder } from './pages/Files/new/FolderFolder';
 import { ProjectFolder } from './pages/Files/new/ProjectFolder';
-import { TenderFolder } from './pages/Files/new/TenderFolder';
 import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
+import { TenderFolder } from './pages/Files/new/TenderFolderOutlet';
 import { OfferFiles } from './pages/Files/new/components/OfferFiles';
 import { OffersFolder } from './pages/Files/new/components/OffersFolder';
 import { TenderFile } from './pages/Files/new/components/TenderFile';
@@ -49,9 +49,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		<Route path={'onboarding'} element={<Onboarding />} />
 
 		{/* 📝 Tasks 📝 */}
-		{/* This should also become an Outlet route */}
-		{/* Outlet route for all things related to this project */}
-		{/* Tasks, Gantt Chart and Files! */}
 		<Route path={'project/:projectId'} element={<ProjectDetailsOutlet />}>
 			<Route index element={<ProjectDetails />} />
 			<Route path={'gantt'} element={<ProjectDetailsGanttChart />} />
@@ -71,8 +68,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		{/* 📂 File System 📂 */}
 		<Route path={'files'} element={<Files />}>
 			<Route index element={<FilesHome />} />
-			{/*			<Route path={':projectId/file/:fileId'} element={<FileId />} />
-			<Route path={':projectId/file/:folderId/:fileId'} element={<FileId />} />*/}
 			<Route path={':projectId'} element={<ProjectFolder />} />
 			<Route path={':projectId/folder/:folderId/:fileId'} element={<FolderFolder />} />
 			<Route path={':projectId/folder/:folderId'} element={<FolderFolder />} />
@@ -82,7 +77,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route index element={<TenderFolderHome />} />
 				<Route path={'tenders'} element={<TendersFolder />} />
 				<Route path={'tenders/:tenderId'} element={<TenderFile />} />
-				{/* <Route path={'tenders/:tenderId/:fileId'} element={<TenderFile />} /> */}
 				<Route path={'offers'} element={<OffersFolder />} />
 				<Route path={'offers/:offerId'} element={<OfferFiles />} />
 				<Route path={'offers/:offerId/:fileId'} element={<OfferFiles />} />
