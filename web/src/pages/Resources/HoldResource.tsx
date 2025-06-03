@@ -42,6 +42,8 @@ export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JS
 		<>
 			{isAvailable ? (
 				<Button
+					colorScheme={'black'}
+					variant={'outline'}
 					isLoading={holdResource.isPending}
 					onClick={() => holdOrReleaseResource('hold')}
 				>
@@ -49,6 +51,8 @@ export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JS
 				</Button>
 			) : notAvailable ? null : (
 				<Button
+					colorScheme={'black'}
+					variant={'outline'}
 					isLoading={location.loading || isReleaseLoading}
 					onClick={() => holdOrReleaseResource('release')}
 				>
