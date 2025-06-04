@@ -5,13 +5,22 @@ import {
 	HStack,
 	Heading,
 	IconButton,
+	Modal,
 	Spacer,
 	Tag,
 	Text,
-	VStack
+	VStack,
+	useDisclosure
 } from '@chakra-ui/react';
+import { DateTime } from 'luxon';
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import ScrollIntoView from 'react-scroll-into-view';
+import { ModalContext } from '../../context/ModalContext';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
+import { Project } from '../../models/Project';
 import { ProjectImage } from '../../models/ProjectImage';
+import { useDeleteDocument } from '../../mutations/useDeleteDocument';
 import {
 	useAddImageDot,
 	useAddImageDotComment,
@@ -20,26 +29,17 @@ import {
 	useRemoveImageDot
 } from '../../mutations/useImageDot';
 import { GigoverFileIconForType } from '../../pages/Files/components/File';
+import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
 import { useImageDots } from '../../queries/useImageDots';
+import { useProjectList } from '../../queries/useProjectList';
 import { humanFileSize } from '../../utils/FileSizeUtils';
 import { formatDate } from '../../utils/StringUtils';
+import { ConfirmDialog } from '../ConfirmDialog';
 import { ImageDot } from '../ImageEditor/ImageDot';
-import { Modal } from '../Modal';
 import { DownloadIcon } from '../icons/DownloadIcon';
 import { ImportantIcon } from '../icons/ImportantIcon';
-import { TrashIcon } from '../icons/TrashIcon';
-// import { devInfo } from '../../utils/ConsoleUtils';
-import { DateTime } from 'luxon';
-import { useNavigate, useParams } from 'react-router-dom';
-import ScrollIntoView from 'react-scroll-into-view';
-import { ModalContext } from '../../context/ModalContext';
-import { useOpenProjects } from '../../hooks/useAvailableProjects';
-import { Project } from '../../models/Project';
-import { useDeleteDocument } from '../../mutations/useDeleteDocument';
-import { GANT_CHART_FORMAT } from '../../pages/Roadmap/GantChartDates';
-import { useProjectList } from '../../queries/useProjectList';
-import { ConfirmDialog } from '../ConfirmDialog';
 import { ShareIcon } from '../icons/ShareIcon';
+import { TrashIcon } from '../icons/TrashIcon';
 
 interface FileSidebarProps {
 	onClose: () => void;
@@ -72,7 +72,8 @@ export interface ICommentComment {
 	userName: string;
 }
 
-export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): JSX.Element => {
+export const EditPhotoModal = ({ file, moveFile }: FileSidebarProps): JSX.Element => {
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const Icon = GigoverFileIconForType(file.type);
 	const [activePoint, setActivePoint] = useState(-1);
 	const params = useParams();
@@ -160,230 +161,239 @@ export const EditPhotoModal = ({ onClose, file, moveFile }: FileSidebarProps): J
 	}, [projects, params.projectId]);
 
 	return (
-		<Modal title={'Photo edit'} open={true} onClose={() => onClose()} centerModal={true}>
-			<VStack
-				align={'stretch'}
-				width={{
-					base: '100%', // 0-48em
-					lg: '80vw'
-				}}
-				style={{ flex: 1, height: '100%' }}
-			>
-				<HStack justify={'space-between'} align={'center'} spacing={4}>
-					<div>
-						<Icon />
-					</div>
-					<Text isTruncated={true}>
-						<span
-							contentEditable={true}
-							suppressContentEditableWarning
-							onBlur={onChangeFileName}
+		<>
+			<Modal isOpen={true} onClose={() => onClose()}>
+				<VStack
+					align={'stretch'}
+					width={{
+						base: '100%', // 0-48em
+						lg: '80vw'
+					}}
+					style={{ flex: 1, height: '100%' }}
+				>
+					<HStack justify={'space-between'} align={'center'} spacing={4}>
+						<div>
+							<Icon />
+						</div>
+						<Text isTruncated={true}>
+							<span
+								contentEditable={true}
+								suppressContentEditableWarning
+								onBlur={onChangeFileName}
+							>
+								{file.name}
+							</span>
+						</Text>
+					</HStack>
+					<Divider />
+					{
+						<Flex
+							minHeight={'60vh'}
+							direction={{
+								base: 'column-reverse', // 0-48em
+								lg: 'row' // 48em-80em,
+							}}
 						>
-							{file.name}
-						</span>
-					</Text>
-				</HStack>
-				<Divider />
-				{
-					<Flex
-						minHeight={'60vh'}
-						direction={{
-							base: 'column-reverse', // 0-48em
-							lg: 'row' // 48em-80em,
-						}}
-					>
-						{/* Comment section used to be here, now moved below */}
-						<Flex p={2} flex={1} position={'relative'}>
-							<div id="image" />
-							<ImageDot
-								newComment={newComment}
-								documentType={file.type}
-								removeComment={removeComment}
-								editComment={editComment}
-								updateStatus={updateStatus}
-								imageSrc={file.url}
-								dots={dots}
-								setActivePoint={setActivePoint}
-								activePoint={activePoint}
-								isNextImage={true}
-								isPrevImage={true}
-								prevImage={() => moveFile('left')}
-								nextImage={() => moveFile('right')}
-							/>
+							{/* Comment section used to be here, now moved below */}
+							<Flex p={2} flex={1} position={'relative'}>
+								<div id="image" />
+								<ImageDot
+									newComment={newComment}
+									documentType={file.type}
+									removeComment={removeComment}
+									editComment={editComment}
+									updateStatus={updateStatus}
+									imageSrc={file.url}
+									dots={dots}
+									setActivePoint={setActivePoint}
+									activePoint={activePoint}
+									isNextImage={true}
+									isPrevImage={true}
+									prevImage={() => moveFile('left')}
+									nextImage={() => moveFile('right')}
+								/>
+							</Flex>
 						</Flex>
-					</Flex>
-				}
-				<Divider />
+					}
+					<Divider />
 
-				{/* Flex box with comments and another box with info and buttons */}
-				<Flex justify={'space-around'}>
-					{/* VStack with Comment info */}
-					<VStack>
-						<Flex direction={'column'} width={'100%'}>
-							<Heading p={2} pl={0}>
-								Notes
-							</Heading>
-							<Box mb={2} p={4} bg={'#EFEFEF'} borderRadius={6}>
-								<ImportantIcon />
-								<Text pt={4}>
-									Click the image to add notes that will be shared with your
-									co-workers
-								</Text>
-							</Box>
+					{/* Flex box with comments and another box with info and buttons */}
+					<Flex justify={'space-around'}>
+						{/* VStack with Comment info */}
+						<VStack>
+							<Flex direction={'column'} width={'100%'}>
+								<Heading p={2} pl={0}>
+									Notes
+								</Heading>
+								<Box mb={2} p={4} bg={'#EFEFEF'} borderRadius={6}>
+									<ImportantIcon />
+									<Text pt={4}>
+										Click the image to add notes that will be shared with your
+										co-workers
+									</Text>
+								</Box>
 
-							{/* List of comments */}
-							{/* I want to add a scroll snap of some sort, when I press a comment, it auto scrolls to the image.  */}
-							<Box overflow={'scroll'} maxHeight={'350px'}>
-								{dots &&
-									dots.map((s) => {
-										if (s.comments.length === 0) {
-											return null;
-										}
-										const currentComment = s.comments[s.comments.length - 1];
+								{/* List of comments */}
+								{/* I want to add a scroll snap of some sort, when I press a comment, it auto scrolls to the image.  */}
+								<Box overflow={'scroll'} maxHeight={'350px'}>
+									{dots &&
+										dots.map((s) => {
+											if (s.comments.length === 0) {
+												return null;
+											}
+											const currentComment =
+												s.comments[s.comments.length - 1];
 
-										return (
-											<>
-												<ScrollIntoView selector="#image">
-													<Flex
-														p={2}
-														py={2}
-														direction={'column'}
-														key={s.dotId}
-														_hover={{ background: '#ececf1' }}
-														cursor={'pointer'}
-														onClick={() => setActivePoint(s.dotId)}
-													>
-														<Flex>
+											return (
+												<>
+													<ScrollIntoView selector="#image">
+														<Flex
+															p={2}
+															py={2}
+															direction={'column'}
+															key={s.dotId}
+															_hover={{ background: '#ececf1' }}
+															cursor={'pointer'}
+															onClick={() => setActivePoint(s.dotId)}
+														>
+															<Flex>
+																<Text
+																	pr={2}
+																	fontSize={'11px'}
+																	isTruncated
+																>
+																	{currentComment?.userName}
+																</Text>
+																<Text fontSize={'11px'} isTruncated>
+																	{formatDate(
+																		new Date(
+																			currentComment?.created ||
+																				new Date()
+																		)
+																	)}
+																</Text>
+															</Flex>
 															<Text
-																pr={2}
+																color={'black'}
+																fontWeight={'400'}
 																fontSize={'11px'}
 																isTruncated
 															>
-																{currentComment?.userName}
+																{currentComment.comment}
 															</Text>
-															<Text fontSize={'11px'} isTruncated>
-																{formatDate(
-																	new Date(
-																		currentComment?.created ||
-																			new Date()
-																	)
+															<Flex>
+																<Text fontSize={'11px'} isTruncated>
+																	{s.comments.length} comments
+																</Text>
+																{s.dotId === activePoint && (
+																	<>
+																		<Spacer />
+																		<Tag size={'sm'}>
+																			Active
+																		</Tag>
+																	</>
 																)}
-															</Text>
+															</Flex>
 														</Flex>
-														<Text
-															color={'black'}
-															fontWeight={'400'}
-															fontSize={'11px'}
-															isTruncated
-														>
-															{currentComment.comment}
-														</Text>
-														<Flex>
-															<Text fontSize={'11px'} isTruncated>
-																{s.comments.length} comments
-															</Text>
-															{s.dotId === activePoint && (
-																<>
-																	<Spacer />
-																	<Tag size={'sm'}>Active</Tag>
-																</>
-															)}
-														</Flex>
-													</Flex>
-													<Divider />
-												</ScrollIntoView>
-											</>
-										);
-									})}
-							</Box>
-						</Flex>
-					</VStack>
-
-					{/* VStack with project info and Buttons */}
-					<VStack align={'stretch'} w={'250px'}>
-						<VStack>
-							<div style={{ height: 20 }} />
-							<HStack justify={'space-between'} align={'center'}>
-								<Heading size={'md'}>Project</Heading>
-								<Text>{project?.name}</Text>
-							</HStack>
-							<HStack justify={'space-between'} align={'center'}>
-								<Heading size={'md'}>Size</Heading>
-								<Text>{humanFileSize(file.bytes)}</Text>
-							</HStack>
-							<HStack justify={'space-between'} align={'center'}>
-								<Heading size={'md'}>Created</Heading>
-								<Text>
-									{DateTime.fromMillis(file.created || 0).toFormat(
-										GANT_CHART_FORMAT
-									)}
-								</Text>
-							</HStack>
-							<div style={{ height: 2 }} />
-						</VStack>
-						<Spacer />
-						{/* Buttons */}
-						<HStack justify={'space-between'} align={'center'}>
-							<VStack justify={'center'} align={'center'}>
-								<IconButton
-									aria-label={'Delete'}
-									colorScheme={'black'}
-									icon={<ShareIcon color={'white'} />}
-									onClick={() => {
-										setModalContext({ shareItem: { file: file } });
-									}}
-								/>
-								<Text color={'black'} fontSize={'l'}>
-									Share
-								</Text>
-							</VStack>
-							<VStack justify={'center'} align={'center'}>
-								<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
-									<IconButton
-										aria-label={'Download'}
-										colorScheme={'black'}
-										icon={<DownloadIcon color={'white'} />}
-									/>
-								</a>
-								<Text color={'black'} fontSize={'l'}>
-									Download
-								</Text>
-							</VStack>
-							<VStack justify={'center'} align={'center'}>
-								<ConfirmDialog
-									header={'Delete image'}
-									setIsOpen={setDialogOpen}
-									callback={async (b) => {
-										if (b) {
-											await deleteDocument(file);
-											navigate(
-												`/files/${file.projectId}/${
-													file.folderId > 0 ? file.folderId : ''
-												}`
+														<Divider />
+													</ScrollIntoView>
+												</>
 											);
-										}
-										setDialogOpen(false);
-									}}
-									isOpen={dialogOpen}
-								>
+										})}
+								</Box>
+							</Flex>
+						</VStack>
+
+						{/* VStack with project info and Buttons */}
+						<VStack align={'stretch'} w={'250px'}>
+							<VStack>
+								<div style={{ height: 20 }} />
+								<HStack justify={'space-between'} align={'center'}>
+									<Heading size={'md'}>Project</Heading>
+									<Text>{project?.name}</Text>
+								</HStack>
+								<HStack justify={'space-between'} align={'center'}>
+									<Heading size={'md'}>Size</Heading>
+									<Text>{humanFileSize(file.bytes)}</Text>
+								</HStack>
+								<HStack justify={'space-between'} align={'center'}>
+									<Heading size={'md'}>Created</Heading>
+									<Text>
+										{DateTime.fromMillis(file.created || 0).toFormat(
+											GANT_CHART_FORMAT
+										)}
+									</Text>
+								</HStack>
+								<div style={{ height: 2 }} />
+							</VStack>
+							<Spacer />
+							{/* Buttons */}
+							<HStack justify={'space-between'} align={'center'}>
+								<VStack justify={'center'} align={'center'}>
 									<IconButton
 										aria-label={'Delete'}
-										colorScheme={'red'}
-										icon={<TrashIcon color={'white'} />}
+										colorScheme={'black'}
+										icon={<ShareIcon color={'white'} />}
 										onClick={() => {
-											setDialogOpen(true);
+											setModalContext({ shareItem: { file: file } });
 										}}
 									/>
 									<Text color={'black'} fontSize={'l'}>
-										Delete
+										Share
 									</Text>
-								</ConfirmDialog>
-							</VStack>
-						</HStack>
-						<div style={{ height: 10 }} />
-					</VStack>
-				</Flex>
-			</VStack>
-		</Modal>
+								</VStack>
+								<VStack justify={'center'} align={'center'}>
+									<a
+										href={file.url}
+										target={'_blank'}
+										rel={'noopener noreferrer'}
+									>
+										<IconButton
+											aria-label={'Download'}
+											colorScheme={'black'}
+											icon={<DownloadIcon color={'white'} />}
+										/>
+									</a>
+									<Text color={'black'} fontSize={'l'}>
+										Download
+									</Text>
+								</VStack>
+								<VStack justify={'center'} align={'center'}>
+									<ConfirmDialog
+										header={'Delete image'}
+										setIsOpen={setDialogOpen}
+										callback={async (b) => {
+											if (b) {
+												await deleteDocument(file);
+												navigate(
+													`/files/${file.projectId}/${
+														file.folderId > 0 ? file.folderId : ''
+													}`
+												);
+											}
+											setDialogOpen(false);
+										}}
+										isOpen={dialogOpen}
+									>
+										<IconButton
+											aria-label={'Delete'}
+											colorScheme={'red'}
+											icon={<TrashIcon color={'white'} />}
+											onClick={() => {
+												setDialogOpen(true);
+											}}
+										/>
+										<Text color={'black'} fontSize={'l'}>
+											Delete
+										</Text>
+									</ConfirmDialog>
+								</VStack>
+							</HStack>
+							<div style={{ height: 10 }} />
+						</VStack>
+					</Flex>
+				</VStack>
+			</Modal>
+		</>
 	);
 };

@@ -8,9 +8,7 @@ interface GigoverMapsWithResources {
 	resources?: Resource[];
 }
 
-const libraries: ('places' | 'drawing' | 'geometry' | 'localContext' | 'visualization')[] = [
-	'places'
-];
+const libraries: ('places' | 'drawing' | 'geometry' | 'visualization')[] = ['places'];
 
 const defaultCenter = { lat: 64.13548, lng: -21.89541 };
 

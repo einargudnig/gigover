@@ -1,7 +1,8 @@
 import { Box, Button, Flex, Spacer, Text } from '@chakra-ui/react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import ReactToPdf from 'react-to-pdf';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { GetOfferItem } from '../../../../models/Tender';
@@ -41,6 +42,43 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 			return 'Rejected';
 		}
 		return 'Unknown';
+	};
+
+	const handleDownloadPdf = async () => {
+		const element = ref.current;
+		if (!element) {
+			console.error('Element not found for PDF generation');
+			return;
+		}
+
+		try {
+			const canvas = await html2canvas(element, {
+				scale: 2, // Improves quality
+				useCORS: true // If you have external images/resources
+			});
+
+			const imgData = canvas.toDataURL('image/png');
+
+			// Use element's dimensions for PDF page size
+			const pdfWidth = element.offsetWidth;
+			const pdfHeight = element.offsetHeight;
+
+			// Determine orientation: 'l' for landscape, 'p' for portrait
+			const orientation = pdfWidth > pdfHeight ? 'l' : 'p';
+
+			const pdf = new jsPDF({
+				orientation: orientation,
+				unit: 'px',
+				format: [pdfWidth, pdfHeight],
+				hotfixes: ['px_scaling'] // Attempt to replicate px-scaling behavior
+			});
+
+			pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+			pdf.save(`Gigover-published-offer-${Number(offerId)}.pdf`);
+		} catch (error) {
+			console.error('Error generating PDF:', error);
+			// You might want to add some user-facing error notification here
+		}
 	};
 
 	const offerFields = [
@@ -102,32 +140,14 @@ export const PublishedOffer = ({ offerData, isOfferLoading }): JSX.Element => {
 
 					<Flex alignItems={'center'} justifyContent={'center'} marginTop={'3'}>
 						<Box>
-							<ReactToPdf
-								targetRef={ref}
-								filename={`Gigover-published-offer-${Number(offerId)}.pdf`}
-								options={
-									ref.current && {
-										orientation: 'landscape',
-										unit: 'px',
-										hotfixes: ['px-scaling'],
-										format: [
-											ref.current?.clientWidth ?? 1920,
-											ref.current?.clientHeight ?? 1080
-										]
-									}
-								}
+							<Button
+								variant={'outline'}
+								colorScheme={'black'}
+								mr={'1'}
+								onClick={handleDownloadPdf}
 							>
-								{({ toPdf }) => (
-									<Button
-										variant={'outline'}
-										colorScheme={'black'}
-										mr={'1'}
-										onClick={toPdf}
-									>
-										Download as PDF
-									</Button>
-								)}
-							</ReactToPdf>
+								Download as PDF
+							</Button>
 						</Box>
 
 						<Spacer />

@@ -14,7 +14,7 @@ import {
 	VStack
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import Timer from 'react-compound-timer';
+import { createTimeModel, useTimeModel } from 'react-compound-timer';
 import { Theme } from '../../Theme';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { Page } from '../../components/Page';
@@ -32,6 +32,40 @@ import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
 import { TimeTrackerReport } from './TimeTrackerReport';
+
+// Helper function to format time units (e.g., 9 -> "09", 10 -> "10")
+const formatTimeUnit = (unit: number): string => (unit < 10 ? `0${unit}` : unit.toString());
+
+// New component to display the timer using the new API
+interface ActiveTimerDisplayProps {
+	initialTimeMs: number;
+	lastUnit?: 'd' | 'h' | 'm' | 's';
+}
+
+const ActiveTimerDisplay: React.FC<ActiveTimerDisplayProps> = ({
+	initialTimeMs,
+	lastUnit = 'h'
+}) => {
+	const timerModel = React.useMemo(
+		() =>
+			createTimeModel({
+				initialTime: initialTimeMs,
+				direction: 'forward',
+				lastUnit: lastUnit,
+				startImmediately: true
+			}),
+		[initialTimeMs, lastUnit]
+	);
+
+	const { value } = useTimeModel(timerModel);
+
+	// value object from useTimeModel contains h, m, s, ms etc.
+	return (
+		<>
+			{formatTimeUnit(value.h)}:{formatTimeUnit(value.m)}:{formatTimeUnit(value.s)}
+		</>
+	);
+};
 
 export const TimeTracker = (): JSX.Element => {
 	const [now, setNow] = useState(new Date());
@@ -280,22 +314,13 @@ export const TimeTracker = (): JSX.Element => {
 																		borderRadius="md"
 																		userSelect="none"
 																	>
-																		<Timer
-																			formatValue={(value) =>
-																				value < 10
-																					? `0${value}`
-																					: value.toString()
-																			}
-																			initialTime={
+																		<ActiveTimerDisplay
+																			initialTimeMs={
 																				now.getTime() -
 																				timeSheet.start
 																			}
 																			lastUnit={'h'}
-																		>
-																			<Timer.Hours />:
-																			<Timer.Minutes />:
-																			<Timer.Seconds />
-																		</Timer>
+																		/>
 																	</Box>
 																	<Button
 																		variant="outline"

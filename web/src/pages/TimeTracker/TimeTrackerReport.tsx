@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import React, { useCallback, useContext, useState } from 'react';
-import Timer from 'react-compound-timer';
+import { createTimeModel, useTimeModel } from 'react-compound-timer';
 import { Center } from '../../components/Center';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -36,6 +36,39 @@ import { useTimeTrackerReport } from './useTimeTrackerReport';
 interface TimeTrackerReportProps {
 	refetch: [number, React.Dispatch<React.SetStateAction<number>>];
 }
+
+// Helper function to format time units (e.g., 9 -> "09", 10 -> "10")
+const formatTimeUnit = (unit: number): string => (unit < 10 ? `0${unit}` : unit.toString());
+
+// New component to display a static duration using the new API
+interface StaticDurationDisplayProps {
+	durationMs: number;
+	lastUnit?: 'd' | 'h' | 'm' | 's';
+}
+
+const StaticDurationDisplay: React.FC<StaticDurationDisplayProps> = ({
+	durationMs,
+	lastUnit = 'h'
+}) => {
+	const timerModel = React.useMemo(
+		() =>
+			createTimeModel({
+				initialTime: durationMs,
+				direction: 'forward', // Direction mostly irrelevant for non-starting timer
+				lastUnit: lastUnit,
+				startImmediately: false // Important: for displaying static duration
+			}),
+		[durationMs, lastUnit]
+	);
+
+	const { value } = useTimeModel(timerModel);
+
+	return (
+		<>
+			{formatTimeUnit(value.h)}:{formatTimeUnit(value.m)}:{formatTimeUnit(value.s)}
+		</>
+	);
+};
 
 export const TimeTrackerReport = ({
 	refetch: [refetchValue, setRefetch]
@@ -251,21 +284,13 @@ export const TimeTrackerReport = ({
 												borderRadius="md"
 												userSelect="none"
 											>
-												<Timer
-													startImmediately={false}
-													formatValue={(value) =>
-														value < 10 ? `0${value}` : value.toString()
-													}
-													initialTime={
+												<StaticDurationDisplay
+													durationMs={
 														result.timesheet.stop -
 														result.timesheet.start
 													}
 													lastUnit={'h'}
-												>
-													<Timer.Hours />:
-													<Timer.Minutes />:
-													<Timer.Seconds />
-												</Timer>
+												/>
 											</Box>
 											<Button
 												ml={2}

@@ -37,8 +37,6 @@ interface TrackerReportMutationVariables {
 }
 
 export const useTrackerReport = () => {
-	console.log('useTrackerReport');
-
 	return useMutation<TrackerReportAPIResponse, Error, TrackerReportMutationVariables | void>({
 		mutationFn: async (variables) => {
 			const fromTime =

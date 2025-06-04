@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 import { ICommentChord } from '../components/modals/EditPhotoModal';
 import { ApiService } from '../services/ApiService';
-// import { devInfo } from '../utils/ConsoleUtils';
 
 export interface DotCommentResponse {
 	dotId: number;

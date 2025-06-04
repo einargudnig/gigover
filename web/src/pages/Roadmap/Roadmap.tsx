@@ -1,6 +1,7 @@
 import { Box, Button, Grid, Portal } from '@chakra-ui/react';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { useEffect, useRef } from 'react';
-import ReactToPdf from 'react-to-pdf';
 import { Page } from '../../components/Page';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
@@ -60,31 +61,49 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 
 	// Should I put the "setCalendarType" in a callback or useEffect?
 
+	const handleDownloadPdf = async () => {
+		const element = ref.current;
+		if (!element) {
+			console.error('Element not found for PDF generation');
+			return;
+		}
+
+		try {
+			const canvas = await html2canvas(element, {
+				scale: 2, // Improves quality
+				useCORS: true // If you have external images/resources
+				// It might be necessary to set a higher scrollY if content is off-screen
+				// scrollY: -window.scrollY
+			});
+
+			const imgData = canvas.toDataURL('image/png');
+
+			const pdfWidth = element.offsetWidth;
+			const pdfHeight = element.offsetHeight;
+
+			// Determine orientation: 'l' for landscape, 'p' for portrait
+			const orientation = pdfWidth > pdfHeight ? 'l' : 'p';
+
+			const pdf = new jsPDF({
+				orientation: orientation,
+				unit: 'px',
+				format: [pdfWidth, pdfHeight],
+				hotfixes: ['px_scaling']
+			});
+
+			pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+			pdf.save(`Gigover-gantt-${state.project?.projectId}.pdf`);
+		} catch (error) {
+			console.error('Error generating PDF:', error);
+			// You might want to add some user-facing error notification here
+		}
+	};
+
 	return (
 		<Page
 			title={'Gantt chart'}
 			backgroundColor={'#fff'}
-			actions={
-				state.project && (
-					<ReactToPdf
-						targetRef={ref}
-						filename={`Gigover-gantt-${state.project?.projectId}.pdf`}
-						options={
-							ref.current && {
-								orientation: 'landscape',
-								unit: 'px',
-								hotfixes: ['px_scaling'],
-								format: [
-									ref.current?.clientWidth ?? 1920,
-									ref.current?.clientHeight ?? 1080
-								]
-							}
-						}
-					>
-						{({ toPdf }) => <Button onClick={toPdf}>Download as PDF</Button>}
-					</ReactToPdf>
-				)
-			}
+			actions={state.project && <Button onClick={handleDownloadPdf}>Download as PDF</Button>}
 		>
 			<>
 				<GantChartContext.Provider value={[state, dispatch]}>
