@@ -89,10 +89,6 @@ export const EditPhotoModal = ({
 	const [project, setProject] = useState<Project | null>(null);
 	const { data: projectData } = useProjectList();
 	const projects = useOpenProjects(projectData);
-	const onChangeFileName = (event: React.FocusEvent<HTMLSpanElement>) => {
-		// devInfo('onChangeFileName', event.target! as Element);
-		console.log('onChangeFileName', event.target! as Element);
-	};
 	const [, setModalContext] = useContext(ModalContext);
 
 	const { data, refetch: refetchImageDots } = useImageDots(file.imageId);
@@ -178,7 +174,7 @@ export const EditPhotoModal = ({
 						<div>
 							<Icon />
 						</div>
-						<Text isTruncated={true}>{file.name}</Text>
+						<Text isTruncated={true}>{file.name}p</Text>
 					</HStack>
 				</ModalHeader>
 				<ModalCloseButton />
