@@ -75,7 +75,7 @@ export const OrganizationSwitcher = () => {
 								>
 									{org.name}
 								</MenuItem>
-						  ))
+							))
 						: null}
 					<MenuDivider />
 					<MenuItem>

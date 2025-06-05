@@ -96,7 +96,7 @@ export const TenderTable = ({ tenderItems, finishDateStatus }): JSX.Element => {
 						const offerItem = isItemInOffer(item.tenderItemId)
 							? offerData?.offer.items.find(
 									(oi) => oi.tenderItemId === item.tenderItemId
-							  )
+								)
 							: null;
 
 						return (

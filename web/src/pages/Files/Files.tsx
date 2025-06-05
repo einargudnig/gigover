@@ -70,9 +70,9 @@ export const Files = (): JSX.Element => {
 													'/file/' +
 													params.fileId
 											}
-									  ]
+										]
 									: [])
-						  ]
+							]
 						: [])
 				]}
 				contentPadding={false}

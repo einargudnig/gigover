@@ -50,7 +50,7 @@ export const OffersFolder = (): JSX.Element => {
 																	bg: 'black',
 																	color: 'white !important',
 																	boxShadow: 'none'
-															  }
+																}
 															: {}
 													}
 												>

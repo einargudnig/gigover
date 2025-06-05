@@ -316,7 +316,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 																					value
 																						? new Date(
 																								value
-																						  )
+																							)
 																						: null
 																				}
 																				onChange={(
@@ -361,7 +361,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 																					value
 																						? new Date(
 																								value
-																						  )
+																							)
 																						: null
 																				}
 																				onChange={(

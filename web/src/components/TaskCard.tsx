@@ -86,7 +86,7 @@ export const TaskCard = ({
 												task: task!,
 												projectId: projectId
 											}
-									  })
+										})
 								: null
 						}
 					>

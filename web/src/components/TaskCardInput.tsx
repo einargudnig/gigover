@@ -69,13 +69,13 @@ export const TaskCardInput = ({
 			setParentHeight(`${textInputRef.current!.scrollHeight}px`);
 			setTextAreaHeight(`${textInputRef.current!.scrollHeight}px`);
 		}
-	}, [text, textInputRef.current]);
+	}, [text]);
 
 	useEffect(() => {
 		if (textInputRef.current) {
 			textInputRef.current.focus();
 		}
-	}, [textInputRef.current]);
+	}, []);
 
 	return (
 		<form onSubmit={submit}>

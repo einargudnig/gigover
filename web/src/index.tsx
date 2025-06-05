@@ -70,16 +70,18 @@ const ChakraTheme = extendTheme({
 });
 
 const container = document.getElementById('gigover-root');
-const root = ReactDOMClient.createRoot(container);
+if (container) {
+	const root = ReactDOMClient.createRoot(container);
 
-root.render(
-	<ErrorBoundary>
-		<ChakraProvider theme={ChakraTheme}>
-			<FirebaseContext.Provider value={firebaseApp}>
-				<QueryClientProvider client={queryClient}>
-					<AppPreloader />
-				</QueryClientProvider>
-			</FirebaseContext.Provider>
-		</ChakraProvider>
-	</ErrorBoundary>
-);
+	root.render(
+		<ErrorBoundary>
+			<ChakraProvider theme={ChakraTheme}>
+				<FirebaseContext.Provider value={firebaseApp}>
+					<QueryClientProvider client={queryClient}>
+						<AppPreloader />
+					</QueryClientProvider>
+				</FirebaseContext.Provider>
+			</ChakraProvider>
+		</ErrorBoundary>
+	);
+}

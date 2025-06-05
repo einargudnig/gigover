@@ -4,7 +4,7 @@ export const API_BASE =
 	process.env.NODE_ENV === 'production'
 		? 'https://rest.gigover.com/rest/'
 		: // 'http://localhost:3000/rest/';
-		  'http://localhost:8080/gigover-sdk-3.0.2/rest/';
+			'http://localhost:8080/gigover-sdk-3.0.2/rest/';
 // If using proxy.
 // If hosting backend locally use :8080 instead of :3000
 

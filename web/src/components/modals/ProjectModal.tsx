@@ -42,7 +42,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			? {
 					name: project?.progressStatus,
 					id: -1
-			  }
+				}
 			: undefined
 	);
 	const { mutateAsync: modify, isPending, isError, error } = useModifyProject();

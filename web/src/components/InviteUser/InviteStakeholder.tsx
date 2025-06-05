@@ -210,7 +210,7 @@ export const InviteStakeholder = ({
 											? units.map((unit) => ({
 													label: unit.name,
 													value: unit.unitId
-											  }))
+												}))
 											: []
 									} // Handle undefined 'units' here
 									isNumber={true}
