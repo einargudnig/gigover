@@ -51,13 +51,13 @@ export const InviteStakeholder = ({
 				setUserId(response.uId);
 			} else {
 				toast({
-					title: 'User not found!',
-					description: 'The user was not found, We have sent an email to the user.',
-					status: 'error',
-					duration: 5000,
+					title: 'User does not have an account.',
+					description: 'We have sent an email to the user to create an account.',
+					status: 'info',
+					duration: 9000,
 					isClosable: true
 				});
-				sendEmailNoAccount();
+				sendEmailNoAccount(searchMail);
 				onClose!();
 			}
 		} catch (e) {
@@ -67,31 +67,26 @@ export const InviteStakeholder = ({
 	}, [searchMutation, searchMail]);
 
 	// For the email we send if the user does not have a gigOver account.
-	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateId = process.env.REACT_APP_EMAIL_STAKEHOLDER_TEMPLATE_ID;
-	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+	const sendEmailNoAccount = async (email: string) => {
+		const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+		const emailTemplateId = import.meta.env.VITE_EMAIL_STAKEHOLDER_TEMPLATE_ID;
+		const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
-	// We send an email to ask the user to create a gigOver account if he doesn't have one.
-	const sendEmailNoAccount = async () => {
 		const templateParams = {
 			propertyName,
-			to_email: searchMail
+			to_email: email
 		};
-		console.log('Sending email to: ', searchMail);
+		console.log('Sending email to: ', email);
 		console.log('propertyName: ', templateParams.propertyName);
 		try {
-			await emailjs
-				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)
-				.then(
-					function (response) {
-						console.log('SUCCESS!', response.status, response.text);
-					},
-					function (error) {
-						console.log('FAILED...', error);
-					}
-				);
+			await emailjs.send(
+				emailServiceId as string,
+				emailTemplateId as string,
+				templateParams,
+				emailUserId
+			);
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	};
 

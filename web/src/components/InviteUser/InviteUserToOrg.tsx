@@ -67,7 +67,7 @@ export const InviteUserToOrg = ({
 					duration: 5000,
 					isClosable: true
 				});
-				sendEmailNoAccount();
+				sendEmailNoAccount(searchMail);
 			}
 		} catch (e) {
 			console.error(e);
@@ -79,19 +79,16 @@ export const InviteUserToOrg = ({
 	}, [searchMutation, searchMail]);
 
 	// For the email we send if the user does not have a gigOver account.
-	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	// TODO update this to the correct template id
-	const emailTemplateId = process.env.REACT_APP_EMAIL_ORGANIZATION_INVITE_TEMPLATE_ID;
-	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
-
-	// We send an email to ask the user to create a gigOver account if he doesn't have one.
-	const sendEmailNoAccount = async () => {
+	const sendEmailNoAccount = async (email: string) => {
+		const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+		const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+		const emailTemplateId = import.meta.env.VITE_EMAIL_ORGANIZATION_INVITE_TEMPLATE_ID;
 		const templateParams = {
-			organizationName,
-			to_email: searchMail
+			organization_name: organizationName,
+			to_email: email
 		};
-		console.log('Sending email to: ', searchMail);
-		console.log('propertyName: ', templateParams.organizationName);
+		console.log('Sending email to: ', email);
+		console.log('propertyName: ', templateParams.organization_name);
 		try {
 			await emailjs
 				.send(emailServiceId!, emailTemplateId!, templateParams!, emailUserId!)

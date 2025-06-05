@@ -20,8 +20,10 @@ import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
 
-// We need this for loading PDF viewer on production.
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+	'pdfjs-dist/build/pdf.worker.min.js',
+	import.meta.url
+).toString();
 
 type Intercom = (type: 'boot', options: Record<string, unknown>) => void;
 declare const window: Window & { Intercom: Intercom };

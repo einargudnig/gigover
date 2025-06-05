@@ -48,8 +48,8 @@ export const HandlingOfferConfirmation = ({
 		onOpen();
 	};
 
-	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateId = process.env.REACT_APP_EMAIL_OFFER_TEMPLATE_ID;
+	const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+	const emailTemplateId = import.meta.env.VITE_EMAIL_OFFER_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	const handling = {

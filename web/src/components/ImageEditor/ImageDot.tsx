@@ -2,7 +2,7 @@
 import { Box, Button, Image as ChakraImage } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import 'react-medium-image-zoom/dist/styles.css';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
+import { Document, Page } from 'react-pdf';
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import useResizeObserver from 'use-resize-observer';
 import useKeyPress from '../../hooks/useArrowKey';
