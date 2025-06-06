@@ -47,7 +47,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 	const pageTitle = 'Project';
 	const breadcrumbs = [{ title: 'Projects', url: '/' }, { title: project?.name || '' }];
 	const pageActions = (
-		<Box display={'flex'} gap={2} alignItems={'center'} py={2}>
+		<Box display={'flex'} gap={2} alignItems={'center'} py={2} height={'50px'}>
 			{!isLoading && project && (
 				<>
 					{project?.owner && (
@@ -63,11 +63,11 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 	);
 	const extraNav = (
 		<Flex
+			borderTop={'1px solid'}
 			borderBottom={'1px'}
 			backgroundColor={'white'}
 			borderColor={'gray.400'}
 			alignItems={'center'}
-			px={3}
 			py={1}
 			height={'50px'}
 		>

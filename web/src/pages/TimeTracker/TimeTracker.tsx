@@ -1,13 +1,18 @@
 import {
 	Box,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
 	Button,
 	Card,
 	CardBody,
 	Divider,
 	Flex,
 	Heading,
+	Link,
 	Tbody,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tr,
@@ -17,7 +22,6 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { createTimeModel, useTimeModel } from 'react-compound-timer';
 import { Theme } from '../../Theme';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Page } from '../../components/Page';
 import { Table } from '../../components/Table';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { EmptyState } from '../../components/empty/EmptyState';
@@ -161,9 +165,46 @@ export const TimeTracker = (): JSX.Element => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [refetch]);
 
+	const pageTitle = 'Time tracker';
+	const breadcrumbs = [{ title: 'Time tracker', url: '/time-tracker' }];
+
 	return (
 		<>
-			<Page title={'Time tracker'}>
+			<Box
+				as="header"
+				borderBottom="1px solid"
+				borderColor="gray.200"
+				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
+				bg="white" // Or transparent if Page.tsx sets a default bg for content
+				mb={4} // Margin to separate from content
+				px={3}
+			>
+				<Box height={'50px'} display={'flex'} alignItems={'center'}>
+					{breadcrumbs ? (
+						<Breadcrumb
+							spacing="8px"
+							// separator={<Chevron direction="right" color={Theme.colors.green} />}
+						>
+							{breadcrumbs.map((breadcrumb, bIndex) => (
+								<BreadcrumbItem key={bIndex}>
+									{breadcrumb.url ? (
+										<BreadcrumbLink as={Link} to={breadcrumb.url}>
+											{breadcrumb.title}
+										</BreadcrumbLink>
+									) : (
+										<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
+									)}
+								</BreadcrumbItem>
+							))}
+						</Breadcrumb>
+					) : (
+						<Heading as="h1" size="lg" color="black">
+							{pageTitle}
+						</Heading>
+					)}
+				</Box>
+			</Box>
+			<Box p={2}>
 				<DisabledPage>
 					<Card
 						borderRadius="12px"
@@ -381,7 +422,8 @@ export const TimeTracker = (): JSX.Element => {
 						</CardBody>
 					</Card>
 				</DisabledPage>
-			</Page>
+			</Box>
+
 			{stopConfirmationModal && (
 				<StopTrackerConfirmation
 					onClose={() => setStopConfirmationModal(undefined)}
