@@ -1,8 +1,20 @@
-import { Box, Button, Grid, Portal } from '@chakra-ui/react';
+import {
+	Box,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	Button,
+	Flex,
+	Grid,
+	HStack,
+	Heading,
+	Link,
+	Portal,
+	Text
+} from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useEffect, useRef } from 'react';
-import { Page } from '../../components/Page';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
 import { useMilestones } from '../../queries/useMilestones';
@@ -99,13 +111,52 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 		}
 	};
 
+	const pageTitle = 'Gantt chart';
+	const breadcrumbs = [{ title: 'Gantt chart', url: '/gant-chart' }];
+	const pageActions = (
+		<>{state.project && <Button onClick={handleDownloadPdf}>Download as PDF</Button>}</>
+	);
+
 	return (
-		<Page
-			title={'Gantt chart'}
-			backgroundColor={'#fff'}
-			actions={state.project && <Button onClick={handleDownloadPdf}>Download as PDF</Button>}
-		>
-			<>
+		<>
+			<Box
+				as="header"
+				borderBottom="1px solid"
+				borderColor="gray.200"
+				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
+				bg="white" // Or transparent if Page.tsx sets a default bg for content
+				mb={4} // Margin to separate from content
+				px={3}
+			>
+				<Flex justifyContent="space-between" alignItems="center">
+					<Box>
+						{breadcrumbs ? (
+							<Breadcrumb
+								spacing="8px"
+								// separator={<Chevron direction="right" color={Theme.colors.green} />}
+							>
+								{breadcrumbs.map((breadcrumb, bIndex) => (
+									<BreadcrumbItem key={bIndex}>
+										{breadcrumb.url ? (
+											<BreadcrumbLink as={Link} to={breadcrumb.url}>
+												{breadcrumb.title}
+											</BreadcrumbLink>
+										) : (
+											<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
+										)}
+									</BreadcrumbItem>
+								))}
+							</Breadcrumb>
+						) : (
+							<Heading as="h1" size="lg" color="black">
+								{pageTitle}
+							</Heading>
+						)}
+					</Box>
+					<HStack spacing={2}>{pageActions}</HStack>
+				</Flex>
+			</Box>
+			<Box p={2}>
 				<GantChartContext.Provider value={[state, dispatch]}>
 					<div ref={ref} id={'gc-container'}>
 						<RoadmapHeader />
@@ -125,7 +176,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 						<DateAmountSlider />
 					</Portal>
 				</GantChartContext.Provider>
-			</>
-		</Page>
+			</Box>
+		</>
 	);
 };

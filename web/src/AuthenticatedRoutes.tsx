@@ -50,9 +50,6 @@ const LazyTendersFolder = lazy(() =>
 const LazyOnboarding = lazy(() =>
 	import('./pages/Onboarding').then((module) => ({ default: module.Onboarding }))
 );
-const LazyOrganize = lazy(() =>
-	import('./pages/Organize').then((module) => ({ default: module.Organize }))
-);
 const LazyProjectDetails = lazy(() =>
 	import('./pages/ProjectDetails/ProjectDetails').then((module) => ({
 		default: module.ProjectDetails
@@ -87,16 +84,12 @@ const LazyRoadmapPreloader = lazy(() =>
 		default: module.RoadmapPreloader
 	}))
 );
-const LazySettings = lazy(() =>
-	import('./pages/Settings').then((module) => ({ default: module.Settings }))
-);
 const LazyResources = lazy(() =>
 	import('./pages/Resources/Resources').then((module) => ({ default: module.Resources }))
 );
 const LazyTimeTracker = lazy(() =>
 	import('./pages/TimeTracker/TimeTracker').then((module) => ({ default: module.TimeTracker }))
 );
-const LazyUsers = lazy(() => import('./pages/Users').then((module) => ({ default: module.Users })));
 const LazyBidDetails = lazy(() =>
 	import('./pages/Procurement/ClientBids/components/BidDetails').then((module) => ({
 		default: module.BidDetails
@@ -177,7 +170,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route index element={<LazyProjectDetails />} />
 				<Route path={'gantt'} element={<LazyProjectDetailsGanttChart />} />
 				<Route path={'files'} element={<LazyProjectDetailsFiles />} />
-				<Route path={':taskId'} element={<LazyOrganize />} />
 			</Route>
 
 			{/* 🏘️ Property system 🏘️ */}
@@ -210,16 +202,8 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				</Route>
 			</Route>
 
-			<Route path={'organize'} element={<LazyOrganize />}>
-				<Route path={':projectId'} element={<LazyOrganize />} />
-			</Route>
-
 			<Route path={'time-tracker'} element={<LazyTimeTracker />}>
 				<Route path={':projectId'} element={<LazyTimeTracker />} />
-			</Route>
-
-			<Route path={'users'} element={<LazyUsers />}>
-				<Route path={':userId'} element={<LazyUsers />} />
 			</Route>
 
 			{/* 💰 Tender/Offer  system 💰 */}
@@ -251,9 +235,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route path={'bid-responses'} element={<LazyBidResponsesList />} />
 				<Route path={'bid-responses/:bidId'} element={<LazyBidResponseDetails />} />
 			</Route>
-
-			{/* 🛠️ Settings 🛠️ */}
-			<Route path={'settings'} element={<LazySettings />} />
 
 			{/* 🏎️ Resources 🏎️ */}
 			<Route path={'resources'} element={<LazyResources />} />
