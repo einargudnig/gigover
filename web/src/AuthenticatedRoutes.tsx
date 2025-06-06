@@ -1,135 +1,268 @@
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Dashboard } from './pages/Dashboard/Dashboard';
-import { Files } from './pages/Files/Files';
-import { FilesHome } from './pages/Files/new/FilesHome';
-import { FolderFolder } from './pages/Files/new/FolderFolder';
-import { ProjectFolder } from './pages/Files/new/ProjectFolder';
-import { TenderFolderHome } from './pages/Files/new/TenderFolderHome';
-import { TenderFolder } from './pages/Files/new/TenderFolderOutlet';
-import { OfferFiles } from './pages/Files/new/components/OfferFiles';
-import { OffersFolder } from './pages/Files/new/components/OffersFolder';
-import { TenderFile } from './pages/Files/new/components/TenderFile';
-import { TendersFolder } from './pages/Files/new/components/TendersFolder';
-import { Onboarding } from './pages/Onboarding';
-import { Organize } from './pages/Organize';
-import { ProjectDetails } from './pages/ProjectDetails/ProjectDetails';
-import { Resources } from './pages/Resources/Resources';
-import { RoadmapPreloader } from './pages/Roadmap/RoadmapPreloader';
-import { Settings } from './pages/Settings';
-import { TimeTracker } from './pages/TimeTracker/TimeTracker';
-import { Users } from './pages/Users';
-// Procurement/Tenders/Offers
-import { BidDetails } from './pages/Procurement/ClientBids/components/BidDetails';
-import { BidResponseDetails } from './pages/Procurement/ClientBids/components/BidResponseDetails';
-import { BidResponsesList } from './pages/Procurement/ClientBids/components/BidResponsesList';
-import { BidsList } from './pages/Procurement/ClientBids/components/BidsList';
-import { InvitedTendersList } from './pages/Procurement/Offers/InvitedTendersList';
-import { MyOffersList } from './pages/Procurement/Offers/MyOffersList';
-import { InvitedTendersDetails } from './pages/Procurement/Offers/components/InvitedTendersDetails';
-import { MyOffersDetails } from './pages/Procurement/Offers/components/MyOfferDetails';
-import { TenderOfferAnswer } from './pages/Procurement/Offers/components/TenderOfferAnswer';
-import { TenderOfferDetails } from './pages/Procurement/Offers/components/TenderOfferDetails';
-import { TenderOffersList } from './pages/Procurement/Offers/components/TendersOffersList';
-import { TenderLayout } from './pages/Procurement/TenderLayout';
-import { TenderDetails } from './pages/Procurement/components/TenderDetails';
-import { MyTendersList } from './pages/Procurement/tabs/MyTendersList';
-import { ProjectDetailsFiles } from './pages/ProjectDetails/ProjectDetailsFiles';
-import { ProjectDetailsGanttChart } from './pages/ProjectDetails/ProjectDetailsGanttChart';
-import { ProjectDetailsOutlet } from './pages/ProjectDetails/ProjectDetailsOutlet';
-import { Property } from './pages/Property/Property';
-import { PropertyId } from './pages/Property/PropertyId';
-import { PropertyOutlet } from './pages/Property/PropertyOutlet';
+import { Page } from './components/Page';
+
+const LazyDashboard = lazy(() =>
+	import('./pages/Dashboard/Dashboard').then((module) => ({ default: module.Dashboard }))
+);
+const LazyFiles = lazy(() =>
+	import('./pages/Files/Files').then((module) => ({ default: module.Files }))
+);
+const LazyFilesHome = lazy(() =>
+	import('./pages/Files/new/FilesHome').then((module) => ({ default: module.FilesHome }))
+);
+const LazyFolderFolder = lazy(() =>
+	import('./pages/Files/new/FolderFolder').then((module) => ({ default: module.FolderFolder }))
+);
+const LazyProjectFolder = lazy(() =>
+	import('./pages/Files/new/ProjectFolder').then((module) => ({ default: module.ProjectFolder }))
+);
+const LazyTenderFolderHome = lazy(() =>
+	import('./pages/Files/new/TenderFolderHome').then((module) => ({
+		default: module.TenderFolderHome
+	}))
+);
+const LazyTenderFolder = lazy(() =>
+	import('./pages/Files/new/TenderFolderOutlet').then((module) => ({
+		default: module.TenderFolder
+	}))
+);
+const LazyOfferFiles = lazy(() =>
+	import('./pages/Files/new/components/OfferFiles').then((module) => ({
+		default: module.OfferFiles
+	}))
+);
+const LazyOffersFolder = lazy(() =>
+	import('./pages/Files/new/components/OffersFolder').then((module) => ({
+		default: module.OffersFolder
+	}))
+);
+const LazyTenderFile = lazy(() =>
+	import('./pages/Files/new/components/TenderFile').then((module) => ({
+		default: module.TenderFile
+	}))
+);
+const LazyTendersFolder = lazy(() =>
+	import('./pages/Files/new/components/TendersFolder').then((module) => ({
+		default: module.TendersFolder
+	}))
+);
+const LazyOnboarding = lazy(() =>
+	import('./pages/Onboarding').then((module) => ({ default: module.Onboarding }))
+);
+const LazyOrganize = lazy(() =>
+	import('./pages/Organize').then((module) => ({ default: module.Organize }))
+);
+const LazyProjectDetails = lazy(() =>
+	import('./pages/ProjectDetails/ProjectDetails').then((module) => ({
+		default: module.ProjectDetails
+	}))
+);
+const LazyProjectDetailsGanttChart = lazy(() =>
+	import('./pages/ProjectDetails/ProjectDetailsGanttChart').then((module) => ({
+		default: module.ProjectDetailsGanttChart
+	}))
+);
+const LazyProjectDetailsFiles = lazy(() =>
+	import('./pages/ProjectDetails/ProjectDetailsFiles').then((module) => ({
+		default: module.ProjectDetailsFiles
+	}))
+);
+const LazyProjectDetailsOutlet = lazy(() =>
+	import('./pages/ProjectDetails/ProjectDetailsOutlet').then((module) => ({
+		default: module.ProjectDetailsOutlet
+	}))
+);
+const LazyPropertyOutlet = lazy(() =>
+	import('./pages/Property/PropertyOutlet').then((module) => ({ default: module.PropertyOutlet }))
+);
+const LazyProperty = lazy(() =>
+	import('./pages/Property/Property').then((module) => ({ default: module.Property }))
+);
+const LazyPropertyId = lazy(() =>
+	import('./pages/Property/PropertyId').then((module) => ({ default: module.PropertyId }))
+);
+const LazyRoadmapPreloader = lazy(() =>
+	import('./pages/Roadmap/RoadmapPreloader').then((module) => ({
+		default: module.RoadmapPreloader
+	}))
+);
+const LazySettings = lazy(() =>
+	import('./pages/Settings').then((module) => ({ default: module.Settings }))
+);
+const LazyResources = lazy(() =>
+	import('./pages/Resources/Resources').then((module) => ({ default: module.Resources }))
+);
+const LazyTimeTracker = lazy(() =>
+	import('./pages/TimeTracker/TimeTracker').then((module) => ({ default: module.TimeTracker }))
+);
+const LazyUsers = lazy(() => import('./pages/Users').then((module) => ({ default: module.Users })));
+const LazyBidDetails = lazy(() =>
+	import('./pages/Procurement/ClientBids/components/BidDetails').then((module) => ({
+		default: module.BidDetails
+	}))
+);
+const LazyBidResponseDetails = lazy(() =>
+	import('./pages/Procurement/ClientBids/components/BidResponseDetails').then((module) => ({
+		default: module.BidResponseDetails
+	}))
+);
+const LazyBidResponsesList = lazy(() =>
+	import('./pages/Procurement/ClientBids/components/BidResponsesList').then((module) => ({
+		default: module.BidResponsesList
+	}))
+);
+const LazyBidsList = lazy(() =>
+	import('./pages/Procurement/ClientBids/components/BidsList').then((module) => ({
+		default: module.BidsList
+	}))
+);
+const LazyInvitedTendersList = lazy(() =>
+	import('./pages/Procurement/Offers/InvitedTendersList').then((module) => ({
+		default: module.InvitedTendersList
+	}))
+);
+const LazyMyOffersList = lazy(() =>
+	import('./pages/Procurement/Offers/MyOffersList').then((module) => ({
+		default: module.MyOffersList
+	}))
+);
+const LazyInvitedTendersDetails = lazy(() =>
+	import('./pages/Procurement/Offers/components/InvitedTendersDetails').then((module) => ({
+		default: module.InvitedTendersDetails
+	}))
+);
+const LazyMyOffersDetails = lazy(() =>
+	import('./pages/Procurement/Offers/components/MyOfferDetails').then((module) => ({
+		default: module.MyOffersDetails
+	}))
+);
+const LazyTenderOfferAnswer = lazy(() =>
+	import('./pages/Procurement/Offers/components/TenderOfferAnswer').then((module) => ({
+		default: module.TenderOfferAnswer
+	}))
+);
+const LazyTenderOfferDetails = lazy(() =>
+	import('./pages/Procurement/Offers/components/TenderOfferDetails').then((module) => ({
+		default: module.TenderOfferDetails
+	}))
+);
+const LazyTenderOffersList = lazy(() =>
+	import('./pages/Procurement/Offers/components/TendersOffersList').then((module) => ({
+		default: module.TenderOffersList
+	}))
+);
+const LazyTenderLayout = lazy(() =>
+	import('./pages/Procurement/TenderLayout').then((module) => ({ default: module.TenderLayout }))
+);
+const LazyTenderDetails = lazy(() =>
+	import('./pages/Procurement/components/TenderDetails').then((module) => ({
+		default: module.TenderDetails
+	}))
+);
+const LazyMyTendersList = lazy(() =>
+	import('./pages/Procurement/tabs/MyTendersList').then((module) => ({
+		default: module.MyTendersList
+	}))
+);
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
-		{/* <Route path={'/'} element={<Dashboard />} /> */}
-		<Route path={'/'} element={<Dashboard />} />
+		<Route path={'/'} element={<Page />}>
+			{/* Onboarding user -> only accessible when userProfile has registered = false */}
+			<Route index element={<LazyDashboard />} />
 
-		{/* Onboarding user -> only accessible when userProfile has registered = false */}
-		<Route path={'onboarding'} element={<Onboarding />} />
+			{/* 📝 Tasks 📝 */}
+			<Route path={'project/:projectId'} element={<LazyProjectDetailsOutlet />}>
+				<Route index element={<LazyProjectDetails />} />
+				<Route path={'gantt'} element={<LazyProjectDetailsGanttChart />} />
+				<Route path={'files'} element={<LazyProjectDetailsFiles />} />
+				<Route path={':taskId'} element={<LazyOrganize />} />
+			</Route>
 
-		{/* 📝 Tasks 📝 */}
-		<Route path={'project/:projectId'} element={<ProjectDetailsOutlet />}>
-			<Route index element={<ProjectDetails />} />
-			<Route path={'gantt'} element={<ProjectDetailsGanttChart />} />
-			<Route path={'files'} element={<ProjectDetailsFiles />} />
-			<Route path={':taskId'} element={<Organize />} />
-		</Route>
+			{/* 🏘️ Property system 🏘️ */}
+			<Route path={'property'} element={<LazyPropertyOutlet />}>
+				<Route index element={<LazyProperty />} />
+				<Route path={':propertyId'} element={<LazyPropertyId />} />
+			</Route>
 
-		{/* 🏘️ Property system 🏘️ */}
-		<Route path={'property'} element={<PropertyOutlet />}>
-			<Route index element={<Property />} />
-			<Route path={':propertyId'} element={<PropertyId />} />
-		</Route>
+			{/* 🛣️ Roadmap 🛣️ */}
+			<Route path={'roadmap'} element={<LazyRoadmapPreloader />} />
 
-		{/* 🛣️ Roadmap 🛣️ */}
-		<Route path={'roadmap'} element={<RoadmapPreloader />} />
+			{/* 📂 File System 📂 */}
+			<Route path={'files'} element={<LazyFiles />}>
+				<Route index element={<LazyFilesHome />} />
+				<Route path={':projectId'} element={<LazyProjectFolder />} />
+				<Route
+					path={':projectId/folder/:folderId/:fileId'}
+					element={<LazyFolderFolder />}
+				/>
+				<Route path={':projectId/folder/:folderId'} element={<LazyFolderFolder />} />
+				<Route path={':projectId/:fileId'} element={<LazyProjectFolder />} />
+				{/* This route is for documents for all tenders and offers */}
+				<Route path={'tender'} element={<LazyTenderFolder />}>
+					<Route index element={<LazyTenderFolderHome />} />
+					<Route path={'tenders'} element={<LazyTendersFolder />} />
+					<Route path={'tenders/:tenderId'} element={<LazyTenderFile />} />
+					<Route path={'offers'} element={<LazyOffersFolder />} />
+					<Route path={'offers/:offerId'} element={<LazyOfferFiles />} />
+					<Route path={'offers/:offerId/:fileId'} element={<LazyOfferFiles />} />
+				</Route>
+			</Route>
 
-		{/* 📂 File System 📂 */}
-		<Route path={'files'} element={<Files />}>
-			<Route index element={<FilesHome />} />
-			<Route path={':projectId'} element={<ProjectFolder />} />
-			<Route path={':projectId/folder/:folderId/:fileId'} element={<FolderFolder />} />
-			<Route path={':projectId/folder/:folderId'} element={<FolderFolder />} />
-			<Route path={':projectId/:fileId'} element={<ProjectFolder />} />
-			{/* This route is for documents for all tenders and offers */}
-			<Route path={'tender'} element={<TenderFolder />}>
-				<Route index element={<TenderFolderHome />} />
-				<Route path={'tenders'} element={<TendersFolder />} />
-				<Route path={'tenders/:tenderId'} element={<TenderFile />} />
-				<Route path={'offers'} element={<OffersFolder />} />
-				<Route path={'offers/:offerId'} element={<OfferFiles />} />
-				<Route path={'offers/:offerId/:fileId'} element={<OfferFiles />} />
+			<Route path={'organize'} element={<LazyOrganize />}>
+				<Route path={':projectId'} element={<LazyOrganize />} />
+			</Route>
+
+			<Route path={'time-tracker'} element={<LazyTimeTracker />}>
+				<Route path={':projectId'} element={<LazyTimeTracker />} />
+			</Route>
+
+			<Route path={'users'} element={<LazyUsers />}>
+				<Route path={':userId'} element={<LazyUsers />} />
+			</Route>
+
+			{/* 💰 Tender/Offer  system 💰 */}
+			<Route path={'tender'} element={<LazyTenderLayout />}>
+				{/* Tenders created by the user */}
+				<Route index element={<LazyMyTendersList />} />
+				<Route path={':tenderId'} element={<LazyTenderDetails />} />
+				<Route path={'tender-offers'} element={<LazyTenderOffersList />} />
+				<Route path={'tender-offer/:tenderId'} element={<LazyTenderOfferDetails />} />
+				{/* Submitted offer to my tenders, here I can answer them!*/}
+				<Route
+					path={'tender-offer/:tenderId/:offerId'}
+					element={<LazyTenderOfferAnswer />}
+				/>
+
+				{/* User has been invited to add offers to these tenders */}
+				<Route path={'invitations'} element={<LazyInvitedTendersList />} />
+				<Route path={'invitations/:tenderId'} element={<LazyInvitedTendersDetails />} />
+
+				{/* Offers that you have submitted */}
+				<Route path={'my-offers'} element={<LazyMyOffersList />} />
+				<Route path={'my-offer/:tenderId/:offerId'} element={<LazyMyOffersDetails />} />
+
+				{/*  Creating bid without inviting many bidders*/}
+				<Route path={'bids'} element={<LazyBidsList />} />
+				<Route path={'bids/:bidId'} element={<LazyBidDetails />} />
+
+				{/* Answers to the bids that you created */}
+				<Route path={'bid-responses'} element={<LazyBidResponsesList />} />
+				<Route path={'bid-responses/:bidId'} element={<LazyBidResponseDetails />} />
+			</Route>
+
+			{/* 🛠️ Settings 🛠️ */}
+			<Route path={'settings'} element={<LazySettings />} />
+
+			{/* 🏎️ Resources 🏎️ */}
+			<Route path={'resources'} element={<LazyResources />} />
+
+			<Route path={'project'} element={<LazyDashboard />}>
+				<Route path={':id'} element={<LazyDashboard />} />
 			</Route>
 		</Route>
 
-		<Route path={'organize'} element={<Organize />}>
-			<Route path={':projectId'} element={<Organize />} />
-		</Route>
-
-		<Route path={'time-tracker'} element={<TimeTracker />}>
-			<Route path={':projectId'} element={<TimeTracker />} />
-		</Route>
-
-		<Route path={'users'} element={<Users />}>
-			<Route path={':userId'} element={<Users />} />
-		</Route>
-
-		{/* 💰 Tender/Offer  system 💰 */}
-		<Route path={'tender'} element={<TenderLayout />}>
-			{/* Tenders created by the user */}
-			<Route index element={<MyTendersList />} />
-			<Route path={':tenderId'} element={<TenderDetails />} />
-			<Route path={'tender-offers'} element={<TenderOffersList />} />
-			<Route path={'tender-offer/:tenderId'} element={<TenderOfferDetails />} />
-			{/* Submitted offer to my tenders, here I can answer them!*/}
-			<Route path={'tender-offer/:tenderId/:offerId'} element={<TenderOfferAnswer />} />
-
-			{/* User has been invited to add offers to these tenders */}
-			<Route path={'invitations'} element={<InvitedTendersList />} />
-			<Route path={'invitations/:tenderId'} element={<InvitedTendersDetails />} />
-
-			{/* Offers that you have submitted */}
-			<Route path={'my-offers'} element={<MyOffersList />} />
-			<Route path={'my-offer/:tenderId/:offerId'} element={<MyOffersDetails />} />
-
-			{/*  Creating bid without inviting many bidders*/}
-			<Route path={'bids'} element={<BidsList />} />
-			<Route path={'bids/:bidId'} element={<BidDetails />} />
-
-			{/* Answers to the bids that you created */}
-			<Route path={'bid-responses'} element={<BidResponsesList />} />
-			<Route path={'bid-responses/:bidId'} element={<BidResponseDetails />} />
-		</Route>
-
-		{/* 🛠️ Settings 🛠️ */}
-		<Route path={'settings'} element={<Settings />} />
-
-		{/* 🏎️ Resources 🏎️ */}
-		<Route path={'resources'} element={<Resources />} />
-
-		<Route path={'project'} element={<Dashboard />}>
-			<Route path={':id'} element={<Dashboard />} />
-		</Route>
+		<Route path={'onboarding'} element={<LazyOnboarding />} />
 	</Routes>
 );
