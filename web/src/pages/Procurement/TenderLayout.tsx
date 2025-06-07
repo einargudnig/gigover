@@ -12,16 +12,20 @@ import {
 	Text,
 	Tooltip
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { useUserTenders } from '../../queries/procurement/useUserTenders';
+import { ApiService } from '../../services/ApiService';
 import { ProcurementSearchBar } from './ProcurementSearchBar';
 import { NewTenderCreate } from './tabs/NewTenderCreate';
 
 export function TenderLayout() {
 	const [showSearch, setShowSearch] = useState(false);
 	const [showCreateTender, setShowCreateTender] = useState(false);
+	const queryClient = useQueryClient();
 
 	const { data } = useUserTenders();
 
@@ -50,6 +54,12 @@ export function TenderLayout() {
 			</Flex>
 		</DisabledComponent>
 	);
+
+	const fetcher = async (url: string) => {
+		const response = await axios.get(url, { withCredentials: true });
+		return response.data;
+	};
+
 	const extraNav = (
 		<DisabledComponent>
 			<>
@@ -69,6 +79,12 @@ export function TenderLayout() {
 											borderBottom={isActive ? '2px' : 'hidden	'}
 											borderColor={'gray.600'}
 											p={1}
+											onMouseEnter={() =>
+												queryClient.prefetchQuery({
+													queryKey: [ApiService.userTenders],
+													queryFn: () => fetcher(ApiService.userTenders)
+												})
+											}
 											_hover={{
 												borderBottom: '2px',
 												borderColor: 'gray.300'
@@ -87,6 +103,12 @@ export function TenderLayout() {
 											borderColor={'gray.600'}
 											p={1}
 											width={'100%'}
+											onMouseEnter={() =>
+												queryClient.prefetchQuery({
+													queryKey: [ApiService.userTenders],
+													queryFn: () => fetcher(ApiService.userTenders)
+												})
+											}
 											_hover={{
 												borderBottom: '2px',
 												borderColor: 'gray.300'
@@ -104,6 +126,12 @@ export function TenderLayout() {
 											borderBottom={isActive ? '2px' : 'hidden	'}
 											borderColor={'gray.600'}
 											p={1}
+											onMouseEnter={() =>
+												queryClient.prefetchQuery({
+													queryKey: [ApiService.bidderTenders],
+													queryFn: () => fetcher(ApiService.bidderTenders)
+												})
+											}
 											_hover={{
 												borderBottom: '2px',
 												borderColor: 'gray.300'
@@ -121,6 +149,12 @@ export function TenderLayout() {
 											borderBottom={isActive ? '2px' : 'hidden	'}
 											borderColor={'gray.600'}
 											p={1}
+											onMouseEnter={() =>
+												queryClient.prefetchQuery({
+													queryKey: [ApiService.userOffers],
+													queryFn: () => fetcher(ApiService.userOffers)
+												})
+											}
 											_hover={{
 												borderBottom: '2px',
 												borderColor: 'gray.300'
@@ -138,6 +172,12 @@ export function TenderLayout() {
 											borderBottom={isActive ? '2px' : 'hidden	'}
 											borderColor={'gray.600'}
 											p={1}
+											onMouseEnter={() =>
+												queryClient.prefetchQuery({
+													queryKey: [ApiService.getBids],
+													queryFn: () => fetcher(ApiService.getBids)
+												})
+											}
 											_hover={{
 												borderBottom: '2px',
 												borderColor: 'gray.300'
@@ -154,6 +194,12 @@ export function TenderLayout() {
 											borderBottom={isActive ? '2px' : 'hidden	'}
 											borderColor={'gray.600'}
 											p={1}
+											onMouseEnter={() =>
+												queryClient.prefetchQuery({
+													queryKey: [ApiService.getClientBids],
+													queryFn: () => fetcher(ApiService.getClientBids)
+												})
+											}
 											_hover={{
 												borderBottom: '2px',
 												borderColor: 'gray.300'
