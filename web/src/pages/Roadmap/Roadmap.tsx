@@ -8,13 +8,13 @@ import {
 	Grid,
 	HStack,
 	Heading,
-	Link,
 	Portal,
 	Text
 } from '@chakra-ui/react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useEffect, useRef } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Milestone } from '../../models/Milestone';
 import { Project } from '../../models/Project';
 import { useMilestones } from '../../queries/useMilestones';
@@ -138,7 +138,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
-											<BreadcrumbLink as={Link} to={breadcrumb.url}>
+											<BreadcrumbLink as={RouterLink} to={breadcrumb.url}>
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (

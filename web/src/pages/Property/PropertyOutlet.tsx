@@ -9,13 +9,12 @@ import {
 	HStack,
 	Heading,
 	IconButton,
-	Link,
 	Text,
 	Tooltip,
 	VStack
 } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link as RouterLink } from 'react-router-dom';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { ModalContext } from '../../context/ModalContext';
@@ -76,7 +75,7 @@ export const PropertyOutlet = (): JSX.Element => {
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
-											<BreadcrumbLink as={Link} to={breadcrumb.url}>
+											<BreadcrumbLink as={RouterLink} to={breadcrumb.url}>
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (
