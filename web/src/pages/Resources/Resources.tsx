@@ -28,7 +28,6 @@ export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data: resourceTypes } = useResourceTypes();
 	const { data, isPending } = useResources();
-	console.log('Resources', data);
 	const { mutateAsync: deleteResourceAsync, isPending: isLoadingDelete } = useResourceDelete();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
