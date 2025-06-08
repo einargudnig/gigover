@@ -1,27 +1,26 @@
+import { useMemo } from 'react';
 import { ProgressStatus } from '../../../models/ProgressStatus';
 import { Project, ProjectStatus } from '../../../models/Project';
-import { useMemo } from 'react';
 
 export const useFilterProjectsBy = (
-	filter: string | ProgressStatus,
-	projects: Project[],
-	isLoading: boolean
+	activeTab: string | ProgressStatus,
+	projects: Project[] | undefined,
+	isPending: boolean
 ) => {
 	return useMemo(() => {
-		if (isLoading) {
-			return [];
-		}
+		if (isPending || !projects) return [];
 
-		if (typeof filter === 'string') {
-			return projects.filter(
-				(project) =>
-					project.status !== ProjectStatus.DONE &&
-					(filter === ProjectStatus.ALL || project.status === filter)
-			);
-		}
+		return projects.filter((project) => {
+			if (activeTab === ProjectStatus.ALL) return true;
+			if (activeTab === ProjectStatus.OPEN) return project.status === ProjectStatus.OPEN;
+			if (activeTab === ProjectStatus.CLOSED) return project.status === ProjectStatus.CLOSED;
 
-		return projects.filter(
-			(project) => project.progressStatus === (filter as ProgressStatus).name
-		);
-	}, [filter, projects, isLoading]);
+			// Handle ProgressStatus objects
+			if (typeof activeTab === 'object' && 'id' in activeTab) {
+				return project.progressStatus?.id === activeTab.id;
+			}
+
+			return project.status === activeTab;
+		});
+	}, [activeTab, projects, isPending]);
 };

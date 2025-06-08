@@ -14,6 +14,7 @@ import {
 	MenuItemOption,
 	MenuList,
 	MenuOptionGroup,
+	Spinner,
 	Text,
 	Tooltip,
 	VStack
@@ -30,27 +31,39 @@ import { ModalContext } from '../../context/ModalContext';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
-import { useProjectList } from '../../queries/useProjectList';
+import { useProjectsInfiniteScroll } from '../../queries/useProjectListInfinite';
 import { ProjectSearchBar } from './ProjectSearchBar';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isPending: isPendingStatuses } = useProgressStatusList();
-	const { data, isPending: isPendingProjects, isFetching, isError, error } = useProjectList();
 	const [, setModalContext] = useContext(ModalContext);
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
 
-	const projects = useFilterProjectsBy(activeTab, data, isPendingProjects);
+	// Use infinite scroll hook
+	const {
+		allProjects,
+		loadMoreRef,
+		hasMore,
+		totalCount,
+		visibleCount,
+		isLoading: isPendingProjects,
+		isFetching,
+		error
+	} = useProjectsInfiniteScroll(20, 10);
+
+	// Filter the projects (now using allProjects for filtering, but will display visibleProjects)
+	const filteredProjects = useFilterProjectsBy(activeTab, allProjects, isPendingProjects);
 
 	useEffect(() => {
 		if (!isPendingProjects) {
 			setCounter((v) => ++v);
 		}
-	}, [projects, activeTab, isPendingProjects]);
+	}, [filteredProjects, activeTab, isPendingProjects]);
 
-	if (isError) {
+	if (error) {
 		return (
 			<p>
 				Error: {error?.errorText} - Code: {error?.errorCode}
@@ -145,17 +158,14 @@ export const Dashboard = (): JSX.Element => {
 				borderBottom="1px solid"
 				borderColor="gray.200"
 				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
-				bg="white" // Or transparent if Page.tsx sets a default bg for content
-				mb={4} // Margin to separate from content
+				bg="white"
+				mb={4}
 				px={3}
 			>
 				<Flex justifyContent="space-between" alignItems="center">
 					<Box>
 						{breadcrumbs ? (
-							<Breadcrumb
-								spacing="8px"
-								// separator={<Chevron direction="right" color={Theme.colors.green} />}
-							>
+							<Breadcrumb spacing="8px">
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
@@ -163,7 +173,7 @@ export const Dashboard = (): JSX.Element => {
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (
-											<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
+											<Text as="span">{breadcrumb.title}</Text>
 										)}
 									</BreadcrumbItem>
 								))}
@@ -178,19 +188,57 @@ export const Dashboard = (): JSX.Element => {
 				</Flex>
 			</Box>
 			<Box p={2}>
-				{isLoading ? (
+				{isLoading && filteredProjects.length === 0 ? (
 					<Center>
 						<LoadingSpinner />
 					</Center>
 				) : (
 					<VStack width={'100%'} align={'stretch'}>
-						{!projects || projects.length <= 0 ? (
+						{!filteredProjects || filteredProjects.length <= 0 ? (
 							<NoProjectsFound />
 						) : (
-							<NewProjectOverview
-								key={`projects_${counter}_${projects.length}`}
-								list={projects}
-							/>
+							<>
+								<NewProjectOverview
+									key={`projects_${counter}_${filteredProjects.length}`}
+									list={filteredProjects}
+								/>
+
+								{/* Infinite Scroll Trigger */}
+								{hasMore && (
+									<Flex
+										ref={loadMoreRef}
+										h="60px"
+										align="center"
+										justify="center"
+										my={4}
+									>
+										<HStack spacing={3}>
+											<Spinner size="sm" color="blue.500" />
+											<Text fontSize="sm" color="gray.600">
+												Loading more projects...
+											</Text>
+										</HStack>
+									</Flex>
+								)}
+
+								{/* Progress indicator */}
+								{totalCount > 0 && (
+									<Flex justify="center" py={4}>
+										<Text fontSize="sm" color="gray.600">
+											Showing {visibleCount} of {totalCount} projects
+										</Text>
+									</Flex>
+								)}
+
+								{/* End message */}
+								{!hasMore && filteredProjects.length > 0 && (
+									<Flex justify="center" py={4}>
+										<Text fontSize="sm" color="gray.500">
+											You&apos;ve reached the end! 🎉
+										</Text>
+									</Flex>
+								)}
+							</>
 						)}
 					</VStack>
 				)}
