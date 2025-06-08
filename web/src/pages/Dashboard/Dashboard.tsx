@@ -14,7 +14,6 @@ import {
 	MenuItemOption,
 	MenuList,
 	MenuOptionGroup,
-	Spinner,
 	Text,
 	Tooltip,
 	VStack
@@ -31,39 +30,27 @@ import { ModalContext } from '../../context/ModalContext';
 import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
-import { useProjectsInfiniteScroll } from '../../queries/useProjectListInfinite';
+import { useProjectList } from '../../queries/useProjectList';
 import { ProjectSearchBar } from './ProjectSearchBar';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isPending: isPendingStatuses } = useProgressStatusList();
+	const { data, isPending: isPendingProjects, isError, error } = useProjectList();
 	const [, setModalContext] = useContext(ModalContext);
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
 
-	// Use infinite scroll hook
-	const {
-		allProjects,
-		loadMoreRef,
-		hasMore,
-		totalCount,
-		visibleCount,
-		isLoading: isPendingProjects,
-		isFetching,
-		error
-	} = useProjectsInfiniteScroll(20, 10);
-
-	// Filter the projects (now using allProjects for filtering, but will display visibleProjects)
-	const filteredProjects = useFilterProjectsBy(activeTab, allProjects, isPendingProjects);
+	const projects = useFilterProjectsBy(activeTab, data, isPendingProjects);
 
 	useEffect(() => {
 		if (!isPendingProjects) {
 			setCounter((v) => ++v);
 		}
-	}, [filteredProjects, activeTab, isPendingProjects]);
+	}, [projects, activeTab, isPendingProjects]);
 
-	if (error) {
+	if (isError) {
 		return (
 			<p>
 				Error: {error?.errorText} - Code: {error?.errorCode}
@@ -71,7 +58,7 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
-	const isLoading = isPendingStatuses || isFetching;
+	const isLoading = isPendingStatuses;
 
 	const pageTitle = 'Dashboard';
 	const breadcrumbs = [{ title: 'Projects', url: '/' }];
@@ -158,14 +145,17 @@ export const Dashboard = (): JSX.Element => {
 				borderBottom="1px solid"
 				borderColor="gray.200"
 				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
-				bg="white"
-				mb={4}
+				bg="white" // Or transparent if Page.tsx sets a default bg for content
+				mb={4} // Margin to separate from content
 				px={3}
 			>
 				<Flex justifyContent="space-between" alignItems="center">
 					<Box>
 						{breadcrumbs ? (
-							<Breadcrumb spacing="8px">
+							<Breadcrumb
+								spacing="8px"
+								// separator={<Chevron direction="right" color={Theme.colors.green} />}
+							>
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
@@ -173,7 +163,7 @@ export const Dashboard = (): JSX.Element => {
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (
-											<Text as="span">{breadcrumb.title}</Text>
+											<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
 										)}
 									</BreadcrumbItem>
 								))}
@@ -188,57 +178,19 @@ export const Dashboard = (): JSX.Element => {
 				</Flex>
 			</Box>
 			<Box p={2}>
-				{isLoading && filteredProjects.length === 0 ? (
+				{isPendingProjects ? (
 					<Center>
 						<LoadingSpinner />
 					</Center>
 				) : (
 					<VStack width={'100%'} align={'stretch'}>
-						{!filteredProjects || filteredProjects.length <= 0 ? (
+						{!projects || projects.length <= 0 ? (
 							<NoProjectsFound />
 						) : (
-							<>
-								<NewProjectOverview
-									key={`projects_${counter}_${filteredProjects.length}`}
-									list={filteredProjects}
-								/>
-
-								{/* Infinite Scroll Trigger */}
-								{hasMore && (
-									<Flex
-										ref={loadMoreRef}
-										h="60px"
-										align="center"
-										justify="center"
-										my={4}
-									>
-										<HStack spacing={3}>
-											<Spinner size="sm" color="blue.500" />
-											<Text fontSize="sm" color="gray.600">
-												Loading more projects...
-											</Text>
-										</HStack>
-									</Flex>
-								)}
-
-								{/* Progress indicator */}
-								{totalCount > 0 && (
-									<Flex justify="center" py={4}>
-										<Text fontSize="sm" color="gray.600">
-											Showing {visibleCount} of {totalCount} projects
-										</Text>
-									</Flex>
-								)}
-
-								{/* End message */}
-								{!hasMore && filteredProjects.length > 0 && (
-									<Flex justify="center" py={4}>
-										<Text fontSize="sm" color="gray.500">
-											You&apos;ve reached the end! 🎉
-										</Text>
-									</Flex>
-								)}
-							</>
+							<NewProjectOverview
+								key={`projects_${counter}_${projects.length}`}
+								list={projects}
+							/>
 						)}
 					</VStack>
 				)}

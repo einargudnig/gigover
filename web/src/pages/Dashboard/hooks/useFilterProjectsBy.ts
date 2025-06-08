@@ -3,24 +3,25 @@ import { ProgressStatus } from '../../../models/ProgressStatus';
 import { Project, ProjectStatus } from '../../../models/Project';
 
 export const useFilterProjectsBy = (
-	activeTab: string | ProgressStatus,
-	projects: Project[] | undefined,
-	isPending: boolean
+	filter: string | ProgressStatus,
+	projects: Project[],
+	isLoading: boolean
 ) => {
 	return useMemo(() => {
-		if (isPending || !projects) return [];
+		if (isLoading) {
+			return [];
+		}
 
-		return projects.filter((project) => {
-			if (activeTab === ProjectStatus.ALL) return true;
-			if (activeTab === ProjectStatus.OPEN) return project.status === ProjectStatus.OPEN;
-			if (activeTab === ProjectStatus.CLOSED) return project.status === ProjectStatus.CLOSED;
+		if (typeof filter === 'string') {
+			return projects.filter(
+				(project) =>
+					project.status !== ProjectStatus.DONE &&
+					(filter === ProjectStatus.ALL || project.status === filter)
+			);
+		}
 
-			// Handle ProgressStatus objects
-			if (typeof activeTab === 'object' && 'id' in activeTab) {
-				return project.progressStatus?.id === activeTab.id;
-			}
-
-			return project.status === activeTab;
-		});
-	}, [activeTab, projects, isPending]);
+		return projects.filter(
+			(project) => project.progressStatus === (filter as ProgressStatus).name
+		);
+	}, [filter, projects, isLoading]);
 };
