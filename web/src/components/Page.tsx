@@ -12,15 +12,12 @@ import {
 	Text,
 	VStack
 } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import React, { Suspense, useContext } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Theme } from '../Theme';
 import { UserContext } from '../context/UserContext';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { useLogout } from '../mutations/useLogout';
-import { ApiService } from '../services/ApiService';
 import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -41,26 +38,6 @@ interface PageProps {
 const NavItem = ({ to, icon, children, onClick }) => {
 	const location = useLocation();
 	const isActive = location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
-	const queryClient = useQueryClient();
-
-	const fetcher = async (url: string) => {
-		const response = await axios.get(url, { withCredentials: true });
-		return response.data;
-	};
-
-	const prefetchProjects = async () => {
-		await queryClient.prefetchQuery({
-			queryKey: [ApiService.projectList],
-			queryFn: () => fetcher(ApiService.projectList)
-		});
-	};
-
-	const prefetchTenders = async () => {
-		await queryClient.prefetchQuery({
-			queryKey: [ApiService.userTenders],
-			queryFn: () => fetcher(ApiService.userTenders)
-		});
-	};
 
 	return (
 		<ChakraLink
@@ -75,9 +52,6 @@ const NavItem = ({ to, icon, children, onClick }) => {
 			fontWeight="bold"
 			color={isActive ? 'yellow.400' : 'gray.500'}
 			_hover={{ textDecoration: 'none' }}
-			onMouseEnter={
-				to === '/' ? prefetchProjects : to === '/tender' ? prefetchTenders : undefined
-			}
 		>
 			<Box mr={3} ml={1}>
 				{React.cloneElement(icon, {

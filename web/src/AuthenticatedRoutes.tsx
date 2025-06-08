@@ -162,7 +162,6 @@ const LazyMyTendersList = lazy(() =>
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
 		<Route path={'/'} element={<Page />}>
-			{/* Onboarding user -> only accessible when userProfile has registered = false */}
 			<Route index element={<LazyDashboard />} />
 
 			{/* 📝 Tasks 📝 */}
@@ -244,6 +243,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			</Route>
 		</Route>
 
+		{/* Onboarding user -> only accessible when userProfile has registered = false */}
 		<Route path={'onboarding'} element={<LazyOnboarding />} />
 	</Routes>
 );
