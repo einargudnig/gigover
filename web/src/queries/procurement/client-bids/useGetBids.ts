@@ -20,7 +20,7 @@ export const useGetBids = () => {
 			});
 			return response.data;
 		},
-		refetchOnWindowFocus: true
+		staleTime: 1000 * 60 * 5 // 5 minutes
 	});
 	const bids: Bid[] = data?.list || [];
 

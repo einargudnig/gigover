@@ -19,6 +19,7 @@ import { NewLogin } from './pages/NewLogin';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
+import { Onboarding } from './pages/Onboarding';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 	'pdfjs-dist/build/pdf.worker.min.js',
@@ -123,7 +124,6 @@ const App = ({
 
 	return (
 		<Router>
-			<OnboardingHandler userProfile={userProfile} />
 			{user !== null ? (
 				<QueryParamProvider>
 					<UserContext.Provider value={user}>
@@ -131,6 +131,12 @@ const App = ({
 							<ModalContext.Provider value={modalContext}>
 								<ErrorBoundary withPage={true}>
 									<GlobalModals />
+									<Routes>
+										{userProfile?.registered === false && (
+											<Route path={'/onboarding'} element={<Onboarding />} />
+										)}
+										<Route path={'/*'} element={<AuthenticatedRoutes />} />
+									</Routes>
 									<AuthenticatedRoutes />
 								</ErrorBoundary>
 							</ModalContext.Provider>
@@ -144,22 +150,6 @@ const App = ({
 			)}
 		</Router>
 	);
-};
-
-interface OnboardingHandlerProps {
-	userProfile?: IUserProfile;
-}
-
-const OnboardingHandler: React.FC<OnboardingHandlerProps> = ({ userProfile }) => {
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (userProfile?.registered === false) {
-			navigate('/onboarding');
-		}
-	}, [userProfile, navigate]);
-
-	return null; // This component does not render anything
 };
 
 export default App;

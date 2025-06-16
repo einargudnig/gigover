@@ -47,9 +47,9 @@ const LazyTendersFolder = lazy(() =>
 		default: module.TendersFolder
 	}))
 );
-const LazyOnboarding = lazy(() =>
-	import('./pages/Onboarding').then((module) => ({ default: module.Onboarding }))
-);
+// const LazyOnboarding = lazy(() =>
+// 	import('./pages/Onboarding').then((module) => ({ default: module.Onboarding }))
+// );
 const LazyProjectDetails = lazy(() =>
 	import('./pages/ProjectDetails/ProjectDetails').then((module) => ({
 		default: module.ProjectDetails
@@ -244,6 +244,6 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 		</Route>
 
 		{/* Onboarding user -> only accessible when userProfile has registered = false */}
-		<Route path={'onboarding'} element={<LazyOnboarding />} />
+		{/* <Route path={'onboarding'} element={<LazyOnboarding />} /> */}
 	</Routes>
 );

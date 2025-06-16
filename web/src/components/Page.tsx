@@ -29,6 +29,7 @@ import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
+import { Center } from './Center';
 
 interface PageProps {
 	backgroundColor?: string;
@@ -167,7 +168,13 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 					overflowY="auto"
 					bg={backgroundColor}
 				>
-					<Suspense fallback={<LoadingSpinner />}>
+					<Suspense
+						fallback={
+							<Center>
+								<LoadingSpinner />
+							</Center>
+						}
+					>
 						<Fade in={true} style={{ flex: 1, height: '100%' }}>
 							<Outlet />
 						</Fade>

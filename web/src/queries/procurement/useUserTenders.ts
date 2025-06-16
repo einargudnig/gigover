@@ -17,8 +17,8 @@ export const useUserTenders = () => {
 			});
 			return response.data;
 		},
-		refetchOnWindowFocus: true
 		// withCredentials: true
+		staleTime: 1000 * 60 * 5 // 5 minutes
 	});
 
 	const tenders: CompleteTender[] = data?.list || [];
