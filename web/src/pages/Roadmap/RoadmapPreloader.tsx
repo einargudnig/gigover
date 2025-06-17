@@ -55,7 +55,7 @@ export const RoadmapPreloader = (): JSX.Element => {
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
-											<BreadcrumbLink as={Link} to={breadcrumb.url}>
+											<BreadcrumbLink as={Link} href={breadcrumb.url}>
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (

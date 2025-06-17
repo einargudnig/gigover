@@ -58,8 +58,6 @@ export const Dashboard = (): JSX.Element => {
 		);
 	}
 
-	const isLoading = isPendingStatuses;
-
 	const pageTitle = 'Dashboard';
 	const breadcrumbs = [{ title: 'Projects', url: '/' }];
 	const pageActions = (
@@ -159,7 +157,7 @@ export const Dashboard = (): JSX.Element => {
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
-											<BreadcrumbLink as={Link} to={breadcrumb.url}>
+											<BreadcrumbLink as={Link} href={breadcrumb.url}>
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (

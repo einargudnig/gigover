@@ -138,7 +138,7 @@ export const Roadmap = ({ projects, selectedProject }: RoadmapProps): JSX.Elemen
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
-											<BreadcrumbLink as={RouterLink} to={breadcrumb.url}>
+											<BreadcrumbLink as={RouterLink} href={breadcrumb.url}>
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (

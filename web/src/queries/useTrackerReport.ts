@@ -63,5 +63,6 @@ export const useTrackerReport = () => {
 
 			return axios.post(ApiService.timerReport, payload, { withCredentials: true });
 		}
+		// staleTime: 1000 * 60 * 5 // 5 minutes
 	});
 };
