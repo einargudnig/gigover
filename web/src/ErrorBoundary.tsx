@@ -1,6 +1,5 @@
 import { Box, Button } from '@chakra-ui/react';
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { Page } from './components/Page';
 import { devError } from './utils/ConsoleUtils';
 
 interface Props {
@@ -39,38 +38,36 @@ class ErrorBoundary extends Component<Props, State> {
 	}
 
 	public render() {
-		const { withPage, children } = this.props;
+		const { children } = this.props;
 		const { hasError, errorName, errorDetails, stack } = this.state;
 
-		if (hasError && withPage) {
+		if (hasError) {
 			return (
-				<Page onLinkClick={() => window.location.reload()}>
-					<div
-						style={{
-							flex: 1,
-							width: '100%',
-							height: '100%',
-							display: 'flex',
-							justifyContent: 'center',
-							alignItems: 'center'
-						}}
-					>
-						<Box bg="white" borderRadius="base" p={4} boxShadow="base" maxWidth="60%">
-							<h1>Sorry.. there was an error</h1>
-							<Button
-								padding={5}
-								marginTop={4}
-								marginBottom={5}
-								onClick={() => window.location.assign('/')}
-							>
-								Try the homepage!
-							</Button>
-							<p>Error: {errorName}</p>
-							<p>Details: {errorDetails}</p>
-							<p>Stack: {stack}</p>
-						</Box>
-					</div>
-				</Page>
+				<div
+					style={{
+						flex: 1,
+						width: '100%',
+						height: '100%',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}
+				>
+					<Box bg="white" borderRadius="base" p={4} boxShadow="base" maxWidth="60%">
+						<h1>Sorry.. there was an error</h1>
+						<Button
+							padding={5}
+							marginTop={4}
+							marginBottom={5}
+							onClick={() => window.location.assign('/')}
+						>
+							Try the homepage!
+						</Button>
+						<p>Error: {errorName}</p>
+						<p>Details: {errorDetails}</p>
+						<p>Stack: {stack}</p>
+					</Box>
+				</div>
 			);
 		}
 

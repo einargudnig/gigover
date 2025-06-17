@@ -129,7 +129,7 @@ const App = ({
 					<UserContext.Provider value={user}>
 						<FileSystemContext.Provider value={fileSystem}>
 							<ModalContext.Provider value={modalContext}>
-								<ErrorBoundary withPage={true}>
+								<ErrorBoundary>
 									<GlobalModals />
 									<Routes>
 										{userProfile?.registered === false && (
@@ -137,7 +137,6 @@ const App = ({
 										)}
 										<Route path={'/*'} element={<AuthenticatedRoutes />} />
 									</Routes>
-									<AuthenticatedRoutes />
 								</ErrorBoundary>
 							</ModalContext.Provider>
 						</FileSystemContext.Provider>
