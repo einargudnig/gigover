@@ -3,9 +3,9 @@ import {
 	Input,
 	InputGroup,
 	InputRightElement,
-	Menu,
-	MenuItem,
-	MenuList,
+	Popover,
+	PopoverBody,
+	PopoverContent,
 	useOutsideClick
 } from '@chakra-ui/react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +15,7 @@ interface SearchBarProps<T> {
 	data: T[];
 	renderResult: (item: T) => React.ReactNode;
 	filterPredicate: (item: T, query: string) => boolean;
+	onSelect: (item: T) => void;
 	placeholder?: string;
 	onClose?: () => void;
 }
@@ -23,10 +24,12 @@ export const SearchBar = <T,>({
 	data,
 	renderResult,
 	filterPredicate,
+	onSelect,
 	placeholder = 'Search...',
 	onClose
 }: SearchBarProps<T>): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
 
@@ -57,6 +60,7 @@ export const SearchBar = <T,>({
 	return (
 		<InputGroup position="relative">
 			<Input
+				ref={inputRef}
 				autoFocus
 				autoComplete={'off'}
 				autoCorrect={'off'}
@@ -80,17 +84,31 @@ export const SearchBar = <T,>({
 				left="0"
 				zIndex={9999}
 			>
-				<Menu isOpen={isOpen} autoSelect={false}>
-					<MenuList width="100%" zIndex="9999">
-						{searchResults.length > 0 ? (
-							searchResults.map((item, index) => (
-								<Box key={index}>{renderResult(item)}</Box>
-							))
-						) : (
-							<MenuItem>No results found</MenuItem>
-						)}
-					</MenuList>
-				</Menu>
+				<Popover
+					isOpen={isOpen}
+					autoFocus={false}
+					initialFocusRef={inputRef}
+					placement="bottom-start"
+				>
+					<PopoverContent width="400px" zIndex="9999">
+						<PopoverBody p={0}>
+							{searchResults.length > 0 ? (
+								searchResults.map((item, index) => (
+									<Box
+										key={index}
+										onClick={() => onSelect(item)}
+										p="8px 12px"
+										_hover={{ bg: 'gray.100', cursor: 'pointer' }}
+									>
+										{renderResult(item)}
+									</Box>
+								))
+							) : (
+								<Box p="8px 12px">No results found</Box>
+							)}
+						</PopoverBody>
+					</PopoverContent>
+				</Popover>
 			</Box>
 		</InputGroup>
 	);
