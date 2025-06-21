@@ -58,6 +58,8 @@ export const PropertyLayout = ({ children }: { children: ReactNode }): JSX.Eleme
 		<>
 			<Box
 				as="header"
+				position="relative"
+				zIndex={1}
 				borderBottom="1px solid"
 				borderColor="gray.200"
 				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"

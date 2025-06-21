@@ -5,6 +5,7 @@ import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { StakeholderModal } from '../../components/modals/PropertyModals/StakeholderModal';
 import { useGetPropertyById } from '../../queries/properties/useGetPropertyById';
+import { PropertyLayout } from './PropertyLayout';
 import { DocumentsTab } from './components/DocumentsTab';
 import { ProjectsTab } from './components/ProjectsTab';
 import { PropertyInfo } from './components/PropertyInfo';
@@ -23,7 +24,7 @@ export const PropertyId = (): JSX.Element => {
 	const documents = data?.property.documents;
 
 	return (
-		<>
+		<PropertyLayout>
 			{manageStakeholders && units && (
 				<StakeholderModal
 					propertyId={Number(propertyId)}
@@ -55,7 +56,6 @@ export const PropertyId = (): JSX.Element => {
 									units={units!}
 									isFetching={isFetching}
 								/>
-								,
 							</TabPanel>
 							<TabPanel>
 								<StakeholdersTab
@@ -79,6 +79,6 @@ export const PropertyId = (): JSX.Element => {
 					</Tabs>
 				</Box>
 			)}
-		</>
+		</PropertyLayout>
 	);
 };
