@@ -3,12 +3,13 @@ import { CardBaseLink } from '../../components/CardBase';
 import { Center } from '../../components/Center';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { useGetProperties } from '../../queries/properties/useGetPoperties';
+import { PropertyLayout } from './PropertyLayout';
 
 export const Property = (): JSX.Element => {
 	const { data, isPending, isFetching } = useGetProperties();
 
 	return (
-		<>
+		<PropertyLayout>
 			{isPending || isFetching ? (
 				<Center>
 					<LoadingSpinner />
@@ -84,6 +85,6 @@ export const Property = (): JSX.Element => {
 					)}
 				</>
 			)}
-		</>
+		</PropertyLayout>
 	);
 };

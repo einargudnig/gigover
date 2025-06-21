@@ -64,7 +64,7 @@ export const PropertySearchBar = ({
 			{isPending ? (
 				<Text>Loading...</Text>
 			) : (
-				<InputGroup>
+				<InputGroup position="relative">
 					<Input
 						autoComplete={'off'}
 						autoCorrect={'off'}
@@ -76,7 +76,6 @@ export const PropertySearchBar = ({
 						ref={refInput}
 						onChange={(e) => {
 							setSearchValue(e.target.value);
-							e.target.focus(); // Keep the focus on the input
 						}}
 					/>
 					<InputRightElement>
@@ -88,14 +87,17 @@ export const PropertySearchBar = ({
 						top="calc(100% + 8px)"
 						width="100%"
 						left="0"
-						right="0"
+						zIndex={9999}
 					>
 						<Menu isOpen={isOpen} autoSelect={false}>
-							<MenuList width="400px" zIndex={1000}>
+							<MenuList width="100%" zIndex="9999">
 								{searchResults.length > 0 ? (
 									searchResults.map((r, key) => (
 										<NavLink key={key} to={`/property/${r.propertyId}`}>
-											<MenuItem onClick={() => setSearchValue('')}>
+											<MenuItem
+												onClick={() => setSearchValue('')}
+												zIndex={999}
+											>
 												{r.name}
 											</MenuItem>
 										</NavLink>

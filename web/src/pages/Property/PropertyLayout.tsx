@@ -13,14 +13,14 @@ import {
 	Tooltip,
 	VStack
 } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
-import { Outlet, Link as RouterLink } from 'react-router-dom';
+import { ReactNode, useContext, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { ModalContext } from '../../context/ModalContext';
 import { PropertySearchBar } from './components/PropertySearchBar';
 
-export const PropertyOutlet = (): JSX.Element => {
+export const PropertyLayout = ({ children }: { children: ReactNode }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const [showSearch, setShowSearch] = useState(false);
 
@@ -61,17 +61,14 @@ export const PropertyOutlet = (): JSX.Element => {
 				borderBottom="1px solid"
 				borderColor="gray.200"
 				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
-				bg="white" // Or transparent if Page.tsx sets a default bg for content
-				mb={4} // Margin to separate from content
+				bg="white"
+				mb={4}
 				px={3}
 			>
 				<Flex justifyContent="space-between" alignItems="center">
 					<Box>
 						{breadcrumbs ? (
-							<Breadcrumb
-								spacing="8px"
-								// separator={<Chevron direction="right" color={Theme.colors.green} />}
-							>
+							<Breadcrumb spacing="8px">
 								{breadcrumbs.map((breadcrumb, bIndex) => (
 									<BreadcrumbItem key={bIndex}>
 										{breadcrumb.url ? (
@@ -79,7 +76,7 @@ export const PropertyOutlet = (): JSX.Element => {
 												{breadcrumb.title}
 											</BreadcrumbLink>
 										) : (
-											<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
+											<Text as="span">{breadcrumb.title}</Text>
 										)}
 									</BreadcrumbItem>
 								))}
@@ -98,7 +95,7 @@ export const PropertyOutlet = (): JSX.Element => {
 					<VStack style={{ height: '100%' }}>
 						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 							<Box overflowY={'auto'} height={'100%'} width={'100%'}>
-								<Outlet />
+								{children}
 							</Box>
 						</HStack>
 					</VStack>

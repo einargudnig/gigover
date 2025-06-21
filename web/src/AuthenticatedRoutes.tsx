@@ -70,9 +70,6 @@ const LazyProjectDetailsOutlet = lazy(() =>
 		default: module.ProjectDetailsOutlet
 	}))
 );
-const LazyPropertyOutlet = lazy(() =>
-	import('./pages/Property/PropertyOutlet').then((module) => ({ default: module.PropertyOutlet }))
-);
 const LazyProperty = lazy(() =>
 	import('./pages/Property/Property').then((module) => ({ default: module.Property }))
 );
@@ -172,7 +169,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			</Route>
 
 			{/* 🏘️ Property system 🏘️ */}
-			<Route path={'property'} element={<LazyPropertyOutlet />}>
+			<Route path={'property'}>
 				<Route index element={<LazyProperty />} />
 				<Route path={':propertyId'} element={<LazyPropertyId />} />
 			</Route>
