@@ -25,7 +25,7 @@ export const ProcurementSearchBar = ({ tenders }: SearchBarProps): JSX.Element =
 			filterPredicate={filterPredicate}
 			renderResult={renderResult}
 			onSelect={handleSelect}
-			placeholder="Search tender"
+			placeholder="Search tender description"
 		/>
 	);
 };
