@@ -101,6 +101,9 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								{...register('title', {
 									required: 'You have to set a title for the project deliverable'
 								})}
+								borderColor={'gray.200'}
+								border={'1px solid'}
+								rounded={'md'}
 							/>
 							{errors.title ? (
 								<FormErrorMessage>{errors.title.message}</FormErrorMessage>
@@ -112,7 +115,12 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						</FormControl>
 						<FormControl id={'description'} mb={6}>
 							<FormLabel>Description</FormLabel>
-							<Textarea {...register('description')} />
+							<Textarea
+								{...register('description')}
+								borderColor={'gray.200'}
+								border={'1px solid'}
+								rounded={'md'}
+							/>
 						</FormControl>
 						<FormControl isRequired isInvalid={true} mb={6}>
 							<FormLabel htmlFor="startDate">Start and end date</FormLabel>
