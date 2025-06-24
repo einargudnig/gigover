@@ -84,6 +84,9 @@ export class GantChartItem {
 		start: Date,
 		end: Date
 	): [number, number] | false {
+		if (this.startDate == null || this.endDate == null) {
+			return false;
+		}
 		const startIndex =
 			dates.get(DateTime.fromMillis(this.startDate!).toFormat(GANT_CHART_FORMAT))?.column ||
 			0;

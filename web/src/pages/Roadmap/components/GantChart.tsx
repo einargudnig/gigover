@@ -106,6 +106,8 @@ export const GantChart = (): JSX.Element => {
 		return new GantChartDates(state.date, state.segments, state.type);
 	}, [state.date, state.type, state.segments]);
 
+	console.log('dates', dates);
+
 	const GridItemRows: GridItemRow[] = useMemo(() => {
 		if (state.rows > 0) {
 			const rows: GridItemRow[] = [];

@@ -33,7 +33,7 @@ export function TenderLayout() {
 	const breadcrumbs = [{ title: 'Procurement', url: '/procurement' }];
 	const pageActions = (
 		<DisabledComponent>
-			<Flex>
+			<Flex mt={2}>
 				{showSearch ? (
 					<ProcurementSearchBar tenders={data} />
 				) : (
