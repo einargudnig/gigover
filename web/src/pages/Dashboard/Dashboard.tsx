@@ -44,6 +44,14 @@ export const Dashboard = (): JSX.Element => {
 
 	const projects = useFilterProjectsBy(activeTab, data, isPendingProjects);
 
+	// Debug log: print the order and lexoRanks of the projects passed to NewProjectOverview
+	if (projects && projects.length > 0) {
+		console.log('Projects passed to NewProjectOverview:');
+		projects.forEach((p, i) => {
+			console.log(`${i + 1}: ${p.name} (lexoRank: ${p.lexoRank})`);
+		});
+	}
+
 	useEffect(() => {
 		if (!isPendingProjects) {
 			setCounter((v) => ++v);
