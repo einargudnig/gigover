@@ -118,8 +118,7 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 				newProjects.forEach((p, i) => {
 					console.log(`${i + 1}: ${p.name} (lexoRank: ${p.lexoRank})`);
 				});
-				queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
-				queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
+				await queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
 			}
 		},
 		[projects, mutateProject, queryClient]
