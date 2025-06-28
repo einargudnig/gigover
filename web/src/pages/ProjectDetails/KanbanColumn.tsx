@@ -2,8 +2,11 @@ import { Box, Button, Flex, Heading, IconButton, Text } from '@chakra-ui/react';
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useState } from 'react';
+import { TaskCardInput } from '../../components/TaskCardInput';
 import { PlusIcon } from '../../components/icons/PlusIcon';
 import type { Task } from '../../models/Task';
+import { useAddTask } from '../../queries/useAddTask';
+import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 import KanbanTaskCard from './KanbanTaskCard';
 
 interface KanbanColumnProps {
@@ -17,6 +20,33 @@ interface KanbanColumnProps {
 const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanColumnProps) => {
 	const { setNodeRef, isOver } = useDroppable({ id: columnId });
 	const [isHovered, setIsHovered] = useState(false);
+	const [isAdding, setIsAdding] = useState(false);
+	const [inputValue, setInputValue] = useState('');
+	const [error, setError] = useState<string | undefined>(undefined);
+	const { mutateAsync: addTask, isPending: isLoading } = useAddTask();
+
+	const handleShowInput = () => {
+		setIsAdding(true);
+		setError(undefined);
+	};
+
+	const handleAddTask = async ({ subject }: { subject: string }) => {
+		setError(undefined);
+		try {
+			await addTask({
+				projectId,
+				status: parseInt(columnId) as import('../../models/Task').TaskStatusType,
+				lexoRank: GetNextLexoRank(tasks, -1, tasks.length - 1).toString(),
+				subject,
+				typeId: undefined // or set a default typeId if needed
+			});
+			setIsAdding(false);
+			setInputValue('');
+		} catch (e: any) {
+			setError(e.message || 'Failed to add task');
+		}
+	};
+
 	return (
 		<Box
 			flex={1}
@@ -41,9 +71,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 					variant="ghost"
 					ml="auto"
 					colorScheme={'black'}
-					onClick={() => {
-						/* handle add task */
-					}}
+					onClick={handleShowInput}
 				/>
 			</Flex>
 			<div
@@ -68,18 +96,27 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 							<KanbanTaskCard task={task} key={task.taskId} projectId={projectId} />
 						))
 					)}
+					{isAdding && (
+						<Box mt={2}>
+							<TaskCardInput
+								value={inputValue}
+								onChange={setInputValue}
+								onSubmit={handleAddTask}
+								loading={isLoading}
+								error={error}
+							/>
+						</Box>
+					)}
 				</SortableContext>
 			</div>
-			{isHovered && (
+			{isHovered && !isAdding && (
 				<Button
 					leftIcon={<PlusIcon />}
 					variant="outline"
 					w="100%"
 					colorScheme="gray"
 					fontWeight="bold"
-					onClick={() => {
-						/* handle add task */
-					}}
+					onClick={handleShowInput}
 				>
 					Add Task
 				</Button>

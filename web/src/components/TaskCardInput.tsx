@@ -1,4 +1,4 @@
-import { Button, Flex, Textarea } from '@chakra-ui/react';
+import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -78,45 +78,47 @@ export const TaskCardInput = ({
 	}, []);
 
 	return (
-		<form onSubmit={submit}>
-			{error && <div style={{ color: 'red' }}>{error}</div>}
-			<div style={{ minHeight: parentHeight }}>
-				<ErrorMessage errors={errors} name="subject" />
-				<Textarea
-					{...subjectRegister}
-					ref={(e) => {
-						registerRef(e);
-						textInputRef.current = e;
-					}}
-					maxLength={599}
-					required={true}
-					placeholder={'Add task name'}
-					bg="transparent"
-					border="none"
-					outline="none"
-					_focus={{ boxShadow: 'none', border: 'none' }}
-					_hover={{ border: 'none' }}
-					boxShadow="none"
-					p={0}
-					mb={2}
-					wordBreak="break-all"
-					width="100%"
-					resize="none"
-					display="block"
-					style={{ height: textAreaHeight }}
-				/>
-			</div>
-			<Flex justifyContent={'end'}>
-				<Button
-					type={'submit'}
-					colorScheme={'gray'}
-					loadingText={'Saving'}
-					isLoading={loading}
-					disabled={loading}
-				>
-					Save
-				</Button>
-			</Flex>
-		</form>
+		<Box bg="white" p={2} borderRadius={8} border="1px solid #e0e0e0">
+			<form onSubmit={submit}>
+				{error && <div style={{ color: 'red' }}>{error}</div>}
+				<div style={{ minHeight: parentHeight }}>
+					<ErrorMessage errors={errors} name="subject" />
+					<Textarea
+						{...subjectRegister}
+						ref={(e) => {
+							registerRef(e);
+							textInputRef.current = e;
+						}}
+						maxLength={599}
+						required={true}
+						placeholder={'Add task name'}
+						bg="transparent"
+						border="none"
+						outline="none"
+						_focus={{ boxShadow: 'none', border: 'none' }}
+						_hover={{ border: 'none' }}
+						boxShadow="none"
+						p={0}
+						mb={2}
+						wordBreak="break-all"
+						width="100%"
+						resize="none"
+						display="block"
+						style={{ height: textAreaHeight }}
+					/>
+				</div>
+				<Flex justifyContent={'end'}>
+					<Button
+						type={'submit'}
+						colorScheme={'gray'}
+						loadingText={'Saving'}
+						isLoading={loading}
+						disabled={loading}
+					>
+						Save
+					</Button>
+				</Flex>
+			</form>
+		</Box>
 	);
 };
