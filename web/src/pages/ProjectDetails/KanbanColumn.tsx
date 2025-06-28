@@ -60,7 +60,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 			position="relative"
 		>
 			<Flex align="center" mb={3}>
-				<Heading size="sm">{title}</Heading>
+				<Heading size="md">{title}</Heading>
 				<Text ml={2} size="sm">
 					({tasks.length})
 				</Text>

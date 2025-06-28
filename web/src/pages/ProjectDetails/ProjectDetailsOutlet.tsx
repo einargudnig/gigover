@@ -215,7 +215,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 				<Box p={2}>
 					<VStack style={{ height: '100%' }}>
 						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-							<Box overflowY={'auto'} height={'100%'} width={'100%'} marginTop={10}>
+							<Box overflowY={'auto'} height={'100%'} width={'100%'}>
 								<Outlet />
 							</Box>
 						</HStack>
