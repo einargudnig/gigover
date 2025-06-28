@@ -86,7 +86,7 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 
 	// Handler for drag end
 	const onDragEnd = useCallback(
-		async (event: DragEndEvent) => {
+		(event: DragEndEvent) => {
 			const { active, over } = event;
 			if (!over || active.id === over.id) {
 				return;
@@ -97,29 +97,43 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 				return;
 			}
 			const newProjects = arrayMove(projects, oldIndex, newIndex);
-			// Calculate new lexoRank for the moved project
+			const before = newProjects[newIndex - 1]?.lexoRank;
+			const after = newProjects[newIndex + 1]?.lexoRank;
+			console.log('Neighbors lexoRanks:', { before, after });
 			const nextRank = GetNextLexoRank(newProjects, newIndex, newIndex);
-			const reorderedItem = newProjects[newIndex];
-			if (reorderedItem.lexoRank !== nextRank.toString()) {
-				reorderedItem.lexoRank = nextRank.toString();
-				await mutateProject({
-					projectId: reorderedItem.projectId,
-					name: reorderedItem.name,
-					description: reorderedItem.description,
-					startDate: reorderedItem.startDate,
-					endDate: reorderedItem.endDate,
-					status: reorderedItem.status,
-					progressStatus: reorderedItem.progressStatus,
-					lexoRank: nextRank.toString()
+			console.log('Calculated nextRank:', nextRank);
+			const reorderedItem = { ...newProjects[newIndex], lexoRank: nextRank.toString() };
+			newProjects[newIndex] = reorderedItem;
+			setProjects(newProjects); // Optimistic update
+			// Async backend update
+			console.log('Updating project:', {
+				projectId: reorderedItem.projectId,
+				name: reorderedItem.name,
+				description: reorderedItem.description,
+				startDate: reorderedItem.startDate,
+				endDate: reorderedItem.endDate,
+				status: reorderedItem.status,
+				progressStatus: reorderedItem.progressStatus,
+				lexoRank: nextRank.toString()
+			});
+			mutateProject({
+				projectId: reorderedItem.projectId,
+				name: reorderedItem.name,
+				description: reorderedItem.description,
+				startDate: reorderedItem.startDate,
+				endDate: reorderedItem.endDate,
+				status: reorderedItem.status,
+				progressStatus: reorderedItem.progressStatus,
+				lexoRank: nextRank.toString()
+			})
+				.then(() => {
+					queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
+				})
+				.catch((e) => {
+					devError('Failed to update project lexoRank', e);
+					// Optionally: refetch to revert optimistic update if needed
+					queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
 				});
-				setProjects(newProjects);
-				// Debug log: print the new order and lexoRanks
-				console.log('New project order after drag:');
-				newProjects.forEach((p, i) => {
-					console.log(`${i + 1}: ${p.name} (lexoRank: ${p.lexoRank})`);
-				});
-				await queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
-			}
 		},
 		[projects, mutateProject, queryClient]
 	);
