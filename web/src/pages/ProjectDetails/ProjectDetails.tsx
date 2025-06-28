@@ -7,10 +7,12 @@ import {
 	verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Label } from '../../components/Label';
 import { DragDropIcon } from '../../components/icons/DragDropIcons';
+import { ModalContext } from '../../context/ModalContext';
+import type { Task } from '../../models/Task';
 import { TaskStatus } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useProjectTypes } from '../../queries/useProjectTypes';
@@ -35,17 +37,13 @@ export const ProjectDetails = () => {
 	// Build columns from real tasks
 	const tasks = data?.project?.tasks || [];
 	const buildColumns = () => {
-		const cols = {};
+		const cols: { [key: string]: Task[] } = {};
 		for (const status of columnOrder) {
 			cols[status] = tasks
 				.filter((t) => t.status.toString() === status)
-				.sort((a, b) => (a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0))
-				.map((t) => ({
-					id: t.taskId.toString(),
-					name: t.subject,
-					type: t.typeId,
-					worker: t.worker
-				}));
+				.sort((a, b) =>
+					a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0
+				);
 		}
 		return cols;
 	};
@@ -143,13 +141,8 @@ export const ProjectDetails = () => {
 	};
 
 	// Find the active task object for the overlay
-	const allTasks = Object.values(columns).flat() as {
-		id: string;
-		name: string;
-		type?: string | number;
-		worker?: { name: string };
-	}[];
-	const activeTaskObj = allTasks.find((t) => t.id === activeTask);
+	const allTasks = Object.values(columns).flat() as Task[];
+	const activeTaskObj = allTasks.find((t) => t.taskId.toString() === activeTask);
 
 	if (isPending) return <Box p={4}>Loading...</Box>;
 	if (isError) return <Box p={4}>Error: {error?.errorText}</Box>;
@@ -169,20 +162,13 @@ export const ProjectDetails = () => {
 							title={columnTitles[colKey]}
 							tasks={columns[colKey]}
 							activeTask={activeTask}
+							projectId={projectIdNumber}
 						/>
 					))}
 				</Flex>
 				<DragOverlay>
 					{activeTaskObj ? (
-						<KanbanTaskCard
-							id={activeTaskObj.id}
-							name={activeTaskObj.name}
-							index={0}
-							columnId={activeColumn}
-							isActive={true}
-							type={activeTaskObj.type}
-							worker={activeTaskObj.worker}
-						/>
+						<KanbanTaskCard task={activeTaskObj} projectId={projectIdNumber} />
 					) : null}
 				</DragOverlay>
 			</DndContext>
@@ -190,7 +176,19 @@ export const ProjectDetails = () => {
 	);
 };
 
-const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
+const KanbanColumn = ({
+	columnId,
+	title,
+	tasks,
+	activeTask,
+	projectId
+}: {
+	columnId: string;
+	title: string;
+	tasks: Task[];
+	activeTask: string | null;
+	projectId: number;
+}) => {
 	const { setNodeRef, isOver } = useDroppable({ id: columnId });
 	return (
 		<Box flex={1} minW="220px" bg="#f7f7fa" borderRadius={8} p={3} boxShadow="sm">
@@ -212,7 +210,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 				}}
 			>
 				<SortableContext
-					items={tasks.map((t) => t.id)}
+					items={tasks.map((t) => t.taskId.toString())}
 					strategy={verticalListSortingStrategy}
 				>
 					{tasks.length === 0 ? (
@@ -220,17 +218,8 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 							{isOver ? 'Release to drop here' : 'No tasks'}
 						</Box>
 					) : (
-						tasks.map((task, idx) => (
-							<KanbanTaskCard
-								key={task.id}
-								id={task.id}
-								name={task.name}
-								index={idx}
-								columnId={columnId}
-								isActive={activeTask === task.id}
-								type={task.type}
-								worker={task.worker}
-							/>
+						tasks.map((task) => (
+							<KanbanTaskCard task={task} key={task.taskId} projectId={projectId} />
 						))
 					)}
 				</SortableContext>
@@ -239,7 +228,12 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 	);
 };
 
-const KanbanTaskCard = ({ id, name, index, columnId, isActive, type, worker }) => {
+const KanbanTaskCard = ({ task, projectId }: { task: Task; projectId: number }) => {
+	const { taskId, subject, typeId, worker } = task;
+	const id = taskId.toString();
+	const name = subject;
+	const type = typeId;
+	const [, setModalContext] = useContext(ModalContext);
 	const { data: projectTypesData } = useProjectTypes();
 	const typeName =
 		typeof type === 'number'
@@ -247,7 +241,7 @@ const KanbanTaskCard = ({ id, name, index, columnId, isActive, type, worker }) =
 			: 'unknown';
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
-		data: { columnId, index }
+		data: { columnId: task.status.toString(), index: 0 }
 	});
 	const style: React.CSSProperties = {
 		position: 'relative',
@@ -259,16 +253,26 @@ const KanbanTaskCard = ({ id, name, index, columnId, isActive, type, worker }) =
 		opacity: isDragging ? 0.85 : 1,
 		marginBottom: 8,
 		padding: 12,
-		cursor: 'default',
-		fontWeight: isActive ? 600 : 400,
-		border: isActive ? '2px solid #6366f1' : '1px solid #e5e7eb',
+		cursor: 'pointer',
+		fontWeight: 600,
+		border: isDragging ? '2px solid #6366f1' : '1px solid #e5e7eb',
 		minHeight: 80,
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between'
 	};
+	// Open modal on card click, but not when clicking the drag icon
+	const handleCardClick = (e: React.MouseEvent) => {
+		if ((e.target as HTMLElement).closest('.drag-handle')) return;
+		setModalContext({
+			taskDetails: {
+				projectId: projectId,
+				task: task
+			}
+		});
+	};
 	return (
-		<div ref={setNodeRef} style={style} {...attributes}>
+		<div ref={setNodeRef} style={style} {...attributes} onClick={handleCardClick}>
 			{/* Top row: name left, drag icon right */}
 			<div
 				style={{
@@ -278,7 +282,11 @@ const KanbanTaskCard = ({ id, name, index, columnId, isActive, type, worker }) =
 				}}
 			>
 				<div style={{ fontWeight: 600, fontSize: 15, wordBreak: 'break-word' }}>{name}</div>
-				<span style={{ cursor: 'grab', marginLeft: 8 }} {...listeners}>
+				<span
+					className="drag-handle"
+					style={{ cursor: 'grab', marginLeft: 8 }}
+					{...listeners}
+				>
 					<DragDropIcon />
 				</span>
 			</div>
