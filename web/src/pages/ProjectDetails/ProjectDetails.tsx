@@ -1,4 +1,4 @@
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { DndContext, DragOverlay, closestCenter, useDroppable } from '@dnd-kit/core';
 import {
 	SortableContext,
@@ -40,7 +40,12 @@ export const ProjectDetails = () => {
 			cols[status] = tasks
 				.filter((t) => t.status.toString() === status)
 				.sort((a, b) => (a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0))
-				.map((t) => ({ id: t.taskId.toString(), name: t.subject, type: t.typeId }));
+				.map((t) => ({
+					id: t.taskId.toString(),
+					name: t.subject,
+					type: t.typeId,
+					worker: t.worker
+				}));
 		}
 		return cols;
 	};
@@ -142,6 +147,7 @@ export const ProjectDetails = () => {
 		id: string;
 		name: string;
 		type?: string | number;
+		worker?: { name: string };
 	}[];
 	const activeTaskObj = allTasks.find((t) => t.id === activeTask);
 
@@ -155,7 +161,7 @@ export const ProjectDetails = () => {
 				onDragStart={handleDragStart}
 				onDragEnd={handleDragEnd}
 			>
-				<Flex gap={4} alignItems="flex-start">
+				<Flex gap={4} alignItems="flex-start" width="100%" overflowX="auto">
 					{columnOrder.map((colKey) => (
 						<KanbanColumn
 							key={colKey}
@@ -175,6 +181,7 @@ export const ProjectDetails = () => {
 							columnId={activeColumn}
 							isActive={true}
 							type={activeTaskObj.type}
+							worker={activeTaskObj.worker}
 						/>
 					) : null}
 				</DragOverlay>
@@ -186,10 +193,15 @@ export const ProjectDetails = () => {
 const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 	const { setNodeRef, isOver } = useDroppable({ id: columnId });
 	return (
-		<Box minW="220px" bg="#f7f7fa" borderRadius={8} p={3} boxShadow="sm">
-			<Heading size="sm" mb={3}>
-				{title}
-			</Heading>
+		<Box flex={1} minW="220px" bg="#f7f7fa" borderRadius={8} p={3} boxShadow="sm">
+			<Flex>
+				<Heading size="sm" mb={3}>
+					{title}
+				</Heading>
+				<Text ml={2} size="sm" mb={3}>
+					({tasks.length})
+				</Text>
+			</Flex>
 			<div
 				ref={setNodeRef}
 				style={{
@@ -217,6 +229,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 								columnId={columnId}
 								isActive={activeTask === task.id}
 								type={task.type}
+								worker={task.worker}
 							/>
 						))
 					)}
@@ -226,7 +239,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 	);
 };
 
-const KanbanTaskCard = ({ id, name, index, columnId, isActive, type }) => {
+const KanbanTaskCard = ({ id, name, index, columnId, isActive, type, worker }) => {
 	const { data: projectTypesData } = useProjectTypes();
 	const typeName =
 		typeof type === 'number'
@@ -245,19 +258,41 @@ const KanbanTaskCard = ({ id, name, index, columnId, isActive, type }) => {
 		boxShadow: isDragging ? '0 4px 16px rgba(0,0,0,0.12)' : '0 1px 2px rgba(0,0,0,0.04)',
 		opacity: isDragging ? 0.85 : 1,
 		marginBottom: 8,
-		padding: '12px 36px 12px 12px',
+		padding: 12,
 		cursor: 'default',
 		fontWeight: isActive ? 600 : 400,
-		border: isActive ? '2px solid #6366f1' : '1px solid #e5e7eb'
+		border: isActive ? '2px solid #6366f1' : '1px solid #e5e7eb',
+		minHeight: 80,
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-between'
 	};
 	return (
 		<div ref={setNodeRef} style={style} {...attributes}>
-			<span style={{ position: 'absolute', top: 8, right: 8, cursor: 'grab' }} {...listeners}>
-				<DragDropIcon />
-			</span>
-			<div>{name}</div>
-			<div style={{ marginTop: 4 }}>
+			{/* Top row: name left, drag icon right */}
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'flex-start'
+				}}
+			>
+				<div style={{ fontWeight: 600, fontSize: 15, wordBreak: 'break-word' }}>{name}</div>
+				<span style={{ cursor: 'grab', marginLeft: 8 }} {...listeners}>
+					<DragDropIcon />
+				</span>
+			</div>
+			{/* Bottom row: type label left, avatar right */}
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'flex-end',
+					marginTop: 12
+				}}
+			>
 				<Label text={typeName} />
+				{worker && worker.name && <Avatar size="xs" name={worker.name} />}
 			</div>
 		</div>
 	);
