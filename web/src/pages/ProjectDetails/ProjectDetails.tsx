@@ -1,23 +1,15 @@
-import { Avatar, Box, Flex, Heading, Text } from '@chakra-ui/react';
-import { DndContext, DragOverlay, closestCenter, useDroppable } from '@dnd-kit/core';
-import {
-	SortableContext,
-	arrayMove,
-	useSortable,
-	verticalListSortingStrategy
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { useContext, useEffect, useState } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
+import { arrayMove } from '@dnd-kit/sortable';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Label } from '../../components/Label';
-import { DragDropIcon } from '../../components/icons/DragDropIcons';
-import { ModalContext } from '../../context/ModalContext';
 import type { Task } from '../../models/Task';
 import { TaskStatus } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
-import { useProjectTypes } from '../../queries/useProjectTypes';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
+import KanbanColumn from './KanbanColumn';
+import KanbanTaskCard from './KanbanTaskCard';
 
 // Dynamically build columns from TaskStatus (excluding Archived)
 const statusEntries = Object.entries(TaskStatus).filter(
@@ -173,135 +165,5 @@ export const ProjectDetails = () => {
 				</DragOverlay>
 			</DndContext>
 		</Box>
-	);
-};
-
-const KanbanColumn = ({
-	columnId,
-	title,
-	tasks,
-	activeTask,
-	projectId
-}: {
-	columnId: string;
-	title: string;
-	tasks: Task[];
-	activeTask: string | null;
-	projectId: number;
-}) => {
-	const { setNodeRef, isOver } = useDroppable({ id: columnId });
-	return (
-		<Box flex={1} minW="220px" bg="#f7f7fa" borderRadius={8} p={3} boxShadow="sm">
-			<Flex>
-				<Heading size="sm" mb={3}>
-					{title}
-				</Heading>
-				<Text ml={2} size="sm" mb={3}>
-					({tasks.length})
-				</Text>
-			</Flex>
-			<div
-				ref={setNodeRef}
-				style={{
-					minHeight: 40,
-					background: isOver ? '#e0e7ff' : undefined,
-					borderRadius: 6,
-					transition: 'background 0.2s'
-				}}
-			>
-				<SortableContext
-					items={tasks.map((t) => t.taskId.toString())}
-					strategy={verticalListSortingStrategy}
-				>
-					{tasks.length === 0 ? (
-						<Box textAlign="center" color="gray.400" py={4}>
-							{isOver ? 'Release to drop here' : 'No tasks'}
-						</Box>
-					) : (
-						tasks.map((task) => (
-							<KanbanTaskCard task={task} key={task.taskId} projectId={projectId} />
-						))
-					)}
-				</SortableContext>
-			</div>
-		</Box>
-	);
-};
-
-const KanbanTaskCard = ({ task, projectId }: { task: Task; projectId: number }) => {
-	const { taskId, subject, typeId, worker } = task;
-	const id = taskId.toString();
-	const name = subject;
-	const type = typeId;
-	const [, setModalContext] = useContext(ModalContext);
-	const { data: projectTypesData } = useProjectTypes();
-	const typeName =
-		typeof type === 'number'
-			? projectTypesData?.projectTypes.find((pt) => pt.typeId === type)?.name || 'unknown'
-			: 'unknown';
-	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-		id,
-		data: { columnId: task.status.toString(), index: 0 }
-	});
-	const style: React.CSSProperties = {
-		position: 'relative',
-		transform: CSS.Transform.toString(transform),
-		transition,
-		background: isDragging ? '#e0e7ff' : 'white',
-		borderRadius: 8,
-		boxShadow: isDragging ? '0 4px 16px rgba(0,0,0,0.12)' : '0 1px 2px rgba(0,0,0,0.04)',
-		opacity: isDragging ? 0.85 : 1,
-		marginBottom: 8,
-		padding: 12,
-		cursor: 'pointer',
-		fontWeight: 600,
-		border: isDragging ? '2px solid #6366f1' : '1px solid #e5e7eb',
-		minHeight: 80,
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'space-between'
-	};
-	// Open modal on card click, but not when clicking the drag icon
-	const handleCardClick = (e: React.MouseEvent) => {
-		if ((e.target as HTMLElement).closest('.drag-handle')) return;
-		setModalContext({
-			taskDetails: {
-				projectId: projectId,
-				task: task
-			}
-		});
-	};
-	return (
-		<div ref={setNodeRef} style={style} {...attributes} onClick={handleCardClick}>
-			{/* Top row: name left, drag icon right */}
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'flex-start'
-				}}
-			>
-				<div style={{ fontWeight: 600, fontSize: 15, wordBreak: 'break-word' }}>{name}</div>
-				<span
-					className="drag-handle"
-					style={{ cursor: 'grab', marginLeft: 8 }}
-					{...listeners}
-				>
-					<DragDropIcon />
-				</span>
-			</div>
-			{/* Bottom row: type label left, avatar right */}
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'flex-end',
-					marginTop: 12
-				}}
-			>
-				<Label text={typeName} />
-				{worker && worker.name && <Avatar size="xs" name={worker.name} />}
-			</div>
-		</div>
 	);
 };
