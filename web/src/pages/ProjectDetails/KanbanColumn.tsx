@@ -104,6 +104,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 								onSubmit={handleAddTask}
 								loading={isLoading}
 								error={error}
+								onCancel={() => setIsAdding(false)}
 							/>
 						</Box>
 					)}

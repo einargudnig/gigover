@@ -11,6 +11,7 @@ interface TaskCardInputProps {
 	loading?: boolean;
 	onChange?: (newValue: string) => void;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'subject'>) => void;
+	onCancel?: () => void;
 }
 
 export const TaskCardInput = ({
@@ -18,7 +19,8 @@ export const TaskCardInput = ({
 	error,
 	loading = false,
 	onChange,
-	onSubmit
+	onSubmit,
+	onCancel
 }: TaskCardInputProps): JSX.Element => {
 	const textInputRef = useRef<HTMLTextAreaElement | null>(null);
 	const [text, setText] = useState(value);
@@ -78,7 +80,7 @@ export const TaskCardInput = ({
 	}, []);
 
 	return (
-		<Box bg="white" p={2} borderRadius={8} border="1px solid #e0e0e0">
+		<Box bg="white" p={2} borderRadius={8} border="1px solid #e0e0e0" mt={2}>
 			<form onSubmit={submit}>
 				{error && <div style={{ color: 'red' }}>{error}</div>}
 				<div style={{ minHeight: parentHeight }}>
@@ -107,7 +109,18 @@ export const TaskCardInput = ({
 						style={{ height: textAreaHeight }}
 					/>
 				</div>
-				<Flex justifyContent={'end'}>
+				<Flex justifyContent={'end'} gap={2}>
+					<Button
+						variant={'outline'}
+						colorScheme={'gray'}
+						onClick={() => {
+							if (onCancel) {
+								onCancel();
+							}
+						}}
+					>
+						Cancel
+					</Button>
 					<Button
 						type={'submit'}
 						colorScheme={'gray'}
