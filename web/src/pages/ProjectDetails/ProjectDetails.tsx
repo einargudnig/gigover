@@ -9,8 +9,11 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { DragDropIcon } from '../../components/icons/DragDropIcons';
 import { TaskStatus } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
+import { useUpdateTask } from '../../queries/useUpdateTask';
+import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 
 // Dynamically build columns from TaskStatus (excluding Archived)
 const statusEntries = Object.entries(TaskStatus).filter(
@@ -21,24 +24,11 @@ const columnTitles = Object.fromEntries(
 	statusEntries.map(([key, value]) => [value.toString(), key])
 );
 
-const initialColumns = {
-	[TaskStatus.Backlog]: [
-		{ id: '1', name: 'Task 1' },
-		{ id: '2', name: 'Task 2' },
-		{ id: '3', name: 'Task 3' }
-	],
-	[TaskStatus.Todo]: [
-		{ id: '4', name: 'Task 4' },
-		{ id: '5', name: 'Task 5' }
-	],
-	[TaskStatus.Doing]: [{ id: '6', name: 'Task 6' }],
-	[TaskStatus.Done]: []
-};
-
 export const ProjectDetails = () => {
 	const { projectId } = useParams();
 	const projectIdNumber = parseInt(projectId as string);
 	const { data, isPending, isError, error } = useProjectDetails(projectIdNumber);
+	const updateTask = useUpdateTask(projectIdNumber);
 
 	// Build columns from real tasks
 	const tasks = data?.project?.tasks || [];
@@ -47,7 +37,8 @@ export const ProjectDetails = () => {
 		for (const status of columnOrder) {
 			cols[status] = tasks
 				.filter((t) => t.status.toString() === status)
-				.map((t) => ({ id: t.taskId.toString(), name: t.subject }));
+				.sort((a, b) => (a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0))
+				.map((t) => ({ id: t.taskId.toString(), name: t.subject, type: t.typeId }));
 		}
 		return cols;
 	};
@@ -89,12 +80,39 @@ export const ProjectDetails = () => {
 			setActiveColumn(null);
 			return;
 		}
+
+		// Find the real task object
+		const realTask = data?.project?.tasks.find((t) => t.taskId.toString() === active.id);
+		if (!realTask) {
+			setActiveTask(null);
+			setActiveColumn(null);
+			return;
+		}
+
+		// Prepare destination column's real tasks, sorted by lexoRank
+		const destTasks = (data?.project?.tasks || [])
+			.filter((t) => t.status.toString() === toColumn)
+			.sort((a, b) => (a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0));
+
+		// Remove the task if moving between columns
+		const destTasksForRank: typeof destTasks = fromColumn === toColumn ? destTasks : destTasks;
+		if (fromColumn !== toColumn) {
+			// If moving between columns, the task is not in destTasks yet
+			// so toIndex is correct
+		}
+
+		// Calculate new lexoRank
+		const nextRank = GetNextLexoRank(
+			destTasksForRank,
+			fromColumn === toColumn ? fromIndex : -1,
+			toIndex
+		);
+
+		// Update local columns optimistically
 		if (fromColumn === toColumn) {
-			// Move within the same column
 			const newColumn = arrayMove(columns[fromColumn], fromIndex, toIndex);
 			setColumns({ ...columns, [fromColumn]: newColumn });
 		} else {
-			// Move between columns
 			const task = columns[fromColumn][fromIndex];
 			const newFrom = [...columns[fromColumn]];
 			newFrom.splice(fromIndex, 1);
@@ -102,12 +120,27 @@ export const ProjectDetails = () => {
 			newTo.splice(toIndex, 0, task);
 			setColumns({ ...columns, [fromColumn]: newFrom, [toColumn]: newTo });
 		}
+
+		// Persist the change
+		updateTask.mutate({
+			taskId: realTask.taskId,
+			status: parseInt(toColumn) as typeof realTask.status,
+			subject: realTask.subject,
+			text: realTask.text,
+			lexoRank: nextRank.toString(),
+			typeId: realTask.typeId
+		});
+
 		setActiveTask(null);
 		setActiveColumn(null);
 	};
 
 	// Find the active task object for the overlay
-	const allTasks = Object.values(columns).flat() as { id: string; name: string }[];
+	const allTasks = Object.values(columns).flat() as {
+		id: string;
+		name: string;
+		type?: string | number;
+	}[];
 	const activeTaskObj = allTasks.find((t) => t.id === activeTask);
 
 	if (isPending) return <Box p={4}>Loading...</Box>;
@@ -139,6 +172,7 @@ export const ProjectDetails = () => {
 							index={0}
 							columnId={activeColumn}
 							isActive={true}
+							type={activeTaskObj.type}
 						/>
 					) : null}
 				</DragOverlay>
@@ -180,6 +214,7 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 								index={idx}
 								columnId={columnId}
 								isActive={activeTask === task.id}
+								type={task.type}
 							/>
 						))
 					)}
@@ -189,12 +224,13 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 	);
 };
 
-const KanbanTaskCard = ({ id, name, index, columnId, isActive }) => {
+const KanbanTaskCard = ({ id, name, index, columnId, isActive, type }) => {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 		data: { columnId, index }
 	});
-	const style = {
+	const style: React.CSSProperties = {
+		position: 'relative',
 		transform: CSS.Transform.toString(transform),
 		transition,
 		background: isDragging ? '#e0e7ff' : 'white',
@@ -202,14 +238,18 @@ const KanbanTaskCard = ({ id, name, index, columnId, isActive }) => {
 		boxShadow: isDragging ? '0 4px 16px rgba(0,0,0,0.12)' : '0 1px 2px rgba(0,0,0,0.04)',
 		opacity: isDragging ? 0.85 : 1,
 		marginBottom: 8,
-		padding: 12,
-		cursor: 'grab',
+		padding: '12px 36px 12px 12px',
+		cursor: 'default',
 		fontWeight: isActive ? 600 : 400,
 		border: isActive ? '2px solid #6366f1' : '1px solid #e5e7eb'
 	};
 	return (
-		<div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-			{name}
+		<div ref={setNodeRef} style={style} {...attributes}>
+			<span style={{ position: 'absolute', top: 8, right: 8, cursor: 'grab' }} {...listeners}>
+				<DragDropIcon />
+			</span>
+			<div>{name}</div>
+			{type && <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>{type}</div>}
 		</div>
 	);
 };
