@@ -9,9 +9,11 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Label } from '../../components/Label';
 import { DragDropIcon } from '../../components/icons/DragDropIcons';
 import { TaskStatus } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
+import { useProjectTypes } from '../../queries/useProjectTypes';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
 
@@ -225,6 +227,11 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask }) => {
 };
 
 const KanbanTaskCard = ({ id, name, index, columnId, isActive, type }) => {
+	const { data: projectTypesData } = useProjectTypes();
+	const typeName =
+		typeof type === 'number'
+			? projectTypesData?.projectTypes.find((pt) => pt.typeId === type)?.name || 'unknown'
+			: 'unknown';
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 		data: { columnId, index }
@@ -249,7 +256,9 @@ const KanbanTaskCard = ({ id, name, index, columnId, isActive, type }) => {
 				<DragDropIcon />
 			</span>
 			<div>{name}</div>
-			{type && <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>{type}</div>}
+			<div style={{ marginTop: 4 }}>
+				<Label text={typeName} />
+			</div>
 		</div>
 	);
 };
