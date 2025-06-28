@@ -8,6 +8,7 @@ import { useProjectTypes } from '../queries/useProjectTypes';
 import { DropZone } from './DropZone';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
+import { DragDropIcon } from './icons/DragDropIcons';
 
 interface TaskProps {
 	projectId: number;
@@ -97,13 +98,16 @@ export const TaskCard = ({
 								justifyContent="space-between"
 								flexDirection="column"
 							>
-								<Box
-									as="h4"
-									fontWeight="normal"
-									fontSize={{ base: '14px', md: '15px', lg: '16px' }}
-								>
-									{task.subject}
-								</Box>
+								<Flex align="center" justify="space-between">
+									<Box
+										as="h4"
+										fontWeight="normal"
+										fontSize={{ base: '14px', md: '15px', lg: '16px' }}
+									>
+										{task.subject}
+									</Box>
+									<DragDropIcon />
+								</Flex>
 								<Flex mt={4} align="center">
 									<Label
 										style={{ display: 'inline-block' }}

@@ -1,4 +1,4 @@
-import { Box, Button, Heading } from '@chakra-ui/react';
+import { Button, Heading } from '@chakra-ui/react';
 import { useDraggable, useDroppable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities'; // For transform styles
 import React, { useState } from 'react';
@@ -23,7 +23,10 @@ interface TaskColumnProps {
 
 const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 	minHeight: 140,
-	background: !isDraggingOver ? 'transparent' : '#e7fff3'
+	background: isDraggingOver ? '#e7f3ff' : 'transparent',
+	borderRadius: 8,
+	transition: 'background 0.2s',
+	padding: 8
 });
 
 export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
@@ -128,17 +131,31 @@ const DraggableTask = ({ task, index, projectId, isDragDisabled }: DraggableTask
 
 	const style: React.CSSProperties = {
 		transform: CSS.Translate.toString(transform),
-		transition: isDragging ? 'transform 0.2s ease' : undefined, // Apply transition during drag
-		opacity: isDragging ? 0.5 : 1,
+		transition: 'box-shadow 0.2s, background 0.2s, transform 0.2s',
+		background: isDragging ? '#f0f4ff' : 'white',
+		boxShadow: isDragging ? '0 4px 16px rgba(0,0,0,0.12)' : '0 1px 2px rgba(0,0,0,0.04)',
+		borderRadius: 8,
+		opacity: isDragging ? 0.85 : 1,
 		display: 'flex',
-		alignItems: 'center'
+		alignItems: 'center',
+		marginBottom: 8,
+		padding: 12,
+		cursor: isDragDisabled ? 'not-allowed' : undefined
 	};
 
 	return (
 		<div ref={setNodeRef} style={style} {...attributes}>
-			<Box {...listeners} pr={2} cursor="grab">
+			<span
+				{...listeners}
+				style={{
+					cursor: isDragDisabled ? 'not-allowed' : 'grab',
+					marginRight: 12,
+					display: 'flex',
+					alignItems: 'center'
+				}}
+			>
 				<DragDropIcon />
-			</Box>
+			</span>
 			<TaskCard projectId={projectId} task={task} />
 		</div>
 	);
