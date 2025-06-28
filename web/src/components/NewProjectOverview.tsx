@@ -96,26 +96,12 @@ export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 			if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) {
 				return;
 			}
+			const nextRank = GetNextLexoRank(projects, oldIndex, newIndex);
 			const newProjects = arrayMove(projects, oldIndex, newIndex);
-			const before = newProjects[newIndex - 1]?.lexoRank;
-			const after = newProjects[newIndex + 1]?.lexoRank;
-			console.log('Neighbors lexoRanks:', { before, after });
-			const nextRank = GetNextLexoRank(newProjects, newIndex, newIndex);
-			console.log('Calculated nextRank:', nextRank);
 			const reorderedItem = { ...newProjects[newIndex], lexoRank: nextRank.toString() };
 			newProjects[newIndex] = reorderedItem;
 			setProjects(newProjects); // Optimistic update
 			// Async backend update
-			console.log('Updating project:', {
-				projectId: reorderedItem.projectId,
-				name: reorderedItem.name,
-				description: reorderedItem.description,
-				startDate: reorderedItem.startDate,
-				endDate: reorderedItem.endDate,
-				status: reorderedItem.status,
-				progressStatus: reorderedItem.progressStatus,
-				lexoRank: nextRank.toString()
-			});
 			mutateProject({
 				projectId: reorderedItem.projectId,
 				name: reorderedItem.name,
