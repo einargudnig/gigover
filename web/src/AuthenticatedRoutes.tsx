@@ -155,6 +155,11 @@ const LazyMyTendersList = lazy(() =>
 		default: module.MyTendersList
 	}))
 );
+const LazySettings = lazy(() =>
+	import('./pages/Settings/Settings').then((module) => ({
+		default: module.Settings
+	}))
+);
 
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
@@ -234,6 +239,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 			{/* 🏎️ Resources 🏎️ */}
 			<Route path={'resources'} element={<LazyResources />} />
+
+			{/* ⚙︎ Settings ⚙︎ */}
+			<Route path={'settings'} element={<LazySettings />} />
 
 			<Route path={'project'} element={<LazyDashboard />}>
 				<Route path={':id'} element={<LazyDashboard />} />

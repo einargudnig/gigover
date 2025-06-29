@@ -144,6 +144,9 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 								</MenuButton>
 								<MenuList>
 									<MenuGroup title={user.name}>
+										<MenuItem>
+											<Link to="/settings">Settings</Link>
+										</MenuItem>
 										<MenuItem
 											onClick={async () => {
 												await firebase.signOut();
