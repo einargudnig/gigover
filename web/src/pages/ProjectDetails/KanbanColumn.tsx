@@ -33,10 +33,11 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 	const handleAddTask = async ({ subject }: { subject: string }) => {
 		setError(undefined);
 		try {
+			const sortedTasks = [...tasks].sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
 			await addTask({
 				projectId,
 				status: parseInt(columnId) as import('../../models/Task').TaskStatusType,
-				lexoRank: GetNextLexoRank(tasks, -1, tasks.length - 1).toString(),
+				lexoRank: GetNextLexoRank(sortedTasks, -1, sortedTasks.length).toString(),
 				subject,
 				typeId: undefined // or set a default typeId if needed
 			});

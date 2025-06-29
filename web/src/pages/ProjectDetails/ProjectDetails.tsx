@@ -1,6 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
-import { arrayMove } from '@dnd-kit/sortable';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import type { Task } from '../../models/Task';
@@ -33,9 +32,7 @@ export const ProjectDetails = () => {
 		for (const status of columnOrder) {
 			cols[status] = tasks
 				.filter((t) => t.status.toString() === status)
-				.sort((a, b) =>
-					a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0
-				);
+				.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
 		}
 		return cols;
 	};
@@ -61,6 +58,7 @@ export const ProjectDetails = () => {
 			setActiveColumn(null);
 			return;
 		}
+
 		const fromColumn = active.data.current?.columnId;
 		const fromIndex = active.data.current?.index;
 		let toColumn = over.data.current?.columnId;
@@ -78,50 +76,82 @@ export const ProjectDetails = () => {
 			return;
 		}
 
-		// Find the real task object
-		const realTask = data?.project?.tasks.find((t) => t.taskId.toString() === active.id);
+		// Find the real task object by ID
+		const taskId = active.id;
+		const realTask = tasks.find((t) => t.taskId.toString() === taskId);
 		if (!realTask) {
 			setActiveTask(null);
 			setActiveColumn(null);
 			return;
 		}
 
-		// Prepare destination column's real tasks, sorted by lexoRank
-		const destTasks = (data?.project?.tasks || [])
+		// Prepare destination column's real tasks, sorted by lexoRank and deduplicated
+		let destTasks = tasks
 			.filter((t) => t.status.toString() === toColumn)
-			.sort((a, b) => (a.lexoRank && b.lexoRank ? (a.lexoRank > b.lexoRank ? 1 : -1) : 0));
+			.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+		// Deduplicate by lexoRank, keeping the first occurrence
+		const seen = new Set();
+		destTasks = destTasks.filter((t) => {
+			if (seen.has(t.lexoRank)) return false;
+			seen.add(t.lexoRank);
+			return true;
+		});
 
-		// Remove the task if moving between columns
-		const destTasksForRank: typeof destTasks = fromColumn === toColumn ? destTasks : destTasks;
-		if (fromColumn !== toColumn) {
-			// If moving between columns, the task is not in destTasks yet
-			// so toIndex is correct
-		}
-
-		// Calculate new lexoRank
-		const nextRank = GetNextLexoRank(
-			destTasksForRank,
-			fromColumn === toColumn ? fromIndex : -1,
-			toIndex
+		// Calculate new lexoRank for the destination position
+		const adjustedToIndex =
+			fromColumn === toColumn && fromIndex < toIndex ? toIndex - 1 : toIndex;
+		console.log(
+			'destTasks:',
+			destTasks.map((t) => ({ id: t.taskId, lexoRank: t.lexoRank }))
 		);
+		console.log(
+			'fromIndex:',
+			fromIndex,
+			'toIndex:',
+			toIndex,
+			'adjustedToIndex:',
+			adjustedToIndex,
+			'fromColumn:',
+			fromColumn,
+			'toColumn:',
+			toColumn
+		);
+		const nextRank = GetNextLexoRank(
+			destTasks,
+			fromColumn === toColumn ? fromIndex : -1,
+			adjustedToIndex
+		);
+		console.log('nextRank:', nextRank);
 
-		// Update local columns optimistically
-		if (fromColumn === toColumn) {
-			const newColumn = arrayMove(columns[fromColumn], fromIndex, toIndex);
-			setColumns({ ...columns, [fromColumn]: newColumn });
-		} else {
-			const task = columns[fromColumn][fromIndex];
-			const newFrom = [...columns[fromColumn]];
-			newFrom.splice(fromIndex, 1);
-			const newTo = [...columns[toColumn]];
-			newTo.splice(toIndex, 0, task);
-			setColumns({ ...columns, [fromColumn]: newFrom, [toColumn]: newTo });
-		}
+		// Build new columns state optimistically
+		const newColumns = { ...columns };
+		// Remove from old column
+		newColumns[fromColumn] = newColumns[fromColumn].filter((t) => t.taskId !== realTask.taskId);
+		// Insert into new column at the correct position
+		const updatedTask = {
+			...realTask,
+			status: parseInt(toColumn) as import('../../models/Task').TaskStatusType,
+			lexoRank: nextRank.toString()
+		};
+		newColumns[toColumn] = [
+			...newColumns[toColumn].slice(0, toIndex),
+			updatedTask,
+			...newColumns[toColumn].slice(toIndex)
+		];
+
+		setColumns(newColumns);
+		console.log('Columns after move:', JSON.stringify(newColumns, null, 2));
+		Object.entries(newColumns).forEach(([col, tasks]) => {
+			console.log(`Column ${col}:`);
+			tasks.forEach((t, i) =>
+				console.log(`  ${i + 1}: id=${t.taskId}, lexoRank=${t.lexoRank}`)
+			);
+		});
 
 		// Persist the change
 		updateTask.mutate({
 			taskId: realTask.taskId,
-			status: parseInt(toColumn) as typeof realTask.status,
+			status: parseInt(toColumn) as import('../../models/Task').TaskStatusType,
 			subject: realTask.subject,
 			text: realTask.text,
 			lexoRank: nextRank.toString(),
