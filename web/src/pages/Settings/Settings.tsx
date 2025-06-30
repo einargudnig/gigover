@@ -19,7 +19,7 @@ export function Settings() {
 	const breadcrumbs = [{ title: 'Settings', url: '/settings' }];
 	const pageActions = (
 		<Box display={'flex'} gap={2} alignItems={'center'} py={2} height={'50px'}>
-			<Button colorScheme={'yellow'}>Manage active organization</Button>
+			<Button colorScheme={'yellow'}>Create organization</Button>
 		</Box>
 	);
 
