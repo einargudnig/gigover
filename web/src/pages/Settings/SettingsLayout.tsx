@@ -1,6 +1,9 @@
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
+	HStack,
+	IconButton,
 	Table,
 	TableContainer,
 	Tbody,
@@ -11,6 +14,7 @@ import {
 	Tr
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { TrashIcon } from '../../components/icons/TrashIcon';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 
@@ -18,8 +22,19 @@ export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
 	const { data: userInfo, isPending: userIsPending } = useGetUserInfo();
 	console.log(data);
+	console.log(userInfo);
 
 	const currentOrganization = userInfo?.organization;
+	console.log(currentOrganization);
+	const isPersonalSpace = currentOrganization === undefined;
+
+	const privMap = {
+		ADMIN: '(Admin)',
+		EDITOR: '(Editor)',
+		VIEWER: '(Viewer)'
+	}[userInfo?.organization?.priv];
+
+	// const currentOrganizationPriv = privMap[currentOrganization?.priv];
 
 	return (
 		<>
@@ -37,25 +52,68 @@ export function SettingsLayout() {
 									<Tr>
 										<Th>Organization</Th>
 										<Th>Role</Th>
+										<Th>Actions</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
 									<Tr>
-										<Td>{currentOrganization?.name}</Td>
-										<Td>{currentOrganization?.priv}</Td>
 										<Td>
-											<Button colorScheme={'yellow'}>Manage</Button>
+											{isPersonalSpace
+												? 'Active organization: Personal space'
+												: `Active organization: ${currentOrganization?.name}`}
+										</Td>
+										<Td>
+											{isPersonalSpace ? 'Owner' : currentOrganization?.priv}
+										</Td>
+										<Td>
+											{!isPersonalSpace ? (
+												<Button variant={'outline'} colorScheme={'gray'}>
+													Manage
+												</Button>
+											) : null}
 										</Td>
 									</Tr>
-									{data?.map((org) => (
-										<Tr key={org.id}>
-											<Td>{org.name}</Td>
-											<Td>{org.priv}</Td>
-											<Td>
-												<Button colorScheme={'yellow'}>Manage</Button>
-											</Td>
-										</Tr>
-									))}
+									{data?.map((org) => {
+										// const isCurrentOrganization = org.id === currentOrganization?.id;
+										// const isCurrentOrganizationPriv = privMap[org.priv];
+										// const isAdmin = org.priv === 'A';
+										const isAdmin = false;
+
+										return (
+											<Tr key={org.id}>
+												<Td>{org.name}</Td>
+												<Td>{org.priv}</Td>
+												<Td>
+													<HStack>
+														<Button
+															isDisabled={isAdmin}
+															variant={'outline'}
+															colorScheme={'gray'}
+														>
+															Manage
+														</Button>
+
+														<IconButton
+															isDisabled={isAdmin}
+															variant={'outline'}
+															colorScheme={'red'}
+															aria-label="Delete organization"
+														>
+															<TrashIcon color={'red'} />
+														</IconButton>
+														<IconButton
+															isDisabled={isAdmin}
+															variant={'outline'}
+															colorScheme={'gray'}
+															aria-label="Leave organization"
+														>
+															<ExternalLinkIcon color={'black'} />
+														</IconButton>
+													</HStack>
+												</Td>
+											</Tr>
+										);
+									})}
 								</Tbody>
 							</Table>
 						</TableContainer>
