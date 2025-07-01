@@ -67,9 +67,68 @@ export function SettingsLayout() {
 										</Td>
 										<Td>
 											{!isPersonalSpace ? (
-												<Button variant={'outline'} colorScheme={'gray'}>
-													Manage
-												</Button>
+												<HStack>
+													<Button
+														variant={'outline'}
+														colorScheme={'gray'}
+													>
+														Manage
+													</Button>
+
+													<ConfirmDialog
+														header="Leave organization"
+														callback={async (b) => {
+															if (b) {
+																leaveOrganizationMutation.mutate(
+																	currentOrganization?.id
+																);
+															}
+															setLeaveDialogOpen(false);
+														}}
+														isOpen={leaveDialogOpen}
+														setIsOpen={setLeaveDialogOpen}
+													>
+														<Tooltip label={'Leave organization'}>
+															<IconButton
+																variant={'outline'}
+																colorScheme={'gray'}
+																onClick={() =>
+																	setLeaveDialogOpen(true)
+																}
+																aria-label="Leave organization"
+															>
+																<ExternalLinkIcon color={'black'} />
+															</IconButton>
+														</Tooltip>
+													</ConfirmDialog>
+
+													<ConfirmDialog
+														header="Delete organization"
+														callback={async (b) => {
+															if (b) {
+																deleteOrganizationMutation.mutate(
+																	currentOrganization?.id
+																);
+															}
+															setDeleteDialogOpen(false);
+														}}
+														isOpen={deleteDialogOpen}
+														setIsOpen={setDeleteDialogOpen}
+													>
+														<Tooltip label={'Delete organization'}>
+															<IconButton
+																variant={'outline'}
+																colorScheme={'red'}
+																onClick={() =>
+																	setDeleteDialogOpen(true)
+																}
+																aria-label="Delete organization"
+															>
+																<TrashIcon color={'red'} />
+															</IconButton>
+														</Tooltip>
+													</ConfirmDialog>
+												</HStack>
 											) : null}
 										</Td>
 									</Tr>
