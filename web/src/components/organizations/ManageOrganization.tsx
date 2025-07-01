@@ -4,8 +4,8 @@ import {
 	Flex,
 	FormControl,
 	FormLabel,
-	Heading,
 	HStack,
+	Heading,
 	Input,
 	Modal,
 	ModalBody,
@@ -22,11 +22,9 @@ import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
-import { DisabledComponent } from '../disabled/DisabledComponent';
-import { CreateOrganization } from './CreateOrganization';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
 
-export const ManageOrganization = (): JSX.Element => {
+export const ManageOrganization = ({ orgName }: { orgName: string }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [showOrgs, setShowOrgs] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
@@ -46,7 +44,6 @@ export const ManageOrganization = (): JSX.Element => {
 		try {
 			setLoginError(null);
 
-			const orgName = activeOrg?.name;
 			const response = await loginOrg({ name: orgName, password });
 			console.log(response);
 			if (response.errorCode === 'OK') {
@@ -68,11 +65,9 @@ export const ManageOrganization = (): JSX.Element => {
 
 	return (
 		<div>
-			<DisabledComponent>
-				<Button variant="link" colorScheme="gray.300" onClick={onOpen} size={'sm'}>
-					Manage active organization
-				</Button>
-			</DisabledComponent>
+			<Button variant="outline" colorScheme="gray" onClick={onOpen}>
+				Manage
+			</Button>
 
 			<Modal isOpen={isOpen} onClose={handleClose} size={'6xl'}>
 				<ModalOverlay />
@@ -84,15 +79,8 @@ export const ManageOrganization = (): JSX.Element => {
 								<Box>
 									<Heading size="lg">Manage Organizations</Heading>
 								</Box>
-								<Box>
-									{showOrgs ? null : (
-										<Box mr={3}>
-											<CreateOrganization />
-										</Box>
-									)}
-								</Box>
 							</Flex>
-							{activeOrg ? (
+							{activeOrg && orgName === activeOrg.name ? (
 								<>
 									{showOrgs ? (
 										<MemberTable activeOrg={activeOrg} />
@@ -171,7 +159,7 @@ export const ManageOrganization = (): JSX.Element => {
 									)}
 								</>
 							) : (
-								<>
+								<Box>
 									<Flex justifyContent={'center'} alignItems={'center'} mt={10}>
 										<Flex flexDirection={'column'} alignItems={'center'}>
 											<Text
@@ -179,8 +167,8 @@ export const ManageOrganization = (): JSX.Element => {
 												fontWeight={'semibold'}
 												textColor={'gray.800'}
 											>
-												You need to select an organization before logging
-												in!
+												You need to select the correct organization before
+												managing it!
 											</Text>
 											<Box mt={4}>
 												<HStack>
@@ -192,7 +180,7 @@ export const ManageOrganization = (): JSX.Element => {
 											</Box>
 										</Flex>
 									</Flex>
-								</>
+								</Box>
 							)}
 						</Box>
 					</ModalBody>

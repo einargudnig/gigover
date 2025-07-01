@@ -9,13 +9,14 @@ import {
 	TableContainer,
 	Tbody,
 	Td,
-	Text,
 	Th,
 	Thead,
+	Tooltip,
 	Tr
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrashIcon } from '../../components/icons/TrashIcon';
+import { ManageOrganization } from '../../components/organizations/ManageOrganization';
 import { ManageOrganizationInvites } from '../../components/organizations/ManageOrganizationInvites';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
@@ -42,16 +43,6 @@ export function SettingsLayout() {
 	return (
 		<>
 			<Box>
-				<Text fontWeight="bold" color={'gray.700'}>
-					Organization
-				</Text>
-
-				<Box mt={4}>
-					<Flex justifyContent={'space-around'} alignItems={'center'}>
-						<OrgInfo />
-						<ManageOrganizationInvites />
-					</Flex>
-				</Box>
 				{isPending || isFetching ? (
 					<LoadingSpinner />
 				) : (
@@ -95,30 +86,29 @@ export function SettingsLayout() {
 												<Td>{org.priv}</Td>
 												<Td>
 													<HStack>
-														<Button
-															isDisabled={isAdmin}
-															variant={'outline'}
-															colorScheme={'gray'}
-														>
-															Manage
-														</Button>
+														<ManageOrganization orgName={org.name} />
 
-														<IconButton
-															isDisabled={isAdmin}
-															variant={'outline'}
-															colorScheme={'red'}
-															aria-label="Delete organization"
-														>
-															<TrashIcon color={'red'} />
-														</IconButton>
-														<IconButton
-															isDisabled={isAdmin}
-															variant={'outline'}
-															colorScheme={'gray'}
-															aria-label="Leave organization"
-														>
-															<ExternalLinkIcon color={'black'} />
-														</IconButton>
+														<Tooltip label="Leave organization">
+															<IconButton
+																isDisabled={isAdmin}
+																variant={'outline'}
+																colorScheme={'gray'}
+																aria-label="Leave organization"
+															>
+																<ExternalLinkIcon color={'black'} />
+															</IconButton>
+														</Tooltip>
+
+														<Tooltip label="Delete organization">
+															<IconButton
+																isDisabled={isAdmin}
+																variant={'outline'}
+																colorScheme={'red'}
+																aria-label="Delete organization"
+															>
+																<TrashIcon color={'red'} />
+															</IconButton>
+														</Tooltip>
 													</HStack>
 												</Td>
 											</Tr>
@@ -129,6 +119,12 @@ export function SettingsLayout() {
 						</TableContainer>
 					</>
 				)}
+			</Box>
+			<Box mt={8} mb={4}>
+				<Flex justifyContent={'space-around'} alignItems={'flex-start'}>
+					<OrgInfo />
+					<ManageOrganizationInvites />
+				</Flex>
 			</Box>
 		</>
 	);

@@ -14,7 +14,6 @@ import { useChangeOrganizations } from '../../mutations/organizations/useChangeO
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 
 export const OrganizationSwitcher = () => {
 	const { data, isPending, isFetching } = useGetOrganizations();
@@ -80,16 +79,6 @@ export const OrganizationSwitcher = () => {
 						<Button variant={'link'} colorScheme={'black'}>
 							<Link to="settings">Manage organizations</Link>
 						</Button>
-					</MenuItem>
-					{/* <MenuItem>
-						<ManageOrganization />
-					</MenuItem>
-					<MenuItem>
-						<CreateOrganization />
-					</MenuItem> */}
-					<MenuDivider />
-					<MenuItem>
-						<ManageOrganizationInvites />
 					</MenuItem>
 				</MenuList>
 			</Menu>
