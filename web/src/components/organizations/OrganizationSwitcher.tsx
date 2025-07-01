@@ -9,13 +9,11 @@ import {
 	MenuItem,
 	MenuList
 } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { CreateOrganization } from './CreateOrganization';
-import { ManageOrganization } from './ManageOrganization';
 import { ManageOrganizationInvites } from './ManageOrganizationInvites';
 
 export const OrganizationSwitcher = () => {
@@ -79,11 +77,16 @@ export const OrganizationSwitcher = () => {
 						: null}
 					<MenuDivider />
 					<MenuItem>
+						<Button variant={'link'} colorScheme={'black'}>
+							<Link to="settings">Manage organizations</Link>
+						</Button>
+					</MenuItem>
+					{/* <MenuItem>
 						<ManageOrganization />
 					</MenuItem>
 					<MenuItem>
 						<CreateOrganization />
-					</MenuItem>
+					</MenuItem> */}
 					<MenuDivider />
 					<MenuItem>
 						<ManageOrganizationInvites />

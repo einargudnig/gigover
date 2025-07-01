@@ -2,6 +2,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
 	Box,
 	Button,
+	Flex,
 	HStack,
 	IconButton,
 	Table,
@@ -15,8 +16,10 @@ import {
 } from '@chakra-ui/react';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrashIcon } from '../../components/icons/TrashIcon';
+import { ManageOrganizationInvites } from '../../components/organizations/ManageOrganizationInvites';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
+import { OrgInfo } from './OrgInfo';
 
 export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
@@ -42,6 +45,13 @@ export function SettingsLayout() {
 				<Text fontWeight="bold" color={'gray.700'}>
 					Organization
 				</Text>
+
+				<Box mt={4}>
+					<Flex justifyContent={'space-around'} alignItems={'center'}>
+						<OrgInfo />
+						<ManageOrganizationInvites />
+					</Flex>
+				</Box>
 				{isPending || isFetching ? (
 					<LoadingSpinner />
 				) : (
