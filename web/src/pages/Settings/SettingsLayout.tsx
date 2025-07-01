@@ -34,14 +34,6 @@ export function SettingsLayout() {
 	console.log(currentOrganization);
 	const isPersonalSpace = currentOrganization === undefined;
 
-	const privMap = {
-		ADMIN: '(Admin)',
-		EDITOR: '(Editor)',
-		VIEWER: '(Viewer)'
-	}[userInfo?.organization?.priv];
-
-	// const currentOrganizationPriv = privMap[currentOrganization?.priv];
-
 	return (
 		<>
 			<Box>
@@ -77,10 +69,6 @@ export function SettingsLayout() {
 										</Td>
 									</Tr>
 									{data?.map((org) => {
-										// const isCurrentOrganization = org.id === currentOrganization?.id;
-										// const isCurrentOrganizationPriv = privMap[org.priv];
-										// const isAdmin = org.priv === 'A';
-										const isAdmin = false;
 										const isCurrentOrg = org.id === currentOrganization?.id;
 
 										return (

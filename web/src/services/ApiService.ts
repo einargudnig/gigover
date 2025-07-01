@@ -177,6 +177,8 @@ export class ApiService {
 	static addPropertyDocument = API_BASE + 'properties/addDocument';
 	static removePropertyDocument = (documentId: number) =>
 		API_BASE + 'properties/removeDocument/' + documentId;
+	// TODO: waiting on this!
+	static removeProperty = API_BASE + 'properties/removeProperty';
 
 	// Organization
 	static createOrganization = API_BASE + 'user/orgCreate';
@@ -192,4 +194,8 @@ export class ApiService {
 	static getUserInvites = API_BASE + 'user/userInvites';
 	// org login?
 	static loginOrganization = API_BASE + 'org/login';
+	static deleteOrganization = (organizationId: number) =>
+		API_BASE + 'user/orgDelete/' + organizationId;
+	static leaveOrganization = (organizationId: number) =>
+		API_BASE + 'user/orgLeave/' + organizationId;
 }
