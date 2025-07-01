@@ -11,9 +11,10 @@ import { useProjectTypes } from '../../queries/useProjectTypes';
 interface KanbanTaskCardProps {
 	task: Task;
 	projectId: number;
+	index: number;
 }
 
-const KanbanTaskCard = ({ task, projectId }: KanbanTaskCardProps) => {
+const KanbanTaskCard = ({ task, projectId, index }: KanbanTaskCardProps) => {
 	const { taskId, subject, typeId, worker } = task;
 	const id = taskId.toString();
 	const name = subject;
@@ -26,7 +27,7 @@ const KanbanTaskCard = ({ task, projectId }: KanbanTaskCardProps) => {
 			: 'unknown';
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
-		data: { columnId: task.status.toString(), index: 0 }
+		data: { columnId: task.status.toString(), index }
 	});
 	const style: React.CSSProperties = {
 		position: 'relative',

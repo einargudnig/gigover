@@ -27,6 +27,7 @@ export const ProjectDetails = () => {
 
 	// Build columns from real tasks
 	const tasks = data?.project?.tasks || [];
+	console.log('tasks:', tasks);
 	const buildColumns = () => {
 		const cols: { [key: string]: Task[] } = {};
 		for (const status of columnOrder) {

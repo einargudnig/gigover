@@ -43,12 +43,18 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'subject'>) => {
 		try {
 			const sortedTasks = [...tasks].sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+			const destinationIndex = sortedTasks.length === 0 ? 0 : sortedTasks.length - 1;
 			const response = await addTask({
 				...taskValues,
-				lexoRank: GetNextLexoRank(sortedTasks, -1, sortedTasks.length).toString(),
+				lexoRank: GetNextLexoRank(sortedTasks, -1, destinationIndex).toString(),
 				projectId: project.projectId,
 				status
 			});
+
+			console.log(
+				'After addTask, lexoRanks in column:',
+				sortedTasks.map((t) => t.lexoRank)
+			);
 
 			if (!response) {
 				setTaskError('Could not create task');

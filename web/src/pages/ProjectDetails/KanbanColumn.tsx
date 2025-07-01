@@ -34,13 +34,18 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 		setError(undefined);
 		try {
 			const sortedTasks = [...tasks].sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+			const destinationIndex = sortedTasks.length === 0 ? 0 : sortedTasks.length - 1;
 			await addTask({
 				projectId,
 				status: parseInt(columnId) as import('../../models/Task').TaskStatusType,
-				lexoRank: GetNextLexoRank(sortedTasks, -1, sortedTasks.length).toString(),
+				lexoRank: GetNextLexoRank(sortedTasks, -1, destinationIndex).toString(),
 				subject,
 				typeId: undefined // or set a default typeId if needed
 			});
+			console.log(
+				'After addTask, lexoRanks in column:',
+				sortedTasks.map((t) => t.lexoRank)
+			);
 			setIsAdding(false);
 			setInputValue('');
 		} catch (e: any) {
@@ -93,8 +98,13 @@ const KanbanColumn = ({ columnId, title, tasks, activeTask, projectId }: KanbanC
 							{isOver ? 'Release to drop here' : 'No tasks'}
 						</Box>
 					) : (
-						tasks.map((task) => (
-							<KanbanTaskCard task={task} key={task.taskId} projectId={projectId} />
+						tasks.map((task, index) => (
+							<KanbanTaskCard
+								task={task}
+								key={task.taskId}
+								projectId={projectId}
+								index={index}
+							/>
 						))
 					)}
 					{isAdding && (
