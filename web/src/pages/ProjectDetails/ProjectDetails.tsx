@@ -27,7 +27,6 @@ export const ProjectDetails = () => {
 
 	// Build columns from real tasks
 	const tasks = data?.project?.tasks || [];
-	console.log('tasks:', tasks);
 	const buildColumns = () => {
 		const cols: { [key: string]: Task[] } = {};
 		for (const status of columnOrder) {
@@ -101,28 +100,11 @@ export const ProjectDetails = () => {
 		// Calculate new lexoRank for the destination position
 		const adjustedToIndex =
 			fromColumn === toColumn && fromIndex < toIndex ? toIndex - 1 : toIndex;
-		console.log(
-			'destTasks:',
-			destTasks.map((t) => ({ id: t.taskId, lexoRank: t.lexoRank }))
-		);
-		console.log(
-			'fromIndex:',
-			fromIndex,
-			'toIndex:',
-			toIndex,
-			'adjustedToIndex:',
-			adjustedToIndex,
-			'fromColumn:',
-			fromColumn,
-			'toColumn:',
-			toColumn
-		);
 		const nextRank = GetNextLexoRank(
 			destTasks,
 			fromColumn === toColumn ? fromIndex : -1,
 			adjustedToIndex
 		);
-		console.log('nextRank:', nextRank);
 
 		// Build new columns state optimistically
 		const newColumns = { ...columns };
