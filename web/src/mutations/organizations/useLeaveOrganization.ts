@@ -9,8 +9,8 @@ export const useLeaveOrganization = () => {
 		mutationKey: [ApiService.leaveOrganization],
 		mutationFn: async (organizationId: number) => {
 			await axios.post(
-				ApiService.leaveOrganization(organizationId),
-				{},
+				ApiService.leaveOrganization,
+				{ id: organizationId },
 				{ withCredentials: true }
 			);
 		},

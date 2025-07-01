@@ -9,8 +9,8 @@ export const useDeleteOrganization = () => {
 		mutationKey: [ApiService.deleteOrganization],
 		mutationFn: async (organizationId: number) => {
 			await axios.post(
-				ApiService.deleteOrganization(organizationId),
-				{},
+				ApiService.deleteOrganization,
+				{ id: organizationId },
 				{ withCredentials: true }
 			);
 		},

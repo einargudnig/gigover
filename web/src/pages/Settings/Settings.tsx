@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { ModalContext } from '../../context/ModalContext';
 import { SettingsLayout } from './SettingsLayout';
 
@@ -69,15 +68,13 @@ export function Settings() {
 				</Flex>
 			</Box>
 			<Box p={2}>
-				<DisabledPage>
-					<VStack style={{ height: '100%' }}>
-						<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-							<Box overflowY={'auto'} height={'100%'} width={'100%'}>
-								<SettingsLayout />
-							</Box>
-						</HStack>
-					</VStack>
-				</DisabledPage>
+				<VStack style={{ height: '100%' }}>
+					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
+						<Box overflowY={'auto'} height={'100%'} width={'100%'}>
+							<SettingsLayout />
+						</Box>
+					</HStack>
+				</VStack>
 			</Box>
 		</>
 	);

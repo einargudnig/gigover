@@ -20,6 +20,8 @@ import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { ManageOrganization } from '../../components/organizations/ManageOrganization';
 import { ManageOrganizationInvites } from '../../components/organizations/ManageOrganizationInvites';
+import { useDeleteOrganization } from '../../mutations/organizations/useDeleteOrganization';
+import { useLeaveOrganization } from '../../mutations/organizations/useLeaveOrganization';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { OrgInfo } from './OrgInfo';
@@ -33,6 +35,9 @@ export function SettingsLayout() {
 	const currentOrganization = userInfo?.organization;
 	console.log(currentOrganization);
 	const isPersonalSpace = currentOrganization === undefined;
+
+	const leaveOrganizationMutation = useLeaveOrganization();
+	const deleteOrganizationMutation = useDeleteOrganization();
 
 	return (
 		<>
@@ -83,8 +88,8 @@ export function SettingsLayout() {
 															header="Leave organization"
 															callback={async (b) => {
 																if (b) {
-																	console.log(
-																		'leave organization'
+																	leaveOrganizationMutation.mutate(
+																		org.id
 																	);
 																}
 																setLeaveDialogOpen(false);
@@ -103,6 +108,9 @@ export function SettingsLayout() {
 																	isDisabled={!isCurrentOrg}
 																	variant={'outline'}
 																	colorScheme={'gray'}
+																	onClick={() =>
+																		setLeaveDialogOpen(true)
+																	}
 																	aria-label="Leave organization"
 																>
 																	<ExternalLinkIcon
@@ -116,10 +124,11 @@ export function SettingsLayout() {
 															header="Delete organization"
 															callback={async (b) => {
 																if (b) {
-																	console.log(
-																		'delete organization'
+																	deleteOrganizationMutation.mutate(
+																		org.id
 																	);
 																}
+																setDeleteDialogOpen(false);
 															}}
 															isOpen={deleteDialogOpen}
 															setIsOpen={setDeleteDialogOpen}
@@ -135,6 +144,9 @@ export function SettingsLayout() {
 																	isDisabled={!isCurrentOrg}
 																	variant={'outline'}
 																	colorScheme={'red'}
+																	onClick={() =>
+																		setDeleteDialogOpen(true)
+																	}
 																	aria-label="Delete organization"
 																>
 																	<TrashIcon color={'red'} />

@@ -194,8 +194,6 @@ export class ApiService {
 	static getUserInvites = API_BASE + 'user/userInvites';
 	// org login?
 	static loginOrganization = API_BASE + 'org/login';
-	static deleteOrganization = (organizationId: number) =>
-		API_BASE + 'user/orgDelete/' + organizationId;
-	static leaveOrganization = (organizationId: number) =>
-		API_BASE + 'user/orgLeave/' + organizationId;
+	static deleteOrganization = API_BASE + 'user/orgDelete';
+	static leaveOrganization = API_BASE + 'user/orgLeave';
 }
