@@ -81,6 +81,7 @@ export function SettingsLayout() {
 										// const isCurrentOrganizationPriv = privMap[org.priv];
 										// const isAdmin = org.priv === 'A';
 										const isAdmin = false;
+										const isCurrentOrg = org.id === currentOrganization?.id;
 
 										return (
 											<Tr key={org.id}>
@@ -103,9 +104,15 @@ export function SettingsLayout() {
 															isOpen={leaveDialogOpen}
 															setIsOpen={setLeaveDialogOpen}
 														>
-															<Tooltip label="Leave organization">
+															<Tooltip
+																label={
+																	isCurrentOrg
+																		? 'Leave organization'
+																		: 'Select this organization to leave'
+																}
+															>
 																<IconButton
-																	isDisabled={isAdmin}
+																	isDisabled={!isCurrentOrg}
 																	variant={'outline'}
 																	colorScheme={'gray'}
 																	aria-label="Leave organization"
@@ -129,9 +136,15 @@ export function SettingsLayout() {
 															isOpen={deleteDialogOpen}
 															setIsOpen={setDeleteDialogOpen}
 														>
-															<Tooltip label="Delete organization">
+															<Tooltip
+																label={
+																	isCurrentOrg
+																		? 'Delete organization'
+																		: 'Select this organization to delete'
+																}
+															>
 																<IconButton
-																	isDisabled={isAdmin}
+																	isDisabled={!isCurrentOrg}
 																	variant={'outline'}
 																	colorScheme={'red'}
 																	aria-label="Delete organization"
