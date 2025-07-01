@@ -10,16 +10,24 @@ import {
 	Text,
 	VStack
 } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { DisabledPage } from '../../components/disabled/DisbledPage';
+import { ModalContext } from '../../context/ModalContext';
 import { SettingsLayout } from './SettingsLayout';
 
 export function Settings() {
+	const [, setModalContext] = useContext(ModalContext);
 	const pageTitle = 'Organization Settings';
-	const breadcrumbs = [{ title: 'Settings', url: '/settings' }];
+	const breadcrumbs = [{ title: 'Organization Settings', url: '/settings' }];
 	const pageActions = (
 		<Box display={'flex'} gap={2} alignItems={'center'} py={2} height={'50px'}>
-			<Button colorScheme={'yellow'}>Create organization</Button>
+			<Button
+				colorScheme={'yellow'}
+				onClick={() => setModalContext({ createOrganization: { organization: undefined } })}
+			>
+				Create organization
+			</Button>
 		</Box>
 	);
 

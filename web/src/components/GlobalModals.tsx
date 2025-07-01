@@ -4,6 +4,7 @@ import { ModalContext } from '../context/ModalContext';
 import ShareItem from '../pages/Files/components/ShareItem';
 import { Modal } from './Modal';
 import { ToolsIcon } from './icons/ToolsIcon';
+import { CreateOrganizationModal } from './modals/CreateOrganizationModal';
 import { EditTimeTrackerModal } from './modals/EditTimeTrackerModal';
 import { MilestoneModal } from './modals/MilestoneModal';
 import { ProjectModal } from './modals/ProjectModal';
@@ -92,6 +93,11 @@ export const GlobalModals = (): JSX.Element => {
 					onClose={() => setModalContext({})}
 				>
 					<UseResourceModal resourceTracker={modalContext.resourceTracker} />
+				</Modal>
+			)}
+			{modalContext.createOrganization && (
+				<Modal open={true} title={'Create organization'}>
+					<CreateOrganizationModal />
 				</Modal>
 			)}
 		</>

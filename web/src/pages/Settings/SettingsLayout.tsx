@@ -14,6 +14,8 @@ import {
 	Tooltip,
 	Tr
 } from '@chakra-ui/react';
+import { useState } from 'react';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { ManageOrganization } from '../../components/organizations/ManageOrganization';
@@ -25,8 +27,8 @@ import { OrgInfo } from './OrgInfo';
 export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
 	const { data: userInfo, isPending: userIsPending } = useGetUserInfo();
-	console.log(data);
-	console.log(userInfo);
+	const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
+	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
 	const currentOrganization = userInfo?.organization;
 	console.log(currentOrganization);
@@ -88,27 +90,56 @@ export function SettingsLayout() {
 													<HStack>
 														<ManageOrganization orgName={org.name} />
 
-														<Tooltip label="Leave organization">
-															<IconButton
-																isDisabled={isAdmin}
-																variant={'outline'}
-																colorScheme={'gray'}
-																aria-label="Leave organization"
-															>
-																<ExternalLinkIcon color={'black'} />
-															</IconButton>
-														</Tooltip>
+														<ConfirmDialog
+															header="Leave organization"
+															callback={async (b) => {
+																if (b) {
+																	console.log(
+																		'leave organization'
+																	);
+																}
+																setLeaveDialogOpen(false);
+															}}
+															isOpen={leaveDialogOpen}
+															setIsOpen={setLeaveDialogOpen}
+														>
+															<Tooltip label="Leave organization">
+																<IconButton
+																	isDisabled={isAdmin}
+																	variant={'outline'}
+																	colorScheme={'gray'}
+																	aria-label="Leave organization"
+																>
+																	<ExternalLinkIcon
+																		color={'black'}
+																	/>
+																</IconButton>
+															</Tooltip>
+														</ConfirmDialog>
 
-														<Tooltip label="Delete organization">
-															<IconButton
-																isDisabled={isAdmin}
-																variant={'outline'}
-																colorScheme={'red'}
-																aria-label="Delete organization"
-															>
-																<TrashIcon color={'red'} />
-															</IconButton>
-														</Tooltip>
+														<ConfirmDialog
+															header="Delete organization"
+															callback={async (b) => {
+																if (b) {
+																	console.log(
+																		'delete organization'
+																	);
+																}
+															}}
+															isOpen={deleteDialogOpen}
+															setIsOpen={setDeleteDialogOpen}
+														>
+															<Tooltip label="Delete organization">
+																<IconButton
+																	isDisabled={isAdmin}
+																	variant={'outline'}
+																	colorScheme={'red'}
+																	aria-label="Delete organization"
+																>
+																	<TrashIcon color={'red'} />
+																</IconButton>
+															</Tooltip>
+														</ConfirmDialog>
 													</HStack>
 												</Td>
 											</Tr>

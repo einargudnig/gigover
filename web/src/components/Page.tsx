@@ -18,7 +18,7 @@ import { Theme } from '../Theme';
 import { UserContext } from '../context/UserContext';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { useLogout } from '../mutations/useLogout';
-import { DevMenu } from './DevMenu';
+import { Center } from './Center';
 import { GigoverLogo } from './GigoverLogo';
 import { LoadingSpinner } from './LoadingSpinner';
 import { FolderIcon } from './icons/FolderIcon';
@@ -29,7 +29,6 @@ import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
-import { Center } from './Center';
 
 interface PageProps {
 	backgroundColor?: string;
@@ -184,7 +183,7 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 					</Suspense>
 				</Box>
 			</Flex>
-			<DevMenu />
+			{/* <DevMenu /> */}
 		</Flex>
 	);
 };
