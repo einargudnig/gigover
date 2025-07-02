@@ -28,8 +28,8 @@ import {
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { TrashIcon } from '../../components/icons/TrashIcon';
+import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ManageOrganizationInvites } from '../../components/organizations/ManageOrganizationInvites';
 import { OrganizationSwitcher } from '../../components/organizations/OrganizationSwitcher';
 import { Organization } from '../../models/Organizations';
@@ -44,7 +44,6 @@ import { OrgInfo } from './OrgInfo';
 export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
 	const { data: userInfo } = useGetUserInfo();
-	console.log('USER INFO', userInfo);
 	const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 

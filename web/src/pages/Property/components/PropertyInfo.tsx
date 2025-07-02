@@ -1,9 +1,18 @@
 import { Box, Button, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ConfirmDialog } from '../../../components/ConfirmDialog';
+import { TrashIcon } from '../../../components/icons/TrashIcon';
 import { ModalContext } from '../../../context/ModalContext';
+import { useRemoveProperty } from '../../../mutations/properties/useRemoveProperty';
 
 export const PropertyInfo = ({ property }): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
+	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+	const deleteProperty = useRemoveProperty();
+	const navigate = useNavigate();
+
+	console.log('property in PropertyInfo', property);
 
 	return (
 		<>
@@ -86,13 +95,38 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 					</GridItem>
 				</Grid>
 				<Flex justifyContent={'flex-end'}>
-					<Button
-						variant="outline"
-						colorScheme="black"
-						onClick={() => setModalContext({ editProperty: { property: property } })}
-					>
-						Edit property
-					</Button>
+					<HStack>
+						<ConfirmDialog
+							header="Delete property"
+							callback={async (b) => {
+								if (b) {
+									await deleteProperty.mutateAsync(property.propertyId);
+									navigate('/property');
+								}
+								setDeleteDialogOpen(false);
+							}}
+							isOpen={deleteDialogOpen}
+							setIsOpen={setDeleteDialogOpen}
+						>
+							<Button
+								variant="outline"
+								colorScheme="red"
+								leftIcon={<TrashIcon color="red" />}
+								onClick={() => setDeleteDialogOpen(true)}
+							>
+								Delete property
+							</Button>
+						</ConfirmDialog>
+						<Button
+							variant="outline"
+							colorScheme="black"
+							onClick={() =>
+								setModalContext({ editProperty: { property: property } })
+							}
+						>
+							Edit property
+						</Button>
+					</HStack>
 				</Flex>
 			</Box>
 		</>
