@@ -15,7 +15,6 @@ import {
 import { useState } from 'react';
 import { useAcceptOrganizationInvite } from '../../mutations/organizations/useAcceptOrganizationInvite';
 import { useDeclineOrganizationInvite } from '../../mutations/organizations/useDeclineOrganizationInvite';
-// import { useGetUserInvites } from '../../queries/organisations/useGetUserInvites';
 import { useGetUserInvites } from '../../queries/organisations/useGetUserInvites';
 import { LoadingSpinner } from '../LoadingSpinner';
 
