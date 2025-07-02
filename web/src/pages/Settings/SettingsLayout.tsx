@@ -50,6 +50,8 @@ export function SettingsLayout() {
 	const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
 	const [loginError, setLoginError] = useState<string | null>(null);
 
+	console.log('[SettingsLayout] render', { isPending, isFetching });
+
 	const currentOrganization = userInfo?.organization;
 	const isPersonalSpace = currentOrganization === undefined;
 
@@ -62,6 +64,7 @@ export function SettingsLayout() {
 	});
 
 	const handleOpenManage = (org) => {
+		console.log('[SettingsLayout] handleOpenManage', org);
 		setSelectedOrg(org);
 		setIsManageModalOpen(true);
 		setLoginError(null);
@@ -94,7 +97,9 @@ export function SettingsLayout() {
 		<>
 			<Box>
 				{isPending || isFetching ? (
-					<LoadingSpinner />
+					<Flex justifyContent={'center'} alignItems={'center'} h={'100%'}>
+						<LoadingSpinner />
+					</Flex>
 				) : (
 					<>
 						<TableContainer>

@@ -16,7 +16,12 @@ import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export const OrganizationSwitcher = () => {
-	const { data, isPending, isFetching } = useGetOrganizations();
+	console.log('[OrganizationSwitcher] mount');
+	const { data, isPending, isFetching } = useGetOrganizations({
+		refetchOnMount: false,
+		refetchOnWindowFocus: false
+	});
+	console.log('[OrganizationSwitcher] useGetOrganizations', { isPending, isFetching });
 	const { data: userInfo, isPending: userIsPending } = useGetUserInfo();
 	const { mutate } = useChangeOrganizations();
 	const location = useLocation();

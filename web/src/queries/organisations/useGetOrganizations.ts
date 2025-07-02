@@ -8,7 +8,7 @@ interface OrganizationsResponse {
 	organizations: Organization[];
 }
 
-export const useGetOrganizations = () => {
+export const useGetOrganizations = (options = {}) => {
 	const { data, isPending, isFetching, isError, error } = useQuery<
 		OrganizationsResponse,
 		ErrorResponse
@@ -19,10 +19,13 @@ export const useGetOrganizations = () => {
 				withCredentials: true
 			});
 			return response.data;
-		}
+		},
+		...options
 	});
 
 	const organizations: Organization[] = data?.organizations || [];
+
+	console.log('[useGetOrganizations] called', { isPending, isFetching });
 
 	return {
 		data: organizations,
