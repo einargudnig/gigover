@@ -25,8 +25,6 @@ export const useGetOrganizations = (options = {}) => {
 
 	const organizations: Organization[] = data?.organizations || [];
 
-	console.log('[useGetOrganizations] called', { isPending, isFetching });
-
 	return {
 		data: organizations,
 		isPending,

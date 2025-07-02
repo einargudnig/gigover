@@ -33,6 +33,7 @@ import { TrashIcon } from '../../components/icons/TrashIcon';
 import { ManageOrganizationInvites } from '../../components/organizations/ManageOrganizationInvites';
 import { OrganizationSwitcher } from '../../components/organizations/OrganizationSwitcher';
 import { Organization } from '../../models/Organizations';
+import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useDeleteOrganization } from '../../mutations/organizations/useDeleteOrganization';
 import { useLeaveOrganization } from '../../mutations/organizations/useLeaveOrganization';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
@@ -43,6 +44,7 @@ import { OrgInfo } from './OrgInfo';
 export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
 	const { data: userInfo } = useGetUserInfo();
+	console.log('USER INFO', userInfo);
 	const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -50,13 +52,12 @@ export function SettingsLayout() {
 	const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
 	const [loginError, setLoginError] = useState<string | null>(null);
 
-	console.log('[SettingsLayout] render', { isPending, isFetching });
-
 	const currentOrganization = userInfo?.organization;
 	const isPersonalSpace = currentOrganization === undefined;
 
 	const leaveOrganizationMutation = useLeaveOrganization();
 	const deleteOrganizationMutation = useDeleteOrganization();
+	const changeOrganizationMutation = useChangeOrganizations();
 
 	const { mutateAsync: loginOrg, isPending: loginPending } = useLoginOrg();
 	const { register, handleSubmit, reset } = useForm<{ password: string }>({
@@ -64,7 +65,6 @@ export function SettingsLayout() {
 	});
 
 	const handleOpenManage = (org) => {
-		console.log('[SettingsLayout] handleOpenManage', org);
 		setSelectedOrg(org);
 		setIsManageModalOpen(true);
 		setLoginError(null);
@@ -137,8 +137,11 @@ export function SettingsLayout() {
 														header="Leave organization"
 														callback={async (b) => {
 															if (b) {
-																leaveOrganizationMutation.mutate(
+																await leaveOrganizationMutation.mutateAsync(
 																	currentOrganization?.id
+																);
+																await changeOrganizationMutation.mutateAsync(
+																	{ id: 0 }
 																);
 															}
 															setLeaveDialogOpen(false);
@@ -164,8 +167,11 @@ export function SettingsLayout() {
 														header="Delete organization"
 														callback={async (b) => {
 															if (b) {
-																deleteOrganizationMutation.mutate(
+																await deleteOrganizationMutation.mutateAsync(
 																	currentOrganization?.id
+																);
+																await changeOrganizationMutation.mutateAsync(
+																	{ id: 0 }
 																);
 															}
 															setDeleteDialogOpen(false);
@@ -211,8 +217,11 @@ export function SettingsLayout() {
 															header="Leave organization"
 															callback={async (b) => {
 																if (b) {
-																	leaveOrganizationMutation.mutate(
+																	await leaveOrganizationMutation.mutateAsync(
 																		org.id
+																	);
+																	await changeOrganizationMutation.mutateAsync(
+																		{ id: 0 }
 																	);
 																}
 																setLeaveDialogOpen(false);
@@ -247,8 +256,11 @@ export function SettingsLayout() {
 															header="Delete organization"
 															callback={async (b) => {
 																if (b) {
-																	deleteOrganizationMutation.mutate(
+																	await deleteOrganizationMutation.mutateAsync(
 																		org.id
+																	);
+																	await changeOrganizationMutation.mutateAsync(
+																		{ id: 0 }
 																	);
 																}
 																setDeleteDialogOpen(false);
