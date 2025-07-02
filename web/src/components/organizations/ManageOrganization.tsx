@@ -22,13 +22,14 @@ import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
 
 export const ManageOrganization = ({ orgName }: { orgName: string }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [showOrgs, setShowOrgs] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
-	const { data: org } = useGetUserInfo();
+	const { data: org, isPending: userInfoIsPending } = useGetUserInfo();
 	const activeOrg = org?.organization;
 
 	const { mutateAsync: loginOrg, isPending } = useLoginOrg();
@@ -80,7 +81,11 @@ export const ManageOrganization = ({ orgName }: { orgName: string }): JSX.Elemen
 									<Heading size="lg">Manage Organizations</Heading>
 								</Box>
 							</Flex>
-							{activeOrg && orgName === activeOrg.name ? (
+							{userInfoIsPending ? (
+								<Flex justifyContent="center" alignItems="center" minH="200px">
+									<LoadingSpinner />
+								</Flex>
+							) : activeOrg && orgName === activeOrg.name ? (
 								<>
 									{showOrgs ? (
 										<MemberTable activeOrg={activeOrg} />

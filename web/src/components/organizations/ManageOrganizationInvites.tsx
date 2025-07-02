@@ -16,24 +16,15 @@ import { useState } from 'react';
 import { useAcceptOrganizationInvite } from '../../mutations/organizations/useAcceptOrganizationInvite';
 import { useDeclineOrganizationInvite } from '../../mutations/organizations/useDeclineOrganizationInvite';
 // import { useGetUserInvites } from '../../queries/organisations/useGetUserInvites';
+import { useGetUserInvites } from '../../queries/organisations/useGetUserInvites';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export const ManageOrganizationInvites = (): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const acceptInvite = useAcceptOrganizationInvite();
 	const declineInvite = useDeclineOrganizationInvite();
-	// const { data, isPending, isError, error } = useGetUserInvites();
+	const { data, isPending, isError, error } = useGetUserInvites();
 
-	// Dummy data and mock states for development
-	const dummyInvites = [
-		{ id: 1, name: 'Acme Corp', priv: 'Admin' },
-		{ id: 2, name: 'Beta LLC', priv: 'Viewer' },
-		{ id: 3, name: 'Gamma Inc', priv: 'Editor' }
-	];
-	const data = dummyInvites;
-	const isPending = false;
-	const isError = false;
-	const error = null;
 	const [answerOrgId, setAnswerOrgId] = useState<number | null>(null);
 	const [answerType, setAnswerType] = useState<'accept' | 'decline' | null>(null);
 
@@ -55,7 +46,7 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 				Manage invites
 			</Text>
 
-			{dummyInvites.length > 0 ? (
+			{data?.length > 0 ? (
 				<>
 					<Box mx={6} mt={2} mb={4}>
 						<Text>
@@ -89,7 +80,7 @@ export const ManageOrganizationInvites = (): JSX.Element => {
 											</Flex>
 										) : (
 											<>
-												{dummyInvites.map((invite) => (
+												{data?.map((invite) => (
 													<Tr key={invite.id}>
 														<Td>{invite.name}</Td>
 														<Td>{invite.priv}</Td>

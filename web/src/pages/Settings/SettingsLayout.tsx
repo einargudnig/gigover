@@ -1,7 +1,6 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
 	Box,
-	Button,
 	Flex,
 	HStack,
 	IconButton,
@@ -68,12 +67,9 @@ export function SettingsLayout() {
 										<Td>
 											{!isPersonalSpace ? (
 												<HStack>
-													<Button
-														variant={'outline'}
-														colorScheme={'gray'}
-													>
-														Manage
-													</Button>
+													<ManageOrganization
+														orgName={currentOrganization?.name}
+													/>
 
 													<ConfirmDialog
 														header="Leave organization"

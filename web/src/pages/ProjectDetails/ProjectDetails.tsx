@@ -173,7 +173,11 @@ export const ProjectDetails = () => {
 				</Flex>
 				<DragOverlay>
 					{activeTaskObj ? (
-						<KanbanTaskCard task={activeTaskObj} projectId={projectIdNumber} />
+						<KanbanTaskCard
+							task={activeTaskObj}
+							projectId={projectIdNumber}
+							index={0}
+						/>
 					) : null}
 				</DragOverlay>
 			</DndContext>
