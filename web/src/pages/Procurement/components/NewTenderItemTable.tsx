@@ -285,6 +285,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 													});
 												}}
 												isOpen={dialogOpen}
+												confirmButtonText="Delete"
 											>
 												<Button
 													aria-label={'Delete item'}

@@ -147,6 +147,7 @@ export function SettingsLayout() {
 														}}
 														isOpen={leaveDialogOpen}
 														setIsOpen={setLeaveDialogOpen}
+														confirmButtonText="Leave"
 													>
 														<Tooltip label={'Leave organization'}>
 															<IconButton
@@ -177,6 +178,7 @@ export function SettingsLayout() {
 														}}
 														isOpen={deleteDialogOpen}
 														setIsOpen={setDeleteDialogOpen}
+														confirmButtonText="Delete"
 													>
 														<Tooltip label={'Delete organization'}>
 															<IconButton
@@ -227,6 +229,7 @@ export function SettingsLayout() {
 															}}
 															isOpen={leaveDialogOpen}
 															setIsOpen={setLeaveDialogOpen}
+															confirmButtonText="Leave"
 														>
 															<Tooltip
 																label={
@@ -266,6 +269,7 @@ export function SettingsLayout() {
 															}}
 															isOpen={deleteDialogOpen}
 															setIsOpen={setDeleteDialogOpen}
+															confirmButtonText="Delete"
 														>
 															<Tooltip
 																label={

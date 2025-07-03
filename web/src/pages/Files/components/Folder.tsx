@@ -117,6 +117,7 @@ export const ProjectFolderComponent = ({
 									setDialogOpen(false);
 								}}
 								isOpen={dialogOpen}
+								confirmButtonText="Delete"
 							>
 								{/*	<MenuItem
 									onClick={() => {

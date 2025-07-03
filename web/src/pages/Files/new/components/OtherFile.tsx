@@ -113,6 +113,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Delete"
 						>
 							<IconButton
 								aria-label={'Delete'}

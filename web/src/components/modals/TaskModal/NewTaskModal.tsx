@@ -177,6 +177,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 													closeModal();
 												}}
 												isOpen={dialogOpen}
+												confirmButtonText="Archive"
 											>
 												<MenuItem
 													icon={<TrashIcon />}

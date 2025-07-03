@@ -79,6 +79,7 @@ export const Stakeholders = ({ stakeHolder }): JSX.Element => {
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Remove"
 						>
 							<IconButton
 								aria-label="Remove Stakeholder"

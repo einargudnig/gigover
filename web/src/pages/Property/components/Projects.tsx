@@ -68,6 +68,7 @@ export const Projects = ({ project }): JSX.Element => {
 									setDialogOpen(false);
 								}}
 								isOpen={dialogOpen}
+								confirmButtonText="Remove"
 							>
 								<Button
 									colorScheme={'red'}

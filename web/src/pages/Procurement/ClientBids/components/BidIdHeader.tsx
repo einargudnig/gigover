@@ -383,6 +383,7 @@ export function BidHeaderActions({
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Delete"
 						>
 							<Button
 								aria-label={'Delete'}

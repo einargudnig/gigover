@@ -107,6 +107,7 @@ export const PropertyInfo = ({ property }): JSX.Element => {
 							}}
 							isOpen={deleteDialogOpen}
 							setIsOpen={setDeleteDialogOpen}
+							confirmButtonText="Delete"
 						>
 							<Button
 								variant="outline"

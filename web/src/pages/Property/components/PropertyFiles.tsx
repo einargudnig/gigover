@@ -99,6 +99,7 @@ export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): J
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Delete"
 						>
 							<IconButton
 								aria-label={'Delete'}

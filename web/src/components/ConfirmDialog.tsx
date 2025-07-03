@@ -14,13 +14,15 @@ export const ConfirmDialog = ({
 	setIsOpen,
 	callback,
 	header,
-	children
+	children,
+	confirmButtonText = 'Delete'
 }: {
 	isOpen: boolean;
 	setIsOpen: (t: boolean) => void;
 	callback: (s: boolean) => void;
 	header: string;
 	children: React.ReactNode;
+	confirmButtonText: string;
 }): JSX.Element => {
 	const onClose = () => setIsOpen(false);
 	const cancelRef = useRef<HTMLButtonElement | null>(null);
@@ -54,7 +56,7 @@ export const ConfirmDialog = ({
 								Cancel
 							</Button>
 							<Button colorScheme="red" onClick={() => callback(true)} ml={3}>
-								Delete
+								{confirmButtonText}
 							</Button>
 						</AlertDialogFooter>
 					</AlertDialogContent>

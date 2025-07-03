@@ -376,6 +376,7 @@ export const EditPhotoModal = ({
 												setDialogOpen(false);
 											}}
 											isOpen={dialogOpen}
+											confirmButtonText="Delete"
 										>
 											<IconButton
 												aria-label={'Delete'}

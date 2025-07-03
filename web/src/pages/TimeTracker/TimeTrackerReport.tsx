@@ -322,6 +322,7 @@ export const TimeTrackerReport = ({
 													setDialogOpen(false);
 												}}
 												isOpen={dialogOpen}
+												confirmButtonText="Delete"
 											>
 												<Button
 													aria-label={'Delete time record'}

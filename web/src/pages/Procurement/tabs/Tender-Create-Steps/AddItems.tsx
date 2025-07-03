@@ -330,6 +330,7 @@ export const AddItems = ({ tenderId }: AddItemsProps): JSX.Element => {
 																});
 															}}
 															isOpen={dialogOpen}
+															confirmButtonText="Delete"
 														>
 															<Button
 																aria-label={'Delete item'}

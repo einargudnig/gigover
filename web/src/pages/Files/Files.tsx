@@ -66,11 +66,13 @@ export const Files = (): JSX.Element => {
 	];
 	const pageActions = (
 		<DisabledComponent>
-			{project && <CreateNewFolderButton projectId={project.projectId} />}
+			<HStack my={2}>
+				{project && <CreateNewFolderButton projectId={project.projectId} />}
 
-			<Button ml={2} onClick={() => setUpload(true)}>
-				Upload
-			</Button>
+				<Button ml={2} onClick={() => setUpload(true)}>
+					Upload
+				</Button>
+			</HStack>
 		</DisabledComponent>
 	);
 

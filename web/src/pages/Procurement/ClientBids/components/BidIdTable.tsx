@@ -326,6 +326,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 													});
 												}}
 												isOpen={dialogOpen}
+												confirmButtonText="Delete"
 											>
 												<Button
 													aria-label={'Delete item'}
