@@ -120,7 +120,7 @@ export const Resources = (): JSX.Element => {
 	const breadcrumbs = [{ title: 'Resources', url: '/resources' }];
 	const pageActions = (
 		<Box display={'flex'} gap={2} alignItems={'center'} py={2} height={'50px'}>
-			<Button>New resource</Button>
+			<Button onClick={() => setModalContext({ resources: {} })}>New resource</Button>
 		</Box>
 	);
 	return (
