@@ -278,7 +278,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 							</FormControl>
 							<Box mb={3} />
 							<FormControl id={'address'} isInvalid={!!errors.address}>
-								<FormLabel>Address - contact person on site</FormLabel>
+								<FormLabel>Address - contact person</FormLabel>
 								<Input
 									placeholder={'Enter the address of the procurement'}
 									required={true}
