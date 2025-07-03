@@ -206,8 +206,8 @@ const DraggableProjectItem = ({ project, index, extraStyle = {} }: DraggableProj
 	};
 
 	return (
-		<Flex ref={setNodeRef} style={style} {...attributes} {...listeners} align="center">
-			<Box pr={2} cursor="grab">
+		<Flex ref={setNodeRef} style={style} align="center">
+			<Box pr={2} cursor="grab" {...attributes} {...listeners}>
 				<DragDropIcon />
 			</Box>
 			<NewProjectCard project={project} />
@@ -250,7 +250,11 @@ const NewProjectCard = ({ project }) => {
 			<Flex flex="1" justifyContent="space-between" alignItems="center" p={1}>
 				<Link
 					to={`/project/${project.projectId}`}
-					style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}
+					style={{
+						textDecoration: 'none',
+						color: 'inherit',
+						flexGrow: 1
+					}}
 				>
 					<Flex justifyContent="space-between" alignItems="center" flex="1">
 						<Box flex="3" width={'200px'}>
@@ -268,93 +272,83 @@ const NewProjectCard = ({ project }) => {
 								<ProjectStatusTag project={project} />
 							</Text>
 						</Box>
-						{/* <Box flex="2" width="100px">
-						<Text>Property</Text>
-					</Box> */}
 					</Flex>
 				</Link>
 				<Box flex="0.5" width={'50px'}>
-					<Text>
-						{isError && <Text>{error?.errorText}</Text>}
-						{isLoading ? (
-							<Box py={1}>
-								<LoadingSpinner size={32} />
-							</Box>
-						) : (
-							<Menu>
-								<MenuButton
-									as={IconButton}
-									variant="ghost"
-									_hover={{ border: '1px', borderColor: 'gray.300' }}
-									_active={{
-										border: '1px',
-										borderColor: 'gray.300',
-										backgroundColor: 'transparent'
+					{isLoading ? (
+						<Box py={1}>
+							<LoadingSpinner size={32} />
+						</Box>
+					) : (
+						<Menu>
+							<MenuButton
+								as={IconButton}
+								variant="ghost"
+								_active={{ bg: 'transparent' }}
+								_hover={{ border: '1px', borderColor: 'gray.300' }}
+								icon={<VerticalDots />}
+							/>
+							<MenuList>
+								<MenuItem
+									onClick={(event) => {
+										event.preventDefault();
+										event.stopPropagation();
+										setModalContext({ modifyProject: { project } });
 									}}
-									icon={<VerticalDots />}
-								/>
-								<MenuList>
-									<MenuItem
-										onClick={(event) => {
-											event.preventDefault();
-											event.stopPropagation();
-											setModalContext({ modifyProject: { project } });
-										}}
-										isDisabled={isViewer}
-									>
-										Edit Project
-									</MenuItem>
-									{project?.projectId && project.status === ProjectStatus.OPEN ? (
-										<>
-											{project?.owner && (
-												<MenuItem
-													onClick={async (event) => {
-														event.preventDefault();
-														event.stopPropagation();
-														await updateStatus(ProjectStatus.CLOSED);
-													}}
-													isDisabled={isViewer}
-												>
-													Close this project
-												</MenuItem>
-											)}
-										</>
-									) : project?.projectId ? (
-										<>
-											{project?.owner && (
-												<MenuItem
-													onClick={async (event) => {
-														event.preventDefault();
-														await updateStatus(ProjectStatus.OPEN);
-													}}
-													isDisabled={isViewer}
-												>
-													Re-open this project
-												</MenuItem>
-											)}
-										</>
-									) : null}
-									{project?.projectId &&
-										project.status === ProjectStatus.CLOSED && (
+									isDisabled={isViewer}
+								>
+									Edit Project
+								</MenuItem>
+								{project?.projectId && project.status === ProjectStatus.OPEN ? (
+									<>
+										{project?.owner && (
 											<MenuItem
 												onClick={async (event) => {
 													event.preventDefault();
 													event.stopPropagation();
-													await updateStatus(ProjectStatus.DONE);
+													await updateStatus(ProjectStatus.CLOSED);
 												}}
 												isDisabled={isViewer}
 											>
-												Archive project
+												Close this project
 											</MenuItem>
 										)}
-									<MenuDivider />
-									<MenuItem onClick={onOpen} isDisabled={isViewer}>
-										Add project to property
+									</>
+								) : project?.projectId ? (
+									<>
+										{project?.owner && (
+											<MenuItem
+												onClick={async (event) => {
+													event.preventDefault();
+													await updateStatus(ProjectStatus.OPEN);
+												}}
+												isDisabled={isViewer}
+											>
+												Re-open this project
+											</MenuItem>
+										)}
+									</>
+								) : null}
+								{project?.projectId && project.status === ProjectStatus.CLOSED && (
+									<MenuItem
+										onClick={async (event) => {
+											event.preventDefault();
+											event.stopPropagation();
+											await updateStatus(ProjectStatus.DONE);
+										}}
+										isDisabled={isViewer}
+									>
+										Archive project
 									</MenuItem>
-								</MenuList>
-							</Menu>
-						)}
-					</Text>
+								)}
+								<MenuDivider />
+								<MenuItem onClick={onOpen} isDisabled={isViewer}>
+									Add project to property
+								</MenuItem>
+							</MenuList>
+						</Menu>
+					)}
+					{isError && <Text>{error?.errorText}</Text>}
 				</Box>
 			</Flex>
 		</>
