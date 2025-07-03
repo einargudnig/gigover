@@ -357,9 +357,7 @@ export const TimeTrackerReport = ({
 				) : (
 					<EmptyState
 						title={'No report available'}
-						text={`We could not find any timesheets between ${startDate?.toFormat(
-							'D MMM YYYY'
-						)} and ${endDate?.toFormat('D MMM YYYY')}`}
+						text={`We could not find any timesheets between ${startDate?.toISODate()} and ${endDate?.toISODate()}`}
 					/>
 				)}
 			</Box>

@@ -43,7 +43,8 @@
 
 .react-datepicker__navigation--previous,
 .react-datepicker__navigation--next {
-	height: 8px;
+	height: 24px;
+	top: 12px;
 }
 
 .react-datepicker__navigation--previous {
@@ -64,6 +65,9 @@
 
 .react-datepicker__header {
 	background: #fff;
+	min-height: 48px;
+	padding-top: 8px;
+	padding-bottom: 8px;
 }
 
 .react-datepicker__header,
