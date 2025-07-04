@@ -174,7 +174,7 @@ export const EditPhotoModal = ({
 						<div>
 							<Icon />
 						</div>
-						<Text isTruncated={true}>{file.name}p</Text>
+						<Text isTruncated={true}>{file.name}</Text>
 					</HStack>
 				</ModalHeader>
 				<ModalCloseButton />

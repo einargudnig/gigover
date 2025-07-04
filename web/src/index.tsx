@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import 'core-js/stable';
 import * as ReactDOMClient from 'react-dom/client';
+import { pdfjs } from 'react-pdf';
 import { AppPreloader } from './App';
 import ErrorBoundary from './ErrorBoundary';
 import { ChakraThemeColors } from './Theme';
@@ -10,6 +11,8 @@ import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
+
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
 const firebaseApp = new Firebase();
 

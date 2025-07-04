@@ -12,7 +12,7 @@ export const useRemoveProperty = () => {
 			await axios.post(
 				ApiService.deleteProperty,
 				{
-					id: propertyId
+					propertyId
 				},
 				{
 					withCredentials: true
