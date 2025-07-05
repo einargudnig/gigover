@@ -119,6 +119,7 @@ export const ImageDot = ({
 	const { ref } = useResizeObserver<HTMLDivElement | HTMLCanvasElement>({
 		// eslint-disable-next-line no-shadow
 		onResize: ({ width, height }) => {
+			console.log('[ImageDot] setBoxDimmensions', { width, height });
 			// @ts-ignore
 			if (height && width) {
 				setBoxDimmensions({ width, height });
@@ -166,9 +167,11 @@ export const ImageDot = ({
 	};
 
 	useEffect(() => {
+		console.log('[ImageDot] useEffect: imageSrc changed', imageSrc);
 		dimenstions(imageSrc, 5000).then((s) => {
-			// @ts-ignore
-			setImageDimmensions({ height: s.height, width: s.width });
+			const img = s as HTMLImageElement;
+			console.log('[ImageDot] setImageDimmensions', { height: img.height, width: img.width });
+			setImageDimmensions({ height: img.height, width: img.width });
 			//setLoading(false);
 		});
 	}, [imageSrc]);

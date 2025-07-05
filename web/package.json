@@ -64,6 +64,7 @@
 			"last 1 safari version"
 		]
 	},
+	"type": "module",
 	"devDependencies": {
 		"@types/axios": "^0.14.0",
 		"@types/luxon": "^3.6.2",
@@ -72,7 +73,6 @@
 		"@types/react-datepicker": "^3.1.7",
 		"@types/react-dom": "^18.2.0",
 		"@types/react-mentions": "^4.1.5",
-		"@types/react-pdf": "^5.0.8",
 		"@types/react-select": "^5.0.1",
 		"@types/uuid": "^10.0.0",
 		"@typescript-eslint/eslint-plugin": "6.16.0",
@@ -89,6 +89,7 @@
 		"prettier-eslint": "15.0.1",
 		"typescript": "5.4.3",
 		"vite": "^5.4.1",
+		"vite-plugin-static-copy": "^3.1.0",
 		"vite-plugin-svgr": "^4.2.0"
 	}
 }
