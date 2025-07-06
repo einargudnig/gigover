@@ -2,7 +2,7 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import 'core-js/stable';
-import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker?url';
+// import pdfjsWorkerUrl from 'pdfjs-dist/build/pdf.worker?url';
 import * as ReactDOMClient from 'react-dom/client';
 import { pdfjs } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
@@ -14,7 +14,8 @@ import { Firebase } from './firebase/firebase';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorkerUrl;
+pdfjs.GlobalWorkerOptions.workerSrc =
+	'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
 const firebaseApp = new Firebase();
 
