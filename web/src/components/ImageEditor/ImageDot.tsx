@@ -119,7 +119,6 @@ export const ImageDot = ({
 	const { ref } = useResizeObserver<HTMLDivElement | HTMLCanvasElement>({
 		// eslint-disable-next-line no-shadow
 		onResize: ({ width, height }) => {
-			console.log('[ImageDot] setBoxDimmensions', { width, height });
 			// @ts-ignore
 			if (height && width) {
 				setBoxDimmensions({ width, height });

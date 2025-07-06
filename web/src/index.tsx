@@ -14,8 +14,7 @@ import { Firebase } from './firebase/firebase';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc =
-	'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
 const firebaseApp = new Firebase();
 

@@ -1,7 +1,7 @@
 import { Flex, Text } from '@chakra-ui/react';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { pdfjs } from 'react-pdf';
-import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import ErrorBoundary from './ErrorBoundary';
@@ -16,15 +16,12 @@ import { FirebaseUser } from './firebase/firebaseTypes';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import { IUserProfile } from './models/UserProfile';
 import { NewLogin } from './pages/NewLogin';
+import { Onboarding } from './pages/Onboarding';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
-import { Onboarding } from './pages/Onboarding';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-	'pdfjs-dist/build/pdf.worker.min.js',
-	import.meta.url
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
 type Intercom = (type: 'boot', options: Record<string, unknown>) => void;
 declare const window: Window & { Intercom: Intercom };
