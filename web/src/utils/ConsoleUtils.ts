@@ -5,7 +5,7 @@ export const devError = (...args: any[]): void => {
 };
 
 export const devInfo = (...args: any[]): void => {
-	if (process.env.ENVIRONMENT !== 'production') {
+	if (import.meta.env.ENVIRONMENT !== 'production') {
 		// @ts-ignore
 		console.info(...args);
 	}

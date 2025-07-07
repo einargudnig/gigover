@@ -24,8 +24,11 @@ export const usePublishBid = () => {
 
 				if (response.status === 200) {
 					console.log({ bidId });
-					await client.refetchQueries({ queryKey: [ApiService.getBidById(bidId.bidId)] });
-					await client.refetchQueries({ queryKey: [ApiService.getClientBids] });
+					await client.invalidateQueries({
+						queryKey: [ApiService.getBidById(bidId.bidId)]
+					});
+					await client.invalidateQueries({ queryKey: [ApiService.getBids] });
+					await client.invalidateQueries({ queryKey: [ApiService.getClientBids] });
 				}
 				return response.data;
 			} catch (e) {

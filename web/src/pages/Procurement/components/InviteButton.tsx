@@ -22,9 +22,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Theme } from '../../../Theme';
 import { useInviteBidder } from '../../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
-import { devError } from '../../../utils/ConsoleUtils';
+import { devError, devInfo } from '../../../utils/ConsoleUtils';
 
-export const InviteButton = ({ tender, tenderDesc }): JSX.Element => {
+export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
 	const { mutate: inviteBidder, isPending: invitingBidder } = useInviteBidder();
@@ -37,10 +37,11 @@ export const InviteButton = ({ tender, tenderDesc }): JSX.Element => {
 				email: searchMail
 			});
 			if (response.uId) {
-				// devInfo('Found user with uId:', response.uId);
+				devInfo('Found user with uId:', response.uId);
 				// Add to tender
+				// console.log('TENDER', tender.id);
 				inviteBidder(
-					{ uId: response.uId, tenderId: tender.id },
+					{ uId: response.uId, tenderId },
 					{
 						onSuccess: (res) => {
 							if (res.errorCode === 'OK') {

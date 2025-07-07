@@ -93,38 +93,38 @@ export function PublishSingleBid({
 	};
 
 	return (
-		<Flex direction="column" align="center" justify="center" minH="80vh">
-			<Box p={8} borderWidth={1} borderRadius={8} boxShadow="lg" maxW="xl" w="full">
-				{getBidIsPending ? (
-					<Center>
-						<LoadingSpinner />
-					</Center>
-				) : bid ? (
-					<VStack spacing={6} align="stretch">
-						<Heading as="h2" size="lg" textAlign="center">
-							Review and Publish Bid
-						</Heading>
-						<Info fields={bidFields} />
-						<DataTable columns={columns} data={bidItems ?? []} showTotalCost={true} />
-						<Text fontSize="sm" color="gray.500">
-							Please review the bid details above. Once published, the bid will be
-							visible and cannot be edited further unless unpublished.
-						</Text>
+		<Box>
+			{getBidIsPending ? (
+				<Center>
+					<LoadingSpinner />
+				</Center>
+			) : bid ? (
+				<VStack spacing={6} align="stretch">
+					<Heading as="h2" size="lg" textAlign="center">
+						Review and Publish Bid
+					</Heading>
+					<Info fields={bidFields} />
+					<DataTable columns={columns} data={bidItems ?? []} showTotalCost={true} />
+					<Text fontSize="sm" color="gray.500">
+						Please review the bid details above. Once published, the bid will be visible
+						and cannot be edited further unless unpublished.
+					</Text>
+					<Flex justifyContent={'end'}>
 						<Button
 							mt={8}
-							colorScheme="blue"
+							variant={'outline'}
+							colorScheme="gray"
 							onClick={handlePublishBid}
 							isLoading={publishBidIsPending}
-							w="full"
 							isDisabled={!bid || bid?.status === 1}
 						>
 							{bid?.status === 1 ? 'Bid Already Published' : 'Publish Bid'}
 						</Button>
-					</VStack>
-				) : (
-					<Text textAlign="center">Bid not found or failed to load.</Text>
-				)}
-			</Box>
-		</Flex>
+					</Flex>
+				</VStack>
+			) : (
+				<Text textAlign="center">Bid not found or failed to load.</Text>
+			)}
+		</Box>
 	);
 }

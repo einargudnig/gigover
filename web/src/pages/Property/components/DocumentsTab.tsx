@@ -38,7 +38,7 @@ export function DocumentsTab({
 					</Button>
 				</Flex>
 				{!documents || documents.length === 0 ? (
-					<Text m={4}>No projects!</Text>
+					<Text m={4}>No documents!</Text>
 				) : (
 					<>
 						{isFetching ? (

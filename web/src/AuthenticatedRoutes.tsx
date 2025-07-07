@@ -241,6 +241,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'resources'} element={<LazyResources />} />
 
 			{/* ⚙︎ Settings ⚙︎ */}
+			{/* Organiasation settings */}
 			<Route path={'settings'} element={<LazySettings />} />
 
 			<Route path={'project'} element={<LazyDashboard />}>
