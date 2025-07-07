@@ -1,39 +1,15 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, HStack, Spacer, Text } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { CardBaseLink } from '../../../../components/CardBase';
 import { Center } from '../../../../components/Center';
 import { LoadingSpinner } from '../../../../components/LoadingSpinner';
 import { Offer } from '../../../../models/Tender';
 import { useGetOfferForTender } from '../../../../queries/procurement/useGetOfferForTender';
 
-const OfferCardStyled = styled(CardBaseLink)`
-	width: 100%;
-	max-width: 100%;
-	height: auto;
-	margin-bottom: 8px;
-
-	h3 {
-		margin-bottom: 16px;
-		color: #000;
-	}
-
-	@media screen and (max-width: 768px) {
-		width: 100%;
-	}
-`;
-
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	padding: ${(props) => props.theme.padding(1)};
-	overflow-y: auto;
-`;
-
 export const TenderOfferDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
-	const { data, isLoading } = useGetOfferForTender(Number(tenderId));
+	const { data, isPending } = useGetOfferForTender(Number(tenderId));
 	const offer: Offer[] | undefined = data;
 	const navigate = useNavigate();
 
@@ -49,8 +25,8 @@ export const TenderOfferDetails = (): JSX.Element => {
 			>
 				<ArrowBackIcon />
 			</Button>
-			<Container>
-				{isLoading ? (
+			<Box flex="1 0" height="100%" p={1} overflowY="auto">
+				{isPending ? (
 					<Center>
 						<LoadingSpinner />
 					</Center>
@@ -83,9 +59,22 @@ export const TenderOfferDetails = (): JSX.Element => {
 										}
 
 										return (
-											<OfferCardStyled
+											<CardBaseLink
 												key={o.offerId}
 												to={`/tender/tender-offer/${o.tenderId}/${o.offerId}`}
+												w="100%"
+												maxW="100%"
+												h="auto"
+												mb="8px"
+												sx={{
+													h3: {
+														marginBottom: '16px',
+														color: '#000'
+													},
+													'@media screen and (max-width: 768px)': {
+														width: '100%'
+													}
+												}}
 											>
 												<Flex>
 													<Box>
@@ -115,14 +104,14 @@ export const TenderOfferDetails = (): JSX.Element => {
 														</HStack>
 													</Box>
 												</Flex>
-											</OfferCardStyled>
+											</CardBaseLink>
 										);
 									})}
 							</>
 						)}
 					</>
 				)}
-			</Container>
+			</Box>
 		</Box>
 	);
 };

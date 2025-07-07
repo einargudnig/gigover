@@ -1,27 +1,27 @@
+import { Tag } from '@chakra-ui/react'; // Added Tag
 import { CSSProperties } from 'react';
-import styled from 'styled-components';
-import { GeneratedColor, colorGenerator } from '../hooks/colorGenerator';
-
-const LabelStyled = styled.label<GeneratedColor>`
-	padding: 4px 6px;
-	font-size: 11px;
-	font-weight: bold;
-	background-color: ${(props) => props.backgroundColor};
-	color: ${(props) => props.textColor};
-	border-radius: 4px;
-`;
+import { colorGenerator } from '../hooks/colorGenerator';
 
 interface LabelProps {
 	text: string;
-	style?: CSSProperties;
+	style?: CSSProperties; // This might not be directly applicable to Chakra Tag in the same way, consider passing Chakra style props if needed.
 }
 
-export const Label = ({ text, ...props }: LabelProps): JSX.Element => {
+export const Label = ({ text, style }: LabelProps): JSX.Element => {
 	const { backgroundColor, textColor } = colorGenerator(text);
 
 	return (
-		<LabelStyled backgroundColor={backgroundColor} textColor={textColor} {...props}>
+		<Tag
+			bg={backgroundColor}
+			color={textColor}
+			fontSize="11px"
+			fontWeight="bold"
+			px="6px" // padding: 4px 6px -> py="4px" px="6px"
+			py="4px"
+			borderRadius="4px"
+			style={style} // Passing through style prop, though direct Chakra props are preferred for styling
+		>
 			{text}
-		</LabelStyled>
+		</Tag>
 	);
 };

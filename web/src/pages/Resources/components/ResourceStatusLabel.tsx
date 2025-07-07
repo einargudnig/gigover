@@ -1,21 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import styled from 'styled-components';
 import { ResourceStatus } from '../../../models/Resource';
-
-const StatusLabelWrapper = styled(Flex)`
-	border-radius: 16px;
-	border: 1px solid black;
-	color: black;
-	position: relative;
-	padding: 4px 16px;
-	font-variant: small-caps;
-`;
-const Ball = styled(Box)`
-	height: 8px;
-	margin-right: 8px;
-	width: 8px;
-	border-radius: 50%;
-`;
 
 interface ResourceStatusLabelProps {
 	status: ResourceStatus;
@@ -54,16 +38,28 @@ export const ResourceStatusLabel = ({ status }: ResourceStatusLabelProps) => {
 	const labelProps = getLabelProps(status);
 
 	return (
-		<StatusLabelWrapper
+		<Flex
 			width={'fit-content'}
 			borderColor={labelProps.color}
 			alignItems={'center'}
 			justifyContent={'center'}
+			borderRadius="16px"
+			border="1px solid black"
+			color="black"
+			position="relative"
+			padding="4px 16px"
+			sx={{ fontVariant: 'small-caps' }}
 		>
-			<Ball background={labelProps.color} />
+			<Box
+				background={labelProps.color}
+				height="8px"
+				marginRight="8px"
+				width="8px"
+				borderRadius="50%"
+			/>
 			<Text fontWeight={'bold'} color={labelProps.color}>
 				{labelProps.label}
 			</Text>
-		</StatusLabelWrapper>
+		</Flex>
 	);
 };

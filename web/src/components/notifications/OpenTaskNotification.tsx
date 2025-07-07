@@ -1,9 +1,9 @@
 import React, { ReactElement, useContext, useEffect, useLayoutEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { ModalContext } from '../../context/ModalContext';
 import { Notification } from '../../hooks/useNotifications';
 import { useTaskDetails } from '../../queries/useTaskDetails';
-import { ModalContext } from '../../context/ModalContext';
 import { FullscreenLoader } from '../FullscreenLoader';
-import ReactDOM from 'react-dom';
 
 export interface OpenTaskNotificationProps {
 	notification: Notification;
@@ -15,7 +15,7 @@ const NotificationPortal = ({ children }: { children: React.ReactNode }) =>
 
 export const OpenTaskNotification = ({ notification }: OpenTaskNotificationProps): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const { data, isLoading } = useTaskDetails(notification.taskId);
+	const { data, isPending } = useTaskDetails(notification.taskId);
 
 	useLayoutEffect(() => {
 		notificationPortal.className = 'gigover-notification-container';
@@ -23,7 +23,7 @@ export const OpenTaskNotification = ({ notification }: OpenTaskNotificationProps
 	}, []);
 
 	useEffect(() => {
-		if (data && !isLoading) {
+		if (data && !isPending) {
 			setModalContext({
 				taskDetails: {
 					task: {
@@ -38,9 +38,9 @@ export const OpenTaskNotification = ({ notification }: OpenTaskNotificationProps
 			});
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, isLoading]);
+	}, [data, isPending]);
 
-	if (isLoading) {
+	if (isPending) {
 		// Show fullscreen loader
 		return (
 			<NotificationPortal>

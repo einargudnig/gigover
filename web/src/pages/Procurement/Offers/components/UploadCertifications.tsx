@@ -1,7 +1,6 @@
-import { Progress, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Progress, Text, VStack, useTheme, useToast } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import styled, { css } from 'styled-components';
 import { FormActions } from '../../../../components/FormActions';
 import { Modal } from '../../../../components/Modal';
 import { FilterIcon } from '../../../../components/icons/FilterIcon';
@@ -18,16 +17,16 @@ interface UploadModalProps {
 	offerId: number;
 }
 
-const UploadModalStyled = styled.div`
-	@media screen and (max-width: 500px) {
-		width: 500px;
-	}
-`;
-
 export const UploadCertifications = ({ onClose, offerId }: UploadModalProps): JSX.Element => {
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file for offer'}>
-			<UploadModalStyled>
+			<Box
+				sx={{
+					'@media screen and (max-width: 500px)': {
+						width: '500px'
+					}
+				}}
+			>
 				<Text marginBottom={4}>
 					You can upload any file you file necessary, this file will be linked to this
 					offer.
@@ -49,33 +48,10 @@ export const UploadCertifications = ({ onClose, offerId }: UploadModalProps): JS
 						}}
 					/>
 				</VStack>
-			</UploadModalStyled>
+			</Box>
 		</Modal>
 	);
 };
-
-// I need to make a new dropZone component that will be used for the upload certifications
-// I don't want to brake the other one. Their use is similar but not the same.
-
-const DropZoneContainer = styled.div<{
-	isDraggingOver: boolean;
-}>`
-	padding: ${(props) => props.theme.padding(6, 0)};
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-	flex: 1;
-	background: #f6f6f6;
-	border-radius: ${(props) => props.theme.borderRadius};
-	cursor: pointer;
-
-	${(props) =>
-		props.isDraggingOver &&
-		css`
-			background: ${props.theme.colors.green};
-		`};
-`;
 
 interface DropZoneProps {
 	propertyId: number;
@@ -105,6 +81,7 @@ export const DropZone = ({
 }: DropZoneProps): JSX.Element => {
 	const { fileService } = useFileService();
 	const { mutateAsync } = useAddTenderDocument();
+	const theme = useTheme();
 
 	const toast = useToast();
 
@@ -199,23 +176,35 @@ export const DropZone = ({
 			{children({ isDragActive, isUploading, open })}
 		</div>
 	) : (
-		<DropZoneContainer {...getRootProps()} isDraggingOver={isDragActive}>
+		<Box
+			{...getRootProps()}
+			paddingY={6}
+			paddingX={0}
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+			flexDirection="column"
+			flex={1}
+			background={isDragActive ? theme.colors.green[500] : '#f6f6f6'}
+			borderRadius="md"
+			cursor="pointer"
+		>
 			<input {...getInputProps()} />
 			<FilterIcon size={64} color={'#838894'} />
 			{isUploading ? (
-				<div style={{ width: '100%', textAlign: 'center' }}>
+				<Box width="100%" textAlign="center">
 					<Text>Uploading ({fileUploadProgress}%)</Text>
 					<Progress colorScheme="green" size="sm" value={fileUploadProgress || 0} />
-				</div>
+				</Box>
 			) : (
-				<div>
+				<Box>
 					<Text>
 						{isDragActive
 							? 'Drop files here'
 							: 'Drag and drop files here or click to select a file'}
 					</Text>
-				</div>
+				</Box>
 			)}
-		</DropZoneContainer>
+		</Box>
 	);
 };

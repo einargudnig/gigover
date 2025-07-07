@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse, ErrorTypes } from '../models/ErrorResponse';
-import axios, { AxiosResponse } from 'axios';
+import { ApiService } from '../services/ApiService';
 
 interface ModifyTimeRecordInput {
 	workId: number;
@@ -15,8 +15,8 @@ interface ModifyTimeRecordInput {
 export const useModifyTimeRecord = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<AxiosResponse, ErrorResponse, ModifyTimeRecordInput>(
-		async (variables) => {
+	return useMutation<ErrorResponse, Error, ModifyTimeRecordInput>({
+		mutationFn: async (variables) => {
 			const response = await axios.post(ApiService.workChange, variables, {
 				withCredentials: true
 			});
@@ -27,11 +27,10 @@ export const useModifyTimeRecord = () => {
 
 			return response.data;
 		},
-		{
-			onSuccess: async () => {
-				await queryClient.invalidateQueries(ApiService.timerReport);
-				await queryClient.invalidateQueries(ApiService.activeWorkers);
-			}
+
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: [ApiService.timerReport] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
 		}
-	);
+	});
 };

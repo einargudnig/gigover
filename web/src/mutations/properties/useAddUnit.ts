@@ -1,8 +1,8 @@
-import axios, { AxiosError } from 'axios';
-import { ApiService } from '../../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
-import { devError } from '../../utils/ConsoleUtils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 export interface UnitFormData {
 	name: string;
@@ -14,17 +14,23 @@ export interface UnitFormData {
 export const useAddUnit = () => {
 	const client = useQueryClient();
 
-	return useMutation<AxiosError, ErrorResponse, UnitFormData>(async (variables) => {
-		try {
-			const response = await axios.post(ApiService.addUnit, variables, {
-				withCredentials: true
+	return useMutation<unknown, ErrorResponse, UnitFormData>({
+		mutationKey: ['addUnit'],
+		mutationFn: async (variables) => {
+			try {
+				const response = await axios.post(ApiService.addUnit, variables, {
+					withCredentials: true
+				});
+				return response.data;
+			} catch (e) {
+				devError(e);
+				throw e; // Re-throw for TanStack Query
+			}
+		},
+		onSuccess: async (data, variables) => {
+			await client.refetchQueries({
+				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
-			await client.refetchQueries(ApiService.getPropertyById(variables.propertyId));
-
-			return response.data;
-		} catch (e) {
-			devError(e);
-			throw new Error('Could not add unit');
 		}
 	});
 };

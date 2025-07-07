@@ -1,26 +1,33 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../../services/ApiService';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { Organization } from '../../models/Organizations';
+import { ApiService } from '../../services/ApiService';
 
 interface OrganizationsResponse {
 	organizations: Organization[];
 }
 
-export const useGetOrganizations = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+export const useGetOrganizations = (options = {}) => {
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		OrganizationsResponse,
 		ErrorResponse
-	>(ApiService.getOrganizations, {
-		refetchOnWindowFocus: true
-		// withCredentials: true
+	>({
+		queryKey: [ApiService.getOrganizations],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getOrganizations, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		...options
 	});
 
 	const organizations: Organization[] = data?.organizations || [];
 
 	return {
 		data: organizations,
-		isLoading,
+		isPending,
 		isFetching,
 		isError,
 		error

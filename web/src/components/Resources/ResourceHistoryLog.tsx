@@ -1,64 +1,18 @@
-import { Flex } from '@chakra-ui/react';
-import styled from 'styled-components';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { Resource } from '../../models/Resource';
 import { useResourceHistory } from '../../queries/useResourceHistory';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { ResourceHistoryTimeSlot } from './ResourceHistoryTimeSlot';
-
-const ResourceHistoryItem = styled.div`
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	flex-direction: column;
-	gap: ${(props) => props.theme.padding(2)};
-
-	&:not(:last-child) {
-		margin-top: ${(props) => props.theme.padding(6)};
-	}
-`;
-
-const ResourceTimeSlots = styled.div`
-	display: flex;
-	gap: ${(props) => props.theme.padding(2)};
-	justify-content: space-evenly;
-	align-items: center;
-`;
-
-const ResourceHistoryUser = styled.div`
-	padding: ${(props) => props.theme.padding(1)} ${(props) => props.theme.padding(2)};
-	font-weight: normal;
-	font-size: 14px;
-	border-radius: 24px;
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.06);
-	background: #fff;
-	color: #838894;
-	display: inline-flex;
-`;
-
-const ResourceLogDescription = styled.p`
-	margin-top: -${(props) => props.theme.padding(1.5)};
-	font-size: 12px;
-	color: #838894;
-	font-style: italic;
-
-	strong {
-		color: #000;
-	}
-`;
 
 export interface ResourceHistoryLogProps {
 	resource: Resource;
 }
 
 export const ResourceHistoryLog = ({ resource }: ResourceHistoryLogProps): JSX.Element => {
-	const { data, isLoading, isError, error } = useResourceHistory(resource);
+	const { data, isPending, isError, error } = useResourceHistory(resource);
 
-	if (isLoading) {
-		return (
-			<div>
-				<LoadingSpinner />
-			</div>
-		);
+	if (isPending) {
+		return <LoadingSpinner />;
 	}
 
 	if (isError) {
@@ -70,23 +24,58 @@ export const ResourceHistoryLog = ({ resource }: ResourceHistoryLogProps): JSX.E
 			{data?.resources.length === 0 && <p>No logs available</p>}
 			{data?.resources.map((i) => (
 				<>
-					<ResourceHistoryItem>
-						<div style={{ display: 'flex', justifyContent: 'center' }}>
-							<ResourceHistoryUser>{i.userName}</ResourceHistoryUser>
-						</div>
+					<Box
+						display="flex"
+						justifyContent="center"
+						width="100%"
+						flexDirection="column"
+						gap={2}
+						sx={{
+							'&:not(:last-child)': {
+								marginTop: 6
+							}
+						}}
+					>
+						<Flex justifyContent="center">
+							<Box
+								paddingX={2}
+								paddingY={1}
+								fontWeight="normal"
+								fontSize="14px"
+								borderRadius="24px"
+								boxShadow="0 5px 10px rgba(0, 0, 0, 0.06)"
+								background="#fff"
+								color="#838894"
+								display="inline-flex"
+							>
+								{i.userName}
+							</Box>
+						</Flex>
 						{i.projectName && i.projectName.length > 0 && (
-							<div style={{ display: 'flex', justifyContent: 'center' }}>
-								<ResourceLogDescription>
-									Resource used in project: <strong>{i.projectName}</strong>&nbsp;
+							<Flex justifyContent="center">
+								<Text
+									marginTop={-1.5}
+									fontSize="12px"
+									color="#838894"
+									fontStyle="italic"
+								>
+									Resource used in project:{' '}
+									<Text as="strong" color="#000">
+										{i.projectName}
+									</Text>
+									&nbsp;
 									{i.taskName && i.taskName.length > 0 && (
 										<>
-											in task: <strong>{i.taskName}</strong>
+											in task:{' '}
+											<Text as="strong" color="#000">
+												{i.taskName}
+											</Text>
 										</>
 									)}
-								</ResourceLogDescription>
-							</div>
+								</Text>
+							</Flex>
 						)}
-						<ResourceTimeSlots>
+						<Flex gap={2} justifyContent="space-evenly" alignItems="center">
 							<ResourceHistoryTimeSlot
 								inUse={false}
 								isHold={true}
@@ -99,8 +88,8 @@ export const ResourceHistoryLog = ({ resource }: ResourceHistoryLogProps): JSX.E
 								item={i}
 								resource={resource}
 							/>
-						</ResourceTimeSlots>
-					</ResourceHistoryItem>
+						</Flex>
+					</Box>
 				</>
 			))}
 		</Flex>

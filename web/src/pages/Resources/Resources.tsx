@@ -1,11 +1,20 @@
-import { Button, Flex, HStack, Heading } from '@chakra-ui/react';
+import {
+	Box,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	Button,
+	Flex,
+	HStack,
+	Heading,
+	Link,
+	Text
+} from '@chakra-ui/react';
 import { useContext, useMemo } from 'react';
-import { CellProps, Column } from 'react-table';
-import styled from 'styled-components';
 import { CardBase } from '../../components/CardBase';
-import { Page } from '../../components/Page';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
 import { TrashIcon } from '../../components/icons/TrashIcon';
-import { Table } from '../../components/table/Table';
+import { SimpleColumnDef, Table } from '../../components/table/Table'; // Import SimpleColumnDef
 import { ModalContext } from '../../context/ModalContext';
 import { Resource, ResourceStatus } from '../../models/Resource';
 import { useResourceDelete } from '../../mutations/useResourceDelete';
@@ -14,45 +23,37 @@ import { useResources } from '../../queries/useResources';
 import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
-
-const ResourceData = styled(CardBase)<{ color?: string }>`
-	padding: 12px 24px;
-	margin-right: 16px;
-	color: ${(props) => props.color || 'black'};
-	font-weight: bold;
-`;
 
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
-	const { data, isLoading } = useResources();
-	const { mutateAsync: deleteResourceAsync, isLoading: isLoadingDelete } = useResourceDelete();
 	const { data: resourceTypes } = useResourceTypes();
+	const { data, isPending } = useResources();
+	const { mutateAsync: deleteResourceAsync, isPending: isLoadingDelete } = useResourceDelete();
 
-	const columns: Array<Column<Resource>> = useMemo(
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const columns: Array<SimpleColumnDef<Resource, any>> = useMemo(
 		() => [
 			{
-				Header: 'Id',
-				accessor: 'serialNr',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
+				accessorKey: 'serialNr',
+				header: 'Id',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
 			{
-				Header: 'Resource',
-				accessor: 'name',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
+				accessorKey: 'name',
+				header: 'Resource',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
 			{
-				Header: 'Type',
-				accessor: 'type',
-				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, number>): JSX.Element => {
+				accessorKey: 'type',
+				header: 'Type',
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					if (resourceTypes) {
 						const type = resourceTypes?.areas?.find((t) => t.type === value);
 
@@ -64,26 +65,22 @@ export const Resources = (): JSX.Element => {
 					return <div>{value}</div>;
 				}
 			},
-			// {
-			// 	Header: 'Last update',
-			// 	accessor: 'year',
-			// 	// eslint-disable-next-line react/display-name
-			// 	Cell: ({ cell: { value } }: CellProps<Resource, string>): JSX.Element => {
-			// 		return <Text fontStyle={'italic'}>{moment(value).format('YYYY-MM-DD')}</Text>;
-			// 	}
-			// },
 			{
-				Header: 'Status',
-				accessor: 'status',
+				accessorKey: 'status',
+				header: 'Status',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ cell: { value } }: CellProps<Resource, ResourceStatus>): JSX.Element => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ value }): JSX.Element => {
 					return <ResourceStatusLabel status={value} />;
 				}
 			},
 			{
-				Header: 'Actions',
+				// id: 'actions', // accessorKey is needed for the new Table component
+				accessorKey: 'id', // Assuming 'id' or some unique key exists on Resource for actions
+				header: 'Actions',
 				// eslint-disable-next-line react/display-name
-				Cell: ({ row }: CellProps<Resource, string>): JSX.Element => {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				cell: ({ row }): JSX.Element => {
 					return (
 						<HStack spacing={4}>
 							{/*<Button*/}
@@ -95,13 +92,11 @@ export const Resources = (): JSX.Element => {
 							{/*>*/}
 							{/*	View log*/}
 							{/*</Button>*/}
-							<HoldResource resource={row.original} />
+							<HoldResource resource={row} />
 							<Button
 								variant={'outline'}
 								colorScheme={'black'}
-								onClick={() =>
-									setModalContext({ resources: { resource: row.original } })
-								}
+								onClick={() => setModalContext({ resources: { resource: row } })}
 							>
 								Edit
 							</Button>
@@ -109,7 +104,7 @@ export const Resources = (): JSX.Element => {
 								variant={'outline'}
 								colorScheme={'black'}
 								isLoading={isLoadingDelete}
-								onClick={async () => await deleteResourceAsync(row.original)}
+								onClick={async () => await deleteResourceAsync(row)}
 							>
 								<TrashIcon />
 							</Button>
@@ -121,54 +116,101 @@ export const Resources = (): JSX.Element => {
 		[resourceTypes, isLoadingDelete, setModalContext, deleteResourceAsync]
 	);
 
+	const pageTitle = 'Resources';
+	const breadcrumbs = [{ title: 'Resources', url: '/resources' }];
+	const pageActions = (
+		<Box display={'flex'} gap={2} alignItems={'center'} py={2} height={'50px'}>
+			<Button onClick={() => setModalContext({ resources: {} })}>New resource</Button>
+		</Box>
+	);
 	return (
-		<Page
-			title={'Resources'}
-			actions={
-				<DisabledComponent>
-					<Button onClick={() => setModalContext({ resources: { resource: undefined } })}>
-						New resource
-					</Button>
-				</DisabledComponent>
-			}
-		>
-			<DisabledPage>
-				<Flex mb={4}>
-					<ResourceData>Total resources: {data?.length}</ResourceData>
-					<ResourceData color={'#1FDF83'}>
-						Available:{' '}
-						{data?.filter((r) => r.status === ResourceStatus.Available)?.length ?? 0}
-					</ResourceData>
-					<ResourceData color={'#EA4335'}>
-						In use:{' '}
-						{data?.filter((r) => r.status === ResourceStatus.InUse)?.length ?? 0}
-					</ResourceData>
+		<>
+			<Box
+				as="header"
+				borderBottom="1px solid"
+				borderColor="gray.200"
+				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
+				bg="white" // Or transparent if Page.tsx sets a default bg for content
+				mb={4} // Margin to separate from content
+				px={3}
+			>
+				<Flex justifyContent="space-between" alignItems="center">
+					<Box>
+						{breadcrumbs ? (
+							<Breadcrumb
+								spacing="8px"
+								// separator={<Chevron direction="right" color={Theme.colors.green} />}
+							>
+								{breadcrumbs.map((breadcrumb, bIndex) => (
+									<BreadcrumbItem key={bIndex}>
+										{breadcrumb.url ? (
+											<BreadcrumbLink as={Link} href={breadcrumb.url}>
+												{breadcrumb.title}
+											</BreadcrumbLink>
+										) : (
+											<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
+										)}
+									</BreadcrumbItem>
+								))}
+							</Breadcrumb>
+						) : (
+							<Heading as="h1" size="lg" color="black">
+								{pageTitle}
+							</Heading>
+						)}
+					</Box>
+					<HStack spacing={2}>{pageActions}</HStack>
 				</Flex>
+				<Box p={2}>
+					<DisabledPage>
+						<Flex mb={4}>
+							<CardBase px="24px" py="12px" mr="16px" fontWeight="bold" color="black">
+								Total resources: {data?.length}
+							</CardBase>
+							<CardBase
+								px="24px"
+								py="12px"
+								mr="16px"
+								fontWeight="bold"
+								color="#1FDF83"
+							>
+								Available:{' '}
+								{data?.filter((r) => r.status === ResourceStatus.Available)
+									?.length ?? 0}
+							</CardBase>
+							<CardBase
+								px="24px"
+								py="12px"
+								mr="16px"
+								fontWeight="bold"
+								color="#EA4335"
+							>
+								In use:{' '}
+								{data?.filter((r) => r.status === ResourceStatus.InUse)?.length ??
+									0}
+							</CardBase>
+						</Flex>
 
-				<CardBase>
-					<Table loading={isLoading} variant={'striped'} columns={columns} data={data} />
-				</CardBase>
+						<CardBase>
+							<Table<Resource>
+								loading={isPending}
+								variant={'striped'}
+								columns={columns}
+								data={data ?? []}
+							/>
+						</CardBase>
 
-				<CardBase mt={4}>
-					<Heading as={'h4'} fontSize={'16px'}>
-						Where are your resources?
-					</Heading>
-				</CardBase>
-				<CardBase mt={4}>
-					{/* <GigoverMaps
-					resources={data ?? []}
-					googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing&key=AIzaSyCxC-j7zMVikBmapDp0CPVCUksbFJHRXO8"
-					loadingElement={
-						<div>
-							<LoadingSpinner />
-						</div>
-					}
-					containerElement={<div style={{ height: '400px' }} />}
-					mapElement={<div style={{ height: '100%' }} />}
-				/> */}
-					<GigoverMaps resources={data ?? []} />
-				</CardBase>
-			</DisabledPage>
-		</Page>
+						<CardBase mt={4}>
+							<Heading as={'h4'} fontSize={'16px'}>
+								Where are your resources?
+							</Heading>
+						</CardBase>
+						<CardBase mt={4}>
+							<GigoverMaps resources={data ?? []} />
+						</CardBase>
+					</DisabledPage>
+				</Box>
+			</Box>
+		</>
 	);
 };

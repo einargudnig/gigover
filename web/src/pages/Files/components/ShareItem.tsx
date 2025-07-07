@@ -82,7 +82,6 @@ const ShareItem = ({ shareItem }: { shareItem: ShareItemContext }) => {
 				))}
 			</Flex>
 			<Heading mb={4}>Get Link</Heading>
-
 			<Flex justifyContent={'space-between'}>
 				<Box>
 					<Text>

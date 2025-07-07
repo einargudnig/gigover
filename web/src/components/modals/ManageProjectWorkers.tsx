@@ -1,5 +1,4 @@
-import { Box, Button, Flex, Heading, Spacer, Text } from '@chakra-ui/react';
-import styled from 'styled-components';
+import { Box, Button, Flex, Heading, List, ListItem, Spacer, Text } from '@chakra-ui/react';
 import { Project, WorkerItem } from '../../models/Project';
 import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
@@ -10,40 +9,6 @@ import { TrashIcon } from '../icons/TrashIcon';
 // import { validateEmail } from '../../utils/StringUtils';
 import { useRemoveUser } from '../../queries/useRemoveUser';
 
-const Divider = styled.div`
-	height: ${(props) => props.theme.padding(3)};
-`;
-
-const ManageWorkersModalStyled = styled.div`
-	h3 {
-		display: flex;
-		align-items: center;
-		margin-bottom: ${(props) => props.theme.padding(2)};
-		border-bottom: 1px solid ${(props) => props.theme.colors.border};
-		padding-bottom: ${(props) => props.theme.padding(2)};
-
-		svg {
-			margin-left: 8px;
-		}
-	}
-
-	ul {
-		list-style-type: none;
-		margin: 0;
-		padding-left: 0;
-
-		li {
-			padding: 12px 0;
-			display: flex;
-			justify-content: space-between;
-
-			&:not(:last-child) {
-				border-bottom: 1px solid ${(props) => props.theme.colors.border};
-			}
-		}
-	}
-`;
-
 interface ManageProjectWorkersProps {
 	onClose: () => void;
 	project: Project;
@@ -53,8 +18,8 @@ export const ManageProjectWorkers = ({
 	onClose,
 	project
 }: ManageProjectWorkersProps): JSX.Element => {
-	const { mutate: removeWorker, isLoading } = useRemoveWorker();
-	const { mutate: removeUser, isLoading: isLoadingTwo } = useRemoveUser();
+	const { mutate: removeWorker, isPending: isLoading } = useRemoveWorker();
+	const { mutate: removeUser, isPending: isLoadingTwo } = useRemoveUser();
 
 	const remove = async (worker: WorkerItem) => {
 		if (worker.type === 1) {
@@ -74,7 +39,7 @@ export const ManageProjectWorkers = ({
 
 	return (
 		<Modal title={'Add team members'} open={true} onClose={onClose}>
-			<ManageWorkersModalStyled>
+			<Box>
 				<Text marginBottom={'4'} as={'h4'}>
 					To add team members, they must have signed up for GigOver.
 				</Text>
@@ -87,14 +52,33 @@ export const ManageProjectWorkers = ({
 						<AddWorkerForm projectId={project.projectId} />
 					</Box>
 				</Flex>
-				<Divider />
+				<Box h={3} />
 				<div>
-					<Heading as={'h3'} size={'md'}>
+					<Heading
+						as={'h3'}
+						size={'md'}
+						display="flex"
+						alignItems="center"
+						mb={2}
+						borderBottomWidth="1px"
+						borderColor="gray.200"
+						pb={2}
+						sx={{ svg: { ml: '8px' } }}
+					>
 						Team members {(isLoading || isLoadingTwo) && <LoadingSpinner />}
 					</Heading>
-					<ul>
+					<List styleType="none" m={0} pl={0}>
 						{project.workers.map((worker, workerIndex) => (
-							<li key={workerIndex}>
+							<ListItem
+								key={workerIndex}
+								py="12px"
+								display="flex"
+								justifyContent="space-between"
+								borderBottomWidth={
+									workerIndex < project.workers.length - 1 ? '1px' : '0'
+								}
+								borderColor="gray.200"
+							>
 								{worker.name} {worker.type === 1 ? '(Web user)' : '(App user)'}
 								<Button
 									size={'sm'}
@@ -104,11 +88,11 @@ export const ManageProjectWorkers = ({
 								>
 									<TrashIcon color={'red'} />
 								</Button>
-							</li>
+							</ListItem>
 						))}
-					</ul>
+					</List>
 				</div>
-			</ManageWorkersModalStyled>
+			</Box>
 		</Modal>
 	);
 };

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from 'react-query';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import { ApiService } from '../services/ApiService';
 import { TimeTrackerInput } from './useTrackerStart';
 
@@ -10,14 +10,17 @@ interface TimeTrackerInputWithComment extends TimeTrackerInput {
 export const useTrackerStop = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<AxiosResponse, AxiosError, TimeTrackerInputWithComment>(
-		async (variables) =>
-			await axios.post(ApiService.stopTimer, variables, { withCredentials: true }),
-		{
-			onSuccess: async () => {
-				await queryClient.invalidateQueries(ApiService.activeWorkers);
-				await queryClient.refetchQueries(ApiService.activeWorkers);
-			}
+	return useMutation<unknown, AxiosError, TimeTrackerInputWithComment>({
+		mutationFn: async (variables) => {
+			const response = await axios.post(ApiService.stopTimer, variables, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
+			await queryClient.refetchQueries({ queryKey: [ApiService.activeWorkers] });
 		}
-	);
+	});
 };

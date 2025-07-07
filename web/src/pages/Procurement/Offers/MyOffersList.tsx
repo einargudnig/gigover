@@ -1,29 +1,21 @@
-import { Box, Flex, Grid, GridItem, HStack, Heading, Text } from '@chakra-ui/react';
-import styled from 'styled-components';
+import {
+	Box,
+	Flex,
+	Grid,
+	GridItem,
+	HStack,
+	Heading,
+	LinkBox,
+	LinkOverlay,
+	Text
+} from '@chakra-ui/react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Offer } from '../../../models/Tender';
 import { useGetUserOffers } from '../../../queries/procurement/useGetUserOffers';
 import { ProcurementListSkeleton } from '../ProcurementListSkeleton';
 
-const OfferCardStyled = styled(CardBaseLink)`
-	width: 100%;
-	max-width: 100%;
-	height: auto;
-	margin-bottom: 8px;
-	margin-top: 8px;
-
-	h3 {
-		margin-bottom: 16px;
-		color: #000;
-	}
-
-	@media screen and (max-width: 768px) {
-		width: 100%;
-	}
-`;
-
 export const MyOffersList = (): JSX.Element => {
-	const { data, isLoading } = useGetUserOffers();
+	const { data, isPending } = useGetUserOffers();
 	const offers: Offer[] | undefined = data;
 	const noOffers = offers?.length === 0;
 
@@ -33,7 +25,7 @@ export const MyOffersList = (): JSX.Element => {
 				<Heading size={'md'}>Offers that you have submitted</Heading>
 			</Flex>
 
-			{isLoading ? (
+			{isPending ? (
 				<ProcurementListSkeleton />
 			) : (
 				<>
@@ -65,50 +57,71 @@ export const MyOffersList = (): JSX.Element => {
 									}
 
 									return (
-										<OfferCardStyled
+										<LinkBox
+											as={CardBaseLink}
 											to={`/tender/my-offer/${o.tenderId}/${o.offerId}`}
 											key={o.offerId}
+											w="100%"
+											maxW="100%"
+											h="auto"
+											mb="8px"
+											mt="8px"
+											sx={{
+												h3: {
+													marginBottom: '16px',
+													color: '#000'
+												},
+												'@media screen and (max-width: 768px)': {
+													width: '100%'
+												}
+											}}
 										>
-											<Flex direction={'column'}>
-												<Grid templateColumns="repeat(4, 1fr)" gap={1}>
-													<GridItem colSpan={2}>
-														<HStack>
-															<Text as={'b'}>Offer notes:</Text>
-															<Text color={'black'}>{o.notes}</Text>
-														</HStack>
-														<HStack>
-															<Text as={'b'}>
-																Tender description:
-															</Text>
-															<Text color={'black'}>
-																{o.tender.description}
-															</Text>
-														</HStack>
-													</GridItem>
-													<GridItem colSpan={1} />
+											<LinkOverlay
+												href={`/tender/my-offer/${o.tenderId}/${o.offerId}`}
+											>
+												<Flex direction={'column'}>
+													<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+														<GridItem colSpan={2}>
+															<HStack>
+																<Text as={'b'}>Offer notes:</Text>
+																<Text color={'black'}>
+																	{o.notes}
+																</Text>
+															</HStack>
+															<HStack>
+																<Text as={'b'}>
+																	Tender description:
+																</Text>
+																<Text color={'black'}>
+																	{o.tender.description}
+																</Text>
+															</HStack>
+														</GridItem>
+														<GridItem colSpan={1} />
 
-													<GridItem colSpan={1}>
-														<HStack>
-															<Text as={'b'} fontSize={'lg'}>
-																Offer status:
-															</Text>
-															<Text
-																color={statusColor}
-																fontSize={'xl'}
-															>
-																{offerStatus}
-															</Text>
-														</HStack>
-														<HStack>
-															<Text as={'b'}>Tender</Text>
-															<Text as={'b'}>owner:</Text>
+														<GridItem colSpan={1}>
+															<HStack>
+																<Text as={'b'} fontSize={'lg'}>
+																	Offer status:
+																</Text>
+																<Text
+																	color={statusColor}
+																	fontSize={'xl'}
+																>
+																	{offerStatus}
+																</Text>
+															</HStack>
+															<HStack>
+																<Text as={'b'}>Tender</Text>
+																<Text as={'b'}>owner:</Text>
 
-															<Text>{o.tender.email}</Text>
-														</HStack>
-													</GridItem>
-												</Grid>
-											</Flex>
-										</OfferCardStyled>
+																<Text>{o.tender.email}</Text>
+															</HStack>
+														</GridItem>
+													</Grid>
+												</Flex>
+											</LinkOverlay>
+										</LinkBox>
 									);
 								})}
 						</>

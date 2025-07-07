@@ -1,26 +1,31 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../../services/ApiService';
-import { CompleteTender } from '../../models/Tender';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { CompleteTender } from '../../models/Tender';
+import { ApiService } from '../../services/ApiService';
 
 export interface TenderResponse {
 	list: CompleteTender[];
 }
 
 export const useUserTenders = () => {
-	const { data, isLoading, isError, error } = useQuery<TenderResponse, ErrorResponse>(
-		ApiService.userTenders,
-		{
-			refetchOnWindowFocus: true
-			// withCredentials: true
-		}
-	);
+	const { data, isPending, isError, error } = useQuery<TenderResponse, ErrorResponse>({
+		queryKey: [ApiService.userTenders],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.userTenders, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		// withCredentials: true
+		staleTime: 1000 * 60 * 5 // 5 minutes
+	});
 
 	const tenders: CompleteTender[] = data?.list || [];
 
 	return {
 		data: tenders,
-		isLoading,
+		isPending,
 		isError,
 		error
 	};

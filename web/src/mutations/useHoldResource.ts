@@ -1,23 +1,23 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
-import { ApiService } from '../services/ApiService';
-import axios from 'axios';
 import { Resource } from '../models/Resource';
+import { ApiService } from '../services/ApiService';
 
-interface HoldResourceResponse {
-	errorText: 'OK';
-}
-
-export const useHoldResource = () => {
+export function useHoldResource() {
 	const queryClient = useQueryClient();
-
-	return useMutation<HoldResourceResponse, ErrorResponse, Resource>(
-		async (resource) =>
-			await axios.post(ApiService.holdResource, resource, { withCredentials: true }),
-		{
-			onSuccess: async () => {
-				await queryClient.invalidateQueries(ApiService.resources);
-			}
+	return useMutation<Resource, AxiosError<ErrorResponse>, Resource>({
+		mutationFn: async (resource: Resource) => {
+			const response = await axios.post(ApiService.holdResource, resource, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		onSuccess: (data, variables) => {
+			queryClient.invalidateQueries({ queryKey: [ApiService.resources] });
+			queryClient.invalidateQueries({
+				queryKey: [ApiService.resourceHistory(variables.id!)]
+			});
 		}
-	);
-};
+	});
+}

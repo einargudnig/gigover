@@ -1,8 +1,7 @@
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { useMutation } from 'react-query';
+import { DateTime } from 'luxon';
 import { ApiService } from '../services/ApiService';
-import { ErrorResponse } from '../models/ErrorResponse';
-import moment from 'moment';
 
 export interface Timesheet {
 	minutes: number;
@@ -12,6 +11,7 @@ export interface Timesheet {
 	taskId: number;
 	workId: number;
 	comment?: string;
+	userName?: string;
 }
 
 export interface TrackerReportItem {
@@ -23,13 +23,13 @@ export interface TrackerReportItem {
 	userName: string;
 }
 
-interface TrackerReportResponse {
+export interface TrackerReportAPIResponse {
 	data: {
 		report: TrackerReportItem[];
 	};
 }
 
-interface TrackerReportInput {
+interface TrackerReportMutationVariables {
 	projectId?: number;
 	from?: number;
 	to?: number;
@@ -37,23 +37,32 @@ interface TrackerReportInput {
 }
 
 export const useTrackerReport = () => {
-	return useMutation<TrackerReportResponse, ErrorResponse, TrackerReportInput>(
-		async (variables = {}) => {
-			const startTime = moment(variables.from);
-			const endTime = moment(variables.to);
+	return useMutation<TrackerReportAPIResponse, Error, TrackerReportMutationVariables | void>({
+		mutationFn: async (variables) => {
+			const fromTime =
+				variables && variables.from
+					? variables.from
+					: DateTime.now().minus({ days: 14 }).toMillis();
+			const toTime = variables && variables.to ? variables.to : DateTime.now().toMillis();
 
-			const startOfDay = moment(startTime).startOf('day');
-			const endOfDay = moment(endTime).endOf('day');
+			const startTime = DateTime.fromMillis(fromTime);
+			const endTime = DateTime.fromMillis(toTime);
 
-			return await axios.post(
-				ApiService.timerReport,
-				{
-					...variables,
-					from: startOfDay.toDate().getTime(),
-					to: endOfDay.toDate().getTime()
-				},
-				{ withCredentials: true }
-			);
+			const startOfDay = startTime.startOf('day');
+			const endOfDay = endTime.endOf('day');
+
+			const payload: TrackerReportMutationVariables = {};
+			if (variables?.projectId) {
+				payload.projectId = variables.projectId;
+			}
+			if (variables?.taskId) {
+				payload.taskId = variables.taskId;
+			}
+			payload.from = startOfDay.toMillis();
+			payload.to = endOfDay.toMillis();
+
+			return axios.post(ApiService.timerReport, payload, { withCredentials: true });
 		}
-	);
+		// staleTime: 1000 * 60 * 5 // 5 minutes
+	});
 };

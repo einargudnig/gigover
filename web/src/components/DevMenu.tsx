@@ -1,18 +1,7 @@
-import { Button } from '@chakra-ui/react';
+import { Box, Button, Input, Text } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
-import styled from 'styled-components';
 import { useChangeUid } from '../mutations/useChangeUid';
 import { IS_LOCAL } from '../services/ApiService';
-
-const DevMenuStyled = styled.div`
-	position: fixed;
-	bottom: 32px;
-	left: 32px;
-	padding: 16px;
-	background: #fff;
-	border: 1px solid red;
-	border-radius: 12px;
-`;
 
 export const DevMenu = (): JSX.Element | null => {
 	const { mutate } = useChangeUid();
@@ -29,15 +18,24 @@ export const DevMenu = (): JSX.Element | null => {
 	}
 
 	return (
-		<DevMenuStyled>
-			<p>View as</p>
-			<input
+		<Box
+			position="fixed"
+			bottom="32px"
+			left="32px"
+			p="16px"
+			bg="#fff"
+			border="1px solid red"
+			borderRadius="12px"
+		>
+			<Text>View as</Text>
+			<Input
 				type={'text'}
 				placeholder={'UID'}
 				value={uid}
 				onChange={(e) => {
 					setUid(e.target.value);
 				}}
+				my={2} // Added some margin for spacing
 			/>
 			<Button
 				onClick={() => {
@@ -46,6 +44,6 @@ export const DevMenu = (): JSX.Element | null => {
 			>
 				Disguise
 			</Button>
-		</DevMenuStyled>
+		</Box>
 	);
 };

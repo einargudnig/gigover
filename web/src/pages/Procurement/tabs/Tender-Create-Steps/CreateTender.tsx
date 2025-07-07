@@ -15,10 +15,10 @@ import {
 	VStack,
 	useToast
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { DatePicker } from '../../../../components/forms/DatePicker';
 import { useOpenProjects } from '../../../../hooks/useAvailableProjects';
 import { Task } from '../../../../models/Task';
@@ -34,7 +34,7 @@ interface CreateTenderProps {
 
 export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	const queryClient = useQueryClient();
-	const { data, isLoading: isLoadingProjects } = useProjectList();
+	const { data, isPending: isLoadingProjects } = useProjectList();
 	const openProjects = useOpenProjects(data);
 	const toast = useToast();
 	const currentDate = new Date();
@@ -46,12 +46,12 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 	const [isChecked, setIsChecked] = useState<number>(0);
 
 	// Mutations
-	const { mutate, isLoading } = useAddTender({
+	const { mutate, isPending } = useAddTender({
 		onSuccess: (tenderId) => {
 			// Here you get the tender ID as a number
 			console.log('Created tender with ID:', tenderId);
 			onTenderCreate(tenderId);
-			queryClient.refetchQueries(ApiService.userTenders);
+			queryClient.refetchQueries({ queryKey: [ApiService.userTenders] });
 		},
 		onError: (error) => {
 			devError('Error creating tender:', error);
@@ -278,7 +278,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 							</FormControl>
 							<Box mb={3} />
 							<FormControl id={'address'} isInvalid={!!errors.address}>
-								<FormLabel>Address - contact person on site</FormLabel>
+								<FormLabel>Address - contact person</FormLabel>
 								<Input
 									placeholder={'Enter the address of the procurement'}
 									required={true}
@@ -313,7 +313,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 									type="submit"
 									colorScheme={'black'}
 									variant={'outline'}
-									isLoading={isLoading}
+									isLoading={isPending}
 									loadingText="Creating..."
 								>
 									Create Tender

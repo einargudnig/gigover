@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import styled, { css } from 'styled-components';
 import { ModalContext } from '../../context/ModalContext';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { Resource, ResourceStatus } from '../../models/Resource';
@@ -20,31 +19,17 @@ import { devError } from '../../utils/ConsoleUtils';
 import { FormActions } from '../FormActions';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Modal } from '../Modal';
-import { CommentInput } from '../Resources/ResourceCommentInput';
+import { ResourceCommentInput } from '../Resources/ResourceCommentInput';
 import { ResourceComments } from '../Resources/ResourceComments';
 import { ResourceHistoryLog } from '../Resources/ResourceHistoryLog';
 import { TrackerSelect } from '../TrackerSelect';
 import { Tabs } from '../tabs/Tabs';
 
-const TabContent = styled.div<{ show: boolean }>`
-	background: #f9f9f9;
-	padding: ${(props) => props.theme.padding(3)};
-	visibility: visible;
-	position: relative;
-
-	${(props) =>
-		!props.show &&
-		css`
-			visibility: hidden;
-			position: absolute;
-		`};
-`;
-
 export const ResourceModal = (): JSX.Element => {
 	const closeModal = useCloseModal();
 	const [{ resources }] = useContext(ModalContext);
-	const { data: resourceTypes, isLoading: isLoadingResourceTypes } = useResourceTypes();
-	const { mutateAsync, isLoading, isError, error } = useModifyResource();
+	const { data: resourceTypes, isPending: isPendingResourceTypes } = useResourceTypes();
+	const { mutateAsync, isPending, isError, error } = useModifyResource();
 	const {
 		register,
 		handleSubmit,
@@ -134,7 +119,7 @@ export const ResourceModal = (): JSX.Element => {
 							<Box mb={6} />
 							<HStack mb={4} spacing={4} justifyContent={'space-between'}>
 								<Tag>Resource Type</Tag>
-								{isLoadingResourceTypes && <LoadingSpinner />}
+								{isPendingResourceTypes && <LoadingSpinner />}
 							</HStack>
 							<Controller
 								name={'type'}
@@ -206,102 +191,117 @@ export const ResourceModal = (): JSX.Element => {
 							>
 								{({ tab }) => (
 									<>
-										<TabContent show={tab.value === 0}>
-											{isEditing && resources?.resource && (
-												<ResourceHistoryLog resource={resources.resource} />
-											)}
-										</TabContent>
-										<TabContent show={tab.value === 1}>
-											<FormControl
-												id={'make'}
-												isInvalid={Boolean(errors.make)}
-												mb={6}
-											>
-												<FormLabel>Resource make</FormLabel>
-												<Input bg={'white'} {...register('make')} />
-												{errors.make && (
-													<FormErrorMessage>
-														{errors.make.message}
-													</FormErrorMessage>
+										{tab.value === 0 && (
+											<Box bg="#f9f9f9" p={3}>
+												{isEditing && resources?.resource && (
+													<ResourceHistoryLog
+														resource={resources.resource}
+													/>
 												)}
-											</FormControl>
-											<FormControl
-												id={'model'}
-												isInvalid={Boolean(errors.model)}
-												mb={6}
-											>
-												<FormLabel>Resource model</FormLabel>
-												<Input bg={'white'} {...register('model')} />
-												{errors.model && (
-													<FormErrorMessage>
-														{errors.model.message}
-													</FormErrorMessage>
-												)}
-											</FormControl>
-											<FormControl
-												id={'year'}
-												isInvalid={Boolean(errors.year)}
-											>
-												<FormLabel>Resource year</FormLabel>
-												<Input
-													bg={'white'}
-													{...register('year')}
-													type="number"
-												/>
-												{errors.year && (
-													<FormErrorMessage>
-														{errors.year.message}
-													</FormErrorMessage>
-												)}
-											</FormControl>
-										</TabContent>
-										<TabContent show={tab.value === 2}>
-											<FormControl
-												id={'cost'}
-												isInvalid={Boolean(errors.cost)}
-												mb={6}
-											>
-												<FormLabel>Resource cost</FormLabel>
-												<Input
-													{...register('cost')}
-													type="number"
-													min={0}
-													bg={'white'}
-												/>
-												{errors.cost ? (
-													<FormErrorMessage>
-														{errors.cost.message}
-													</FormErrorMessage>
-												) : (
-													<FormHelperText>
-														What is the hourly rental cost?
-													</FormHelperText>
-												)}
-											</FormControl>
-										</TabContent>
-										<TabContent show={tab.value === 3}>
-											<FormControl
-												id={'description'}
-												isInvalid={Boolean(errors.description)}
-											>
-												<FormLabel>Resource description</FormLabel>
-												<Input bg={'white'} {...register('description')} />
-												{errors.description ? (
-													<FormErrorMessage>
-														{errors.description.message}
-													</FormErrorMessage>
-												) : (
-													<FormHelperText>
-														Describe your resource
-													</FormHelperText>
-												)}
-											</FormControl>
-										</TabContent>
-										{isEditing && resources?.resource && (
-											<TabContent show={tab.value === 4}>
+											</Box>
+										)}
+										{tab.value === 1 && (
+											<Box bg="#f9f9f9" p={3}>
+												<FormControl
+													id={'make'}
+													isInvalid={Boolean(errors.make)}
+													mb={6}
+												>
+													<FormLabel>Resource make</FormLabel>
+													<Input bg={'white'} {...register('make')} />
+													{errors.make && (
+														<FormErrorMessage>
+															{errors.make.message}
+														</FormErrorMessage>
+													)}
+												</FormControl>
+												<FormControl
+													id={'model'}
+													isInvalid={Boolean(errors.model)}
+													mb={6}
+												>
+													<FormLabel>Resource model</FormLabel>
+													<Input bg={'white'} {...register('model')} />
+													{errors.model && (
+														<FormErrorMessage>
+															{errors.model.message}
+														</FormErrorMessage>
+													)}
+												</FormControl>
+												<FormControl
+													id={'year'}
+													isInvalid={Boolean(errors.year)}
+												>
+													<FormLabel>Resource year</FormLabel>
+													<Input
+														bg={'white'}
+														{...register('year')}
+														type="number"
+													/>
+													{errors.year && (
+														<FormErrorMessage>
+															{errors.year.message}
+														</FormErrorMessage>
+													)}
+												</FormControl>
+											</Box>
+										)}
+										{tab.value === 2 && (
+											<Box bg="#f9f9f9" p={3}>
+												<FormControl
+													id={'cost'}
+													isInvalid={Boolean(errors.cost)}
+													mb={6}
+												>
+													<FormLabel>Resource cost</FormLabel>
+													<Input
+														{...register('cost')}
+														type="number"
+														min={0}
+														bg={'white'}
+													/>
+													{errors.cost ? (
+														<FormErrorMessage>
+															{errors.cost.message}
+														</FormErrorMessage>
+													) : (
+														<FormHelperText>
+															What is the hourly rental cost?
+														</FormHelperText>
+													)}
+												</FormControl>
+											</Box>
+										)}
+										{tab.value === 3 && (
+											<Box bg="#f9f9f9" p={3}>
+												<FormControl
+													id={'description'}
+													isInvalid={Boolean(errors.description)}
+												>
+													<FormLabel>Resource description</FormLabel>
+													<Input
+														bg={'white'}
+														{...register('description')}
+													/>
+													{errors.description ? (
+														<FormErrorMessage>
+															{errors.description.message}
+														</FormErrorMessage>
+													) : (
+														<FormHelperText>
+															Describe your resource
+														</FormHelperText>
+													)}
+												</FormControl>
+											</Box>
+										)}
+										{isEditing && resources?.resource && tab.value === 4 && (
+											<Box bg="#f9f9f9" p={3}>
 												<ResourceComments resource={resources.resource} />
-												<CommentInput resourceId={resources.resource.id!} />
-											</TabContent>
+												<ResourceCommentInput
+													resource={resources.resource}
+												/>
+											</Box>
 										)}
 									</>
 								)}
@@ -311,8 +311,8 @@ export const ResourceModal = (): JSX.Element => {
 							submitText={
 								resources?.resource ? 'Update resource' : 'Create a resource'
 							}
-							submitLoading={isLoading}
-							submitDisabled={isLoading}
+							submitLoading={isPending}
+							submitDisabled={isPending}
 							cancelText={'Discard changes'}
 							onCancel={() => closeModal()}
 						/>

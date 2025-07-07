@@ -32,7 +32,7 @@ export const Onboarding = (): JSX.Element => {
 	const user = useContext(UserContext);
 	const firebase = useContext(FirebaseContext);
 	const [registrationError, setRegistrationError] = useState('');
-	const { mutateAsync: registerFn, data, isLoading, isError, error } = useRegister();
+	const { mutateAsync: registerFn, data, isPending, isError, error } = useRegister();
 	const navigate = useNavigate();
 
 	// If the user already is registered, redirect to the dashboard
@@ -113,9 +113,9 @@ export const Onboarding = (): JSX.Element => {
 									{/* mutation errors + more errors! */}
 									{isError && (
 										<>
-											<Text color="red.500">{error?.errorText}</Text>
+											<Text color="red.500">{error?.message}</Text>
 											<Text color="red.500" size={'sm'}>
-												{error?.errorCode}
+												{error?.name}
 											</Text>
 										</>
 									)}
@@ -197,8 +197,8 @@ export const Onboarding = (): JSX.Element => {
 										</FormControl>
 										<Flex justifyContent={'flex-end'} marginTop="4">
 											<Button
-												disabled={isLoading}
-												isLoading={isLoading}
+												disabled={isPending}
+												isLoading={isPending}
 												loadingText="Submitting"
 												type="submit"
 											>

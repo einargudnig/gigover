@@ -1,5 +1,5 @@
-import styled from 'styled-components';
+import { Box } from '@chakra-ui/react';
 
-export const Divider = styled.div`
-	height: ${(props) => props.theme.padding(3)};
-`;
+export const Divider = () => {
+	return <Box height={3} />;
+};

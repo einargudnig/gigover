@@ -1,8 +1,8 @@
 import { Tag, TagLabel, TagLeftIcon } from '@chakra-ui/react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { Project } from '../models/Project';
-import { ClockIcon } from './icons/ClockIcon';
 import { formatDateWithoutTime } from '../utils/StringUtils';
+import { ClockIcon } from './icons/ClockIcon';
 
 // This was used to showcase project time left.
 // TODO: remove this function
@@ -36,9 +36,9 @@ interface ProjectTimeStatusProps {
 }
 
 export const ProjectTimeStatus = ({ project }: ProjectTimeStatusProps): JSX.Element => {
-	const now = moment(new Date());
-	const end = moment(project.endDate > 0 ? project.endDate : now);
-	const hoursLeft = end.diff(now, 'hours');
+	const now = DateTime.now();
+	const end = DateTime.fromMillis(project.endDate > 0 ? project.endDate : now.toMillis());
+	const hoursLeft = end.diff(now, 'hours').hours;
 	const timeWithoutYear =
 		project.endDate > 0 ? formatDateWithoutTime(new Date(project.endDate)) : 'No end date';
 

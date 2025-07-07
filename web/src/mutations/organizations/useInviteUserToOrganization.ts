@@ -1,5 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
@@ -14,9 +14,10 @@ export const useInviteUserToOrganization = () => {
 	const queryClient = useQueryClient();
 	const mutationKey = ApiService.inviteToOrganization;
 
-	return useMutation<ErrorResponse, AxiosError, InviteUserToOrganizationInput>(
-		mutationKey,
-		async (variables) => {
+	return useMutation<ErrorResponse, AxiosError, InviteUserToOrganizationInput>({
+		mutationKey: [mutationKey],
+
+		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
@@ -27,15 +28,15 @@ export const useInviteUserToOrganization = () => {
 				}
 
 				// we want to refetch this query so the organizations updates after we invite a user.
-				queryClient.refetchQueries(ApiService.getOrganizationUsers);
-				queryClient.refetchQueries(ApiService.getUserOrgInvites);
-				queryClient.refetchQueries(ApiService.getUserInfo);
-				queryClient.refetchQueries(ApiService.getOrganizations);
+				queryClient.invalidateQueries({ queryKey: [ApiService.getOrganizationUsers] });
+				queryClient.invalidateQueries({ queryKey: [ApiService.getUserOrgInvites] });
+				queryClient.invalidateQueries({ queryKey: [ApiService.getUserInfo] });
+				queryClient.invalidateQueries({ queryKey: [ApiService.getOrganizations] });
 				return response.data;
 			} catch (e) {
 				devError(e);
 				throw e;
 			}
 		}
-	);
+	});
 };

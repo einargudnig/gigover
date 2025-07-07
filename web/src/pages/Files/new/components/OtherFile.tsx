@@ -1,9 +1,8 @@
 import { HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { CardBase } from '../../../../components/CardBase';
+import { CardBaseLink } from '../../../../components/CardBase';
 import { DownloadIcon } from '../../../../components/icons/DownloadIcon';
 import { FileHouseIcon } from '../../../../components/icons/FileTypes/FileHouseIcon';
 import { FileImgIcon } from '../../../../components/icons/FileTypes/FileImgIcon';
@@ -40,9 +39,6 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 	}
 };
 
-// const FileStyled = styled(CardBaseLink)``;
-const FileStyledNoLink = styled(CardBase)``;
-
 export const GetFileLink = (file: TenderDocument) => {
 	const { offerId, tenderId } = useParams();
 	const location = useLocation();
@@ -75,10 +71,10 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 	const Icon = OtherFileIconForType(file.type);
 	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
 	const { mutateAsync: deleteTenderDocumentAsync } = useDeleteTenderDocument(); // for delete file on Tender
-	// const href = GetFileLink(file);
+	const href = GetFileLink(file);
 
 	return (
-		<FileStyledNoLink>
+		<CardBaseLink to={href}>
 			<HStack spacing={8}>
 				<Icon />
 
@@ -89,7 +85,9 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					<Text m={0}>File from file storage</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
-				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+				<Text m={0}>
+					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
+				</Text>
 				<VStack justify={'center'} align={'center'}>
 					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 						<IconButton
@@ -115,6 +113,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Delete"
 						>
 							<IconButton
 								aria-label={'Delete'}
@@ -133,6 +132,6 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					</VStack>
 				) : null}
 			</HStack>
-		</FileStyledNoLink>
+		</CardBaseLink>
 	);
 };

@@ -1,8 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { ApiService } from '../../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
-import { devError } from '../../utils/ConsoleUtils';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 export interface StakeHolderFormData {
 	name: string;
@@ -21,19 +21,23 @@ interface StakeHolderResponse {
 export const useAddStakeHolder = () => {
 	const client = useQueryClient();
 
-	return useMutation<StakeHolderResponse, ErrorResponse, StakeHolderFormData>(
-		async (variables) => {
+	return useMutation<StakeHolderResponse, ErrorResponse, StakeHolderFormData>({
+		mutationKey: [ApiService.addStakeholder],
+		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post(ApiService.addStakeholder, variables, {
 					withCredentials: true
 				});
-				await client.refetchQueries(ApiService.getPropertyById(variables.propertyId));
-
 				return response.data;
 			} catch (e) {
 				devError(e);
-				throw new Error('Could not add unit');
+				throw e;
 			}
+		},
+		onSuccess: async (data, variables) => {
+			await client.invalidateQueries({
+				queryKey: [ApiService.getPropertyById(variables.propertyId)]
+			});
 		}
-	);
+	});
 };

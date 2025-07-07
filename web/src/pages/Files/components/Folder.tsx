@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
 import { CardBaseLink } from '../../../components/CardBase';
 import { ConfirmDialog } from '../../../components/ConfirmDialog';
 import { DropZone } from '../../../components/DropZone';
@@ -31,22 +30,6 @@ interface FolderProps {
 	url?: string;
 }
 
-const FolderCard = styled(CardBaseLink)<{ isDragActive: boolean; selected?: boolean }>`
-	${(props) =>
-		props.isDragActive &&
-		css`
-			outline: 3px solid ${props.theme.colors.green};
-		`};
-
-	${(props) =>
-		props.selected &&
-		css`
-			background: #000;
-			color: #fff !important;
-			box-shadow: none;
-		`};
-`;
-
 export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 	return (
 		<DropZone
@@ -56,9 +39,20 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 			uploadType={FileUploadType.Project}
 		>
 			{({ isDragActive, isUploading }) => (
-				<FolderCard
+				<CardBaseLink
 					to={`/files/${project.projectId}/${url || ''}`}
-					isDragActive={isDragActive}
+					outline={isDragActive ? '3px solid var(--chakra-colors-green)' : 'none'}
+					bg={isDragActive ? 'var(--chakra-colors-green)' : 'white'}
+					color={isDragActive ? 'white' : 'black'}
+					boxShadow={
+						isDragActive
+							? 'none'
+							: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+					}
+					_hover={{
+						boxShadow: 'none',
+						textDecoration: 'none'
+					}}
 				>
 					<VStack align={'stretch'} spacing={4}>
 						<HStack justify={'space-between'} align={'center'}>
@@ -79,7 +73,7 @@ export const Folder = ({ project, url }: FolderProps): JSX.Element => {
 							<Text>{humanFileSize(project.totalBytes || 0)}</Text>
 						</HStack>
 					</VStack>
-				</FolderCard>
+				</CardBaseLink>
 			)}
 		</DropZone>
 	);
@@ -96,11 +90,8 @@ export const ProjectFolderComponent = ({
 	folder,
 	selectedFolderId
 }: ProjectFolderProps): JSX.Element => {
-	const { data, isLoading } = useFolderDocuments(folder.folderId);
-	// const { data: folderData, isLoading: folderIsLoading } = useFolderFolders(
-	// 	projectId,
-	// 	folder.folderId
-	// );
+	const { data, isPending } = useFolderDocuments(folder.folderId);
+
 	const isSelected = folder.folderId === selectedFolderId;
 	const navigate = useNavigate();
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -126,6 +117,7 @@ export const ProjectFolderComponent = ({
 									setDialogOpen(false);
 								}}
 								isOpen={dialogOpen}
+								confirmButtonText="Delete"
 							>
 								{/*	<MenuItem
 									onClick={() => {
@@ -158,10 +150,20 @@ export const ProjectFolderComponent = ({
 				uploadType={FileUploadType.Project}
 			>
 				{({ isDragActive, isUploading }) => (
-					<FolderCard
+					<CardBaseLink
 						to={`/files/${projectId}/folder/${folder.folderId}`}
-						selected={isSelected}
-						isDragActive={isDragActive}
+						outline={isDragActive ? '3px solid var(--chakra-colors-green)' : 'none'}
+						bg={isDragActive ? 'var(--chakra-colors-green)' : 'white'}
+						color={isDragActive ? 'white' : 'black'}
+						boxShadow={
+							isDragActive
+								? 'none'
+								: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+						}
+						_hover={{
+							boxShadow: 'none',
+							textDecoration: 'none'
+						}}
 					>
 						<VStack align={'stretch'} spacing={4}>
 							<HStack justify={'space-between'} align={'center'}>
@@ -179,10 +181,10 @@ export const ProjectFolderComponent = ({
 								{folder.name}
 							</Heading>
 							<HStack justify={'space-between'}>
-								{isLoading ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
+								{isPending ? <LoadingSpinner /> : <Text>{data.length} Files</Text>}
 							</HStack>
 						</VStack>
-					</FolderCard>
+					</CardBaseLink>
 				)}
 			</DropZone>
 		</div>

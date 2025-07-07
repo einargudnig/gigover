@@ -1,17 +1,5 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 import React from 'react';
-import styled from 'styled-components';
-
-const FormActionsContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: ${(props) => props.theme.padding(3)} 0;
-	position: sticky;
-	bottom: 0px;
-	right: 0px;
-	background: white;
-`;
 
 interface FormActionsProps {
 	submitText?: string | React.ReactNode;
@@ -36,13 +24,23 @@ export const FormActions = ({
 	cancelText,
 	cancelDisabled = false,
 	hideSubmitButton = false,
-	...props
+	style
 }: FormActionsProps): JSX.Element => (
-	<FormActionsContainer {...props}>
+	<Flex
+		justifyContent="space-between"
+		alignItems="center"
+		py={3}
+		px={0}
+		position="sticky"
+		bottom="0px"
+		right="0px"
+		bg="white"
+		style={style}
+	>
 		{onCancel ? (
 			<Button
 				variant={'outline'}
-				colorScheme={'black'}
+				colorScheme={'gray'}
 				onClick={onCancel}
 				disabled={cancelDisabled}
 			>
@@ -62,5 +60,5 @@ export const FormActions = ({
 				{submitText}
 			</Button>
 		)}
-	</FormActionsContainer>
+	</Flex>
 );

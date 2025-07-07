@@ -29,7 +29,7 @@ interface MilestoneModalProps {
 
 export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element => {
 	const { projectId, milestone, callback } = context;
-	const { data, isLoading: isLoadingProject } = useProjectDetails(projectId);
+	const { data, isPending: isLoadingProject } = useProjectDetails(projectId);
 	const closeModal = useCloseModal(callback);
 	const {
 		register,
@@ -42,7 +42,7 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 		mode: 'onChange',
 		reValidateMode: 'onBlur'
 	});
-	const { mutateAsync: addMilestone, isLoading, isError, error } = useAddMilestone();
+	const { mutateAsync: addMilestone, isPending, isError, error } = useAddMilestone();
 	const tasks = data?.project?.tasks.filter((t) => t.status !== TaskStatus.Archived) ?? [];
 
 	const onSubmit = handleSubmit(async (values) => {
@@ -83,8 +83,8 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						{isError && (
 							<>
 								{/* Server errors */}
-								<p>{error?.errorText}</p>
-								<small>{error?.errorCode}</small>
+								<p>{error?.message}</p>
+								<small>{error?.name}</small>
 							</>
 						)}
 					</div>
@@ -101,6 +101,9 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 								{...register('title', {
 									required: 'You have to set a title for the project deliverable'
 								})}
+								borderColor={'gray.200'}
+								border={'1px solid'}
+								rounded={'md'}
 							/>
 							{errors.title ? (
 								<FormErrorMessage>{errors.title.message}</FormErrorMessage>
@@ -112,7 +115,12 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						</FormControl>
 						<FormControl id={'description'} mb={6}>
 							<FormLabel>Description</FormLabel>
-							<Textarea {...register('description')} />
+							<Textarea
+								{...register('description')}
+								borderColor={'gray.200'}
+								border={'1px solid'}
+								rounded={'md'}
+							/>
 						</FormControl>
 						<FormControl isRequired isInvalid={true} mb={6}>
 							<FormLabel htmlFor="startDate">Start and end date</FormLabel>
@@ -207,9 +215,9 @@ export const MilestoneModal = ({ context }: MilestoneModalProps): JSX.Element =>
 						<FormActions
 							submitText={'Save'}
 							onSubmit={onSubmit}
-							submitLoading={isLoading}
-							submitDisabled={isLoading}
-							cancelDisabled={isLoading}
+							submitLoading={isPending}
+							submitDisabled={isPending}
+							cancelDisabled={isPending}
 							cancelText={'Cancel'}
 							onCancel={() => closeModal()}
 						/>

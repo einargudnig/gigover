@@ -4,8 +4,8 @@ import {
 	Flex,
 	FormControl,
 	FormLabel,
-	Heading,
 	HStack,
+	Heading,
 	Input,
 	Modal,
 	ModalBody,
@@ -22,18 +22,17 @@ import { useForm } from 'react-hook-form';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { MemberTable } from '../../pages/Organisation/MemberTable';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
-import { CreateOrganization } from './CreateOrganization';
+import { LoadingSpinner } from '../LoadingSpinner';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
-import { DisabledComponent } from '../disabled/DisabledComponent';
 
-export const ManageOrganization = (): JSX.Element => {
+export const ManageOrganization = ({ orgName }: { orgName: string }): JSX.Element => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [showOrgs, setShowOrgs] = useState<boolean>(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
-	const { data: org } = useGetUserInfo();
+	const { data: org, isPending: userInfoIsPending } = useGetUserInfo();
 	const activeOrg = org?.organization;
 
-	const { mutateAsync: loginOrg, isLoading } = useLoginOrg();
+	const { mutateAsync: loginOrg, isPending } = useLoginOrg();
 
 	const { register, handleSubmit, reset } = useForm<{ name: string; password: string }>({
 		defaultValues: {
@@ -46,7 +45,6 @@ export const ManageOrganization = (): JSX.Element => {
 		try {
 			setLoginError(null);
 
-			const orgName = activeOrg?.name;
 			const response = await loginOrg({ name: orgName, password });
 			console.log(response);
 			if (response.errorCode === 'OK') {
@@ -68,11 +66,9 @@ export const ManageOrganization = (): JSX.Element => {
 
 	return (
 		<div>
-			<DisabledComponent>
-				<Button variant="link" colorScheme="gray.300" onClick={onOpen} size={'sm'}>
-					Manage active organization
-				</Button>
-			</DisabledComponent>
+			<Button variant="outline" colorScheme="gray" onClick={onOpen}>
+				Manage
+			</Button>
 
 			<Modal isOpen={isOpen} onClose={handleClose} size={'6xl'}>
 				<ModalOverlay />
@@ -84,15 +80,12 @@ export const ManageOrganization = (): JSX.Element => {
 								<Box>
 									<Heading size="lg">Manage Organizations</Heading>
 								</Box>
-								<Box>
-									{showOrgs ? null : (
-										<Box mr={3}>
-											<CreateOrganization />
-										</Box>
-									)}
-								</Box>
 							</Flex>
-							{activeOrg ? (
+							{userInfoIsPending ? (
+								<Flex justifyContent="center" alignItems="center" minH="200px">
+									<LoadingSpinner />
+								</Flex>
+							) : activeOrg && orgName === activeOrg.name ? (
 								<>
 									{showOrgs ? (
 										<MemberTable activeOrg={activeOrg} />
@@ -144,7 +137,7 @@ export const ManageOrganization = (): JSX.Element => {
 																<Button
 																	type="submit"
 																	colorScheme="gray"
-																	isLoading={isLoading}
+																	isLoading={isPending}
 																>
 																	Login
 																</Button>
@@ -171,7 +164,7 @@ export const ManageOrganization = (): JSX.Element => {
 									)}
 								</>
 							) : (
-								<>
+								<Box>
 									<Flex justifyContent={'center'} alignItems={'center'} mt={10}>
 										<Flex flexDirection={'column'} alignItems={'center'}>
 											<Text
@@ -179,8 +172,8 @@ export const ManageOrganization = (): JSX.Element => {
 												fontWeight={'semibold'}
 												textColor={'gray.800'}
 											>
-												You need to select an organization before logging
-												in!
+												You need to select the correct organization before
+												managing it!
 											</Text>
 											<Box mt={4}>
 												<HStack>
@@ -192,7 +185,7 @@ export const ManageOrganization = (): JSX.Element => {
 											</Box>
 										</Flex>
 									</Flex>
-								</>
+								</Box>
 							)}
 						</Box>
 					</ModalBody>

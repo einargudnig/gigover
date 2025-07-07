@@ -19,7 +19,7 @@ export const ProjectDetailsGanttChart = (): JSX.Element => {
 	const ref = useRef<HTMLDivElement | null>(null);
 	const { projectId } = useParams<{ projectId: string }>();
 
-	const { data, isLoading, isError, error } = useProjectDetails(Number(projectId));
+	const { data, isPending: isLoading, isError, error } = useProjectDetails(Number(projectId));
 
 	const project: Project | undefined = data?.project;
 

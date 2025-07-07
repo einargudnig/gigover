@@ -1,4 +1,5 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { ProjectStatusType } from '../models/Project';
 import { Task } from '../models/Task';
@@ -29,7 +30,14 @@ interface TaskDetailsResponse {
 }
 
 export const useTaskDetails = (taskId: number) =>
-	useQuery<TaskDetailsResponse, ErrorResponse>(ApiService.taskDetails(taskId), {
+	useQuery<TaskDetailsResponse, ErrorResponse>({
+		queryKey: [ApiService.taskDetails(taskId)],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.taskDetails(taskId), {
+				withCredentials: true
+			});
+			return response.data;
+		},
 		refetchOnWindowFocus: true,
 		refetchInterval: 10000
 	});

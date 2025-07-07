@@ -1,8 +1,8 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { ApiService } from '../services/ApiService';
-import { useMutation, useQueryClient } from 'react-query';
-import { devError } from '../utils/ConsoleUtils';
 import { ProjectImage } from '../models/ProjectImage';
+import { ApiService } from '../services/ApiService';
+import { devError } from '../utils/ConsoleUtils';
 
 export interface DocumentInput
 	extends Pick<
@@ -22,8 +22,8 @@ export interface DocumentInput
 export const useAddDocument = () => {
 	const client = useQueryClient();
 
-	return useMutation<{ projectImage: ProjectImage }, AxiosError, DocumentInput>(
-		async (variables) => {
+	return useMutation<{ projectImage: ProjectImage }, AxiosError, DocumentInput>({
+		mutationFn: async (variables) => {
 			try {
 				const response = await axios.post<{ projectImage: ProjectImage }>(
 					ApiService.addImage,
@@ -32,17 +32,20 @@ export const useAddDocument = () => {
 						withCredentials: true
 					}
 				);
-				await client.refetchQueries(ApiService.projectList);
-
-				if (variables.folderId) {
-					await client.refetchQueries(ApiService.folderFiles(variables.folderId));
-				}
-
 				return response.data;
 			} catch (e) {
 				devError(e);
-				throw new Error('Could not upload image');
+				throw e;
+			}
+		},
+		onSuccess: async (data, variables) => {
+			await client.refetchQueries({ queryKey: [ApiService.projectList] });
+
+			if (variables.folderId) {
+				await client.refetchQueries({
+					queryKey: [ApiService.folderFiles(variables.folderId)]
+				});
 			}
 		}
-	);
+	});
 };

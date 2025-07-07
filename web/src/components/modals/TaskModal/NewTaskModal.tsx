@@ -31,10 +31,11 @@ import {
 	VStack,
 	useDisclosure
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { FC, useCallback, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { useEventListener } from '../../../hooks/useEventListener';
+import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 import { FileUploadType } from '../../../models/FileUploadType';
 import { Project } from '../../../models/Project';
 import { Task, TaskStatus } from '../../../models/Task';
@@ -50,6 +51,7 @@ import { DropZone } from '../../DropZone';
 import { LoadingSpinner } from '../../LoadingSpinner';
 import { TrackerSelect } from '../../TrackerSelect';
 import { User } from '../../User';
+import { DisabledComponent } from '../../disabled/DisabledComponent';
 import { DatePicker } from '../../forms/DatePicker';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { TrashIcon } from '../../icons/TrashIcon';
@@ -57,8 +59,6 @@ import { VerticalDots } from '../../icons/VerticalDots';
 import { CommentInput } from './CommentInput';
 import { UseResourceOnTask } from './UseResourceOnTask';
 import { WorkerAssigneUpdate } from './WorkerAssigneUpdate';
-import { DisabledComponent } from '../../disabled/DisabledComponent';
-import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 
 export interface TaskModalProps {
 	open: boolean;
@@ -76,7 +76,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 	task
 }) => {
 	const queryClient = useQueryClient();
-	const { data, isLoading, isError, error } = useTaskDetails(task.taskId);
+	const { data, isPending, isError, error } = useTaskDetails(task.taskId);
 	const projectTask = data?.projectTask;
 	const { data: projectData } = useProjectDetails(projectId);
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -103,7 +103,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 
 	const {
 		mutateAsync: updateTask,
-		isLoading: taskLoading,
+		isPending: taskLoading,
 		error: taskError
 	} = useUpdateTask(projectId);
 
@@ -177,6 +177,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 													closeModal();
 												}}
 												isOpen={dialogOpen}
+												confirmButtonText="Archive"
 											>
 												<MenuItem
 													icon={<TrashIcon />}
@@ -217,7 +218,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 									{taskError && (
 										<Text color={'red.500'}>{taskError.errorText}</Text>
 									)}
-									{isLoading ? (
+									{isPending ? (
 										<>
 											<Box marginTop={4}>
 												<SkeletonCircle size="8" />
@@ -316,7 +317,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 																					value
 																						? new Date(
 																								value
-																						  )
+																							)
 																						: null
 																				}
 																				onChange={(
@@ -361,7 +362,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 																					value
 																						? new Date(
 																								value
-																						  )
+																							)
 																						: null
 																				}
 																				onChange={(
@@ -543,7 +544,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Comments panel */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>
@@ -555,7 +556,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 									) : null}
 									<Box height={'650px'}>
 										<HStack spacing={4} justifyContent={'space-between'} mb={4}>
-											{isLoading && <LoadingSpinner />}
+											{isPending && <LoadingSpinner />}
 										</HStack>
 										<Flex direction={'column'} height={'100%'}>
 											<Box flex={'1'} overflowY={'auto'}>
@@ -589,7 +590,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Files for task */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>
@@ -606,9 +607,9 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 										uploadType={FileUploadType.Task}
 										externalId={task.taskId}
 										callback={() => {
-											queryClient.invalidateQueries(
-												ApiService.taskDetails(task.taskId)
-											);
+											queryClient.invalidateQueries({
+												queryKey: [ApiService.taskDetails(task.taskId)]
+											});
 										}}
 									>
 										{({ isDragActive, open }) => (
@@ -674,7 +675,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Workers for task */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>
@@ -697,7 +698,7 @@ export const NewTaskModal: FC<TaskModalProps> = ({
 								</TabPanel>
 								{/* //! Resources for task */}
 								<TabPanel>
-									{isLoading ? (
+									{isPending ? (
 										<Center>
 											<LoadingSpinner />
 										</Center>

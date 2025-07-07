@@ -200,7 +200,7 @@ function EditTenderForm({ tender, setIsEditing }) {
 	const currentDate = new Date();
 	const [isChecked, setIsChecked] = useState<number>(tender.delivery || 0);
 
-	const { mutate: modifyTender, isLoading } = useModifyTender();
+	const { mutate: modifyTender, isPending } = useModifyTender();
 
 	const handleChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setIsChecked(e.target.checked ? 1 : 0);
@@ -366,7 +366,7 @@ function EditTenderForm({ tender, setIsEditing }) {
 						type="submit"
 						colorScheme={'black'}
 						variant={'outline'}
-						isLoading={isLoading}
+						isLoading={isPending}
 						loadingText="Updating..."
 					>
 						Update Tender

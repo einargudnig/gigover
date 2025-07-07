@@ -1,8 +1,7 @@
-import { Box, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
-import moment from 'moment';
+import { Box, BoxProps, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
+import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { DownloadIcon } from '../../../components/icons/DownloadIcon';
 import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
 import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
@@ -36,16 +35,18 @@ export const PropertyFilesIcon = (fileType: DocumentTypes) => {
 	}
 };
 
-export const CardBase = styled(Box)`
-	max-width: 100%;
-	border-radius: 12px;
-	border: 1px solid ${(props) => props.theme.colors.black};
-	box-shadow: ${(props) => props.theme.boxShadow()};
-	padding: 24px;
-	transition: all 0.2s linear;
-`;
-
-const FileStyledNoLink = styled(CardBase)``;
+export const CardBase = (props: BoxProps) => (
+	<Box
+		maxWidth="100%"
+		borderRadius="12px"
+		border="1px solid"
+		borderColor="black"
+		boxShadow="md"
+		p="24px"
+		transition="all 0.2s linear"
+		{...props}
+	/>
+);
 
 export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): JSX.Element => {
 	const { propertyId } = useParams();
@@ -59,7 +60,7 @@ export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): J
 	file.propertyId = propertyIdNumber;
 
 	return (
-		<FileStyledNoLink>
+		<CardBase>
 			<HStack spacing={8}>
 				<Icon />
 
@@ -70,7 +71,9 @@ export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): J
 					<Text m={0}>File from file storage</Text>
 				</VStack>
 				<Text m={0}>{humanFileSize(file.bytes || 0)}</Text>
-				<Text m={0}>{moment(file.created).format(GANT_CHART_FORMAT)}</Text>
+				<Text m={0}>
+					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
+				</Text>
 				<VStack justify={'center'} align={'center'}>
 					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 						<IconButton
@@ -96,6 +99,7 @@ export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): J
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Delete"
 						>
 							<IconButton
 								aria-label={'Delete'}
@@ -114,6 +118,6 @@ export const PropertyFiles = ({ showDelete = true, file }: PropertyFileProps): J
 					</VStack>
 				) : null}
 			</HStack>
-		</FileStyledNoLink>
+		</CardBase>
 	);
 };

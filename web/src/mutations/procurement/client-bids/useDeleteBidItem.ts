@@ -1,5 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
 import { BidItem } from '../../../models/Tender';
 import { ApiService } from '../../../services/ApiService';
 
@@ -10,22 +10,28 @@ interface ClientBidItemDeleteResponse {
 export const useDeleteBidItem = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ClientBidItemDeleteResponse, AxiosError, BidItem>(async (variables) => {
-		try {
-			const response = await axios.post(ApiService.deleteBidItem, variables, {
-				withCredentials: true
-			});
-			// If I successfully added a tender item, I need to refetch the tenderItems
-			// So that the new tender item is displayed in the list.
-			// I need to refetch the getTenderById query, since that is the one that fetches the tenderItems
-			const bidId = variables?.bidId || 0;
-			if (response.data.errorText === 'OK' || response.status === 200) {
-				await queryClient.refetchQueries(ApiService.getBidById(bidId));
+	return useMutation<ClientBidItemDeleteResponse, AxiosError, BidItem>({
+		mutationKey: ['deleteBidItem'],
+		mutationFn: async (variables) => {
+			try {
+				const response = await axios.post(ApiService.deleteBidItem, variables, {
+					withCredentials: true
+				});
+				return response.data;
+			} catch (e) {
+				if (e instanceof Error) {
+					throw e;
+				}
+				throw new Error('Could not delete bid item'); // Fallback
 			}
-
-			return response.data;
-		} catch (e) {
-			throw new Error('Could not add tender item');
+		},
+		onSuccess: async (data, variables) => {
+			const bidId = variables?.bidId || 0;
+			// The original code checked data.errorText === 'OK' or response.status === 200.
+			// onSuccess implies a successful HTTP status. We can check data.errorText if needed.
+			if (data.errorText === 'OK') {
+				await queryClient.refetchQueries({ queryKey: [ApiService.getBidById(bidId)] });
+			}
 		}
 	});
 };

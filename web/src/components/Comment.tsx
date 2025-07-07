@@ -1,7 +1,6 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { ProjectImage } from '../models/ProjectImage';
 import { GetFileLink } from '../pages/Files/components/File';
 import { formatDate } from '../utils/StringUtils';
@@ -16,36 +15,6 @@ interface CommentProps {
 	images?: ProjectImage[];
 }
 
-const CommentStyled = styled.div`
-	p:first-child {
-		display: flex;
-		justify-content: space-between;
-
-		strong {
-			font-weight: normal;
-			display: inline-block;
-			font-size: 0.6875rem;
-			color: #000;
-			margin-right: ${(props) => props.theme.padding(1.5)};
-		}
-	}
-
-	p:last-child {
-		background: #e4e6eb;
-		color: #000;
-		padding: 3px 6px;
-		font-size: 14px;
-		border-radius: 6px;
-		margin-top: ${(props) => props.theme.padding(1)};
-		margin-bottom: ${(props) => props.theme.padding(3)};
-
-		span.usertag {
-			border-bottom: 1px solid #fae44d;
-			display: inline-block;
-		}
-	}
-`;
-
 export const Comment = ({
 	author,
 	date,
@@ -59,18 +28,20 @@ export const Comment = ({
 	}
 	const commentText = comment.replace(
 		CommentRegex,
-		"<span class='usertag' style='font-weight: bold; color: #000'>$1</span>"
+		"<span class='usertag' style='font-weight: bold; color: #000; border-bottom: 1px solid #fae44d; display: inline-block;'>$1</span>"
 	);
 
 	const foundImage = images?.find((i) => i.imageId === imageId);
 
 	return (
 		<>
-			<CommentStyled>
-				<p>
-					<strong>{author}</strong>
-					<small>{formatDate(date)}</small>
-				</p>
+			<Box>
+				<Flex justify="space-between">
+					<Text as="strong" fontSize="0.6875rem" color="#000" mr={1.5 * 4}>
+						{author}
+					</Text>
+					<Text as="small">{formatDate(date)}</Text>
+				</Flex>
 				{foundImage && (
 					<div>
 						<Link to={GetFileLink(foundImage)}>
@@ -91,14 +62,22 @@ export const Comment = ({
 					</div>
 				)}
 				{comment.trim().length > 0 ? (
-					<p
+					<Box
+						as="p"
+						bg="#e4e6eb"
+						color="#000"
+						p="3px 6px"
+						fontSize="14px"
+						borderRadius="6px"
+						mt={1 * 4}
+						mb={3 * 4}
 						dangerouslySetInnerHTML={{ __html: commentText }}
-						style={{ display: 'inline-block' }}
+						display="inline-block"
 					/>
 				) : (
 					<React.Fragment />
 				)}
-			</CommentStyled>
+			</Box>
 		</>
 	);
 };

@@ -1,24 +1,20 @@
-import { Button, FormControl, FormErrorMessage, FormLabel, Input, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	Flex,
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Input,
+	Text
+} from '@chakra-ui/react';
 import { useCallback, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { CardBase } from '../../../components/CardBase';
 import { DropZone } from '../../../components/DropZone';
 import { FormActions } from '../../../components/FormActions';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { Modal } from '../../../components/Modal';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
 import { useAddFolder } from '../../../queries/useAddFolder';
-
-const NewFolderCard = styled(CardBase)`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	button {
-		margin-top: ${(props) => props.theme.padding(2)};
-	}
-`;
 
 export const CreateNewFolderButton = ({
 	projectId,
@@ -29,7 +25,7 @@ export const CreateNewFolderButton = ({
 }) => {
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const [isOpen, setIsOpen] = useState(false);
-	const { mutateAsync, isLoading, isError, error } = useAddFolder();
+	const { mutateAsync, isPending, isError, error } = useAddFolder();
 
 	const addFolder = useCallback(() => {
 		const folderName = inputRef.current?.value || '';
@@ -71,7 +67,7 @@ export const CreateNewFolderButton = ({
 					</FormControl>
 					<FormActions
 						submitText={'Create'}
-						submitLoading={isLoading}
+						submitLoading={isPending}
 						onSubmit={() => addFolder()}
 						cancelText={'Close'}
 						onCancel={() => setIsOpen(false)}
@@ -102,25 +98,34 @@ export const CreateNewFolder = ({
 	return (
 		<DropZone offerId={0} tenderId={0} projectId={projectId} folderId={folderId}>
 			{({ isDragActive, isUploading }) => (
-				<NewFolderCard
-					style={{
-						width: '100%',
-						border: isDragActive
+				<Box
+					width="100%"
+					bg="white"
+					border={
+						isDragActive
 							? '1px solid var(--chakra-colors-green-400)'
 							: '1px solid transparent'
-					}}
+					}
+					borderRadius="12px"
+					transition="all 0.2s linear"
+					boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+					p={{ base: 2, md: 3, lg: 4 }}
+					m={2}
 				>
-					{isUploading ? (
-						<LoadingSpinner />
-					) : (
-						<>
-							<Text>
-								Create a new folder or drop a folder here to start uploading
-							</Text>
-							<CreateNewFolderButton projectId={projectId} folderId={folderId} />
-						</>
-					)}
-				</NewFolderCard>
+					<Flex justifyContent="center" alignItems="center" flexDirection="column">
+						{isUploading ? (
+							<LoadingSpinner />
+						) : (
+							<>
+								<Text>
+									Create a new folder or drop a folder here to start uploading
+								</Text>
+								<Box h={2} />
+								<CreateNewFolderButton projectId={projectId} folderId={folderId} />
+							</>
+						)}
+					</Flex>
+				</Box>
 			)}
 		</DropZone>
 	);

@@ -57,7 +57,7 @@ function EditBidForm({
 	bid: Bid;
 	setIsEditing: (isEditing: boolean) => void;
 }) {
-	const { mutateAsync: editBidAsync, isLoading } = useEditBid();
+	const { mutateAsync: editBidAsync, isPending } = useEditBid();
 
 	// Form setup
 	const {
@@ -224,7 +224,7 @@ function EditBidForm({
 							variant={'outline'}
 							colorScheme={'black'}
 							type="submit"
-							isLoading={isLoading}
+							isLoading={isPending}
 						>
 							Save Changes
 						</Button>
@@ -345,7 +345,7 @@ export function BidHeaderActions({
 	setIsEditing: (isEditing: boolean) => void;
 }) {
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const { mutateAsync: deleteBidAsync, isLoading: isLoadingDelete } = useDeleteBid();
+	const { mutateAsync: deleteBidAsync, isPending: isPendingDelete } = useDeleteBid();
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
 
 	const toast = useToast();
@@ -377,18 +377,19 @@ export function BidHeaderActions({
 										isClosable: true
 									});
 								} else {
-									await deleteBidAsync(bid);
+									await deleteBidAsync(bid?.bidId || 0);
 									navigate('/tender/bids');
 								}
 								setDialogOpen(false);
 							}}
 							isOpen={dialogOpen}
+							confirmButtonText="Delete"
 						>
 							<Button
 								aria-label={'Delete'}
 								colorScheme={'red'}
 								variant={'outline'}
-								isLoading={isLoadingDelete}
+								isLoading={isPendingDelete}
 								leftIcon={<TrashIcon color={'red'} size={20} />}
 								onClick={() => {
 									setDialogOpen(true);

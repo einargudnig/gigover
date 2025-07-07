@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Milestone } from '../models/Milestone';
+import { Organization } from '../models/Organizations';
 import { Project, WorkerItem } from '../models/Project';
 import { ProjectFolder } from '../models/ProjectFolder';
 import { ProjectImage } from '../models/ProjectImage';
@@ -95,6 +96,9 @@ export interface IModalContext {
 	editUnit?: {
 		unit?: IPropertyUnit;
 		propertyId: number;
+	};
+	createOrganization?: {
+		organization?: Organization;
 	};
 }
 

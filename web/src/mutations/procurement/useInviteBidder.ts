@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../../services/ApiService';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../../utils/ConsoleUtils';
 import { ErrorResponse } from '../../models/ErrorResponse';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface InviteBidderInput {
 	tenderId: number;
@@ -11,29 +11,31 @@ interface InviteBidderInput {
 
 export const useInviteBidder = () => {
 	const queryClient = useQueryClient();
-	const mutationKey = ApiService.addBidder;
 
-	return useMutation<ErrorResponse, AxiosError, InviteBidderInput>(
-		mutationKey,
-		async (variables) => {
+	return useMutation<ErrorResponse, AxiosError, InviteBidderInput>({
+		mutationFn: async (variables) => {
 			try {
 				console.log(variables);
-				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
+				const response = await axios.post<ErrorResponse>(ApiService.addBidder, variables, {
 					withCredentials: true
 				});
 
 				if (response.data.errorCode !== 'OK') {
-					throw new Error(response.data?.errorCode);
+					throw new Error(
+						response.data?.errorText || response.data?.errorCode || 'Invitation failed'
+					);
 				}
-
-				// we want to refetch this query so the bidder table updates after we invite a bidder.
-				queryClient.refetchQueries(ApiService.getTenderById(variables.tenderId));
 				console.log(response.data);
 				return response.data;
 			} catch (e) {
 				devError(e);
 				throw e;
 			}
+		},
+		onSuccess: (data, variables) => {
+			queryClient.refetchQueries({
+				queryKey: [ApiService.getTenderById(variables.tenderId)]
+			});
 		}
-	);
+	});
 };

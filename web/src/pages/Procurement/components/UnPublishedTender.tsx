@@ -28,11 +28,10 @@ export function UnpublishedTender({ tender, getTenderLoading }): JSX.Element {
 }
 
 function HandleTender({ tender }) {
-	const { mutateAsync: publishTender, isLoading: isPublishLoading } = usePublishTender();
+	const { mutateAsync: publishTender, isPending: isPublishPending } = usePublishTender();
 	const tenderDescForEmail = tender?.description;
 	const tenderStatus = tender?.status;
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
-
 	const toast = useToast();
 
 	const handlePublish = async () => {
@@ -81,7 +80,7 @@ function HandleTender({ tender }) {
 							variant={'outline'}
 							colorScheme={'black'}
 						>
-							{isPublishLoading ? <LoadingSpinner /> : 'Publish Tender'}
+							{isPublishPending ? <LoadingSpinner /> : 'Publish Tender'}
 						</Button>
 					) : (
 						<Text mr={'2'}>You have already published the Tender</Text>

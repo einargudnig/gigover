@@ -1,21 +1,5 @@
+import { Button } from '@chakra-ui/react'; // Added Button
 import React from 'react';
-import styled, { css } from 'styled-components';
-
-const TabButton = styled.button<{ selected: boolean }>`
-	border-bottom: 2px solid transparent;
-	outline: 0;
-	padding: 8px 16px;
-	color: #000;
-	opacity: 0.5;
-	transition: all 0.2s linear;
-
-	${(props) =>
-		props.selected &&
-		css`
-			opacity: 1;
-			border-bottom: 2px solid ${props.theme.colors.yellow};
-		`};
-`;
 
 export type TabType = { value: string | number; label: string };
 
@@ -33,8 +17,23 @@ export function Tab<T extends Record<K, React.ReactNode>, K extends keyof T>({
 	selected
 }: TabProps<T, K>) {
 	return (
-		<TabButton type={'button'} selected={selected ?? false} onClick={() => onClick(tab)}>
+		// Replaced TabButton with Chakra Button and style props
+		<Button
+			type={'button'}
+			variant="unstyled" // To remove default button styling
+			borderBottomWidth="2px"
+			borderColor={selected ? 'yellow.500' : 'transparent'} // Assuming theme.colors.yellow maps to yellow.500
+			outline={0}
+			px={4} // 16px padding
+			py={2} // 8px padding
+			color="black"
+			opacity={selected ? 1 : 0.5}
+			transition="all 0.2s linear"
+			_focus={{ boxShadow: 'none' }} // Remove focus outline if not desired
+			onClick={() => onClick(tab)}
+			borderRadius={0} // Remove default border radius from button
+		>
 			{tab[labelKey]}
-		</TabButton>
+		</Button>
 	);
 }

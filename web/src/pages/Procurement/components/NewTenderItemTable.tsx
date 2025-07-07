@@ -65,13 +65,13 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 	}, [tenderItems]);
 
 	const {
-		mutate,
-		isLoading: isMutateLoading,
+		mutate: mutateAdd,
+		isPending: isAddPending,
 		isError: isMutateError,
 		error: mutateError
 	} = useAddTenderItem();
-	const { mutate: mutateUpdate, isLoading: isUpdateLoading } = useModifyTenderItem();
-	const { mutateAsync: deleteTenderItem, isLoading: isDeleteLoading } = useDeleteTenderItem();
+	const { mutate: mutateUpdate, isPending: isUpdatePending } = useModifyTenderItem();
+	const { mutateAsync: deleteTenderItem, isPending: isDeletePending } = useDeleteTenderItem();
 
 	// We only want the unit to be max 4 characters kg, m2, l, etc
 	const isInvalidUnit = formData.unit!.length > 5;
@@ -102,7 +102,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 			unit: formData.unit
 		});
 		console.log('Items', items);
-		mutate(formData);
+		mutateAdd(formData);
 		setFormData({ ...defaultData });
 		// console.log('mutate with this formData:', formData); // Good for debugging
 	};
@@ -236,7 +236,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 												aria-label={'Update item'}
 												onClick={() => handleUpdate(item)}
 											>
-												{isUpdateLoading ? <LoadingSpinner /> : 'Update'}
+												{isUpdatePending ? <LoadingSpinner /> : 'Update'}
 											</Button>
 											<Button
 												variant={'outline'}
@@ -285,12 +285,13 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 													});
 												}}
 												isOpen={dialogOpen}
+												confirmButtonText="Delete"
 											>
 												<Button
 													aria-label={'Delete item'}
 													variant={'outline'}
 													colorScheme={'red'}
-													isLoading={isDeleteLoading}
+													isLoading={isDeletePending}
 													onClick={() => setDialogOpen(true)}
 													disabled={finishDateStatus}
 												>
@@ -372,7 +373,7 @@ export const NewTenderItemTable = ({ tender }): JSX.Element => {
 									colorScheme={'black'}
 									disabled={finishDateStatus}
 								>
-									{isMutateLoading ? <LoadingSpinner /> : 'Add item'}
+									{isAddPending ? <LoadingSpinner /> : 'Add item'}
 								</Button>
 							</Td>
 						</Tr>

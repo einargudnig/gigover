@@ -9,7 +9,7 @@ interface AddItemsProps {
 }
 
 export function AddItemsSingleBid({ bidId }: AddItemsProps) {
-	const { data, isLoading } = useGetBidById(Number(bidId));
+	const { data, isPending: isLoading } = useGetBidById(Number(bidId));
 	const bid: Bid | undefined = data?.bid;
 
 	const bidFields = [

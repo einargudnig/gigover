@@ -1,5 +1,5 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
 import { ErrorResponse } from '../../../models/ErrorResponse';
 import { ApiService } from '../../../services/ApiService';
 
@@ -14,20 +14,26 @@ interface PublishBidRequest {
 export const usePublishBid = () => {
 	const client = useQueryClient();
 
-	return useMutation<PublishBidResponse, ErrorResponse, PublishBidRequest>(async (bidId) => {
-		try {
-			const response = await axios.post(ApiService.publishBid, bidId, {
-				withCredentials: true
-			});
+	return useMutation<PublishBidResponse, ErrorResponse, PublishBidRequest>({
+		mutationKey: ['publishBid'],
+		mutationFn: async (bidId: PublishBidRequest) => {
+			try {
+				const response = await axios.post(ApiService.publishBid, bidId, {
+					withCredentials: true
+				});
 
-			if (response.status === 200) {
-				console.log({ bidId });
-				await client.refetchQueries(ApiService.getBidById(bidId.bidId));
-				await client.refetchQueries(ApiService.getClientBids);
+				if (response.status === 200) {
+					console.log({ bidId });
+					await client.invalidateQueries({
+						queryKey: [ApiService.getBidById(bidId.bidId)]
+					});
+					await client.invalidateQueries({ queryKey: [ApiService.getBids] });
+					await client.invalidateQueries({ queryKey: [ApiService.getClientBids] });
+				}
+				return response.data;
+			} catch (e) {
+				throw new Error('Could not publish tender');
 			}
-			return response.data;
-		} catch (e) {
-			throw new Error('Could not publish tender');
 		}
 	});
 };

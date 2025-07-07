@@ -1,27 +1,28 @@
-import { Button, HStack, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	Button,
+	Flex,
+	HStack,
+	Heading,
+	Text,
+	VStack
+} from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Page } from '../../components/Page';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { DisabledPage } from '../../components/disabled/DisbledPage';
+import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { Project } from '../../models/Project';
 import { useProjectList } from '../../queries/useProjectList';
 import { UploadModal } from './UploadModal';
-// import { devInfo } from '../../utils/ConsoleUtils';
-import { useOpenProjects } from '../../hooks/useAvailableProjects';
 import { CreateNewFolderButton } from './components/CreateNewFolder';
-import { DisabledPage } from '../../components/disabled/DisbledPage';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
-
-const Container = styled.div`
-	flex: 1 0;
-	height: 100%;
-	padding: ${(props) => props.theme.padding(3)};
-	overflow-y: auto;
-`;
 
 export const Files = (): JSX.Element => {
-	const { data, isLoading } = useProjectList();
+	const { data, isPending } = useProjectList();
 	const params = useParams();
 	const [project, setProject] = useState<Project | null>(null);
 	const [upload, setUpload] = useState(false);
@@ -43,6 +44,38 @@ export const Files = (): JSX.Element => {
 		setProject(null);
 	}, [projects, params.projectId]);
 
+	const pageTitle = 'Files';
+	const breadcrumbs = [
+		{ title: 'Your files', url: '/files/' },
+		...(project
+			? [
+					{
+						title: project.name,
+						url: '/files/' + project.projectId
+					},
+					...(params.fileId
+						? [
+								{
+									title: '/**/File',
+									url: '/files/' + project.projectId + '/file/' + params.fileId
+								}
+							]
+						: [])
+				]
+			: [])
+	];
+	const pageActions = (
+		<DisabledComponent>
+			<HStack my={2}>
+				{project && <CreateNewFolderButton projectId={project.projectId} />}
+
+				<Button ml={2} onClick={() => setUpload(true)}>
+					Upload
+				</Button>
+			</HStack>
+		</DisabledComponent>
+	);
+
 	return (
 		<>
 			{upload && (
@@ -58,53 +91,58 @@ export const Files = (): JSX.Element => {
 					}}
 				/>
 			)}
-			<Page
-				title={'Files'}
-				breadcrumbs={[
-					{ title: 'Your files', url: '/files/' },
-					...(project
-						? [
-								{
-									title: project.name,
-									url: '/files/' + project.projectId
-								},
-								...(params.fileId
-									? [
-											{
-												title: '/**/File',
-												url:
-													'/files/' +
-													project.projectId +
-													'/file/' +
-													params.fileId
-											}
-									  ]
-									: [])
-						  ]
-						: [])
-				]}
-				contentPadding={false}
-				actions={
-					<DisabledComponent>
-						{project && <CreateNewFolderButton projectId={project.projectId} />}
-						<Button onClick={() => setUpload(true)}>Upload</Button>
-					</DisabledComponent>
-				}
+			<Box
+				as="header"
+				borderBottom="1px solid"
+				borderColor="gray.200"
+				boxShadow="6px 6px 25px rgba(0, 0, 0, 0.03)"
+				bg="white" // Or transparent if Page.tsx sets a default bg for content
+				mb={4} // Margin to separate from content
+				px={3}
 			>
+				<Flex justifyContent="space-between" alignItems="center">
+					<Box>
+						{breadcrumbs ? (
+							<Breadcrumb
+								spacing="8px"
+								// separator={<Chevron direction="right" color={Theme.colors.green} />}
+							>
+								{breadcrumbs.map((breadcrumb, bIndex) => (
+									<BreadcrumbItem key={bIndex}>
+										{breadcrumb.url ? (
+											<BreadcrumbLink as={Link} href={breadcrumb.url}>
+												{breadcrumb.title}
+											</BreadcrumbLink>
+										) : (
+											<Text as="span">{breadcrumb.title}</Text> // For non-link breadcrumbs
+										)}
+									</BreadcrumbItem>
+								))}
+							</Breadcrumb>
+						) : (
+							<Heading as="h1" size="lg" color="black">
+								{pageTitle}
+							</Heading>
+						)}
+					</Box>
+					<HStack spacing={2}>{pageActions}</HStack>
+				</Flex>
+			</Box>
+			<Box p={2}>
 				<DisabledPage>
 					<VStack style={{ height: '100%' }}>
-						{isLoading ? (
+						{isPending ? (
 							<LoadingSpinner />
 						) : (
 							<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
-								<Container>
+								<Box p={3} overflowY="auto" height={'100%'} width={'100%'}>
 									<Outlet />
-								</Container>
+								</Box>
 							</HStack>
 						)}
 					</VStack>
 				</DisabledPage>
-			</Page>
+			</Box>
 		</>
 	);
 };

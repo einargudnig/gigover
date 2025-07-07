@@ -16,7 +16,7 @@ import { DropZone } from './UploadCertifications';
 
 export const MyOffersDetails = (): JSX.Element => {
 	const { tenderId, offerId } = useParams();
-	const { data: offerData, isLoading, isFetching } = useGetOfferByOfferId(Number(offerId));
+	const { data: offerData, isPending, isFetching } = useGetOfferByOfferId(Number(offerId));
 	const { data: tenderData } = useGetTenderById(Number(tenderId));
 	const tender = tenderData?.tender;
 	const finishDateStatus = handleFinishDate(tender?.finishDate);
@@ -36,7 +36,7 @@ export const MyOffersDetails = (): JSX.Element => {
 
 	return (
 		<Box p={4}>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
@@ -63,7 +63,7 @@ export const MyOffersDetails = (): JSX.Element => {
 							</Flex>
 						</>
 					) : (
-						<PublishedOffer offerData={offerData} isOfferLoading={isLoading} />
+						<PublishedOffer offerData={offerData} isOfferLoading={isPending} />
 					)}
 					<Box marginTop={'2'}>
 						<Box p={4}>

@@ -1,67 +1,65 @@
-import styled from 'styled-components';
+import { Box, Progress as ChakraProgress, Text } from '@chakra-ui/react'; // Added Chakra components
 
 interface ProgressBarProps {
-	percent: number;
-	secondaryProgress?: number;
+	percent: number; // Represents the "done" part
+	secondaryProgress?: number; // Represents the "in progress" part, additional to "done"
 }
 
-const ProgressBarStyled = styled.div<ProgressBarProps>`
-	width: 100%;
-
-	> p:first-child {
-		font-size: 11px;
-		text-align: right;
-
-		span {
-			color: #1fdf83;
-		}
-	}
-
-	.bar {
-		margin: 6px 0;
-		background: #e9e9ef;
-		height: 6px;
-		border-radius: 3px;
-		overflow: hidden;
-		position: relative;
-
-		.progress,
-		.in-progress {
-			position: absolute;
-			top: 0;
-			left: 0;
-			height: 100%;
-			border-radius: 3px;
-			transition: all 0.2s linear;
-		}
-
-		.in-progress {
-			background-color: #f9dc97;
-			width: ${(props) => props.secondaryProgress ?? 0}%;
-		}
-
-		.progress {
-			background-color: #1fdf83;
-			width: ${(props) => props.percent}%;
-		}
-	}
-`;
-
 export const ProgressBar = ({ percent, secondaryProgress = 0 }: ProgressBarProps): JSX.Element => {
+	const totalProgress = percent + secondaryProgress;
+	// Ensure values are within 0-100 for Progress component
+	const clampedPercent = Math.max(0, Math.min(percent, 100));
+	const clampedSecondaryProgress = Math.max(0, Math.min(secondaryProgress, 100 - clampedPercent));
+	const clampedTotalProgress = Math.max(0, Math.min(totalProgress, 100));
+
 	return (
-		<ProgressBarStyled percent={percent} secondaryProgress={percent + secondaryProgress}>
-			<p>
-				{secondaryProgress > 0 && (
+		<Box width="100%">
+			<Text fontSize="11px" textAlign="right">
+				{clampedSecondaryProgress > 0 && (
 					<>
-						{secondaryProgress.toFixed(0)}% In progress <span>&bull;</span>{' '}
+						{clampedSecondaryProgress.toFixed(0)}% In progress{' '}
+						<Text as="span" color="#f9dc97">
+							{' '}
+							&bull;
+						</Text>{' '}
 					</>
 				)}
-				{percent.toFixed(0)}% Done
-			</p>
-			<div className={'bar'}>
-				{secondaryProgress && <div className={'in-progress'} />}
-				<div className={'progress'} />
-			</div>
-		</ProgressBarStyled>
+				{clampedPercent.toFixed(0)}% Done
+			</Text>
+			<Box
+				my="6px"
+				bg="#e9e9ef"
+				height="6px"
+				borderRadius="3px"
+				overflow="hidden"
+				position="relative"
+			>
+				<ChakraProgress
+					value={clampedTotalProgress}
+					colorScheme="yellow" // Corresponds to #f9dc97 for .in-progress
+					height="100%"
+					borderRadius="3px"
+					position="absolute"
+					top={0}
+					left={0}
+					width="100%" // The progress bar itself will be sized by its value prop
+					transition="width 0.2s linear"
+					hasStripe={false} // Optional: if you want stripes for in-progress
+					isAnimated={false} // Optional
+				/>
+				{/* Top layer for done progress */}
+				<ChakraProgress
+					value={clampedPercent}
+					colorScheme="green" // Corresponds to #1fdf83 for .progress
+					height="100%"
+					borderRadius="3px"
+					position="absolute"
+					top={0}
+					left={0}
+					width="100%" // The progress bar itself will be sized by its value prop
+					transition="width 0.2s linear"
+				/>
+			</Box>
+		</Box>
 	);
 };

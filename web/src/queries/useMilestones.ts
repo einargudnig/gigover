@@ -1,6 +1,6 @@
-import { MilestoneForm } from '../models/Milestone';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ErrorResponse } from '../models/ErrorResponse';
+import { MilestoneForm } from '../models/Milestone';
 import { ApiService } from '../services/ApiService';
 
 export interface MilestoneResponse {
@@ -8,6 +8,8 @@ export interface MilestoneResponse {
 }
 
 export const useMilestones = (projectId: number) =>
-	useQuery<MilestoneResponse, ErrorResponse>(ApiService.getMilestones(projectId), {
+	useQuery<MilestoneResponse, ErrorResponse>({
+		queryKey: [ApiService.getMilestones(projectId)],
+		enabled: !!projectId,
 		refetchOnWindowFocus: true
 	});

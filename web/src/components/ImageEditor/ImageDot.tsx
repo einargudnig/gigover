@@ -2,31 +2,15 @@
 import { Box, Button, Image as ChakraImage } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import 'react-medium-image-zoom/dist/styles.css';
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
-import styled from 'styled-components';
+import { Document, Page } from 'react-pdf';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 import useResizeObserver from 'use-resize-observer';
 import useKeyPress from '../../hooks/useArrowKey';
 import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
 import { IImageDot } from '../modals/EditPhotoModal';
 import ImagePoint from './ImagePoint';
-// import ImageCanvas from './ImageCanvas';
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
 
-const StyledDiv = styled(Box)`
-	canvas {
-		width: auto !important;
-		max-height: 100%;
-		@media screen and (max-width: 800px) {
-			height: auto !important;
-			max-width: 100%;
-		}
-	}
-
-	.react-pdf__Page {
-		height: 60vh;
-	}
-`;
 // @ts-ignore
 const dimenstions = (url, rejectTimeout) => {
 	return new Promise((resolve, reject) => {
@@ -182,9 +166,11 @@ export const ImageDot = ({
 	};
 
 	useEffect(() => {
+		console.log('[ImageDot] useEffect: imageSrc changed', imageSrc);
 		dimenstions(imageSrc, 5000).then((s) => {
-			// @ts-ignore
-			setImageDimmensions({ height: s.height, width: s.width });
+			const img = s as HTMLImageElement;
+			console.log('[ImageDot] setImageDimmensions', { height: img.height, width: img.width });
+			setImageDimmensions({ height: img.height, width: img.width });
 			//setLoading(false);
 		});
 	}, [imageSrc]);
@@ -332,15 +318,6 @@ export const ImageDot = ({
 									<Button m={4} onClick={() => setZoomAllowed(false)}>
 										Exit zoom
 									</Button>
-									{/* This it the broken ZOOM */}
-									{/* <ImageCanvas
-										canvasHeight={window.innerHeight}
-										canvasWidth={window.innerWidth}
-										imageUrl={imageSrc}
-									/> */}
-									{/* This is the working ZOOM */}
-									{/* Replaced it with the react zoom pan pinch and the chakra image */}
-									{/* Still need to work the other thing out! */}
 									<TransformWrapper zoomAnimation={{ size: 0.1 }}>
 										<TransformComponent
 											wrapperStyle={{ width: '100%', height: '100%' }}
@@ -436,55 +413,77 @@ export const ImageDot = ({
 	};
 	// @ts-ignore
 	return (
-		<StyledDiv
-			borderRadius={12}
+		<Box
+			borderRadius="12px"
 			width={'100%'}
 			maxHeight={'60vh'}
-			background={'black'}
-			style={{
-				position: 'relative',
-				display: 'flex',
-				alignItems: 'center',
-				justifyContent: 'center'
+			bg={'black'}
+			position={'relative'}
+			display={'flex'}
+			alignItems={'center'}
+			justifyContent={'center'}
+			sx={{
+				canvas: {
+					width: 'auto !important',
+					maxHeight: '100%',
+					'@media screen and (max-width: 800px)': {
+						height: 'auto !important',
+						maxWidth: '100%'
+					}
+				},
+				'.react-pdf__Page': {
+					height: '60vh'
+				}
 			}}
 		>
-			{!(documentType === 2 || documentType === 'VIDEO') && (
-				<Button
-					size={'sm'}
-					zIndex={9}
-					position={'absolute'}
-					top={'0'}
-					right={'0'}
-					onClick={() => setZoomAllowed(!zoomAllowed)}
-				>
-					{!zoomAllowed ? 'Allow Zoom' : 'Disable zoom'}
-				</Button>
-			)}
-			{isPrevImage && (
-				<Button
-					size={'sm'}
-					zIndex={9}
-					position={'absolute'}
-					top={'50%'}
-					left={'-8px'}
-					onClick={() => prevImage()}
-				>
-					<Chevron direction={'left'} />
-				</Button>
-			)}
-			{isNextImage && (
-				<Button
-					size={'sm'}
-					zIndex={9}
-					position={'absolute'}
-					top={'50%'}
-					right={'-8px'}
-					onClick={() => nextImage()}
-				>
-					<Chevron direction={'right'} />
-				</Button>
-			)}
-			{zoomAllowed ? renderImage() : renderImage()}
-		</StyledDiv>
+			<Box
+				borderRadius="12px"
+				width={'100%'}
+				maxHeight={'60vh'}
+				bg={'black'}
+				position={'relative'}
+				display={'flex'}
+				alignItems={'center'}
+				justifyContent={'center'}
+			>
+				{!(documentType === 2 || documentType === 'VIDEO') && (
+					<Button
+						size={'sm'}
+						zIndex={9}
+						position={'absolute'}
+						top={'0'}
+						right={'0'}
+						onClick={() => setZoomAllowed(!zoomAllowed)}
+					>
+						{!zoomAllowed ? 'Allow Zoom' : 'Disable zoom'}
+					</Button>
+				)}
+				{isPrevImage && (
+					<Button
+						size={'sm'}
+						zIndex={9}
+						position={'absolute'}
+						top={'50%'}
+						left={'-8px'}
+						onClick={() => prevImage()}
+					>
+						<Chevron direction={'left'} />
+					</Button>
+				)}
+				{isNextImage && (
+					<Button
+						size={'sm'}
+						zIndex={9}
+						position={'absolute'}
+						top={'50%'}
+						right={'-8px'}
+						onClick={() => nextImage()}
+					>
+						<Chevron direction={'right'} />
+					</Button>
+				)}
+				{zoomAllowed ? renderImage() : renderImage()}
+			</Box>
+		</Box>
 	);
 };

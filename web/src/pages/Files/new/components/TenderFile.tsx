@@ -8,7 +8,7 @@ import { OtherGigoverFile } from './OtherFile';
 export const TenderFile = (): JSX.Element => {
 	const params = useParams();
 	const tenderId = params.tenderId ? params.tenderId : -1;
-	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
+	const { data, isPending, isError, error } = useGetTenderById(Number(tenderId));
 	const tenderDocuments = data?.tender.documents;
 
 	if (isError && error) {
@@ -22,7 +22,7 @@ export const TenderFile = (): JSX.Element => {
 
 	return (
 		<>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>

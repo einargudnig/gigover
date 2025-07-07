@@ -1,13 +1,13 @@
+import { Resource } from '../models/Resource';
 import { useHoldResource } from '../mutations/useHoldResource';
 import { useGetLocation } from './useGetLocation';
-import { Resource } from '../models/Resource';
 
 export const useHoldResourceButton = () => {
 	const holdResource = useHoldResource();
 	const location = useGetLocation();
 
 	return {
-		isLoading: location.loading || holdResource.isLoading,
+		isPending: location.loading || holdResource.isPending,
 		execute: async (resource: Resource, projectId?: number, taskId?: number) => {
 			let gps: GeolocationPosition | null = null;
 			try {

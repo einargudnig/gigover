@@ -1,8 +1,7 @@
-import axios, { AxiosError } from 'axios';
+import { useMutation, UseMutationOptions } from '@tanstack/react-query';
+import axios from 'axios';
 import { ApiService } from '../../services/ApiService';
-import { useMutation, UseMutationOptions } from 'react-query';
 import { devError } from '../../utils/ConsoleUtils';
-import { ErrorResponse } from '../../models/ErrorResponse';
 
 export interface TenderFormData {
 	projectId: number;
@@ -21,39 +20,29 @@ interface TenderCreateResponse {
 	errorCode?: string;
 }
 
-export const useAddTender = (
-	options?: UseMutationOptions<number, ErrorResponse, TenderFormData>
-) => {
-	return useMutation<number, ErrorResponse, TenderFormData>(async (variables) => {
-		try {
-			const response = await axios.post<TenderCreateResponse>(
-				ApiService.addTender,
-				variables,
-				{
-					withCredentials: true
+export const useAddTender = (options?: UseMutationOptions<number, Error, TenderFormData>) => {
+	return useMutation<number, Error, TenderFormData>({
+		mutationKey: [ApiService.addTender],
+		mutationFn: async (variables) => {
+			try {
+				const response = await axios.post<TenderCreateResponse>(
+					ApiService.addTender,
+					variables,
+					{
+						withCredentials: true
+					}
+				);
+
+				if (response.data.errorCode) {
+					throw new Error(response.data.errorCode);
 				}
-			);
 
-			if (response.data.errorCode) {
-				throw new Error(response.data.errorCode);
+				return response.data.id;
+			} catch (error) {
+				devError('Error in useAddTender:', error);
+				throw error;
 			}
-
-			return response.data.id;
-		} catch (error) {
-			if (error) {
-				const axiosError = error as AxiosError<ErrorResponse>;
-				devError('Axios error:', axiosError.response?.data);
-				throw {
-					message: 'Could not add tender',
-					errorCode: axiosError.response?.data?.errorCode || 'UNKNOWN_ERROR'
-				};
-			}
-
-			devError('Unknown error:', error);
-			throw {
-				message: 'An unexpected error occurred',
-				errorCode: 'UNKNOWN_ERROR'
-			};
-		}
-	}, options);
+		},
+		...(options || {})
+	});
 };

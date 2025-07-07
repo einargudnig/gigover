@@ -22,12 +22,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Theme } from '../../../Theme';
 import { useInviteBidder } from '../../../mutations/procurement/useInviteBidder';
 import { useGetUserByEmail } from '../../../queries/useGetUserByEmail';
-import { devError } from '../../../utils/ConsoleUtils';
+import { devError, devInfo } from '../../../utils/ConsoleUtils';
 
 export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 	const [searchMail, setSearchMail] = useState('');
 	const [inviteSuccess, setInviteSuccess] = useState(false);
-	const inviteMutation = useInviteBidder();
+	const { mutate: inviteBidder, isPending: invitingBidder } = useInviteBidder();
 	const searchMutation = useGetUserByEmail();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const toast = useToast();
@@ -37,26 +37,32 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 				email: searchMail
 			});
 			if (response.uId) {
-				// devInfo('Found user with uId:', response.uId);
+				devInfo('Found user with uId:', response.uId);
 				// Add to tender
-				inviteMutation.mutateAsync({ uId: response.uId, tenderId }).then((res) => {
-					if (res.errorCode === 'OK') {
-						setSearchMail('');
-						setInviteSuccess(true); //! Fix this
-						toast({
-							title: 'User invited',
-							description:
-								'The user has been invited to make an offer to the tender, we also sent him an email.',
-							status: 'success',
-							duration: 3000,
-							isClosable: true
-						});
-						sendEmailAccount();
-						onClose();
-					} else {
-						throw new Error('Could not invite user.');
+				// console.log('TENDER', tender.id);
+				inviteBidder(
+					{ uId: response.uId, tenderId },
+					{
+						onSuccess: (res) => {
+							if (res.errorCode === 'OK') {
+								setSearchMail('');
+								setInviteSuccess(true);
+								toast({
+									title: 'User invited',
+									description:
+										'The user has been invited to make an offer to the tender, we also sent him an email.',
+									status: 'success',
+									duration: 3000,
+									isClosable: true
+								});
+								sendEmailAccount();
+								onClose();
+							} else {
+								throw new Error('Could not invite user.');
+							}
+						}
 					}
-				});
+				);
 			} else {
 				toast({
 					title: 'User not found',
@@ -84,9 +90,9 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 		}
 	}, [inviteSuccess]);
 	// For the email we send if the user does not have a gigOver account.
-	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateIdNoAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
-	const emailTemplateIdAccount = process.env.REACT_APP_EMAIL_TEMPLATE_ID_ACCOUNT;
+	const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+	const emailTemplateIdNoAccount = import.meta.env.VITE_EMAIL_TEMPLATE_ID;
+	const emailTemplateIdAccount = import.meta.env.VITE_EMAIL_TEMPLATE_ID_ACCOUNT;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	// We send an email to ask the user to create a gigOver account if he doesn't have one.
@@ -173,7 +179,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 								</Text>
 								<FormControl
 									isRequired={true}
-									isInvalid={searchMutation.isError || inviteMutation.isError}
+									isInvalid={searchMutation.isError || invitingBidder}
 									mb={4}
 								>
 									<FormLabel htmlFor={'inviteEmail'}>E-mail</FormLabel>
@@ -190,7 +196,7 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 											</Text>
 										</>
 									) : (
-										(searchMutation.isError || inviteMutation.isError) && (
+										(searchMutation.isError || invitingBidder) && (
 											<>
 												<FormErrorMessage>
 													The user with email {searchMail} could not be
@@ -214,8 +220,8 @@ export const InviteButton = ({ tenderId, tenderDesc }): JSX.Element => {
 							<Spacer />
 							<Button
 								loadingText={'Inviting'}
-								isLoading={searchMutation.isLoading || inviteMutation.isLoading}
-								disabled={searchMutation.isLoading || inviteMutation.isLoading}
+								isLoading={searchMutation.isPending || invitingBidder}
+								disabled={searchMutation.isPending || invitingBidder}
 								onClick={search}
 							>
 								Invite

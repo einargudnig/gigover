@@ -1,0 +1,8 @@
+{
+	"terminals": [
+		{
+			"name": "Setup",
+			"command": "sh setup.sh"
+		}
+	]
+}

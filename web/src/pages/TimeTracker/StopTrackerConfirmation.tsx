@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { Modal } from '../../components/Modal';
 import { Input } from '../../components/forms/Input';
@@ -18,7 +18,7 @@ export const StopTrackerConfirmation = ({
 	onComplete
 }: StopTrackerConfirmationProps): JSX.Element => {
 	const [comment, setComment] = useState('');
-	const { mutateAsync: stopTask, isLoading } = useTrackerStop();
+	const { mutateAsync: stopTask, isPending } = useTrackerStop();
 
 	const onConfirm = useCallback(async () => {
 		await stopTask({
@@ -34,7 +34,7 @@ export const StopTrackerConfirmation = ({
 
 	return (
 		<Modal open={true} centerModal={true} title={'Stop time tracking'} onClose={onClose}>
-			<div>
+			<Box>
 				<Text mt={-2} mb={4}>
 					Do you want to stop this timer?
 				</Text>
@@ -44,14 +44,14 @@ export const StopTrackerConfirmation = ({
 					placeholder={'Add comment'}
 				/>
 				<Flex mt={6} justifyContent={'space-between'}>
-					<Button onClick={onClose} colorScheme={'gray'} isLoading={isLoading}>
+					<Button onClick={onClose} colorScheme={'gray'} isLoading={isPending}>
 						Cancel
 					</Button>
-					<Button onClick={onConfirm} isLoading={isLoading}>
+					<Button onClick={onConfirm} isLoading={isPending}>
 						Stop timer
 					</Button>
 				</Flex>
-			</div>
+			</Box>
 		</Modal>
 	);
 };

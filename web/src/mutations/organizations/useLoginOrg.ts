@@ -1,15 +1,21 @@
-import axios, { AxiosError } from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
-import { useMutation } from 'react-query';
-import { ErrorResponse } from '../../models/ErrorResponse';
+
+interface LoginOrgVariables {
+	name: string | undefined;
+	password: string;
+}
 
 export const useLoginOrg = () => {
 	const mutationKey = ApiService.loginOrganization;
 
-	return useMutation<ErrorResponse, AxiosError, { name: string; password: string }>(
-		mutationKey,
-		async (variables) => {
+	return useMutation<ErrorResponse, Error, LoginOrgVariables>({
+		mutationKey: [mutationKey],
+
+		mutationFn: async (variables: LoginOrgVariables) => {
 			try {
 				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
 					withCredentials: true
@@ -25,5 +31,5 @@ export const useLoginOrg = () => {
 				throw e;
 			}
 		}
-	);
+	});
 };

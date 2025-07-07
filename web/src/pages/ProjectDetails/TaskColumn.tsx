@@ -1,17 +1,19 @@
+import { Button, Heading } from '@chakra-ui/react';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities'; // For transform styles
 import React, { useState } from 'react';
+import { TaskCard } from '../../components/TaskCard';
+import { DisabledComponent } from '../../components/disabled/DisabledComponent';
+import { InputWrapper } from '../../components/forms/Input';
+import { DragDropIcon } from '../../components/icons/DragDropIcons';
+import { PlusIcon } from '../../components/icons/PlusIcon';
+import { useEventListener } from '../../hooks/useEventListener';
+import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
 import { Project } from '../../models/Project';
 import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
 import { useAddTask } from '../../queries/useAddTask';
-import { PlusIcon } from '../../components/icons/PlusIcon';
-import { TaskCard } from '../../components/TaskCard';
-import { InputWrapper } from '../../components/forms/Input';
-import { useEventListener } from '../../hooks/useEventListener';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { devError } from '../../utils/ConsoleUtils';
-import { Button, Heading } from '@chakra-ui/react';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
-import { useGetUserPrivileges } from '../../hooks/useGetUserPrivileges';
-import { DisabledComponent } from '../../components/disabled/DisabledComponent';
 
 interface TaskColumnProps {
 	project: Project;
@@ -21,24 +23,38 @@ interface TaskColumnProps {
 
 const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 	minHeight: 140,
-	background: !isDraggingOver ? 'transparent' : '#e7fff3'
+	background: isDraggingOver ? '#e7f3ff' : 'transparent',
+	borderRadius: 8,
+	transition: 'background 0.2s',
+	padding: 8
 });
 
 export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	const [isCreatingTask, setIsCreatingTask] = useState(false);
 	const [taskError, setTaskError] = useState<string>();
 	const { privileges } = useGetUserPrivileges();
-	const { mutateAsync: addTask, isLoading } = useAddTask();
+	const { mutateAsync: addTask, isPending: isLoading } = useAddTask();
 	const taskStatus = Object.keys(TaskStatus).filter((value, index) => index === status)[0];
+
+	const { setNodeRef: setDroppableNodeRef, isOver: isDroppableOver } = useDroppable({
+		id: status.toString()
+	});
 
 	const createTask = async (taskValues: Pick<Task, 'typeId' | 'subject'>) => {
 		try {
+			const sortedTasks = [...tasks].sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+			const destinationIndex = sortedTasks.length === 0 ? 0 : sortedTasks.length - 1;
 			const response = await addTask({
 				...taskValues,
-				lexoRank: GetNextLexoRank(tasks, -1, tasks.length - 1).toString(),
+				lexoRank: GetNextLexoRank(sortedTasks, -1, destinationIndex).toString(),
 				projectId: project.projectId,
 				status
 			});
+
+			console.log(
+				'After addTask, lexoRanks in column:',
+				sortedTasks.map((t) => t.lexoRank)
+			);
 
 			if (!response) {
 				setTaskError('Could not create task');
@@ -66,45 +82,27 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 	return (
 		<>
 			<Heading size={'md'}>{taskStatus}</Heading>
-			<Droppable droppableId={status.toString()}>
-				{(droppable, snapshot) => (
-					<div
-						{...droppable.droppableProps}
-						style={getListStyle(snapshot.isDraggingOver)}
-						ref={droppable.innerRef}
-					>
-						{tasks.map((task, taskIndex) => (
-							<Draggable
-								key={task.taskId}
-								draggableId={task.taskId.toString()}
-								index={taskIndex}
-								isDragDisabled={privileges?.includes('VIEWER')}
-							>
-								{(provided): JSX.Element => (
-									<div
-										{...provided.draggableProps}
-										{...provided.dragHandleProps}
-										ref={provided.innerRef}
-									>
-										<TaskCard projectId={project.projectId} task={task} />
-									</div>
-								)}
-							</Draggable>
-						))}
-						{droppable.placeholder}
-						{isCreatingTask && (
-							<InputWrapper>
-								<TaskCard
-									error={taskError}
-									loading={isLoading}
-									projectId={project.projectId}
-									onSubmit={(taskValues) => createTask(taskValues)}
-								/>
-							</InputWrapper>
-						)}
-					</div>
+			<div ref={setDroppableNodeRef} style={getListStyle(isDroppableOver)}>
+				{tasks.map((task, taskIndex) => (
+					<DraggableTask
+						key={task.taskId}
+						task={task}
+						index={taskIndex}
+						projectId={project.projectId}
+						isDragDisabled={privileges?.includes('VIEWER')}
+					/>
+				))}
+				{isCreatingTask && (
+					<InputWrapper>
+						<TaskCard
+							error={taskError}
+							loading={isLoading}
+							projectId={project.projectId}
+							onSubmit={(taskValues) => createTask(taskValues)}
+						/>
+					</InputWrapper>
 				)}
-			</Droppable>
+			</div>
 			<DisabledComponent>
 				<Button
 					colorScheme={'gray'}
@@ -116,5 +114,56 @@ export const TaskColumn = ({ project, status, tasks }: TaskColumnProps) => {
 				</Button>
 			</DisabledComponent>
 		</>
+	);
+};
+
+// Helper component for Draggable Task
+interface DraggableTaskProps {
+	task: Task;
+	index: number;
+	projectId: number;
+	isDragDisabled?: boolean;
+}
+
+const DraggableTask = ({ task, index, projectId, isDragDisabled }: DraggableTaskProps) => {
+	const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+		id: task.taskId.toString(),
+		data: {
+			task,
+			index,
+			sortable: { index } // for GetNextLexoRank
+		},
+		disabled: isDragDisabled
+	});
+
+	const style: React.CSSProperties = {
+		transform: CSS.Translate.toString(transform),
+		transition: 'box-shadow 0.2s, background 0.2s, transform 0.2s',
+		background: isDragging ? '#f0f4ff' : 'white',
+		boxShadow: isDragging ? '0 4px 16px rgba(0,0,0,0.12)' : '0 1px 2px rgba(0,0,0,0.04)',
+		borderRadius: 8,
+		opacity: isDragging ? 0.85 : 1,
+		display: 'flex',
+		alignItems: 'center',
+		marginBottom: 8,
+		padding: 12,
+		cursor: isDragDisabled ? 'not-allowed' : undefined
+	};
+
+	return (
+		<div ref={setNodeRef} style={style} {...attributes}>
+			<span
+				{...listeners}
+				style={{
+					cursor: isDragDisabled ? 'not-allowed' : 'grab',
+					marginRight: 12,
+					display: 'flex',
+					alignItems: 'center'
+				}}
+			>
+				<DragDropIcon />
+			</span>
+			<TaskCard projectId={projectId} task={task} />
+		</div>
 	);
 };

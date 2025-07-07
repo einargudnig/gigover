@@ -1,8 +1,8 @@
 import { Box, Button, Flex, FormControl, FormLabel, Heading, Input, Text } from '@chakra-ui/react';
+import emailjs from '@emailjs/browser';
 import { useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Bid } from '../../../../../models/Tender';
-import emailjs from '@emailjs/browser';
 
 import { useGetUserByEmail } from '../../../../../queries/useGetUserByEmail';
 import { devError } from '../../../../../utils/ConsoleUtils';
@@ -68,8 +68,8 @@ export function AddSingleBidder({ onClientInvite }: AddSingleBidderProps) {
 								variant={'outline'}
 								colorScheme={'black'}
 								onClick={search}
-								isLoading={searchMutation.isLoading}
-								isDisabled={searchMutation.isLoading || searchMutation.isError}
+								isLoading={searchMutation.isPending}
+								isDisabled={searchMutation.isPending || searchMutation.isError}
 							>
 								Invite
 							</Button>
@@ -92,8 +92,8 @@ export function AddSingleBidder({ onClientInvite }: AddSingleBidderProps) {
 // We send an email to ask the user to create a gigOver account if he doesn't have one.
 const sendEmailNoAccount = async (searchMail: string) => {
 	// For the email we send if the user does not have a gigOver account.
-	const emailServiceId = process.env.REACT_APP_EMAIL_SERVICE_ID;
-	const emailTemplateId = process.env.REACT_APP_EMAIL_CLIENT_BID_TEMPLATE_ID;
+	const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+	const emailTemplateId = import.meta.env.VITE_EMAIL_CLIENT_BID_TEMPLATE_ID;
 	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
 
 	const templateParams = {

@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import axios, { AxiosError } from 'axios';
-import { devError } from '../utils/ConsoleUtils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
+import { ApiService } from '../services/ApiService';
+import { devError } from '../utils/ConsoleUtils';
 
 interface InviteUserInput {
 	projectId: number;
@@ -11,21 +11,23 @@ interface InviteUserInput {
 
 export const useInviteUserToProject = () => {
 	const queryClient = useQueryClient();
-	const mutationKey = ApiService.addUser;
 
-	return useMutation<ErrorResponse, AxiosError, InviteUserInput>(
-		mutationKey,
-		async (variables) => {
+	return useMutation<ErrorResponse, Error, InviteUserInput>({
+		mutationKey: [ApiService.addUser],
+
+		mutationFn: async (variables) => {
 			try {
-				const response = await axios.post<ErrorResponse>(mutationKey, variables, {
+				const response = await axios.post<ErrorResponse>(ApiService.addUser, variables, {
 					withCredentials: true
 				});
 
 				if (response.data.errorCode !== 'OK') {
-					throw new Error(response.data?.errorCode);
+					throw new Error(response.data?.errorText || response.data?.errorCode);
 				}
 
-				queryClient.refetchQueries(ApiService.projectDetails(variables.projectId));
+				await queryClient.refetchQueries({
+					queryKey: [ApiService.projectDetails(variables.projectId)]
+				});
 
 				return response.data;
 			} catch (e) {
@@ -33,5 +35,5 @@ export const useInviteUserToProject = () => {
 				throw e;
 			}
 		}
-	);
+	});
 };

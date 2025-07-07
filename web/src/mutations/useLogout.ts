@@ -1,9 +1,12 @@
-import { useMutation } from 'react-query';
-import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { ApiService } from '../services/ApiService';
 
 export const useLogout = () => {
-	return useMutation('Logout', async () => {
-		return await axios.get(ApiService.logout, { withCredentials: true });
+	return useMutation<AxiosResponse, AxiosError, void>({
+		mutationKey: ['Logout'],
+		mutationFn: async () => {
+			return await axios.get(ApiService.logout, { withCredentials: true });
+		}
 	});
 };

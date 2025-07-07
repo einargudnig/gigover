@@ -1,20 +1,21 @@
-import axios, { AxiosError } from 'axios';
-import { useMutation, useQueryClient } from 'react-query';
-import { TenderDocumentByTenderOwner } from '../../models/TenderDocument';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import { ApiService } from '../../services/ApiService';
 import { devError } from '../../utils/ConsoleUtils';
 
 // export interface DocumentInput extends Pick<TenderDocumentByTenderOwner, 'tenderId' | 'name' | 'type' | 'url' | 'bytes'> { }
 
-interface TenderDocumentDeleteResponse {
-	errorText: 'OK';
+interface DeleteTenderDocumentVariables {
+	id: number;
+	tenderId: number;
+	offerId: number;
 }
 
 export const useDeleteTenderDocument = () => {
 	const client = useQueryClient();
 
-	return useMutation<TenderDocumentDeleteResponse, AxiosError, TenderDocumentByTenderOwner>(
-		async (variables) => {
+	return useMutation({
+		mutationFn: async (variables: DeleteTenderDocumentVariables) => {
 			try {
 				console.log('variable in mutation: ', variables);
 				const response = await axios.post(
@@ -25,10 +26,12 @@ export const useDeleteTenderDocument = () => {
 					}
 				);
 
-				await client.refetchQueries([
-					ApiService.getTenderById(variables.tenderId),
-					ApiService.offer(variables.offerId)
-				]);
+				await client.refetchQueries({
+					queryKey: [
+						ApiService.getTenderById(variables.tenderId),
+						ApiService.offer(variables.offerId)
+					]
+				});
 
 				return response.data;
 			} catch (e) {
@@ -36,5 +39,5 @@ export const useDeleteTenderDocument = () => {
 				throw new Error('Could not delete document`');
 			}
 		}
-	);
+	});
 };

@@ -1,20 +1,27 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+import axios, { AxiosError } from 'axios';
+import { ProjectFile } from '../models/ProjectFile';
 import { ApiService } from '../services/ApiService';
-import { AxiosError } from 'axios';
-import { ProjectImage } from '../models/ProjectImage';
 
 interface FolderFilesResponse {
-	projectDocuments: ProjectImage[];
+	projectDocuments: ProjectFile[];
 }
 
 export const useFolderDocuments = (folderId: number) => {
-	const { data, isLoading, isError, error } = useQuery<FolderFilesResponse, AxiosError>(
-		ApiService.folderFiles(folderId)
-	);
+	const { data, isPending, isError, error } = useQuery<FolderFilesResponse, AxiosError>({
+		queryKey: [ApiService.folderFiles(folderId)],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.folderFiles(folderId), {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		enabled: !!folderId
+	});
 
 	return {
 		data: (data && data.projectDocuments) || [],
-		isLoading,
+		isPending,
 		isError,
 		error
 	};

@@ -1,7 +1,8 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
-import { Project } from '../models/Project';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
+import { Project } from '../models/Project';
+import { ApiService } from '../services/ApiService';
 
 export interface ProjectResponse {
 	projects: Project[];
@@ -19,11 +20,20 @@ export const projectSorter = (a: Project, b: Project) => {
 };
 
 export const useProjectList = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isError, error } = useQuery<
 		ProjectResponse,
 		ErrorResponse,
 		ProjectResponse
-	>(ApiService.projectList);
+	>({
+		queryKey: [ApiService.projectList],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.projectList, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		staleTime: 1000 * 60 * 5 // 5 minutes
+	});
 
 	const projects: Project[] = data?.projects || [];
 
@@ -33,8 +43,7 @@ export const useProjectList = () => {
 	return {
 		data: projects.sort(projectSorter),
 		// data: projects,
-		isLoading,
-		isFetching,
+		isPending,
 		isError,
 		error
 	};

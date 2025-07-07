@@ -30,7 +30,7 @@ export const OpenOffer = (): JSX.Element => {
 	const { tenderId } = useParams();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { register, handleSubmit } = useForm<OfferNote>();
-	const { mutateAsync: addOffer, isLoading } = useAddOffer();
+	const { mutateAsync: addOffer, isPending } = useAddOffer();
 
 	const navigate = useNavigate();
 	const toast = useToast();
@@ -43,7 +43,7 @@ export const OpenOffer = (): JSX.Element => {
 			};
 
 			// we can chain a .then() function to the end to receive the result of the mutation. In this case, we expect the result to be a number, which we can capture as the id parameter of the .then() function.
-			const response = await addOffer(body).then((res) => res.data.id);
+			const response = await addOffer(body).then((res) => res.id);
 
 			// Before this was { id: 33 } because the AxiosResponse was of type AxiosResponse<{ id: number }>
 			// Changed it to be of type AxiosResponse<number> and returned response.data.id in the mutation.
@@ -136,7 +136,7 @@ export const OpenOffer = (): JSX.Element => {
 								</Button>
 								<Spacer />
 								<Button type="submit" variant={'outline'} colorScheme={'black'}>
-									{isLoading ? <LoadingSpinner /> : 'Open offer'}
+									{isPending ? <LoadingSpinner /> : 'Open offer'}
 								</Button>
 							</AlertDialogFooter>
 						</AlertDialogContent>

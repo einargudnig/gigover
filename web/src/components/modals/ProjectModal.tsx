@@ -10,9 +10,9 @@ import {
 	Heading,
 	Input
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import CreatableSelect from 'react-select/creatable';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { ProgressStatus } from '../../models/ProgressStatus';
@@ -42,10 +42,10 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 			? {
 					name: project?.progressStatus,
 					id: -1
-			  }
+				}
 			: undefined
 	);
-	const { mutateAsync: modify, isLoading, isError, error } = useModifyProject();
+	const { mutateAsync: modify, isPending, isError, error } = useModifyProject();
 	const {
 		register,
 		handleSubmit,
@@ -69,8 +69,8 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				progressStatus: progressStatus?.name ?? null
 			});
 
-			queryClient.refetchQueries(ApiService.projectList);
-			queryClient.refetchQueries(ApiService.getProgressStatusList);
+			queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
+			queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
 			closeModal();
 		} catch (e) {
 			devError('Error', e);
@@ -225,8 +225,8 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 
 				<FormActions
 					submitText={project ? 'Update project' : 'Create a project'}
-					submitLoading={isLoading}
-					submitDisabled={isLoading}
+					submitLoading={isPending}
+					submitDisabled={isPending}
 					cancelText={'Discard changes'}
 					onCancel={() => closeModal()}
 				/>

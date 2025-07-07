@@ -1,24 +1,32 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../../../services/ApiService';
-import { Bid } from '../../../models/Tender';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../../models/ErrorResponse';
+import { Bid } from '../../../models/Tender';
+import { ApiService } from '../../../services/ApiService';
 
 export interface ClientBidResponse {
 	list: Bid[];
 }
 
 export const useGetBids = () => {
-	const { data, isLoading, isSuccess, isError, error } = useQuery<
+	const { data, isPending, isSuccess, isError, error } = useQuery<
 		ClientBidResponse,
 		ErrorResponse
-	>(ApiService.getBids, {
-		refetchOnWindowFocus: true
+	>({
+		queryKey: ['bids'],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getBids, {
+				withCredentials: true
+			});
+			return response.data;
+		},
+		staleTime: 1000 * 60 * 5 // 5 minutes
 	});
 	const bids: Bid[] = data?.list || [];
 
 	return {
 		data: bids,
-		isLoading,
+		isPending,
 		isError,
 		isSuccess,
 		error

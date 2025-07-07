@@ -12,7 +12,7 @@ export interface HoldResourceProps {
 export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JSX.Element => {
 	const location = useGetLocation();
 	const holdResource = useHoldResourceButton();
-	const { mutateAsync: releaseResource, isLoading: isReleaseLoading } = useReleaseResource();
+	const { mutateAsync: releaseResource, isPending: isReleaseLoading } = useReleaseResource();
 
 	const isAvailable = resource.status === 0;
 	const notAvailable = resource.status === 2;
@@ -42,13 +42,17 @@ export const HoldResource = ({ resource, title = 'Use' }: HoldResourceProps): JS
 		<>
 			{isAvailable ? (
 				<Button
-					isLoading={holdResource.isLoading}
+					colorScheme={'black'}
+					variant={'outline'}
+					isLoading={holdResource.isPending}
 					onClick={() => holdOrReleaseResource('hold')}
 				>
 					{title}
 				</Button>
 			) : notAvailable ? null : (
 				<Button
+					colorScheme={'black'}
+					variant={'outline'}
 					isLoading={location.loading || isReleaseLoading}
 					onClick={() => holdOrReleaseResource('release')}
 				>

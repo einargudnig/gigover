@@ -1,23 +1,21 @@
 import { Box, HStack, Tag, Text } from '@chakra-ui/react';
-import moment from 'moment';
 import { useEffect, useRef, useState } from 'react';
-import { SingleDatePicker } from 'react-dates';
 import { Theme } from '../../Theme';
 import { IEditTimeTrackerModalContext } from '../../context/ModalContext';
 import { useCloseModal } from '../../hooks/useCloseModal';
 import { Project } from '../../models/Project';
 import { Task } from '../../models/Task';
 import { useModifyTimeRecord } from '../../mutations/useModifyTimeRecord';
-import { DatePickerWrapper } from '../../pages/TimeTracker/TimeTrackerReport';
 import { useProjectList } from '../../queries/useProjectList';
+import { APP_DATE_FORMAT } from '../../utils/AppDateFormat';
 import { range } from '../../utils/ArrayUtils';
-import { MomentDateFormat } from '../../utils/MomentDateFormat';
 import { addZeroBefore } from '../../utils/NumberUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { FormActions } from '../FormActions';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { Modal } from '../Modal';
 import { TrackerSelect } from '../TrackerSelect';
+import { DatePicker } from '../forms/DatePicker';
 import { Input } from '../forms/Input';
 import { TimeIcon } from '../icons/TimeIcon';
 
@@ -48,10 +46,7 @@ export const EditTimeTrackerModal = ({
 	});
 
 	const closeModal = useCloseModal(callback);
-	const { mutateAsync: modifyTimeRecord, isLoading, isError, error } = useModifyTimeRecord();
-
-	const [focusedStart, setFocusedStart] = useState<boolean>(false);
-	const [focusedEnd, setFocusedEnd] = useState<boolean>(false);
+	const { mutateAsync: modifyTimeRecord, isPending, isError, error } = useModifyTimeRecord();
 
 	const update = async () => {
 		if (!selectedProject?.projectId || !selectedTask?.taskId) {
@@ -91,11 +86,11 @@ export const EditTimeTrackerModal = ({
 	return (
 		<Modal
 			title={
-				<>
-					<TimeIcon color={Theme.colors.green} />
+				<HStack>
+					<TimeIcon color={Theme.colors.black} />
 					<div>Edit Time Record</div>
-					{isLoading && <LoadingSpinner />}
-				</>
+					{isPending && <LoadingSpinner />}
+				</HStack>
 			}
 			open={true}
 			centerModal={false}
@@ -145,18 +140,17 @@ export const EditTimeTrackerModal = ({
 			/>
 			<Box my={4}>
 				<Tag mb={4}>Work start date and time</Tag>
-				<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
-					<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
-						<SingleDatePicker
-							id={'startTime'}
-							displayFormat={MomentDateFormat}
-							date={moment(startTime)}
-							onDateChange={(md) => setStartTime(md?.toDate() ?? startTime)}
-							focused={focusedStart}
-							isOutsideRange={() => false}
-							onFocusChange={(f) => setFocusedStart(f.focused)}
+				<HStack spacing={4} width="100%" sx={{ flex: 1 }} alignItems="flex-end">
+					<Box flex={1} mr={2}>
+						<DatePicker
+							selected={startTime}
+							onChange={(date: Date | null) => setStartTime(date ?? startTime)}
+							dateFormat={APP_DATE_FORMAT}
+							showTimeSelect
+							timeIntervals={15}
+							timeCaption="Time"
 						/>
-					</DatePickerWrapper>
+					</Box>
 					<Box flex={1}>
 						<TrackerSelect
 							title={'Hour started'}
@@ -193,18 +187,17 @@ export const EditTimeTrackerModal = ({
 			</Box>
 			<Box my={4}>
 				<Tag mb={4}>Work end date and time</Tag>
-				<HStack spacing={4} width="100%" sx={{ flex: 1 }}>
-					<DatePickerWrapper style={{ margin: '8px 0', flex: 1 }}>
-						<SingleDatePicker
-							id={'endTime'}
-							displayFormat={MomentDateFormat}
-							date={moment(endTime)}
-							onDateChange={(md) => setEndTime(md?.toDate() ?? endTime)}
-							focused={focusedEnd}
-							isOutsideRange={() => false}
-							onFocusChange={(f) => setFocusedEnd(f.focused)}
+				<HStack spacing={4} width="100%" sx={{ flex: 1 }} alignItems="flex-end">
+					<Box flex={1} mr={2}>
+						<DatePicker
+							selected={endTime}
+							onChange={(date: Date | null) => setEndTime(date ?? endTime)}
+							dateFormat={APP_DATE_FORMAT}
+							showTimeSelect
+							timeIntervals={15}
+							timeCaption="Time"
 						/>
-					</DatePickerWrapper>
+					</Box>
 					<Box flex={1}>
 						<TrackerSelect
 							title={'Hour ended'}

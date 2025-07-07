@@ -10,9 +10,9 @@ import {
 	Text,
 	useToast
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { DatePicker } from '../../../../../components/forms/DatePicker';
 import { CalendarIcon } from '../../../../../components/icons/Calendar';
 import { Bid } from '../../../../../models/Tender';
@@ -31,12 +31,12 @@ export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingl
 	const queryClient = useQueryClient();
 	const toast = useToast();
 
-	const { mutate, isLoading } = useAddBid({
+	const { mutate, isPending } = useAddBid({
 		onSuccess: (bidId) => {
 			// Here you get the tender ID as a number
 			console.log('Created tender for a single client with ID:', bidId);
 			onBidCreate(bidId);
-			queryClient.refetchQueries(ApiService.getBids);
+			queryClient.refetchQueries({ queryKey: [ApiService.getBids] });
 		},
 		onError: (error) => {
 			devError('Error creating tender for a single client:', error);
@@ -186,7 +186,7 @@ export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingl
 						type="submit"
 						colorScheme={'black'}
 						variant={'outline'}
-						isLoading={isLoading}
+						isLoading={isPending}
 						loadingText="Creating..."
 					>
 						Create Bid

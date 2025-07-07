@@ -1,22 +1,7 @@
 import { Box, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { getMinMaxForCalendarType } from '../hooks/useGantChart';
-
-const DaySliderContainer = styled.div`
-	position: fixed;
-	bottom: 24px;
-	right: 24px;
-	background: #fff;
-	box-shadow: 0 0 1px 1px #f2f4f7;
-	user-select: none;
-	padding: ${(props) => props.theme.padding(1, 2)};
-	border-radius: 4px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-`;
 
 export const DateAmountSlider = (): JSX.Element => {
 	const [state, dispatch] = useContext(GantChartContext);
@@ -34,7 +19,20 @@ export const DateAmountSlider = (): JSX.Element => {
 	}, [state.segments]);
 
 	return (
-		<DaySliderContainer>
+		<Box
+			position="fixed"
+			bottom="24px"
+			right="24px"
+			bg="white"
+			boxShadow="0 0 1px 1px #f2f4f7"
+			userSelect="none"
+			py={2} // Assuming theme.padding(1,2) refers to theme spacing units, using 2 for pY and 4 for pX as a common setup.
+			px={4} // Adjust if theme.padding maps differently
+			borderRadius="4px"
+			display="flex"
+			justifyContent="space-between"
+			alignItems="center"
+		>
 			<Box width={'100px'} mr={6}>
 				<Slider
 					aria-label="damount-slider"
@@ -60,6 +58,6 @@ export const DateAmountSlider = (): JSX.Element => {
 					{displayValue} {state.type.toLowerCase()}
 				</Text>
 			</Box>
-		</DaySliderContainer>
+		</Box>
 	);
 };

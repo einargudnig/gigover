@@ -1,26 +1,32 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { OrganizationInvites } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
 
-interface OrganizationsResponse {
-	organizationUsers: OrganizationInvites[];
+interface OrgInvitesResponse {
+	invites: OrganizationInvites[];
 }
 
 export const useGetUserOrgInvites = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
-		OrganizationsResponse,
+	const { data, isPending, isFetching, isError, error } = useQuery<
+		OrgInvitesResponse,
 		ErrorResponse
-	>(ApiService.getUserOrgInvites, {
-		refetchOnWindowFocus: true
-		// withCredentials: true
+	>({
+		queryKey: [ApiService.getUserOrgInvites],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getUserOrgInvites, {
+				withCredentials: true
+			});
+			return response.data;
+		}
 	});
 
-	const organizationsInvites: OrganizationInvites[] = data?.organizationUsers || [];
+	const invites: OrganizationInvites[] = data?.invites || [];
 
 	return {
-		data: organizationsInvites,
-		isLoading,
+		data: invites,
+		isPending,
 		isFetching,
 		isError,
 		error

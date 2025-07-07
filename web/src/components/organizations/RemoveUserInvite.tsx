@@ -108,8 +108,8 @@ export function RemoveUserInvite() {
 											</Flex>
 
 											<Button
-												isLoading={removeInviteMutation.isLoading}
-												disabled={removeInviteMutation.isLoading}
+												isLoading={removeInviteMutation.isPending}
+												disabled={removeInviteMutation.isPending}
 												onClick={removeUserInvite}
 												width={'full'}
 												variant={'outline'}
@@ -121,8 +121,8 @@ export function RemoveUserInvite() {
 									) : (
 										<Button
 											loadingText={'Searching...'}
-											isLoading={searchMutation.isLoading}
-											disabled={searchMutation.isLoading}
+											isLoading={searchMutation.isPending}
+											disabled={searchMutation.isPending}
 											onClick={search}
 											width={'full'}
 											variant={'outline'}

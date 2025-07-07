@@ -1,0 +1,217 @@
+# Vite Migration and Package Update Plan
+
+This document outlines the tasks for migrating the React application from Create React App (CRA) to Vite, along with necessary package updates.
+
+## Phase 1: Critical Dependency Updates
+
+-   [x] **Upgrade Firebase (v7 to v10+)**
+    -   [x] Update `firebase` package in `package.json`.
+    -   [x] Refactor Firebase initialization and service usage to the v9+ modular API (`src/firebase/firebase.ts`, `src/services/FileSystemService.ts`, `src/hooks/useFirebaseAuth.ts`, `src/pages/NewLogin.tsx`, `src/firebase/firebaseTypes.ts`).
+    -   [x] Test authentication and Firebase-dependent features.
+-   [-] **Upgrade React Query (v3 to TanStack Query v5)**
+    -   [x] Replace `react-query` with `@tanstack/react-query` in `package.json`.
+    -   [x] Update `QueryClientProvider` setup in `src/index.tsx`.
+    -   [x] Refactor all instances of `useQuery`, `useMutation`, and other hooks.
+        -   [x] `src/mutations/useHoldResource.ts`
+        -   [x] `src/mutations/useImageDot.ts`
+        -   [x] `src/mutations/useRemoveProgressTab.ts`
+        -   [x] `src/mutations/useReleaseResource.ts`
+        -   [x] `src/mutations/useModifyProject.ts`
+        -   [x] `src/mutations/useReportToCSV.ts`
+        -   [x] `src/mutations/useAddDocument.ts`
+        -   [x] `src/queries/useGetUserByPhoneNumber.ts`
+        -   [x] `src/mutations/useDeleteDocument.ts`
+        -   [x] `src/mutations/procurement/useAcceptOffer.ts`
+        -   [x] `src/mutations/procurement/useInviteBidder.ts`
+        -   [x] `src/mutations/procurement/useAddOffer.ts`
+        -   [x] `src/mutations/procurement/useAddTenderItem.ts`
+        -   [x] `src/mutations/properties/useAddStakeHolder.ts`
+        -   [x] `src/mutations/properties/useAddProjectToProperty.ts`
+        -   [x] `src/mutations/properties/useRemoveProjectFromProperty.ts`
+        -   [x] `src/mutations/properties/useEditProperty.ts`
+        -   [x] `src/mutations/procurement/useDeleteProcurement.ts`
+        -   [x] `src/mutations/properties/useAddUnit.ts`
+        -   [x] `src/mutations/procurement/useAddTenderDocument.ts`
+        -   [x] `src/mutations/procurement/useModifyTender.ts`
+        -   [x] `src/mutations/procurement/useDeleteTenderItem.ts`
+        -   [x] `src/mutations/procurement/useAddOfferItems.ts`
+        -   [x] `src/mutations/procurement/useModifyTenderItem.ts`
+        -   [x] `src/mutations/procurement/usePublishOffer.ts`
+        -   [x] `src/mutations/procurement/usePublishTender.ts`
+        -   [x] `src/mutations/procurement/client-bids/useAcceptBid.ts`
+        -   [x] `src/mutations/procurement/client-bids/useEditBidItem.ts`
+        -   [x] `src/mutations/procurement/client-bids/useEditBid.ts`
+        -   [x] `src/mutations/procurement/useRejectOffer.ts`
+        -   [x] `src/mutations/procurement/useAddTenderDocumentByTenderOwner.ts`
+        -   [x] `src/mutations/procurement/client-bids/useRejectBid.ts`
+        -   [x] `src/mutations/procurement/client-bids/useDeleteBidItem.ts`
+        -   [x] `src/mutations/properties/useRemoveStakeHolder.ts`
+        -   [x] `src/mutations/properties/useAddPropertyDocument.ts`
+        -   [x] `src/queries/useVerify.ts`
+        -   [x] `src/mutations/useChangeUid.ts`
+        -   [x] `src/mutations/useProjectFolders.ts`
+    -   [x] Review TanStack Query v4 and v5 migration guides for breaking changes.
+        -   **v4 Breaking Changes Noted:**
+            -   Package name: `react-query` -> `@tanstack/react-query` (Already handled)
+            -   Query Keys: Must be an array. (Believed to be handled, confirm during testing)
+            -   `idle` State Removed: Use `fetchStatus: 'idle'`. `isInitialLoading` for first load. (Review usages of `isLoading`)
+            -   `useQueries` API: Accepts `{ queries: [...] }`. (Review if `useQueries` is used)
+            -   `undefined` as Cache Value: Query functions returning `undefined` are errors. (Low risk, but good to note)
+            -   Network Mode: Default is `online`. If `offlineFirst` is needed, configure in `QueryClient`. (Currently not set, defaults to `online`)
+            -   `onSuccess` with `setQueryData`: `onSuccess` no longer called from `setQueryData`. (No direct usage found)
+        -   **v5 Breaking Changes Noted:**
+            -   Single Signature: All hooks/methods use a single object argument. (Largely handled during initial refactor)
+            -   Callbacks removed from `useQuery` (`onSuccess`, `onError`, `onSettled`). (No direct usage found)
+            -   `cacheTime` renamed to `gcTime`. (`QueryClient` in `src/index.tsx` uses defaults, effectively `gcTime: 5 * 60 * 1000`).
+            -   `isLoading` is now `isPending`. Old `isLoading` (first load) is new `isLoading` (`isPending && isFetching`). `isInitialLoading` (v4) is deprecated. (Needs careful review of `isLoading`, `isFetching` etc.)
+            -   `keepPreviousData` removed. Use `placeholderData: keepPreviousData`. (No usage found)
+            -   Infinite Queries:
+                -   `initialPageParam` required. (Review infinite query usages)
+                -   `getNextPageParam` required, manual mode removed. (Review infinite query usages)
+            -   React Version: Requires React 18.0+. (Project is on React 18.2.0)
+            -   Hydration: `Hydrate` component is `HydrationBoundary`, `useHydrate` removed. (No usage found)
+    -   [x] Run TanStack Query codemods (v4 and v5) to catch any missed changes.
+        -   v4 `replace-import-specifier.cjs`: Ran successfully, 43 files modified.
+        -   v4 `key-transformation.cjs`: Ran with many errors/warnings. Seems mostly incompatible with already v5-like syntax. 1 file (`src/mutations/procurement/useAddTender.ts`) had a transformation error.
+        -   v5 `remove-overloads.cjs`: Ran, 33 files modified. Many files reported as needing manual transformation. Files with "unknown error":
+            -   [x] `src/queries/procurement/useGetBidderTenders.ts`
+            -   [x] `src/queries/procurement/useGetTenderById.ts`
+            -   [x] `src/queries/procurement/useGetUserOffers.ts`
+            -   [x] `src/queries/useProgressStatusList.ts`
+            -   [x] `src/queries/procurement/client-bids/useGetBids.ts`
+    -   [x] Systematically review `useQuery` and `useMutation` calls for adherence to v5 patterns.
+        -   [x] **Manual Review Required (from v5 codemod output - non-exhaustive list, check codemod logs for full list):**
+            -   [x] `src/mutations/procurement/useInviteBidder.ts`
+            -   [x] `src/mutations/procurement/useModifyTender.ts`
+            -   [x] `src/mutations/procurement/useModifyTenderItem.ts`
+            -   [x] `src/mutations/procurement/usePublishOffer.ts`
+            -   [x] `src/mutations/procurement/client-bids/useRejectBid.ts`
+            -   [x] `src/mutations/procurement/useDeleteTenderItem.ts`
+            -   [x] `src/mutations/procurement/useRejectOffer.ts`
+            -   [x] `src/mutations/procurement/usePublishTender.ts`
+            -   [x] `src/queries/useAddFolder.ts`
+            -   [x] `src/hooks/useNotifications.ts`
+            -   [x] `src/queries/useAddTask.ts`
+            -   [x] `src/mutations/useAddDocument.ts`
+            -   [x] `src/mutations/useAddMilestone.ts`
+            -   [x] `src/queries/useAddWorker.ts`
+            -   [x] `src/queries/useGetUserByPhoneNumber.ts`
+            -   [x] `src/mutations/useChangeUid.ts`
+            -   [x] `src/mutations/useDeleteFolder.ts`
+            -   [x] `src/queries/useFolderFolders.ts`
+            -   [x] `src/mutations/useDeleteNotification.ts`
+            -   [x] `src/mutations/useDeleteTimeRecord.ts`
+            -   [x] `src/queries/useProjectDocuments.ts`
+            -   [x] `src/queries/useProjectFoldersQuery.ts`
+            -   [x] `src/mutations/useHoldResource.ts`
+            -   [x] `src/queries/useProjectList.ts`
+            -   [x] `src/mutations/useInviteUserToProject.ts`
+            -   [x] `src/queries/useProjectUsers.ts`
+            -   [x] `src/mutations/useImageDot.ts`
+            -   [x] `src/mutations/useModifyProject.ts`
+            -   [x] `src/queries/useRemoveWorker.ts`
+            -   [x] `src/mutations/useLogout.ts`
+            -   [x] `src/mutations/useModifyTimeRecord.ts`
+            -   [x] `src/mutations/useReadNotification.ts`
+            -   [x] `src/components/modals/TaskModal/NewTaskModal.tsx`
+            -   [x] `src/queries/useRemoveUser.ts`
+            -   [x] `src/mutations/useProjectFolders.ts`
+            -   [x] `src/components/NewProjectOverview.tsx`
+            -   [x] `src/mutations/useReleaseResource.ts`
+            -   [x] `src/mutations/useRemoveProgressTab.ts`
+            -   [x] `src/mutations/useModifyResource.ts`
+            -   [x] `src/queries/useTrackerStart.ts`
+            -   [x] `src/mutations/useResourceComment.ts`
+            -   [x] `src/queries/useTrackerStop.ts`
+            -   [x] `src/queries/useResources.ts`
+            -   [x] `src/queries/useVerify.ts`
+            -   [x] `src/queries/useWorkAdd.ts`
+            -   [x] `src/queries/useUpdateTask.ts`
+            -   [x] `src/queries/organisations/useGetOrganizationUsers.ts`
+            -   [x] `src/queries/organisations/useGetUserInvites.ts`
+            -   [x] `src/queries/useGetUserInfo.ts`
+            -   [x] `src/mutations/useResourceDelete.ts`
+            -   [x] `src/queries/useTaskComment.ts`
+            -   [x] `src/components/modals/TaskModal/TaskModal.tsx`
+            -   [x] `src/queries/organisations/useGetOrganizations.ts`
+            -   [x] `src/mutations/organizations/useChangeOrganizations.ts`
+            -   [x] `src/mutations/useDeleteDocument.ts`
+            -   [x] `src/mutations/organizations/useDeclineOrganizationInvite.ts`
+            -   [x] `src/queries/properties/useGetPoperties.ts`
+            -   [x] `src/mutations/organizations/useAcceptOrganizationInvite.ts`
+            -   [x] `src/mutations/organizations/useInviteUserToOrganization.ts`
+            -   [x] `src/mutations/organizations/useCreateOrganization.ts`
+            -   [x] `src/mutations/organizations/useChangePrivileges.ts`
+            -   [x] `src/mutations/properties/useAddStakeHolder.ts`
+            -   [x] `src/mutations/properties/useEditProperty.ts`
+            -   [x] `src/mutations/properties/useEditUnit.ts`
+            -   [x] `src/mutations/properties/useAddProjectToProperty.ts`
+            -   [x] `src/mutations/properties/useAddProperty.ts`
+            -   [x] `src/mutations/properties/useRemoveProjectFromProperty.ts`
+            -   [x] `src/mutations/properties/useRemovePropertyDocument.ts`
+            -   [x] `src/mutations/procurement/useAddOffer.ts`
+            -   [x] `src/mutations/properties/useRemoveStakeHolder.ts`
+            -   [x] `src/mutations/procurement/useAddTender.ts` (Also had v4 codemod error)
+            -   [x] `src/mutations/procurement/client-bids/useAcceptBid.ts`
+            -   [x] `src/mutations/procurement/useAddTenderDocument.ts`
+            -   [x] `src/mutations/procurement/client-bids/useAddBidItem.ts`
+            -   [x] `src/mutations/procurement/useBidderReject.ts`
+            -   [x] `src/mutations/procurement/useAddTenderItem.ts`
+            -   [x] `src/mutations/procurement/useAddTenderDocumentByTenderOwner.ts`
+            -   [x] `src/mutations/procurement/client-bids/useAddBid.ts`
+            -   [x] `src/mutations/procurement/useDeleteProcurement.ts`
+            -   [x] `src/mutations/procurement/useAcceptOffer.ts`
+            -   [x] `src/mutations/procurement/client-bids/useDeleteBidItem.ts`
+            -   [x] `src/mutations/procurement/client-bids/useEditBid.ts`
+            -   [x] `src/queries/organisations/useGetUserOrgInvites.ts`
+            -   [x] `src/mutations/properties/useAddUnit.ts`
+            -   [x] `src/components/modals/ProjectModal.tsx`
+            -   [x] `src/mutations/procurement/client-bids/useEditBidItem.ts`
+            -   [x] `src/mutations/procurement/useAddOfferItems.ts`
+            -   [x] `src/mutations/procurement/client-bids/usePublishBid.ts`
+            -   [x] `src/mutations/organizations/useRemoveInviteToOrganization.ts`
+            -   [x] `src/mutations/properties/useAddPropertyDocument.ts`
+            -   [x] `src/pages/Procurement/tabs/Tender-Create-Steps/CreateTender.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/new/CreateBidSingleBidder.tsx`
+        -   [x] Check `isLoading`, `isFetching`, `isPending`, `status` usage based on v5 definitions.
+            -   [x] `src/pages/Dashboard/Dashboard.tsx`
+            -   [x] `src/components/NewProjectOverview.tsx`
+            -   [x] `src/components/modals/TaskModal/TaskModal.tsx`
+            -   [x] `src/pages/Property/PropertyId.tsx`
+            -   [x] `src/pages/ProjectDetails/ProjectDetails.tsx`
+            -   [x] `src/pages/Onboarding.tsx`
+        -   [x] **Broader Check: Review remaining `isLoading` instances codebase-wide**
+            -   [x] `src/pages/Onboarding.tsx`
+            -   [x] `src/pages/Dashboard/hooks/useFilterProjectsBy.ts`
+            -   [x] `src/pages/ProjectDetails/ProjectDetailsOutlet.tsx`
+            -   [x] `src/pages/ProjectDetails/ProjectDetailsFiles.tsx`
+            -   [x] `src/pages/ProjectDetails/ProjectDetailsGanttChart.tsx`
+            -   [x] `src/pages/ProjectDetails/TaskColumn.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/BidsList.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/BidResponsesList.tsx`
+            -   [x] `src/pages/Procurement/ClientBids/components/new/AddItemsSingleBid.tsx`
+    -   [ ] Test all data-fetching and caching functionality.
+-   [ ] **Stabilize React Router DOM (v6-beta to v6-latest stable)**
+    -   [ ] Update `react-router-dom` in `package.json`.
+    -   [ ] Review React Router v6 stable release notes for breaking changes from the beta version.
+    -   [ ] Test all routing, navigation, and route-related hooks.
+
+## Phase 2: Update Other Important Dependencies
+
+-   [ ] **Chakra UI (`@chakra-ui/react`)**
+    -   [ ] Update `@chakra-ui/react` (currently `^2.10.4`) and related packages (e.g., `@chakra-ui/icons`) to the latest `^2.x.x` or a suitable newer version.
+    -   [ ] Check changelogs for minor breaking changes or deprecated APIs and update UI components accordingly.
+-   [ ] **General Dependencies & DevDependencies**
+    -   [ ] Review and update other packages (e.g., `axios`, `date-fns`, `moment`, `react-datepicker`, `react-hook-form`, etc.).
+    -   [ ] Update type definitions (`@types/*`).
+    -   [ ] Update ESLint, Prettier, and their plugins.
+    -   [ ] Consider if `moment` (currently `^2.29.1`) can be fully replaced by `date-fns` (currently `^2.16.1`) to reduce bundle size.
+    -   [ ] Update `typescript` (currently `5.0.4`) if necessary and compatible with other upgrades.
+
+## Phase 3: Vite Migration
+
+-   [ ] **Install Vite and Core Plugins**
+    -   [ ] Add `vite` and `@vitejs/plugin-react` (or `@vitejs/plugin-react-swc`) to `devDependencies`.
+-   [ ] **Remove Create React App**
+    -   [ ] Uninstall `react-scripts`.
+-   [ ] \*\*Update `package.json`

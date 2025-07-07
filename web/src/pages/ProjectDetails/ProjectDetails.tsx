@@ -1,160 +1,186 @@
-import { Box } from '@chakra-ui/react';
-import { useMemo } from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { Box, Flex } from '@chakra-ui/react';
+import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Project } from '../../models/Project';
-import { Task, TaskStatus, TaskStatusType } from '../../models/Task';
+import type { Task } from '../../models/Task';
+import { TaskStatus } from '../../models/Task';
 import { useProjectDetails } from '../../queries/useProjectDetails';
 import { useUpdateTask } from '../../queries/useUpdateTask';
 import { GetNextLexoRank } from '../../utils/GetNextLexoRank';
-import { TaskColumn } from './TaskColumn';
-import { Center } from '../../components/Center';
+import KanbanColumn from './KanbanColumn';
+import KanbanTaskCard from './KanbanTaskCard';
 
-const FeedBoard = styled.div`
-	display: flex;
-	flex-direction: row;
-	margin-left: -8px;
-	margin-right: -8px;
-`;
+// Dynamically build columns from TaskStatus (excluding Archived)
+const statusEntries = Object.entries(TaskStatus).filter(
+	([key, value]) => value !== TaskStatus.Archived
+);
+const columnOrder = statusEntries.map(([key, value]) => value.toString());
+const columnTitles = Object.fromEntries(
+	statusEntries.map(([key, value]) => [value.toString(), key])
+);
 
-const KanbanBoard = styled.div`
-	flex: 1;
-	user-select: none;
-`;
-
-const FeedColumn = styled.div`
-	margin: 0 ${(props): string => props.theme.padding(1.5)};
-	height: 100%;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	padding: 16px;
-
-	> div {
-		flex: 1;
-		border-radius: 3px;
-	}
-
-	@media screen and (max-width: 1024px) {
-		margin: 0 ${(props): string => props.theme.padding(1)};
-		padding: 12px;
-
-		&:not(:last-child) {
-			margin-right: ${(props): string => props.theme.padding(1)};
-		}
-	}
-`;
-
-export const ProjectDetails = (): JSX.Element | null => {
+export const ProjectDetails = () => {
 	const { projectId } = useParams();
 	const projectIdNumber = parseInt(projectId as string);
-	const { mutate: updateTask } = useUpdateTask(projectIdNumber);
+	const { data, isPending, isError, error } = useProjectDetails(projectIdNumber);
+	const updateTask = useUpdateTask(projectIdNumber);
 
-	const { data, isLoading, isError, error } = useProjectDetails(projectIdNumber);
-	const project: Project | undefined = data && data.project;
-
-	const taskSorter = (a, b) => {
-		if (a.lexoRank && b.lexoRank) {
-			return a.lexoRank > b.lexoRank ? 1 : -1;
+	// Build columns from real tasks
+	const tasks = data?.project?.tasks || [];
+	const buildColumns = () => {
+		const cols: { [key: string]: Task[] } = {};
+		for (const status of columnOrder) {
+			cols[status] = tasks
+				.filter((t) => t.status.toString() === status)
+				.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
 		}
-		if (a.lexoRank) {
-			return 1;
-		}
-		if (b.lexoRank) {
-			return -1;
-		}
-		return a.primary > b.priority ? 1 : -1;
+		return cols;
 	};
-	const tasks = useMemo(() => {
-		return {
-			[TaskStatus.Backlog]:
-				project?.tasks
-					.filter((task) => task.status === TaskStatus.Backlog)
-					.sort(taskSorter) ?? [],
-			[TaskStatus.Todo]:
-				project?.tasks.filter((task) => task.status === TaskStatus.Todo).sort(taskSorter) ??
-				[],
-			[TaskStatus.Doing]:
-				project?.tasks
-					.filter((task) => task.status === TaskStatus.Doing)
-					.sort(taskSorter) ?? [],
-			[TaskStatus.Done]:
-				project?.tasks.filter((task) => task.status === TaskStatus.Done).sort(taskSorter) ??
-				[]
-		};
-	}, [project?.tasks]);
+	const [columns, setColumns] = useState(buildColumns());
+	const [activeTask, setActiveTask] = useState(null);
+	const [activeColumn, setActiveColumn] = useState(null);
 
-	const onDragEnd = async (result: DropResult) => {
-		//Sort it baby
-		const nextStatus = result.destination?.droppableId ?? 0;
-		const nextIndex = result.destination?.index ?? 0;
+	// Update columns when tasks change
+	useEffect(() => {
+		setColumns(buildColumns());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [tasks.length]);
 
-		const nextRow: Task[] = tasks[nextStatus];
-		const nextRank = GetNextLexoRank(nextRow, result.source.index ?? -1, nextIndex);
+	const handleDragStart = (event) => {
+		setActiveTask(event.active.id);
+		setActiveColumn(event.active.data.current?.columnId);
+	};
 
-		const taskId = parseInt(result.draggableId || '0');
-
-		const status: TaskStatusType = parseInt(
-			result.destination?.droppableId || '0'
-		) as TaskStatusType;
-
-		const task = project?.tasks.find((t) => t.taskId === taskId);
-
-		if (taskId === 0 || !task) {
+	const handleDragEnd = (event) => {
+		const { active, over } = event;
+		if (!over) {
+			setActiveTask(null);
+			setActiveColumn(null);
 			return;
 		}
 
-		// USE LEXO RANK INSTEAD
-		const priority = result.destination ? result.destination.index : result.source.index;
-		// console.log('Priority', priority);
+		const fromColumn = active.data.current?.columnId;
+		const fromIndex = active.data.current?.index;
+		let toColumn = over.data.current?.columnId;
+		let toIndex = over.data.current?.index;
 
-		updateTask({
-			...task,
-			priority,
-			lexoRank: nextRank.toString(),
-			status,
-			taskId
+		// If dropped on an empty column, over.id is the column id
+		if (columnOrder.includes(over.id)) {
+			toColumn = over.id;
+			toIndex = 0;
+		}
+
+		if (!fromColumn || !toColumn) {
+			setActiveTask(null);
+			setActiveColumn(null);
+			return;
+		}
+
+		// Find the real task object by ID
+		const taskId = active.id;
+		const realTask = tasks.find((t) => t.taskId.toString() === taskId);
+		if (!realTask) {
+			setActiveTask(null);
+			setActiveColumn(null);
+			return;
+		}
+
+		// Prepare destination column's real tasks, sorted by lexoRank and deduplicated
+		let destTasks = tasks
+			.filter((t) => t.status.toString() === toColumn)
+			.sort((a, b) => a.lexoRank.localeCompare(b.lexoRank));
+		// Deduplicate by lexoRank, keeping the first occurrence
+		const seen = new Set();
+		destTasks = destTasks.filter((t) => {
+			if (seen.has(t.lexoRank)) return false;
+			seen.add(t.lexoRank);
+			return true;
 		});
+
+		// Calculate new lexoRank for the destination position
+		const adjustedToIndex =
+			fromColumn === toColumn && fromIndex < toIndex ? toIndex - 1 : toIndex;
+		const nextRank = GetNextLexoRank(
+			destTasks,
+			fromColumn === toColumn ? fromIndex : -1,
+			adjustedToIndex
+		);
+
+		// Build new columns state optimistically
+		const newColumns = { ...columns };
+		// Remove from old column
+		newColumns[fromColumn] = newColumns[fromColumn].filter((t) => t.taskId !== realTask.taskId);
+		// Insert into new column at the correct position
+		const updatedTask = {
+			...realTask,
+			status: parseInt(toColumn) as import('../../models/Task').TaskStatusType,
+			lexoRank: nextRank.toString()
+		};
+		newColumns[toColumn] = [
+			...newColumns[toColumn].slice(0, toIndex),
+			updatedTask,
+			...newColumns[toColumn].slice(toIndex)
+		];
+
+		setColumns(newColumns);
+		console.log('Columns after move:', JSON.stringify(newColumns, null, 2));
+		Object.entries(newColumns).forEach(([col, tasks]) => {
+			console.log(`Column ${col}:`);
+			tasks.forEach((t, i) =>
+				console.log(`  ${i + 1}: id=${t.taskId}, lexoRank=${t.lexoRank}`)
+			);
+		});
+
+		// Persist the change
+		updateTask.mutate({
+			taskId: realTask.taskId,
+			status: parseInt(toColumn) as import('../../models/Task').TaskStatusType,
+			subject: realTask.subject,
+			text: realTask.text,
+			lexoRank: nextRank.toString(),
+			typeId: realTask.typeId
+		});
+
+		setActiveTask(null);
+		setActiveColumn(null);
 	};
 
-	if (!isLoading && !project) {
-		throw new Error('Could not find project');
-	}
+	// Find the active task object for the overlay
+	const allTasks = Object.values(columns).flat() as Task[];
+	const activeTaskObj = allTasks.find((t) => t.taskId.toString() === activeTask);
+
+	if (isPending) return <Box p={4}>Loading...</Box>;
+	if (isError) return <Box p={4}>Error: {error?.errorText}</Box>;
 
 	return (
-		<>
-			<Box>
-				{isLoading ? (
-					<Center>
-						<LoadingSpinner />
-					</Center>
-				) : isError ? (
-					<p>
-						Error fetching project with id: {projectId} - Reason: {error?.errorText}.
-						Code: {error?.errorCode}
-					</p>
-				) : (
-					<KanbanBoard>
-						<DragDropContext onDragEnd={onDragEnd} onDragStart={() => null}>
-							<FeedBoard>
-								{Object.values(TaskStatus)
-									.filter((status) => status !== TaskStatus.Archived)
-									.map((taskStatus, tIndex) => (
-										<FeedColumn key={tIndex}>
-											<TaskColumn
-												project={project!}
-												status={taskStatus}
-												tasks={tasks[taskStatus]}
-											/>
-										</FeedColumn>
-									))}
-							</FeedBoard>
-						</DragDropContext>
-					</KanbanBoard>
-				)}
-			</Box>
-		</>
+		<Box p={4}>
+			<DndContext
+				collisionDetection={closestCenter}
+				onDragStart={handleDragStart}
+				onDragEnd={handleDragEnd}
+			>
+				<Flex gap={4} alignItems="flex-start" width="100%" overflowX="auto">
+					{columnOrder.map((colKey) => (
+						<KanbanColumn
+							key={colKey}
+							columnId={colKey}
+							title={columnTitles[colKey]}
+							tasks={columns[colKey]}
+							activeTask={activeTask}
+							projectId={projectIdNumber}
+						/>
+					))}
+				</Flex>
+				<DragOverlay>
+					{activeTaskObj ? (
+						<KanbanTaskCard
+							task={activeTaskObj}
+							projectId={projectIdNumber}
+							index={0}
+						/>
+					) : null}
+				</DragOverlay>
+			</DndContext>
+		</Box>
 	);
 };

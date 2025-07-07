@@ -1,14 +1,14 @@
 import { Avatar, Box, Flex, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { useContext } from 'react';
 import { ModalContext } from '../context/ModalContext';
+import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
 import { FileUploadType } from '../models/FileUploadType';
 import { Task } from '../models/Task';
 import { useProjectTypes } from '../queries/useProjectTypes';
-import { CardBase } from './CardBase';
 import { DropZone } from './DropZone';
 import { Label } from './Label';
 import { TaskCardInput } from './TaskCardInput';
-import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
+import { DragDropIcon } from './icons/DragDropIcons';
 
 interface TaskProps {
 	projectId: number;
@@ -46,8 +46,6 @@ export const TaskCard = ({
 	}
 
 	const hoverBg = useColorModeValue('gray.100', 'gray.700');
-	const editingBoxShadow = '0 5px 25px rgba(0, 140, 0, 0.2)';
-	const errorBoxShadow = '0 5px 25px rgba(222, 39, 39, 0.2)';
 	const dragActiveOutline = useColorModeValue('green.500', 'green.200');
 
 	return (
@@ -69,16 +67,15 @@ export const TaskCard = ({
 					placement="top"
 				>
 					<Box
-						as={CardBase}
+						bg="white"
+						borderRadius="12px"
+						transition="all 0.2s linear"
+						boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
 						p={{ base: 2, md: 3, lg: 4 }}
 						m={2}
 						cursor={isInteractable ? 'pointer' : 'not-allowed'}
 						opacity={isInteractable ? 1 : 0.5}
-						bg={isEditing ? 'white' : undefined}
 						wordBreak="break-word"
-						boxShadow={
-							isEditing ? (error ? errorBoxShadow : editingBoxShadow) : undefined
-						}
 						outline={isDragActive ? `3px solid ${dragActiveOutline}` : undefined}
 						_hover={!isEditing ? { bg: hoverBg } : undefined}
 						onClick={() =>
@@ -90,7 +87,7 @@ export const TaskCard = ({
 												task: task!,
 												projectId: projectId
 											}
-									  })
+										})
 								: null
 						}
 					>
@@ -101,13 +98,16 @@ export const TaskCard = ({
 								justifyContent="space-between"
 								flexDirection="column"
 							>
-								<Box
-									as="h4"
-									fontWeight="normal"
-									fontSize={{ base: '14px', md: '15px', lg: '16px' }}
-								>
-									{task.subject}
-								</Box>
+								<Flex align="center" justify="space-between">
+									<Box
+										as="h4"
+										fontWeight="normal"
+										fontSize={{ base: '14px', md: '15px', lg: '16px' }}
+									>
+										{task.subject}
+									</Box>
+									<DragDropIcon />
+								</Flex>
 								<Flex mt={4} align="center">
 									<Label
 										style={{ display: 'inline-block' }}

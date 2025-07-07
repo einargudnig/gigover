@@ -1,3 +1,4 @@
+import { InfoIcon } from '@chakra-ui/icons';
 import {
 	Avatar,
 	Box,
@@ -36,16 +37,15 @@ import { useChangePrivileges } from '../../mutations/organizations/useChangePriv
 import { useRemoveInviteToOrganization } from '../../mutations/organizations/useRemoveInviteToOrganization';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
 import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
-import { InfoIcon } from '@chakra-ui/icons';
 
 export function MemberTable({ activeOrg }): JSX.Element {
-	const { data, isLoading, isFetching, isError, error } = useGetOrganizationUsers();
+	const { data, isPending, isFetching, isError, error } = useGetOrganizationUsers();
 	const changePrivileges = useChangePrivileges();
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 	const {
 		data: userInvites,
-		isLoading: userInvitesLoading,
+		isPending: userInvitesLoading,
 		isFetching: userInvitesFetching,
 		isError: userInvitesIsError,
 		error: userInvitesError
@@ -265,7 +265,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 										</>
 									)}
 
-									{isLoading || isFetching ? (
+									{isPending || isFetching ? (
 										<Tr>
 											<Td>Loading...</Td>
 											<Td>
@@ -274,7 +274,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 										</Tr>
 									) : isError ? (
 										<Tr>
-											<Td>{error?.errorCode}</Td>
+											<Td>{error?.errorText}</Td>
 										</Tr>
 									) : (
 										<>

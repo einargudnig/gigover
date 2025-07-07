@@ -1,4 +1,5 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { ApiService } from '../../services/ApiService';
 
@@ -14,21 +15,24 @@ interface OrganizationUsersResponse {
 }
 
 export const useGetOrganizationUsers = () => {
-	const { data, isLoading, isFetching, isError, error } = useQuery<
+	const { data, isPending, isFetching, isError, error } = useQuery<
 		OrganizationUsersResponse,
 		ErrorResponse
-	>(ApiService.getOrganizationUsers, {
-		refetchOnWindowFocus: true
+	>({
+		queryKey: [ApiService.getOrganizationUsers],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getOrganizationUsers, {
+				withCredentials: true
+			});
+			return response.data;
+		}
 	});
 
-	// Ensure the object structure matches OrganizationUsersResponse
-	const organizationUsers: OrganizationUsersResponse = {
-		organizationUsers: data?.organizationUsers || []
-	};
+	const users: OrgUsers[] = data?.organizationUsers || [];
 
 	return {
-		data: organizationUsers,
-		isLoading,
+		data: { organizationUsers: users },
+		isPending,
 		isFetching,
 		isError,
 		error

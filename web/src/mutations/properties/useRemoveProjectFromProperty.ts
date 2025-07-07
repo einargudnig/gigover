@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
-import { devError } from '../../utils/ConsoleUtils';
-import { ApiService } from '../../services/ApiService';
 import { PropertyToProject } from '../../models/Property';
+import { ApiService } from '../../services/ApiService';
+import { devError } from '../../utils/ConsoleUtils';
 
 interface AddProjectToPropertyResponse {
 	errorText: 'OK';
@@ -11,8 +11,8 @@ interface AddProjectToPropertyResponse {
 export const useRemoveProjectFromProperty = () => {
 	const client = useQueryClient();
 
-	return useMutation<AddProjectToPropertyResponse, AxiosError, PropertyToProject>(
-		async (variables) => {
+	return useMutation<AddProjectToPropertyResponse, AxiosError, PropertyToProject>({
+		mutationFn: async (variables) => {
 			try {
 				// console.log('variable in mutation: ', variables);
 				const response = await axios.post(
@@ -22,14 +22,17 @@ export const useRemoveProjectFromProperty = () => {
 						withCredentials: true
 					}
 				);
-
-				await client.refetchQueries(ApiService.getPropertyById(variables.propertyId));
 				console.log('response.data: ', response.data);
 				return response.data;
 			} catch (e) {
 				devError(e);
-				throw new Error('Could not add project to property`');
+				throw e; // Re-throw for TanStack Query
 			}
+		},
+		onSuccess: async (_data, variables) => {
+			await client.invalidateQueries({
+				queryKey: [ApiService.getPropertyById(variables.propertyId)]
+			});
 		}
-	);
+	});
 };

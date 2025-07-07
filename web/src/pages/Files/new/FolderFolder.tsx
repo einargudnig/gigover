@@ -14,10 +14,10 @@ export const FolderFolder = (): JSX.Element => {
 	const projectId = params.projectId ? parseInt(params.projectId) : -1;
 	const folderId = params.folderId ? parseInt(params.folderId) : -1;
 
-	const { data, isLoading, isError, error } = useFolderFolders(projectId, folderId);
+	const { data, isPending, isError, error } = useFolderFolders(projectId, folderId);
 	const projectDocuments = useFolderDocuments(folderId);
 
-	if (isLoading) {
+	if (isPending) {
 		return <LoadingSpinner />;
 	}
 

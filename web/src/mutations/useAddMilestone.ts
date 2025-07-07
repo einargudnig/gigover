@@ -1,18 +1,22 @@
-import { useMutation, useQueryClient } from 'react-query';
-import { ErrorResponse } from '../models/ErrorResponse';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { ApiService } from '../services/ApiService';
 import { MilestoneForm } from '../models/Milestone';
+import { ApiService } from '../services/ApiService';
 
 interface MilestoneFormInput extends Omit<MilestoneForm, 'milestoneId'> {
 	milestoneId?: number;
 }
 
+interface AddMilestoneResponse {
+	id: number;
+	// Add other properties if the backend returns more than just the id
+}
+
 export const useAddMilestone = () => {
 	const queryClient = useQueryClient();
 
-	return useMutation<{ id: number }, ErrorResponse, MilestoneFormInput>(
-		async (variables) => {
+	return useMutation<AddMilestoneResponse, Error, MilestoneFormInput>({
+		mutationFn: async (variables) => {
 			const response = await axios.post(ApiService.addMilestone, variables, {
 				withCredentials: true
 			});
@@ -23,16 +27,17 @@ export const useAddMilestone = () => {
 
 			return response.data;
 		},
-		{
-			onSuccess: async (data, variables) => {
-				await queryClient.invalidateQueries(ApiService.getMilestones(variables.projectId));
 
-				if (variables.milestoneId) {
-					await queryClient.invalidateQueries(
-						ApiService.milestoneDetails(variables.milestoneId)
-					);
-				}
+		onSuccess: async (data, variables) => {
+			await queryClient.invalidateQueries({
+				queryKey: [ApiService.getMilestones(variables.projectId)]
+			});
+
+			if (variables.milestoneId) {
+				await queryClient.invalidateQueries({
+					queryKey: [ApiService.milestoneDetails(variables.milestoneId)]
+				});
 			}
 		}
-	);
+	});
 };

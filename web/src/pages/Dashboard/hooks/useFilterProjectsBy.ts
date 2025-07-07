@@ -1,6 +1,6 @@
+import { useMemo } from 'react';
 import { ProgressStatus } from '../../../models/ProgressStatus';
 import { Project, ProjectStatus } from '../../../models/Project';
-import { useMemo } from 'react';
 
 export const useFilterProjectsBy = (
 	filter: string | ProgressStatus,

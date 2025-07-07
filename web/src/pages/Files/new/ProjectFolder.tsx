@@ -1,4 +1,6 @@
 import { Spacer, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
+import { pdfjs } from 'react-pdf';
 import { useParams } from 'react-router-dom';
 import { LoadingSpinner } from '../../../components/LoadingSpinner';
 import { SimpleGrid } from '../../../components/SimpleGrid';
@@ -9,14 +11,23 @@ import { CreateNewFolder } from '../components/CreateNewFolder';
 import { ProjectFolderComponent } from '../components/Folder';
 import { FilesUi } from './components/FilesUi';
 
+// Set workerSrc for pdfjs
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
+
 export const ProjectFolder = (): JSX.Element => {
 	const params = useParams();
 	const projectId = params.projectId ? parseInt(params.projectId) : -1;
 
-	const { data, isLoading, isError, error } = useProjectFoldersQuery(projectId);
+	const { data, isPending, isError, error } = useProjectFoldersQuery(projectId);
 	const projectDocuments = useProjectDocuments(projectId);
 
-	if (isLoading) {
+	const [numPages, setNumPages] = useState<number | null>(null);
+
+	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+		setNumPages(numPages);
+	}
+
+	if (isPending) {
 		return <LoadingSpinner />;
 	}
 
@@ -52,6 +63,16 @@ export const ProjectFolder = (): JSX.Element => {
 
 			<Spacer height={4} />
 			<FilesUi title={''} files={projectDocuments?.data ?? []} projectId={projectId} />
+
+			{/* <div>
+				<Document
+					file="/sample.pdf" // Place sample.pdf in your public/ folder
+					onLoadSuccess={onDocumentLoadSuccess}
+				>
+					<Page pageNumber={1} />
+				</Document>
+				{numPages && <p>Page 1 of {numPages}</p>}
+			</div> */}
 		</>
 	);
 };

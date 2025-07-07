@@ -1,6 +1,5 @@
-import { Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { DropZone } from '../../components/DropZone';
 import { FormActions } from '../../components/FormActions';
 import { Modal } from '../../components/Modal';
@@ -16,12 +15,6 @@ interface UploadModalProps {
 	projectId?: number;
 	folderId?: string;
 }
-
-const UploadModalStyled = styled.div`
-	@media screen and (max-width: 500px) {
-		width: 500px;
-	}
-`;
 
 export const UploadModal = ({ projectId, folderId, onClose }: UploadModalProps): JSX.Element => {
 	const { data } = useProjectList();
@@ -47,7 +40,7 @@ export const UploadModal = ({ projectId, folderId, onClose }: UploadModalProps):
 
 	return (
 		<Modal open={true} onClose={onClose} centerModal={true} title={'Upload file'}>
-			<UploadModalStyled>
+			<Box w={{ base: '100%', sm: '500px' }}>
 				<VStack mb={-6} align={'stretch'}>
 					{openProjects ? (
 						<TrackerSelect
@@ -108,7 +101,7 @@ export const UploadModal = ({ projectId, folderId, onClose }: UploadModalProps):
 						}}
 					/>
 				</VStack>
-			</UploadModalStyled>
+			</Box>
 		</Modal>
 	);
 };

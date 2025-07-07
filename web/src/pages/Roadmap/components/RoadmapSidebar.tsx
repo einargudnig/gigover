@@ -1,14 +1,14 @@
 import { Button, Flex, GridItem, HStack, IconButton, Text, VStack } from '@chakra-ui/react';
 import { useContext } from 'react';
+import { DisabledComponent } from '../../../components/disabled/DisabledComponent';
 import { EmptyProjects } from '../../../components/empty/EmptyProjects';
 import { EmptyState } from '../../../components/empty/EmptyState';
 import { Edit } from '../../../components/icons/Edit';
 import { ModalContext } from '../../../context/ModalContext';
+import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
 import { displayTaskTitle } from '../../../utils/TaskUtils';
 import { GantChartContext } from '../contexts/GantChartContext';
 import { GRID_ROW_HEIGHT, GRID_SIDEBAR_WIDTH } from '../hooks/useGantChart';
-import { useGetUserPrivileges } from '../../../hooks/useGetUserPrivileges';
-import { DisabledComponent } from '../../../components/disabled/DisabledComponent';
 
 export const RoadmapSidebar = (): JSX.Element => {
 	const [, setModalState] = useContext(ModalContext);

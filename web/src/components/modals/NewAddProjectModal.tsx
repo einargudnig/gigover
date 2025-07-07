@@ -33,7 +33,7 @@
 // } from '@chakra-ui/react';
 // import { FC, useCallback, useState } from 'react';
 // import { Controller, useForm } from 'react-hook-form';
-// import { useQueryClient } from 'react-query';
+// import { useQueryClient } from '@tanstack/react-query';
 // import { useCloseModal } from '../../hooks/useCloseModal';
 // import { Project } from '../../models/Project';
 // import { IProperties } from '../../models/Property';
@@ -49,6 +49,7 @@
 // import { CrossIcon } from '../icons/CrossIcon';
 // import { TrashIcon } from '../icons/TrashIcon';
 // import { VerticalDots } from '../icons/VerticalDots';
+// import { Moment } from 'moment';
 
 // export interface ProjectModalProps {
 // 	project?: Project;

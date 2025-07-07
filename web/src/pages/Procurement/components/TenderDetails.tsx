@@ -10,7 +10,7 @@ import { UnpublishedTender } from './UnPublishedTender';
 
 export const TenderDetails = (): JSX.Element => {
 	const { tenderId } = useParams();
-	const { data, isLoading, isError, error } = useGetTenderById(Number(tenderId));
+	const { data, isPending, isError, error } = useGetTenderById(Number(tenderId));
 	const tender: TenderWithItems | undefined = data?.tender;
 	const navigate = useNavigate();
 	const isTenderPublished = tender?.status === 1;
@@ -25,7 +25,7 @@ export const TenderDetails = (): JSX.Element => {
 			>
 				<ArrowBackIcon />
 			</Button>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
@@ -36,9 +36,9 @@ export const TenderDetails = (): JSX.Element => {
 			) : (
 				<Box>
 					{isTenderPublished ? (
-						<PublishedTender tender={tender} getTenderLoading={isLoading} />
+						<PublishedTender tender={tender} getTenderLoading={isPending} />
 					) : (
-						<UnpublishedTender tender={tender} getTenderLoading={isLoading} />
+						<UnpublishedTender tender={tender} getTenderLoading={isPending} />
 					)}
 				</Box>
 			)}

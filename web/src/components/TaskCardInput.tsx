@@ -1,23 +1,8 @@
-import { Button, Flex } from '@chakra-ui/react';
+import { Box, Button, Flex, Textarea } from '@chakra-ui/react';
 import { ErrorMessage } from '@hookform/error-message';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import { Task } from '../models/Task';
-
-const TaskInput = styled.textarea`
-	background: transparent;
-	border: none;
-	outline: none;
-	box-shadow: none;
-	padding: 0;
-	margin-bottom: ${(props) => props.theme.padding(2)};
-	word-wrap: break-word;
-	word-break: break-all;
-	width: 100%;
-	resize: none;
-	display: block;
-`;
 
 interface TaskCardInputProps {
 	task?: Task;
@@ -26,6 +11,7 @@ interface TaskCardInputProps {
 	loading?: boolean;
 	onChange?: (newValue: string) => void;
 	onSubmit?: (taskValues: Pick<Task, 'typeId' | 'subject'>) => void;
+	onCancel?: () => void;
 }
 
 export const TaskCardInput = ({
@@ -33,12 +19,26 @@ export const TaskCardInput = ({
 	error,
 	loading = false,
 	onChange,
-	onSubmit
+	onSubmit,
+	onCancel
 }: TaskCardInputProps): JSX.Element => {
-	const textInputRef = useRef<HTMLTextAreaElement>();
+	const textInputRef = useRef<HTMLTextAreaElement | null>(null);
 	const [text, setText] = useState(value);
 	const [textAreaHeight, setTextAreaHeight] = useState('auto');
 	const [parentHeight, setParentHeight] = useState('auto');
+
+	const onChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+		if (textInputRef.current) {
+			setTextAreaHeight('auto');
+			setParentHeight(`${textInputRef.current!.scrollHeight}px`);
+		}
+		setText(event.target.value);
+
+		if (onChange) {
+			onChange(event.target.value);
+		}
+	};
+
 	const {
 		register,
 		handleSubmit,
@@ -47,6 +47,11 @@ export const TaskCardInput = ({
 		defaultValues: {
 			subject: value
 		}
+	});
+
+	const { ref: registerRef, ...subjectRegister } = register('subject', {
+		required: true,
+		onChange: onChangeHandler
 	});
 
 	const submit = handleSubmit(async (values) => {
@@ -74,40 +79,59 @@ export const TaskCardInput = ({
 		}
 	}, []);
 
-	const onChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setTextAreaHeight('auto');
-		setParentHeight(`${textInputRef.current!.scrollHeight}px`);
-		setText(event.target.value);
-
-		if (onChange) {
-			onChange(event.target.value);
-		}
-	};
-
 	return (
-		<form onSubmit={submit}>
-			{error && <div style={{ color: 'red' }}>{error}</div>}
-			<div style={{ minHeight: parentHeight }}>
-				<ErrorMessage errors={errors} name="subject" />
-				<TaskInput
-					maxLength={599}
-					required={true}
-					placeholder={'Add task name'}
-					style={{ height: textAreaHeight }}
-					{...register('subject', { required: true, onChange: onChangeHandler })}
-				/>
-			</div>
-			<Flex justifyContent={'end'}>
-				<Button
-					type={'submit'}
-					colorScheme={'gray'}
-					loadingText={'Saving'}
-					isLoading={loading}
-					disabled={loading}
-				>
-					Save
-				</Button>
-			</Flex>
-		</form>
+		<Box bg="white" p={2} borderRadius={8} border="1px solid #e0e0e0" mt={2}>
+			<form onSubmit={submit}>
+				{error && <div style={{ color: 'red' }}>{error}</div>}
+				<div style={{ minHeight: parentHeight }}>
+					<ErrorMessage errors={errors} name="subject" />
+					<Textarea
+						{...subjectRegister}
+						ref={(e) => {
+							registerRef(e);
+							textInputRef.current = e;
+						}}
+						maxLength={599}
+						required={true}
+						placeholder={'Add task name'}
+						bg="transparent"
+						border="none"
+						outline="none"
+						_focus={{ boxShadow: 'none', border: 'none' }}
+						_hover={{ border: 'none' }}
+						boxShadow="none"
+						p={0}
+						mb={2}
+						wordBreak="break-all"
+						width="100%"
+						resize="none"
+						display="block"
+						style={{ height: textAreaHeight }}
+					/>
+				</div>
+				<Flex justifyContent={'end'} gap={2}>
+					<Button
+						variant={'outline'}
+						colorScheme={'gray'}
+						onClick={() => {
+							if (onCancel) {
+								onCancel();
+							}
+						}}
+					>
+						Cancel
+					</Button>
+					<Button
+						type={'submit'}
+						colorScheme={'gray'}
+						loadingText={'Saving'}
+						isLoading={loading}
+						disabled={loading}
+					>
+						Save
+					</Button>
+				</Flex>
+			</form>
+		</Box>
 	);
 };

@@ -15,14 +15,14 @@ import { BidIdTable } from './BidIdTable';
 export const BidDetails = (): JSX.Element => {
 	const { bidId } = useParams<{ bidId: string }>();
 	const navigate = useNavigate();
-	const { data, isLoading } = useGetBidById(Number(bidId)); // TODO add error handling
+	const { data, isPending } = useGetBidById(Number(bidId)); // TODO add error handling
 	const bid: Bid | undefined = data?.bid;
 
 	const isBidPublished = bid?.status === 1;
 
 	return (
 		<>
-			{isLoading ? (
+			{isPending ? (
 				<Center>
 					<LoadingSpinner />
 				</Center>
@@ -116,7 +116,7 @@ function UnpublishedBid({ bid }: { bid: Bid }) {
 }
 
 function HandleBid({ bid }: { bid: Bid }) {
-	const { mutateAsync: publishBid, isLoading: isPublishLoading } = usePublishBid();
+	const { mutateAsync: publishBid, isPending: isPublishPending } = usePublishBid();
 	const toast = useToast();
 
 	const finishDateStatus = handleFinishDate(bid?.finishDate);
@@ -162,7 +162,7 @@ function HandleBid({ bid }: { bid: Bid }) {
 				colorScheme={'black'}
 				variant={'outline'}
 				onClick={handlePublish}
-				isLoading={isPublishLoading}
+				isLoading={isPublishPending}
 				isDisabled={finishDateStatus}
 			>
 				Publish Bid

@@ -1,6 +1,6 @@
-import { useQuery } from 'react-query';
-import { ApiService } from '../services/ApiService';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { ApiService } from '../services/ApiService';
 import { devError } from '../utils/ConsoleUtils';
 
 export type Notification = {
@@ -23,18 +23,21 @@ interface NotificationHook {
 }
 
 const useNotificationQuery = () => {
-	return useQuery<Notification[]>(ApiService.notifications, async () => {
-		try {
-			const res = await axios.get(ApiService.notifications, { withCredentials: true });
+	return useQuery<Notification[]>({
+		queryKey: [ApiService.notifications],
+		queryFn: async () => {
+			try {
+				const res = await axios.get(ApiService.notifications, { withCredentials: true });
 
-			if (!(res.data && res.data.notifications)) {
-				throw new Error(res.data);
+				if (!(res.data && res.data.notifications)) {
+					throw new Error(res.data);
+				}
+
+				return res.data.notifications.sort((a, b) => b.created - a.created);
+			} catch (e) {
+				devError(e);
+				throw e;
 			}
-
-			return res.data.notifications.sort((a, b) => b.created - a.created);
-		} catch (e) {
-			devError(e);
-			throw e;
 		}
 	});
 };

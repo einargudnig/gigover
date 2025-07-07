@@ -1,20 +1,6 @@
+import { Box, Flex } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { Tab } from './Tab';
-import styled from 'styled-components';
-
-const TabContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	border-bottom: 1px solid #e5e5e5;
-
-	> nav {
-		display: flex;
-	}
-`;
-
-const TabActionsContainer = styled.div`
-	align-self: center;
-`;
 
 export interface TabsProps<T extends Record<K, React.ReactNode>, K extends keyof T> {
 	labelKey: K;
@@ -51,8 +37,8 @@ export function Tabs<T extends Record<K, React.ReactNode>, K extends keyof T>({
 
 	return (
 		<>
-			<TabContainer>
-				<nav aria-label="Tabs">
+			<Flex justify="space-between" borderBottomWidth="1px" borderColor="#e5e5e5">
+				<Flex as="nav">
 					{tabs.map((t, tabIndex) => (
 						<Tab
 							key={tabIndex}
@@ -62,13 +48,13 @@ export function Tabs<T extends Record<K, React.ReactNode>, K extends keyof T>({
 							selected={comparator(t, selectedTab)}
 						/>
 					))}
-				</nav>
+				</Flex>
 				{tabActions && (
-					<TabActionsContainer>
+					<Box alignSelf="center">
 						<div>{tabActions}</div>
-					</TabActionsContainer>
+					</Box>
 				)}
-			</TabContainer>
+			</Flex>
 			{children && (
 				<div>
 					{selectedTab && children && children({ tab: selectedTab })}

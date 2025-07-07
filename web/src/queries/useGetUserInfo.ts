@@ -1,4 +1,5 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { ErrorResponse } from '../models/ErrorResponse';
 import { IUserInfo } from '../models/UserProfile';
 import { ApiService } from '../services/ApiService';
@@ -25,18 +26,21 @@ export const useGetUserInfo = () => {
 		authenticated: false
 	};
 
-	const { data, isLoading, isError, error } = useQuery<IUserInfo, ErrorResponse>(
-		ApiService.getUserInfo,
-		{
-			refetchOnWindowFocus: true
+	const { data, isPending, isError, error } = useQuery<IUserInfo, ErrorResponse>({
+		queryKey: [ApiService.getUserInfo],
+		queryFn: async () => {
+			const response = await axios.get(ApiService.getUserInfo, {
+				withCredentials: true
+			});
+			return response.data;
 		}
-	);
+	});
 
 	const userInfo: IUserInfo = data || defaultUserInfo;
 
 	return {
 		data: userInfo,
-		isLoading,
+		isPending,
 		isError,
 		error
 	};

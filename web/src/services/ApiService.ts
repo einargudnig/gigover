@@ -4,7 +4,7 @@ export const API_BASE =
 	process.env.NODE_ENV === 'production'
 		? 'https://rest.gigover.com/rest/'
 		: // 'http://localhost:3000/rest/';
-		  'http://localhost:8080/gigover-sdk-3.0.2/rest/';
+			'http://localhost:8080/gigover-sdk-3.0.2/rest/';
 // If using proxy.
 // If hosting backend locally use :8080 instead of :3000
 
@@ -177,6 +177,7 @@ export class ApiService {
 	static addPropertyDocument = API_BASE + 'properties/addDocument';
 	static removePropertyDocument = (documentId: number) =>
 		API_BASE + 'properties/removeDocument/' + documentId;
+	static deleteProperty = API_BASE + 'properties/delProperty';
 
 	// Organization
 	static createOrganization = API_BASE + 'user/orgCreate';
@@ -192,4 +193,6 @@ export class ApiService {
 	static getUserInvites = API_BASE + 'user/userInvites';
 	// org login?
 	static loginOrganization = API_BASE + 'org/login';
+	static deleteOrganization = API_BASE + 'user/orgDelete';
+	static leaveOrganization = API_BASE + 'user/orgLeave';
 }
