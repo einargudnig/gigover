@@ -68,7 +68,7 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 			? {
 					name: project?.progressStatus,
 					id: -1
-			  }
+				}
 			: undefined
 	);
 	const {
@@ -125,8 +125,8 @@ export const NewModifyProjectModal: FC<ProjectModalProps> = ({
 				progressStatus: progressStatus?.name ?? null
 			});
 
-			queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
-			queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
+			queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
+			queryClient.invalidateQueries({ queryKey: [ApiService.getProgressStatusList] });
 			closeDrawer();
 		} catch (e) {
 			devError('Error', e);

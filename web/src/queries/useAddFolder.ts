@@ -26,13 +26,13 @@ export const useAddFolder = () => {
 				if (response.status === 200) {
 					// Refetch the new folder list after creation
 					if (variables.folderId) {
-						await client.refetchQueries({
+						await client.invalidateQueries({
 							queryKey: [
 								ApiService.folderFolders(variables.projectId, variables.folderId)
 							]
 						});
 					} else {
-						await client.refetchQueries({
+						await client.invalidateQueries({
 							queryKey: [ApiService.folderList(variables.projectId)]
 						});
 					}

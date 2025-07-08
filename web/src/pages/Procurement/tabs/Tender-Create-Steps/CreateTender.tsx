@@ -51,7 +51,7 @@ export function CreateTender({ onTenderCreate }: CreateTenderProps) {
 			// Here you get the tender ID as a number
 			console.log('Created tender with ID:', tenderId);
 			onTenderCreate(tenderId);
-			queryClient.refetchQueries({ queryKey: [ApiService.userTenders] });
+			queryClient.invalidateQueries({ queryKey: [ApiService.userTenders] });
 		},
 		onError: (error) => {
 			devError('Error creating tender:', error);

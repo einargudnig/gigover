@@ -18,7 +18,9 @@ export const useAcceptOffer = () => {
 		onSuccess: async (data, offerIdVariables) => {
 			// data is response.data, offerIdVariables is the input offerId
 			// If ApiService.offer expects the offerId itself for the queryKey:
-			await client.refetchQueries({ queryKey: [ApiService.offer(offerIdVariables.offerId)] });
+			await client.invalidateQueries({
+				queryKey: [ApiService.offer(offerIdVariables.offerId)]
+			});
 		}
 	});
 };

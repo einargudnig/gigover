@@ -28,7 +28,9 @@ export const useAddPropertyDocument = () => {
 			}
 		},
 		onSuccess: (data, variables) => {
-			client.refetchQueries({ queryKey: [ApiService.getPropertyById(variables.propertyId)] });
+			client.invalidateQueries({
+				queryKey: [ApiService.getPropertyById(variables.propertyId)]
+			});
 		}
 	});
 };

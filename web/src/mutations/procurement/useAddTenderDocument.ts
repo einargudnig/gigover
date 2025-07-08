@@ -30,11 +30,11 @@ export const useAddTenderDocument = () => {
 		},
 		onSuccess: async (data, variables) => {
 			if (variables.offerId) {
-				await client.refetchQueries({ queryKey: [ApiService.offer(variables.offerId)] });
+				await client.invalidateQueries({ queryKey: [ApiService.offer(variables.offerId)] });
 			}
 			// Potentially also refetch tender documents if variables.tenderId exists
 			if (variables.tenderId) {
-				await client.refetchQueries({
+				await client.invalidateQueries({
 					queryKey: [ApiService.tenderDocuments(variables.tenderId)]
 				});
 			}

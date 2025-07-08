@@ -33,7 +33,7 @@ export const useInviteBidder = () => {
 			}
 		},
 		onSuccess: (data, variables) => {
-			queryClient.refetchQueries({
+			queryClient.invalidateQueries({
 				queryKey: [ApiService.getTenderById(variables.tenderId)]
 			});
 		}

@@ -24,6 +24,7 @@ import { useGetTenderById } from '../../../../queries/procurement/useGetTenderBy
 import { useGetUserByEmail } from '../../../../queries/useGetUserByEmail';
 import { devError, devInfo } from '../../../../utils/ConsoleUtils';
 import { TenderInfo } from './TenderInfo';
+import emailjs from '@emailjs/browser';
 
 export interface InviteBidderProps {
 	tenderId: number;
@@ -63,10 +64,21 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 							duration: 3000,
 							isClosable: true
 						});
+						sendEmailAccount();
 					} else {
 						throw new Error('Could not invite user.');
 					}
 				});
+			} else {
+				toast({
+					title: 'User not found',
+					description:
+						'The user you tried to invite does not have an GigOver account. We will send an email asking him to create one. Note that you still have to invite him after he has created the account.',
+					status: 'info',
+					duration: 3000,
+					isClosable: true
+				});
+				sendEmailNoAccount();
 			}
 		} catch (e) {
 			//
@@ -82,6 +94,60 @@ export const AddBidder = ({ tenderId, onBidderAdded }: InviteBidderProps): JSX.E
 			}, 3500);
 		}
 	}, [inviteSuccess]);
+
+	// For the email we send if the user does not have a gigOver account.
+	const emailServiceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
+	const emailTemplateIdNoAccount = import.meta.env.VITE_EMAIL_TEMPLATE_ID;
+	const emailTemplateIdAccount = import.meta.env.VITE_EMAIL_TEMPLATE_ID_ACCOUNT;
+	const emailUserId = 'yz_BqW8_gSHEh6eAL'; // this is a public key, so no reason to have it in .env
+
+	// We send an email to ask the user to create a gigOver account if he doesn't have one.
+	const sendEmailNoAccount = async () => {
+		const templateParams = {
+			tenderDesc: tender?.description,
+			to_email: searchMail
+		};
+		console.log('Sending email to: ', searchMail);
+		console.log('tenderDesc: ', templateParams.tenderDesc);
+		try {
+			await emailjs
+				.send(emailServiceId!, emailTemplateIdNoAccount!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	// We also want to send an email even though the user has an account.
+	const sendEmailAccount = async () => {
+		const templateParams = {
+			tenderDesc: tender?.description,
+			to_email: searchMail
+		};
+		console.log('Sending email to: ', searchMail);
+		console.log('tenderDesc: ', templateParams.tenderDesc);
+		try {
+			await emailjs
+				.send(emailServiceId!, emailTemplateIdAccount!, templateParams!, emailUserId!)
+				.then(
+					function (response) {
+						console.log('SUCCESS!', response.status, response.text);
+					},
+					function (error) {
+						console.log('FAILED...', error);
+					}
+				);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	return (
 		<Box backgroundColor={'white'} py={6} rounded={'md'}>

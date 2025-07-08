@@ -28,7 +28,7 @@ export const useAddUnit = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getPropertyById(variables.propertyId)]
 			});
 		}

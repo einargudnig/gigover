@@ -40,10 +40,10 @@ export const useModifyTender = () => {
 		},
 		onSuccess: async (data, variables) => {
 			// Assuming response.status === 200 check is implicitly handled by onSuccess
-			await queryClient.refetchQueries({
+			await queryClient.invalidateQueries({
 				queryKey: [ApiService.getTenderById(Number(tenderId))]
 			});
-			await queryClient.refetchQueries({ queryKey: [ApiService.userTenders] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.userTenders] });
 		}
 	});
 };

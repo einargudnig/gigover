@@ -24,7 +24,7 @@ export const useDeleteFolder = () => {
 
 				if (response.status === 200) {
 					// Refetch the new folder list after creation
-					await client.refetchQueries({
+					await client.invalidateQueries({
 						queryKey: [ApiService.folderList(variables.projectId)]
 					});
 				}

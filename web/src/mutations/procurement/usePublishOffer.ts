@@ -23,8 +23,10 @@ export const usePublishOffer = () => {
 		},
 		onSuccess: async (data, offerIdVariables) => {
 			// data is response.data, offerIdVariables is the input offerId
-			await client.refetchQueries({ queryKey: [ApiService.userOffers] });
-			await client.refetchQueries({ queryKey: [ApiService.offer(offerIdVariables.offerId)] });
+			await client.invalidateQueries({ queryKey: [ApiService.userOffers] });
+			await client.invalidateQueries({
+				queryKey: [ApiService.offer(offerIdVariables.offerId)]
+			});
 		}
 	});
 };

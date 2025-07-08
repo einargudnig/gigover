@@ -32,7 +32,7 @@ export const useActiveTimeTrackers = () => {
 			return response.data;
 		},
 		onSuccess: async () => {
-			await queryClient.refetchQueries({ queryKey: [ApiService.timerReport] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.timerReport] });
 			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
 		}
 	});

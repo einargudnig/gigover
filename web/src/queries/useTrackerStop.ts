@@ -20,7 +20,7 @@ export const useTrackerStop = () => {
 
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
-			await queryClient.refetchQueries({ queryKey: [ApiService.activeWorkers] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
 		}
 	});
 };
