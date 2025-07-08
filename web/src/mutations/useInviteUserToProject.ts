@@ -25,7 +25,7 @@ export const useInviteUserToProject = () => {
 					throw new Error(response.data?.errorText || response.data?.errorCode);
 				}
 
-				await queryClient.refetchQueries({
+				await queryClient.invalidateQueries({
 					queryKey: [ApiService.projectDetails(variables.projectId)]
 				});
 

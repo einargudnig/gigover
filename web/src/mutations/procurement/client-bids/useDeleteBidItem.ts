@@ -30,7 +30,7 @@ export const useDeleteBidItem = () => {
 			// The original code checked data.errorText === 'OK' or response.status === 200.
 			// onSuccess implies a successful HTTP status. We can check data.errorText if needed.
 			if (data.errorText === 'OK') {
-				await queryClient.refetchQueries({ queryKey: [ApiService.getBidById(bidId)] });
+				await queryClient.invalidateQueries({ queryKey: [ApiService.getBidById(bidId)] });
 			}
 		}
 	});

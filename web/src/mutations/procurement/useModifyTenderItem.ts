@@ -30,7 +30,7 @@ export const useModifyTenderItem = () => {
 			}
 		},
 		onSuccess: async () => {
-			await queryClient.refetchQueries({
+			await queryClient.invalidateQueries({
 				queryKey: [ApiService.getTenderById(Number(tenderId))]
 			});
 		}

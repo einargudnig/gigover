@@ -133,8 +133,8 @@
 // 				progressStatus: progressStatus?.name ?? null
 // 			});
 
-// 			queryClient.refetchQueries(ApiService.projectList);
-// 			queryClient.refetchQueries(ApiService.getProgressStatusList);
+// 			queryClient.invalidateQueries(ApiService.projectList);
+// 			queryClient.invalidateQueries(ApiService.getProgressStatusList);
 // 			closeDrawer();
 // 		} catch (e) {
 // 			devError('Error', e);

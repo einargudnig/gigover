@@ -30,7 +30,9 @@ export const useEditBidItem = () => {
 			}
 		},
 		onSuccess: async (_data, _variables) => {
-			await queryClient.refetchQueries({ queryKey: [ApiService.getBidById(Number(bidId))] });
+			await queryClient.invalidateQueries({
+				queryKey: [ApiService.getBidById(Number(bidId))]
+			});
 		}
 	});
 };

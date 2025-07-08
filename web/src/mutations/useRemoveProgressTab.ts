@@ -19,7 +19,7 @@ export const useRemoveProgressTab = () => {
 			return response.data;
 		},
 		onSuccess: async () => {
-			await queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.getProgressStatusList] });
 		}
 	});
 };

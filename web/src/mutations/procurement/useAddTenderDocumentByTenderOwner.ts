@@ -28,7 +28,7 @@ export const useAddTenderDocumentByTenderOwner = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getTenderById(variables.tenderId)]
 			});
 		}

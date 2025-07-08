@@ -27,7 +27,7 @@ export const useDeleteTenderItem = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await queryClient.refetchQueries({
+			await queryClient.invalidateQueries({
 				queryKey: [ApiService.getTenderById(Number(tenderId))]
 			});
 		}

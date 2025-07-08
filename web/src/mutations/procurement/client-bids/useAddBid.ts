@@ -39,7 +39,7 @@ export const useAddBid = (
 				if (response.data.errorCode === 'DATA_STORE_EXCEPTION') {
 					throw new Error(response.data?.errorCode);
 				}
-				await client.refetchQueries({ queryKey: [ApiService.getBids] });
+				await client.invalidateQueries({ queryKey: [ApiService.getBids] });
 
 				return response.data.id;
 			} catch (e) {

@@ -31,7 +31,7 @@ export const useAddTenderItem = () => {
 		},
 		onSuccess: async (data, variables) => {
 			const tenderId = variables?.tenderId || 0;
-			await queryClient.refetchQueries({ queryKey: [ApiService.getTenderById(tenderId)] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.getTenderById(tenderId)] });
 		}
 	});
 };

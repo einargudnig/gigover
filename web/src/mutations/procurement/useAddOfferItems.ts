@@ -34,7 +34,9 @@ export const useAddOfferItems = () => {
 		},
 		onSuccess: async (data, variables) => {
 			// Do I need to refetch any queries after I add a new offer to an item?
-			await queryClient.refetchQueries({ queryKey: [ApiService.offer(variables.offerId)] });
+			await queryClient.invalidateQueries({
+				queryKey: [ApiService.offer(variables.offerId)]
+			});
 		}
 	});
 };

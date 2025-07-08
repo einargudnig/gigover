@@ -28,7 +28,9 @@ export const useAddBidItem = () => {
 				// I need to refetch the getTenderById query, since that is the one that fetches the tenderItems
 				const bidId = variables?.bidId || 0;
 				if (response.status === 200) {
-					await queryClient.refetchQueries({ queryKey: [ApiService.getBidById(bidId)] });
+					await queryClient.invalidateQueries({
+						queryKey: [ApiService.getBidById(bidId)]
+					});
 				}
 
 				return response.data;

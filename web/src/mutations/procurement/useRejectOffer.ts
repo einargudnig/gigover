@@ -15,7 +15,9 @@ export const useRejectOffer = () => {
 			return response.data; // Assuming response.data is compatible with OfferId
 		},
 		onSuccess: async (data, offerIdVariables) => {
-			await client.refetchQueries({ queryKey: [ApiService.offer(offerIdVariables.offerId)] });
+			await client.invalidateQueries({
+				queryKey: [ApiService.offer(offerIdVariables.offerId)]
+			});
 		}
 	});
 };

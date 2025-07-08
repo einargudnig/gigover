@@ -26,7 +26,7 @@ export const useDeleteTenderDocument = () => {
 					}
 				);
 
-				await client.refetchQueries({
+				await client.invalidateQueries({
 					queryKey: [
 						ApiService.getTenderById(variables.tenderId),
 						ApiService.offer(variables.offerId)

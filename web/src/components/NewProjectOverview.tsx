@@ -231,8 +231,8 @@ const NewProjectCard = ({ project }) => {
 					projectId,
 					status
 				});
-				queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
-				queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
+				queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
+				queryClient.invalidateQueries({ queryKey: [ApiService.getProgressStatusList] });
 			}
 		} catch (e) {
 			devError('Error', e);

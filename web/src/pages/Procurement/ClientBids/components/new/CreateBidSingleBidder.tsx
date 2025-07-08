@@ -36,7 +36,7 @@ export function CreateBidSingleBidder({ clientUId, onBidCreate }: CreateBidSingl
 			// Here you get the tender ID as a number
 			console.log('Created tender for a single client with ID:', bidId);
 			onBidCreate(bidId);
-			queryClient.refetchQueries({ queryKey: [ApiService.getBids] });
+			queryClient.invalidateQueries({ queryKey: [ApiService.getBids] });
 		},
 		onError: (error) => {
 			devError('Error creating tender for a single client:', error);

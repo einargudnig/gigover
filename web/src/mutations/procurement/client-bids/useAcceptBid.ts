@@ -16,7 +16,7 @@ export const useAcceptBid = () => {
 			return response.data; // Assuming response.data is compatible with BidId
 		},
 		onSuccess: async (data, bidIdVariables) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getClientBidById(bidIdVariables.bidId)]
 			});
 		}

@@ -69,8 +69,8 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 				progressStatus: progressStatus?.name ?? null
 			});
 
-			queryClient.refetchQueries({ queryKey: [ApiService.projectList] });
-			queryClient.refetchQueries({ queryKey: [ApiService.getProgressStatusList] });
+			queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
+			queryClient.invalidateQueries({ queryKey: [ApiService.getProgressStatusList] });
 			closeModal();
 		} catch (e) {
 			devError('Error', e);

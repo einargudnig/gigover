@@ -39,10 +39,10 @@ export const useAddDocument = () => {
 			}
 		},
 		onSuccess: async (data, variables) => {
-			await client.refetchQueries({ queryKey: [ApiService.projectList] });
+			await client.invalidateQueries({ queryKey: [ApiService.projectList] });
 
 			if (variables.folderId) {
-				await client.refetchQueries({
+				await client.invalidateQueries({
 					queryKey: [ApiService.folderFiles(variables.folderId)]
 				});
 			}

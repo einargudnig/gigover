@@ -29,10 +29,10 @@ export const usePublishTender = () => {
 			}
 		},
 		onSuccess: async (data, tenderIdRequest) => {
-			await client.refetchQueries({
+			await client.invalidateQueries({
 				queryKey: [ApiService.getTenderById(tenderIdRequest.tenderId)]
 			});
-			await client.refetchQueries({ queryKey: [ApiService.userTenders] });
+			await client.invalidateQueries({ queryKey: [ApiService.userTenders] });
 		}
 	});
 };

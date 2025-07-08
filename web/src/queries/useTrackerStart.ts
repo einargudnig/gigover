@@ -19,7 +19,7 @@ export const useTrackerStart = () => {
 		},
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: [ApiService.activeWorkers] });
-			await queryClient.refetchQueries({ queryKey: [ApiService.timerReport] });
+			await queryClient.invalidateQueries({ queryKey: [ApiService.timerReport] });
 		}
 	});
 };

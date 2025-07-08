@@ -22,11 +22,11 @@ export const useBidderReject = () => {
 					withCredentials: true
 				});
 				if (response.status === 200) {
-					await client.refetchQueries({
+					await client.invalidateQueries({
 						queryKey: [ApiService.getTenderById(tenderId.tenderId)]
 					});
-					await client.refetchQueries({ queryKey: [ApiService.userTenders] });
-					await client.refetchQueries({ queryKey: [ApiService.bidderTenders] });
+					await client.invalidateQueries({ queryKey: [ApiService.userTenders] });
+					await client.invalidateQueries({ queryKey: [ApiService.bidderTenders] });
 				}
 				return response.data;
 			} catch (e) {

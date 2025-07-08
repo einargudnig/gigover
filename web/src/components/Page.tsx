@@ -117,10 +117,14 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 					<NavItem to="/tender" icon={<TenderIcon />} onClick={onLinkClick}>
 						Tenders
 					</NavItem>
+
+					{/* <NavItem to="/settings" icon={<SettingsIcon />} onClick={onLinkClick}>
+						Settings
+					</NavItem> */}
 				</VStack>
 
 				<Text fontSize="xs" color="gray.700" userSelect="none">
-					v1.8
+					v2.0
 				</Text>
 			</Flex>
 
@@ -144,7 +148,7 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 								<MenuList>
 									<MenuGroup title={user.name}>
 										<MenuItem>
-											<Link to="/settings">Settings</Link>
+											<Link to={'/settings'}>Settings</Link>
 										</MenuItem>
 										<MenuItem
 											onClick={async () => {
