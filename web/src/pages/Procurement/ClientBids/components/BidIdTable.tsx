@@ -143,7 +143,8 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	const isInvalidUnit = formData.unit!.length > 5;
 
 	// eslint-disable-next-line
-	const isInvalidCost = formData.cost! >= 100000;
+	// TODO: this should be >= 10 000 000
+	const isInvalidCost = formData.cost! >= 10000000000;
 
 	return (
 		<Box>
@@ -425,8 +426,7 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 										/>
 										{isInvalidCost ? (
 											<FormHelperText>
-												This will be update soon, now the cost has to be
-												lower than 100.000
+												The cost cannot be higher.
 											</FormHelperText>
 										) : null}
 									</FormControl>

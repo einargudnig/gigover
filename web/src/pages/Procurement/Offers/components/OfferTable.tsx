@@ -111,7 +111,6 @@ export const TenderTable = ({ tenderItems, finishDateStatus }): JSX.Element => {
 									) : (
 										<Input
 											htmlSize={6}
-											borderColor={'gray.400'}
 											placeholder="cost"
 											width={'auto'}
 											type="text"
@@ -122,6 +121,14 @@ export const TenderTable = ({ tenderItems, finishDateStatus }): JSX.Element => {
 													'cost',
 													removeFormat(e.target.value)
 												)
+											}
+											isInvalid={
+												item.cost !== undefined && item.cost >= 10000000000
+											}
+											borderColor={
+												item.cost !== undefined && item.cost >= 10000000000
+													? 'red.500'
+													: 'gray.400'
 											}
 										/>
 									)}
