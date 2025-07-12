@@ -41,34 +41,6 @@ const getListStyle = (isDraggingOver: boolean): React.CSSProperties => ({
 	width: '100%'
 });
 
-// DropIndicator component
-// const DropIndicator = ({ isActive }: { isActive: boolean }) => (
-// 	<Box
-// 		height="0"
-// 		borderTop={isActive ? '3px solid #38A169' : '3px solid transparent'}
-// 		width="100%"
-// 		my={0}
-// 		pointerEvents="none"
-// 		zIndex={1}
-// 	/>
-// );
-
-// ProjectDropZone component
-// const ProjectDropZone = ({
-// 	index,
-// 	activeDropIndex
-// }: {
-// 	index: number;
-// 	activeDropIndex: number | null;
-// }) => {
-// 	const { setNodeRef, isOver } = useDroppable({ id: index.toString() });
-// 	return (
-// 		<div ref={setNodeRef} style={{ width: '100%' }}>
-// 			<DropIndicator isActive={isOver || activeDropIndex === index} />
-// 		</div>
-// 	);
-// };
-
 export const NewProjectOverview: React.FC<SortableGridProps> = ({ list }) => {
 	const [projects, setProjects] = useState<Project[]>(list);
 	const { mutateAsync: mutateProject } = useModifyProject();
@@ -345,6 +317,8 @@ const NewProjectCard = ({ project }) => {
 								<MenuItem onClick={onOpen} isDisabled={isViewer}>
 									Add project to property
 								</MenuItem>
+								<MenuDivider />
+								<MenuItem>Leave project</MenuItem>
 							</MenuList>
 						</Menu>
 					)}

@@ -1,4 +1,14 @@
-import { Box, Button, Flex, Heading, List, ListItem, Spacer, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Button,
+	IconButton,
+	Flex,
+	Heading,
+	List,
+	ListItem,
+	Spacer,
+	Text
+} from '@chakra-ui/react';
 import { Project, WorkerItem } from '../../models/Project';
 import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
@@ -80,16 +90,46 @@ export const ManageProjectWorkers = ({
 								borderColor="gray.200"
 							>
 								{worker.name} {worker.type === 1 ? '(Web user)' : '(App user)'}
-								<Button
+								<IconButton
+									aria-label="remove user"
 									size={'sm'}
 									variant={'outline'}
 									colorScheme={'red'}
 									onClick={() => remove(worker)}
 								>
 									<TrashIcon color={'red'} />
-								</Button>
+								</IconButton>
 							</ListItem>
 						))}
+						<Box pointerEvents={'none'} opacity={'0.5'}>
+							<ListItem
+								py="12px"
+								display="flex"
+								justifyContent="space-between"
+								borderBottomWidth={'1px'}
+								borderTopWidth={'1px'}
+								borderColor="gray.200"
+							>
+								Jón Jónsson - (Left project 02.07.2025)
+							</ListItem>
+						</Box>
+						<ListItem
+							py="12px"
+							display="flex"
+							justifyContent="space-between"
+							borderBottomWidth={'1px'}
+							borderColor="gray.200"
+						>
+							Anna
+							<IconButton
+								aria-label="remove user"
+								size={'sm'}
+								variant={'outline'}
+								colorScheme={'red'}
+							>
+								<TrashIcon color={'red'} />
+							</IconButton>
+						</ListItem>
 					</List>
 				</div>
 			</Box>

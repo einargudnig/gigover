@@ -53,7 +53,7 @@ export const ProjectDetailsOutlet = (): JSX.Element => {
 					{project?.owner && (
 						<Tooltip hasArrow label="Add members to project">
 							<Button colorScheme={'yellow'} onClick={() => setManageWorkers(true)}>
-								Add members
+								Members
 							</Button>
 						</Tooltip>
 					)}
