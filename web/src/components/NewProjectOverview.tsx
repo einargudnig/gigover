@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import {
 	Box,
 	Flex,
@@ -29,6 +28,10 @@ import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
+import { useRemoveWorker } from '../queries/useRemoveWorker';
+import { useGetUserInfo } from '../queries/useGetUserInfo';
+import { useGetUserByEmail } from '../queries/useGetUserByEmail';}
+// import { ConfirmDialog } from './ConfirmDialog';
 
 interface SortableGridProps {
 	list: Project[];
@@ -194,6 +197,16 @@ const NewProjectCard = ({ project }) => {
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const { privileges } = useGetUserPrivileges();
 	const isViewer = privileges.includes('VIEWER');
+	const { mutate: removeWorker, isPending: isRemoveWorkerPending } = useRemoveWorker();
+	const { data } = useGetUserInfo();
+	const searchMutation = useGetUserByEmail()
+
+	const userInfo = data;
+	console.log({ userInfo });
+
+	const userId = searchMutation.mutateAsync({ email: userInfo.email })
+
+
 
 	const updateStatus = async (status) => {
 		try {
@@ -318,7 +331,17 @@ const NewProjectCard = ({ project }) => {
 									Add project to property
 								</MenuItem>
 								<MenuDivider />
-								<MenuItem>Leave project</MenuItem>
+
+								<MenuItem
+									onCLick={() =>
+										removeWorker({
+											projectId: project.projectId,
+											uId: worker.uId
+										})
+									}
+								>
+									Leave project
+								</MenuItem>
 							</MenuList>
 						</Menu>
 					)}
