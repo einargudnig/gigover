@@ -142,8 +142,6 @@ export const BidIdTable = ({ bid }): JSX.Element => {
 	// We only want the unit to be max 4 characters kg, m2, l, etc
 	const isInvalidUnit = formData.unit!.length > 5;
 
-	// eslint-disable-next-line
-	// TODO: this should be >= 10 000 000
 	const isInvalidCost = formData.cost! >= 10000000000;
 
 	return (
