@@ -14,7 +14,7 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ModalContext } from '../context/ModalContext';
 import { useGetUserPrivileges } from '../hooks/useGetUserPrivileges';
@@ -28,10 +28,10 @@ import { ProjectStatusTag, ProjectTimeStatus } from './ProjectTimeStatus';
 import { DragDropIcon } from './icons/DragDropIcons';
 import { VerticalDots } from './icons/VerticalDots';
 import { ProjectToPropertyModal } from './modals/PropertyModals/ProjectToProperty';
-import { useRemoveWorker } from '../queries/useRemoveWorker';
+import { useRemoveUser } from '../queries/useRemoveUser';
 import { useGetUserInfo } from '../queries/useGetUserInfo';
-import { useGetUserByEmail } from '../queries/useGetUserByEmail';}
-// import { ConfirmDialog } from './ConfirmDialog';
+import { useGetUserByEmail } from '../queries/useGetUserByEmail';
+import { ConfirmDialog } from './ConfirmDialog';
 
 interface SortableGridProps {
 	list: Project[];
@@ -192,21 +192,34 @@ const DraggableProjectItem = ({ project, index, extraStyle = {} }: DraggableProj
 
 const NewProjectCard = ({ project }) => {
 	const [, setModalContext] = useContext(ModalContext);
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const queryClient = useQueryClient();
 	const { mutateAsync: modify, isPending: isLoading, isError, error } = useModifyProject();
 	const { isOpen, onClose, onOpen } = useDisclosure();
 	const { privileges } = useGetUserPrivileges();
 	const isViewer = privileges.includes('VIEWER');
-	const { mutate: removeWorker, isPending: isRemoveWorkerPending } = useRemoveWorker();
+	const { mutate: removeUser, isPending: isRemoveUserPending } = useRemoveUser();
 	const { data } = useGetUserInfo();
-	const searchMutation = useGetUserByEmail()
-
 	const userInfo = data;
-	console.log({ userInfo });
 
-	const userId = searchMutation.mutateAsync({ email: userInfo.email })
+	const searchMutation = useGetUserByEmail();
 
+	const handleRemoveWorker = useCallback(async () => {
+		try {
+			const response = await searchMutation.mutateAsync({ email: userInfo.userName || '' });
 
+			if (response.uId) {
+				console.log('Found user to remove');
+				removeUser({
+					projectId: project.projectId,
+					uId: response.uId
+				});
+				queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
+			}
+		} catch (e) {
+			devError(e);
+		}
+	}, [searchMutation, userInfo, project.projectId, removeUser, queryClient]);
 
 	const updateStatus = async (status) => {
 		try {
@@ -260,7 +273,7 @@ const NewProjectCard = ({ project }) => {
 					</Flex>
 				</Link>
 				<Box flex="0.5" width={'50px'}>
-					{isLoading ? (
+					{isLoading || isRemoveUserPending ? (
 						<Box py={1}>
 							<LoadingSpinner size={32} />
 						</Box>
@@ -331,17 +344,25 @@ const NewProjectCard = ({ project }) => {
 									Add project to property
 								</MenuItem>
 								<MenuDivider />
-
-								<MenuItem
-									onCLick={() =>
-										removeWorker({
-											projectId: project.projectId,
-											uId: worker.uId
-										})
-									}
-								>
-									Leave project
-								</MenuItem>
+								{!project?.owner && (
+									<ConfirmDialog
+										header="Leave Project"
+										setIsOpen={setDialogOpen}
+										callback={async (b) => {
+											if (b) {
+												console.log('Remove');
+												await handleRemoveWorker();
+											}
+											setDialogOpen(false);
+										}}
+										isOpen={dialogOpen}
+										confirmButtonText={'Leave'}
+									>
+										<MenuItem onClick={() => setDialogOpen(true)}>
+											Leave project
+										</MenuItem>
+									</ConfirmDialog>
+								)}
 							</MenuList>
 						</Menu>
 					)}

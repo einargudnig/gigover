@@ -101,7 +101,7 @@ export const ManageProjectWorkers = ({
 								</IconButton>
 							</ListItem>
 						))}
-						<Box pointerEvents={'none'} opacity={'0.5'}>
+						{/* <Box pointerEvents={'none'} opacity={'0.5'}>
 							<ListItem
 								py="12px"
 								display="flex"
@@ -129,7 +129,7 @@ export const ManageProjectWorkers = ({
 							>
 								<TrashIcon color={'red'} />
 							</IconButton>
-						</ListItem>
+						</ListItem> */}
 					</List>
 				</div>
 			</Box>
