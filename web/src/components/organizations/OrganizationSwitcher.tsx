@@ -14,6 +14,8 @@ import { useChangeOrganizations } from '../../mutations/organizations/useChangeO
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { LoadingSpinner } from '../LoadingSpinner';
+import { useGetUserByEmail } from '../../queries/useGetUserByEmail';
+import { useCallback, useEffect } from 'react';
 
 export const OrganizationSwitcher = () => {
 	const { data, isPending, isFetching } = useGetOrganizations({
@@ -23,6 +25,28 @@ export const OrganizationSwitcher = () => {
 	const { data: userInfo, isPending: userIsPending } = useGetUserInfo();
 	const { mutate } = useChangeOrganizations();
 	const location = useLocation();
+
+	const getUserIdByEmail = useGetUserByEmail();
+
+	const logUserIdByEmail = useCallback(async () => {
+		if (!userInfo?.userName) {
+			console.log('No userName found in userInfo');
+			return;
+		}
+		try {
+			const result = await getUserIdByEmail.mutateAsync({ email: userInfo.userName });
+			console.log({ userInfo });
+			console.log('Fetched userId:', result?.uId);
+		} catch (error) {
+			console.log('Error fetching userId:', error);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [userInfo?.userName, getUserIdByEmail]);
+
+	useEffect(() => {
+		logUserIdByEmail();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [userInfo?.organization]);
 
 	const isOnProjectIdPage = /^\/project\/\d+$/.test(location.pathname);
 	const isOnPropertyIdPage = /^\/property\/\d+$/.test(location.pathname);
