@@ -3,23 +3,12 @@ import {
 	Box,
 	Button,
 	Flex,
-	FormControl,
-	FormLabel,
-	Heading,
 	HStack,
 	IconButton,
-	Input,
-	Modal,
-	ModalBody,
-	ModalCloseButton,
-	ModalContent,
-	ModalOverlay,
-	Spacer,
 	Table,
 	TableContainer,
 	Tbody,
 	Td,
-	Text,
 	Th,
 	Thead,
 	Tooltip,
@@ -27,75 +16,31 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { ManageOrganizationInvites } from '../../components/organizations/ManageOrganizationInvites';
-import { OrganizationSwitcher } from '../../components/organizations/OrganizationSwitcher';
-import { Organization } from '../../models/Organizations';
 import { useChangeOrganizations } from '../../mutations/organizations/useChangeOrganizations';
 import { useDeleteOrganization } from '../../mutations/organizations/useDeleteOrganization';
 import { useLeaveOrganization } from '../../mutations/organizations/useLeaveOrganization';
-import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { OrgInfo } from './OrgInfo';
-import { ManageOrganization } from '../../components/organizations/ManageOrganization';
-import { MemberTable } from '../Organisation/MemberTable';
 
 export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
 	const { data: userInfo } = useGetUserInfo();
-	const [showOrgs, setShowOrgs] = useState(false);
+
 	const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-	const [isManageModalOpen, setIsManageModalOpen] = useState(false);
-	const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
-	const [loginError, setLoginError] = useState<string | null>(null);
-
 	const currentOrganization = userInfo?.organization;
+	// TODO: Add privileges to disabled state????
 	const isPersonalSpace = currentOrganization === undefined;
 
 	const leaveOrganizationMutation = useLeaveOrganization();
 	const deleteOrganizationMutation = useDeleteOrganization();
 	const changeOrganizationMutation = useChangeOrganizations();
-
-	const { mutateAsync: loginOrg, isPending: loginPending } = useLoginOrg();
-	const { register, handleSubmit, reset } = useForm<{ password: string }>({
-		defaultValues: { password: '' }
-	});
-
-	const handleOpenManage = (org) => {
-		setSelectedOrg(org);
-		setIsManageModalOpen(true);
-		setLoginError(null);
-		reset();
-	};
-
-	const handleCloseManage = () => {
-		setIsManageModalOpen(false);
-		setSelectedOrg(null);
-		setLoginError(null);
-		reset();
-	};
-
-	const handleLogin = async (password: string) => {
-		if (!selectedOrg) return;
-		try {
-			setLoginError(null);
-			const response = await loginOrg({ name: selectedOrg.name, password });
-			if (response.errorCode === 'OK') {
-				setShowOrgs(true);
-				// handleCloseManage();
-			} else if (response.errorCode === 'WRONG_USER_PASSWORD') {
-				setLoginError('Wrong password');
-			}
-		} catch (error) {
-			setLoginError('Invalid username or password, try again');
-		}
-	};
 
 	return (
 		<>
@@ -128,13 +73,7 @@ export function SettingsLayout() {
 										<Td>
 											{!isPersonalSpace ? (
 												<HStack>
-													<Button
-														variant="outline"
-														colorScheme="gray"
-														onClick={() =>
-															handleOpenManage(currentOrganization)
-														}
-													>
+													<Button variant="outline" colorScheme="gray">
 														<Link
 															to={`/settings/${currentOrganization?.id}`}
 														>
@@ -219,7 +158,6 @@ export function SettingsLayout() {
 															variant="outline"
 															colorScheme="gray"
 															disabled={!isCurrentOrg}
-															// onClick={() => handleOpenManage(org)}
 														>
 															<Link to={`/settings/${org.id}`}>
 																Manage
@@ -316,7 +254,7 @@ export function SettingsLayout() {
 			</Box>
 
 			{/* Manage Organization Modal */}
-			<Modal isOpen={isManageModalOpen} onClose={handleCloseManage} size={'lg'}>
+			{/* <Modal isOpen={isManageModalOpen} onClose={handleCloseManage} size={'lg'}>
 				<ModalOverlay />
 				<ModalContent p={2}>
 					<ModalCloseButton />
@@ -424,13 +362,12 @@ export function SettingsLayout() {
 						) : null}
 					</ModalBody>
 				</ModalContent>
-			</Modal>
+			</Modal> */}
 
 			<Box mt={8} mb={4}>
 				<Flex justifyContent={'space-around'} alignItems={'flex-start'}>
 					<OrgInfo />
 					<ManageOrganizationInvites />
-					{/* <ManageOrganization /> */}
 				</Flex>
 			</Box>
 		</>
