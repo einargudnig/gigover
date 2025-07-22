@@ -228,6 +228,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 														name={invite.name}
 														src={`https://bit.ly/${invite.name}`}
 													/>
+
 													<Text marginLeft={1} color="black">
 														{invite.name}
 													</Text>
@@ -239,14 +240,16 @@ export function MemberTable({ activeOrg }): JSX.Element {
 											<Td>
 												<Menu>
 													<MenuButton>
-														<VerticalDots />
+														{removeInviteMutation.isPending ? (
+															<LoadingSpinner />
+														) : (
+															<VerticalDots />
+														)}
 													</MenuButton>
 													<MenuList>
 														<MenuItem
 															onClick={() =>
-																removeUserInvite({
-																	uId: invite.uId
-																})
+																removeUserInvite(invite.uId)
 															}
 														>
 															Remove invite
