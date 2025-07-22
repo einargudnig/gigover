@@ -135,7 +135,11 @@ export function SettingsLayout() {
 															handleOpenManage(currentOrganization)
 														}
 													>
-														Manage
+														<Link
+															to={`/settings/${currentOrganization?.id}`}
+														>
+															Manage
+														</Link>
 													</Button>
 													<ConfirmDialog
 														header="Leave organization"
@@ -214,6 +218,7 @@ export function SettingsLayout() {
 														<Button
 															variant="outline"
 															colorScheme="gray"
+															disabled={!isCurrentOrg}
 															// onClick={() => handleOpenManage(org)}
 														>
 															<Link to={`/settings/${org.id}`}>
