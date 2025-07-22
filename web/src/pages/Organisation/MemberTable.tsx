@@ -102,7 +102,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 				</ModalContent>
 			</Modal> */}
 
-			<Box width="500px" border={'1px'} borderColor={'red'}>
+			<Box>
 				<Box>
 					<Flex alignItems={'center'}>
 						<Heading size={'md'}>Member Table - {activeOrg?.name ?? ''}</Heading>

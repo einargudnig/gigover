@@ -20,14 +20,13 @@ import { MemberTable } from './MemberTable';
 export function OrganisationSettings() {
 	const [showOrgs, setShowOrgs] = useState(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
-	const { organisationId } = useParams();
+	// const { organisationId } = useParams();
 	const navigate = useNavigate();
 	const { data: userInfo } = useGetUserInfo();
 	const currentOrganisation = userInfo?.organization;
-	console.log({ currentOrganisation });
 
 	const { mutateAsync: loginOrg, isPending: loginPending } = useLoginOrg();
-	const { register, handleSubmit, reset } = useForm<{ password: string }>({
+	const { register, handleSubmit } = useForm<{ password: string }>({
 		defaultValues: { password: '' }
 	});
 
@@ -53,7 +52,7 @@ export function OrganisationSettings() {
 			</Button>
 			<Box>
 				{showOrgs ? (
-					<MemberTable activeOrg={selectedOrg} />
+					<MemberTable activeOrg={currentOrganisation} />
 				) : (
 					<Flex justifyContent={'center'} alignItems={'center'}>
 						<Box mt={4} w={'40%'}>
@@ -61,7 +60,7 @@ export function OrganisationSettings() {
 							<Box mt={2}>
 								<form
 									onSubmit={handleSubmit(
-										(data) => selectedOrg && handleLogin(data.password)
+										(data) => currentOrganisation && handleLogin(data.password)
 									)}
 								>
 									<FormControl marginBottom={2}>
