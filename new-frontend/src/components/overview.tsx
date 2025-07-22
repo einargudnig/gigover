@@ -70,7 +70,7 @@ export const Overview = () => {
 		<Box marginTop={[12, 36]} paddingX={['10px', '165px']}>
 			<Box marginY={10}>
 				<Heading textAlign={'center'} fontSize={'30px'}>
-					Help your maintenance and construction projects stay on schedule and budget
+					Help your projects stay on schedule and budget
 				</Heading>
 			</Box>
 			<VStack spacing={10}>
