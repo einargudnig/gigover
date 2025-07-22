@@ -7,7 +7,7 @@ export const FeaturesSection = () => {
 	return (
 		<Box paddingX={['10px', '165px']} marginBottom={10}>
 			<Text fontSize={'32px'} textAlign="center" marginY={10}>
-				Everything you need to run your maintenance and construction projects efficiently:
+				Everything you need to run your projects efficiently:
 			</Text>
 			<Grid templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }} gap={3}>
 				<GridItem colSpan={1}>
@@ -20,9 +20,9 @@ export const FeaturesSection = () => {
 								Timely, budget-friendly, and high-quality project completion
 							</Text>
 							<Text>
-								Project management ensures that property management projects are
-								completed on time, within budget, and to the highest standards,
-								reducing delays and cost overruns.
+								Project management ensures that projects are completed on time,
+								within budget, and to the highest standards, reducing delays and
+								cost overruns.
 							</Text>
 						</Box>
 					</VStack>

@@ -9,7 +9,7 @@ export const Cta = ({ bgColor, buttonColor }: { bgColor: string; buttonColor: st
 					<Text fontSize="4xl">Get in control of your projects today</Text>
 				</Box>
 				<Text fontSize="2xl" marginTop={8} marginBottom={8} textAlign={'center'}>
-					Help your maintenance and construction work stay on schedule and on budget!
+					Help your work stay on schedule and on budget!
 				</Text>
 				<Button size={'lg'} colorScheme={buttonColor}>
 					<Link to="https://web.gigover.com/">Start free trial</Link>
