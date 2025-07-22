@@ -26,6 +26,7 @@ import {
 	Tr
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 import { TrashIcon } from '../../components/icons/TrashIcon';
@@ -40,10 +41,13 @@ import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { useGetOrganizations } from '../../queries/organisations/useGetOrganizations';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
 import { OrgInfo } from './OrgInfo';
+import { ManageOrganization } from '../../components/organizations/ManageOrganization';
+import { MemberTable } from '../Organisation/MemberTable';
 
 export function SettingsLayout() {
 	const { data, isPending, isFetching } = useGetOrganizations();
 	const { data: userInfo } = useGetUserInfo();
+	const [showOrgs, setShowOrgs] = useState(false);
 	const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
@@ -83,7 +87,8 @@ export function SettingsLayout() {
 			setLoginError(null);
 			const response = await loginOrg({ name: selectedOrg.name, password });
 			if (response.errorCode === 'OK') {
-				handleCloseManage();
+				setShowOrgs(true);
+				// handleCloseManage();
 			} else if (response.errorCode === 'WRONG_USER_PASSWORD') {
 				setLoginError('Wrong password');
 			}
@@ -209,9 +214,11 @@ export function SettingsLayout() {
 														<Button
 															variant="outline"
 															colorScheme="gray"
-															onClick={() => handleOpenManage(org)}
+															// onClick={() => handleOpenManage(org)}
 														>
-															Manage
+															<Link to={`/settings/${org.id}`}>
+																Manage
+															</Link>
 														</Button>
 
 														<ConfirmDialog
@@ -312,68 +319,80 @@ export function SettingsLayout() {
 						{selectedOrg &&
 						currentOrganization &&
 						selectedOrg.id === currentOrganization.id ? (
-							<Box mt={4} w={'100%'}>
-								<Heading size="md">Log in to Organization</Heading>
-								<Box mt={2}>
-									<form
-										onSubmit={handleSubmit(
-											(data) => selectedOrg && handleLogin(data.password)
-										)}
-									>
-										<FormControl marginBottom={2}>
-											<FormLabel htmlFor="name">
-												Active organization Name
-											</FormLabel>
-											<Input
-												type="text"
-												id="name"
-												value={selectedOrg.name}
-												isDisabled
-											/>
-										</FormControl>
-										<FormControl marginBottom={2}>
-											<FormLabel htmlFor="password">Password</FormLabel>
-											<Input
-												type="password"
-												id="password"
-												{...register('password')}
-											/>
-										</FormControl>
-										<Flex marginTop={4} marginBottom={3}>
-											<Box>
-												<Button
-													variant={'outline'}
-													colorScheme="gray"
-													onClick={handleCloseManage}
-												>
-													Cancel
-												</Button>
-											</Box>
-											<Spacer />
-											<Box>
-												<Button
-													type="submit"
-													colorScheme="gray"
-													isLoading={loginPending}
-												>
-													Login
-												</Button>
-											</Box>
-										</Flex>
-										{loginError && (
-											<Flex
-												justifyContent={'center'}
-												alignItems={'center'}
-												mt={3}
+							<>
+								{showOrgs ? (
+									<MemberTable activeOrg={selectedOrg} />
+								) : (
+									<Box mt={4} w={'100%'}>
+										<Heading size="md">Log in to Organization</Heading>
+										<Box mt={2}>
+											<form
+												onSubmit={handleSubmit(
+													(data) =>
+														selectedOrg && handleLogin(data.password)
+												)}
 											>
-												<Text color={'red.400'} fontWeight={'semibold'}>
-													{loginError}
-												</Text>
-											</Flex>
-										)}
-									</form>
-								</Box>
-							</Box>
+												<FormControl marginBottom={2}>
+													<FormLabel htmlFor="name">
+														Active organization Name
+													</FormLabel>
+													<Input
+														type="text"
+														id="name"
+														value={selectedOrg.name}
+														isDisabled
+													/>
+												</FormControl>
+												<FormControl marginBottom={2}>
+													<FormLabel htmlFor="password">
+														Password
+													</FormLabel>
+													<Input
+														type="password"
+														id="password"
+														{...register('password')}
+													/>
+												</FormControl>
+												<Flex marginTop={4} marginBottom={3}>
+													<Box>
+														<Button
+															variant={'outline'}
+															colorScheme="gray"
+															onClick={handleCloseManage}
+														>
+															Cancel
+														</Button>
+													</Box>
+													<Spacer />
+													<Box>
+														<Button
+															type="submit"
+															colorScheme="gray"
+															isLoading={loginPending}
+														>
+															Login
+														</Button>
+													</Box>
+												</Flex>
+												{loginError && (
+													<Flex
+														justifyContent={'center'}
+														alignItems={'center'}
+														mt={3}
+													>
+														<Text
+															color={'red.400'}
+															fontWeight={'semibold'}
+														>
+															{loginError}
+														</Text>
+													</Flex>
+												)}
+											</form>
+										</Box>
+									</Box>
+								)}
+							</>
 						) : selectedOrg ? (
 							<Box>
 								<Flex justifyContent={'center'} alignItems={'center'} mt={10}>
@@ -406,6 +425,7 @@ export function SettingsLayout() {
 				<Flex justifyContent={'space-around'} alignItems={'flex-start'}>
 					<OrgInfo />
 					<ManageOrganizationInvites />
+					{/* <ManageOrganization /> */}
 				</Flex>
 			</Box>
 		</>

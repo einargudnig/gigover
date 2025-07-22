@@ -161,6 +161,12 @@ const LazySettings = lazy(() =>
 	}))
 );
 
+const LazyOrganisationSettings = lazy(() =>
+	import('./pages/Organisation/OrganizationSettings').then((module) => ({
+		default: module.OrganisationSettings
+	}))
+);
+
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
 		<Route path={'/'} element={<Page />}>
@@ -242,7 +248,9 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 			{/* ⚙︎ Settings ⚙︎ */}
 			{/* Organiasation settings */}
-			<Route path={'settings'} element={<LazySettings />} />
+			<Route path={'settings'} element={<LazySettings />}>
+				<Route path={':organisationId'} element={<LazyOrganisationSettings />} />
+			</Route>
 
 			<Route path={'project'} element={<LazyDashboard />}>
 				<Route path={':id'} element={<LazyDashboard />} />
