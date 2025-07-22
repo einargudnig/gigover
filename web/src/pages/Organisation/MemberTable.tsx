@@ -37,6 +37,7 @@ import { useChangePrivileges } from '../../mutations/organizations/useChangePriv
 import { useRemoveInviteToOrganization } from '../../mutations/organizations/useRemoveInviteToOrganization';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
 import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
+// import { useGetOr}
 
 export function MemberTable({ activeOrg }): JSX.Element {
 	const { data, isPending, isFetching, isError, error } = useGetOrganizationUsers();
@@ -44,12 +45,13 @@ export function MemberTable({ activeOrg }): JSX.Element {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 	const {
-		data: userInvites,
+		data: userOrgInvites,
 		isPending: userInvitesLoading,
 		isFetching: userInvitesFetching,
 		isError: userInvitesIsError,
 		error: userInvitesError
 	} = useGetUserOrgInvites();
+	console.log({ userOrgInvites });
 	const removeInviteMutation = useRemoveInviteToOrganization();
 
 	const updatePrivileges = ({ uId, priv }) => {
@@ -91,7 +93,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 
 	return (
 		<>
-			{/* <Modal isOpen={isOpen} onClose={onClose}>
+			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent pb={4}>
 					<ModalHeader>Invite members to {activeOrg.name}</ModalHeader>
@@ -100,7 +102,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 						<InviteUserToOrg organizationName={activeOrg.name} onClose={onClose} />
 					</ModalBody>
 				</ModalContent>
-			</Modal> */}
+			</Modal>
 
 			<Box>
 				<Box>
@@ -217,7 +219,7 @@ export function MemberTable({ activeOrg }): JSX.Element {
 								</Tr>
 							) : (
 								<>
-									{userInvites?.map((invite, index) => (
+									{userOrgInvites?.map((invite, index) => (
 										<Tr key={index}>
 											<Td>
 												<Flex alignItems={'center'}>

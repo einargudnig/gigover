@@ -154,15 +154,15 @@ export function SettingsLayout() {
 												<Td>{org.priv}</Td>
 												<Td>
 													<HStack>
-														<Button
-															variant="outline"
-															colorScheme="gray"
-															disabled={!isCurrentOrg}
-														>
-															<Link to={`/settings/${org.id}`}>
+														<Link to={`/settings/${org.id}`}>
+															<Button
+																isDisabled={!isCurrentOrg}
+																variant="outline"
+																colorScheme="gray"
+															>
 																Manage
-															</Link>
-														</Button>
+															</Button>
+														</Link>
 
 														<ConfirmDialog
 															header="Leave organization"
@@ -252,117 +252,6 @@ export function SettingsLayout() {
 					</>
 				)}
 			</Box>
-
-			{/* Manage Organization Modal */}
-			{/* <Modal isOpen={isManageModalOpen} onClose={handleCloseManage} size={'lg'}>
-				<ModalOverlay />
-				<ModalContent p={2}>
-					<ModalCloseButton />
-					<ModalBody>
-						{selectedOrg &&
-						currentOrganization &&
-						selectedOrg.id === currentOrganization.id ? (
-							<>
-								{showOrgs ? (
-									<MemberTable activeOrg={selectedOrg} />
-								) : (
-									<Box mt={4} w={'100%'}>
-										<Heading size="md">Log in to Organization</Heading>
-										<Box mt={2}>
-											<form
-												onSubmit={handleSubmit(
-													(data) =>
-														selectedOrg && handleLogin(data.password)
-												)}
-											>
-												<FormControl marginBottom={2}>
-													<FormLabel htmlFor="name">
-														Active organization Name
-													</FormLabel>
-													<Input
-														type="text"
-														id="name"
-														value={selectedOrg.name}
-														isDisabled
-													/>
-												</FormControl>
-												<FormControl marginBottom={2}>
-													<FormLabel htmlFor="password">
-														Password
-													</FormLabel>
-													<Input
-														type="password"
-														id="password"
-														{...register('password')}
-													/>
-												</FormControl>
-												<Flex marginTop={4} marginBottom={3}>
-													<Box>
-														<Button
-															variant={'outline'}
-															colorScheme="gray"
-															onClick={handleCloseManage}
-														>
-															Cancel
-														</Button>
-													</Box>
-													<Spacer />
-													<Box>
-														<Button
-															type="submit"
-															colorScheme="gray"
-															isLoading={loginPending}
-														>
-															Login
-														</Button>
-													</Box>
-												</Flex>
-												{loginError && (
-													<Flex
-														justifyContent={'center'}
-														alignItems={'center'}
-														mt={3}
-													>
-														<Text
-															color={'red.400'}
-															fontWeight={'semibold'}
-														>
-															{loginError}
-														</Text>
-													</Flex>
-												)}
-											</form>
-										</Box>
-									</Box>
-								)}
-							</>
-						) : selectedOrg ? (
-							<Box>
-								<Flex justifyContent={'center'} alignItems={'center'} mt={10}>
-									<Flex flexDirection={'column'} alignItems={'center'}>
-										<Text
-											fontSize={'xl'}
-											fontWeight={'semibold'}
-											textColor={'gray.800'}
-										>
-											You need to select the correct organization before
-											managing it!
-										</Text>
-										<Box mt={4}>
-											<HStack>
-												<Text textColor={'gray.600'}>
-													Select organization:{' '}
-												</Text>
-												<OrganizationSwitcher />
-											</HStack>
-										</Box>
-									</Flex>
-								</Flex>
-							</Box>
-						) : null}
-					</ModalBody>
-				</ModalContent>
-			</Modal> */}
 
 			<Box mt={8} mb={4}>
 				<Flex justifyContent={'space-around'} alignItems={'flex-start'}>
