@@ -11,7 +11,7 @@ import {
 	Text
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useLoginOrg } from '../../mutations/organizations/useLoginOrg';
 import { useState } from 'react';
 import { useGetUserInfo } from '../../queries/useGetUserInfo';
@@ -20,7 +20,6 @@ import { MemberTable } from './MemberTable';
 export function OrganisationSettings() {
 	const [showOrgs, setShowOrgs] = useState(false);
 	const [loginError, setLoginError] = useState<string | null>(null);
-	// const { organisationId } = useParams();
 	const navigate = useNavigate();
 	const { data: userInfo } = useGetUserInfo();
 	const currentOrganisation = userInfo?.organization;
@@ -87,7 +86,7 @@ export function OrganisationSettings() {
 											<Button
 												variant={'outline'}
 												colorScheme="gray"
-												// onClick={handleCloseManage}
+												onClick={() => navigate(-1)}
 											>
 												Cancel
 											</Button>
