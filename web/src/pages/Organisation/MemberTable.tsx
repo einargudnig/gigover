@@ -264,10 +264,13 @@ export function MemberTable({ activeOrg }): JSX.Element {
 
 							{isPending || isFetching ? (
 								<Tr>
-									<Td>Loading...</Td>
+									<Td></Td>
+									<Td></Td>
 									<Td>
 										<LoadingSpinner />
 									</Td>
+									<Td></Td>
+									<Td></Td>
 								</Tr>
 							) : isError ? (
 								<Tr>
