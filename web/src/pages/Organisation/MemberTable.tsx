@@ -37,6 +37,7 @@ import { useChangePrivileges } from '../../mutations/organizations/useChangePriv
 import { useRemoveInviteToOrganization } from '../../mutations/organizations/useRemoveInviteToOrganization';
 import { useGetOrganizationUsers } from '../../queries/organisations/useGetOrganizationUsers';
 import { useGetUserOrgInvites } from '../../queries/organisations/useGetUserOrgInvites';
+// import { useGetOr}
 
 export function MemberTable({ activeOrg }): JSX.Element {
 	const { data, isPending, isFetching, isError, error } = useGetOrganizationUsers();
@@ -44,12 +45,13 @@ export function MemberTable({ activeOrg }): JSX.Element {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
 	const {
-		data: userInvites,
+		data: userOrgInvites,
 		isPending: userInvitesLoading,
 		isFetching: userInvitesFetching,
 		isError: userInvitesIsError,
 		error: userInvitesError
 	} = useGetUserOrgInvites();
+	console.log({ userOrgInvites });
 	const removeInviteMutation = useRemoveInviteToOrganization();
 
 	const updatePrivileges = ({ uId, priv }) => {
@@ -102,62 +104,143 @@ export function MemberTable({ activeOrg }): JSX.Element {
 				</ModalContent>
 			</Modal>
 
-			{activeOrg ? (
-				<>
-					<Box width="full">
+			<Box>
+				<Box>
+					<Flex alignItems={'center'}>
+						<Heading size={'md'}>Member Table - {activeOrg?.name ?? ''}</Heading>
+						<Spacer />
 						<Box>
-							<Flex alignItems={'center'}>
-								<Heading size={'md'}>
-									Member Table - {activeOrg?.name ?? ''}
-								</Heading>
-								<Spacer />
-								<Box>
-									<Flex>
-										<Button
-											variant={'outline'}
-											colorScheme={'gray'}
-											onClick={onOpen}
-										>
-											Invite Members
-										</Button>
-									</Flex>
-								</Box>
+							<Flex>
+								<Button variant={'outline'} colorScheme={'gray'} onClick={onOpen}>
+									Invite Members
+								</Button>
 							</Flex>
 						</Box>
+					</Flex>
+				</Box>
 
-						<TableContainer>
-							<Table variant="striped">
-								<Thead>
-									<Tr>
-										<Th>Name</Th>
-										<Th>Email</Th>
-										<Th>Access</Th>
-										<Th>Status</Th>
-										<Th>Actions</Th>
-									</Tr>
-								</Thead>
-								<Tbody>
-									{data?.organizationUsers.map((member) => (
-										<Tr key={member.uId}>
+				<TableContainer>
+					<Table variant="striped">
+						<Thead>
+							<Tr>
+								<Th>Name</Th>
+								<Th>Email</Th>
+								<Th>Access</Th>
+								<Th>Status</Th>
+								<Th>Actions</Th>
+							</Tr>
+						</Thead>
+						<Tbody>
+							{data?.organizationUsers.map((member) => (
+								<Tr key={member.uId}>
+									<Td>
+										<Flex alignItems={'center'}>
+											<Avatar
+												size="sm"
+												name={member.name}
+												src={`https://bit.ly/${member.name}`}
+											/>
+											<Text marginLeft={1} color="black">
+												{member.name}
+											</Text>
+										</Flex>
+									</Td>
+									<Td>{member.email}</Td>
+									<Td width={'65px'}>{member.priv}</Td>
+									<Td>Joined</Td>
+									<Td>
+										<Menu>
+											<MenuButton>
+												{updatingUserId === member.uId ? (
+													<LoadingSpinner />
+												) : (
+													<VerticalDots />
+												)}
+											</MenuButton>
+											<MenuList>
+												<MenuItem
+													onClick={() =>
+														updatePrivileges({
+															uId: member.uId,
+															priv: 'ADMIN'
+														})
+													}
+												>
+													<Flex align={'center'}>
+														Make admin
+														<Tooltip label="Manages organizations. See all projects and manage users.">
+															<InfoIcon ml={2} />
+														</Tooltip>
+													</Flex>
+												</MenuItem>
+												<MenuItem
+													onClick={() =>
+														updatePrivileges({
+															uId: member.uId,
+															priv: 'EDITOR'
+														})
+													}
+												>
+													<Flex align={'center'}>
+														Make editor
+														<Tooltip label="See projects they are added to, create new projects, edit tasks and members within those tasks.">
+															<InfoIcon ml={2} />
+														</Tooltip>
+													</Flex>
+												</MenuItem>
+												<MenuItem
+													onClick={() =>
+														updatePrivileges({
+															uId: member.uId,
+															priv: 'VIEWER'
+														})
+													}
+												>
+													<Flex align={'center'}>
+														Make viewer
+														<Tooltip label="Viewer can view task and communicate within Broadcast communication tasks.">
+															<InfoIcon ml={2} />
+														</Tooltip>
+													</Flex>
+												</MenuItem>
+											</MenuList>
+										</Menu>
+									</Td>
+								</Tr>
+							))}
+
+							{userInvitesLoading || userInvitesFetching ? (
+								<Tr>
+									<Td></Td>
+								</Tr>
+							) : userInvitesIsError ? (
+								<Tr>
+									<Td>{userInvitesError?.errorCode}</Td>
+								</Tr>
+							) : (
+								<>
+									{userOrgInvites?.map((invite, index) => (
+										<Tr key={index}>
 											<Td>
 												<Flex alignItems={'center'}>
 													<Avatar
 														size="sm"
-														name={member.name}
-														src={`https://bit.ly/${member.name}`}
+														name={invite.name}
+														src={`https://bit.ly/${invite.name}`}
 													/>
+
 													<Text marginLeft={1} color="black">
-														{member.name}
+														{invite.name}
 													</Text>
 												</Flex>
 											</Td>
-											<Td>{member.email}</Td>
-											<Td width={'65px'}>{member.priv}</Td>
-											<Td>Joined</Td>
+											<Td>{invite.email}</Td>
+											<Td>{invite.priv}</Td>
+											<Td>Invited</Td>
 											<Td>
 												<Menu>
 													<MenuButton>
-														{updatingUserId === member.uId ? (
+														{removeInviteMutation.isPending ? (
 															<LoadingSpinner />
 														) : (
 															<VerticalDots />
@@ -166,164 +249,61 @@ export function MemberTable({ activeOrg }): JSX.Element {
 													<MenuList>
 														<MenuItem
 															onClick={() =>
-																updatePrivileges({
-																	uId: member.uId,
-																	priv: 'ADMIN'
-																})
+																removeUserInvite(invite.uId)
 															}
 														>
-															<Flex align={'center'}>
-																Make admin
-																<Tooltip label="Manages organizations. See all projects and manage users.">
-																	<InfoIcon ml={2} />
-																</Tooltip>
-															</Flex>
-														</MenuItem>
-														<MenuItem
-															onClick={() =>
-																updatePrivileges({
-																	uId: member.uId,
-																	priv: 'EDITOR'
-																})
-															}
-														>
-															<Flex align={'center'}>
-																Make editor
-																<Tooltip label="See projects they are added to, create new projects, edit tasks and members within those tasks.">
-																	<InfoIcon ml={2} />
-																</Tooltip>
-															</Flex>
-														</MenuItem>
-														<MenuItem
-															onClick={() =>
-																updatePrivileges({
-																	uId: member.uId,
-																	priv: 'VIEWER'
-																})
-															}
-														>
-															<Flex align={'center'}>
-																Make viewer
-																<Tooltip label="Viewer can view task and communicate within Broadcast communication tasks.">
-																	<InfoIcon ml={2} />
-																</Tooltip>
-															</Flex>
+															Remove invite
 														</MenuItem>
 													</MenuList>
 												</Menu>
 											</Td>
 										</Tr>
 									))}
+								</>
+							)}
 
-									{userInvitesLoading || userInvitesFetching ? (
-										<Tr>
-											<Td></Td>
-										</Tr>
-									) : userInvitesIsError ? (
-										<Tr>
-											<Td>{userInvitesError?.errorCode}</Td>
-										</Tr>
-									) : (
+							{isPending || isFetching ? (
+								<Tr>
+									<Td></Td>
+									<Td></Td>
+									<Td>
+										<LoadingSpinner />
+									</Td>
+									<Td></Td>
+									<Td></Td>
+								</Tr>
+							) : isError ? (
+								<Tr>
+									<Td>{error?.errorText}</Td>
+								</Tr>
+							) : (
+								<>
+									{data?.organizationUsers.length === 0 ? (
 										<>
-											{userInvites?.map((invite, index) => (
-												<Tr key={index}>
-													<Td>
-														<Flex alignItems={'center'}>
-															<Avatar
-																size="sm"
-																name={invite.name}
-																src={`https://bit.ly/${invite.name}`}
-															/>
-															<Text marginLeft={1} color="black">
-																{invite.name}
-															</Text>
-														</Flex>
-													</Td>
-													<Td>{invite.email}</Td>
-													<Td>{invite.priv}</Td>
-													<Td>Invited</Td>
-													<Td>
-														<Menu>
-															<MenuButton>
-																<VerticalDots />
-															</MenuButton>
-															<MenuList>
-																<MenuItem
-																	onClick={() =>
-																		removeUserInvite({
-																			uId: invite.uId
-																		})
-																	}
-																>
-																	Remove invite
-																</MenuItem>
-															</MenuList>
-														</Menu>
-													</Td>
-												</Tr>
-											))}
+											<Tr>
+												<Td>
+													No data, be sure that you have selected a
+													organization!
+												</Td>
+											</Tr>
+											<Tr>
+												<Td>You might be in your personal space.</Td>
+											</Tr>
 										</>
-									)}
-
-									{isPending || isFetching ? (
-										<Tr>
-											<Td>Loading...</Td>
-											<Td>
-												<LoadingSpinner />
-											</Td>
-										</Tr>
-									) : isError ? (
-										<Tr>
-											<Td>{error?.errorText}</Td>
-										</Tr>
-									) : (
-										<>
-											{data?.organizationUsers.length === 0 ? (
-												<>
-													<Tr>
-														<Td>
-															No data, be sure that you have selected
-															a organization!
-														</Td>
-													</Tr>
-													<Tr>
-														<Td>
-															You might be in your personal space.
-														</Td>
-													</Tr>
-												</>
-											) : null}
-										</>
-									)}
-								</Tbody>
-							</Table>
-						</TableContainer>
-						<Box mt={4}>
-							<Flex>
-								{changePrivileges.isError && (
-									<Text color={'red.500'}>{changePrivileges.error?.message}</Text>
-								)}
-							</Flex>
-						</Box>
-					</Box>
-				</>
-			) : (
-				<>
-					<Flex justifyContent={'center'} alignItems={'center'} mt={10}>
-						<Flex flexDirection={'column'} alignItems={'center'}>
-							<Text fontSize={'xl'} fontWeight={'semibold'} textColor={'gray.800'}>
-								You need to select an organization before logging in!
-							</Text>
-							<Box mt={4}>
-								<HStack>
-									<Text textColor={'gray.600'}>Select organization: </Text>
-									<OrganizationSwitcher />
-								</HStack>
-							</Box>
-						</Flex>
+									) : null}
+								</>
+							)}
+						</Tbody>
+					</Table>
+				</TableContainer>
+				<Box mt={4}>
+					<Flex>
+						{changePrivileges.isError && (
+							<Text color={'red.500'}>{changePrivileges.error?.message}</Text>
+						)}
 					</Flex>
-				</>
-			)}
+				</Box>
+			</Box>
 		</>
 	);
 }

@@ -11,7 +11,7 @@ import {
 	VStack
 } from '@chakra-ui/react';
 import { useContext } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Outlet, Link as RouterLink } from 'react-router-dom';
 import { ModalContext } from '../../context/ModalContext';
 import { SettingsLayout } from './SettingsLayout';
 
@@ -71,7 +71,7 @@ export function Settings() {
 				<VStack style={{ height: '100%' }}>
 					<HStack style={{ flex: 1, height: '100%', width: '100%' }}>
 						<Box overflowY={'auto'} height={'100%'} width={'100%'}>
-							<SettingsLayout />
+							<Outlet />
 						</Box>
 					</HStack>
 				</VStack>

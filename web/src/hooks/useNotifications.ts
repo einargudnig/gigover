@@ -8,11 +8,12 @@ export type Notification = {
 	address: string | null;
 	commentId: number;
 	created: number;
+	orgId: number;
 	status: number;
 	subject: string | null;
 	taskId: number;
 	text: string | null;
-	typeNotification: 'C' | 'P';
+	typeNotification: 'C' | 'P' | 'O';
 	typeSend: string | null;
 };
 

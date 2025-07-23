@@ -19,11 +19,12 @@ import { Center } from '../Center';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { CrossIcon } from '../icons/CrossIcon';
 import { OpenTaskNotification } from './OpenTaskNotification';
+import { useNavigate } from 'react-router';
 
 export const Notifications = (): JSX.Element => {
 	const { onOpen, onClose, isOpen } = useDisclosure();
 	const notifications = useNotifications();
-	// console.log('NOTIFICATIONS', notifications);
+	console.log('NOTIFICATIONS', notifications);
 
 	return (
 		<Popover isOpen={isOpen} onOpen={onOpen} onClose={onClose} closeOnBlur={true}>
@@ -73,18 +74,21 @@ export const Notifications = (): JSX.Element => {
 
 const Notification = ({ data, onClick }: { data: NotificationType; onClick: () => void }) => {
 	const [openTask, setOpenTask] = useState(false);
+	const navigate = useNavigate();
 	const readNotificationMutation = useReadNotification();
 	const deleteNotificationMutation = useDeleteNotification();
 
 	const openNotification = async () => {
+		await readNotificationMutation.mutateAsync(data);
 		// mark as read
-		if (data.taskId) {
-			await readNotificationMutation.mutateAsync(data);
-
+		if (data.typeNotification === 'O' && data.orgId) {
+			navigate('/settings');
+			console.log('navigate');
+		} else if (data.taskId) {
 			// Open Task
 			setOpenTask(true);
-			onClick();
 		}
+		onClick();
 	};
 
 	const deleteNotification = async (e: React.MouseEvent) => {

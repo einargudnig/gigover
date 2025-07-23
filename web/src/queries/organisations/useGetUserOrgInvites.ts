@@ -5,7 +5,7 @@ import { OrganizationInvites } from '../../models/Organizations';
 import { ApiService } from '../../services/ApiService';
 
 interface OrgInvitesResponse {
-	invites: OrganizationInvites[];
+	organizationUsers: OrganizationInvites[];
 }
 
 export const useGetUserOrgInvites = () => {
@@ -22,7 +22,7 @@ export const useGetUserOrgInvites = () => {
 		}
 	});
 
-	const invites: OrganizationInvites[] = data?.invites || [];
+	const invites: OrganizationInvites[] = data?.organizationUsers || [];
 
 	return {
 		data: invites,
