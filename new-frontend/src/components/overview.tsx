@@ -22,7 +22,7 @@ export const Overview = () => {
 			alt: 'App screenshot',
 			title: 'Avoid guesswork about project status',
 			description:
-				'Track your construction project status in real-time, eliminating uncertainty about timelines, and gain visibility into any issues or delays.'
+				'Track your project status in real-time, eliminating uncertainty about timelines, and gain visibility into any issues or delays.'
 		},
 		{
 			id: 2,
@@ -46,7 +46,7 @@ export const Overview = () => {
 			alt: 'App screenshot',
 			title: 'Simplify time tracking and payroll',
 			description:
-				'Track employee hours, keeping an eye on when and where employees are working, and export reports for seamless payroll processing.'
+				'Track project hours, keeping an eye on when and where stakeholders are working, and export reports for seamless payroll processing.'
 		},
 		{
 			id: 5,

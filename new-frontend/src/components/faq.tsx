@@ -20,7 +20,7 @@ const faqData: FaqItem[] = [
 	{
 		id: 1,
 		question: 'Who is Gigover for?',
-		answer: 'Gigover simplifies project management by helping managers streamline projects and guide them towards goals and task completion. All stakeholders involved with a property can benefit from using Gigover.'
+		answer: 'Gigover simplifies project management by helping managers streamline projects and guide them towards goals and task completion. Gigover is for everybody that is involved in projects.'
 	},
 	{
 		id: 2,
@@ -30,7 +30,7 @@ const faqData: FaqItem[] = [
 	{
 		id: 3,
 		question: 'Why should I choose Gigover?',
-		answer: 'Gigover provides all the tools you need to run a successful project. You can start for free to see if Gigover is the right software partner for you and then expand by adding more units to your account.'
+		answer: 'Gigover provides all the tools you need to run a successful project. You can start for free to see if Gigover is the right software partner for you and then expand by adding more users to your account.'
 	},
 	{
 		id: 4,

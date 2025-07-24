@@ -56,7 +56,7 @@ const pricingTiers: PricingTier[] = [
 			{ id: 4, description: 'Project managers' },
 			{ id: 5, description: 'Messaging and notifications' },
 			{ id: 6, description: 'Time clock and reports' },
-			{ id: 7, description: '$4 adds to bill per user if user storage exceeds 500MB' }
+			{ id: 7, description: '$4 adds to bill per user if user storage exceeds 250MB' }
 		]
 	},
 	{
@@ -64,7 +64,7 @@ const pricingTiers: PricingTier[] = [
 		users: '6-100',
 		name: 'Growth',
 		includedStorage: '1GB',
-		extraStorage: 4,
+		extraStorage: 0.25,
 		features: [
 			{ id: 1, description: 'Properties' },
 			{ id: 2, description: 'Tasks' },
@@ -72,7 +72,7 @@ const pricingTiers: PricingTier[] = [
 			{ id: 4, description: 'Project managers' },
 			{ id: 5, description: 'Messaging and notifications' },
 			{ id: 6, description: 'Time clock and reports' },
-			{ id: 7, description: '$4 adds to bill per user if user storage exceeds 1GB' }
+			{ id: 7, description: '$0.25 adds to bill per user if user storage exceeds 1GB' }
 		]
 	},
 	{
@@ -80,7 +80,7 @@ const pricingTiers: PricingTier[] = [
 		name: 'Scale',
 		users: '101-1000',
 		includedStorage: '1GB',
-		extraStorage: 4,
+		extraStorage: 0.25,
 		features: [
 			{ id: 1, description: 'Properties' },
 			{ id: 2, description: 'Tasks' },
@@ -88,7 +88,7 @@ const pricingTiers: PricingTier[] = [
 			{ id: 4, description: 'Project managers' },
 			{ id: 5, description: 'Messaging and notifications' },
 			{ id: 6, description: 'Time clock and reports' },
-			{ id: 7, description: '$4 adds to bill per user if user storage exceeds 1GB' }
+			{ id: 7, description: '$0.25 adds to bill per user if user storage exceeds 1GB' }
 		]
 	},
 	{
@@ -96,7 +96,7 @@ const pricingTiers: PricingTier[] = [
 		users: '1000+',
 		name: 'Enterprise',
 		includedStorage: '1GB',
-		extraStorage: 4,
+		extraStorage: 0.25,
 		features: [
 			{ id: 1, description: 'Properties' },
 			{ id: 2, description: 'Tasks' },
@@ -104,7 +104,7 @@ const pricingTiers: PricingTier[] = [
 			{ id: 4, description: 'Project managers' },
 			{ id: 5, description: 'Messaging and notifications' },
 			{ id: 6, description: 'Time clock and reports' },
-			{ id: 7, description: '$4 adds to bill per user if user storage exceeds 1GB' }
+			{ id: 7, description: '$0.25 adds to bill per user if user storage exceeds 1GB' }
 		]
 	}
 ];
