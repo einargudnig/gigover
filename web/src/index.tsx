@@ -13,20 +13,11 @@ import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
+import initMocks from './mocks/handlers/mocks';
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
 const firebaseApp = new Firebase();
-
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			queryFn: axiosQueryFetcher as any,
-			refetchOnWindowFocus: false
-		}
-	}
-});
 
 const ChakraTheme = extendTheme({
 	colors: ChakraThemeColors,
@@ -75,20 +66,31 @@ const ChakraTheme = extendTheme({
 	}
 });
 
-const container = document.getElementById('gigover-root');
-if (container) {
-	const root = ReactDOMClient.createRoot(container);
+initMocks().then(() => {
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				queryFn: axiosQueryFetcher as any,
+				refetchOnWindowFocus: false
+			}
+		}
+	});
+	const container = document.getElementById('gigover-root');
+	if (container) {
+		const root = ReactDOMClient.createRoot(container);
 
-	root.render(
-		<ErrorBoundary>
-			<ChakraProvider theme={ChakraTheme}>
-				<FirebaseContext.Provider value={firebaseApp}>
-					<QueryClientProvider client={queryClient}>
-						<AppPreloader />
-						<ReactQueryDevtools initialIsOpen={false} />
-					</QueryClientProvider>
-				</FirebaseContext.Provider>
-			</ChakraProvider>
-		</ErrorBoundary>
-	);
-}
+		root.render(
+			<ErrorBoundary>
+				<ChakraProvider theme={ChakraTheme}>
+					<FirebaseContext.Provider value={firebaseApp}>
+						<QueryClientProvider client={queryClient}>
+							<AppPreloader />
+							<ReactQueryDevtools initialIsOpen={false} />
+						</QueryClientProvider>
+					</FirebaseContext.Provider>
+				</ChakraProvider>
+			</ErrorBoundary>
+		);
+	}
+});

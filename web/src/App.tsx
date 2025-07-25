@@ -16,7 +16,7 @@ import { FirebaseUser } from './firebase/firebaseTypes';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import { IUserProfile } from './models/UserProfile';
 import { NewLogin } from './pages/NewLogin';
-import { Onboarding } from './pages/Onboarding';
+import { Onboarding } from './pages/onboarding';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
