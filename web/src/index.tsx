@@ -13,7 +13,7 @@ import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
-import initMocks from './mocks/handlers/mocks';
+import initMocks from './mocks/mocks';
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
@@ -66,6 +66,7 @@ const ChakraTheme = extendTheme({
 	}
 });
 
+// init mock for msw → used to mock api calls!
 initMocks().then(() => {
 	const queryClient = new QueryClient({
 		defaultOptions: {

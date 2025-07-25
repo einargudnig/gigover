@@ -29,6 +29,7 @@ import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
+import { DevMenu } from './DevMenu';
 
 interface PageProps {
 	backgroundColor?: string;
@@ -187,7 +188,7 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 					</Suspense>
 				</Box>
 			</Flex>
-			{/* <DevMenu /> */}
+			<DevMenu />
 		</Flex>
 	);
 };
