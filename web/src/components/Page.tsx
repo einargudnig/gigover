@@ -153,7 +153,9 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 										</MenuItem>
 										<MenuItem
 											onClick={async () => {
+												console.log('firebase signout');
 												await firebase.signOut();
+												console.log('API log out');
 												await logout(undefined, undefined);
 											}}
 										>
