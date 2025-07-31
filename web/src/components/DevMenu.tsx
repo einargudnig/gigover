@@ -1,6 +1,7 @@
 import { Box, Button, Input, Text } from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { useChangeUid } from '../mutations/useChangeUid';
+import { enableMsw, disableMsw, isMswEnabled } from '../mocks/utils/toggle-msw';
 import { IS_LOCAL } from '../services/ApiService';
 
 export const DevMenu = (): JSX.Element | null => {
@@ -12,6 +13,8 @@ export const DevMenu = (): JSX.Element | null => {
 			mutate(uid);
 		}
 	}, [uid, mutate]);
+
+	const isEnabled = isMswEnabled();
 
 	if (!IS_LOCAL) {
 		return null;
@@ -43,6 +46,14 @@ export const DevMenu = (): JSX.Element | null => {
 				}}
 			>
 				Disguise
+			</Button>
+
+			<Button
+				marginLeft={5}
+				colorScheme={isEnabled ? 'purple' : 'gray'}
+				onClick={isEnabled ? disableMsw : enableMsw}
+			>
+				MSW: {isEnabled ? 'ON' : 'OFF'}
 			</Button>
 		</Box>
 	);
