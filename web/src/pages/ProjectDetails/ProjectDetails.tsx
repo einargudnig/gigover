@@ -1,6 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { DndContext, DragOverlay, closestCenter } from '@dnd-kit/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import type { Task } from '../../models/Task';
 import { TaskStatus } from '../../models/Task';
@@ -25,7 +25,7 @@ export const ProjectDetails = () => {
 	const { data, isPending, isError, error } = useProjectDetails(projectIdNumber);
 	const updateTask = useUpdateTask(projectIdNumber);
 
-	// Build columns from real tasks
+	// Build columns from real tasks - now reactive to task changes
 	const tasks = data?.project?.tasks || [];
 	const buildColumns = () => {
 		const cols: { [key: string]: Task[] } = {};
@@ -36,15 +36,11 @@ export const ProjectDetails = () => {
 		}
 		return cols;
 	};
-	const [columns, setColumns] = useState(buildColumns());
+
+	// Use computed columns instead of local state for reactivity
+	const columns = buildColumns();
 	const [activeTask, setActiveTask] = useState(null);
 	const [activeColumn, setActiveColumn] = useState(null);
-
-	// Update columns when tasks change
-	useEffect(() => {
-		setColumns(buildColumns());
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [tasks.length]);
 
 	const handleDragStart = (event) => {
 		setActiveTask(event.active.id);
@@ -106,32 +102,7 @@ export const ProjectDetails = () => {
 			adjustedToIndex
 		);
 
-		// Build new columns state optimistically
-		const newColumns = { ...columns };
-		// Remove from old column
-		newColumns[fromColumn] = newColumns[fromColumn].filter((t) => t.taskId !== realTask.taskId);
-		// Insert into new column at the correct position
-		const updatedTask = {
-			...realTask,
-			status: parseInt(toColumn) as import('../../models/Task').TaskStatusType,
-			lexoRank: nextRank.toString()
-		};
-		newColumns[toColumn] = [
-			...newColumns[toColumn].slice(0, toIndex),
-			updatedTask,
-			...newColumns[toColumn].slice(toIndex)
-		];
-
-		setColumns(newColumns);
-		console.log('Columns after move:', JSON.stringify(newColumns, null, 2));
-		Object.entries(newColumns).forEach(([col, tasks]) => {
-			console.log(`Column ${col}:`);
-			tasks.forEach((t, i) =>
-				console.log(`  ${i + 1}: id=${t.taskId}, lexoRank=${t.lexoRank}`)
-			);
-		});
-
-		// Persist the change
+		// Persist the change - optimistic updates will handle the UI updates
 		updateTask.mutate({
 			taskId: realTask.taskId,
 			status: parseInt(toColumn) as import('../../models/Task').TaskStatusType,

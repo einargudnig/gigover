@@ -25,6 +25,7 @@ const KanbanTaskCard = ({ task, projectId, index }: KanbanTaskCardProps) => {
 		typeof type === 'number'
 			? projectTypesData?.projectTypes.find((pt) => pt.typeId === type)?.name || 'unknown'
 			: 'unknown';
+
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 		data: { columnId: task.status.toString(), index }
