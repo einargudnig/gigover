@@ -1,7 +1,7 @@
 import { Avatar } from '@chakra-ui/react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Label } from '../../components/Label';
 import { DragDropIcon } from '../../components/icons/DragDropIcons';
 import { ModalContext } from '../../context/ModalContext';
@@ -25,6 +25,17 @@ const KanbanTaskCard = ({ task, projectId, index }: KanbanTaskCardProps) => {
 		typeof type === 'number'
 			? projectTypesData?.projectTypes.find((pt) => pt.typeId === type)?.name || 'unknown'
 			: 'unknown';
+
+	// Debug logging to track when task data updates
+	useEffect(() => {
+		console.log(`🔄 KanbanTaskCard re-rendered for task ${taskId}:`, {
+			subject,
+			typeId,
+			typeName,
+			status: task.status
+		});
+	}, [taskId, subject, typeId, typeName, task.status]);
+
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 		data: { columnId: task.status.toString(), index }

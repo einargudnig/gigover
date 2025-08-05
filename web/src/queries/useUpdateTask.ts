@@ -17,25 +17,43 @@ export interface UpdateTaskFormData
 	worker?: { uId?: number | string };
 }
 
+interface UpdateTaskContext {
+	previousProjectDetails: { project: Project } | null;
+	previousTask: Task | null;
+}
+
 export const useUpdateTask = (projectId: number) => {
 	const queryClient = useQueryClient();
 
-	return useMutation<ProjectResponse, ErrorResponse, UpdateTaskFormData>({
+	return useMutation<ProjectResponse, ErrorResponse, UpdateTaskFormData, UpdateTaskContext>({
 		mutationFn: async (variables) => {
+			console.log('🚀 Starting task update mutation:', variables);
 			const response = await axios.post(ApiService.updateTask, variables, {
 				withCredentials: true
 			});
 			return response.data;
 		},
 		onMutate: async (variables) => {
-			const cacheKeyArray = [ApiService.projectDetails(projectId)];
-			const projectDetails = queryClient.getQueryData<{ project: Project }>(cacheKeyArray);
+			console.log('📝 Starting optimistic update for task:', variables.taskId);
 
-			if (projectDetails) {
-				const tasks = [...projectDetails.project.tasks];
+			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+			await queryClient.cancelQueries({ queryKey: [ApiService.projectDetails(projectId)] });
+
+			const cacheKeyArray = [ApiService.projectDetails(projectId)];
+			const previousProjectDetails = queryClient.getQueryData<{ project: Project }>(
+				cacheKeyArray
+			);
+
+			if (previousProjectDetails) {
+				const tasks = [...previousProjectDetails.project.tasks];
 				const taskIndex = tasks.findIndex((task) => task.taskId === variables.taskId);
 
 				if (taskIndex !== -1) {
+					console.log('✅ Found task in cache, applying optimistic update');
+
+					// Store the previous state for potential rollback
+					const previousTask = tasks[taskIndex];
+
 					tasks[taskIndex] = {
 						...tasks[taskIndex],
 						text: variables.text,
@@ -47,16 +65,38 @@ export const useUpdateTask = (projectId: number) => {
 
 					const newProjectDetails = {
 						project: {
-							...projectDetails.project,
+							...previousProjectDetails.project,
 							tasks: tasks
 						}
 					};
 
 					await queryClient.setQueryData(cacheKeyArray, newProjectDetails);
+					console.log('✅ Optimistic update applied successfully');
+
+					// Return context with the previous value for rollback
+					return { previousProjectDetails, previousTask };
+				} else {
+					console.log('❌ Task not found in cache for optimistic update');
 				}
+			} else {
+				console.log('❌ No project details found in cache for optimistic update');
+			}
+
+			return { previousProjectDetails: null, previousTask: null };
+		},
+		onError: (err, variables, context) => {
+			console.log('❌ Task update failed, rolling back optimistic update:', err);
+
+			// If we have context, rollback the optimistic update
+			if (context?.previousProjectDetails) {
+				const cacheKeyArray = [ApiService.projectDetails(projectId)];
+				queryClient.setQueryData(cacheKeyArray, context.previousProjectDetails);
+				console.log('🔄 Rolled back optimistic update');
 			}
 		},
 		onSuccess: async (data, variables) => {
+			console.log('✅ Task update successful, invalidating queries');
+
 			await queryClient.invalidateQueries({ queryKey: [ApiService.projectList] });
 			await queryClient.invalidateQueries({
 				queryKey: [ApiService.projectDetails(projectId)]
@@ -67,6 +107,9 @@ export const useUpdateTask = (projectId: number) => {
 					queryKey: [ApiService.taskDetails(variables.taskId)]
 				});
 			}
+		},
+		onSettled: () => {
+			console.log('🏁 Task update mutation settled');
 		}
 	});
 };
