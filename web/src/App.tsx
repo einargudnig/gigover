@@ -127,7 +127,6 @@ const App = ({
 						<FileSystemContext.Provider value={fileSystem}>
 							<ModalContext.Provider value={modalContext}>
 								<ErrorBoundary>
-									<GlobalModals />
 									<Routes>
 										{userProfile?.registered === false && (
 											<Route path={'/onboarding'} element={<Onboarding />} />
@@ -149,3 +148,4 @@ const App = ({
 };
 
 export default App;
+

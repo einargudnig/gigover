@@ -27,6 +27,7 @@ import { FormActions } from '../FormActions';
 import { InviteUser } from '../InviteUser/InviteUser';
 import { DatePicker } from '../forms/DatePicker';
 import { InputWrapper } from '../forms/Input';
+import { ErrorBoundary } from '../../ErrorBoundary.tsx';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -57,6 +58,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	});
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
+		throw new Error('Sentry test!');
 		try {
 			await modify({
 				projectId: project?.projectId,
@@ -94,146 +96,169 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	};
 
 	return (
-		<div>
-			{isError && (
-				<>
-					{/* Server errors */}
-					<p>{error?.errorText}</p>
-					<small>{error?.errorCode}</small>
-				</>
-			)}
-			<form onSubmit={onSubmit}>
-				<FormControl id={'name'} isRequired isInvalid={Boolean(errors.name)}>
-					<FormLabel>Project name</FormLabel>
-					<Input
-						required={true}
-						{...register('name', { required: 'The project name is missing' })}
-					/>
-					{errors.name ? (
-						<FormErrorMessage>{errors.name.message}</FormErrorMessage>
-					) : (
-						<FormHelperText>Give your project a name</FormHelperText>
-					)}
-				</FormControl>
-				<Box mb={6} />
-				<FormControl id={'description'} isRequired isInvalid={Boolean(errors.description)}>
-					<FormLabel>Project description</FormLabel>
-					<Input required={true} {...register('description')} />
-					{errors.description ? (
-						<FormErrorMessage>{errors.description.message}</FormErrorMessage>
-					) : (
-						<FormHelperText>Describe your project</FormHelperText>
-					)}
-				</FormControl>
-				<Box mb={6} />
-				<FormControl id={'progressStatus'}>
-					<FormLabel>
-						Progress (optional) - Select or create a new one (Press enter after creating
-						a new status)
-					</FormLabel>
-					<CreatableSelect
-						theme={(theme) => ({
-							...theme,
-							borderRadius: 8,
-							colors: {
-								...theme.colors,
-								neutral20: 'var(--chakra-colors-gray-200)',
-								neutral30: 'var(--chakra-colors-gray-400)',
-								primary25: 'var(--chakra-colors-yellow-100)',
-								primary50: 'var(--chakra-colors-yellow-200)',
-								primary75: 'var(--chakra-colors-yellow-300)',
-								primary: 'var(--chakra-colors-yellow-400)'
-							}
-						})}
-						onChange={(newValue, actionMeta) => {
-							if (actionMeta.action === 'create-option') {
-								const createdValue = newValue as unknown as {
-									label: string;
-									value: string;
-								};
-								setProgressStatus({ id: -1, name: createdValue.label });
-							} else {
-								setProgressStatus(newValue as unknown as ProgressStatus);
-							}
-						}}
-						getOptionLabel={(option: unknown) => (option as ProgressStatus).name}
-						getOptionValue={(option: unknown) => {
-							return (option as ProgressStatus).id as unknown as string;
-						}}
-						value={progressStatus}
-						options={progressStatuses?.progressStatusList || []}
-					/>
-				</FormControl>
-				<Box mb={6} />
-				<FormControl>
-					<FormLabel htmlFor="startDate">Start and end date</FormLabel>
-					<HStack>
-						<Controller
-							name="startDate"
-							control={control}
-							defaultValue={
-								project?.startDate
-									? (project.startDate.valueOf() as number)
-									: undefined
-							}
-							render={({ field: { onChange, value, onBlur } }) => (
-								<DatePicker
-									selected={value ? new Date(value) : null}
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									onBlur={onBlur}
-									required={false}
-								/>
-							)}
+		<ErrorBoundary>
+			<div>
+				{isError && (
+					<>
+						{/* Server errors */}
+						<p>{error?.errorText}</p>
+						<small>{error?.errorCode}</small>
+					</>
+				)}
+				<form onSubmit={onSubmit}>
+					<FormControl id={'name'} isRequired isInvalid={Boolean(errors.name)}>
+						<FormLabel>Project name</FormLabel>
+						<Input
+							required={true}
+							{...register('name', { required: 'The project name is missing' })}
 						/>
-						<Controller
-							name="endDate"
-							control={control}
-							defaultValue={
-								project?.endDate ? (project.endDate.valueOf() as number) : undefined
-							}
-							render={({ field: { onChange, value, onBlur } }) => (
-								<DatePicker
-									selected={value ? new Date(value) : null}
-									onChange={(date) => {
-										if (date) {
-											onChange((date as Date).getTime());
-										} else {
-											onChange(null);
-										}
-									}}
-									onBlur={onBlur}
-								/>
-							)}
+						{errors.name ? (
+							<FormErrorMessage>{errors.name.message}</FormErrorMessage>
+						) : (
+							<FormHelperText>Give your project a name</FormHelperText>
+						)}
+					</FormControl>
+					<Box mb={6} />
+					<FormControl
+						id={'description'}
+						isRequired
+						isInvalid={Boolean(errors.description)}
+					>
+						<FormLabel>Project description</FormLabel>
+						<Input required={true} {...register('description')} />
+						{errors.description ? (
+							<FormErrorMessage>{errors.description.message}</FormErrorMessage>
+						) : (
+							<FormHelperText>Describe your project</FormHelperText>
+						)}
+					</FormControl>
+					<Box mb={6} />
+					<FormControl id={'progressStatus'}>
+						<FormLabel>
+							Progress (optional) - Select or create a new one (Press enter after
+							creating a new status)
+						</FormLabel>
+						<CreatableSelect
+							theme={(theme) => ({
+								...theme,
+								borderRadius: 8,
+								colors: {
+									...theme.colors,
+									neutral20: 'var(--chakra-colors-gray-200)',
+									neutral30: 'var(--chakra-colors-gray-400)',
+									primary25: 'var(--chakra-colors-yellow-100)',
+									primary50: 'var(--chakra-colors-yellow-200)',
+									primary75: 'var(--chakra-colors-yellow-300)',
+									primary: 'var(--chakra-colors-yellow-400)'
+								}
+							})}
+							onChange={(newValue, actionMeta) => {
+								if (actionMeta.action === 'create-option') {
+									const createdValue = newValue as unknown as {
+										label: string;
+										value: string;
+									};
+									setProgressStatus({ id: -1, name: createdValue.label });
+								} else {
+									setProgressStatus(newValue as unknown as ProgressStatus);
+								}
+							}}
+							getOptionLabel={(option: unknown) => (option as ProgressStatus).name}
+							getOptionValue={(option: unknown) => {
+								return (option as ProgressStatus).id as unknown as string;
+							}}
+							value={progressStatus}
+							options={progressStatuses?.progressStatusList || []}
 						/>
-					</HStack>
-					{errors.startDate || errors.endDate ? (
-						<FormErrorMessage>
-							{errors.startDate?.message || errors.endDate?.message}
-						</FormErrorMessage>
-					) : (
-						<FormHelperText>
-							When should this project start and be finished?
-						</FormHelperText>
-					)}
-				</FormControl>
+					</FormControl>
+					<Box mb={6} />
+					<FormControl>
+						<FormLabel htmlFor="startDate">Start and end date</FormLabel>
+						<HStack>
+							<Controller
+								name="startDate"
+								control={control}
+								defaultValue={
+									project?.startDate
+										? (project.startDate.valueOf() as number)
+										: undefined
+								}
+								render={({ field: { onChange, value, onBlur } }) => (
+									<DatePicker
+										selected={value ? new Date(value) : null}
+										onChange={(date) => {
+											if (date) {
+												onChange((date as Date).getTime());
+											} else {
+												onChange(null);
+											}
+										}}
+										onBlur={onBlur}
+										required={false}
+									/>
+								)}
+							/>
+							<Controller
+								name="endDate"
+								control={control}
+								defaultValue={
+									project?.endDate
+										? (project.endDate.valueOf() as number)
+										: undefined
+								}
+								render={({ field: { onChange, value, onBlur } }) => (
+									<DatePicker
+										selected={value ? new Date(value) : null}
+										onChange={(date) => {
+											if (date) {
+												onChange((date as Date).getTime());
+											} else {
+												onChange(null);
+											}
+										}}
+										onBlur={onBlur}
+									/>
+								)}
+							/>
+						</HStack>
+						{errors.startDate || errors.endDate ? (
+							<FormErrorMessage>
+								{errors.startDate?.message || errors.endDate?.message}
+							</FormErrorMessage>
+						) : (
+							<FormHelperText>
+								When should this project start and be finished?
+							</FormHelperText>
+						)}
+					</FormControl>
 
-				<FormActions
-					submitText={project ? 'Update project' : 'Create a project'}
-					submitLoading={isPending}
-					submitDisabled={isPending}
-					cancelText={'Discard changes'}
-					onCancel={() => closeModal()}
-				/>
-			</form>
-			{project?.projectId && project.status === ProjectStatus.OPEN ? (
-				<InputWrapper>
-					{project.owner && (
+					<FormActions
+						submitText={project ? 'Update project' : 'Create a project'}
+						submitLoading={isPending}
+						submitDisabled={isPending}
+						cancelText={'Discard changes'}
+						onCancel={() => closeModal()}
+					/>
+				</form>
+				{project?.projectId && project.status === ProjectStatus.OPEN ? (
+					<InputWrapper>
+						{project.owner && (
+							<Button
+								type={'button'}
+								size={'0'}
+								variant={'link'}
+								colorScheme={'red'}
+								onClick={async (event) => {
+									event.preventDefault();
+									await updateStatus(ProjectStatus.CLOSED);
+								}}
+							>
+								Close this project
+							</Button>
+						)}
+					</InputWrapper>
+				) : project?.projectId ? (
+					<InputWrapper>
 						<Button
 							type={'button'}
 							size={'0'}
@@ -241,54 +266,39 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 							colorScheme={'red'}
 							onClick={async (event) => {
 								event.preventDefault();
-								await updateStatus(ProjectStatus.CLOSED);
+								await updateStatus(ProjectStatus.OPEN);
 							}}
 						>
-							Close this project
+							Re-open this project
 						</Button>
-					)}
-				</InputWrapper>
-			) : project?.projectId ? (
-				<InputWrapper>
-					<Button
-						type={'button'}
-						size={'0'}
-						variant={'link'}
-						colorScheme={'red'}
-						onClick={async (event) => {
-							event.preventDefault();
-							await updateStatus(ProjectStatus.OPEN);
-						}}
-					>
-						Re-open this project
-					</Button>
-				</InputWrapper>
-			) : null}
-			{project?.projectId && project.status === ProjectStatus.CLOSED && (
-				<InputWrapper>
-					<Button
-						type={'button'}
-						size={'0'}
-						colorScheme={'red'}
-						variant={'link'}
-						onClick={async (event) => {
-							event.preventDefault();
-							await updateStatus(ProjectStatus.DONE);
-						}}
-					>
-						Archive this project
-					</Button>
-				</InputWrapper>
-			)}
-			{project && project.projectId && project.owner && (
-				<div>
-					<Divider mb={4} />
-					<Heading size={'md'} mb={4}>
-						Invite users to {project.name}
-					</Heading>
-					<InviteUser projectId={project.projectId} />
-				</div>
-			)}
-		</div>
+					</InputWrapper>
+				) : null}
+				{project?.projectId && project.status === ProjectStatus.CLOSED && (
+					<InputWrapper>
+						<Button
+							type={'button'}
+							size={'0'}
+							colorScheme={'red'}
+							variant={'link'}
+							onClick={async (event) => {
+								event.preventDefault();
+								await updateStatus(ProjectStatus.DONE);
+							}}
+						>
+							Archive this project
+						</Button>
+					</InputWrapper>
+				)}
+				{project && project.projectId && project.owner && (
+					<div>
+						<Divider mb={4} />
+						<Heading size={'md'} mb={4}>
+							Invite users to {project.name}
+						</Heading>
+						<InviteUser projectId={project.projectId} />
+					</div>
+				)}
+			</div>
+		</ErrorBoundary>
 	);
 };

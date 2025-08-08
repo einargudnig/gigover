@@ -11,6 +11,7 @@ import ErrorBoundary from './ErrorBoundary';
 import { ChakraThemeColors } from './Theme';
 import { FirebaseContext } from './firebase/FirebaseContext';
 import { Firebase } from './firebase/firebase';
+import './sentry';
 import { axiosQueryFetcher } from './queries/axiosQueryFetcher';
 import './styles/index.css';
 import initMocks from './mocks/mocks';

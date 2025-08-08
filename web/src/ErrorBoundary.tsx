@@ -1,5 +1,6 @@
 import { Box, Button } from '@chakra-ui/react';
 import { Component, ErrorInfo, ReactNode } from 'react';
+import * as Sentry from '@sentry/react';
 import { devError } from './utils/ConsoleUtils';
 
 interface Props {
@@ -35,6 +36,7 @@ class ErrorBoundary extends Component<Props, State> {
 
 	public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
 		devError('Uncaught error:', error, errorInfo);
+		Sentry.captureException(error, { extra: { errorInfo } });
 	}
 
 	public render() {
@@ -67,25 +69,6 @@ class ErrorBoundary extends Component<Props, State> {
 						<p>Details: {errorDetails}</p>
 						<p>Stack: {stack}</p>
 					</Box>
-				</div>
-			);
-		}
-
-		if (hasError) {
-			return (
-				<div>
-					<h1>Sorry.. there was an error</h1>
-					<Button
-						padding={5}
-						marginTop={4}
-						marginBottom={5}
-						onClick={() => window.location.assign('/')}
-					>
-						Try the homepage!
-					</Button>
-					<p>Error: {errorName}</p>
-					<p>Details: {errorDetails}</p>
-					<p>Stack: {stack}</p>
 				</div>
 			);
 		}
