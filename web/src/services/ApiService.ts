@@ -1,3 +1,5 @@
+import { captureApiError } from '../utils/SentryUtils';
+
 export const IS_LOCAL = process.env.NODE_ENV !== 'production';
 
 export const API_BASE =
@@ -7,6 +9,54 @@ export const API_BASE =
 			'http://localhost:8080/gigover-sdk-3.0.2/rest/';
 // If using proxy.
 // If hosting backend locally use :8080 instead of :3000
+
+/**
+ * Custom API error class for better error handling and Sentry tracking
+ */
+export class ApiError extends Error {
+	statusCode: number;
+	endpoint: string;
+	method: string;
+	responseData?: any;
+
+	constructor(
+		message: string,
+		endpoint: string,
+		statusCode = 0,
+		method = 'unknown',
+		responseData?: any
+	) {
+		super(message);
+		this.name = 'ApiError';
+		this.statusCode = statusCode;
+		this.endpoint = endpoint;
+		this.method = method;
+		this.responseData = responseData;
+	}
+}
+
+/**
+ * Utility function to handle API errors with Sentry tracking
+ * @param error The original error
+ * @param endpoint The API endpoint that was called
+ * @param showFeedback Whether to show feedback dialog
+ */
+export const handleApiError = (error: any, endpoint: string, showFeedback = false): never => {
+	// Extract status code and message if available
+	const statusCode = error?.response?.status || error?.status || 0;
+	const message = error?.response?.data?.message || error?.message || 'Unknown API error';
+	const method = error?.config?.method || 'unknown';
+	const responseData = error?.response?.data;
+
+	// Create a properly structured API error
+	const apiError = new ApiError(message, endpoint, statusCode, method, responseData);
+
+	// Track with Sentry
+	captureApiError(apiError, endpoint, showFeedback);
+
+	// Rethrow for normal error handling flow
+	throw apiError;
+};
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';

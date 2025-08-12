@@ -20,6 +20,7 @@ import { Onboarding } from './pages/onboarding';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
+import * as Sentry from '@sentry/react';
 
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
 
@@ -57,11 +58,30 @@ export const AppPreloader = (): JSX.Element => {
 
 			...userProperties
 		});
+		
+		// Set Sentry user context when user data is available
+		if (data && authUser) {
+			Sentry.setUser({
+				id: authUser.uid,
+				email: data.userName,
+				username: data.name,
+				ip_address: '{{auto}}'
+			});
+			
+			// Add additional context that might help with debugging
+			Sentry.setTag('user_type', data.type?.toString());
+			Sentry.setTag('registered', data.registered?.toString());
+		}
 	}, [authUser?.uid, data]);
 
 	useEffect(() => {
 		if (error) {
 			setHasError(true);
+			// Capture API verification errors
+			Sentry.captureMessage('User verification failed', {
+				level: 'error',
+				extra: { error }
+			});
 		}
 	}, [error]);
 
@@ -148,4 +168,3 @@ const App = ({
 };
 
 export default App;
-

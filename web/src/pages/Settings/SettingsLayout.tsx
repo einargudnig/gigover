@@ -43,6 +43,11 @@ export function SettingsLayout() {
 	const changeOrganizationMutation = useChangeOrganizations();
 
 	return (
+				<Box mb={8}>
+					<Link to="/settings/sentry">
+						<Button variant="outline" colorScheme="blue">Sentry Monitoring Tools</Button>
+					</Link>
+				</Box>
 		<>
 			<Box>
 				{isPending || isFetching ? (

@@ -167,6 +167,12 @@ const LazySettingsLayout = lazy(() =>
 	}))
 );
 
+const LazySentrySettings = lazy(() =>
+	import('./pages/Settings/SentrySettings').then((module) => ({
+		default: module.SentrySettings
+	}))
+);
+
 const LazyOrganisationSettings = lazy(() =>
 	import('./pages/Organisation/OrganizationSettings').then((module) => ({
 		default: module.OrganisationSettings
@@ -257,6 +263,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			<Route path={'settings'} element={<LazySettings />}>
 				<Route index element={<LazySettingsLayout />} />
 				<Route path={':orgId'} element={<LazyOrganisationSettings />} />
+				<Route path={'sentry'} element={<LazySentrySettings />} />
 			</Route>
 
 			<Route path={'project'} element={<LazyDashboard />}>
