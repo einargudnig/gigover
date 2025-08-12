@@ -1,4 +1,4 @@
-import { captureApiError } from '../utils/SentryUtils';
+import { ApiError, ApiErrorType, handleApiError } from '../utils/apiErrorUtils';
 
 export const IS_LOCAL = process.env.NODE_ENV !== 'production';
 
@@ -11,52 +11,168 @@ export const API_BASE =
 // If hosting backend locally use :8080 instead of :3000
 
 /**
- * Custom API error class for better error handling and Sentry tracking
+ * Maximum number of retry attempts for retryable API errors
  */
-export class ApiError extends Error {
-	statusCode: number;
-	endpoint: string;
-	method: string;
-	responseData?: any;
+export const MAX_RETRY_ATTEMPTS = 3;
 
-	constructor(
-		message: string,
-		endpoint: string,
-		statusCode = 0,
-		method = 'unknown',
-		responseData?: any
-	) {
-		super(message);
-		this.name = 'ApiError';
-		this.statusCode = statusCode;
-		this.endpoint = endpoint;
-		this.method = method;
-		this.responseData = responseData;
+/**
+ * Base backoff time for retries (in ms)
+ */
+export const BASE_RETRY_DELAY = 500;
+
+/**
+ * Retry an API call with exponential backoff
+ * @param fn The function to retry
+ * @param retryAttempts Current retry attempt count
+ * @param maxRetries Maximum number of retries
+ */
+export async function retryWithBackoff<T>(
+	fn: () => Promise<T>,
+	retryAttempts = 0,
+	maxRetries = MAX_RETRY_ATTEMPTS
+): Promise<T> {
+	try {
+		return await fn();
+	} catch (error) {
+		// Check if we should retry
+		if (retryAttempts < maxRetries && error instanceof ApiError && error.retryable) {
+			// Calculate exponential backoff delay
+			const delay = Math.min(
+				BASE_RETRY_DELAY * Math.pow(2, retryAttempts),
+				10000 // Max 10 seconds
+			);
+
+			// Add jitter to prevent thundering herd
+			const jitteredDelay = delay + Math.random() * 100;
+
+			// Wait before retrying
+			await new Promise((resolve) => setTimeout(resolve, jitteredDelay));
+
+			// Retry with incremented attempt count
+			return retryWithBackoff(fn, retryAttempts + 1, maxRetries);
+		}
+
+		// We've run out of retries or the error isn't retryable
+		throw error;
 	}
 }
 
 /**
- * Utility function to handle API errors with Sentry tracking
- * @param error The original error
- * @param endpoint The API endpoint that was called
- * @param showFeedback Whether to show feedback dialog
+ * API client with enhanced error handling and retry logic
  */
-export const handleApiError = (error: any, endpoint: string, showFeedback = false): never => {
-	// Extract status code and message if available
-	const statusCode = error?.response?.status || error?.status || 0;
-	const message = error?.response?.data?.message || error?.message || 'Unknown API error';
-	const method = error?.config?.method || 'unknown';
-	const responseData = error?.response?.data;
+export class ApiClient {
+	/**
+	 * Make a request with automatic error handling and retry for network issues
+	 */
+	static async request<T>(
+		url: string,
+		method = 'GET',
+		data?: any,
+		options: {
+			retries?: number;
+			withCredentials?: boolean;
+			headers?: Record<string, string>;
+		} = {}
+	): Promise<T> {
+		const { retries = MAX_RETRY_ATTEMPTS, withCredentials = true, headers = {} } = options;
 
-	// Create a properly structured API error
-	const apiError = new ApiError(message, endpoint, statusCode, method, responseData);
+		// Use fetch API
+		const makeRequest = async (): Promise<T> => {
+			try {
+				const requestOptions: RequestInit = {
+					method,
+					credentials: withCredentials ? 'include' : 'same-origin',
+					headers: {
+						'Content-Type': 'application/json',
+						...headers
+					}
+				};
 
-	// Track with Sentry
-	captureApiError(apiError, endpoint, showFeedback);
+				// Add body for non-GET requests
+				if (method !== 'GET' && data) {
+					requestOptions.body = JSON.stringify(data);
+				}
 
-	// Rethrow for normal error handling flow
-	throw apiError;
-};
+				// Make the request
+				const response = await fetch(url, requestOptions);
+
+				// Handle non-2xx responses
+				if (!response.ok) {
+					let responseData;
+					try {
+						responseData = await response.json();
+					} catch (e) {
+						// If JSON parsing fails, use text instead
+						responseData = { message: await response.text() };
+					}
+
+					throw new ApiError({
+						message: responseData?.message || `API Error (${response.status})`,
+						type: response.status >= 500 ? ApiErrorType.SERVER : ApiErrorType.CLIENT,
+						endpoint: url,
+						status: response.status,
+						method,
+						responseData,
+						requestData: data,
+						retryable: response.status >= 500 || response.status === 429
+					});
+				}
+
+				// Parse successful response
+				try {
+					return await response.json();
+				} catch (e) {
+					// Handle successful but invalid JSON responses
+					throw new ApiError({
+						message: 'Invalid JSON response',
+						type: ApiErrorType.PARSE,
+						endpoint: url,
+						status: response.status,
+						method,
+						retryable: false
+					});
+				}
+			} catch (error) {
+				// Handle fetch errors and transform them to ApiErrors
+				if (!(error instanceof ApiError)) {
+					throw handleApiError(error, url, method, data);
+				}
+				throw error;
+			}
+		};
+
+		// Attempt the request with retries
+		return retryWithBackoff(makeRequest, 0, retries);
+	}
+
+	/**
+	 * GET request
+	 */
+	static async get<T>(url: string, options?: any): Promise<T> {
+		return ApiClient.request<T>(url, 'GET', undefined, options);
+	}
+
+	/**
+	 * POST request
+	 */
+	static async post<T>(url: string, data?: any, options?: any): Promise<T> {
+		return ApiClient.request<T>(url, 'POST', data, options);
+	}
+
+	/**
+	 * PUT request
+	 */
+	static async put<T>(url: string, data?: any, options?: any): Promise<T> {
+		return ApiClient.request<T>(url, 'PUT', data, options);
+	}
+
+	/**
+	 * DELETE request
+	 */
+	static async delete<T>(url: string, options?: any): Promise<T> {
+		return ApiClient.request<T>(url, 'DELETE', undefined, options);
+	}
+}
 
 export class ApiService {
 	static verify = API_BASE + 'user/verify';
@@ -135,7 +251,6 @@ export class ApiService {
 	static getUserIdByEmail = 'https://us-central1-gigover2.cloudfunctions.net/getUserIdForEmail';
 
 	// File system
-
 	static folderList = (projectId: number) => API_BASE + 'contractor/folder/' + projectId; //old
 	static addFolder = API_BASE + 'contractor/addFolder';
 	static deleteFolder = API_BASE + 'contractor/removeFolder';
