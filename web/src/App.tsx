@@ -1,10 +1,11 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useContext, useEffect, useMemo, useState } from 'react';
+// import 'normalize.css';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { pdfjs } from 'react-pdf';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import { QueryParamProvider } from 'use-query-params';
 import { AuthenticatedRoutes } from './AuthenticatedRoutes';
-import ErrorBoundary from './ErrorBoundary';
+import { EnhancedErrorBoundary } from './components/ErrorBoundary';
 import { FullscreenLoader } from './components/FullscreenLoader';
 import { GlobalModals } from './components/GlobalModals';
 import { FileSystemContext } from './context/FileSystemContext';
@@ -16,13 +17,15 @@ import { FirebaseUser } from './firebase/firebaseTypes';
 import { useFirebaseAuth } from './hooks/useFirebaseAuth';
 import { IUserProfile } from './models/UserProfile';
 import { NewLogin } from './pages/NewLogin';
-import { Onboarding } from './pages/onboarding';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
 import * as Sentry from '@sentry/react';
+import { ErrorCategory } from './sentry';
+import ErrorBoundaryTester from './components/ErrorBoundary/ErrorBoundaryTester';
 
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.js';
+// We need this for loading PDF viewer on production.
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 type Intercom = (type: 'boot', options: Record<string, unknown>) => void;
 declare const window: Window & { Intercom: Intercom };
@@ -58,30 +61,11 @@ export const AppPreloader = (): JSX.Element => {
 
 			...userProperties
 		});
-		
-		// Set Sentry user context when user data is available
-		if (data && authUser) {
-			Sentry.setUser({
-				id: authUser.uid,
-				email: data.userName,
-				username: data.name,
-				ip_address: '{{auto}}'
-			});
-			
-			// Add additional context that might help with debugging
-			Sentry.setTag('user_type', data.type?.toString());
-			Sentry.setTag('registered', data.registered?.toString());
-		}
 	}, [authUser?.uid, data]);
 
 	useEffect(() => {
 		if (error) {
 			setHasError(true);
-			// Capture API verification errors
-			Sentry.captureMessage('User verification failed', {
-				level: 'error',
-				extra: { error }
-			});
 		}
 	}, [error]);
 
@@ -89,20 +73,10 @@ export const AppPreloader = (): JSX.Element => {
 	// this might be good to have 😬
 	console.log({ loading, isLoadingFirebase, data });
 
+	// TODO: why was !data resulting in an infinte loading spinner when not loggedin
 	if (loading || isLoadingFirebase) {
 		return <FullscreenLoader />;
 	}
-
-	const user = {
-		registered: data?.registered ?? false,
-		type: data?.type ?? 0,
-		email: data?.email ?? '',
-		authenticated: data?.authenticated ?? false,
-		avatar: data?.avatar ?? '',
-		name: data?.name ?? '',
-		userName: data?.userName ?? '',
-		phoneNumber: data?.phoneNumber ?? ''
-	};
 
 	if (hasError) {
 		return (
@@ -112,7 +86,7 @@ export const AppPreloader = (): JSX.Element => {
 		);
 	}
 
-	return <App userProfile={user} authUser={authUser} />;
+	return <App userProfile={data} authUser={authUser} />;
 };
 
 const App = ({
@@ -141,19 +115,27 @@ const App = ({
 
 	return (
 		<Router>
+			<OnboardingHandler userProfile={userProfile} />
 			{user !== null ? (
 				<QueryParamProvider>
 					<UserContext.Provider value={user}>
 						<FileSystemContext.Provider value={fileSystem}>
 							<ModalContext.Provider value={modalContext}>
-								<ErrorBoundary>
-									<Routes>
-										{userProfile?.registered === false && (
-											<Route path={'/onboarding'} element={<Onboarding />} />
-										)}
-										<Route path={'/*'} element={<AuthenticatedRoutes />} />
-									</Routes>
-								</ErrorBoundary>
+								<EnhancedErrorBoundary
+									errorCategory={ErrorCategory.RENDER}
+									name="AppRoot"
+									retryable={true}
+									onError={(error, errorInfo) => {
+										console.error('App-level error:', error);
+										Sentry.captureException(error, {
+											extra: { errorInfo },
+											tags: { level: 'fatal', component: 'AppRoot' }
+										});
+									}}
+								>
+									<GlobalModals />
+									<AuthenticatedRoutes />
+								</EnhancedErrorBoundary>
 							</ModalContext.Provider>
 						</FileSystemContext.Provider>
 					</UserContext.Provider>
@@ -165,6 +147,22 @@ const App = ({
 			)}
 		</Router>
 	);
+};
+
+interface OnboardingHandlerProps {
+	userProfile?: IUserProfile;
+}
+
+const OnboardingHandler: React.FC<OnboardingHandlerProps> = ({ userProfile }) => {
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (userProfile?.registered === false) {
+			navigate('/onboarding');
+		}
+	}, [userProfile, navigate]);
+
+	return null; // This component does not render anything
 };
 
 export default App;

@@ -203,7 +203,7 @@ class EnhancedErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryS
 					</Flex>
 
 					<Text>
-						We&aposve encountered an error and our team has been notified.
+						We've encountered an error and our team has been notified.
 						{retryable ? ' You can try again or view details below.' : ''}
 					</Text>
 

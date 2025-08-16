@@ -67,7 +67,7 @@ export class ApiClient {
 	static async request<T>(
 		url: string,
 		method = 'GET',
-		data?: any,
+		data?: Record<string, string>,
 		options: {
 			retries?: number;
 			withCredentials?: boolean;
@@ -148,28 +148,36 @@ export class ApiClient {
 	/**
 	 * GET request
 	 */
-	static async get<T>(url: string, options?: any): Promise<T> {
+	static async get<T>(url: string, options?: Record<string, string>): Promise<T> {
 		return ApiClient.request<T>(url, 'GET', undefined, options);
 	}
 
 	/**
 	 * POST request
 	 */
-	static async post<T>(url: string, data?: any, options?: any): Promise<T> {
+	static async post<T>(
+		url: string,
+		data?: Record<string, string>,
+		options?: Record<string, string>
+	): Promise<T> {
 		return ApiClient.request<T>(url, 'POST', data, options);
 	}
 
 	/**
 	 * PUT request
 	 */
-	static async put<T>(url: string, data?: any, options?: any): Promise<T> {
+	static async put<T>(
+		url: string,
+		data?: Record<string, string>,
+		options?: Record<string, string>
+	): Promise<T> {
 		return ApiClient.request<T>(url, 'PUT', data, options);
 	}
 
 	/**
 	 * DELETE request
 	 */
-	static async delete<T>(url: string, options?: any): Promise<T> {
+	static async delete<T>(url: string, options?: Record<string, string>): Promise<T> {
 		return ApiClient.request<T>(url, 'DELETE', undefined, options);
 	}
 }
