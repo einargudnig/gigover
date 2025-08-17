@@ -32,6 +32,7 @@ import { useRemoveUser } from '../queries/useRemoveUser';
 import { useGetUserInfo } from '../queries/useGetUserInfo';
 import { useGetUserByEmail } from '../queries/useGetUserByEmail';
 import { ConfirmDialog } from './ConfirmDialog';
+import { DataFetchingErrorBoundary } from './ErrorBoundary';
 
 interface SortableGridProps {
 	list: Project[];

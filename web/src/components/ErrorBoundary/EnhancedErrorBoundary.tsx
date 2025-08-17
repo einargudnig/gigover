@@ -1,17 +1,17 @@
-import React, { Component, ComponentType, ErrorInfo, ReactNode } from 'react';
-import * as Sentry from '@sentry/react';
-import {
-	Button,
-	Box,
-	Heading,
-	Text,
-	Flex,
-	VStack,
-	Divider,
-	Collapse,
-	Icon
-} from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon, RepeatIcon, WarningIcon } from '@chakra-ui/icons';
+import {
+	Box,
+	Button,
+	Collapse,
+	Divider,
+	Flex,
+	Heading,
+	Icon,
+	Text,
+	VStack
+} from '@chakra-ui/react';
+import * as Sentry from '@sentry/react';
+import React, { Component, ComponentType, ErrorInfo, ReactNode } from 'react';
 import { ErrorCategory } from '../../sentry';
 import { devError } from '../../utils/ConsoleUtils';
 
