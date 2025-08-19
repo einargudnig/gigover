@@ -264,6 +264,7 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				</Route>
 			</Route>
 
+			{/* 🕒 Time Tracker 🕒 */}
 			<Route path={'time-tracker'} element={<LazyTimeTracker />}>
 				<Route path={':projectId'} element={<LazyTimeTracker />} />
 			</Route>

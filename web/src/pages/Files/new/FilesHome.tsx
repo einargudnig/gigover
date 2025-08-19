@@ -12,7 +12,7 @@ import { ApiService } from '../../../services/ApiService';
 import { useQueryClient } from '@tanstack/react-query';
 
 export const FilesHome = (): JSX.Element => {
-	const { data, isPending } = useProjectList();
+	const { data, isPending, isError, error } = useProjectList();
 
 	const projects = useOpenProjects(data);
 
@@ -29,12 +29,18 @@ export const FilesHome = (): JSX.Element => {
 						queryClient.invalidateQueries({ queryKey: [ApiService.projectList] })
 					}
 				>
-					<SimpleGrid itemWidth={320}>
-						{projects.map((p) => (
-							<Folder key={p.projectId} project={p} />
-						))}
-						<TenderFolder />
-					</SimpleGrid>
+					{isError ? (
+						(() => {
+							throw error;
+						})()
+					) : (
+						<SimpleGrid itemWidth={320}>
+							{projects.map((p) => (
+								<Folder key={p.projectId} project={p} />
+							))}
+							<TenderFolder />
+						</SimpleGrid>
+					)}
 				</DataFetchingErrorBoundary>
 			</VStack>
 		</div>
