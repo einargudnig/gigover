@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { ErrorResponse } from '../../models/ErrorResponse';
 import { IProperties } from '../../models/Property';
@@ -10,7 +10,6 @@ export interface PropertiesResponse {
 
 export const useGetProperties = () => {
 	const { data, isPending, isFetching, isError, error } = useQuery<
-		// const { data, isPending, isFetching, isError, error } = useSuspenseQuery<
 		PropertiesResponse,
 		ErrorResponse
 	>({
