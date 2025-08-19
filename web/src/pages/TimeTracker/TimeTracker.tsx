@@ -36,6 +36,7 @@ import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { StopTrackerConfirmation } from './StopTrackerConfirmation';
 import { TimeTrackerReport } from './TimeTrackerReport';
+import { DataFetchingErrorBoundary } from '../../components/ErrorBoundary';
 
 // Helper function to format time units (e.g., 9 -> "09", 10 -> "10")
 const formatTimeUnit = (unit: number): string => (unit < 10 ? `0${unit}` : unit.toString());
@@ -206,221 +207,232 @@ export const TimeTracker = (): JSX.Element => {
 			</Box>
 			<Box p={2}>
 				<DisabledPage>
-					<Card
-						borderRadius="12px"
-						background="#fff"
-						boxShadow={Theme.boxShadow()}
-						p={6}
-						display="flex"
-						justifyContent="space-between"
-						alignItems="center"
+					<DataFetchingErrorBoundary
+						name="TimeTracker"
+						loadingState={reportDataLoading || activeTimerLoading}
+						onRetry={async () => {
+							await activeTrackers({});
+							await getReport();
+						}}
 					>
-						<Flex justifyContent="space-around" alignItems="center" w="100%">
-							<Box>
-								<VStack>
-									<Heading
-										as="h3"
-										size="md"
-										fontWeight="normal"
-										paddingTop={6}
-										pb={2}
-									>
-										Timesheets
-									</Heading>
-									{reportDataLoading ? (
-										<Heading as="h1" size="xl">
-											<LoadingSpinner />
+						<Card
+							borderRadius="12px"
+							background="#fff"
+							boxShadow={Theme.boxShadow()}
+							p={6}
+							display="flex"
+							justifyContent="space-between"
+							alignItems="center"
+						>
+							<Flex justifyContent="space-around" alignItems="center" w="100%">
+								<Box>
+									<VStack>
+										<Heading
+											as="h3"
+											size="md"
+											fontWeight="normal"
+											paddingTop={6}
+											pb={2}
+										>
+											Timesheets
 										</Heading>
-									) : (
-										<Heading as="h1" size="xl">
-											{totalTimesheets}
+										{reportDataLoading ? (
+											<Heading as="h1" size="xl">
+												<LoadingSpinner />
+											</Heading>
+										) : (
+											<Heading as="h1" size="xl">
+												{totalTimesheets}
+											</Heading>
+										)}
+									</VStack>
+								</Box>
+								<Divider
+									orientation="vertical"
+									height="100px"
+									borderColor={Theme.colors.border}
+								/>
+								<Box>
+									<VStack>
+										<Heading
+											as="h3"
+											size="md"
+											fontWeight="normal"
+											paddingTop={6}
+											pb={2}
+										>
+											Minutes tracked
 										</Heading>
-									)}
-								</VStack>
-							</Box>
-							<Divider
-								orientation="vertical"
-								height="100px"
-								borderColor={Theme.colors.border}
-							/>
-							<Box>
-								<VStack>
-									<Heading
-										as="h3"
-										size="md"
-										fontWeight="normal"
-										paddingTop={6}
-										pb={2}
-									>
-										Minutes tracked
-									</Heading>
-									{reportDataLoading ? (
-										<Heading as="h1" size="xl">
-											<LoadingSpinner />
+										{reportDataLoading ? (
+											<Heading as="h1" size="xl">
+												<LoadingSpinner />
+											</Heading>
+										) : (
+											<Heading as="h1" size="md">
+												{secondsToString(totalMinutes * 60)}
+											</Heading>
+										)}
+									</VStack>
+								</Box>
+								<Divider
+									orientation="vertical"
+									height="100px"
+									borderColor={Theme.colors.border}
+								/>
+								<Box>
+									<VStack>
+										<Heading
+											as="h3"
+											size="md"
+											fontWeight="normal"
+											paddingTop={6}
+											pb={2}
+										>
+											Workers
 										</Heading>
-									) : (
-										<Heading as="h1" size="md">
-											{secondsToString(totalMinutes * 60)}
-										</Heading>
-									)}
-								</VStack>
-							</Box>
-							<Divider
-								orientation="vertical"
-								height="100px"
-								borderColor={Theme.colors.border}
-							/>
-							<Box>
-								<VStack>
-									<Heading
-										as="h3"
-										size="md"
-										fontWeight="normal"
-										paddingTop={6}
-										pb={2}
-									>
-										Workers
-									</Heading>
-									{reportDataLoading ? (
-										<Heading as="h1" size="xl">
-											<LoadingSpinner />
-										</Heading>
-									) : (
-										<Heading as="h1" size="xl">
-											{reportData?.data.report?.length || 0}
-										</Heading>
-									)}
-								</VStack>
-							</Box>
-						</Flex>
-						<Box />
-					</Card>
-					<Card
-						borderRadius="12px"
-						background="#fff"
-						boxShadow={Theme.boxShadow()}
-						p={6}
-						my={6}
-					>
-						<CardBody p={0}>
-							<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
-								<Heading as="h3" size="sm">
-									Active timers
-								</Heading>
-								<StartTrackingAction />
+										{reportDataLoading ? (
+											<Heading as="h1" size="xl">
+												<LoadingSpinner />
+											</Heading>
+										) : (
+											<Heading as="h1" size="xl">
+												{reportData?.data.report?.length || 0}
+											</Heading>
+										)}
+									</VStack>
+								</Box>
 							</Flex>
-							<Box>
-								{!hasWorkers ? (
-									<Box mt={6}>
-										<EmptyState
-											title={'No current active workers'}
-											text={'Start tracking to see active timers'}
-											action={<StartTrackingAction />}
-										/>
-									</Box>
-								) : (
-									<Table>
-										<Thead>
-											<Tr>
-												<Th>Project</Th>
-												<Th>Worker</Th>
-												<Th style={{ width: 200, textAlign: 'center' }}>
-													Timer
-												</Th>
-											</Tr>
-										</Thead>
-										<Tbody>
-											{data?.workers?.map((worker) =>
-												worker.timeSheets.map(
-													(timeSheet, timeSheetIndex) => (
-														<Tr key={`${worker.uId}_${timeSheetIndex}`}>
-															<Td>
-																{getActiveTrackerHeader(
-																	timeSheet.projectId,
-																	timeSheet.taskId
-																)}
-															</Td>
-															<Td>{worker.name}</Td>
-															<Td>
-																<Flex
-																	justify="flex-end"
-																	align="center"
-																>
-																	<Box
-																		fontSize="lg"
-																		fontWeight="light"
-																		border="1px solid #e5e5e5"
-																		padding={3}
-																		marginRight={3}
-																		borderRadius="md"
-																		userSelect="none"
+							<Box />
+						</Card>
+						<Card
+							borderRadius="12px"
+							background="#fff"
+							boxShadow={Theme.boxShadow()}
+							p={6}
+							my={6}
+						>
+							<CardBody p={0}>
+								<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
+									<Heading as="h3" size="sm">
+										Active timers
+									</Heading>
+									<StartTrackingAction />
+								</Flex>
+								<Box>
+									{!hasWorkers ? (
+										<Box mt={6}>
+											<EmptyState
+												title={'No current active workers'}
+												text={'Start tracking to see active timers'}
+												action={<StartTrackingAction />}
+											/>
+										</Box>
+									) : (
+										<Table>
+											<Thead>
+												<Tr>
+													<Th>Project</Th>
+													<Th>Worker</Th>
+													<Th style={{ width: 200, textAlign: 'center' }}>
+														Timer
+													</Th>
+												</Tr>
+											</Thead>
+											<Tbody>
+												{data?.workers?.map((worker) =>
+													worker.timeSheets.map(
+														(timeSheet, timeSheetIndex) => (
+															<Tr
+																key={`${worker.uId}_${timeSheetIndex}`}
+															>
+																<Td>
+																	{getActiveTrackerHeader(
+																		timeSheet.projectId,
+																		timeSheet.taskId
+																	)}
+																</Td>
+																<Td>{worker.name}</Td>
+																<Td>
+																	<Flex
+																		justify="flex-end"
+																		align="center"
 																	>
-																		<ActiveTimerDisplay
-																			initialTimeMs={
-																				now.getTime() -
-																				timeSheet.start
-																			}
-																			lastUnit={'h'}
-																		/>
-																	</Box>
-																	<Button
-																		variant="outline"
-																		aria-label="Stop timer"
-																		colorScheme="black"
-																		height="100%"
-																		borderRadius="md"
-																		paddingY={3}
-																		paddingX={4}
-																		fontSize="lg"
-																		_active={{
-																			outline: 'none',
-																			border: 'none'
-																		}}
-																		_focus={{
-																			outline: 'none',
-																			border: 'none'
-																		}}
-																		onClick={() =>
-																			setStopConfirmationModal(
-																				{
-																					projectId:
-																						timeSheet.projectId,
-																					taskId: timeSheet.taskId,
-																					uId: worker.uId
+																		<Box
+																			fontSize="lg"
+																			fontWeight="light"
+																			border="1px solid #e5e5e5"
+																			padding={3}
+																			marginRight={3}
+																			borderRadius="md"
+																			userSelect="none"
+																		>
+																			<ActiveTimerDisplay
+																				initialTimeMs={
+																					now.getTime() -
+																					timeSheet.start
 																				}
-																			)
-																		}
-																	>
-																		|&nbsp;|
-																	</Button>
-																</Flex>
-															</Td>
-														</Tr>
+																				lastUnit={'h'}
+																			/>
+																		</Box>
+																		<Button
+																			variant="outline"
+																			aria-label="Stop timer"
+																			colorScheme="black"
+																			height="100%"
+																			borderRadius="md"
+																			paddingY={3}
+																			paddingX={4}
+																			fontSize="lg"
+																			_active={{
+																				outline: 'none',
+																				border: 'none'
+																			}}
+																			_focus={{
+																				outline: 'none',
+																				border: 'none'
+																			}}
+																			onClick={() =>
+																				setStopConfirmationModal(
+																					{
+																						projectId:
+																							timeSheet.projectId,
+																						taskId: timeSheet.taskId,
+																						uId: worker.uId
+																					}
+																				)
+																			}
+																		>
+																			|&nbsp;|
+																		</Button>
+																	</Flex>
+																</Td>
+															</Tr>
+														)
 													)
-												)
-											)}
-										</Tbody>
-									</Table>
-								)}
-							</Box>
-						</CardBody>
-					</Card>
-					<Card
-						borderRadius="12px"
-						background="#fff"
-						boxShadow={Theme.boxShadow()}
-						p={6}
-						my={6}
-					>
-						<CardBody p={0}>
-							<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
-								<Heading as="h3" size="sm">
-									Reports
-								</Heading>
-							</Flex>
-							<TimeTrackerReport refetch={[refetch, setRefetch]} />
-						</CardBody>
-					</Card>
+												)}
+											</Tbody>
+										</Table>
+									)}
+								</Box>
+							</CardBody>
+						</Card>
+						<Card
+							borderRadius="12px"
+							background="#fff"
+							boxShadow={Theme.boxShadow()}
+							p={6}
+							my={6}
+						>
+							<CardBody p={0}>
+								<Flex justify="space-between" align="center" mb={Theme.padding(3)}>
+									<Heading as="h3" size="sm">
+										Reports
+									</Heading>
+								</Flex>
+								<TimeTrackerReport refetch={[refetch, setRefetch]} />
+							</CardBody>
+						</Card>
+					</DataFetchingErrorBoundary>
 				</DisabledPage>
 			</Box>
 
