@@ -23,26 +23,33 @@ const ErrorBoundaryTester: React.FC<ErrorBoundaryTesterProps> = ({ location = 'c
 	};
 
 	const triggerError = () => {
+		// Force React to notice this error by using useState function incorrectly
+		const forceError = () => {
+			// @ts-ignore - intentionally causing an error
+			setErrorType(() => {
+				throw new Error(
+					`${location} error - intentionally thrown for testing (${errorType})`
+				);
+			});
+		};
+
 		switch (errorType) {
 			case 'render':
+				// Direct error throwing in render
 				throw new Error(`${location} render error - intentionally thrown for testing`);
 
 			case 'async':
-				Promise.reject(
-					new Error(`${location} async error - intentionally thrown for testing`)
-				);
+				// Immediately throw the async error rather than just rejecting it
+				setTimeout(() => {
+					forceError();
+				}, 0);
 				break;
 
 			case 'event':
-				// Simulate an event handler error
-				window.dispatchEvent(
-					new ErrorEvent('error', {
-						error: new Error(
-							`${location} event error - intentionally thrown for testing`
-						),
-						message: `${location} event error - intentionally thrown for testing`
-					})
-				);
+				// Use setTimeout to move out of event context and throw error
+				setTimeout(() => {
+					forceError();
+				}, 0);
 				break;
 
 			case 'network':
@@ -54,7 +61,7 @@ const ErrorBoundaryTester: React.FC<ErrorBoundaryTesterProps> = ({ location = 'c
 				throw networkError;
 
 			case 'component-state':
-				// This causes a render error due to invalid state
+				// Directly manipulate state in an invalid way to cause error
 				// @ts-ignore - intentionally causing an error
 				setErrorType(null.invalid);
 				break;
