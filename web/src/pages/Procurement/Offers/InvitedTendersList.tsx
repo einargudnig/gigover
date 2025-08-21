@@ -13,14 +13,18 @@ import {
 import { useMemo } from 'react';
 import { CardBaseLink } from '../../../components/CardBase';
 import { Center } from '../../../components/Center';
+import { DataFetchingErrorBoundary } from '../../../components/ErrorBoundary';
 import { CompleteTender } from '../../../models/Tender';
 import { useGetBidderTenders } from '../../../queries/procurement/useGetBidderTenders';
+import { ApiService } from '../../../services/ApiService';
 import { handleFinishDate } from '../../../utils/HandleFinishDate';
 import { formatDateWithoutTime } from '../../../utils/StringUtils';
-import { ProcurementListSkeleton } from '../ProcurementListSkeleton';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const InvitedTendersList = (): JSX.Element => {
-	const { data: tenders, isPending } = useGetBidderTenders();
+	const { data: tenders, isPending, isError, error } = useGetBidderTenders();
+
+	const queryClient = useQueryClient();
 
 	const getUniqueTenders = useMemo(() => {
 		return () => {
@@ -112,124 +116,145 @@ export const InvitedTendersList = (): JSX.Element => {
 			<Flex justify={'start'}>
 				<Heading size={'md'}>You have been invited to add offers to these tenders</Heading>
 			</Flex>
+			<DataFetchingErrorBoundary
+				name="InvitedTendersList"
+				apiEndpoint={ApiService.bidderTenders}
+				loadingState={isPending}
+				onRetry={() => {
+					queryClient.invalidateQueries({ queryKey: [ApiService.bidderTenders] });
+				}}
+			>
+				{isError ? (
+					(() => {
+						throw error;
+					})()
+				) : (
+					<>
+						{noTender ? (
+							<Center>
+								<Text fontSize={'xl'}>
+									You do not have any tenders yet. The Tender owner needs to add
+									you to the tender.
+								</Text>
+							</Center>
+						) : (
+							<>
+								{uniqueTenders
+									.slice()
+									.reverse()
+									.map((t) => {
+										let offerStatus;
+										if (t.status === 0) {
+											offerStatus = 'Unpublished';
+										} else if (t.status === 1) {
+											offerStatus = 'Published';
+										} else {
+											offerStatus = 'Unknown';
+										}
 
-			{isPending ? (
-				<ProcurementListSkeleton />
-			) : (
-				<>
-					{noTender ? (
-						<Center>
-							<Text fontSize={'xl'}>
-								You do not have any tenders yet. The Tender owner needs to add you
-								to the tender.
-							</Text>
-						</Center>
-					) : (
-						<>
-							{uniqueTenders
-								.slice()
-								.reverse()
-								.map((t) => {
-									let offerStatus;
-									if (t.status === 0) {
-										offerStatus = 'Unpublished';
-									} else if (t.status === 1) {
-										offerStatus = 'Published';
-									} else {
-										offerStatus = 'Unknown';
-									}
-
-									return (
-										<LinkBox
-											as={CardBaseLink}
-											to={handleLinkFromStatus(t) || '#'}
-											key={t.tenderId}
-											w="100%"
-											maxW="100%"
-											h="auto"
-											mb="8px"
-											mt="8px"
-											sx={{
-												h3: {
-													marginBottom: '16px',
-													color: '#000'
-												},
-												'@media screen and (max-width: 768px)': {
-													width: '100%'
-												}
-											}}
-										>
-											<LinkOverlay href={handleLinkFromStatus(t) || '#'}>
-												<Flex direction={'column'}>
-													<Grid templateColumns="repeat(4, 1fr)" gap={1}>
-														<GridItem colSpan={2}>
-															<HStack>
-																<Text as={'b'}>Project:</Text>
-																<Text color={'black'}>
-																	{t.projectName}
-																</Text>
-															</HStack>
-															<HStack>
-																<Text as={'b'}>
-																	Tender description:
-																</Text>
-																<Text color={'black'}>
-																	{t.description}
-																</Text>
-															</HStack>
-														</GridItem>
-														<GridItem colSpan={1}>
-															<HStack>
-																<Text as={'b'}>Phone number:</Text>
-																<Text color={'black'}>
-																	{t.phoneNumber}
-																</Text>
-															</HStack>
-															<HStack>
-																<Text as={'b'}>Tender status:</Text>
-																<Text color={'black'}>
-																	{offerStatus}
-																</Text>
-															</HStack>
-														</GridItem>
-														<GridItem colSpan={1}>
-															<HStack>
-																<Text as={'b'}>
-																	Number of items:
-																</Text>
-																<Text color={'black'}>
-																	{t.items.length}
-																</Text>
-															</HStack>
-															<HStack>{shouldDeliver(t)}</HStack>
-														</GridItem>
-														<GridItem colSpan={2}>
-															<p
-																style={{
-																	marginBottom: -16,
-																	fontSize: 14
-																}}
-															>
-																{finishDateStatus(t.finishDate)}
-															</p>
-														</GridItem>
-														<GridItem colSpan={1} />
-														<GridItem colSpan={1}>
-															<HStack>
-																<Text as={'b'}>Bid status:</Text>
-																<Text>{renderBidStatus(t)}</Text>
-															</HStack>
-														</GridItem>
-													</Grid>
-												</Flex>
-											</LinkOverlay>
-										</LinkBox>
-									);
-								})}
-						</>
-					)}
-				</>
-			)}
+										return (
+											<LinkBox
+												as={CardBaseLink}
+												to={handleLinkFromStatus(t) || '#'}
+												key={t.tenderId}
+												w="100%"
+												maxW="100%"
+												h="auto"
+												mb="8px"
+												mt="8px"
+												sx={{
+													h3: {
+														marginBottom: '16px',
+														color: '#000'
+													},
+													'@media screen and (max-width: 768px)': {
+														width: '100%'
+													}
+												}}
+											>
+												<LinkOverlay href={handleLinkFromStatus(t) || '#'}>
+													<Flex direction={'column'}>
+														<Grid
+															templateColumns="repeat(4, 1fr)"
+															gap={1}
+														>
+															<GridItem colSpan={2}>
+																<HStack>
+																	<Text as={'b'}>Project:</Text>
+																	<Text color={'black'}>
+																		{t.projectName}
+																	</Text>
+																</HStack>
+																<HStack>
+																	<Text as={'b'}>
+																		Tender description:
+																	</Text>
+																	<Text color={'black'}>
+																		{t.description}
+																	</Text>
+																</HStack>
+															</GridItem>
+															<GridItem colSpan={1}>
+																<HStack>
+																	<Text as={'b'}>
+																		Phone number:
+																	</Text>
+																	<Text color={'black'}>
+																		{t.phoneNumber}
+																	</Text>
+																</HStack>
+																<HStack>
+																	<Text as={'b'}>
+																		Tender status:
+																	</Text>
+																	<Text color={'black'}>
+																		{offerStatus}
+																	</Text>
+																</HStack>
+															</GridItem>
+															<GridItem colSpan={1}>
+																<HStack>
+																	<Text as={'b'}>
+																		Number of items:
+																	</Text>
+																	<Text color={'black'}>
+																		{t.items.length}
+																	</Text>
+																</HStack>
+																<HStack>{shouldDeliver(t)}</HStack>
+															</GridItem>
+															<GridItem colSpan={2}>
+																<p
+																	style={{
+																		marginBottom: -16,
+																		fontSize: 14
+																	}}
+																>
+																	{finishDateStatus(t.finishDate)}
+																</p>
+															</GridItem>
+															<GridItem colSpan={1} />
+															<GridItem colSpan={1}>
+																<HStack>
+																	<Text as={'b'}>
+																		Bid status:
+																	</Text>
+																	<Text>
+																		{renderBidStatus(t)}
+																	</Text>
+																</HStack>
+															</GridItem>
+														</Grid>
+													</Flex>
+												</LinkOverlay>
+											</LinkBox>
+										);
+									})}
+							</>
+						)}
+					</>
+				)}
+			</DataFetchingErrorBoundary>
 		</Box>
 	);
 };
