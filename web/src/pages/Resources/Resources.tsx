@@ -175,6 +175,7 @@ export const Resources = (): JSX.Element => {
 							onRetry={() =>
 								queryClient.invalidateQueries({ queryKey: [ApiService.resources] })
 							}
+							skeletonCount={8}
 						>
 							{isError ? (
 								(() => {

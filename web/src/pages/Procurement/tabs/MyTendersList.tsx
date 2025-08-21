@@ -75,6 +75,7 @@ export function MyTendersList() {
 				onRetry={() =>
 					queryClient.invalidateQueries({ queryKey: [ApiService.userTenders] })
 				}
+				skeletonCount={8}
 			>
 				{isError ? (
 					(() => {

@@ -55,6 +55,7 @@ export const BidResponsesList = (): JSX.Element => {
 				onRetry={() => {
 					queryClient.invalidateQueries({ queryKey: [ApiService.getClientBids] });
 				}}
+				skeletonCount={8}
 			>
 				{isError ? (
 					(() => {

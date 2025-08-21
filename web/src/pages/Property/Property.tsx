@@ -16,6 +16,7 @@ export const Property = (): JSX.Element => {
 				apiEndpoint={ApiService.getProperties}
 				loadingState={isPending || isFetching}
 				onRetry={() => {}}
+				skeletonCount={8}
 			>
 				{isError ? (
 					(() => {

@@ -74,6 +74,7 @@ export const TenderOffersList = (): JSX.Element => {
 				onRetry={() =>
 					queryClient.invalidateQueries({ queryKey: [ApiService.userTenders] })
 				}
+				skeletonCount={8}
 			>
 				{isError ? (
 					(() => {

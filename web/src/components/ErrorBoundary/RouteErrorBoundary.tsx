@@ -38,7 +38,7 @@ const RouteFallback = ({ error, resetError, showFeedback }: FallbackProps) => {
 						Try Again
 					</Button>
 
-					<Button variant="outline" colorScheme="yellow" onClick={showFeedback}>
+					<Button variant="outline" colorScheme="black" onClick={showFeedback}>
 						Report Problem
 					</Button>
 				</HStack>

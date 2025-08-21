@@ -37,6 +37,7 @@ export const MyOffersList = (): JSX.Element => {
 				onRetry={() => {
 					queryClient.invalidateQueries({ queryKey: [ApiService.userOffers] });
 				}}
+				skeletonCount={8}
 			>
 				{isError ? (
 					(() => {

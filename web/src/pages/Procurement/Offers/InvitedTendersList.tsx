@@ -123,6 +123,7 @@ export const InvitedTendersList = (): JSX.Element => {
 				onRetry={() => {
 					queryClient.invalidateQueries({ queryKey: [ApiService.bidderTenders] });
 				}}
+				skeletonCount={8}
 			>
 				{isError ? (
 					(() => {

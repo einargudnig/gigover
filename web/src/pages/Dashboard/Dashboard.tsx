@@ -186,6 +186,7 @@ export const Dashboard = (): JSX.Element => {
 					onRetry={() =>
 						queryClient.invalidateQueries({ queryKey: [ApiService.projectList] })
 					}
+					skeletonCount={8}
 				>
 					{isError ? (
 						(() => {
