@@ -1,5 +1,6 @@
 import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { RouteErrorBoundary } from './components/ErrorBoundary';
 import { Page } from './components/Page';
 
 const LazyDashboard = lazy(() =>
@@ -167,6 +168,12 @@ const LazySettingsLayout = lazy(() =>
 	}))
 );
 
+const LazySentrySettings = lazy(() =>
+	import('./pages/Settings/SentrySettings').then((module) => ({
+		default: module.SentrySettings
+	}))
+);
+
 const LazyOrganisationSettings = lazy(() =>
 	import('./pages/Organisation/OrganizationSettings').then((module) => ({
 		default: module.OrganisationSettings
@@ -176,10 +183,24 @@ const LazyOrganisationSettings = lazy(() =>
 export const AuthenticatedRoutes = (): JSX.Element => (
 	<Routes>
 		<Route path={'/'} element={<Page />}>
-			<Route index element={<LazyDashboard />} />
+			<Route
+				index
+				element={
+					<RouteErrorBoundary routeName="Dashboard">
+						<LazyDashboard />
+					</RouteErrorBoundary>
+				}
+			/>
 
 			{/* 📝 Tasks 📝 */}
-			<Route path={'project/:projectId'} element={<LazyProjectDetailsOutlet />}>
+			<Route
+				path={'project/:projectId'}
+				element={
+					<RouteErrorBoundary routeName="ProjectDetails">
+						<LazyProjectDetailsOutlet />
+					</RouteErrorBoundary>
+				}
+			>
 				<Route index element={<LazyProjectDetails />} />
 				<Route path={'gantt'} element={<LazyProjectDetailsGanttChart />} />
 				<Route path={'files'} element={<LazyProjectDetailsFiles />} />
@@ -187,15 +208,36 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 
 			{/* 🏘️ Property system 🏘️ */}
 			<Route path={'property'}>
-				<Route index element={<LazyProperty />} />
-				<Route path={':propertyId'} element={<LazyPropertyId />} />
+				<Route
+					index
+					element={
+						<RouteErrorBoundary routeName="PropertyList">
+							<LazyProperty />
+						</RouteErrorBoundary>
+					}
+				/>
+				<Route
+					path={':propertyId'}
+					element={
+						<RouteErrorBoundary routeName="PropertyDetails">
+							<LazyPropertyId />
+						</RouteErrorBoundary>
+					}
+				/>
 			</Route>
 
 			{/* 🛣️ Roadmap 🛣️ */}
 			<Route path={'roadmap'} element={<LazyRoadmapPreloader />} />
 
 			{/* 📂 File System 📂 */}
-			<Route path={'files'} element={<LazyFiles />}>
+			<Route
+				path={'files'}
+				element={
+					<RouteErrorBoundary routeName="FileSystem">
+						<LazyFiles />
+					</RouteErrorBoundary>
+				}
+			>
 				<Route index element={<LazyFilesHome />} />
 				<Route path={':projectId'} element={<LazyProjectFolder />} />
 				<Route
@@ -205,7 +247,14 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				<Route path={':projectId/folder/:folderId'} element={<LazyFolderFolder />} />
 				<Route path={':projectId/:fileId'} element={<LazyProjectFolder />} />
 				{/* This route is for documents for all tenders and offers */}
-				<Route path={'tender'} element={<LazyTenderFolder />}>
+				<Route
+					path={'tender'}
+					element={
+						<RouteErrorBoundary routeName="TenderFiles">
+							<LazyTenderFolder />
+						</RouteErrorBoundary>
+					}
+				>
 					<Route index element={<LazyTenderFolderHome />} />
 					<Route path={'tenders'} element={<LazyTendersFolder />} />
 					<Route path={'tenders/:tenderId'} element={<LazyTenderFile />} />
@@ -215,12 +264,20 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 				</Route>
 			</Route>
 
+			{/* 🕒 Time Tracker 🕒 */}
 			<Route path={'time-tracker'} element={<LazyTimeTracker />}>
 				<Route path={':projectId'} element={<LazyTimeTracker />} />
 			</Route>
 
 			{/* 💰 Tender/Offer  system 💰 */}
-			<Route path={'tender'} element={<LazyTenderLayout />}>
+			<Route
+				path={'tender'}
+				element={
+					<RouteErrorBoundary routeName="ProcurementSystem">
+						<LazyTenderLayout />
+					</RouteErrorBoundary>
+				}
+			>
 				{/* Tenders created by the user */}
 				<Route index element={<LazyMyTendersList />} />
 				<Route path={':tenderId'} element={<LazyTenderDetails />} />
@@ -250,13 +307,28 @@ export const AuthenticatedRoutes = (): JSX.Element => (
 			</Route>
 
 			{/* 🏎️ Resources 🏎️ */}
-			<Route path={'resources'} element={<LazyResources />} />
+			<Route
+				path={'resources'}
+				element={
+					<RouteErrorBoundary routeName="Resources">
+						<LazyResources />
+					</RouteErrorBoundary>
+				}
+			/>
 
 			{/* ⚙︎ Settings ⚙︎ */}
 			{/* Organiasation settings */}
-			<Route path={'settings'} element={<LazySettings />}>
+			<Route
+				path={'settings'}
+				element={
+					<RouteErrorBoundary routeName="Settings">
+						<LazySettings />
+					</RouteErrorBoundary>
+				}
+			>
 				<Route index element={<LazySettingsLayout />} />
 				<Route path={':orgId'} element={<LazyOrganisationSettings />} />
+				<Route path={'sentry'} element={<LazySentrySettings />} />
 			</Route>
 
 			<Route path={'project'} element={<LazyDashboard />}>

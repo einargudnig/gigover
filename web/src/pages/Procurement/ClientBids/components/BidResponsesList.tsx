@@ -14,10 +14,14 @@ import { Center } from '../../../../components/Center';
 import { Bid } from '../../../../models/Tender';
 import { useGetClientBids } from '../../../../queries/procurement/client-bids/useGetClientBids';
 import { formatDateWithoutTime } from '../../../../utils/StringUtils';
-import { ProcurementListSkeleton } from '../../ProcurementListSkeleton';
+import { ApiService } from '../../../../services/ApiService';
+import { useQueryClient } from '@tanstack/react-query';
+import { DataFetchingErrorBoundary } from '../../../../components/ErrorBoundary';
 
 export const BidResponsesList = (): JSX.Element => {
-	const { data, isPending: isLoading } = useGetClientBids();
+	const { data, isPending, isError, error } = useGetClientBids();
+
+	const queryClient = useQueryClient();
 
 	const status = (bid: Bid) => {
 		if (bid?.status === 0 || bid?.status === 1) {
@@ -44,93 +48,113 @@ export const BidResponsesList = (): JSX.Element => {
 				<Heading size={'md'}>Bids that you have answered</Heading>
 			</Flex>
 
-			{isLoading ? (
-				<ProcurementListSkeleton />
-			) : (
-				<>
-					{!data || data.length === 0 ? (
-						<Center>
-							<Text>No Bids Found</Text>
-						</Center>
-					) : (
-						data
-							.slice()
-							.reverse()
-							.map((bid) => {
-								return (
-									<LinkBox
-										as={CardBaseLink}
-										key={bid.bidId}
-										to={`/tender/bid-responses/${bid.bidId}`}
-										w="100%"
-										maxW="100%"
-										h="auto"
-										mt="8px"
-										mb="8px"
-										sx={{
-											h3: {
-												marginBottom: '16px',
-												color: '#000'
-											},
-											'@media screen and (max-width: 768px)': {
-												width: '100%'
-											}
-										}}
-									>
-										<LinkOverlay href={`/tender/bid-responses/${bid.bidId}`}>
-											<Flex direction={'column'}>
-												<Grid templateColumns="repeat(4, 1fr)" gap={1}>
-													<GridItem colSpan={2}>
-														<HStack>
-															<Text color={'black'}>
-																Description:
-															</Text>
-															<Text>{bid.description}</Text>
-														</HStack>
-														<HStack>
-															<Text color={'black'}>Terms: </Text>
-															<Text>{bid.terms}</Text>
-														</HStack>
-														<HStack>
-															<Text color={'black'}>Address: </Text>
-															<Text>{bid.address}</Text>
-														</HStack>
-														<HStack>
-															<Text color={'black'}>Status: </Text>
-															<Text>{status(bid)}</Text>
-														</HStack>
-													</GridItem>
-													<GridItem colSpan={2}>
-														<HStack>
-															<Text color={'black'}>Deliver:</Text>
-															<Text>
-																{bid.delivery ? 'Yes' : 'No'}
-															</Text>
-														</HStack>
-														<HStack>
-															<Text color={'black'}>
-																Close Date:{' '}
-															</Text>
-															<Text>
-																{formatDateWithoutTime(
-																	new Date(bid.finishDate)
-																)}
-															</Text>
-														</HStack>
-														<HStack>
-															<Text color={'black'}>Notes:</Text>
-															<Text>{bid.notes}</Text>
-														</HStack>
-													</GridItem>
-												</Grid>
-											</Flex>
-										</LinkOverlay>
-									</LinkBox>
-								);
-							})
-					)}
-				</>
-			)}
+			<DataFetchingErrorBoundary
+				name="BidResponsesList"
+				apiEndpoint={ApiService.getClientBids}
+				loadingState={isPending}
+				onRetry={() => {
+					queryClient.invalidateQueries({ queryKey: [ApiService.getClientBids] });
+				}}
+				skeletonCount={8}
+			>
+				{isError ? (
+					(() => {
+						throw error;
+					})()
+				) : (
+					<>
+						{!data || data.length === 0 ? (
+							<Center>
+								<Text>No Bids Found</Text>
+							</Center>
+						) : (
+							data
+								.slice()
+								.reverse()
+								.map((bid) => {
+									return (
+										<LinkBox
+											as={CardBaseLink}
+											key={bid.bidId}
+											to={`/tender/bid-responses/${bid.bidId}`}
+											w="100%"
+											maxW="100%"
+											h="auto"
+											mt="8px"
+											mb="8px"
+											sx={{
+												h3: {
+													marginBottom: '16px',
+													color: '#000'
+												},
+												'@media screen and (max-width: 768px)': {
+													width: '100%'
+												}
+											}}
+										>
+											<LinkOverlay
+												href={`/tender/bid-responses/${bid.bidId}`}
+											>
+												<Flex direction={'column'}>
+													<Grid templateColumns="repeat(4, 1fr)" gap={1}>
+														<GridItem colSpan={2}>
+															<HStack>
+																<Text color={'black'}>
+																	Description:
+																</Text>
+																<Text>{bid.description}</Text>
+															</HStack>
+															<HStack>
+																<Text color={'black'}>Terms: </Text>
+																<Text>{bid.terms}</Text>
+															</HStack>
+															<HStack>
+																<Text color={'black'}>
+																	Address:{' '}
+																</Text>
+																<Text>{bid.address}</Text>
+															</HStack>
+															<HStack>
+																<Text color={'black'}>
+																	Status:{' '}
+																</Text>
+																<Text>{status(bid)}</Text>
+															</HStack>
+														</GridItem>
+														<GridItem colSpan={2}>
+															<HStack>
+																<Text color={'black'}>
+																	Deliver:
+																</Text>
+																<Text>
+																	{bid.delivery ? 'Yes' : 'No'}
+																</Text>
+															</HStack>
+															<HStack>
+																<Text color={'black'}>
+																	Close Date:{' '}
+																</Text>
+																<Text>
+																	{formatDateWithoutTime(
+																		new Date(bid.finishDate)
+																	)}
+																</Text>
+															</HStack>
+															<HStack>
+																<Text color={'black'}>Notes:</Text>
+																<Text>{bid.notes}</Text>
+															</HStack>
+														</GridItem>
+													</Grid>
+												</Flex>
+											</LinkOverlay>
+										</LinkBox>
+									);
+								})
+						)}
+					</>
+				)}
+			</DataFetchingErrorBoundary>
 		</Box>
 	);
 };

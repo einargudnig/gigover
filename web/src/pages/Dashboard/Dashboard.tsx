@@ -19,7 +19,7 @@ import {
 	VStack
 } from '@chakra-ui/react';
 import { useContext, useEffect, useState } from 'react';
-import { Center } from '../../components/Center';
+import DataFetchingErrorBoundary from '../../components/ErrorBoundary/DataFetchingErrorBoundary';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { NewProjectOverview } from '../../components/NewProjectOverview';
 import { DisabledComponent } from '../../components/disabled/DisabledComponent';
@@ -31,8 +31,10 @@ import { ProgressStatus } from '../../models/ProgressStatus';
 import { ProjectStatus } from '../../models/Project';
 import { useProgressStatusList } from '../../queries/useProgressStatusList';
 import { useProjectList } from '../../queries/useProjectList';
+import { ApiService } from '../../services/ApiService';
 import { ProjectSearchBar } from './ProjectSearchBar';
 import { useFilterProjectsBy } from './hooks/useFilterProjectsBy';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Dashboard = (): JSX.Element => {
 	const { data: statuses, isPending: isPendingStatuses } = useProgressStatusList();
@@ -41,6 +43,7 @@ export const Dashboard = (): JSX.Element => {
 	const [counter, setCounter] = useState(0);
 	const [activeTab, setActiveTab] = useState<string | ProgressStatus>(ProjectStatus.OPEN);
 	const [showSearch, setShowSearch] = useState(false);
+	const queryClient = useQueryClient();
 
 	const projects = useFilterProjectsBy(activeTab, data, isPendingProjects);
 
@@ -57,14 +60,6 @@ export const Dashboard = (): JSX.Element => {
 			setCounter((v) => ++v);
 		}
 	}, [projects, activeTab, isPendingProjects]);
-
-	if (isError) {
-		return (
-			<p>
-				Error: {error?.errorText} - Code: {error?.errorCode}
-			</p>
-		);
-	}
 
 	const pageTitle = 'Dashboard';
 	const breadcrumbs = [{ title: 'Projects', url: '/' }];
@@ -184,22 +179,32 @@ export const Dashboard = (): JSX.Element => {
 				</Flex>
 			</Box>
 			<Box p={2}>
-				{isPendingProjects ? (
-					<Center>
-						<LoadingSpinner />
-					</Center>
-				) : (
-					<VStack width={'100%'} align={'stretch'}>
-						{!projects || projects.length <= 0 ? (
-							<NoProjectsFound />
-						) : (
-							<NewProjectOverview
-								key={`projects_${counter}_${projects.length}`}
-								list={projects}
-							/>
-						)}
-					</VStack>
-				)}
+				<DataFetchingErrorBoundary
+					name="ProjectList"
+					apiEndpoint={ApiService.projectList}
+					loadingState={isPendingProjects}
+					onRetry={() =>
+						queryClient.invalidateQueries({ queryKey: [ApiService.projectList] })
+					}
+					skeletonCount={8}
+				>
+					{isError ? (
+						(() => {
+							throw error;
+						})()
+					) : (
+						<VStack width={'100%'} align={'stretch'}>
+							{!projects || projects.length <= 0 ? (
+								<NoProjectsFound />
+							) : (
+								<NewProjectOverview
+									key={`projects_${counter}_${projects.length}`}
+									list={projects}
+								/>
+							)}
+						</VStack>
+					)}
+				</DataFetchingErrorBoundary>
 			</Box>
 		</>
 	);

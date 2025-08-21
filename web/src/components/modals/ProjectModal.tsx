@@ -57,6 +57,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	});
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
+		throw new Error('Sentry test!');
 		try {
 			await modify({
 				projectId: project?.projectId,
@@ -228,7 +229,7 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 					submitLoading={isPending}
 					submitDisabled={isPending}
 					cancelText={'Discard changes'}
-					onCancel={() => closeModal()}
+					// onCancel={() => closeModal()}
 				/>
 			</form>
 			{project?.projectId && project.status === ProjectStatus.OPEN ? (

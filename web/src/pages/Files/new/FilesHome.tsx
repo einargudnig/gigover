@@ -3,30 +3,46 @@ import { SimpleGrid } from '../../../components/SimpleGrid';
 import { useOpenProjects } from '../../../hooks/useAvailableProjects';
 import { useProjectList } from '../../../queries/useProjectList';
 import { Folder } from '../components/Folder';
+import { DataFetchingErrorBoundary } from '../../../components/ErrorBoundary';
 
 // For the Tender Folder
 import { CardBaseLink } from '../../../components/CardBase';
 import { FolderIcon } from '../../../components/icons/FolderIcon';
-import { LoadingSpinner } from '../../../components/LoadingSpinner';
+import { ApiService } from '../../../services/ApiService';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const FilesHome = (): JSX.Element => {
-	const { data, isPending } = useProjectList();
+	const { data, isPending, isError, error } = useProjectList();
 
 	const projects = useOpenProjects(data);
 
-	if (isPending) {
-		return <LoadingSpinner />;
-	}
+	const queryClient = useQueryClient();
 
 	return (
 		<div>
 			<VStack alignItems={'flex-start'} style={{ width: '100%' }} spacing={4}>
-				<SimpleGrid itemWidth={320}>
-					{projects.map((p) => (
-						<Folder key={p.projectId} project={p} />
-					))}
-					<TenderFolder />
-				</SimpleGrid>
+				<DataFetchingErrorBoundary
+					name="FilesList"
+					apiEndpoint={ApiService.projectList}
+					loadingState={isPending}
+					onRetry={() =>
+						queryClient.invalidateQueries({ queryKey: [ApiService.projectList] })
+					}
+					skeletonCount={8}
+				>
+					{isError ? (
+						(() => {
+							throw error;
+						})()
+					) : (
+						<SimpleGrid itemWidth={320}>
+							{projects.map((p) => (
+								<Folder key={p.projectId} project={p} />
+							))}
+							<TenderFolder />
+						</SimpleGrid>
+					)}
+				</DataFetchingErrorBoundary>
 			</VStack>
 		</div>
 	);

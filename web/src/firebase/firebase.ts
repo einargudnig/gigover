@@ -1,4 +1,5 @@
 import { getAnalytics, type Analytics } from 'firebase/analytics';
+import { getPerformance } from 'firebase/performance';
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import {
 	GoogleAuthProvider,
@@ -27,6 +28,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app: FirebaseApp = initializeApp(firebaseConfig);
+const performance = getPerformance(app);
 const authInstance: Auth = getAuth(app);
 const analyticsInstance: Analytics = getAnalytics(app);
 const googleAuthProviderInstance: GoogleAuthProvider = new GoogleAuthProvider();
@@ -68,6 +70,7 @@ export const doSignOut = async (): Promise<void> => {
 
 export {
 	app,
+	performance,
 	authInstance as auth,
 	analyticsInstance as analytics,
 	googleAuthProviderInstance as googleAuthProvider

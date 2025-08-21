@@ -28,3 +28,9 @@ yarn-error.log*
 # SpecStory explanation file
 .specstory/
 .specstory/.what-is-this.md
+
+# Sentry Config File
+.env.sentry-build-plugin
+
+*storybook.log
+storybook-static

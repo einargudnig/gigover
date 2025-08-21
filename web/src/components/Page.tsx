@@ -19,6 +19,7 @@ import { UserContext } from '../context/UserContext';
 import { FirebaseContext } from '../firebase/FirebaseContext';
 import { useLogout } from '../mutations/useLogout';
 import { Center } from './Center';
+import { DevMenu } from './DevMenu';
 import { GigoverLogo } from './GigoverLogo';
 import { LoadingSpinner } from './LoadingSpinner';
 import { FolderIcon } from './icons/FolderIcon';
@@ -29,12 +30,6 @@ import { TimeIcon } from './icons/TimeIcon';
 import { ToolsIcon } from './icons/ToolsIcon';
 import { Notifications } from './notifications/Notifications';
 import { OrganizationSwitcher } from './organizations/OrganizationSwitcher';
-import { DevMenu } from './DevMenu';
-
-interface PageProps {
-	backgroundColor?: string;
-	onLinkClick?: () => void;
-}
 
 const NavItem = ({ to, icon, children, onClick }) => {
 	const location = useLocation();
@@ -90,7 +85,6 @@ export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element |
 						<GigoverLogo scale={0.7} />
 					</ChakraLink>
 				</Box>
-
 				<VStack as="nav" align="stretch" spacing={0} width="100%">
 					<NavItem to="/" icon={<ProjectIcon />} onClick={onLinkClick}>
 						Projects

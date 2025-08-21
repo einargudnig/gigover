@@ -23,12 +23,17 @@ import { useResources } from '../../queries/useResources';
 import { HoldResource } from './HoldResource';
 import GigoverMaps from './components/GigoverMaps';
 import { ResourceStatusLabel } from './components/ResourceStatusLabel';
+import { DataFetchingErrorBoundary } from '../../components/ErrorBoundary';
+import { ApiService } from '../../services/ApiService';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Resources = (): JSX.Element => {
 	const [, setModalContext] = useContext(ModalContext);
 	const { data: resourceTypes } = useResourceTypes();
-	const { data, isPending } = useResources();
+	const { data, isPending, isError, error } = useResources();
 	const { mutateAsync: deleteResourceAsync, isPending: isLoadingDelete } = useResourceDelete();
+
+	const queryClient = useQueryClient();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const columns: Array<SimpleColumnDef<Resource, any>> = useMemo(
@@ -163,51 +168,76 @@ export const Resources = (): JSX.Element => {
 				</Flex>
 				<Box p={2}>
 					<DisabledPage>
-						<Flex mb={4}>
-							<CardBase px="24px" py="12px" mr="16px" fontWeight="bold" color="black">
-								Total resources: {data?.length}
-							</CardBase>
-							<CardBase
-								px="24px"
-								py="12px"
-								mr="16px"
-								fontWeight="bold"
-								color="#1FDF83"
-							>
-								Available:{' '}
-								{data?.filter((r) => r.status === ResourceStatus.Available)
-									?.length ?? 0}
-							</CardBase>
-							<CardBase
-								px="24px"
-								py="12px"
-								mr="16px"
-								fontWeight="bold"
-								color="#EA4335"
-							>
-								In use:{' '}
-								{data?.filter((r) => r.status === ResourceStatus.InUse)?.length ??
-									0}
-							</CardBase>
-						</Flex>
+						<DataFetchingErrorBoundary
+							name="ResourceList"
+							apiEndpoint={ApiService.resources}
+							loadingState={isPending}
+							onRetry={() =>
+								queryClient.invalidateQueries({ queryKey: [ApiService.resources] })
+							}
+							skeletonCount={8}
+						>
+							{isError ? (
+								(() => {
+									throw error;
+								})()
+							) : (
+								<>
+									<Flex mb={4}>
+										<CardBase
+											px="24px"
+											py="12px"
+											mr="16px"
+											fontWeight="bold"
+											color="black"
+										>
+											Total resources: {data?.length}
+										</CardBase>
+										<CardBase
+											px="24px"
+											py="12px"
+											mr="16px"
+											fontWeight="bold"
+											color="#1FDF83"
+										>
+											Available:{' '}
+											{data?.filter(
+												(r) => r.status === ResourceStatus.Available
+											)?.length ?? 0}
+										</CardBase>
+										<CardBase
+											px="24px"
+											py="12px"
+											mr="16px"
+											fontWeight="bold"
+											color="#EA4335"
+										>
+											In use:{' '}
+											{data?.filter((r) => r.status === ResourceStatus.InUse)
+												?.length ?? 0}
+										</CardBase>
+									</Flex>
 
-						<CardBase>
-							<Table<Resource>
-								loading={isPending}
-								variant={'striped'}
-								columns={columns}
-								data={data ?? []}
-							/>
-						</CardBase>
+									<CardBase>
+										<Table<Resource>
+											loading={isPending}
+											variant={'striped'}
+											columns={columns}
+											data={data ?? []}
+										/>
+									</CardBase>
 
-						<CardBase mt={4}>
-							<Heading as={'h4'} fontSize={'16px'}>
-								Where are your resources?
-							</Heading>
-						</CardBase>
-						<CardBase mt={4}>
-							<GigoverMaps resources={data ?? []} />
-						</CardBase>
+									<CardBase mt={4}>
+										<Heading as={'h4'} fontSize={'16px'}>
+											Where are your resources?
+										</Heading>
+									</CardBase>
+									<CardBase mt={4}>
+										<GigoverMaps resources={data ?? []} />
+									</CardBase>
+								</>
+							)}
+						</DataFetchingErrorBoundary>
 					</DisabledPage>
 				</Box>
 			</Box>
