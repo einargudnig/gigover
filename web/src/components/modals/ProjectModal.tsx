@@ -57,7 +57,6 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	});
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
-		throw new Error('Sentry test!');
 		try {
 			await modify({
 				projectId: project?.projectId,
