@@ -1,5 +1,6 @@
+import * as Sentry from '@sentry/react';
+import { ErrorCategory } from './sentry';
 import { Flex, Text } from '@chakra-ui/react';
-// import 'normalize.css';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { pdfjs } from 'react-pdf';
 import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
@@ -20,9 +21,7 @@ import { NewLogin } from './pages/NewLogin';
 import { useProjectTypes } from './queries/useProjectTypes';
 import { useVerify } from './queries/useVerify';
 import { FileSystemService } from './services/FileSystemService';
-import * as Sentry from '@sentry/react';
-import { ErrorCategory } from './sentry';
-import ErrorBoundaryTester from './components/ErrorBoundary/ErrorBoundaryTester';
+import { SupportLauncher } from './components/SupportLauncher';
 
 // We need this for loading PDF viewer on production.
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -57,8 +56,8 @@ export const AppPreloader = (): JSX.Element => {
 
 		window.Intercom('boot', {
 			app_id: 'jsp3pks1',
-			alignment: 'right', // This aligns the widget to the right
-
+			alignment: 'right',
+			hide_default_launcher: true,
 			...userProperties
 		});
 	}, [authUser?.uid, data]);
@@ -135,6 +134,7 @@ const App = ({
 								>
 									<GlobalModals />
 									<AuthenticatedRoutes />
+									<SupportLauncher />
 								</EnhancedErrorBoundary>
 							</ModalContext.Provider>
 						</FileSystemContext.Provider>

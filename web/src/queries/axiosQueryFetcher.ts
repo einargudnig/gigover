@@ -30,8 +30,8 @@ export const axiosQueryFetcher = async ({ queryKey }: { queryKey: string }) => {
 		// Just track the failure and rethrow
 		trackWorkflow('api_query', 'failed', {
 			endpoint,
-			errorType: error.type,
-			status: error.status
+			errorType: (error as any)?.type ?? 'unknown',
+			status: (error as any)?.status ?? 'unknown'
 		});
 
 		throw error;

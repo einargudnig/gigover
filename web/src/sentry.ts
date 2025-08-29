@@ -1,6 +1,5 @@
-import * as Sentry from '@sentry/react';
-import { reactRouterV6BrowserTracingIntegration } from '@sentry/react';
 import { BrowserClient } from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 
 // Error types to categorize different kinds of errors
 export enum ErrorCategory {
@@ -50,6 +49,10 @@ function getSessionId() {
 
 // Get browser and system info for better error context
 function getSystemInfo() {
+	const connection =
+		navigator.connection ||
+		(navigator as any).mozConnection ||
+		(navigator as any).webkitConnection;
 	return {
 		userAgent: navigator.userAgent,
 		language: navigator.language,
@@ -57,12 +60,12 @@ function getSystemInfo() {
 		screenSize: `${window.screen.width}x${window.screen.height}`,
 		viewportSize: `${window.innerWidth}x${window.innerHeight}`,
 		devicePixelRatio: window.devicePixelRatio,
-		connection: navigator.connection
+		connection: connection
 			? {
-					type: (navigator.connection as any).effectiveType,
-					downlink: (navigator.connection as any).downlink,
-					rtt: (navigator.connection as any).rtt,
-					saveData: (navigator.connection as any).saveData
+					type: connection.effectiveType,
+					downlink: connection.downlink,
+					rtt: connection.rtt,
+					saveData: connection.saveData
 				}
 			: undefined
 	};
@@ -110,7 +113,7 @@ Sentry.init({
 			maskAllInputs: true,
 			blockAllMedia: false
 		}),
-		Sentry.feedbackIntegration()
+		Sentry.feedbackIntegration({ autoInject: false })
 	],
 
 	// Use environment-specific configuration
@@ -132,6 +135,7 @@ Sentry.init({
 	},
 
 	// Configure fingerprinting and enhance error data before sending
+
 	beforeSend(event, hint) {
 		// Skip if the event is being explicitly dropped
 		if (event.tags?.skipCapture === 'true') {
@@ -150,9 +154,9 @@ Sentry.init({
 			// Add memory usage if available
 			if (performance && performance.memory) {
 				event.extra.memory = {
-					jsHeapSizeLimit: (performance as any).memory.jsHeapSizeLimit,
-					totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
-					usedJSHeapSize: (performance as any).memory.usedJSHeapSize
+					jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+					totalJSHeapSize: performance.memory.totalJSHeapSize,
+					usedJSHeapSize: performance.memory.usedJSHeapSize
 				};
 			}
 
@@ -174,8 +178,11 @@ Sentry.init({
 					event.tags = { ...event.tags, errorCategory: ErrorCategory.RESOURCE };
 				} else if (errorType === 'ApiError') {
 					// Group API errors by status code and endpoint pattern
-					const endpoint = event.extra?.api?.endpoint || '';
-					const statusCode = event.extra?.api?.statusCode || 0;
+					const api = event.extra?.api as
+						| { endpoint?: string; statusCode?: number }
+						| undefined;
+					const endpoint = api?.endpoint || '';
+					const statusCode = api?.statusCode || 0;
 					const endpointPattern = endpoint
 						.replace(/\/[a-zA-Z0-9-]+$/, '/:id')
 						.replace(/\d+/g, ':id');
@@ -195,21 +202,26 @@ Sentry.init({
 
 // Get performance timing information for better error context
 function getNavigationTiming() {
-	if (!window.performance || !window.performance.timing) return {};
-
-	const timing = window.performance.timing;
-	const now = Date.now();
+	if (!window.performance || !window.performance.getEntriesByType) {
+		return {};
+	}
+	const entries = window.performance.getEntriesByType('navigation');
+	if (!entries.length) {
+		return {};
+	}
+	const timing = entries[0] as PerformanceNavigationTiming;
+	const now = performance.now();
 
 	return {
 		dnsLookup: timing.domainLookupEnd - timing.domainLookupStart,
 		tcpConnection: timing.connectEnd - timing.connectStart,
-		requestStart: timing.requestStart - timing.navigationStart,
+		requestStart: timing.requestStart,
 		responseTime: timing.responseEnd - timing.responseStart,
-		domInteractive: timing.domInteractive - timing.navigationStart,
-		domComplete: timing.domComplete - timing.navigationStart,
+		domInteractive: timing.domInteractive,
+		domComplete: timing.domComplete,
 		loadEvent: timing.loadEventEnd - timing.loadEventStart,
-		totalPageLoad: timing.loadEventEnd - timing.navigationStart,
-		timeOnPage: now - timing.navigationStart
+		totalPageLoad: timing.loadEventEnd,
+		timeOnPage: now - timing.startTime
 	};
 }
 
@@ -260,7 +272,7 @@ window.addEventListener('error', (event) => {
 				errorCategory: ErrorCategory.RESOURCE,
 				resourceType: target.nodeName.toLowerCase(),
 				resourceUrl:
-					(target as HTMLScriptElement | HTMLImageElement | HTMLLinkElement).src ||
+					(target as HTMLScriptElement | HTMLImageElement).src ||
 					(target as HTMLLinkElement).href ||
 					'unknown'
 			}
@@ -354,11 +366,34 @@ export function showFeedbackDialog(eventId: string, options?: Partial<Sentry.Rep
 
 // Function to check if Sentry is properly initialized
 export function isSentryInitialized(): boolean {
-	const client = Sentry.getCurrentHub().getClient();
+	const client = Sentry.getClient();
 	return client instanceof BrowserClient;
 }
 
 // Function to manually flush events - useful before page unloads
 export function flushSentryEvents(): Promise<boolean> {
 	return Sentry.flush();
+}
+
+export function openUserFeedback(): boolean {
+	// Preferred API (available in many v10 builds)
+	if ((Sentry as any).feedback?.open) {
+		(Sentry as any).feedback.open();
+		return true;
+	}
+
+	// Fallback: find the Feedback integration instance and call open()
+	const client = Sentry.getClient();
+	const integration = client?.getIntegrationByName?.('Feedback') as any | undefined;
+
+	if (integration?.open) {
+		integration.open(); // opens the feedback dialog
+		return true;
+	}
+
+	// Fallback 2: use legacy Report Dialog only if you pass an eventId
+	// const eventId = Sentry.captureMessage('User opened feedback (no error)'); // optional
+	// (Sentry as any).showReportDialog?.({ eventId });
+
+	return false;
 }

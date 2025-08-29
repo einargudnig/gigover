@@ -59,6 +59,11 @@ const NavItem = ({ to, icon, children, onClick }) => {
 	);
 };
 
+interface PageProps {
+	backgroundColor?: string;
+	onLinkClick?: () => void;
+}
+
 export const Page = ({ backgroundColor, onLinkClick }: PageProps): JSX.Element | null => {
 	const { mutateAsync: logout } = useLogout();
 	const user = useContext(UserContext);
