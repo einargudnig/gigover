@@ -376,24 +376,35 @@ export function flushSentryEvents(): Promise<boolean> {
 }
 
 export function openUserFeedback(): boolean {
-	// Preferred API (available in many v10 builds)
-	if ((Sentry as any).feedback?.open) {
+	const hasApi = !!(Sentry as any).feedback?.open;
+	console.log('[Sentry] feedback.open exists?', hasApi);
+	if (hasApi) {
 		(Sentry as any).feedback.open();
 		return true;
 	}
 
-	// Fallback: find the Feedback integration instance and call open()
 	const client = Sentry.getClient();
 	const integration = client?.getIntegrationByName?.('Feedback') as any | undefined;
-
+	console.log('[Sentry] getIntegrationByName("Feedback")', integration);
 	if (integration?.open) {
-		integration.open(); // opens the feedback dialog
+		integration.open();
 		return true;
 	}
 
-	// Fallback 2: use legacy Report Dialog only if you pass an eventId
-	// const eventId = Sentry.captureMessage('User opened feedback (no error)'); // optional
+	// Optional fallback to legacy dialog while debugging:
+	// const eventId = Sentry.captureMessage('User feedback (manual open)');
 	// (Sentry as any).showReportDialog?.({ eventId });
-
 	return false;
 }
+
+// Fallback: find the Feedback integration instance and call open()
+const client = Sentry.getClient();
+console.log('[Sentry] client', client);
+console.log(
+	'[Sentry] integrations',
+	client?.getOptions?.().integrations?.map((i) => i.name)
+);
+console.log('[Sentry] has feedback API', !!(Sentry as any).feedback?.open);
+
+const feedbackIntegration = (client as any)?.getIntegrationByName?.('Feedback');
+console.log('[Sentry] feedback integration', feedbackIntegration);

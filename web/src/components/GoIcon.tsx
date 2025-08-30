@@ -1,7 +1,6 @@
-import React from 'react';
 import { IconProps } from './IconProps';
 
-export const GoIcon = ({ size = 64 }: IconProps): JSX.Element => {
+export const Gogcon = ({ size = 64 }: IconProps): JSX.Element => {
 	return (
 		<svg
 			width={size}
