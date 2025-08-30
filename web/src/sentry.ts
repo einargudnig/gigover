@@ -99,11 +99,14 @@ const getEnvConfig = () => {
 	return envConfigs[env] || envConfigs.development;
 };
 
+const isLocalhost = window.location.hostname === 'localhost';
+
 // Initialize Sentry with enhanced configuration
 Sentry.init({
 	dsn: 'https://446b0afced9c231fc1a8153b19150fde@o4509808656973824.ingest.de.sentry.io/4509808659660880',
 	release: __APP_VERSION__,
 	environment: __APP_ENV__,
+	enabled: !isLocalhost, // Disable Sentry on localhost for local development
 	integrations: [
 		// Add React Router integration
 		// reactRouterV6BrowserTracingIntegration(),
@@ -400,10 +403,7 @@ export function openUserFeedback(): boolean {
 // Fallback: find the Feedback integration instance and call open()
 const client = Sentry.getClient();
 console.log('[Sentry] client', client);
-console.log(
-	'[Sentry] integrations',
-	client?.getOptions?.().integrations?.map((i) => i.name)
-);
+console.log('[Sentry] integrations');
 console.log('[Sentry] has feedback API', !!(Sentry as any).feedback?.open);
 
 const feedbackIntegration = (client as any)?.getIntegrationByName?.('Feedback');
