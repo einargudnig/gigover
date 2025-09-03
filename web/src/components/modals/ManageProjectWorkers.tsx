@@ -1,14 +1,4 @@
-import {
-	Box,
-	Button,
-	IconButton,
-	Flex,
-	Heading,
-	List,
-	ListItem,
-	Spacer,
-	Text
-} from '@chakra-ui/react';
+import { Box, IconButton, Flex, Heading, List, ListItem, Spacer, Text } from '@chakra-ui/react';
 import { Project, WorkerItem } from '../../models/Project';
 import { AddWorkerForm } from '../../pages/ProjectDetails/AddWorkerForm';
 import { useRemoveWorker } from '../../queries/useRemoveWorker';
@@ -28,19 +18,19 @@ export const ManageProjectWorkers = ({
 	onClose,
 	project
 }: ManageProjectWorkersProps): JSX.Element => {
-	const { mutate: removeWorker, isPending: isLoading } = useRemoveWorker();
-	const { mutate: removeUser, isPending: isLoadingTwo } = useRemoveUser();
+	const { mutate: removeWorker, isPending: isLoading } = useRemoveWorker(); // Mobile user
+	const { mutate: removeUser, isPending: isLoadingTwo } = useRemoveUser(); // Web user
 
 	const remove = async (worker: WorkerItem) => {
 		if (worker.type === 1) {
 			// Web User
-			await removeUser({
+			removeUser({
 				projectId: project.projectId,
 				uId: worker.uId
 			});
 		} else {
 			// App user
-			await removeWorker({
+			removeWorker({
 				projectId: project.projectId,
 				uId: worker.uId
 			});
