@@ -7,12 +7,21 @@ import { SubstringText } from '../../utils/StringUtils';
 import { displayTaskTitle } from '../../utils/TaskUtils';
 import { TrackerSelect } from '../TrackerSelect';
 import { UseResourceOnTask } from './TaskModal/UseResourceOnTask';
+import { ModalErrorBoundary } from '../ErrorBoundary';
 
 export const UseResourceModal = ({
 	resourceTracker
 }: {
 	resourceTracker: ResourceTrackerContext;
 }): JSX.Element => {
+	return (
+		<ModalErrorBoundary>
+			<ResourceSelect resourceTracker={resourceTracker} />
+		</ModalErrorBoundary>
+	);
+};
+
+const ResourceSelect = ({ resourceTracker }: { resourceTracker: ResourceTrackerContext }) => {
 	const project = resourceTracker.project;
 	const tasks: Task[] = useProjectTasks(project);
 	const [selectedTask, setSelectedTask] = useState<Task | undefined>();

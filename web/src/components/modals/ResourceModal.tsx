@@ -40,6 +40,11 @@ export const ResourceModal = (): JSX.Element => {
 		mode: 'onBlur'
 	});
 
+	if (isError && error) {
+		console.error('Error fro mutation', error);
+		throw error;
+	}
+
 	const onSubmit = handleSubmit(async (values) => {
 		try {
 			await mutateAsync({
@@ -61,13 +66,6 @@ export const ResourceModal = (): JSX.Element => {
 			flexContainer={true}
 		>
 			<div style={{ height: '100%', flex: 1 }}>
-				{isError && (
-					<>
-						{/* Server errors */}
-						<p>{error?.errorText}</p>
-						<small>{error?.errorCode}</small>
-					</>
-				)}
 				<form onSubmit={onSubmit} style={{ height: '100%' }}>
 					<div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
 						<div style={{ flex: 1 }}>

@@ -27,6 +27,7 @@ import { FormActions } from '../FormActions';
 import { InviteUser } from '../InviteUser/InviteUser';
 import { DatePicker } from '../forms/DatePicker';
 import { InputWrapper } from '../forms/Input';
+import { FormErrorBoundary, ModalErrorBoundary } from '../ErrorBoundary';
 
 interface ProjectModalProps {
 	project?: Project;
@@ -34,6 +35,20 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 	const closeModal = useCloseModal();
+
+	return (
+		<ModalErrorBoundary>
+			<FormErrorBoundary>
+				<ProjectModalForm project={project} closeModal={closeModal} />
+			</FormErrorBoundary>
+		</ModalErrorBoundary>
+	);
+};
+
+const ProjectModalForm = ({
+	project,
+	closeModal
+}: ProjectModalProps & { closeModal: () => void }) => {
 	const queryClient = useQueryClient();
 	const { data: progressStatuses } = useProgressStatusList();
 	const { data: projects } = useProjectList();
@@ -55,6 +70,11 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 		defaultValues: project,
 		mode: 'onBlur'
 	});
+
+	if (isError && error) {
+		console.error('Error fro mutation', error);
+		throw error;
+	}
 
 	const onSubmit = handleSubmit(async ({ name, description, startDate, endDate }) => {
 		try {
@@ -95,13 +115,6 @@ export const ProjectModal = ({ project }: ProjectModalProps): JSX.Element => {
 
 	return (
 		<div>
-			{isError && (
-				<>
-					{/* Server errors */}
-					<p>{error?.errorText}</p>
-					<small>{error?.errorCode}</small>
-				</>
-			)}
 			<form onSubmit={onSubmit}>
 				<FormControl id={'name'} isRequired isInvalid={Boolean(errors.name)}>
 					<FormLabel>Project name</FormLabel>
