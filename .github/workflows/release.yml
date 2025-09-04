@@ -1,0 +1,354 @@
+name: Release Management
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "Version bump type"
+        required: true
+        default: "patch"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      release_type:
+        description: "Release type"
+        required: true
+        default: "stable"
+        type: choice
+        options:
+          - stable
+          - beta
+          - alpha
+
+env:
+  NODE_VERSION: "18"
+  FLUTTER_VERSION: "3.13.0"
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    outputs:
+      new_version: ${{ steps.version.outputs.new_version }}
+      release_notes: ${{ steps.changelog.outputs.release_notes }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Calculate new version
+        id: version
+        run: |
+          # Get current version from package.json (using web as reference)
+          CURRENT_VERSION=$(node -p "require('./web/package.json').version")
+          echo "Current version: $CURRENT_VERSION"
+
+          # Calculate new version based on input
+          case "${{ github.event.inputs.version_type }}" in
+            "major")
+              NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print ($1+1)".0.0"}')
+              ;;
+            "minor")
+              NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."+($2+1)".0"}')
+              ;;
+            "patch")
+              NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2"."+($3+1)}')
+              ;;
+          esac
+
+          # Add pre-release suffix if not stable
+          if [ "${{ github.event.inputs.release_type }}" != "stable" ]; then
+            NEW_VERSION="${NEW_VERSION}-${{ github.event.inputs.release_type }}.$(date +%Y%m%d%H%M%S)"
+          fi
+
+          echo "New version: $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update version in package.json files
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.new_version }}"
+
+          # Update web package.json
+          jq --arg version "$NEW_VERSION" '.version = $version' web/package.json > tmp.$$.json && mv tmp.$$.json web/package.json
+
+          # Update new-frontend package.json
+          jq --arg version "$NEW_VERSION" '.version = $version' new-frontend/package.json > tmp.$$.json && mv tmp.$$.json new-frontend/package.json
+
+          # Update frontend package.json
+          jq --arg version "$NEW_VERSION" '.version = $version' frontend/package.json > tmp.$$.json && mv tmp.$$.json frontend/package.json
+
+      - name: Update Flutter version
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.new_version }}"
+          # Remove any pre-release suffix for Flutter (it expects semantic version)
+          FLUTTER_VERSION=$(echo $NEW_VERSION | sed 's/-.*$//')
+
+          # Get current build number and increment
+          CURRENT_BUILD=$(grep -o '+[0-9]*' app/pubspec.yaml | sed 's/+//')
+          NEW_BUILD=$((CURRENT_BUILD + 1))
+
+          # Update pubspec.yaml
+          sed -i "s/version: .*/version: ${FLUTTER_VERSION}+${NEW_BUILD}/" app/pubspec.yaml
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Simple changelog generation (you might want to use a more sophisticated tool)
+          echo "## What's Changed" > CHANGELOG_TEMP.md
+          echo "" >> CHANGELOG_TEMP.md
+
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            git log ${LAST_TAG}..HEAD --pretty=format:"* %s (%h)" >> CHANGELOG_TEMP.md
+          else
+            git log --pretty=format:"* %s (%h)" --max-count=10 >> CHANGELOG_TEMP.md
+          fi
+
+          echo "" >> CHANGELOG_TEMP.md
+          echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${LAST_TAG}...v${{ steps.version.outputs.new_version }}" >> CHANGELOG_TEMP.md
+
+          # Store changelog content for later use
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG_TEMP.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Commit version updates
+        run: |
+          git add .
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
+          git tag "v${{ steps.version.outputs.new_version }}"
+          git push origin main
+          git push origin "v${{ steps.version.outputs.new_version }}"
+
+  build-all:
+    runs-on: ubuntu-latest
+    needs: prepare-release
+    if: always() && (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    strategy:
+      matrix:
+        project:
+          [
+            { name: "web", path: "web" },
+            { name: "new-frontend", path: "new-frontend" },
+            { name: "frontend", path: "frontend" },
+            { name: "functions", path: "functions/functions" },
+          ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: ${{ matrix.project.path }}/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.project.path }}
+          npm ci
+
+      - name: Build project
+        run: |
+          cd ${{ matrix.project.path }}
+          npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.project.name }}-release-build
+          path: |
+            ${{ matrix.project.path }}/dist/
+            ${{ matrix.project.path }}/build/
+            ${{ matrix.project.path }}/lib/
+          retention-days: 90
+
+  build-mobile:
+    runs-on: ubuntu-latest
+    needs: prepare-release
+    if: always() && (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "11"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Get dependencies
+        run: |
+          cd app
+          flutter pub get
+
+      - name: Build Android Release
+        run: |
+          cd app
+          flutter build apk --release
+          flutter build appbundle --release
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release
+          path: |
+            app/build/app/outputs/flutter-apk/*.apk
+            app/build/app/outputs/bundle/release/*.aab
+          retention-days: 90
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: [build-all, build-mobile]
+    if: always() && (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    environment: production
+    strategy:
+      matrix:
+        project:
+          [
+            { name: "web", path: "web" },
+            { name: "new-frontend", path: "new-frontend" },
+            { name: "frontend", path: "frontend" },
+          ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.project.name }}-release-build
+          path: ${{ matrix.project.path }}/
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
+          projectId: ${{ secrets.FIREBASE_PROJECT_ID_PRODUCTION }}
+          channelId: live
+          entryPoint: ${{ matrix.project.path }}
+
+  deploy-functions:
+    runs-on: ubuntu-latest
+    needs: build-all
+    if: always() && (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download functions build
+        uses: actions/download-artifact@v4
+        with:
+          name: functions-release-build
+          path: functions/functions/
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy Firebase Functions
+        run: |
+          cd functions
+          firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
+        env:
+          FIREBASE_PROJECT: ${{ secrets.FIREBASE_PROJECT_ID_PRODUCTION }}
+
+  create-github-release:
+    runs-on: ubuntu-latest
+    needs: [deploy-production, deploy-functions, build-mobile]
+    if: always() && (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: android-release
+          path: ./mobile-artifacts/
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ steps.version.outputs.version }}
+          body: |
+            ## Release ${{ steps.version.outputs.version }}
+
+            ### 🚀 What's New
+            This release includes updates across all platforms:
+
+            - **Web Applications**: Updated and deployed to production
+            - **Mobile App**: New Android build available
+            - **Backend Functions**: Latest cloud functions deployed
+
+            ### 📱 Mobile Downloads
+            - Android APK: Available in release assets
+            - iOS: Available through TestFlight/App Store
+
+            ### 🔗 Live Applications
+            - Main Web App: [Production URL]
+            - New Frontend: [Production URL]
+            - Marketing Site: [Production URL]
+
+            ---
+
+            For technical details and breaking changes, see the [full changelog](https://github.com/${{ github.repository }}/compare/previous-tag...${{ github.ref_name }}).
+          files: |
+            mobile-artifacts/**/*.apk
+            mobile-artifacts/**/*.aab
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+
+  notify-team:
+    runs-on: ubuntu-latest
+    needs: create-github-release
+    if: always()
+    steps:
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Notify on success
+        if: needs.create-github-release.result == 'success'
+        run: |
+          echo "✅ Release ${{ steps.version.outputs.version }} deployed successfully!"
+          echo "All platforms have been updated and are live."
+
+      - name: Notify on failure
+        if: needs.create-github-release.result == 'failure'
+        run: |
+          echo "❌ Release ${{ steps.version.outputs.version }} deployment failed!"
+          echo "Check the workflow logs for details."
