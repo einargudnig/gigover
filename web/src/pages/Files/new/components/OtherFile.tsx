@@ -1,4 +1,4 @@
-import { HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
+import { Box, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
@@ -39,42 +39,13 @@ export const OtherFileIconForType = (fileType: DocumentTypes) => {
 	}
 };
 
-export const GetFileLink = (file: TenderDocument) => {
-	const { offerId, tenderId } = useParams();
-	const location = useLocation();
-
-	// Extract the pathname and search from the location object
-	const { pathname } = location;
-
-	// Check if the current URL contains either 'offers' or 'tenders'
-	const isOffersUrl = pathname.includes('offers');
-	const isTendersUrl = pathname.includes('tenders');
-
-	let href = '';
-
-	if (isOffersUrl) {
-		// If it's an offers, append the fileId
-		return (href = `/files/tender/offers/${offerId}/${file.id}`);
-	} else if (isTendersUrl) {
-		// If it's a tender, append the fileId
-		return (href = `/files/tender/offers/${tenderId}/${file.id}`);
-	} else {
-		// If the URL doesn't contain 'offers' or 'tenders', handle it accordingly
-		// For example, you might want to show an error message or redirect to a default page.
-		console.error('Invalid URL format');
-	}
-
-	return href;
-};
-
 export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): JSX.Element => {
 	const Icon = OtherFileIconForType(file.type);
 	const [dialogOpen, setDialogOpen] = useState(false); // for delete file on Tender
 	const { mutateAsync: deleteTenderDocumentAsync } = useDeleteTenderDocument(); // for delete file on Tender
-	const href = GetFileLink(file);
 
 	return (
-		<CardBaseLink to={href}>
+		<Box maxWidth="100%" borderRadius="12px" bg="white" padding="24px">
 			<HStack spacing={8}>
 				<Icon />
 
@@ -88,7 +59,7 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 				<Text m={0}>
 					{DateTime.fromMillis(file.created || 0).toFormat(GANT_CHART_FORMAT)}
 				</Text>
-				<VStack justify={'center'} align={'center'}>
+				<VStack justify={'center'} align={'center'} zIndex={88}>
 					<a href={file.url} target={'_blank'} rel={'noopener noreferrer'}>
 						<IconButton
 							aria-label={'Download'}
@@ -132,6 +103,6 @@ export const OtherGigoverFile = ({ showDelete = false, file }: OtherFileProps): 
 					</VStack>
 				) : null}
 			</HStack>
-		</CardBaseLink>
+		</Box>
 	);
 };
