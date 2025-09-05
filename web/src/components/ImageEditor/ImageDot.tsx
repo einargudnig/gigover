@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Button, Image as ChakraImage } from '@chakra-ui/react';
+import { Box, Button, Image as ChakraImage, Text } from '@chakra-ui/react';
 import { useCallback, useEffect, useState } from 'react';
 import 'react-medium-image-zoom/dist/styles.css';
 import { Document, Page } from 'react-pdf';
@@ -8,6 +8,8 @@ import useResizeObserver from 'use-resize-observer';
 import useKeyPress from '../../hooks/useArrowKey';
 import { DocumentTypes } from '../../models/ProjectImage';
 import { Chevron } from '../icons/Chevron';
+import { FileImgIcon } from '../icons/FileTypes/FileImgIcon';
+import { FileTextIcon } from '../icons/FileTypes/FileTextIcon';
 import { IImageDot } from '../modals/EditPhotoModal';
 import ImagePoint from './ImagePoint';
 
@@ -43,6 +45,69 @@ const dimenstions = (url, rejectTimeout) => {
 			timer = setTimeout(() => reject('Timeout exception'), rejectTimeout);
 		}
 	});
+};
+
+const isPsdFile = (imageSrc: string): boolean => {
+	return imageSrc.toLowerCase().includes('.psd');
+};
+
+const isWordDocument = (imageSrc: string): boolean => {
+	const lowerSrc = imageSrc.toLowerCase();
+	return lowerSrc.includes('.docx') || lowerSrc.includes('.doc');
+};
+
+const PsdPlaceholder = (): JSX.Element => {
+	return (
+		<Box
+			display="flex"
+			flexDirection="column"
+			alignItems="center"
+			justifyContent="center"
+			height="100%"
+			bg="gray.100"
+			borderRadius="md"
+			p={8}
+			color="gray.700"
+		>
+			<FileImgIcon />
+			<Text mt={4} fontSize="lg" fontWeight="bold">
+				PSD File
+			</Text>
+			<Text mt={2} color="gray.600" textAlign="center">
+				Photoshop files cannot be previewed in the browser
+			</Text>
+			<Text mt={2} fontSize="sm" color="gray.500" textAlign="center">
+				Use the download button to view this file
+			</Text>
+		</Box>
+	);
+};
+
+const WordDocumentPlaceholder = (): JSX.Element => {
+	return (
+		<Box
+			display="flex"
+			flexDirection="column"
+			alignItems="center"
+			justifyContent="center"
+			height="100%"
+			bg="gray.100"
+			borderRadius="md"
+			p={8}
+			color="gray.700"
+		>
+			<FileTextIcon />
+			<Text mt={4} fontSize="lg" fontWeight="bold">
+				Word Document
+			</Text>
+			<Text mt={2} color="gray.600" textAlign="center">
+				Word documents cannot be previewed in the browser
+			</Text>
+			<Text mt={2} fontSize="sm" color="gray.500" textAlign="center">
+				Use the download button to view this file
+			</Text>
+		</Box>
+	);
 };
 
 export const ImageDot = ({
@@ -216,6 +281,12 @@ export const ImageDot = ({
 					switch (documentType) {
 						case 2:
 						case 'DOCUMENT':
+							// Handle Word documents with placeholder
+							if (isWordDocument(imageSrc)) {
+								return <WordDocumentPlaceholder />;
+							}
+
+							// Handle PDF documents with react-pdf
 							return (
 								<>
 									{num !== -1 && (
@@ -305,6 +376,11 @@ export const ImageDot = ({
 							);
 						case 0:
 						case 'IMAGE':
+							// Handle PSD files with placeholder
+							if (isPsdFile(imageSrc)) {
+								return <PsdPlaceholder />;
+							}
+
 							return zoomAllowed ? (
 								<Box
 									height={'100%'}

@@ -101,7 +101,13 @@ export const ProjectFolderComponent = ({
 		<div style={{ position: 'relative' }}>
 			<div style={{ position: 'absolute', right: '8px', top: '8px' }}>
 				<Menu>
-					<MenuButton as={Button} aria-label="More actions" size="xs" color={'black'}>
+					<MenuButton
+						as={Button}
+						aria-label="More actions"
+						size="xs"
+						colorScheme={'gray'}
+						variant={'outline'}
+					>
 						...
 					</MenuButton>
 					<MenuList>

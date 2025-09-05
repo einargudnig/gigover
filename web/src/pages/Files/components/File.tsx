@@ -4,10 +4,7 @@ import { CardBaseLink } from '../../../components/CardBase';
 import { FileHouseIcon } from '../../../components/icons/FileTypes/FileHouseIcon';
 import { FileImgIcon } from '../../../components/icons/FileTypes/FileImgIcon';
 import { FilePdfIcon } from '../../../components/icons/FileTypes/FilePdfIcon';
-import { FileStarIcon } from '../../../components/icons/FileTypes/FileStarIcon';
-import { FileTextIcon } from '../../../components/icons/FileTypes/FileTextIcon';
 import { FileVideoIcon } from '../../../components/icons/FileTypes/FileVideoIcon';
-import { FileType } from '../../../models/ProjectFile';
 import { DocumentTypes, ProjectImage } from '../../../models/ProjectImage';
 import { humanFileSize } from '../../../utils/FileSizeUtils';
 import { GANT_CHART_FORMAT } from '../../Roadmap/GantChartDates';
@@ -32,29 +29,17 @@ export const GigoverFileIconForType = (fileType: DocumentTypes) => {
 	}
 };
 
-// @deprecated
-export const FileIconForType = (fileType: FileType) => {
-	switch (fileType) {
-		case 'txt':
-			return FileTextIcon;
-		case 'other':
-			return FileStarIcon;
-		case 'video':
-			return FileVideoIcon;
-		case 'picture':
-			return FileImgIcon;
-		case 'drawing':
-			return FileHouseIcon;
-		case 'pdf':
-			return FilePdfIcon;
-		default:
-		case 'document':
-			return FileTextIcon;
-	}
-};
-
 const GigoverThumbnail = (file: ProjectImage) => {
 	return <img data-src={file.previewImage + '&mode=crop&w=60&h=60'} width={60} height={60} />;
+};
+
+const shouldShowThumbnail = (file: ProjectImage) => {
+	// Don't show thumbnail for PSD files even if they have preview images
+	if (file.name.toLowerCase().endsWith('.psd')) {
+		return false;
+	}
+
+	return (file.type === 0 || file.type === 'IMAGE') && file.previewImage;
 };
 
 export const GetFileLink = (file: ProjectImage) => {
@@ -74,11 +59,7 @@ export const GigoverFile = ({ file }: GigoverFileProps): JSX.Element => {
 	return (
 		<CardBaseLink to={href}>
 			<HStack spacing={8}>
-				{(file.type === 0 || file.type === 'IMAGE') && file.previewImage ? (
-					GigoverThumbnail(file)
-				) : (
-					<Icon />
-				)}
+				{shouldShowThumbnail(file) ? GigoverThumbnail(file) : <Icon />}
 				<VStack justify={'center'} align={'flex-start'} style={{ flex: 1 }}>
 					<Heading m={0} mb={0} as={'h4'} size={'sm'}>
 						{file.name}
