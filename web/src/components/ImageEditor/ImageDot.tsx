@@ -56,6 +56,11 @@ const isWordDocument = (imageSrc: string): boolean => {
 	return lowerSrc.includes('.docx') || lowerSrc.includes('.doc');
 };
 
+const isHeicImage = (imageSrc: string): boolean => {
+	const lowerSrc = imageSrc.toLowerCase();
+	return lowerSrc.includes('.heic') || lowerSrc.includes('.heif');
+};
+
 const PsdPlaceholder = (): JSX.Element => {
 	return (
 		<Box
@@ -105,6 +110,33 @@ const WordDocumentPlaceholder = (): JSX.Element => {
 			</Text>
 			<Text mt={2} fontSize="sm" color="gray.500" textAlign="center">
 				Use the download button to view this file
+			</Text>
+		</Box>
+	);
+};
+
+const HeicPlaceholder = (): JSX.Element => {
+	return (
+		<Box
+			display="flex"
+			flexDirection="column"
+			alignItems="center"
+			justifyContent="center"
+			height="100%"
+			bg="gray.100"
+			borderRadius="md"
+			p={8}
+			color="gray.700"
+		>
+			<FileImgIcon />
+			<Text mt={4} fontSize="lg" fontWeight="bold">
+				HEIC Image
+			</Text>
+			<Text mt={2} color="gray.600" textAlign="center">
+				HEIC images cannot be previewed in the browser
+			</Text>
+			<Text mt={2} fontSize="sm" color="gray.500" textAlign="center">
+				Use the download button to view this file or convert to JPEG/PNG
 			</Text>
 		</Box>
 	);
@@ -271,11 +303,11 @@ export const ImageDot = ({
 	const renderImage = () => {
 		return (
 			<Box
-				style={{
-					position: 'relative',
-					display: 'flex',
-					maxHeight: '100%'
-				}}
+				position={'relative'}
+				display={'flex'}
+				height={'100%'}
+				maxWidth={'100%'}
+				overflow={'hidden'}
 			>
 				{(() => {
 					switch (documentType) {
@@ -381,6 +413,11 @@ export const ImageDot = ({
 								return <PsdPlaceholder />;
 							}
 
+							// Handle HEIC files with placeholder
+							if (isHeicImage(imageSrc)) {
+								return <HeicPlaceholder />;
+							}
+
 							return zoomAllowed ? (
 								<Box
 									height={'100%'}
@@ -410,24 +447,29 @@ export const ImageDot = ({
 									</TransformWrapper>
 								</Box>
 							) : (
-								/*	<Zoom>
+								<Box
+									height={'100%'}
+									width={'100%'}
+									display={'flex'}
+									alignItems={'center'}
+									justifyContent={'center'}
+									overflow={'hidden'}
+								>
 									<ChakraImage
 										ref={ref}
 										onMouseUp={addDot}
 										src={imageSrc}
 										maxHeight={'100%'}
 										maxWidth={'100%'}
-										fit={'contain'}
+										objectFit={'contain'}
+										sx={{
+											maxHeight: '60vh !important',
+											maxWidth: '100% !important',
+											height: 'auto !important',
+											width: 'auto !important'
+										}}
 									/>
-								</Zoom>*/
-								<ChakraImage
-									ref={ref}
-									onMouseUp={addDot}
-									src={imageSrc}
-									maxHeight={'100%'}
-									maxWidth={'100%'}
-									fit={'contain'}
-								/>
+								</Box>
 							);
 						default:
 							return <h1>INVALID FILE TYPE</h1>;
